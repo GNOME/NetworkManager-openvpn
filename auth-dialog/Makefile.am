@@ -3,7 +3,7 @@ libexec_PROGRAMS = nm-openvpn-auth-dialog
 nm_openvpn_auth_dialog_CPPFLAGS =			\
 	$(GTHREAD_CFLAGS)			\
 	$(GTK_CFLAGS)				\
-	$(LIBGNOMEUI_CFLAGS)			\
+	$(GCONF_CFLAGS)				\
 	$(NETWORK_MANAGER_CFLAGS)		\
 	$(GNOMEKEYRING_CFLAGS) \
 	-I$(top_srcdir)/
@@ -26,7 +26,7 @@ nm_openvpn_auth_dialog_SOURCES =			\
 
 nm_openvpn_auth_dialog_LDADD =			\
 	$(GTK_LIBS)				\
-	$(LIBGNOMEUI_LIBS)			\
+	$(GCONF_LIBS)				\
 	$(top_builddir)/common-gnome/libnm-openvpn-common-gnome.la \
 	$(NULL)
 
