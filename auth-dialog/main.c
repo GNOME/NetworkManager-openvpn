@@ -27,9 +27,9 @@
 #endif
 
 #include <string.h>
+#include <stdlib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libgnomeui/libgnomeui.h>
 #include <gconf/gconf-client.h>
 #include <gnome-keyring.h>
 #include <nm-setting-vpn.h>
@@ -317,9 +317,8 @@ main (int argc, char *argv[])
 	gchar *vpn_uuid = NULL;
 	gchar *vpn_service = NULL;
 	char buf[1];
-	int ret, exit_status = 1;
+	int ret;
 	GOptionContext *context;
-	GnomeProgram *program;
 	GOptionEntry entries[] = {
 			{ "reprompt", 'r', 0, G_OPTION_ARG_NONE, &retry, "Reprompt for passwords", NULL},
 			{ "uuid", 'u', 0, G_OPTION_ARG_STRING, &vpn_uuid, "UUID of VPN connection", NULL},
@@ -332,23 +331,21 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
+	gtk_init (&argc, &argv);
+
 	context = g_option_context_new ("- openvpn auth dialog");
 	g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
-
-	program = gnome_program_init ("nm-openvpn-auth-dialog", VERSION,
-							LIBGNOMEUI_MODULE,
-							argc, argv,
-							GNOME_PARAM_GOPTION_CONTEXT, context,
-							GNOME_PARAM_NONE);
+	g_option_context_parse (context, &argc, &argv, NULL);
+	g_option_context_free (context);
 
 	if (vpn_uuid == NULL || vpn_name == NULL || vpn_service == NULL) {
 		fprintf (stderr, "Have to supply ID, name, and service\n");
-		goto out;
+		return EXIT_FAILURE;
 	}
 
 	if (strcmp (vpn_service, NM_DBUS_SERVICE_OPENVPN) != 0) {
 		fprintf (stderr, "This dialog only works with the '%s' service\n", NM_DBUS_SERVICE_OPENVPN);
-		goto out;		
+		return EXIT_FAILURE;
 	}
 
 	memset (&info, 0, sizeof (PasswordsInfo));
@@ -357,14 +354,12 @@ main (int argc, char *argv[])
 
 	if (!get_password_types (&info)) {
 		fprintf (stderr, "Invalid connection");
-		goto out;
+		return EXIT_FAILURE;
 	}
-
-	exit_status = 0;
 
 	if (!info.need_password && !info.need_certpass) {
 		printf ("%s\n%s\n\n\n", NM_OPENVPN_KEY_NOSECRET, "true");
-		goto out;
+		return EXIT_SUCCESS;
 	}
 
 	if (get_secrets (&info, retry)) {
@@ -383,8 +378,6 @@ main (int argc, char *argv[])
 	/* wait for data on stdin  */
 	ret = fread (buf, sizeof (char), sizeof (buf), stdin);
 
- out:
-	g_object_unref (program);
 
-	return exit_status;
+	return EXIT_SUCCESS;
 }
