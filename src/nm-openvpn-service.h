@@ -23,7 +23,7 @@
 #ifndef NM_OPENVPN_SERVICE_H
 #define NM_OPENVPN_SERVICE_H
 
-#include <glib/gtypes.h>
+#include <glib.h>
 #include <glib-object.h>
 #include <nm-vpn-plugin.h>
 

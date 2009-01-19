@@ -27,7 +27,7 @@
 #ifndef GNOME_TWO_PASSWORD_DIALOG_H
 #define GNOME_TWO_PASSWORD_DIALOG_H
 
-#include <gtk/gtkdialog.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
