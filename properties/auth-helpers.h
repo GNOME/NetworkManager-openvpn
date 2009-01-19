@@ -24,7 +24,6 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
-#include <gtk/gtkfilefilter.h>
 #include <glade/glade.h>
 
 #include <nm-connection.h>

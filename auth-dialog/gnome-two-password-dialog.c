@@ -22,21 +22,7 @@
 */
 
 #include <config.h>
-//#include "gnome-i18nP.h"
 #include "gnome-two-password-dialog.h"
-#include <gtk/gtkbox.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkstock.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
