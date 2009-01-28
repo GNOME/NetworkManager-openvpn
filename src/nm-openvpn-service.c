@@ -874,7 +874,17 @@ real_connect (NMVPNPlugin   *plugin,
 
 	user_name = nm_setting_vpn_get_user_name (s_vpn);
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
+	
 	connection_type = validate_connection_type (tmp);
+	
+	if (!connection_type) {
+		g_set_error (error,
+		             NM_VPN_PLUGIN_ERROR,
+		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		             "%s",
+		             "Invalid connection type.");
+		return FALSE;
+	}	
 
 	/* Need a username for any password-based connection types */
 	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
@@ -932,6 +942,15 @@ real_need_secrets (NMVPNPlugin *plugin,
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
 	connection_type = validate_connection_type (tmp);
+	
+	if (!connection_type) {
+		g_set_error (error,
+		             NM_VPN_PLUGIN_ERROR,
+		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		             "%s",
+		             "Invalid connection type.");
+		return FALSE;
+	}
 
 	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		/* Will require a password and maybe private key password */
