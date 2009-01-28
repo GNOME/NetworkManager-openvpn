@@ -287,6 +287,7 @@ main (int argc, char *argv[])
 	GValue *nbns_list = NULL;
 	GValue *dns_domain = NULL;
 	struct in_addr temp_addr;
+	gboolean tapdev = FALSE;
 
 	g_type_init ();
 
@@ -310,12 +311,16 @@ main (int argc, char *argv[])
 	if (val)
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_INT_GATEWAY, val);
 
-	/* Tunnel device */
-	val = str_to_gvalue (getenv ("dev"), FALSE);
+	/* VPN device */
+	tmp = getenv ("dev");
+	val = str_to_gvalue (tmp, FALSE);
 	if (val)
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_TUNDEV, val);
 	else
 		helper_failed (connection, "Tunnel Device");
+
+	if (strncmp (tmp, "tap", 3) == 0)
+		tapdev = TRUE;
 
 	/* IP address */
 	val = addr_to_gvalue (getenv ("ifconfig_local"));
@@ -329,15 +334,28 @@ main (int argc, char *argv[])
 	if (val)
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PTP, val);
 
-	/* Netmask */
-	tmp = getenv ("route_netmask_1");
-	if (tmp && inet_pton (AF_INET, tmp, &temp_addr) > 0) {
+	/* Netmask
+	 *
+	 * TAP devices pass back the netmask, while TUN devices always use /32
+	 * since they are point-to-point.
+	 */
+	if (tapdev) {
+		tmp = getenv ("ifconfig_netmask");
+		if (tmp && inet_pton (AF_INET, tmp, &temp_addr) > 0) {
+			GValue *val;
+
+			val = g_slice_new0 (GValue);
+			g_value_init (val, G_TYPE_UINT);
+			g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (temp_addr.s_addr));
+
+			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
+		}
+	} else {
 		GValue *val;
 
 		val = g_slice_new0 (GValue);
 		g_value_init (val, G_TYPE_UINT);
-		g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (temp_addr.s_addr));
-
+		g_value_set_uint (val, 32);
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 	}
 
