@@ -1,3 +1,10 @@
+2009-01-28  Dan Williams  <dcbw@redhat.com>
+
+	* src/nm-openvpn-service-openvpn-helper.c
+		- (main): handle subnets correctly; TAP devices get their netmask
+			from 'ifconfig_netmask', while TUN devices always use
+			/32 becuase they are point-to-point
+
 2009-01-28  Christoph Höger <choeger@cs.tu-berlin.de>
 
 	* src/nm-openvpn-service.c
