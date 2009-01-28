@@ -1,3 +1,9 @@
+2009-01-28  Christoph Höger <choeger@cs.tu-berlin.de>
+
+	* src/nm-openvpn-service.c
+		- (real_connect, real_need_secrets): don't segfault if the
+			connection type is invalid
+
 2008-12-13  Przemysław Grzegorczyk  <pgrzegorczyk@gmail.com>
 
 	* src/nm-openvpn-service.h:
