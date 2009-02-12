@@ -55,6 +55,7 @@
 #define SECRET_TAG "secret"
 #define AUTH_USER_PASS_TAG "auth-user-pass"
 #define TLS_AUTH_TAG "tls-auth"
+#define AUTH_TAG "auth"
 
 static gboolean
 handle_path_item (const char *line,
@@ -315,8 +316,21 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 
-		if (!strncmp (*line, AUTH_USER_PASS_TAG, strlen (AUTH_USER_PASS_TAG)))
+		if (!strncmp (*line, AUTH_USER_PASS_TAG, strlen (AUTH_USER_PASS_TAG))) {
 			have_pass = TRUE;
+			continue;
+		}
+
+		if (!strncmp (*line, AUTH_TAG, strlen (AUTH_TAG))) {
+			items = get_args (*line + strlen (AUTH_TAG));
+			if (!items)
+				continue;
+
+			if (g_strv_length (items))
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH, items[0]);
+			g_strfreev (items);
+			continue;
+		}
 	}
 
 	if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY))

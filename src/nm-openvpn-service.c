@@ -83,6 +83,7 @@ typedef struct {
 } ValidProperty;
 
 static ValidProperty valid_properties[] = {
+	{ NM_OPENVPN_KEY_AUTH,                 G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CA,                   G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CERT,                 G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CIPHER,               G_TYPE_STRING, 0, 0, FALSE },
@@ -501,6 +502,18 @@ openvpn_watch_cb (GPid pid, gint status, gpointer user_data)
 	nm_vpn_plugin_set_state (plugin, NM_VPN_SERVICE_STATE_STOPPED);
 }
 
+static gboolean
+validate_auth (const char *auth)
+{
+	if (auth) {
+		if (   !strcmp (auth, NM_OPENVPN_AUTH_NONE)
+		    || !strcmp (auth, NM_OPENVPN_AUTH_MD5)
+		    || !strcmp (auth, NM_OPENVPN_AUTH_SHA1))
+			return TRUE;
+	}
+	return FALSE;
+}
+
 static const char *
 validate_connection_type (const char *ctype)
 {
@@ -575,7 +588,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  GError **error)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-	const char *openvpn_binary, *connection_type, *tmp;
+	const char *openvpn_binary, *auth, *connection_type, *tmp;
 	GPtrArray *args;
 	GSource *openvpn_watch;
 	GPid pid;
@@ -590,6 +603,18 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		             "Could not find the openvpn binary.");
 		return FALSE;
 	}
+  
+ 	auth = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
+ 	if (auth) {
+ 		if (!validate_auth(auth)) {
+ 			g_set_error (error,
+ 			             NM_VPN_PLUGIN_ERROR,
+ 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+ 			             "%s",
+ 			             "Invalid HMAC auth.");
+ 			return FALSE;
+ 		}
+ 	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
 	connection_type = validate_connection_type (tmp);
@@ -656,6 +681,12 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (tmp && strlen (tmp)) {
 		add_openvpn_arg (args, "--cipher");
 		add_openvpn_arg (args, tmp);
+	}
+
+	/* Auth */
+	if (auth) {
+		add_openvpn_arg (args, "--auth");
+		add_openvpn_arg (args, auth);
 	}
 
 	/* TA */
