@@ -721,6 +721,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_TAP_DEV,
 	NM_OPENVPN_KEY_PROTO_TCP,
 	NM_OPENVPN_KEY_CIPHER,
+	NM_OPENVPN_KEY_AUTH,
 	NM_OPENVPN_KEY_TA_DIR,
 	NM_OPENVPN_KEY_TA,
 	NULL
@@ -865,6 +866,63 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 	g_strfreev (items);
 }
 
+#define HMACAUTH_COL_NAME 0
+#define HMACAUTH_COL_VALUE 1
+#define HMACAUTH_COL_DEFAULT 2
+
+static void
+populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
+{
+	GtkListStore *store;
+	GtkTreeIter iter;
+	gboolean active_initialized = FALSE;
+	const char **item;
+	static const char *items[] = {
+		NM_OPENVPN_AUTH_NONE,
+		NM_OPENVPN_AUTH_MD5,
+		NM_OPENVPN_AUTH_SHA1,
+		NULL
+	};
+
+	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+	gtk_combo_box_set_model (box, GTK_TREE_MODEL (store));
+
+	/* Add default option which won't pass --auth to openvpn */
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    HMACAUTH_COL_NAME, _("Default"),
+	                    HMACAUTH_COL_DEFAULT, TRUE, -1);
+
+	/* Add options */
+	for (item = items; *item; item++) {
+		const char *name = NULL;
+
+		if (!strcmp (*item, NM_OPENVPN_AUTH_NONE))
+			name = _("None");
+		else if (!strcmp (*item, NM_OPENVPN_AUTH_MD5))
+			name = _("MD-5");
+		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA1))
+			name = _("SHA-1");
+		else
+			g_assert_not_reached ();
+
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+		                    HMACAUTH_COL_NAME, name,
+		                    HMACAUTH_COL_VALUE, *item,
+		                    HMACAUTH_COL_DEFAULT, FALSE, -1);
+		if (hmacauth && !strcmp (*item, hmacauth)) {
+			gtk_combo_box_set_active_iter (box, &iter);
+			active_initialized = TRUE;
+		}
+	}
+
+	if (!active_initialized)
+		gtk_combo_box_set_active (box, 0);
+
+	g_object_unref (store);
+}
+
 static void
 tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 {
@@ -959,16 +1017,20 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
+	widget = glade_xml_get_widget (xml, "cipher_combo");
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
+	populate_cipher_combo (GTK_COMBO_BOX (widget), value);
+
+	widget = glade_xml_get_widget (xml, "hmacauth_combo");
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_AUTH);
+	populate_hmacauth_combo (GTK_COMBO_BOX (widget), value);
+
 	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		GtkListStore *store;
 		GtkTreeIter iter;
 		int direction = -1, active = -1;
-
-		widget = glade_xml_get_widget (xml, "cipher_combo");
-		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
-		populate_cipher_combo (GTK_COMBO_BOX (widget), value);
 
 		widget = glade_xml_get_widget (xml, "tls_auth_checkbutton");
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
@@ -1012,7 +1074,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		}
 	} else {
 		widget = glade_xml_get_widget (xml, "options_notebook");
-		gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 1);
+		gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2);
 	}
 
 out:
@@ -1059,7 +1121,9 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TAP_DEV), g_strdup ("yes"));
 
 	contype = g_object_get_data (G_OBJECT (dialog), "connection-type");
-	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
+	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
+	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		GtkTreeModel *model;
 		GtkTreeIter iter;
 
@@ -1074,6 +1138,20 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 			                    TLS_CIPHER_COL_DEFAULT, &is_default, -1);
 			if (!is_default && cipher) {
 				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CIPHER), g_strdup (cipher));
+			}
+		}
+		
+		widget = glade_xml_get_widget (xml, "hmacauth_combo");
+		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
+		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
+			char *hmacauth = NULL;
+			gboolean is_default = TRUE;
+
+			gtk_tree_model_get (model, &iter,
+			                    HMACAUTH_COL_VALUE, &hmacauth,
+			                    HMACAUTH_COL_DEFAULT, &is_default, -1);
+			if (!is_default && hmacauth) {
+				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_AUTH), g_strdup (hmacauth));
 			}
 		}
 		

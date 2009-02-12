@@ -38,6 +38,7 @@
 #define NM_DBUS_INTERFACE_OPENVPN  "org.freedesktop.NetworkManager.openvpn"
 #define NM_DBUS_PATH_OPENVPN       "/org/freedesktop/NetworkManager/openvpn"
 
+#define NM_OPENVPN_KEY_AUTH "auth"
 #define NM_OPENVPN_KEY_CA "ca"
 #define NM_OPENVPN_KEY_CERT "cert"
 #define NM_OPENVPN_KEY_CIPHER "cipher"
@@ -62,6 +63,10 @@
  * required for the connection.
  */
 #define NM_OPENVPN_KEY_NOSECRET "no-secret"
+
+#define NM_OPENVPN_AUTH_NONE "none"
+#define NM_OPENVPN_AUTH_MD5  "MD5"
+#define NM_OPENVPN_AUTH_SHA1 "SHA1"
 
 #define NM_OPENVPN_CONTYPE_TLS          "tls"
 #define NM_OPENVPN_CONTYPE_STATIC_KEY   "static-key"
