@@ -2,372 +2,376 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Funda Wang <fundawang@linux.net.cn>, 2004.
+# Wei Mingzhi <whistler@openoffice.org>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-04 00:45+0800\n"
-"PO-Revision-Date: 2006-02-04 01:03+0800\n"
-"Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=NetworkManager&component=VPN: openvpn\n"
+"POT-Creation-Date: 2009-02-17 01:50+0000\n"
+"PO-Revision-Date: 2009-02-18 15:14+0800\n"
+"Last-Translator: Wei Mingzhi <whistler@openoffice.org>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:148
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
-msgstr "密码(_P)："
+msgstr "密码(_P):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:149
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
-msgstr "次要密码(_S)："
+msgstr "次要密码(_S):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:272
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
-msgstr "用户名(_U)："
+msgstr "用户名(_U):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:274
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
-msgstr "域(_D)："
+msgstr "域(_D):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:360
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "匿名连接(_A)"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:365
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
-msgstr "连接为用户(_U)："
+msgstr "连接为用户(_U):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "此会话记住密码(_R)"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "在密钥环中保存密码(_S)"
 
-#: ../auth-dialog/main.c:214
+#: ../auth-dialog/main.c:127
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "要访问虚拟私网“%s”，您必须进行身份验证。"
 
-#: ../auth-dialog/main.c:215
+#: ../auth-dialog/main.c:128
 msgid "Authenticate VPN"
 msgstr "验证 VPN"
 
-#: ../auth-dialog/main.c:227 ../auth-dialog/main.c:252
+#: ../auth-dialog/main.c:149
+msgid "Certificate pass_word:"
+msgstr "证书密码(_W):"
+
+#: ../auth-dialog/main.c:163
 msgid "Certificate password:"
-msgstr "证书密码："
+msgstr "证书密码:"
 
-#: ../nm-openvpn.desktop.in.h:1
-msgid "Add, Remove, and Edit VPN Connections"
-msgstr "添加、删除和编辑 VPN 连接"
+#: ../properties/auth-helpers.c:160
+msgid "Choose a Certificate Authority certificate..."
+msgstr "选择一个认证中心证书..."
 
-#: ../nm-openvpn.desktop.in.h:2
-msgid "VPN Connection Manager (OpenVPN)"
-msgstr "VPN 连接管理器(OpenVPN)"
+#: ../properties/auth-helpers.c:179
+msgid "Choose your personal certificate..."
+msgstr "选择您的个人证书..."
 
-#: ../properties/nm-openvpn.c:108
-msgid "OpenVPN Client"
-msgstr "OpenVPN 客户端"
+#: ../properties/auth-helpers.c:197
+msgid "Choose your private key..."
+msgstr "选择您的私钥..."
 
-#: ../properties/nm-openvpn.c:614
-msgid "The following OpenVPN connection will be created:"
-msgstr "即将创建下面的 VPN 连接："
+#: ../properties/auth-helpers.c:250
+msgid "Choose an OpenVPN static key..."
+msgstr "选择一个 OpenVPN 静态密钥..."
 
-#: ../properties/nm-openvpn.c:616
-#, c-format
-msgid "Name:  %s"
-msgstr "名称：%s"
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:901
+#: ../properties/auth-helpers.c:1054
+msgid "None"
+msgstr "无"
 
-#: ../properties/nm-openvpn.c:624
-msgid "Connection Type: X.509 Certificates"
-msgstr "连接类型：X.509 证书"
+#: ../properties/auth-helpers.c:654
+msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgstr "PEM 证书 (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/nm-openvpn.c:627 ../properties/nm-openvpn.c:654
-#: ../properties/nm-openvpn.c:666
-#, c-format
-msgid "CA:  %s"
-msgstr "CA：%s"
+#: ../properties/auth-helpers.c:714
+msgid "OpenVPN Static Keys (*.key)"
+msgstr "OpenVPN 静态密钥 (*.key)"
 
-#: ../properties/nm-openvpn.c:630 ../properties/nm-openvpn.c:669
-#, c-format
-msgid "Cert:  %s"
-msgstr "证书：%s"
+#: ../properties/auth-helpers.c:823 ../properties/auth-helpers.c:893
+msgid "Default"
+msgstr "默认"
 
-#: ../properties/nm-openvpn.c:633 ../properties/nm-openvpn.c:672
-#, c-format
-msgid "Key:  %s"
-msgstr "密钥：%s"
+#: ../properties/auth-helpers.c:903
+msgid "MD-5"
+msgstr "MD-5"
 
-#: ../properties/nm-openvpn.c:637
-msgid "Connection Type: Shared Key"
-msgstr ""
+#: ../properties/auth-helpers.c:905
+msgid "SHA-1"
+msgstr "SHA-1"
 
-#: ../properties/nm-openvpn.c:640
-#, c-format
-msgid "Shared Key:  %s"
-msgstr "共享密钥：%s"
+#: ../properties/nm-openvpn.c:53
+msgid "OpenVPN"
+msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:643
-#, c-format
-msgid "Local IP:  %s"
-msgstr "本地 IP：%s"
+#: ../properties/nm-openvpn.c:54
+msgid "Compatible with the OpenVPN server."
+msgstr "与 OpenVPN 服务器兼容"
 
-#: ../properties/nm-openvpn.c:646
-#, c-format
-msgid "Remote IP:  %s"
-msgstr "远程 IP：%s"
+#: ../properties/nm-openvpn.c:322
+msgid "Certificates (TLS)"
+msgstr "证书 (TLS)"
 
-#: ../properties/nm-openvpn.c:651
-msgid "Connection Type: Password"
-msgstr "连接类型：密码"
-
-#: ../properties/nm-openvpn.c:657 ../properties/nm-openvpn.c:675
-#, c-format
-msgid "Username:  %s"
-msgstr "用户名：%s"
-
-#: ../properties/nm-openvpn.c:663
-msgid "Connection Type: X.509 with Password Authentication"
-msgstr ""
-
-#: ../properties/nm-openvpn.c:681
-#, c-format
-msgid "Remote:  %s"
-msgstr "远程：%s"
-
-#: ../properties/nm-openvpn.c:684
-#, c-format
-msgid "Device: %s"
-msgstr "设备：%s"
-
-#: ../properties/nm-openvpn.c:684
-msgid "TAP"
-msgstr "TAP"
-
-#: ../properties/nm-openvpn.c:684
-msgid "TUN"
-msgstr "TUN"
-
-#: ../properties/nm-openvpn.c:687
-#, c-format
-msgid "Protocol: %s"
-msgstr "协议：%s"
-
-#: ../properties/nm-openvpn.c:687
-msgid "TCP"
-msgstr "TCP"
-
-#: ../properties/nm-openvpn.c:687
-msgid "UDP"
-msgstr "UDP"
-
-#: ../properties/nm-openvpn.c:691
-#, c-format
-msgid "Routes:  %s"
-msgstr "路由：%s"
-
-#: ../properties/nm-openvpn.c:695
-#, c-format
-msgid "Use LZO Compression: %s"
-msgstr "使用 LZO 压缩：%s"
-
-#: ../properties/nm-openvpn.c:695
-msgid "Yes"
-msgstr "是"
-
-#: ../properties/nm-openvpn.c:695
-msgid "No"
-msgstr "否"
-
-#: ../properties/nm-openvpn.c:698
-msgid "The connection details can be changed using the \"Edit\" button."
-msgstr ""
-
-#: ../properties/nm-openvpn.c:849
-msgid "Cannot import settings"
-msgstr "无法导入设置"
-
-#: ../properties/nm-openvpn.c:851
-#, c-format
-msgid "The VPN settings file '%s' does not contain valid data."
-msgstr "VPN 设置文件“%s”不包含有效数据。"
-
-#: ../properties/nm-openvpn.c:885
-msgid "Select file to import"
-msgstr "选择要导入的文件"
-
-#: ../properties/nm-openvpn.c:966 ../properties/nm-openvpn.c:978
-msgid "Select CA to use"
-msgstr "选择要使用的 CA"
-
-#: ../properties/nm-openvpn.c:969
-msgid "Select certificate to use"
-msgstr "选择要使用的证书"
-
-#: ../properties/nm-openvpn.c:972
-msgid "Select key to use"
-msgstr "选择要使用的密钥"
-
-#: ../properties/nm-openvpn.c:975
-msgid "Select shared key to use"
-msgstr "选择要使用的共享密钥"
-
-#. printf ("in impl_export\n");
-#: ../properties/nm-openvpn.c:1147
-msgid "Save as..."
-msgstr "另存为..."
-
-#: ../properties/nm-openvpn.c:1177
-#, c-format
-msgid "A file named \"%s\" already exists."
-msgstr "已经存在名为“%s”的文件。"
-
-#: ../properties/nm-openvpn.c:1180
-msgid "Do you want to replace it with the one you are saving?"
-msgstr ""
-
-#: ../properties/nm-openvpn-dialog.glade.h:1
-msgid "<b>Connection Name</b>"
-msgstr "<b>连接名称</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:2
-msgid "<b>Optional Information</b>"
-msgstr "<b>可选信息</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:3
-msgid "<b>Required Information</b>"
-msgstr "<b>请求的信息</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:4
-msgid "<i>example: 172.16.0.0/16 10.11.12.0/24</i>"
-msgstr ""
-
-#: ../properties/nm-openvpn-dialog.glade.h:5
-msgid "CA  file:"
-msgstr "CA 文件："
-
-#: ../properties/nm-openvpn-dialog.glade.h:6
-msgid "Certificate:"
-msgstr "证书："
-
-#: ../properties/nm-openvpn-dialog.glade.h:7
-msgid "Connection Type:"
-msgstr "连接类型："
-
-#: ../properties/nm-openvpn-dialog.glade.h:8
-msgid "Key:"
-msgstr "密钥："
-
-#: ../properties/nm-openvpn-dialog.glade.h:9
-msgid "Local IP:"
-msgstr "本地 IP："
-
-#: ../properties/nm-openvpn-dialog.glade.h:10
+#: ../properties/nm-openvpn.c:336
 msgid "Password"
 msgstr "密码"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
+#: ../properties/nm-openvpn.c:353
+msgid "Password with Certificates (TLS)"
+msgstr "带有证书的密码 (TLS)"
+
+#: ../properties/nm-openvpn.c:365
+msgid "Static Key"
+msgstr "静态密钥"
+
+#: ../properties/nm-openvpn-dialog.glade.h:1
+msgid " "
+msgstr " "
+
+#: ../properties/nm-openvpn-dialog.glade.h:2
+msgid "<b>Authentication</b>"
+msgstr "<b>认证</b>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:3
+msgid "<b>General</b>"
+msgstr "<b>一般</b>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:4
 msgid ""
-"Please enter the information provided by your system administrator below. Do "
-"not enter your password here as you will be prompted when connecting."
+"<i>If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.</i>"
 msgstr ""
+"<i>如果启用密钥方向，它必须与 VPN 端使用的密钥方向相反。例如，VPN 端使用 "
+"'1'，此连接必须使用 '0'。如果您不确认您应该使用何值，请联系网络管理员。</i>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:5
+msgid "Ad_vanced..."
+msgstr "高级(_V)..."
+
+#: ../properties/nm-openvpn-dialog.glade.h:6
+msgid "CA Certificate:"
+msgstr "CA 认证:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:7
+msgid "Cipher:"
+msgstr "加密:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:8
+msgid "General"
+msgstr "一般"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "HMAC 认证:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:10
+msgid "Key Direction:"
+msgstr "密钥方向:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:11
+msgid "Key File:"
+msgstr "密钥文件:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:12
-msgid ""
-"Please note that the file you import is not an OpenVPN configuration file. "
-"Ask your adminstrator for the file."
-msgstr ""
+msgid "Local IP Address:"
+msgstr "本地 IP 地址:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:13
-msgid "Remote IP:"
-msgstr "远程 IP："
+msgid "OpenVPN Advanced Options"
+msgstr "OpenVPN 高级选项"
 
 #: ../properties/nm-openvpn-dialog.glade.h:14
-msgid "Shared Key:"
-msgstr "共享密钥："
+msgid "Password:"
+msgstr "密码:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:15
-msgid "Shared key"
-msgstr "共享要密钥"
+msgid "Private Key Password:"
+msgstr "私钥密码:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:16
-msgid "Use LZO compression"
-msgstr "使用 LZO 压缩"
+msgid "Private Key:"
+msgstr "私钥:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:17
-msgid "Use TAP device"
-msgstr ""
+msgid "Security"
+msgstr "安全性"
 
 #: ../properties/nm-openvpn-dialog.glade.h:18
-msgid "Use TCP connection"
-msgstr "使用 TCP 连接"
+msgid "Show passwords"
+msgstr "显示密码"
 
 #: ../properties/nm-openvpn-dialog.glade.h:19
-msgid "Username:"
-msgstr "用户名："
+msgid "Static Key:"
+msgstr "静态密钥:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:20
-msgid "X.509"
-msgstr ""
+msgid "TLS Authentication"
+msgstr "TLS 认证"
 
 #: ../properties/nm-openvpn-dialog.glade.h:21
-msgid ""
-"X.509 Certificates\n"
-"Pre-shared key\n"
-"Password Authentication\n"
-"X.509 with Password Authentication"
-msgstr ""
+msgid "Type:"
+msgstr "类型:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:22
+msgid "Use L_ZO data compression"
+msgstr "使用 L_ZO 压缩"
+
+#: ../properties/nm-openvpn-dialog.glade.h:23
+msgid "Use a TA_P device"
+msgstr "便用 TA_P 设备"
+
+#: ../properties/nm-openvpn-dialog.glade.h:24
+msgid "Use a _TCP connection"
+msgstr "使用 _TCP 连接"
 
 #: ../properties/nm-openvpn-dialog.glade.h:25
-msgid "_Gateway:"
-msgstr "网关(_G)："
+msgid "Use additional TLS authentication"
+msgstr "使用附加 TLS 认证"
 
 #: ../properties/nm-openvpn-dialog.glade.h:26
-msgid "_Import Saved Configuration..."
-msgstr "导入保存的配置(_I)..."
+msgid "Use custom gateway p_ort:"
+msgstr "使用自定义网关端口(_O):"
 
 #: ../properties/nm-openvpn-dialog.glade.h:27
-msgid ""
-"_Name used to identify the connection to the private network, e.g. \"Campus "
-"VPN\" or \"Corporate Network\""
-msgstr ""
+msgid "User Certificate:"
+msgstr "用户证书:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:28
-msgid "_Only use VPN connection for these addresses"
-msgstr "这些地址只使用 VPN 连接(_O)"
+msgid "User name:"
+msgstr "用户名:"
 
-#: ../src/nm-openvpn-service.c:136
-msgid ""
-"The VPN login failed because the user name and password were not accepted or "
-"the certificate password was wrong."
-msgstr ""
+#: ../properties/nm-openvpn-dialog.glade.h:29
+msgid "_Gateway:"
+msgstr "网关(_G):"
 
-#: ../src/nm-openvpn-service.c:138
-msgid "The VPN login failed because the VPN program could not be started."
-msgstr ""
+#~ msgid "Add, Remove, and Edit VPN Connections"
+#~ msgstr "添加、删除和编辑 VPN 连接"
 
-#: ../src/nm-openvpn-service.c:140
-msgid ""
-"The VPN login failed because the VPN program could not connect to the VPN "
-"server."
-msgstr ""
+#~ msgid "VPN Connection Manager (OpenVPN)"
+#~ msgstr "VPN 连接管理器(OpenVPN)"
 
-#: ../src/nm-openvpn-service.c:142
-msgid ""
-"The VPN login failed because the VPN configuration options were invalid."
-msgstr ""
+#~ msgid "The following OpenVPN connection will be created:"
+#~ msgstr "即将创建下面的 VPN 连接："
 
-#: ../src/nm-openvpn-service.c:144
-msgid ""
-"The VPN login failed because the VPN program received an invalid "
-"configuration from the VPN server."
-msgstr ""
+#~ msgid "Name:  %s"
+#~ msgstr "名称：%s"
 
-#: ../src/nm-openvpn-service.c:146
-msgid "VPN connection failed"
-msgstr "VPN 连接失败"
+#~ msgid "Connection Type: X.509 Certificates"
+#~ msgstr "连接类型：X.509 证书"
 
+#~ msgid "CA:  %s"
+#~ msgstr "CA：%s"
+
+#~ msgid "Cert:  %s"
+#~ msgstr "证书：%s"
+
+#~ msgid "Key:  %s"
+#~ msgstr "密钥：%s"
+
+#~ msgid "Shared Key:  %s"
+#~ msgstr "共享密钥：%s"
+
+#~ msgid "Local IP:  %s"
+#~ msgstr "本地 IP：%s"
+
+#~ msgid "Remote IP:  %s"
+#~ msgstr "远程 IP：%s"
+
+#~ msgid "Connection Type: Password"
+#~ msgstr "连接类型：密码"
+
+#~ msgid "Username:  %s"
+#~ msgstr "用户名：%s"
+
+#~ msgid "Remote:  %s"
+#~ msgstr "远程：%s"
+
+#~ msgid "Device: %s"
+#~ msgstr "设备：%s"
+
+#~ msgid "TAP"
+#~ msgstr "TAP"
+
+#~ msgid "TUN"
+#~ msgstr "TUN"
+
+#~ msgid "Protocol: %s"
+#~ msgstr "协议：%s"
+
+#~ msgid "TCP"
+#~ msgstr "TCP"
+
+#~ msgid "UDP"
+#~ msgstr "UDP"
+
+#~ msgid "Routes:  %s"
+#~ msgstr "路由：%s"
+
+#~ msgid "Use LZO Compression: %s"
+#~ msgstr "使用 LZO 压缩：%s"
+
+#~ msgid "Yes"
+#~ msgstr "是"
+
+#~ msgid "Cannot import settings"
+#~ msgstr "无法导入设置"
+
+#~ msgid "The VPN settings file '%s' does not contain valid data."
+#~ msgstr "VPN 设置文件“%s”不包含有效数据。"
+
+#~ msgid "Select file to import"
+#~ msgstr "选择要导入的文件"
+
+#~ msgid "Select CA to use"
+#~ msgstr "选择要使用的 CA"
+
+#~ msgid "Select certificate to use"
+#~ msgstr "选择要使用的证书"
+
+#~ msgid "Select key to use"
+#~ msgstr "选择要使用的密钥"
+
+#~ msgid "Select shared key to use"
+#~ msgstr "选择要使用的共享密钥"
+
+#~ msgid "Save as..."
+#~ msgstr "另存为..."
+
+#~ msgid "A file named \"%s\" already exists."
+#~ msgstr "已经存在名为“%s”的文件。"
+
+#~ msgid "<b>Connection Name</b>"
+#~ msgstr "<b>连接名称</b>"
+
+#~ msgid "<b>Optional Information</b>"
+#~ msgstr "<b>可选信息</b>"
+
+#~ msgid "CA  file:"
+#~ msgstr "CA 文件："
+
+#~ msgid "Connection Type:"
+#~ msgstr "连接类型："
+
+#~ msgid "Remote IP:"
+#~ msgstr "远程 IP："
+
+#~ msgid "Shared key"
+#~ msgstr "共享要密钥"
+
+#~ msgid "_Import Saved Configuration..."
+#~ msgstr "导入保存的配置(_I)..."
+
+#~ msgid "_Only use VPN connection for these addresses"
+#~ msgstr "这些地址只使用 VPN 连接(_O)"
+
+#~ msgid "VPN connection failed"
+#~ msgstr "VPN 连接失败"
