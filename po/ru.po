@@ -1,104 +1,113 @@
-# translation of ru.po to Russian
-# Ukrainian translation of NetworkManager openvpn
+# Russian translation of NetworkManager openvpn
 # Copyright (C) Free Software Foundation, 2005
 # This file is distributed under the same license as the NetworkManager package.
 #
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2005-2007.
 # Leonid Kanter <leon@asplinux.ru>, 2007, 2008.
+# Артём Попов <artfwo@gmail.com>, 2009
 msgid ""
 msgstr ""
-"Project-Id-Version: ru\n"
+"Project-Id-Version: network-manager-openvpn trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-08 14:53+0300\n"
-"PO-Revision-Date: 2008-08-08 15:13+0300\n"
-"Last-Translator: Leonid Kanter <leon@asplinux.ru>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"POT-Creation-Date: 2009-02-20 10:37+0300\n"
+"PO-Revision-Date: 2009-02-12 16:49+0600\n"
+"Last-Translator: Артём Попов <artfwo@gmail.com>\n"
+"Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "_Вторичный пароль:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
 msgstr "_Имя пользователя:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "_Домен:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "Подключаться _анонимно"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "_Подключаться как пользователь:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "_Запомнить пароль для этого сеанса"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "_Сохранить пароль на брелоке"
 
-#: ../auth-dialog/main.c:187
+#: ../auth-dialog/main.c:127
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Для доступа к виртуальной частной сети '%s' требуется аутентификация."
 
-#: ../auth-dialog/main.c:188
+#: ../auth-dialog/main.c:128
 msgid "Authenticate VPN"
 msgstr "Аутентификация VPN"
 
-#: ../auth-dialog/main.c:201
+#: ../auth-dialog/main.c:149
 msgid "Certificate pass_word:"
 msgstr "Па_роль сертификата:"
 
-#: ../auth-dialog/main.c:216
+#: ../auth-dialog/main.c:163
 msgid "Certificate password:"
 msgstr "Пароль сертификата:"
 
-#: ../properties/auth-helpers.c:68
+#: ../properties/auth-helpers.c:160
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Выберите сертификат Центра сертификации..."
 
-#: ../properties/auth-helpers.c:87
+#: ../properties/auth-helpers.c:179
 msgid "Choose your personal certificate..."
 msgstr "Выберите ваш персональный сертификат..."
 
-#: ../properties/auth-helpers.c:105
+#: ../properties/auth-helpers.c:197
 msgid "Choose your private key..."
 msgstr "Выберите ваш личный ключ..."
 
-#: ../properties/auth-helpers.c:158
+#: ../properties/auth-helpers.c:250
 msgid "Choose an OpenVPN static key..."
 msgstr "Выберите статический ключ OpenVPN..."
 
-#: ../properties/auth-helpers.c:176 ../properties/auth-helpers.c:886
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:901
+#: ../properties/auth-helpers.c:1054
 msgid "None"
 msgstr "Нет"
 
-#: ../properties/auth-helpers.c:519
-msgid "PEM certificates (*.pem, *.crt, *.key)"
-msgstr "Сертификаты PEM (*.pem, *.crt, *.key)"
+#: ../properties/auth-helpers.c:654
+msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgstr "Сертификаты PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:579
+#: ../properties/auth-helpers.c:714
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Статические ключи OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:711
+#: ../properties/auth-helpers.c:823 ../properties/auth-helpers.c:893
 msgid "Default"
 msgstr "По умолчанию"
+
+#: ../properties/auth-helpers.c:903
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:905
+msgid "SHA-1"
+msgstr "SHA-1"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -108,19 +117,19 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Совместим с сервером OpenVPN."
 
-#: ../properties/nm-openvpn.c:308 ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn.c:322
 msgid "Certificates (TLS)"
 msgstr "Сертификаты (TLS)"
 
-#: ../properties/nm-openvpn.c:320
+#: ../properties/nm-openvpn.c:336
 msgid "Password"
 msgstr "Пароль"
 
-#: ../properties/nm-openvpn.c:334
+#: ../properties/nm-openvpn.c:353
 msgid "Password with Certificates (TLS)"
 msgstr "Пароль с сертификатами (TLS)"
 
-#: ../properties/nm-openvpn.c:346
+#: ../properties/nm-openvpn.c:365
 msgid "Static Key"
 msgstr "Статический ключ"
 
@@ -142,8 +151,11 @@ msgid ""
 "peer.  For example, if the peer uses '1', this connection must use '0'.  If "
 "you are unsure what value to use, contact your system administrator.</i>"
 msgstr ""
-"<i>Если используется направление ключа, оно должно быть противоположно направлению, которое "
-"использует вторая сторона. Например, если вторая сторона использует \"1\", это соединение должно использовать \"0\". Если вы не уверены, какое значение использовать, свяжитесь с системным администратором.</i>"
+"<i>Если используется направление ключа, оно должно быть противоположно "
+"направлению, которое использует вторая сторона. Например, если вторая "
+"сторона использует \"1\", это соединение должно использовать \"0\". Если вы "
+"не уверены, какое значение использовать, свяжитесь с системным "
+"администратором.</i>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:5
 msgid "Ad_vanced..."
@@ -153,13 +165,17 @@ msgstr "_Дополнительно..."
 msgid "CA Certificate:"
 msgstr "Сертификат CA:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Cipher:"
 msgstr "Шифр:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "General"
 msgstr "Общие"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "Аутентификация HMAC"
 
 #: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Key Direction:"
@@ -170,74 +186,74 @@ msgid "Key File:"
 msgstr "Направление ключа:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:12
+msgid "Local IP Address:"
+msgstr "Локальный IP-адрес:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:13
 msgid "OpenVPN Advanced Options"
 msgstr "Дополнительные параметры OpenVPN"
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
+#: ../properties/nm-openvpn-dialog.glade.h:14
+msgid "Password:"
+msgstr "Пароль:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:15
+msgid "Private Key Password:"
+msgstr "Пароль личного ключа:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:16
 msgid "Private Key:"
 msgstr "Личный ключ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
+#: ../properties/nm-openvpn-dialog.glade.h:17
+msgid "Security"
+msgstr "Безопасность"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
+msgid "Show passwords"
+msgstr "Показать пароли"
+
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Static Key:"
 msgstr "Статический ключ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:20
+msgid "TLS Authentication"
+msgstr "Аутентификация TLS"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Type:"
 msgstr "Тип:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Use L_ZO data compression"
 msgstr "Использовать сжатие L_ZO"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use a TA_P device"
 msgstr "Использовать устройство TA_P"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a _TCP connection"
 msgstr "Использовать соединение _TCP"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use additional TLS authentication"
 msgstr "Дополнительная аутентификация TLS"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use custom gateway p_ort:"
 msgstr "Использовать другой _порт шлюза:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "User Certificate:"
 msgstr "Сертификат пользователя:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User name:"
 msgstr "Имя пользователя:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "_Gateway:"
 msgstr "_Шлюз:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:24
-msgid "gtk-cancel"
-msgstr "gtk-cancel"
-
-#: ../properties/nm-openvpn-dialog.glade.h:25
-msgid "gtk-ok"
-msgstr "gtk-ok"
-
-#: ../properties/nm-openvpn-dialog.glade.h:26
-msgid "page 1"
-msgstr "страница 1"
-
-#: ../properties/nm-openvpn-dialog.glade.h:27
-msgid "page 2"
-msgstr "страница 2"
-
-#: ../properties/nm-openvpn-dialog.glade.h:28
-msgid "page 3"
-msgstr "страница 3"
-
-#: ../properties/nm-openvpn-dialog.glade.h:29
-msgid "page 4"
-msgstr "страница 4"
 
