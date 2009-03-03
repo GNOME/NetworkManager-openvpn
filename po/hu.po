@@ -1,15 +1,15 @@
 # Hungarian translation of NetworkManager-openvpn.
-# Copyright (C) 2006, 2007, 2008 The Free Software Foundation, Inc.
+# Copyright (C) 2006, 2007, 2008, 2009 The Free Software Foundation, Inc.
 # This file is distributed under the same license as the NetworkManager-openvpn package.
 #
 # Gabor Halaszvari <g.halaszvari@portmax.hu>, 2006.
-# Gabor Kelemen <kelemeng@gnome.hu>, 2006, 2007, 2008.
+# Gabor Kelemen <kelemeng@gnome.hu>, 2006, 2007, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-08 14:09+0000\n"
-"PO-Revision-Date: 2008-12-16 21:01+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&component=VPN: openvpn\n"
+"POT-Creation-Date: 2009-02-12 16:10+0000\n"
+"PO-Revision-Date: 2009-03-03 15:36+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -18,35 +18,35 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Jelszó:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "Jelszó _még egyszer:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
 msgstr "_Felhasználói név:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "_Tartomány:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "Csatlakozás _névtelenül"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "Csatlakozás _mint:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "Je_lszó megjegyzése a munkamenetre"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "Jelszó mentése a _kulcstartóra"
 
@@ -83,7 +83,8 @@ msgstr "Válassza ki a személyes kulcsát…"
 msgid "Choose an OpenVPN static key..."
 msgstr "Válassza ki az OpenVPN statikus kulcsát…"
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:992
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:901
+#: ../properties/auth-helpers.c:1054
 msgid "None"
 msgstr "Nincs"
 
@@ -95,9 +96,17 @@ msgstr "PEM tanúsítványok (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN statikus kulcsok (*.key)"
 
-#: ../properties/auth-helpers.c:822
+#: ../properties/auth-helpers.c:823 ../properties/auth-helpers.c:893
 msgid "Default"
 msgstr "Alapértelmezett"
+
+#: ../properties/auth-helpers.c:903
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:905
+msgid "SHA-1"
+msgstr "SHA-1"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -107,7 +116,7 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Kompatibilis az OpenVPN kiszolgálóval."
 
-#: ../properties/nm-openvpn.c:322 ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn.c:322
 msgid "Certificates (TLS)"
 msgstr "Tanúsítványok (TLS)"
 
@@ -154,13 +163,18 @@ msgstr "S_peciális…"
 msgid "CA Certificate:"
 msgstr "CA tanúsítvány:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Cipher:"
 msgstr "Rejtjelzés:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "General"
 msgstr "Általános"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+#| msgid "<b>Authentication</b>"
+msgid "HMAC Authentication:"
+msgstr "HMAC hitelesítés:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Key Direction:"
@@ -191,46 +205,55 @@ msgid "Private Key:"
 msgstr "Személyes kulcs:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:17
+msgid "Security"
+msgstr "Biztonság"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Show passwords"
 msgstr "Jelszavak megjelenítése"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Static Key:"
 msgstr "Statikus kulcs:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:20
+#| msgid "<b>Authentication</b>"
+msgid "TLS Authentication"
+msgstr "TLS hitelesítés"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Type:"
 msgstr "Típus:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Use L_ZO data compression"
 msgstr "L_ZO tömörítés használata"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use a TA_P device"
 msgstr "TA_P eszköz használata"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a _TCP connection"
 msgstr "T_CP kapcsolat használata"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use additional TLS authentication"
 msgstr "Kiegészítő TLS hitelesítés használata"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use custom gateway p_ort:"
 msgstr "Egyéni átjáró_port használata:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "User Certificate:"
 msgstr "Felhasználói tanúsítvány:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User name:"
 msgstr "Felhasználónév:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "_Gateway:"
 msgstr "Á_tjáró:"
 
