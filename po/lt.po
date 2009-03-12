@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-24 23:44+0300\n"
-"PO-Revision-Date: 2008-09-25 00:02+0300\n"
+"POT-Creation-Date: 2009-03-12 13:36+0200\n"
+"PO-Revision-Date: 2009-03-12 13:36+0200\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
@@ -18,35 +18,35 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
 "100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Slaptažodis:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "_Antrinis slaptažodis:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
 msgstr "_Naudotojo vardas:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "S_ritis:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "Jungtis an_onimiškai"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "Prisijungti kaip na_udotojas:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "_Atsiminti slaptažodį šiam seansui"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "Iš_saugoti slaptažodį raktinėje"
 
@@ -69,37 +69,46 @@ msgstr "Liudijimo slaptažo_dis:"
 msgid "Certificate password:"
 msgstr "Liudijimo slaptažodis:"
 
-#: ../properties/auth-helpers.c:161
+#: ../properties/auth-helpers.c:160
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Pasirinkite liudijimų įstaigos liudijimą..."
 
-#: ../properties/auth-helpers.c:180
+#: ../properties/auth-helpers.c:179
 msgid "Choose your personal certificate..."
 msgstr "Pasirinkite savo asmeninį liudijimą..."
 
-#: ../properties/auth-helpers.c:198
+#: ../properties/auth-helpers.c:197
 msgid "Choose your private key..."
 msgstr "Pasirinkite savo asmeninį raktą..."
 
-#: ../properties/auth-helpers.c:251
+#: ../properties/auth-helpers.c:250
 msgid "Choose an OpenVPN static key..."
 msgstr "Pasirinkite OpenVPN statinį raktą..."
 
-#: ../properties/auth-helpers.c:275 ../properties/auth-helpers.c:1002
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:901
+#: ../properties/auth-helpers.c:1054
 msgid "None"
 msgstr "Nėra"
 
-#: ../properties/auth-helpers.c:660
-msgid "PEM certificates (*.pem, *.crt, *.key)"
-msgstr "PEM liudijimai (*.pem, *.crt, *.key)"
+#: ../properties/auth-helpers.c:654
+msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgstr "PEM liudijimai (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:720
+#: ../properties/auth-helpers.c:714
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN statiniai raktai (*.key)"
 
-#: ../properties/auth-helpers.c:831
+#: ../properties/auth-helpers.c:823 ../properties/auth-helpers.c:893
 msgid "Default"
 msgstr "Numatytasis"
+
+#: ../properties/auth-helpers.c:903
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:905
+msgid "SHA-1"
+msgstr "SHA-1"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -109,7 +118,7 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Suderinamas su OpenVPN serveriu."
 
-#: ../properties/nm-openvpn.c:322 ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn.c:322
 msgid "Certificates (TLS)"
 msgstr "Liudijimai (TLS)"
 
@@ -145,8 +154,8 @@ msgid ""
 msgstr ""
 "<i>Jeigu naudojama rakto kryptis, ji turi būti priešinga naudojamai VPN "
 "lygiarangyje. Pavyzdžiui, jeigu lygiarangyje naudojama „1“, šiam "
-"prisijungimui turi būti naudojama „0“. Jeigu nežinote, kokią reikšmę naudoti, "
-"susisiekite su savo sistemos administratoriumi.</i>"
+"prisijungimui turi būti naudojama „0“. Jeigu nežinote, kokią reikšmę "
+"naudoti, susisiekite su savo sistemos administratoriumi.</i>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:5
 msgid "Ad_vanced..."
@@ -157,44 +166,48 @@ msgid "CA Certificate:"
 msgstr "LĮ liudijimas:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:7
-msgid "Certificate Password:"
-msgstr "Liudijimo slaptažodis:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:9
 msgid "Cipher:"
 msgstr "Šifras:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:10
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "General"
 msgstr "Bendra"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "HMAC autentikacija:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Key Direction:"
 msgstr "Rakto kryptis:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:12
+#: ../properties/nm-openvpn-dialog.glade.h:11
 msgid "Key File:"
 msgstr "Rakto failas:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
+#: ../properties/nm-openvpn-dialog.glade.h:12
 msgid "Local IP Address:"
 msgstr "Vietinis IP adresas:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
+#: ../properties/nm-openvpn-dialog.glade.h:13
 msgid "OpenVPN Advanced Options"
 msgstr "Išsamesnės OpenVPN parinktys"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:14
 msgid "Password:"
 msgstr "Slaptažodis:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:15
+msgid "Private Key Password:"
+msgstr "Asmeninio rakto slaptažodis:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:16
 msgid "Private Key:"
 msgstr "Asmeninis raktas:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:17
-msgid "Select A File"
-msgstr "Pasirinkite failą"
+msgid "Security"
+msgstr "Saugumas"
 
 #: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Show passwords"
@@ -205,37 +218,47 @@ msgid "Static Key:"
 msgstr "Statinis raktas:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:20
+msgid "TLS Authentication"
+msgstr "TLS autentikacija"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Type:"
 msgstr "Tipas:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Use L_ZO data compression"
 msgstr "Naudoti L_ZO duomenų glaudinimą"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use a TA_P device"
 msgstr "Naudoti TA_P įrenginį"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a _TCP connection"
 msgstr "Naudoti _TCP prisijungimą"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use additional TLS authentication"
 msgstr "Naudoti papildomą TLS tapatybės nustatymą"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use custom gateway p_ort:"
 msgstr "Naudoti pasirinktinį šliuzo _prievadą:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "User Certificate:"
 msgstr "Naudotojo sertifikatas:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User name:"
 msgstr "Naudotojo vardas:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "_Gateway:"
 msgstr "Š_liuzas:"
+
+#~ msgid "Certificate Password:"
+#~ msgstr "Liudijimo slaptažodis:"
+
+#~ msgid "Select A File"
+#~ msgstr "Pasirinkite failą"
