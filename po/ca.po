@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-26 20:48+0100\n"
-"PO-Revision-Date: 2009-01-18 16:36+0100\n"
+"POT-Creation-Date: 2009-03-09 22:34+0100\n"
+"PO-Revision-Date: 2009-02-22 15:06+0100\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -84,7 +84,8 @@ msgstr "Trieu la vostra clau privada..."
 msgid "Choose an OpenVPN static key..."
 msgstr "Trieu una clau estàtica OpenVPN..."
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:992
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:901
+#: ../properties/auth-helpers.c:1054
 msgid "None"
 msgstr "Cap"
 
@@ -96,9 +97,17 @@ msgstr "Certificats PEM (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Claus estàtiques OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:822
+#: ../properties/auth-helpers.c:823 ../properties/auth-helpers.c:893
 msgid "Default"
 msgstr "Predeterminat"
+
+#: ../properties/auth-helpers.c:903
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:905
+msgid "SHA-1"
+msgstr "SHA-1"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -108,7 +117,7 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Compatible amb el servidor OpenVPN."
 
-#: ../properties/nm-openvpn.c:322 ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn.c:322
 msgid "Certificates (TLS)"
 msgstr "Certificats (TLS)"
 
@@ -155,13 +164,17 @@ msgstr "A_vançat..."
 msgid "CA Certificate:"
 msgstr "Certificat d'autoritat de certificació:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Cipher:"
 msgstr "Criptògraf:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "General"
 msgstr "General"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "Autenticació HMAC:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Key Direction:"
@@ -192,46 +205,54 @@ msgid "Private Key:"
 msgstr "Clau privada:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:17
+msgid "Security"
+msgstr "Seguretat"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Show passwords"
 msgstr "Mostra les contrasenyes"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Static Key:"
 msgstr "Clau estàtica:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:20
+msgid "TLS Authentication"
+msgstr "Autenticació TLS"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Type:"
 msgstr "Tipus:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Use L_ZO data compression"
 msgstr "Utilitza la compressió de dades L_ZO"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use a TA_P device"
 msgstr "Utilitza un dispositiu TA_P"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a _TCP connection"
 msgstr "Utilitza una connexió _TCP"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use additional TLS authentication"
 msgstr "Utilitza autenticació TLS addicional"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use custom gateway p_ort:"
 msgstr "Utilitza un _port de passarel·la personalitzat:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "User Certificate:"
 msgstr "Certificat d'usuari:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User name:"
 msgstr "Nom d'usuari:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "_Gateway:"
 msgstr "Pas_sarel·la:"
 

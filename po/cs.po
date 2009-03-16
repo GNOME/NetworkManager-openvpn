@@ -3,122 +3,132 @@
 # This file is distributed under the same license as the NetworkManager-openvpn package.
 # Jakub Friedl <jfriedl@suse.cz>, 2006.
 # Jiří Eischmann <jiri@eischmann.cz>, 2008.
+# Zdeněk Hataš <zdenek.hatas@gmail.com>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-17 22:14+0200\n"
-"PO-Revision-Date: 2008-09-16 13:07+0100\n"
-"Last-Translator: Jiří Eischmann <jiri@eischmann.cz>\n"
+"POT-Creation-Date: 2009-03-12 19:25+0100\n"
+"PO-Revision-Date: 2009-03-08 10:31+0100\n"
+"Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Heslo:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "_Sekundární heslo:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
 msgstr "_Uživ. jméno:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "_Doména:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "Připojit _anonymně"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "Připojit jako _uživatel:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "_Zapamatovat heslo pro toto sezení"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "_Uložit heslo do svazku klíčů"
 
-#: ../auth-dialog/main.c:210
+#: ../auth-dialog/main.c:127
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Pro přístup do VPN '%s' se musíte autentizovat."
 
-#: ../auth-dialog/main.c:211
+#: ../auth-dialog/main.c:128
 msgid "Authenticate VPN"
 msgstr "Ověřování VPN"
 
-#: ../auth-dialog/main.c:232
+#: ../auth-dialog/main.c:149
 msgid "Certificate pass_word:"
 msgstr "Heslo _certifikátu:"
 
-#: ../auth-dialog/main.c:246
+#: ../auth-dialog/main.c:163
 msgid "Certificate password:"
 msgstr "Heslo certifikátu:"
 
-#: ../properties/auth-helpers.c:69
+#: ../properties/auth-helpers.c:160
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Zvolit certifikát certifikační autority..."
 
-#: ../properties/auth-helpers.c:88
+#: ../properties/auth-helpers.c:179
 msgid "Choose your personal certificate..."
 msgstr "Zvolit váš osobní certifikát..."
 
-#: ../properties/auth-helpers.c:106
+#: ../properties/auth-helpers.c:197
 msgid "Choose your private key..."
 msgstr "Zvolit váš osobní klíč..."
 
-#: ../properties/auth-helpers.c:159
+#: ../properties/auth-helpers.c:250
 msgid "Choose an OpenVPN static key..."
 msgstr "Zvolit statický klíč OpenVPN..."
 
-#: ../properties/auth-helpers.c:183 ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:901
+#: ../properties/auth-helpers.c:1054
 msgid "None"
 msgstr "Žádný"
 
-#: ../properties/auth-helpers.c:518
-msgid "PEM certificates (*.pem, *.crt, *.key)"
-msgstr "Certifikáty PEM (*.pem, *.crt, *.key)"
+#: ../properties/auth-helpers.c:654
+msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgstr "Certifikáty PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:578
+#: ../properties/auth-helpers.c:714
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statické klíče OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:689
+#: ../properties/auth-helpers.c:823 ../properties/auth-helpers.c:893
 msgid "Default"
 msgstr "Výchozí"
 
-#: ../properties/nm-openvpn.c:52
+#: ../properties/auth-helpers.c:903
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:905
+msgid "SHA-1"
+msgstr "SHA-1"
+
+#: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:54
 msgid "Compatible with the OpenVPN server."
 msgstr "Kompatibilní s OpenVPN serverem."
 
-#: ../properties/nm-openvpn.c:310 ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn.c:322
 msgid "Certificates (TLS)"
 msgstr "Certifikáty (TLS)"
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:336
 msgid "Password"
 msgstr "Heslo"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:353
 msgid "Password with Certificates (TLS)"
 msgstr "Heslo s certifikáty (TLS)"
 
-#: ../properties/nm-openvpn.c:348
+#: ../properties/nm-openvpn.c:365
 msgid "Static Key"
 msgstr "Statický klíč"
 
@@ -152,13 +162,17 @@ msgstr "P_okročilé..."
 msgid "CA Certificate:"
 msgstr "Certifikát CA:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Cipher:"
 msgstr "Šifra:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "General"
 msgstr "Obecné"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "Autentizace HMAC:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Key Direction:"
@@ -170,52 +184,72 @@ msgstr "Soubor klíče:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:12
 msgid "Local IP Address:"
-msgstr "Lokální IP adresa:"
+msgstr "Místní IP adresa:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:13
 msgid "OpenVPN Advanced Options"
 msgstr "Pokročilé volby OpenVPN"
 
 #: ../properties/nm-openvpn-dialog.glade.h:14
+msgid "Password:"
+msgstr "Heslo:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:15
+msgid "Private Key Password:"
+msgstr "Heslo soukromého klíče:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:16
 msgid "Private Key:"
 msgstr "Soukromý klíč:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:17
+msgid "Security"
+msgstr "Zabezpečení"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
+msgid "Show passwords"
+msgstr "Zobrazit hesla"
+
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Static Key:"
 msgstr "Statický klíč:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
+#: ../properties/nm-openvpn-dialog.glade.h:20
+msgid "TLS Authentication"
+msgstr "Autentizace TLS"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Use L_ZO data compression"
 msgstr "Použít kompresi L_ZO"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use a TA_P device"
 msgstr "Použít TA_P zařízení"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a _TCP connection"
 msgstr "Použít _TCP spojení"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use additional TLS authentication"
 msgstr "Použít dodatečnou autentizaci TLS"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use custom gateway p_ort:"
 msgstr "P_oužít vlastní port brány:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "User Certificate:"
 msgstr "Uživatelský certifikát:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User name:"
 msgstr "Uživatelské jméno:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "_Gateway:"
 msgstr "_Brána:"
