@@ -884,7 +884,7 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 		NULL
 	};
 
-	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+	store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	gtk_combo_box_set_model (box, GTK_TREE_MODEL (store));
 
 	/* Add default option which won't pass --auth to openvpn */
