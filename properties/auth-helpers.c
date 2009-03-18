@@ -487,6 +487,7 @@ auth_widget_update_connection (GladeXML *xml,
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	GtkWidget *widget;
+	const char *str;
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS)) {
 		update_tls (xml, "tls", s_vpn);
@@ -497,7 +498,10 @@ auth_widget_update_connection (GladeXML *xml,
 		update_tls (xml, "pw_tls", s_vpn);
 		update_username (xml, "pw_tls", s_vpn);
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
+		/* Update static key */
 		update_from_filechooser (xml, NM_OPENVPN_KEY_STATIC_KEY, "sk", "key_chooser", s_vpn);
+
+		/* Update direction */
 		widget = glade_xml_get_widget (xml, "sk_direction_combo");
 		g_assert (widget);
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
@@ -511,6 +515,13 @@ auth_widget_update_connection (GladeXML *xml,
 				g_free (tmp);
 			}
 		}
+
+		/* Update local address */
+		widget = glade_xml_get_widget (xml, "sk_local_address_entry");
+		g_assert (widget);
+		str = gtk_entry_get_text (GTK_ENTRY (widget));
+		if (str && strlen (str))
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, str);
 	} else
 		g_assert_not_reached ();
 
