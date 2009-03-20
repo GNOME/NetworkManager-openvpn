@@ -2,125 +2,134 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2008.
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 16:27+0200\n"
-"PO-Revision-Date: 2008-09-09 16:43+0200\n"
+"POT-Creation-Date: 2009-03-20 14:05+0100\n"
+"PO-Revision-Date: 2009-03-20 14:06+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Pasahitza:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "_Bigarren pasahitza:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
 msgstr "_Erabiltzaile-izena:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "_Domeinua:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "Konektatu _anonimo gisa"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "Konektatu _erabiltzaile gisa:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "_Gogoratu pasahitza saio honetan"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "_Gorde pasahitza gako-sortan"
 
-#: ../auth-dialog/main.c:210
+#: ../auth-dialog/main.c:127
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr ""
 "Autentifikatu egin behar zara '%s' VPN-ra (Sare Birtual Pribatua) "
 "sarbidetzeko."
 
-#: ../auth-dialog/main.c:211
+#: ../auth-dialog/main.c:128
 msgid "Authenticate VPN"
 msgstr "Autentifikatu VPN"
 
-#: ../auth-dialog/main.c:232
+#: ../auth-dialog/main.c:149
 msgid "Certificate pass_word:"
 msgstr "_Ziurtagiriaren pasahitza:"
 
-#: ../auth-dialog/main.c:246
+#: ../auth-dialog/main.c:163
 msgid "Certificate password:"
 msgstr "Ziurtagiriaren pasahitza:"
 
-#: ../properties/auth-helpers.c:69
+#: ../properties/auth-helpers.c:160
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Aukeratu Ziurtagiri-Emailearen ziurtagiria..."
 
-#: ../properties/auth-helpers.c:88
+#: ../properties/auth-helpers.c:179
 msgid "Choose your personal certificate..."
 msgstr "Aukeratu ziurtagiri pertsonala..."
 
-#: ../properties/auth-helpers.c:106
+#: ../properties/auth-helpers.c:197
 msgid "Choose your private key..."
 msgstr "Aukeratu gako pribatua..."
 
-#: ../properties/auth-helpers.c:159
+#: ../properties/auth-helpers.c:250
 msgid "Choose an OpenVPN static key..."
 msgstr "Aukeratu OpenVPN gako estatikoa..."
 
-#: ../properties/auth-helpers.c:183 ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:912
+#: ../properties/auth-helpers.c:1065
 msgid "None"
 msgstr "Bat ere ez"
 
-#: ../properties/auth-helpers.c:518
-msgid "PEM certificates (*.pem, *.crt, *.key)"
-msgstr "PEM ziurtagiriak (*.pem, *.crt, *.key)"
+#: ../properties/auth-helpers.c:665
+msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgstr "PEM ziurtagiriak (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:578
+#: ../properties/auth-helpers.c:725
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN gako estatikoak (*.key)"
 
-#: ../properties/auth-helpers.c:689
+#: ../properties/auth-helpers.c:834 ../properties/auth-helpers.c:904
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: ../properties/nm-openvpn.c:52
+#: ../properties/auth-helpers.c:914
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:916
+msgid "SHA-1"
+msgstr "SHA-1"
+
+#: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:54
 msgid "Compatible with the OpenVPN server."
 msgstr "OpenVPN zerbitzariarekin bateragarria."
 
-#: ../properties/nm-openvpn.c:310 ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn.c:322
 msgid "Certificates (TLS)"
 msgstr "Ziurtagiriak (TLS)"
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:336
 msgid "Password"
 msgstr "Pasahitza"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:353
 msgid "Password with Certificates (TLS)"
 msgstr "Pasahitza ziurtagiriekin (TLS)"
 
-#: ../properties/nm-openvpn.c:348
+#: ../properties/nm-openvpn.c:365
 msgid "Static Key"
 msgstr "Gako estatikoa"
 
@@ -142,10 +151,10 @@ msgid ""
 "peer.  For example, if the peer uses '1', this connection must use '0'.  If "
 "you are unsure what value to use, contact your system administrator.</i>"
 msgstr ""
-"<i>Gakoaren helbidea erabiltzen bada, VPN parekoarenaren aurkakoa izan behar du. "
-"Esate baterako, parekoak '1' erabiltzen badu, konexio honek '0' erabili behar du. "
-"Zein balio erabili behar duzun ez badakizu, jar zaitez sistemako administratzailearekin "
-"harremanetan.</i>"
+"<i>Gakoaren helbidea erabiltzen bada, VPN parekoarenaren aurkakoa izan behar "
+"du. Esate baterako, parekoak '1' erabiltzen badu, konexio honek '0' erabili "
+"behar du. Zein balio erabili behar duzun ez badakizu, jar zaitez sistemako "
+"administratzailearekin harremanetan.</i>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:5
 msgid "Ad_vanced..."
@@ -155,13 +164,17 @@ msgstr "_Aurreratua..."
 msgid "CA Certificate:"
 msgstr "ZE ziurtagiria:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Cipher:"
 msgstr "Zifratua:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "General"
 msgstr "Orokorra"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "HMAC autentifikazioa:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Key Direction:"
@@ -180,46 +193,66 @@ msgid "OpenVPN Advanced Options"
 msgstr "OpenVPN-ren aukera aurreratuak"
 
 #: ../properties/nm-openvpn-dialog.glade.h:14
+msgid "Password:"
+msgstr "Pasahitza:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:15
+msgid "Private Key Password:"
+msgstr "Gako pribatuaren pasahitza:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:16
 msgid "Private Key:"
 msgstr "Gako pribatua:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:17
+msgid "Security"
+msgstr "Segurtasuna"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
+msgid "Show passwords"
+msgstr "Erakutsi pasahitza"
+
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Static Key:"
 msgstr "Gako estatikoa:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
+#: ../properties/nm-openvpn-dialog.glade.h:20
+msgid "TLS Authentication"
+msgstr "TLS autentifikazioa"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Type:"
 msgstr "Mota:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Use L_ZO data compression"
 msgstr "Erabili _LZO datu-konpresioa"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use a TA_P device"
 msgstr "Erabili TA_P gailua"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a _TCP connection"
 msgstr "Erabili _TCP konexioa"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use additional TLS authentication"
 msgstr "Erabili TLS autentifikazio gehigarria"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use custom gateway p_ort:"
 msgstr "Erabili atebidearen _ataka pertsonalizatua:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "User Certificate:"
 msgstr "Erabiltzailearen ziurtagiria:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User name:"
 msgstr "Erabiltzaile-izena:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "_Gateway:"
 msgstr "_Atebidea:"
 
