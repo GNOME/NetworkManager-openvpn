@@ -3,52 +3,52 @@
 # This file is distributed under the same license as the NetworkManager package.
 # Thomas Gier <info@thomasgier.de>, 2007.
 # Hauke Mehrtens <hauke@hauke-m.de>, 2008.
-# Christian Kirbach <Christian.Kirbach@googlemail.com>, 2008.
+# Christian Kirbach <Christian.Kirbach@googlemail.com>, 2008, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-25 21:55+0100\n"
-"PO-Revision-Date: 2008-10-24 00:11+0200\n"
+"POT-Creation-Date: 2009-03-21 15:28+0100\n"
+"PO-Revision-Date: 2009-03-21 15:08+0100\n"
 "Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
-"Language-Team: German <gnome-de@gnome.org>\n"
+"Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Passwort:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "_Sekundäres Passwort:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
 msgstr "_Benutzername:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "_Domäne:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "_Anonym verbinden"
 
 # CHECK ACCELERATOR
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "Als _Benutzer verbinden:"
 
 # CHECK ACCELERATOR
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "_Passwort für dieser Sitzung behalten"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "Passwort im _Schlüsselbund speichern"
 
@@ -88,21 +88,30 @@ msgid "Choose an OpenVPN static key..."
 msgstr "Statischen OpenVPN-Schlüssel auswählen..."
 
 # CHECK keine/keiner
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:992
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:912
+#: ../properties/auth-helpers.c:1065
 msgid "None"
 msgstr "keine"
 
-#: ../properties/auth-helpers.c:654
+#: ../properties/auth-helpers.c:665
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM-Zertifikate (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:714
+#: ../properties/auth-helpers.c:725
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statische OpenVPN-Schlüssel (*.key)"
 
-#: ../properties/auth-helpers.c:822
+#: ../properties/auth-helpers.c:834 ../properties/auth-helpers.c:904
 msgid "Default"
 msgstr "Vorgabe"
+
+#: ../properties/auth-helpers.c:914
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:916
+msgid "SHA-1"
+msgstr "SHA-1"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -112,7 +121,7 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Kompatibel zum OpenVPN-Server"
 
-#: ../properties/nm-openvpn.c:322 ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn.c:322
 msgid "Certificates (TLS)"
 msgstr "Zertifikate (TLS):"
 
@@ -159,13 +168,17 @@ msgstr "Er_weitert..."
 msgid "CA Certificate:"
 msgstr "Zertifikat der Zertifizierungsstelle:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Cipher:"
 msgstr "Chiffre:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "General"
 msgstr "Allgemein"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "HMAC-Authentifizierung:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Key Direction:"
@@ -196,46 +209,54 @@ msgid "Private Key:"
 msgstr "Privater Schlüssel:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:17
+msgid "Security"
+msgstr "Sicherheit"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Show passwords"
 msgstr "Passwort anzeigen"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Static Key:"
 msgstr "Statischer Schlüssel:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:20
+msgid "TLS Authentication"
+msgstr "TLS-Authentifizierung"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Type:"
 msgstr "Art:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Use L_ZO data compression"
 msgstr "L_ZO-Komprimierung verwenden"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use a TA_P device"
 msgstr "TA_P-Gerät verwenden"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a _TCP connection"
 msgstr "_TCP-Verbindung verwenden"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use additional TLS authentication"
 msgstr "Zusätzliche TLS-Authentifizierung verwenden"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use custom gateway p_ort:"
 msgstr "_Gateway-Port:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "User Certificate:"
 msgstr "Zertifikat des Benutzers:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User name:"
 msgstr "Benutzername:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "_Gateway:"
 msgstr "_Gateway:"
 
