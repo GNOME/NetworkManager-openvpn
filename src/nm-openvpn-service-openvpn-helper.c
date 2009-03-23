@@ -336,28 +336,24 @@ main (int argc, char *argv[])
 
 	/* Netmask
 	 *
-	 * TAP devices pass back the netmask, while TUN devices always use /32
-	 * since they are point-to-point.
+	 * Either TAP or TUN modes can have an arbitrary netmask in newer versions
+	 * of openvpn, while in older versions only TAP mode would.  So accept a
+	 * netmask if passed, otherwise default to /32 for TUN devices since they
+	 * are usually point-to-point.
 	 */
-	if (tapdev) {
-		tmp = getenv ("ifconfig_netmask");
-		if (tmp && inet_pton (AF_INET, tmp, &temp_addr) > 0) {
-			GValue *val;
-
-			val = g_slice_new0 (GValue);
-			g_value_init (val, G_TYPE_UINT);
-			g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (temp_addr.s_addr));
-
-			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
-		}
-	} else {
-		GValue *val;
-
+	tmp = getenv ("ifconfig_netmask");
+	if (tmp && inet_pton (AF_INET, tmp, &temp_addr) > 0) {
+		val = g_slice_new0 (GValue);
+		g_value_init (val, G_TYPE_UINT);
+		g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (temp_addr.s_addr));
+		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
+	} else if (!tapdev) {
 		val = g_slice_new0 (GValue);
 		g_value_init (val, G_TYPE_UINT);
 		g_value_set_uint (val, 32);
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
-	}
+	} else
+		nm_warning ("No IP4 netmask/prefix (missing or invalid 'ifconfig_netmask')");
 
 	val = get_routes ();
 	if (val)
