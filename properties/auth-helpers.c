@@ -301,6 +301,15 @@ sk_init_auth_widget (GladeXML *xml,
 		if (value && strlen (value))
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 	}
+
+	widget = glade_xml_get_widget (xml, "sk_remote_address_entry");
+	gtk_size_group_add_widget (group, widget);
+	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
+	if (s_vpn) {
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
+		if (value && strlen (value))
+			gtk_entry_set_text (GTK_ENTRY (widget), value);
+	}
 }
 
 static gboolean
@@ -415,6 +424,16 @@ auth_widget_check_validity (GladeXML *xml, const char *contype, GError **error)
 			             NM_OPENVPN_KEY_LOCAL_IP);
 			return FALSE;
 		}
+
+		widget = glade_xml_get_widget (xml, "sk_remote_address_entry");
+		str = gtk_entry_get_text (GTK_ENTRY (widget));
+		if (!str || !strlen (str)) {
+			g_set_error (error,
+			             OPENVPN_PLUGIN_UI_ERROR,
+			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             NM_OPENVPN_KEY_REMOTE_IP);
+			return FALSE;
+		}
 	} else
 		g_assert_not_reached ();
 
@@ -522,6 +541,13 @@ auth_widget_update_connection (GladeXML *xml,
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (str && strlen (str))
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, str);
+
+		/* Update remote address */
+		widget = glade_xml_get_widget (xml, "sk_remote_address_entry");
+		g_assert (widget);
+		str = gtk_entry_get_text (GTK_ENTRY (widget));
+		if (str && strlen (str))
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, str);
 	} else
 		g_assert_not_reached ();
 
