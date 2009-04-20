@@ -18,7 +18,7 @@ nm_openvpn_service_SOURCES =				\
 				nm-openvpn-service.h
 
 
-nm_openvpn_service_LDADD = $(NETWORK_MANAGER_LIBS) -lnm_glib_vpn
+nm_openvpn_service_LDADD = $(NETWORK_MANAGER_LIBS)
 
 
 nm_openvpn_service_openvpn_helper_SOURCES = 					\
