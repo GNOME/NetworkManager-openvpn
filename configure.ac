@@ -38,7 +38,7 @@ AC_CHECK_FUNCS(select socket uname)
 dnl
 dnl GNOME support
 dnl
-AC_ARG_WITH(gnome, AC_HELP_STRING([--without-gnome], [Build NetworkManager-openvpn without GNOME support, e.g. vpn service only]))
+AC_ARG_WITH(gnome, AS_HELP_STRING([--without-gnome], [Build NetworkManager-openvpn without GNOME support, e.g. vpn service only]))
 AM_CONDITIONAL(WITH_GNOME, test x"$with_gnome" != xno)
 
 GETTEXT_PACKAGE=NetworkManager-openvpn
@@ -83,7 +83,7 @@ if test x"$with_gnome" != xno; then
 fi
 
 AC_ARG_ENABLE(more-warnings,
-AC_HELP_STRING([--enable-more-warnings], [Maximum compiler warnings]),
+AS_HELP_STRING([--enable-more-warnings], [Maximum compiler warnings]),
 set_more_warnings="$enableval",[
 if test -d "$srcdir/{arch}" || test -d "$srcdir/CVS"; then
 	set_more_warnings=yes
