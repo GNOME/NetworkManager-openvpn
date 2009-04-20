@@ -6,7 +6,7 @@ test -z "$srcdir" && srcdir=.
 REQUIRED_AUTOMAKE_VERSION=1.7
 PKG_NAME=NetworkManager-openvpn
 
-(test -f $srcdir/configure.in \
+(test -f $srcdir/configure.ac \
   && test -f $srcdir/auth-dialog/main.c) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
     echo " top-level $PKG_NAME directory"
