@@ -5,7 +5,7 @@ AC_CONFIG_AUX_DIR(.)
 AM_INIT_AUTOMAKE([subdir-objects no-dist-gzip dist-bzip2])
 AM_MAINTAINER_MODE
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 dnl
 dnl Require programs
@@ -115,7 +115,7 @@ else
 	AC_MSG_RESULT(no)
 fi
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 src/Makefile
 common-gnome/Makefile
@@ -123,3 +123,4 @@ auth-dialog/Makefile
 properties/Makefile
 po/Makefile.in
 ])
+AC_OUTPUT
