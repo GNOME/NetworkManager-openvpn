@@ -1,7 +1,6 @@
 AC_PREREQ(2.52)
 
 AC_INIT(NetworkManager-openvpn, 0.7.1, dcbw@redhat.com, NetworkManager-openvpn)
-AC_CONFIG_AUX_DIR(.)
 AM_INIT_AUTOMAKE([subdir-objects no-dist-gzip dist-bzip2])
 AM_MAINTAINER_MODE
 
