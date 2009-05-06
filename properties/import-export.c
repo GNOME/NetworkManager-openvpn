@@ -43,6 +43,7 @@
 #include "../src/nm-openvpn-service.h"
 
 #define CLIENT_TAG "client"
+#define TLS_CLIENT_TAG "tls-client"
 #define DEV_TAG "dev"
 #define PROTO_TAG "proto"
 #define REMOTE_TAG "remote"
@@ -204,7 +205,8 @@ do_import (const char *path, char **lines, GError **error)
 		if (!strlen (*line))
 			continue;
 
-		if (!strncmp (*line, CLIENT_TAG, strlen (CLIENT_TAG)))
+		if (   !strncmp (*line, CLIENT_TAG, strlen (CLIENT_TAG))
+		    || !strncmp (*line, TLS_CLIENT_TAG, strlen (TLS_CLIENT_TAG)))
 			have_client = TRUE;
 
 		if (!strncmp (*line, DEV_TAG, strlen (DEV_TAG))) {
@@ -380,7 +382,11 @@ do_import (const char *path, char **lines, GError **error)
 
 	g_free (default_path);
 
-	nm_connection_add_setting (connection, NM_SETTING (s_vpn));
+	if (connection)
+		nm_connection_add_setting (connection, NM_SETTING (s_vpn));
+	else if (s_vpn)
+		g_object_unref (s_vpn);
+
 	return connection;
 }
 
