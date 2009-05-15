@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2009-02-12 16:10+0000\n"
-"PO-Revision-Date: 2009-03-03 15:36+0100\n"
+"POT-Creation-Date: 2009-04-17 15:41+0000\n"
+"PO-Revision-Date: 2009-05-15 23:29+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -83,28 +83,28 @@ msgstr "Válassza ki a személyes kulcsát…"
 msgid "Choose an OpenVPN static key..."
 msgstr "Válassza ki az OpenVPN statikus kulcsát…"
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:901
-#: ../properties/auth-helpers.c:1054
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:938
+#: ../properties/auth-helpers.c:1091
 msgid "None"
 msgstr "Nincs"
 
-#: ../properties/auth-helpers.c:654
+#: ../properties/auth-helpers.c:691
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM tanúsítványok (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:714
+#: ../properties/auth-helpers.c:751
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN statikus kulcsok (*.key)"
 
-#: ../properties/auth-helpers.c:823 ../properties/auth-helpers.c:893
+#: ../properties/auth-helpers.c:860 ../properties/auth-helpers.c:930
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: ../properties/auth-helpers.c:903
+#: ../properties/auth-helpers.c:940
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:905
+#: ../properties/auth-helpers.c:942
 msgid "SHA-1"
 msgstr "SHA-1"
 
@@ -172,7 +172,6 @@ msgid "General"
 msgstr "Általános"
 
 #: ../properties/nm-openvpn-dialog.glade.h:9
-#| msgid "<b>Authentication</b>"
 msgid "HMAC Authentication:"
 msgstr "HMAC hitelesítés:"
 
@@ -205,55 +204,59 @@ msgid "Private Key:"
 msgstr "Személyes kulcs:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:17
+#| msgid "Local IP Address:"
+msgid "Remote IP Address:"
+msgstr "Távoli IP cím:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Security"
 msgstr "Biztonság"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Show passwords"
 msgstr "Jelszavak megjelenítése"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:20
 msgid "Static Key:"
 msgstr "Statikus kulcs:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
-#| msgid "<b>Authentication</b>"
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "TLS Authentication"
 msgstr "TLS hitelesítés"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Type:"
 msgstr "Típus:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use L_ZO data compression"
 msgstr "L_ZO tömörítés használata"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a TA_P device"
 msgstr "TA_P eszköz használata"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use a _TCP connection"
 msgstr "T_CP kapcsolat használata"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use additional TLS authentication"
 msgstr "Kiegészítő TLS hitelesítés használata"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "Use custom gateway p_ort:"
 msgstr "Egyéni átjáró_port használata:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User Certificate:"
 msgstr "Felhasználói tanúsítvány:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "User name:"
 msgstr "Felhasználónév:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
+#: ../properties/nm-openvpn-dialog.glade.h:30
 msgid "_Gateway:"
 msgstr "Á_tjáró:"
 
