@@ -3,7 +3,7 @@
 
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
-REQUIRED_AUTOMAKE_VERSION=1.7
+REQUIRED_AUTOMAKE_VERSION=1.9
 PKG_NAME=NetworkManager-openvpn
 
 (test -f $srcdir/configure.ac \
@@ -13,11 +13,11 @@ PKG_NAME=NetworkManager-openvpn
     exit 1
 }
 
-
-which gnome-autogen.sh || {
-    echo "You need to install gnome-common from the GNOME CVS"
-    exit 1
-}
-USE_GNOME2_MACROS=1 . gnome-autogen.sh
+(cd $srcdir;
+    autoreconf --install --symlink &&
+    intltoolize --force &&
+    autoreconf &&
+    ./configure --enable-maintainer-mode $@
+)
 
 

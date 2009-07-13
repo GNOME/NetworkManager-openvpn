@@ -19,6 +19,7 @@ libnm_openvpn_properties_la_CFLAGS =                    \
         $(LIBGNOMEUI_CFLAGS)                            \
         $(NETWORK_MANAGER_CFLAGS)                       \
         $(GNOMEKEYRING_CFLAGS)                          \
+        $(DISABLE_DEPRECATED)                           \
         -I$(top_srcdir)/                                \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
         -DGLADEDIR=\""$(gladedir)"\"                    \
