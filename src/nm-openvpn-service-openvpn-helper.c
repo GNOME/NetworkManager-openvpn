@@ -331,8 +331,22 @@ main (int argc, char *argv[])
 
 	/* PTP address; for vpnc PTP address == internal IP4 address */
 	val = addr_to_gvalue (getenv ("ifconfig_remote"));
-	if (val)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PTP, val);
+	if (val) {
+		/* Sigh.  Openvpn added 'topology' stuff in 2.1 that changes the meaning
+		 * of the ifconfig bits without actually telling you what they are
+		 * supposed to mean; basically relying on specific 'ifconfig' behavior.
+		 */
+		tmp = getenv ("ifconfig_remote");
+		if (tmp && !strncmp (tmp, "255.", 4)) {
+			guint32 addr;
+
+			/* probably a netmask, not a PTP address; topology == subnet */
+			addr = g_value_get_uint (val);
+			g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (addr));
+			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
+		} else
+			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PTP, val);
+	}
 
 	/* Netmask
 	 *
@@ -348,10 +362,12 @@ main (int argc, char *argv[])
 		g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (temp_addr.s_addr));
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 	} else if (!tapdev) {
-		val = g_slice_new0 (GValue);
-		g_value_init (val, G_TYPE_UINT);
-		g_value_set_uint (val, 32);
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
+		if (!g_hash_table_lookup (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX)) {
+			val = g_slice_new0 (GValue);
+			g_value_init (val, G_TYPE_UINT);
+			g_value_set_uint (val, 32);
+			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
+		}
 	} else
 		nm_warning ("No IP4 netmask/prefix (missing or invalid 'ifconfig_netmask')");
 
