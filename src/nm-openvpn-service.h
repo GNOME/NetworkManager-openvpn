@@ -64,6 +64,8 @@
  */
 #define NM_OPENVPN_KEY_NOSECRET "no-secret"
 
+#define NM_OPENVPN_KEY_RENEG_SECONDS "reneg-seconds"
+
 #define NM_OPENVPN_AUTH_NONE "none"
 #define NM_OPENVPN_AUTH_MD5  "MD5"
 #define NM_OPENVPN_AUTH_SHA1 "SHA1"

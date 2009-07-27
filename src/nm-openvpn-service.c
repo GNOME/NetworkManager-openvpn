@@ -101,6 +101,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_TA,                   G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TA_DIR,               G_TYPE_INT, 0, 1, FALSE },
 	{ NM_OPENVPN_KEY_USERNAME,             G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_RENEG_SECONDS,        G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
 
@@ -732,6 +733,21 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR);
 		if (tmp && strlen (tmp))
 			add_openvpn_arg (args, tmp);
+	}
+
+	/* Reneg seconds */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
+	if (tmp && strlen (tmp)) {
+		add_openvpn_arg (args, "--reneg-sec");
+		if (!add_openvpn_arg_int (args, tmp)) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             "Invalid reneg seconds '%s'.",
+			             tmp);
+			free_openvpn_args (args);
+			return FALSE;
+		}
 	}
 
 	if (getenv ("OPENVPN_DEBUG")) {
