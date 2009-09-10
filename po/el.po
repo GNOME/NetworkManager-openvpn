@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Kostas Papadimas <pkst@gnome.org>, 2007.
-# Jennie Petoumenou <epetoumenou@gmail.com>, 2008.
+# Jennie Petoumenou <epetoumenou@gmail.com>, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-07 16:00+0000\n"
-"PO-Revision-Date: 2008-12-07 01:32+0200\n"
+"POT-Creation-Date: 2009-09-10 17:44+0300\n"
+"PO-Revision-Date: 2009-09-10 14:12+0200\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
@@ -18,35 +18,35 @@ msgstr ""
 "X-Generator: Lokalize 0.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Συνθηματικό:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "_Δευτερεύον συνθηματικό:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
 msgstr "Ό_νομα χρήστη:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "_Τομέας:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "_Ανώνυμη σύνδεση"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "Σύνδεση ως _χρήστης:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "Απομνη_μόνευση συνθηματικού για αυτή τη συνεδρία"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "Απο_θήκευση συνθηματικού στην κλειδοθήκη"
 
@@ -85,21 +85,30 @@ msgstr "Επιλέξτε το ιδιωτικό σας κλειδί..."
 msgid "Choose an OpenVPN static key..."
 msgstr "Επιλέξτε στατικό κλειδί OpenVPN..."
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:992
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:938
+#: ../properties/auth-helpers.c:1091
 msgid "None"
 msgstr "Χωρίς"
 
-#: ../properties/auth-helpers.c:654
+#: ../properties/auth-helpers.c:691
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Πιστοποιητικά PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:714
+#: ../properties/auth-helpers.c:751
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Στατικά κλειδιά OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:822
+#: ../properties/auth-helpers.c:860 ../properties/auth-helpers.c:930
 msgid "Default"
 msgstr "Προεπιλεγμένο"
+
+#: ../properties/auth-helpers.c:940
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:942
+msgid "SHA-1"
+msgstr "SHA-1"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -109,7 +118,7 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Συμβατό με τον εξυπηρετητή OpenVPN."
 
-#: ../properties/nm-openvpn.c:322 ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn.c:322
 msgid "Certificates (TLS)"
 msgstr "Πιστοποιητικά (TLS)"
 
@@ -157,13 +166,17 @@ msgstr "Για προ_χωρημένους..."
 msgid "CA Certificate:"
 msgstr "Πι_στοποιητικό CA:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Cipher:"
 msgstr "Αλγόριθμος κρυπτογράφησης:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "General"
 msgstr "Γενικά"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "Πιστοποίηση HMAC:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Key Direction:"
@@ -194,45 +207,57 @@ msgid "Private Key:"
 msgstr "Ιδιωτικό κλειδί:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:17
+msgid "Remote IP Address:"
+msgstr "Απομακρυσμένη διεύθυνση IP:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
+msgid "Security"
+msgstr "Ασφάλεια"
+
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Show passwords"
 msgstr "Εμφάνιση συνθηματικών"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:20
 msgid "Static Key:"
 msgstr "Στατικό Κλειδί:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:21
+msgid "TLS Authentication"
+msgstr "Πιστοποίηση TLS:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Type:"
 msgstr "Τύπος:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Use L_ZO data compression"
 msgstr "Χρήση συμπίεσης L_ZO"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Use a TA_P device"
 msgstr "Χρήση συσκευής TA_P"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Use a _TCP connection"
 msgstr "Χρήση σύνδεσης _TCP"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use additional TLS authentication"
 msgstr "Χρήση επιπλέον πιστοποίησης TLS"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "Use custom gateway p_ort:"
 msgstr "Χρήση προσαρμοσμένης _θύρας πύλης:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "User Certificate:"
 msgstr "Πιστοποιητικό χρήστη:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "User name:"
 msgstr "Όνομα χρήστη:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:30
 msgid "_Gateway:"
 msgstr "Πύ_λη:"
