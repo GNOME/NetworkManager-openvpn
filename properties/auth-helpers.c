@@ -761,6 +761,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_AUTH,
 	NM_OPENVPN_KEY_TA_DIR,
 	NM_OPENVPN_KEY_TA,
+	NM_OPENVPN_KEY_RENEG_SECONDS,
 	NULL
 };
 
@@ -799,6 +800,16 @@ port_toggled_cb (GtkWidget *check, gpointer user_data)
 	GtkWidget *widget;
 
 	widget = glade_xml_get_widget (xml, "port_spinbutton");
+	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+}
+
+static void
+reneg_toggled_cb (GtkWidget *check, gpointer user_data)
+{
+	GladeXML *xml = (GladeXML *) user_data;
+	GtkWidget *widget;
+
+	widget = glade_xml_get_widget (xml, "reneg_spinbutton");
 	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
@@ -1011,6 +1022,30 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	                        xml, (GDestroyNotify) g_object_unref);
 	g_object_set_data (G_OBJECT (dialog), "connection-type", GINT_TO_POINTER (contype));
 
+	widget = glade_xml_get_widget (xml, "reneg_checkbutton");
+	g_signal_connect ( G_OBJECT (widget), "toggled", G_CALLBACK (reneg_toggled_cb), xml);
+
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_RENEG_SECONDS);
+	if (value && strlen (value)) {
+		long int tmp;
+
+		errno = 0;
+		tmp = strtol (value, NULL, 10);
+		if (errno == 0 && tmp >= 0 && tmp < 604800) {  /* up to a week? */
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+			widget = glade_xml_get_widget (xml, "reneg_spinbutton");
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
+		}
+		gtk_widget_set_sensitive (widget, TRUE);
+	} else {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+
+		widget = glade_xml_get_widget (xml, "reneg_spinbutton");
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0.0);
+		gtk_widget_set_sensitive (widget, FALSE);
+	}
+
 	widget = glade_xml_get_widget (xml, "port_checkbutton");
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (port_toggled_cb), xml);
 
@@ -1135,6 +1170,15 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	g_return_val_if_fail (xml != NULL, NULL);
 
 	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+	widget = glade_xml_get_widget (xml, "reneg_checkbutton");
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int reneg_seconds;
+
+		widget = glade_xml_get_widget (xml, "reneg_spinbutton");
+		reneg_seconds = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_RENEG_SECONDS), g_strdup_printf ("%d", reneg_seconds));
+	}
 
 	widget = glade_xml_get_widget (xml, "port_checkbutton");
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
