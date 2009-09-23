@@ -57,6 +57,7 @@
 #define AUTH_USER_PASS_TAG "auth-user-pass"
 #define TLS_AUTH_TAG "tls-auth"
 #define AUTH_TAG "auth"
+#define RENEG_SEC_TAG "reneg-sec"
 
 static gboolean
 handle_path_item (const char *line,
@@ -233,6 +234,27 @@ do_import (const char *path, char **lines, GError **error)
 
 		if (!strncmp (*line, COMP_TAG, strlen (COMP_TAG))) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
+			continue;
+		}
+
+		if (!strncmp (*line, RENEG_SEC_TAG, strlen (RENEG_SEC_TAG))) {
+			items = get_args (*line + strlen (RENEG_SEC_TAG));
+			if (!items)
+				continue;
+
+			if (g_strv_length (items) >= 1) {
+				glong secs;
+
+				errno = 0;
+				secs = strtol (items[0], NULL, 10);
+				if ((errno == 0) && (secs >= 0) && (secs < 604800)) {
+					char *tmp = g_strdup_printf ("%d", (guint32) secs);
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, tmp);
+					g_free (tmp);
+				} else
+					g_warning ("%s: invalid time length in option '%s'", __func__, *line);
+			}
+			g_strfreev (items);
 			continue;
 		}
 
