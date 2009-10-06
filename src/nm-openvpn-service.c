@@ -213,7 +213,8 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 static gboolean
 nm_openvpn_properties_validate (NMSettingVPN *s_vpn, GError **error)
 {
-	ValidateInfo info = { &valid_properties[0], error, FALSE };
+	GError *validate_error = NULL;
+	ValidateInfo info = { &valid_properties[0], &validate_error, FALSE };
 
 	nm_setting_vpn_foreach_data_item (s_vpn, validate_one_property, &info);
 	if (!info.have_items) {
@@ -225,13 +226,18 @@ nm_openvpn_properties_validate (NMSettingVPN *s_vpn, GError **error)
 		return FALSE;
 	}
 
-	return *error ? FALSE : TRUE;
+	if (validate_error) {
+		*error = validate_error;
+		return FALSE;
+	}
+	return TRUE;
 }
 
 static gboolean
 nm_openvpn_secrets_validate (NMSettingVPN *s_vpn, GError **error)
 {
-	ValidateInfo info = { &valid_secrets[0], error, FALSE };
+	GError *validate_error = NULL;
+	ValidateInfo info = { &valid_secrets[0], &validate_error, FALSE };
 
 	nm_setting_vpn_foreach_secret (s_vpn, validate_one_property, &info);
 	if (!info.have_items) {
@@ -243,7 +249,11 @@ nm_openvpn_secrets_validate (NMSettingVPN *s_vpn, GError **error)
 		return FALSE;
 	}
 
-	return *error ? FALSE : TRUE;
+	if (validate_error) {
+		*error = validate_error;
+		return FALSE;
+	}
+	return TRUE;
 }
 
 static void
