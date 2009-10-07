@@ -577,6 +577,7 @@ nm_find_openvpn (void)
 	static const char *openvpn_binary_paths[] = {
 		"/usr/sbin/openvpn",
 		"/sbin/openvpn",
+		"/usr/local/sbin/openvpn",
 		NULL
 	};
 	const char  **openvpn_binary = openvpn_binary_paths;
