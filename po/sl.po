@@ -3,420 +3,447 @@
 # This file is distributed under the same license as the NetworkManager-openvpn package.
 #
 # Matic Žgur <mr.zgur@gmail.com>, 2007.
+# Matej Urbančič <mateju@svn.gnome.org>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-10 03:26+0000\n"
-"PO-Revision-Date: 2007-01-10 15:25+0100\n"
-"Last-Translator: Matic Žgur <mr.zgur@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&component=VPN: openvpn\n"
+"POT-Creation-Date: 2009-09-28 11:36+0000\n"
+"PO-Revision-Date: 2009-10-06 11:35+0100\n"
+"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
+"X-Poedit-Country: SLOVENIA\n"
 "X-Poedit-Language: Slovenian\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+"X-Poedit-SourceCharset: utf-8\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Geslo:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "_Sekundarno geslo:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
 msgstr "_Uporabniško ime:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "_Domena:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "Poveži _anonimno"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "Poveži se kot _uporabnik:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "_Zapomni si geslo za to sejo"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "Shrani geslo v _zbirko ključev"
 
-#: ../auth-dialog/main.c:214
+#: ../auth-dialog/main.c:127
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Morate se overoviti za dostop do navideznega zasebnega omrežja '%s'."
 
-#: ../auth-dialog/main.c:215
+#: ../auth-dialog/main.c:128
 msgid "Authenticate VPN"
-msgstr "Overovi VPN"
+msgstr "Overi VPN"
 
-#: ../auth-dialog/main.c:227
+#: ../auth-dialog/main.c:149
 msgid "Certificate pass_word:"
-msgstr "G_eslo za certifikat:"
+msgstr "G_eslo potrdila:"
 
-#: ../auth-dialog/main.c:252
+#: ../auth-dialog/main.c:163
 msgid "Certificate password:"
-msgstr "Geslo za certifikat:"
+msgstr "Geslo potrdila:"
 
-#: ../nm-openvpn.desktop.in.h:1
-msgid "Add, Remove, and Edit VPN Connections"
-msgstr "Dodajte, odstranite ali uredite povezave VPN"
+#: ../properties/auth-helpers.c:160
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Izbor izdajatelja potrdila ..."
 
-#: ../nm-openvpn.desktop.in.h:2
-msgid "VPN Connection Manager (OpenVPN)"
-msgstr "Upravitelj povezav VPN (OpenVPN)"
+#: ../properties/auth-helpers.c:179
+msgid "Choose your personal certificate..."
+msgstr "Izbor osebnega potrdila ..."
 
-#: ../properties/nm-openvpn.c:130
-msgid "OpenVPN Client"
-msgstr "Odjemalec OpenVPN"
+#: ../properties/auth-helpers.c:197
+msgid "Choose your private key..."
+msgstr "Izbor osebnega ključa ..."
 
-#: ../properties/nm-openvpn.c:729
-msgid "The following OpenVPN connection will be created:"
-msgstr "Naslednje povezave OpenVPN bodo ustvarjene:"
+#: ../properties/auth-helpers.c:250
+msgid "Choose an OpenVPN static key..."
+msgstr "Izbor OpenVPN stalnega ključa ..."
 
-#: ../properties/nm-openvpn.c:731
-#, c-format
-msgid "Name:  %s"
-msgstr "Ime: %s"
+#: ../properties/auth-helpers.c:274
+#: ../properties/auth-helpers.c:949
+#: ../properties/auth-helpers.c:1126
+#| msgid "none"
+msgid "None"
+msgstr "Brez"
 
-#: ../properties/nm-openvpn.c:739
-msgid "Connection Type: X.509 Certificates"
-msgstr "Vrsta povezave: Certifikati X.509"
+#: ../properties/auth-helpers.c:691
+msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgstr "Potrdila PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/nm-openvpn.c:742
-#: ../properties/nm-openvpn.c:769
-#: ../properties/nm-openvpn.c:781
-#, c-format
-msgid "CA:  %s"
-msgstr "CA: %s"
+#: ../properties/auth-helpers.c:751
+msgid "OpenVPN Static Keys (*.key)"
+msgstr "Stalni ključi OpenVPN (*.key)"
 
-#: ../properties/nm-openvpn.c:745
-#: ../properties/nm-openvpn.c:784
-#, c-format
-msgid "Cert:  %s"
-msgstr "Cert: %s"
+#: ../properties/auth-helpers.c:871
+#: ../properties/auth-helpers.c:941
+msgid "Default"
+msgstr "Privzeto"
 
-#: ../properties/nm-openvpn.c:748
-#: ../properties/nm-openvpn.c:787
-#, c-format
-msgid "Key:  %s"
-msgstr "Ključ: %s"
+#: ../properties/auth-helpers.c:951
+msgid "MD-5"
+msgstr "MD-5"
 
-#: ../properties/nm-openvpn.c:752
-msgid "Connection Type: Shared Key"
-msgstr "Vrsta povezave: Deljeni ključ"
+#: ../properties/auth-helpers.c:953
+msgid "SHA-1"
+msgstr "SHA-1"
 
-#: ../properties/nm-openvpn.c:755
-#, c-format
-msgid "Shared Key:  %s"
-msgstr "Deljeni ključ: %s"
+#: ../properties/nm-openvpn.c:53
+#| msgid "OpenVPN Client"
+msgid "OpenVPN"
+msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:758
-#, c-format
-msgid "Local IP:  %s"
-msgstr "Lokalni IP: %s"
+#: ../properties/nm-openvpn.c:54
+msgid "Compatible with the OpenVPN server."
+msgstr "Skladno s strežnikom OpenVPN."
 
-#: ../properties/nm-openvpn.c:761
-#, c-format
-msgid "Remote IP:  %s"
-msgstr "Oddaljeni IP: %s"
+#: ../properties/nm-openvpn.c:322
+#| msgid "Certificate:"
+msgid "Certificates (TLS)"
+msgstr "Potrdila (TSL)"
 
-#: ../properties/nm-openvpn.c:766
-msgid "Connection Type: Password"
-msgstr "Vrsta povezave: Geslo"
-
-#: ../properties/nm-openvpn.c:772
-#: ../properties/nm-openvpn.c:790
-#, c-format
-msgid "Username:  %s"
-msgstr "Uporabniško ime: %s"
-
-#: ../properties/nm-openvpn.c:778
-msgid "Connection Type: X.509 with Password Authentication"
-msgstr "Vrsta povezave: X.509 z overovitvijo z geslom"
-
-#: ../properties/nm-openvpn.c:796
-#, c-format
-msgid "Remote:  %s"
-msgstr "Oddaljeno: %s"
-
-#: ../properties/nm-openvpn.c:799
-#, c-format
-msgid "Device: %s"
-msgstr "Naprava: %s"
-
-#: ../properties/nm-openvpn.c:799
-msgid "TAP"
-msgstr "TAP"
-
-#: ../properties/nm-openvpn.c:799
-msgid "TUN"
-msgstr "TUN"
-
-#: ../properties/nm-openvpn.c:802
-#, c-format
-msgid "Protocol: %s"
-msgstr "Protokol: %s"
-
-#: ../properties/nm-openvpn.c:802
-msgid "TCP"
-msgstr "TCP"
-
-#: ../properties/nm-openvpn.c:802
-msgid "UDP"
-msgstr "UDP"
-
-#: ../properties/nm-openvpn.c:806
-#, c-format
-msgid "Routes:  %s"
-msgstr "Smeri: %s"
-
-#: ../properties/nm-openvpn.c:810
-#, c-format
-msgid "Use LZO Compression: %s"
-msgstr "Uporabi kompresijo LZO: %s"
-
-#: ../properties/nm-openvpn.c:810
-msgid "Yes"
-msgstr "Da"
-
-#: ../properties/nm-openvpn.c:810
-msgid "No"
-msgstr "Ne"
-
-#: ../properties/nm-openvpn.c:814
-#, c-format
-msgid "Cipher:  %s"
-msgstr "Šifra: %s"
-
-#: ../properties/nm-openvpn.c:819
-#, c-format
-msgid "TLS auth:  %s %s"
-msgstr "Overovitev TLS: %s %s"
-
-#: ../properties/nm-openvpn.c:823
-msgid "The connection details can be changed using the \"Edit\" button."
-msgstr "Podrobnosti o povezavi so lahko spremenjene z uporabo gumba \"Uredi\"."
-
-#: ../properties/nm-openvpn.c:1003
-msgid "Cannot import settings"
-msgstr "Ni mogoče uvoziti nastavitev"
-
-#: ../properties/nm-openvpn.c:1005
-#, c-format
-msgid "The VPN settings file '%s' does not contain valid data."
-msgstr "Datoteka z nastavitvami za VPN '%s' ne vsebuje veljavnih podatkov."
-
-#: ../properties/nm-openvpn.c:1042
-msgid "Select file to import"
-msgstr "Izberite datoteko za uvoz"
-
-#: ../properties/nm-openvpn.c:1122
-#: ../properties/nm-openvpn.c:1134
-msgid "Select CA to use"
-msgstr "Izberite CA za uporabo"
-
-#: ../properties/nm-openvpn.c:1125
-msgid "Select certificate to use"
-msgstr "Izberite certifikat za uporabo"
-
-#: ../properties/nm-openvpn.c:1128
-msgid "Select key to use"
-msgstr "Izberite ključ za uporabo"
-
-#: ../properties/nm-openvpn.c:1131
-msgid "Select shared key to use"
-msgstr "Izberite deljeni ključ za uporabo"
-
-#: ../properties/nm-openvpn.c:1137
-msgid "Select TA to use"
-msgstr "Izberite TA za uporabo"
-
-#. printf ("in impl_export\n");
-#: ../properties/nm-openvpn.c:1326
-msgid "Save as..."
-msgstr "Shrani kot ..."
-
-#: ../properties/nm-openvpn.c:1356
-#, c-format
-msgid "A file named \"%s\" already exists."
-msgstr "Datoteka z imenom \"%s\" že obstaja."
-
-#: ../properties/nm-openvpn.c:1359
-msgid "Do you want to replace it with the one you are saving?"
-msgstr "Ali jo želite zamenjati s to, ki jo shranjujete?"
-
-#: ../properties/nm-openvpn.c:1373
-msgid "Failed to export configuration"
-msgstr "Izvoz nastavitev ni uspel"
-
-#: ../properties/nm-openvpn.c:1375
-#, c-format
-msgid "Failed to save file %s"
-msgstr "Shranjevanje datoteke %s ni uspelo"
-
-#: ../properties/nm-openvpn-dialog.glade.h:1
-msgid "0"
-msgstr "0"
-
-#: ../properties/nm-openvpn-dialog.glade.h:2
-msgid "1"
-msgstr "1"
-
-#: ../properties/nm-openvpn-dialog.glade.h:3
-msgid "<b>Connection Name</b>"
-msgstr "<b>Ime povezave</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:4
-msgid "<b>Optional Information</b>"
-msgstr "<b>Dodatne informacije</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:5
-msgid "<b>Required Information</b>"
-msgstr "<b>Zahtevane informacije</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:6
-msgid "<i>example: 172.16.0.0/16 10.11.12.0/24</i>"
-msgstr "<i>primer: 172.16.0.0/16 10.11.12.0/24</i>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:7
-msgid "CA  file:"
-msgstr "Datoteka z CA:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:8
-msgid "Certificate:"
-msgstr "Certifikat:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:9
-msgid "Connection Type:"
-msgstr "Vrsta povezave:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:10
-msgid "Direction:"
-msgstr "Smer:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:11
-msgid "Key:"
-msgstr "Ključ:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:12
-msgid "Local IP:"
-msgstr "Lokalni IP:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:13
+#: ../properties/nm-openvpn.c:336
 msgid "Password"
 msgstr "Geslo"
 
+#: ../properties/nm-openvpn.c:353
+msgid "Password with Certificates (TLS)"
+msgstr "Geslo s potrdilom (TLS)"
+
+#: ../properties/nm-openvpn.c:365
+msgid "Static Key"
+msgstr "Stalni ključ"
+
+#: ../properties/nm-openvpn-dialog.glade.h:1
+msgid " "
+msgstr " "
+
+#: ../properties/nm-openvpn-dialog.glade.h:2
+#| msgid "<b>Required Information</b>"
+msgid "<b>Authentication</b>"
+msgstr "<b>Overitev</b>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:3
+msgid "<b>General</b>"
+msgstr "<b>Splošno</b>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:4
+msgid "<i>If key direction is used, it must be the opposite of that used on the VPN peer.  For example, if the peer uses '1', this connection must use '0'.  If you are unsure what value to use, contact your system administrator.</i>"
+msgstr "<i>V primeru, da je uporabljena določena smer, mora biti določena nasprotno, kot je določena pri drugem odjemalcu na VPN povezavi. Primer: kadar odjemalec izbere vrednost '1', mora bit ta povezava določena z vrednostjo '0'.  V primeru, da niste prepričani, katero vrednost uporabiti, stopite v stik s skrbnikom.</i>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:5
+msgid "Ad_vanced..."
+msgstr "_Napredno ..."
+
+#: ../properties/nm-openvpn-dialog.glade.h:6
+#| msgid "Certificate:"
+msgid "CA Certificate:"
+msgstr "Potrdilo CA:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:7
+#| msgid "Cipher:  %s"
+msgid "Cipher:"
+msgstr "Šifra:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:8
+msgid "General"
+msgstr "Splošno"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+#| msgid "Authenticate VPN"
+msgid "HMAC Authentication:"
+msgstr "Overitev HMAC:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:10
+#| msgid "Direction:"
+msgid "Key Direction:"
+msgstr "Smer ključa:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:11
+#| msgid "Key:"
+msgid "Key File:"
+msgstr "Datoteka ključa:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:12
+#| msgid "Local IP:"
+msgid "Local IP Address:"
+msgstr "Krajevni naslov IP:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:13
+msgid "OpenVPN Advanced Options"
+msgstr "Napredne OpenVPN možnosti"
+
 #: ../properties/nm-openvpn-dialog.glade.h:14
-msgid "Please enter the information provided by your system administrator below. Do not enter your password here as you will be prompted when connecting."
-msgstr "Prosim, spodaj vnesite informacije, ki vam jih je priskrbel sistemski administrator. Ne vnesite svojega gesla tukaj, saj boste ponovno vprašani zanj med povezovanjem."
+#| msgid "_Password:"
+msgid "Password:"
+msgstr "Geslo:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:15
-msgid "Please note that the file you import is not an OpenVPN configuration file. Ask your administrator for the file."
-msgstr "Prosim, pomnite, da datoteka, ki ste jo uvozili, ni datoteka z nastavitvami za OpenVPN. Vprašajte administratorja za datoteko."
+#| msgid "Certificate password:"
+msgid "Private Key Password:"
+msgstr "Geslo osebnega ključa:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:16
-msgid "Remote IP:"
-msgstr "Oddaljeni IP:"
+#| msgid "Shared Key:"
+msgid "Private Key:"
+msgstr "Osebni ključ:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:17
-msgid "Shared Key:"
-msgstr "Deljeni ključ:"
+#| msgid "Remote IP:"
+msgid "Remote IP Address:"
+msgstr "Oddaljeni naslov IP:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:18
-msgid "Shared key"
-msgstr "Deljeni ključ"
+msgid "Security"
+msgstr "Varnost"
 
 #: ../properties/nm-openvpn-dialog.glade.h:19
-msgid "Use LZO compression"
-msgstr "Uporabi kompresijo LZO"
+#| msgid "Password"
+msgid "Show passwords"
+msgstr "Pokaži gesla"
 
 #: ../properties/nm-openvpn-dialog.glade.h:20
-msgid "Use TAP device"
-msgstr "Uporabi napravo TAP"
+#| msgid "Shared Key:"
+msgid "Static Key:"
+msgstr "Stalni ključ:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:21
-msgid "Use TCP connection"
-msgstr "Uporabi povezavo TCP"
+#| msgid "Authenticate VPN"
+msgid "TLS Authentication"
+msgstr "Overitev TSL"
 
 #: ../properties/nm-openvpn-dialog.glade.h:22
-msgid "Use TLS auth:"
-msgstr "Uporabi overovitev TLS:"
+msgid "Type:"
+msgstr "Vrsta:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:23
-msgid "Use cipher:"
-msgstr "Uporabi šifro:"
+#| msgid "Use LZO compression"
+msgid "Use L_ZO data compression"
+msgstr "Uporabi _LZO stiskanje"
 
 #: ../properties/nm-openvpn-dialog.glade.h:24
-msgid "Username:"
-msgstr "Uporabniško ime:"
+#| msgid "Use TAP device"
+msgid "Use a TA_P device"
+msgstr "Uporabi napravo _TAP"
 
 #: ../properties/nm-openvpn-dialog.glade.h:25
-msgid "X.509"
-msgstr "X.509"
+#| msgid "Use TCP connection"
+msgid "Use a _TCP connection"
+msgstr "Uporabi povezavo _TCP"
 
 #: ../properties/nm-openvpn-dialog.glade.h:26
-msgid ""
-"X.509 Certificates\n"
-"Pre-shared key\n"
-"Password Authentication\n"
-"X.509 with Password Authentication"
-msgstr ""
-"Certifikati X.509\n"
-"Vnaprej deljeni ključ\n"
-"Overovitev z geslom\n"
-"X.509 z overovitvijo z geslom"
+msgid "Use additional TLS authentication"
+msgstr "Uporabi dodatno TSL overjanje"
+
+#: ../properties/nm-openvpn-dialog.glade.h:27
+msgid "Use custom _renegotiation interval:"
+msgstr "Uporabi časovni razmik _pogajanja po meri:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:28
+msgid "Use custom gateway p_ort:"
+msgstr "Uporabi _vrata prehoda po meri:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:29
+#| msgid "Certificate:"
+msgid "User Certificate:"
+msgstr "Uporabniško potrdilo:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:30
+#| msgid "Username:"
+msgid "User name:"
+msgstr "Uporabniško ime:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:31
 msgid "_Gateway:"
 msgstr "_Prehod:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:31
-msgid "_Import Saved Configuration..."
-msgstr "_Uvozi shranjene nastavitve ..."
-
-#: ../properties/nm-openvpn-dialog.glade.h:32
-msgid "_Name used to identify the connection to the private network, e.g. \"Campus VPN\" or \"Corporate Network\""
-msgstr "_Ime, uporabljeno za identificiranje povezave na zasebno omrežje, npr. \"Campus VPN\" ali \"Corporate Network\""
-
-#: ../properties/nm-openvpn-dialog.glade.h:33
-msgid "_Only use VPN connection for these addresses"
-msgstr "Uporabi povezavo VPN _samo za te naslove"
-
-#: ../properties/nm-openvpn-dialog.glade.h:34
-msgid "none"
-msgstr "noben"
-
-#: ../src/nm-openvpn-service.c:127
-msgid "The VPN login failed because the user name and password were not accepted or the certificate password was wrong."
-msgstr "Prijava v VPN ni uspela, ker uporabniško ime in geslo nista bila sprejeta ali pa je bilo geslo certifikata napačno."
-
-#: ../src/nm-openvpn-service.c:129
-msgid "The VPN login failed because the VPN program could not be started."
-msgstr "Prijava v VPN ni uspela, ker ni mogoče zagnati programa VPN."
-
-#: ../src/nm-openvpn-service.c:131
-msgid "The VPN login failed because the VPN program could not connect to the VPN server."
-msgstr "Prijava v VPN ni uspela, ker se program VPN ne more povezati s strežnikom VPN."
-
-#: ../src/nm-openvpn-service.c:133
-msgid "The VPN login failed because the VPN configuration options were invalid."
-msgstr "Prijava v VPN ni uspela, ker so nastavitve VPN neveljavne."
-
-#: ../src/nm-openvpn-service.c:135
-msgid "The VPN login failed because the VPN program received an invalid configuration from the VPN server."
-msgstr "Prijava v VPN ni uspela, ker je program VPN prejel neveljavne nastavitve iz strežnika VPN."
-
-#: ../src/nm-openvpn-service.c:137
-msgid "VPN connection failed"
-msgstr "Povezava VPN ni uspela"
+#~ msgid "Add, Remove, and Edit VPN Connections"
+#~ msgstr "Dodajte, odstranite ali uredite povezave VPN"
+#~ msgid "VPN Connection Manager (OpenVPN)"
+#~ msgstr "Upravitelj povezav VPN (OpenVPN)"
+#~ msgid "The following OpenVPN connection will be created:"
+#~ msgstr "Naslednje povezave OpenVPN bodo ustvarjene:"
+#~ msgid "Name:  %s"
+#~ msgstr "Ime: %s"
+#~ msgid "Connection Type: X.509 Certificates"
+#~ msgstr "Vrsta povezave: Certifikati X.509"
+#~ msgid "CA:  %s"
+#~ msgstr "CA: %s"
+#~ msgid "Cert:  %s"
+#~ msgstr "Cert: %s"
+#~ msgid "Key:  %s"
+#~ msgstr "Ključ: %s"
+#~ msgid "Connection Type: Shared Key"
+#~ msgstr "Vrsta povezave: Deljeni ključ"
+#~ msgid "Shared Key:  %s"
+#~ msgstr "Deljeni ključ: %s"
+#~ msgid "Local IP:  %s"
+#~ msgstr "Lokalni IP: %s"
+#~ msgid "Remote IP:  %s"
+#~ msgstr "Oddaljeni IP: %s"
+#~ msgid "Connection Type: Password"
+#~ msgstr "Vrsta povezave: Geslo"
+#~ msgid "Username:  %s"
+#~ msgstr "Uporabniško ime: %s"
+#~ msgid "Connection Type: X.509 with Password Authentication"
+#~ msgstr "Vrsta povezave: X.509 z overovitvijo z geslom"
+#~ msgid "Remote:  %s"
+#~ msgstr "Oddaljeno: %s"
+#~ msgid "Device: %s"
+#~ msgstr "Naprava: %s"
+#~ msgid "TAP"
+#~ msgstr "TAP"
+#~ msgid "TUN"
+#~ msgstr "TUN"
+#~ msgid "Protocol: %s"
+#~ msgstr "Protokol: %s"
+#~ msgid "TCP"
+#~ msgstr "TCP"
+#~ msgid "UDP"
+#~ msgstr "UDP"
+#~ msgid "Routes:  %s"
+#~ msgstr "Smeri: %s"
+#~ msgid "Use LZO Compression: %s"
+#~ msgstr "Uporabi kompresijo LZO: %s"
+#~ msgid "Yes"
+#~ msgstr "Da"
+#~ msgid "No"
+#~ msgstr "Ne"
+#~ msgid "TLS auth:  %s %s"
+#~ msgstr "Overovitev TLS: %s %s"
+#~ msgid "The connection details can be changed using the \"Edit\" button."
+#~ msgstr ""
+#~ "Podrobnosti o povezavi so lahko spremenjene z uporabo gumba \"Uredi\"."
+#~ msgid "Cannot import settings"
+#~ msgstr "Ni mogoče uvoziti nastavitev"
+#~ msgid "The VPN settings file '%s' does not contain valid data."
+#~ msgstr "Datoteka z nastavitvami za VPN '%s' ne vsebuje veljavnih podatkov."
+#~ msgid "Select file to import"
+#~ msgstr "Izberite datoteko za uvoz"
+#~ msgid "Select CA to use"
+#~ msgstr "Izberite CA za uporabo"
+#~ msgid "Select certificate to use"
+#~ msgstr "Izberite certifikat za uporabo"
+#~ msgid "Select key to use"
+#~ msgstr "Izberite ključ za uporabo"
+#~ msgid "Select shared key to use"
+#~ msgstr "Izberite deljeni ključ za uporabo"
+#~ msgid "Select TA to use"
+#~ msgstr "Izberite TA za uporabo"
+#~ msgid "Save as..."
+#~ msgstr "Shrani kot ..."
+#~ msgid "A file named \"%s\" already exists."
+#~ msgstr "Datoteka z imenom \"%s\" že obstaja."
+#~ msgid "Do you want to replace it with the one you are saving?"
+#~ msgstr "Ali jo želite zamenjati s to, ki jo shranjujete?"
+#~ msgid "Failed to export configuration"
+#~ msgstr "Izvoz nastavitev ni uspel"
+#~ msgid "Failed to save file %s"
+#~ msgstr "Shranjevanje datoteke %s ni uspelo"
+#~ msgid "0"
+#~ msgstr "0"
+#~ msgid "1"
+#~ msgstr "1"
+#~ msgid "<b>Connection Name</b>"
+#~ msgstr "<b>Ime povezave</b>"
+#~ msgid "<b>Optional Information</b>"
+#~ msgstr "<b>Dodatne informacije</b>"
+#~ msgid "<i>example: 172.16.0.0/16 10.11.12.0/24</i>"
+#~ msgstr "<i>primer: 172.16.0.0/16 10.11.12.0/24</i>"
+#~ msgid "CA  file:"
+#~ msgstr "Datoteka z CA:"
+#~ msgid "Connection Type:"
+#~ msgstr "Vrsta povezave:"
+#~ msgid ""
+#~ "Please enter the information provided by your system administrator below. "
+#~ "Do not enter your password here as you will be prompted when connecting."
+#~ msgstr ""
+#~ "Prosim, spodaj vnesite informacije, ki vam jih je priskrbel sistemski "
+#~ "administrator. Ne vnesite svojega gesla tukaj, saj boste ponovno vprašani "
+#~ "zanj med povezovanjem."
+#~ msgid ""
+#~ "Please note that the file you import is not an OpenVPN configuration "
+#~ "file. Ask your administrator for the file."
+#~ msgstr ""
+#~ "Prosim, pomnite, da datoteka, ki ste jo uvozili, ni datoteka z "
+#~ "nastavitvami za OpenVPN. Vprašajte administratorja za datoteko."
+#~ msgid "Shared key"
+#~ msgstr "Deljeni ključ"
+#~ msgid "Use TLS auth:"
+#~ msgstr "Uporabi overovitev TLS:"
+#~ msgid "Use cipher:"
+#~ msgstr "Uporabi šifro:"
+#~ msgid "X.509"
+#~ msgstr "X.509"
+#~ msgid ""
+#~ "X.509 Certificates\n"
+#~ "Pre-shared key\n"
+#~ "Password Authentication\n"
+#~ "X.509 with Password Authentication"
+#~ msgstr ""
+#~ "Certifikati X.509\n"
+#~ "Vnaprej deljeni ključ\n"
+#~ "Overovitev z geslom\n"
+#~ "X.509 z overovitvijo z geslom"
+#~ msgid "_Import Saved Configuration..."
+#~ msgstr "_Uvozi shranjene nastavitve ..."
+#~ msgid ""
+#~ "_Name used to identify the connection to the private network, e.g. "
+#~ "\"Campus VPN\" or \"Corporate Network\""
+#~ msgstr ""
+#~ "_Ime, uporabljeno za identificiranje povezave na zasebno omrežje, npr. "
+#~ "\"Campus VPN\" ali \"Corporate Network\""
+#~ msgid "_Only use VPN connection for these addresses"
+#~ msgstr "Uporabi povezavo VPN _samo za te naslove"
+#~ msgid ""
+#~ "The VPN login failed because the user name and password were not accepted "
+#~ "or the certificate password was wrong."
+#~ msgstr ""
+#~ "Prijava v VPN ni uspela, ker uporabniško ime in geslo nista bila sprejeta "
+#~ "ali pa je bilo geslo certifikata napačno."
+#~ msgid "The VPN login failed because the VPN program could not be started."
+#~ msgstr "Prijava v VPN ni uspela, ker ni mogoče zagnati programa VPN."
+#~ msgid ""
+#~ "The VPN login failed because the VPN program could not connect to the VPN "
+#~ "server."
+#~ msgstr ""
+#~ "Prijava v VPN ni uspela, ker se program VPN ne more povezati s strežnikom "
+#~ "VPN."
+#~ msgid ""
+#~ "The VPN login failed because the VPN configuration options were invalid."
+#~ msgstr "Prijava v VPN ni uspela, ker so nastavitve VPN neveljavne."
+#~ msgid ""
+#~ "The VPN login failed because the VPN program received an invalid "
+#~ "configuration from the VPN server."
+#~ msgstr ""
+#~ "Prijava v VPN ni uspela, ker je program VPN prejel neveljavne nastavitve "
+#~ "iz strežnika VPN."
+#~ msgid "VPN connection failed"
+#~ msgstr "Povezava VPN ni uspela"
 
