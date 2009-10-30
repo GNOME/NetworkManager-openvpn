@@ -1,8 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /***************************************************************************
  *
- * Copyright (C) 2008 Dan Williams, <dcbw@redhat.com>
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,6 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Copyright (C) 2008 - 2009 Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
  *
  **************************************************************************/
 
@@ -31,6 +31,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <ctype.h>
+#include <stdio.h>
 
 #include <glib/gi18n-lib.h>
 
@@ -44,19 +45,19 @@
 
 #define CLIENT_TAG "client"
 #define TLS_CLIENT_TAG "tls-client"
-#define DEV_TAG "dev"
-#define PROTO_TAG "proto"
-#define REMOTE_TAG "remote"
+#define DEV_TAG "dev "
+#define PROTO_TAG "proto "
+#define REMOTE_TAG "remote "
 #define CA_TAG "ca"
 #define CERT_TAG "cert"
 #define KEY_TAG "key"
 #define CIPHER_TAG "cipher"
 #define COMP_TAG "comp-lzo"
-#define IFCONFIG_TAG "ifconfig"
+#define IFCONFIG_TAG "ifconfig "
 #define SECRET_TAG "secret"
 #define AUTH_USER_PASS_TAG "auth-user-pass"
 #define TLS_AUTH_TAG "tls-auth"
-#define AUTH_TAG "auth"
+#define AUTH_TAG "auth "
 #define RENEG_SEC_TAG "reneg-sec"
 
 static gboolean
@@ -415,7 +416,136 @@ do_import (const char *path, char **lines, GError **error)
 gboolean
 do_export (const char *path, NMConnection *connection, GError **error)
 {
-	return FALSE;
-}
+	NMSettingConnection *s_con;
+	NMSettingIP4Config *s_ip4;
+	NMSettingVPN *s_vpn;
+	FILE *f;
+	const char *value;
+	const char *gateway = NULL;
+	const char *cipher = NULL;
+	const char *cacert = NULL;
+	const char *connection_type = NULL;
+	const char *user_cert = NULL;
+	const char *private_key = NULL;
+	const char *port = NULL;
+	gboolean success = FALSE;
+	gboolean device_tun = TRUE;
+	gboolean proto_udp = TRUE;
+	gboolean use_lzo = FALSE;
+	gboolean reneg_exists = FALSE;
+	guint32 reneg = 0;
 
+	s_con = NM_SETTING_CONNECTION (nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION));
+	g_assert (s_con);
+
+	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+
+	f = fopen (path, "w");
+	if (!f) {
+		g_set_error (error, 0, 0, "could not open file for writing");
+		return FALSE;
+	}
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
+	if (value && strlen (value))
+		gateway = value;
+	else {
+		g_set_error (error, 0, 0, "connection was incomplete (missing gateway)");
+		goto done;
+	}
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
+	if (value && strlen (value))
+		connection_type = value;
+
+	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)
+	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
+	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
+		if (value && strlen (value))
+			cacert = value;
+	}
+
+	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)
+	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
+		if (value && strlen (value))
+			user_cert = value;
+
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+		if (value && strlen (value))
+			private_key = value;
+	}
+
+	/* Advanced values start */
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
+	if (value && strlen (value))
+		port = value;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
+	if (value && strlen (value)) {
+		reneg_exists = TRUE;
+		reneg = strtol (value, NULL, 10);
+	}
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
+	if (value && !strcmp (value, "yes"))
+		proto_udp = FALSE;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV);
+	if (value && !strcmp (value, "yes"))
+		device_tun = FALSE;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
+	if (value && !strcmp (value, "yes"))
+		use_lzo = TRUE;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER);
+	if (value && strlen (value))
+		cipher = value;
+
+	/* Advanced values end */
+
+	fprintf (f, "client\n");
+	fprintf (f, "remote %s %s\n", gateway, port ? port : "");
+
+	if (cacert)
+		fprintf (f, "ca %s\n", cacert);
+	if (user_cert)
+		fprintf (f, "cert %s\n", user_cert);
+	if (private_key)
+		fprintf(f, "key %s\n", private_key);
+
+	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
+	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
+		fprintf (f, "auth-user-pass\n");
+
+	if (reneg_exists)
+		fprintf (f, "reneg-sec %d\n", reneg);
+
+	if (cipher)
+		fprintf (f, "cipher %s\n", cipher);
+
+	if (use_lzo)
+		fprintf (f, "comp-lzo yes\n");
+
+	fprintf (f, "dev %s\n", device_tun ? "tun" : "tap");
+	fprintf (f, "proto %s\n", proto_udp ? "udp" : "tcp");
+
+	/* Add hard-coded stuff */
+	fprintf (f,
+	         "nobind\n"
+	         "auth-nocache\n"
+	         "script-security 2\n"
+	         "persist-key\n"
+	         "persist-tun\n"
+	         "user openvpn\n"
+	         "group openvpn\n");
+	success = TRUE;
+
+done:
+	fclose (f);
+	return success;
+}
 

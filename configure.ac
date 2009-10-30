@@ -101,12 +101,28 @@ fi
 
 NM_COMPILER_WARNINGS
 
+dnl
+dnl Tests
+dnl
+AC_ARG_WITH(tests, AS_HELP_STRING([--with-tests], [Build NetworkManager tests]))
+AM_CONDITIONAL(WITH_TESTS, test "x$with_tests" = "xyes")
+case $with_tests in
+    yes)
+        with_tests=yes
+        ;;
+    *)
+        with_tests=no
+        ;;
+esac
+
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
 common-gnome/Makefile
 auth-dialog/Makefile
 properties/Makefile
+properties/tests/Makefile
+properties/tests/conf/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT

@@ -605,7 +605,10 @@ import (NMVpnPluginUiInterface *iface, const char *path, GError **error)
 		goto out;
 	}
 
-	if (strcmp (ext, ".ovpn") && strcmp (ext, ".conf") && strcmp (ext, ".cnf")) {
+	if (   strcmp (ext, ".ovpn")
+	    && strcmp (ext, ".conf")
+	    && strcmp (ext, ".cnf")
+	    && strcmp (ext, ".ovpntest")) {   /* Special extension for testcases */
 		g_set_error (error,
 		             OPENVPN_PLUGIN_UI_ERROR,
 		             OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
@@ -615,6 +618,22 @@ import (NMVpnPluginUiInterface *iface, const char *path, GError **error)
 
 	if (!g_file_get_contents (path, &contents, NULL, error))
 		return NULL;
+
+	if (!g_utf8_validate (contents, -1, NULL)) {
+		char *tmp;
+		GError *conv_error = NULL;
+
+		tmp = g_locale_to_utf8 (contents, -1, NULL, NULL, &conv_error);
+		if (conv_error) {
+			/* ignore the error, we tried at least. */
+			g_error_free (conv_error);
+			g_free (tmp);
+		} else {
+			g_assert (tmp);
+			g_free (contents);
+			contents = tmp;  /* update contents with the UTF-8 safe text */
+		}
+	}
 
 	lines = g_strsplit_set (contents, "\r\n", 0);
 	if (g_strv_length (lines) <= 1) {

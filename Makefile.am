@@ -31,7 +31,8 @@ EXTRA_DIST = nm-openvpn-service.name.in \
              $(icon_DATA)         \
              intltool-extract.in  \
              intltool-merge.in    \
-             intltool-update.in
+             intltool-update.in \
+             nm-test-helpers.h
 
 CLEANFILES = $(nmvpnservice_DATA) $(desktop_DATA) *~
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update
