@@ -1,4 +1,4 @@
-# translation of network-manager-openvpn.po.master.ta.po to Tamil
+# translation of network-manager-openvpn.master.ta.po to Tamil
 # Tamil translation of network-manager-openvpn.
 # Copyright (C) 2009 network-manager-openvpn's COPYRIGHT HOLDER
 # This file is distributed under the same license as the network-manager-openvpn package.
@@ -7,10 +7,10 @@
 # I. Felix <ifelix@redhat.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: network-manager-openvpn.po.master.ta\n"
+"Project-Id-Version: network-manager-openvpn.master.ta\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2009-06-17 06:17+0000\n"
-"PO-Revision-Date: 2009-06-27 00:56+0530\n"
+"POT-Creation-Date: 2009-09-28 11:36+0000\n"
+"PO-Revision-Date: 2009-10-30 12:25+0530\n"
 "Last-Translator: I. Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\\n\n"
+"\n"
 "\n"
 "\n"
 
@@ -86,8 +87,8 @@ msgstr "உங்களது தனிப்பட்ட விசையை த
 msgid "Choose an OpenVPN static key..."
 msgstr "ஒரு திறந்தVPN நிலையான விசையைத் தேர்ந்தெடு..."
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:938
-#: ../properties/auth-helpers.c:1091
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:949
+#: ../properties/auth-helpers.c:1126
 msgid "None"
 msgstr "ஒன்றுமில்லை"
 
@@ -99,15 +100,15 @@ msgstr "PEM சான்றிதழ்கள் (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "திறந்தVPN நிலையான விசைகள் (*.key)"
 
-#: ../properties/auth-helpers.c:860 ../properties/auth-helpers.c:930
+#: ../properties/auth-helpers.c:871 ../properties/auth-helpers.c:941
 msgid "Default"
 msgstr "முன்னிருப்பு"
 
-#: ../properties/auth-helpers.c:940
+#: ../properties/auth-helpers.c:951
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:942
+#: ../properties/auth-helpers.c:953
 msgid "SHA-1"
 msgstr "SHA-1"
 
@@ -153,9 +154,10 @@ msgid ""
 "peer.  For example, if the peer uses '1', this connection must use '0'.  If "
 "you are unsure what value to use, contact your system administrator.</i>"
 msgstr ""
-"<i>விசை திசை பயன்படுத்தப்பட்டால், அது VPN பீரில் பயன்படுத்துபடும் எதிரில் "
-"இருக்கும்.  எடுத்துக்காட்டாக, பீர் '1'ஐ பயன்படுத்தினால், இந்த இணைப்பு '0'வை பயன்படுத்தும்.  நீங்கள் "
-"எந்த மதிப்பை பயன்படுத்த வேண்டுமென தெளிவில்லாமல் இருந்தால், உங்கள் கணினி நிர்வாகியை தொடர்பு கொள்ளவும்.</i>"
+"<i>விசை திசை பயன்படுத்தப்பட்டால், அது VPN பீரில் பயன்படுத்துபடும் எதிரில் இருக்கும்.  "
+"எடுத்துக்காட்டாக, பீர் '1'ஐ பயன்படுத்தினால், இந்த இணைப்பு '0'வை பயன்படுத்தும்.  நீங்கள் எந்த "
+"மதிப்பை பயன்படுத்த வேண்டுமென தெளிவில்லாமல் இருந்தால், உங்கள் கணினி நிர்வாகியை தொடர்பு "
+"கொள்ளவும்.</i>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:5
 msgid "Ad_vanced..."
@@ -246,18 +248,22 @@ msgid "Use additional TLS authentication"
 msgstr "கூடுதல் TLS அங்கீகாரத்தை பயன்படுத்து"
 
 #: ../properties/nm-openvpn-dialog.glade.h:27
+msgid "Use custom _renegotiation interval:"
+msgstr "தனிபயன் மறுகுறைத்தல் இடைவெறியை பயன்படுத்து (_r):"
+
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "Use custom gateway p_ort:"
 msgstr "தனிபயன் கேட்வே துறையைப் பயன்படுத்து (_o):"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "User Certificate:"
 msgstr "பயனர் சான்றிதழ்:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
+#: ../properties/nm-openvpn-dialog.glade.h:30
 msgid "User name:"
 msgstr "பயனர் பெயர்:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
+#: ../properties/nm-openvpn-dialog.glade.h:31
 msgid "_Gateway:"
 msgstr "கேட்வே (_G):"
 
