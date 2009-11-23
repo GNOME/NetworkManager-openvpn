@@ -427,7 +427,11 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *connection_type = NULL;
 	const char *user_cert = NULL;
 	const char *private_key = NULL;
+	const char *static_key = NULL;
+	const char *static_key_direction = NULL;
 	const char *port = NULL;
+	const char *local_ip = NULL;
+	const char *remote_ip = NULL;
 	gboolean success = FALSE;
 	gboolean device_tun = TRUE;
 	gboolean proto_udp = TRUE;
@@ -478,6 +482,16 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			private_key = value;
 	}
 
+	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
+		if (value && strlen (value))
+			static_key = value;
+
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION);
+		if (value && strlen (value))
+			static_key_direction = value;
+	}
+
 	/* Advanced values start */
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
 	if (value && strlen (value))
@@ -505,6 +519,14 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && strlen (value))
 		cipher = value;
 
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
+	if (value && strlen (value))
+		local_ip = value;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
+	if (value && strlen (value))
+		remote_ip = value;
+
 	/* Advanced values end */
 
 	fprintf (f, "client\n");
@@ -521,6 +543,16 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
 		fprintf (f, "auth-user-pass\n");
 
+	if (!strcmp(connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
+		if (static_key) {
+			fprintf (f, "secret %s%s%s\n",
+			         static_key,
+			         static_key_direction ? " " : "",
+			         static_key_direction ? static_key_direction : "");
+		} else
+			g_warning ("%s: invalid openvpn static key configuration (missing static key)", __func__);
+	}
+
 	if (reneg_exists)
 		fprintf (f, "reneg-sec %d\n", reneg);
 
@@ -532,6 +564,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	fprintf (f, "dev %s\n", device_tun ? "tun" : "tap");
 	fprintf (f, "proto %s\n", proto_udp ? "udp" : "tcp");
+
+	if (local_ip && remote_ip)
+		fprintf (f, "ifconfig %s %s\n", local_ip, remote_ip);
 
 	/* Add hard-coded stuff */
 	fprintf (f,

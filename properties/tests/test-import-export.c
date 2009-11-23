@@ -390,6 +390,108 @@ test_non_utf8_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	g_object_unref (connection);
 }
 
+static void
+test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMSettingConnection *s_con;
+	NMSettingIP4Config *s_ip4;
+	NMSettingVPN *s_vpn;
+	const char *expected_id = "static";
+	char *expected_path;
+
+	connection = get_basic_connection ("static-key-import", plugin, dir, "static.ovpn");
+	ASSERT (connection != NULL, "static-key-import", "failed to import connection");
+
+	/* Connection setting */
+	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	ASSERT (s_con != NULL,
+	        "static-key-import", "missing 'connection' setting");
+
+	ASSERT (strcmp (nm_setting_connection_get_id (s_con), expected_id) == 0,
+	        "static-key-import", "unexpected connection ID");
+
+	ASSERT (nm_setting_connection_get_uuid (s_con) == NULL,
+	        "static-key-import", "unexpected valid UUID");
+
+	/* IP4 setting */
+	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
+	ASSERT (s_ip4 == NULL,
+	        "static-key-import", "unexpected 'ip4-config' setting");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        "static-key-import", "missing 'vpn' setting");
+
+	/* Data items */
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_STATIC_KEY);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE, "10.11.12.13");
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_PORT, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, "1");
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_TA, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_LOCAL_IP, "10.8.0.2");
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_IP, "10.8.0.1");
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+
+	expected_path = g_strdup_printf ("%s/static.key", dir);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY, expected_path);
+	g_free (expected_path);
+
+	/* Secrets */
+	test_secret ("static-key-import-secrets", s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
+	test_secret ("static-key-import-secrets", s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
+
+	g_object_unref (connection);
+}
+
+#define STATIC_KEY_EXPORTED_NAME "static.ovpntest"
+static void
+test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+	int ret;
+
+	connection = get_basic_connection ("static-key-export", plugin, dir, "static.ovpn");
+	ASSERT (connection != NULL, "static-key-export", "failed to import connection");
+
+	path = g_build_path ("/", dir, STATIC_KEY_EXPORTED_NAME, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL ("static-key-export", "export failed with missing error");
+		else
+			FAIL ("static-key-export", "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection ("static-key-export", plugin, dir, STATIC_KEY_EXPORTED_NAME);
+	ret = unlink (path);
+	ASSERT (connection != NULL, "static-key-export", "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        "static-key-export", "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
@@ -420,6 +522,9 @@ int main (int argc, char **argv)
 	test_tls_export (plugin, argv[1]);
 
 	test_non_utf8_import (plugin, argv[1]);
+
+	test_static_key_import (plugin, argv[1]);
+	test_static_key_export (plugin, argv[1]);
 
 	g_object_unref (plugin);
 

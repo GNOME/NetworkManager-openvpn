@@ -13,7 +13,7 @@ test_import_export_CPPFLAGS = \
 	$(GTK_CFLAGS) \
 	$(GCONF_CFLAGS) \
 	$(GNOMEKEYRING_CFLAGS) \
-        $(NETWORK_MANAGER_CFLAGS) \
+	$(NETWORK_MANAGER_CFLAGS) \
 	$(DBUS_CFLAGS)
 
 test_import_export_LDADD = \
