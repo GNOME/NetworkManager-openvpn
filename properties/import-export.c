@@ -60,6 +60,8 @@
 #define AUTH_TAG "auth "
 #define RENEG_SEC_TAG "reneg-sec"
 #define TLS_REMOTE_TAG "tls-remote"
+#define PORT_TAG "port"
+#define RPORT_TAG "rport"
 
 
 static char *
@@ -177,6 +179,20 @@ handle_direction (const char *tag, const char *key, char *leftover, NMSettingVPN
 		g_warning ("%s: unknown %s direction '%s'", __func__, tag, leftover);
 }
 
+static char *
+parse_port (const char *str, const char *line)
+{
+	glong port;
+
+	errno = 0;
+	port = strtol (str, NULL, 10);
+	if ((errno == 0) && (port > 0) && (port < 65536))
+		return g_strdup_printf ("%d", (gint) port);
+
+	g_warning ("%s: invalid remote port in option '%s'", __func__, line);
+	return NULL;
+}
+
 NMConnection *
 do_import (const char *path, char **lines, GError **error)
 {
@@ -282,16 +298,13 @@ do_import (const char *path, char **lines, GError **error)
 				have_remote = TRUE;
 
 				if (g_strv_length (items) >= 2) {
-					glong port;
+					char *tmp;
 
-					errno = 0;
-					port = strtol (items[1], NULL, 10);
-					if ((errno == 0) && (port > 0) && (port < 65536)) {
-						char *tmp = g_strdup_printf ("%d", (guint32) port);
+					tmp = parse_port (items[1], *line);
+					if (tmp) {
 						nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PORT, tmp);
 						g_free (tmp);
-					} else
-						g_warning ("%s: invalid remote port in option '%s'", __func__, *line);
+					}
 				}
 			}
 			g_strfreev (items);
@@ -299,6 +312,30 @@ do_import (const char *path, char **lines, GError **error)
 			if (!nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE))
 				g_warning ("%s: unknown remote option '%s'", __func__, *line);
 			continue;
+		}
+
+		if (   !strncmp (*line, PORT_TAG, strlen (PORT_TAG))
+		    || !strncmp (*line, RPORT_TAG, strlen (RPORT_TAG))) {
+			char *tmp;
+
+			/* Port specified in 'remote' always takes precedence */
+			if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT))
+				continue;
+
+			if (!strncmp (*line, PORT_TAG, strlen (PORT_TAG)))
+				items = get_args (*line + strlen (PORT_TAG));
+			else if (!strncmp (*line, RPORT_TAG, strlen (RPORT_TAG)))
+				items = get_args (*line + strlen (RPORT_TAG));
+			else
+				g_assert_not_reached ();
+
+			if (g_strv_length (items) >= 1) {
+				tmp = parse_port (items[0], *line);
+				if (tmp) {
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PORT, tmp);
+					g_free (tmp);
+				}
+			}
 		}
 
 		if (handle_path_item (*line, CA_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL))
@@ -570,7 +607,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	/* Advanced values end */
 
 	fprintf (f, "client\n");
-	fprintf (f, "remote %s %s\n", gateway, port ? port : "");
+	fprintf (f, "remote %s%s%s\n",
+	         gateway,
+	         port ? " " : "",
+	         port ? port : "");
 
 	if (cacert)
 		fprintf (f, "ca %s\n", cacert);
