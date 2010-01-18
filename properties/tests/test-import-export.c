@@ -282,8 +282,6 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_PORT, "1194");
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY, NULL);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
-	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_TA, NULL);
-	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
@@ -301,6 +299,11 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	expected_path = g_strdup_printf ("%s/keys/clee.key", dir);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_KEY, expected_path);
 	g_free (expected_path);
+
+	expected_path = g_strdup_printf ("%s/keys/46.key", dir);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_TA, expected_path);
+	g_free (expected_path);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_TA_DIR, "1");
 
 	/* Secrets */
 	test_secret ("tls-import-secrets", s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);

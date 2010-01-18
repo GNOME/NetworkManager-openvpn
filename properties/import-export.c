@@ -457,6 +457,8 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
 	const char *tls_remote = NULL;
+	const char *tls_auth = NULL;
+	const char *tls_auth_dir = NULL;
 	gboolean success = FALSE;
 	gboolean device_tun = TRUE;
 	gboolean proto_udp = TRUE;
@@ -557,6 +559,14 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && strlen (value))
 		remote_ip = value;
 
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
+	if (value && strlen (value))
+		tls_auth = value;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR);
+	if (value && strlen (value))
+		tls_auth_dir = value;
+
 	/* Advanced values end */
 
 	fprintf (f, "client\n");
@@ -573,7 +583,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
 		fprintf (f, "auth-user-pass\n");
 
-	if (!strcmp(connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
+	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		if (static_key) {
 			fprintf (f, "secret %s%s%s\n",
 			         static_key,
@@ -598,8 +608,18 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (local_ip && remote_ip)
 		fprintf (f, "ifconfig %s %s\n", local_ip, remote_ip);
 
-	if (tls_remote)
-		fprintf (f,"tls-remote \"%s\"\n", tls_remote);
+	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_TLS)
+	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		if (tls_remote)
+			fprintf (f,"tls-remote \"%s\"\n", tls_remote);
+
+		if (tls_auth) {
+			fprintf (f, "tls-auth %s%s%s\n",
+			         tls_auth,
+			         tls_auth_dir ? " " : "",
+			         tls_auth_dir ? tls_auth_dir : "");
+		}
+	}
 
 	/* Add hard-coded stuff */
 	fprintf (f,
