@@ -288,6 +288,7 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, "/CN=myvpn.company.com");
 
 	expected_path = g_strdup_printf ("%s/keys/mg8.ca", dir);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_CA, expected_path);
