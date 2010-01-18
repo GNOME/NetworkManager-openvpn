@@ -59,6 +59,55 @@
 #define TLS_AUTH_TAG "tls-auth"
 #define AUTH_TAG "auth "
 #define RENEG_SEC_TAG "reneg-sec"
+#define TLS_REMOTE_TAG "tls-remote"
+
+
+static char *
+unquote (const char *line, char **leftover)
+{
+	char *tmp, *item, *unquoted = NULL, *p;
+	gboolean quoted = FALSE;
+
+	if (leftover)
+		g_return_val_if_fail (*leftover == NULL, FALSE);
+
+	tmp = g_strdup (line);
+	item = g_strstrip (tmp);
+	if (!strlen (item)) {
+		g_free (tmp);
+		return NULL;
+	}
+
+	/* Simple unquote */
+	if ((item[0] == '"') || (item[0] == '\'')) {
+		quoted = TRUE;
+		item++;
+	}
+
+	/* Unquote stuff using openvpn unquoting rules */
+	unquoted = g_malloc0 (strlen (item) + 1);
+	for (p = unquoted; *item; item++, p++) {
+		if (quoted && ((*item == '"') || (*item == '\'')))
+			break;
+		else if (!quoted && isspace (*item))
+			break;
+
+		if (*item == '\\' && *(item+1) == '\\')
+			*p = *(++item);
+		else if (*item == '\\' && *(item+1) == '"')
+			*p = *(++item);
+		else if (*item == '\\' && *(item+1) == ' ')
+			*p = *(++item);
+		else
+			*p = *item;
+	}
+	if (leftover && *item)
+		*leftover = item + 1;
+
+	g_free (tmp);
+	return unquoted;
+}
+
 
 static gboolean
 handle_path_item (const char *line,
@@ -68,59 +117,23 @@ handle_path_item (const char *line,
                   const char *path,
                   char **leftover)
 {
-	char *tmp, *file, *unquoted, *p, *full_path = NULL;
-	gboolean quoted = FALSE;
-
-	if (leftover)
-		g_return_val_if_fail (*leftover == NULL, FALSE);
+	char *file, *full_path = NULL;
 
 	if (strncmp (line, tag, strlen (tag)))
 		return FALSE;
 
-	tmp = g_strdup (line + strlen (tag));
-	file = g_strstrip (tmp);
-	if (!strlen (file))
-		goto out;
+	file = unquote (line + strlen (tag), leftover);
+	if (!file)
+		return FALSE;
 
 	/* If file isn't an absolute file name, add the default path */
-	if (!g_path_is_absolute (file)) {
+	if (!g_path_is_absolute (file))
 		full_path = g_build_filename (path, file, NULL);
-		file = full_path;
-	}
 
-	/* Simple unquote */
-	if ((file[0] == '"') || (file[0] == '\'')) {
-		quoted = TRUE;
-		file++;
-	}
+	nm_setting_vpn_add_data_item (s_vpn, key, full_path ? full_path : file);
 
-	/* Unquote stuff using openvpn unquoting rules */
-	unquoted = g_malloc0 (strlen (file) + 1);
-	for (p = unquoted; *file; file++, p++) {
-		if (quoted && ((*file == '"') || (*file == '\'')))
-			break;
-		else if (!quoted && isspace (*file))
-			break;
-
-		if (*file == '\\' && *(file+1) == '\\')
-			*p = *(++file);
-		else if (*file == '\\' && *(file+1) == '"')
-			*p = *(++file);
-		else if (*file == '\\' && *(file+1) == ' ')
-			*p = *(++file);
-		else
-			*p = *file;
-	}
-	if (leftover && *file)
-		*leftover = file + 1;
-
-	nm_setting_vpn_add_data_item (s_vpn, key, unquoted);
-	g_free (unquoted);
-
-out:
-	g_free (tmp);
-	if (full_path)
-		g_free (full_path);
+	g_free (file);
+	g_free (full_path);
 	return TRUE;
 }
 
@@ -327,6 +340,17 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 
+		/* tls-remote */
+		if (!strncmp (*line, TLS_REMOTE_TAG, strlen (TLS_REMOTE_TAG))) {
+			char *unquoted = unquote (*line + strlen (TLS_REMOTE_TAG), NULL);
+
+			if (unquoted) {
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, unquoted);
+				g_free (unquoted);
+			}
+			continue;
+		}
+
 		if (!strncmp (*line, IFCONFIG_TAG, strlen (IFCONFIG_TAG))) {
 			items = get_args (*line + strlen (IFCONFIG_TAG));
 			if (!items)
@@ -432,6 +456,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *port = NULL;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
+	const char *tls_remote = NULL;
 	gboolean success = FALSE;
 	gboolean device_tun = TRUE;
 	gboolean proto_udp = TRUE;
@@ -491,6 +516,11 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		if (value && strlen (value))
 			static_key_direction = value;
 	}
+
+	/* Export tls-remote value now*/
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
+	if (value && strlen (value))
+		tls_remote = value;
 
 	/* Advanced values start */
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
@@ -567,6 +597,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	if (local_ip && remote_ip)
 		fprintf (f, "ifconfig %s %s\n", local_ip, remote_ip);
+
+	if (tls_remote)
+		fprintf (f,"tls-remote \"%s\"\n", tls_remote);
 
 	/* Add hard-coded stuff */
 	fprintf (f,

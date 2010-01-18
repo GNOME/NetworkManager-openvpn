@@ -762,6 +762,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_TA_DIR,
 	NM_OPENVPN_KEY_TA,
 	NM_OPENVPN_KEY_RENEG_SECONDS,
+	NM_OPENVPN_KEY_TLS_REMOTE,
 	NULL
 };
 
@@ -1097,6 +1098,12 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_AUTH);
 	populate_hmacauth_combo (GTK_COMBO_BOX (widget), value);
 
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_REMOTE);
+	if (value && strlen (value)) {
+		widget = glade_xml_get_widget (xml, "tls_remote_entry");
+		gtk_entry_set_text (GTK_ENTRY(widget), value);
+	}
+
 	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
@@ -1161,6 +1168,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	GtkWidget *widget;
 	GladeXML *xml;
 	const char *contype = NULL;
+	const char *value = NULL;
 
 	g_return_val_if_fail (dialog != NULL, NULL);
 	if (error)
@@ -1235,7 +1243,12 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_AUTH), g_strdup (hmacauth));
 			}
 		}
-		
+
+		widget = glade_xml_get_widget (xml, "tls_remote_entry");
+		value = gtk_entry_get_text (GTK_ENTRY(widget));
+		if (value && strlen (value))
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TLS_REMOTE), g_strdup (value));
+
 		widget = glade_xml_get_widget (xml, "tls_auth_checkbutton");
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 			char *filename;

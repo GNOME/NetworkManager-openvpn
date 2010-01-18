@@ -56,6 +56,7 @@
 #define NM_OPENVPN_KEY_TA "ta"
 #define NM_OPENVPN_KEY_TA_DIR "ta-dir"
 #define NM_OPENVPN_KEY_USERNAME "username"
+#define NM_OPENVPN_KEY_TLS_REMOTE "tls-remote"
 
 #define NM_OPENVPN_KEY_PASSWORD "password"
 #define NM_OPENVPN_KEY_CERTPASS "cert-pass"
