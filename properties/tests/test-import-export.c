@@ -493,6 +493,85 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	g_free (path);
 }
 
+static void
+test_port_import (NMVpnPluginUiInterface *plugin,
+                  const char *detail,
+                  const char *dir,
+                  const char *file,
+                  const char *expected_id,
+                  const char *expected_port)
+{
+	NMConnection *connection;
+	NMSettingConnection *s_con;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection (detail, plugin, dir, file);
+	ASSERT (connection != NULL, detail, "failed to import connection");
+
+	/* Connection setting */
+	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	ASSERT (s_con != NULL,
+	        detail, "missing 'connection' setting");
+
+	ASSERT (strcmp (nm_setting_connection_get_id (s_con), expected_id) == 0,
+	        detail, "unexpected connection ID");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        detail, "missing 'vpn' setting");
+
+	/* Data items */
+	test_item (detail, s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
+	test_item (detail, s_vpn, NM_OPENVPN_KEY_PORT, expected_port);
+
+	g_object_unref (connection);
+}
+
+static void
+test_port_export (NMVpnPluginUiInterface *plugin,
+                  const char *detail,
+                  const char *dir,
+                  const char *file,
+                  const char *exported_name)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+	int ret;
+
+	connection = get_basic_connection (detail, plugin, dir, file);
+	ASSERT (connection != NULL, detail, "failed to import connection");
+
+	path = g_build_path ("/", dir, exported_name, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL (detail, "export failed with missing error");
+		else
+			FAIL (detail, "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection (detail, plugin, dir, exported_name);
+	ret = unlink (path);
+	ASSERT (connection != NULL, detail, "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        detail, "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
@@ -526,6 +605,12 @@ int main (int argc, char **argv)
 
 	test_static_key_import (plugin, argv[1]);
 	test_static_key_export (plugin, argv[1]);
+
+	test_port_import (plugin, "port-import", argv[1], "port.ovpn", "port", "2345");
+	test_port_export (plugin, "port-export", argv[1], "port.ovpn", "port.ovpntest");
+
+	test_port_import (plugin, "rport-import", argv[1], "rport.ovpn", "rport", "6789");
+	test_port_export (plugin, "rport-export", argv[1], "rport.ovpn", "rport.ovpntest");
 
 	g_object_unref (plugin);
 

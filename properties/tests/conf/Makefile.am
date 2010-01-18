@@ -3,6 +3,8 @@ EXTRA_DIST = \
 	tls.ovpn \
 	iso885915.ovpn \
 	static.key \
-	static.ovpn
+	static.ovpn \
+	port.ovpn \
+	rport.ovpn
 
 
