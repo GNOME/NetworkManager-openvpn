@@ -12,14 +12,18 @@ dbusservice_DATA = nm-openvpn-service.conf
 nmvpnservicedir = $(sysconfdir)/NetworkManager/VPN
 nmvpnservice_DATA = nm-openvpn-service.name
 
-if WITH_GNOME
-desktopdir = $(datadir)/applications
-desktop_in_files = nm-openvpn.desktop.in
-desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
+desktopfile = nm-openvpn.desktop.in
+iconfile = gnome-mime-application-x-openvpn-settings.png
 
-icondir = $(datadir)/icons/hicolor/48x48/apps
-icon_DATA = gnome-mime-application-x-openvpn-settings.png
+if WITH_GNOME
+# FIXME: uncomment when nmce gets --import support
+#desktopdir = $(datadir)/applications
+#desktop_in_files = $(desktopfile)
+#desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+#@INTLTOOL_DESKTOP_RULE@
+
+#icondir = $(datadir)/icons/hicolor/48x48/apps
+#icon_DATA = $(iconfile)
 endif
 
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
@@ -27,8 +31,8 @@ nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 
 EXTRA_DIST = nm-openvpn-service.name.in \
              $(dbusservice_DATA)  \
-             $(desktop_in_files)  \
-             $(icon_DATA)         \
+             $(desktopfile) \
+             $(iconfile) \
              intltool-extract.in  \
              intltool-merge.in    \
              intltool-update.in \
