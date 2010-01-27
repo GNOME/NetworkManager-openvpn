@@ -2,24 +2,23 @@
 # Copyright (C) 2006, 2007, 2008, 2009 the NetworkManager-OpenVPN'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the NetworkManager-OpenVPN package.
 # Francesco Marletta <francesco.marletta@tiscali.it>, 2006, 2007, 2008, 2009.
-#
+# Luca Ferretti <elle.uca@libero.it>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-OpenVPN 0.7.1\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2009-04-17 15:41+0000\n"
-"PO-Revision-Date: 2009-04-18 18:08+0200\n"
-"Last-Translator: Francesco Marletta <francesco.marletta@tiscali.it>\n"
-"Language-Team: italian <tp@lists.linux.it>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-25 23:13+0100\n"
+"PO-Revision-Date: 2010-01-27 01:25+0100\n"
+"Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
+"Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
-msgstr "_Password:"
+msgstr "Pass_word:"
 
 #: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
@@ -53,8 +52,7 @@ msgstr "_Salva la password nel portachiavi"
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr ""
-"È necessario autenticarsi per accedere alla Rete Privata Virtuale (VPN) \"%s"
-"\"."
+"È necessario autenticarsi per accedere alla VPN (rete privata virtuale) «%s»."
 
 #: ../auth-dialog/main.c:128
 msgid "Authenticate VPN"
@@ -84,8 +82,8 @@ msgstr "Scegliere la propria chiave privata..."
 msgid "Choose an OpenVPN static key..."
 msgstr "Scegliere una chiave statica OpenVPN..."
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:938
-#: ../properties/auth-helpers.c:1091
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:950
+#: ../properties/auth-helpers.c:1133
 msgid "None"
 msgstr "Nessuno"
 
@@ -97,15 +95,15 @@ msgstr "Certificati PEM (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Chiavi statiche OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:860 ../properties/auth-helpers.c:930
+#: ../properties/auth-helpers.c:872 ../properties/auth-helpers.c:942
 msgid "Default"
 msgstr "Predefinito"
 
-#: ../properties/auth-helpers.c:940
+#: ../properties/auth-helpers.c:952
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:942
+#: ../properties/auth-helpers.c:954
 msgid "SHA-1"
 msgstr "SHA-1"
 
@@ -147,116 +145,132 @@ msgstr "<b>Generale</b>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:4
 msgid ""
+"<i>Connect only to servers whose certificate matches the given subject.\n"
+"Example: /CN=myvpn.company.com</i>"
+msgstr ""
+"<i>Connette solo a quei server il cui certificato corrisponde all'oggetto indicato.\n"
+"Esempio: /CN=miavpn.compagnia.com</i>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:6
+msgid ""
 "<i>If key direction is used, it must be the opposite of that used on the VPN "
 "peer.  For example, if the peer uses '1', this connection must use '0'.  If "
 "you are unsure what value to use, contact your system administrator.</i>"
 msgstr ""
-"<i>Se la direzione della chiave è usata, deve essere opposta a quella usata "
-"sul peer della VPN. Per esempio, se il peer usa \"1\", questa connessione "
-"deve usare \"0\". Se si è incerti sul valore da usare, contattare "
-"l'amministratore di sistema.</i>"
+"<i>Se viene usata la direzione della chiave, deve essere opposta a quella "
+"usata sul peer della VPN. Per esempio, se il peer usa \"1\", questa "
+"connessione deve usare \"0\". Se si è incerti sul valore da usare, "
+"contattare l'amministratore di sistema.</i>"
 
 # NdT: sono le preferenze avanzate
-#: ../properties/nm-openvpn-dialog.glade.h:5
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Ad_vanced..."
 msgstr "A_vanzate..."
 
-#: ../properties/nm-openvpn-dialog.glade.h:6
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "CA Certificate:"
 msgstr "Certificato CA:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn-dialog.glade.h:9
 msgid "Cipher:"
 msgstr "Cifrario:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "General"
 msgstr "Generale"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:11
 msgid "HMAC Authentication:"
 msgstr "Autenticazione HMAC:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:10
+#: ../properties/nm-openvpn-dialog.glade.h:12
 msgid "Key Direction:"
-msgstr "Direzione chiave:"
+msgstr "Direzione della chiave:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
+#: ../properties/nm-openvpn-dialog.glade.h:13
 msgid "Key File:"
 msgstr "File chiave:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:12
+#: ../properties/nm-openvpn-dialog.glade.h:14
 msgid "Local IP Address:"
 msgstr "Indirizzo IP locale:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
+#: ../properties/nm-openvpn-dialog.glade.h:15
 msgid "OpenVPN Advanced Options"
 msgstr "Opzioni OpenVPN avanzate"
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
+#: ../properties/nm-openvpn-dialog.glade.h:16
 msgid "Password:"
 msgstr "Password:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:17
 msgid "Private Key Password:"
-msgstr "Password chiave privata:"
+msgstr "Password della chiave privata:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Private Key:"
 msgstr "Chiave privata:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Remote IP Address:"
 msgstr "Indirizzo IP remoto:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:20
 msgid "Security"
 msgstr "Sicurezza"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Show passwords"
 msgstr "Mostra password"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Static Key:"
 msgstr "Chiave statica:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:23
+msgid "Subject Match:"
+msgstr "Corrispondenza per oggetto:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "TLS Authentication"
 msgstr "Autenticazione TLS"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Type:"
 msgstr "Tipo:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use L_ZO data compression"
-msgstr "Usare compressione L_ZO"
+msgstr "Usare la compressione L_ZO"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "Use a TA_P device"
 msgstr "Usare un device TA_P"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "Use a _TCP connection"
 msgstr "Usare una connessione _TCP"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "Use additional TLS authentication"
 msgstr "Usare autenticazione TLS aggiuntiva"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:30
+msgid "Use custom _renegotiation interval:"
+msgstr "Usare un intervallo di _rinegoziazione personalizzato:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:31
 msgid "Use custom gateway p_ort:"
 msgstr "Usare una p_orta gateway personalizzata:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:32
 msgid "User Certificate:"
 msgstr "Certificato utente:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
+#: ../properties/nm-openvpn-dialog.glade.h:33
 msgid "User name:"
 msgstr "Nome utente:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
+#: ../properties/nm-openvpn-dialog.glade.h:34
 msgid "_Gateway:"
 msgstr "_Gateway:"
