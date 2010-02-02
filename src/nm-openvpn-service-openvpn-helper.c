@@ -36,6 +36,9 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <ctype.h>
+#include <netdb.h>
+
 #include <dbus/dbus.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <dbus/dbus-glib.h>
@@ -274,6 +277,86 @@ get_routes (void)
 	return value;
 }
 
+static GValue *
+trusted_remote_to_gvalue (void)
+{
+	char *tmp;
+	GValue *val = NULL;
+	struct in_addr addr;
+	const char *p;
+	gboolean is_name = FALSE;
+
+	tmp = getenv ("trusted_ip");
+	if (!tmp)
+		tmp = getenv ("remote_1");
+	if (!tmp) {
+		g_warning ("%s: did not receive remote gateway address", __func__);
+		return NULL;
+	}
+
+	/* Check if it seems to be a hostname hostname */
+	p = tmp;
+	while (*p) {
+		if (*p != '.' && !isdigit (*p)) {
+			is_name = TRUE;
+			break;
+		}
+		p++;
+	}
+
+	/* Resolve a hostname if required */
+	if (is_name) {
+		struct addrinfo hints;
+		struct addrinfo *result = NULL, *rp;
+		int err;
+
+		memset (&hints, 0, sizeof (hints));
+
+		hints.ai_family = AF_INET;
+		hints.ai_flags = AI_ADDRCONFIG;
+		err = getaddrinfo (tmp, NULL, &hints, &result);
+		if (err != 0) {
+			g_warning ("%s: failed to look up VPN gateway address '%s' (%d)",
+			           __func__, tmp, err);
+			return NULL;
+		}
+
+		/* FIXME: so what if the name resolves to multiple IP addresses?  We
+		 * don't know which one pptp decided to use so we could end up using a
+		 * different one here, and the VPN just won't work.
+		 */
+		for (rp = result; rp; rp = rp->ai_next) {
+			if (   (rp->ai_family == AF_INET)
+			    && (rp->ai_addrlen == sizeof (struct sockaddr_in))) {
+				struct sockaddr_in *inptr = (struct sockaddr_in *) rp->ai_addr;
+
+				memcpy (&addr, &(inptr->sin_addr), sizeof (struct in_addr));
+				break;
+			}
+		}
+
+		freeaddrinfo (result);
+	} else {
+		errno = 0;
+		if (inet_pton (AF_INET, tmp, &addr) <= 0) {
+			g_warning ("%s: failed to convert VPN gateway address '%s' (%d)",
+			           __func__, tmp, errno);
+			return NULL;
+		}
+	}
+
+	if (addr.s_addr != 0) {
+		val = g_slice_new0 (GValue);
+		g_value_init (val, G_TYPE_UINT);
+		g_value_set_uint (val, addr.s_addr);
+	} else {
+		g_warning ("%s: failed to convert or look up VPN gateway address '%s'",
+		           __func__, tmp);
+	}
+
+	return val;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -300,7 +383,7 @@ main (int argc, char *argv[])
 	config = g_hash_table_new (g_str_hash, g_str_equal);
 
 	/* External world-visible VPN gateway */
-	val = addr_to_gvalue (getenv ("trusted_ip"));
+	val = trusted_remote_to_gvalue ();
 	if (val)
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_EXT_GATEWAY, val);
 	else
