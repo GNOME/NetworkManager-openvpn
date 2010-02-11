@@ -2,14 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# A S Alam <aalam@users.sf.net>, 2007, 2009.
+# A S Alam <aalam@users.sf.net>, 2007, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2009-09-28 11:36+0000\n"
-"PO-Revision-Date: 2009-10-08 09:07+0530\n"
+"POT-Creation-Date: 2010-02-04 21:44+0000\n"
+"PO-Revision-Date: 2010-02-11 06:57+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -83,8 +83,8 @@ msgstr "ਆਪਣੀ ਪ੍ਰਾਈਵੇਟ ਕੁੰਜੀ ਚੁਣੋ..."
 msgid "Choose an OpenVPN static key..."
 msgstr "OpenVPN ਸਟੇਟਿਕ ਕੁੰਜੀ ਚੁਣੋ..."
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:949
-#: ../properties/auth-helpers.c:1126
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:950
+#: ../properties/auth-helpers.c:1133
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
@@ -96,15 +96,15 @@ msgstr "PEM ਸਰਟੀਫਿਕੇਟ (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN ਸਟੇਟਿਕ ਕੁੰਜੀਆਂ (*.key)"
 
-#: ../properties/auth-helpers.c:871 ../properties/auth-helpers.c:941
+#: ../properties/auth-helpers.c:872 ../properties/auth-helpers.c:942
 msgid "Default"
 msgstr "ਡਿਫਾਲਟ"
 
-#: ../properties/auth-helpers.c:951
+#: ../properties/auth-helpers.c:952
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:953
+#: ../properties/auth-helpers.c:954
 msgid "SHA-1"
 msgstr "SHA-1"
 
@@ -146,6 +146,14 @@ msgstr "<b>ਆਮ</b>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:4
 msgid ""
+"<i>Connect only to servers whose certificate matches the given subject.\n"
+"Example: /CN=myvpn.company.com</i>"
+msgstr ""
+"<i>ਕੇਵਲ ਸਰਵਰਾਂ ਨਾਲ ਕੁਨੈਕਟ ਕਰੋ, ਜਿਸ ਦੇ ਸਰਟੀਫਿਕੇਟ ਨਾਲ ਦਿੱਤਾ ਵਿਸ਼ਾ ਮਿਲਦਾ ਹੋਵੇ।\n"
+"ਜਿਵੇਂ: /CN=myvpn.company.com</i>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:6
+msgid ""
 "<i>If key direction is used, it must be the opposite of that used on the VPN "
 "peer.  For example, if the peer uses '1', this connection must use '0'.  If "
 "you are unsure what value to use, contact your system administrator.</i>"
@@ -154,111 +162,115 @@ msgstr ""
 "ਪੀਅਰ '1' ਵਰਤਦਾ ਹੈ ਤਾਂ ਇਹ ਕੁਨੈਕਸ਼ਨ '0' ਵਰਤਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ। ਜੇ ਤੁਸੀਂ ਇਸ ਦੇ ਮੁੱਲ ਵਰਤਣ ਬਾਰੇ "
 "ਯਕੀਨੀ ਨਹੀਂ ਹੋ ਤਾਂ ਆਪਣੇ ਪਰਸ਼ਾਸ਼ਕ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।</i>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:5
+#: ../properties/nm-openvpn-dialog.glade.h:7
 msgid "Ad_vanced..."
 msgstr "ਮਾਹਰ(_v)..."
 
-#: ../properties/nm-openvpn-dialog.glade.h:6
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "CA Certificate:"
 msgstr "CA ਸਰਟੀਫਕੇਟ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:7
+#: ../properties/nm-openvpn-dialog.glade.h:9
 msgid "Cipher:"
 msgstr "ਸੀਫ਼ਰ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "General"
 msgstr "ਆਮ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:11
 msgid "HMAC Authentication:"
 msgstr "HMAC ਪਰਮਾਣਕਿਤਾ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:10
+#: ../properties/nm-openvpn-dialog.glade.h:12
 msgid "Key Direction:"
 msgstr "ਕੁੰਜੀ ਦਿਸ਼ਾ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
+#: ../properties/nm-openvpn-dialog.glade.h:13
 msgid "Key File:"
 msgstr "ਕੁੰਜੀ ਫਾਇਲ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:12
+#: ../properties/nm-openvpn-dialog.glade.h:14
 msgid "Local IP Address:"
 msgstr "ਲੋਕਲ IP ਐਡਰੈੱਸ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
+#: ../properties/nm-openvpn-dialog.glade.h:15
 msgid "OpenVPN Advanced Options"
 msgstr "OpenVPN ਮਾਹਰ ਚੋਣਾਂ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
+#: ../properties/nm-openvpn-dialog.glade.h:16
 msgid "Password:"
 msgstr "ਪਾਸਵਰਡ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:17
 msgid "Private Key Password:"
 msgstr "ਪ੍ਰਾਈਵੇਟ ਕੁੰਜੀ ਪਾਸਵਰਡ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Private Key:"
 msgstr "ਪ੍ਰਾਈਵੇਟ ਕੁੰਜੀ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
+#: ../properties/nm-openvpn-dialog.glade.h:19
 msgid "Remote IP Address:"
 msgstr "ਰਿਮੋਟ IP ਐਡਰੈੱਸ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:20
 msgid "Security"
 msgstr "ਸੁਰੱਖਿਆ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Show passwords"
 msgstr "ਪਾਸਵਰਡ ਵੇਖੋ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Static Key:"
 msgstr "ਸਟੇਟਿਕ ਕੁੰਜੀ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:23
+msgid "Subject Match:"
+msgstr "ਵਿਸ਼ਾ ਮਿਲਦਾ:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "TLS Authentication"
 msgstr "TLS ਪਰਮਾਣਕਿਤਾ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "Type:"
 msgstr "ਟਾਈਪ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Use L_ZO data compression"
 msgstr "L_ZO ਡਾਟਾ ਕੰਪਰੈਸ਼ਨ ਵਰਤੋਂ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "Use a TA_P device"
 msgstr "TA_P ਜੰਤਰ ਵਰਤੋਂ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "Use a _TCP connection"
 msgstr "_TCP ਕੁਨੈਕਸ਼ਨ ਵਰਤੋਂ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "Use additional TLS authentication"
 msgstr "ਹੋਰ TLS ਪਰਮਾਣਕਿਤਾ ਵਰਤੋਂ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:30
 msgid "Use custom _renegotiation interval:"
 msgstr "ਪਸੰਦੀਦਾ ਰੀਨੈਗੋਸ਼ੀਏਸ਼ਨ ਅੰਤਰਾਲ ਵਰਤੋਂ(_r):"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:31
 msgid "Use custom gateway p_ort:"
 msgstr "ਕਸਟਮ ਗੇਟਵੇ ਪੋਰਟ ਵਰਤੋਂ(_o):"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
+#: ../properties/nm-openvpn-dialog.glade.h:32
 msgid "User Certificate:"
 msgstr "ਯੂਜ਼ਰ ਸਰਟੀਫਕੇਟ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
+#: ../properties/nm-openvpn-dialog.glade.h:33
 msgid "User name:"
 msgstr "ਯੂਜ਼ਰ ਨਾਂ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:31
+#: ../properties/nm-openvpn-dialog.glade.h:34
 msgid "_Gateway:"
 msgstr "ਗੇਟਵੇ(_G):"
 
