@@ -5,6 +5,7 @@ EXTRA_DIST = \
 	static.key \
 	static.ovpn \
 	port.ovpn \
-	rport.ovpn
+	rport.ovpn \
+	tun-opts.conf
 
 
