@@ -575,6 +575,69 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 	g_free (path);
 }
 
+static void
+test_tun_opts_import (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection ("tunopts-import", plugin, dir, "tun-opts.conf");
+	ASSERT (connection != NULL, "tunopts-import", "failed to import connection");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        "tunopts-import", "missing 'vpn' setting");
+
+	/* Data items */
+	test_item ("tunopts-import-data", s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
+	test_item ("tunopts-import-data", s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU, "1300");
+	test_item ("tunopts-import-data", s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, "1200");
+
+	g_object_unref (connection);
+}
+
+#define TUNOPTS_EXPORTED_NAME "tun-opts.ovpntest"
+static void
+test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+	int ret;
+
+	connection = get_basic_connection ("tunopts-export", plugin, dir, "tun-opts.conf");
+	ASSERT (connection != NULL, "tunopts-export", "failed to import connection");
+
+	path = g_build_path ("/", dir, TUNOPTS_EXPORTED_NAME, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL ("tunopts-export", "export failed with missing error");
+		else
+			FAIL ("tunopts-export", "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection ("tunopts-export", plugin, dir, TUNOPTS_EXPORTED_NAME);
+	ret = unlink (path);
+	ASSERT (connection != NULL, "tunopts-export", "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        "tunopts-export", "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
@@ -614,6 +677,9 @@ int main (int argc, char **argv)
 
 	test_port_import (plugin, "rport-import", argv[1], "rport.ovpn", "rport", "6789");
 	test_port_export (plugin, "rport-export", argv[1], "rport.ovpn", "rport.ovpntest");
+
+	test_tun_opts_import (plugin, argv[1]);
+	test_tun_opts_export (plugin, argv[1]);
 
 	g_object_unref (plugin);
 

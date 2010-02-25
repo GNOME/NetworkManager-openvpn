@@ -755,6 +755,9 @@ sk_file_chooser_filter_new (void)
 static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_PORT,
 	NM_OPENVPN_KEY_COMP_LZO,
+	NM_OPENVPN_KEY_MSSFIX,
+	NM_OPENVPN_KEY_TUNNEL_MTU,
+	NM_OPENVPN_KEY_FRAGMENT_SIZE,
 	NM_OPENVPN_KEY_TAP_DEV,
 	NM_OPENVPN_KEY_PROTO_TCP,
 	NM_OPENVPN_KEY_CIPHER,
@@ -801,6 +804,26 @@ port_toggled_cb (GtkWidget *check, gpointer user_data)
 	GtkWidget *widget;
 
 	widget = glade_xml_get_widget (xml, "port_spinbutton");
+	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+}
+
+static void
+tunmtu_toggled_cb (GtkWidget *check, gpointer user_data)
+{
+	GladeXML *xml = (GladeXML *) user_data;
+	GtkWidget *widget;
+
+	widget = glade_xml_get_widget (xml, "tunmtu_spinbutton");
+	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+}
+
+static void
+fragment_toggled_cb (GtkWidget *check, gpointer user_data)
+{
+	GladeXML *xml = (GladeXML *) user_data;
+	GtkWidget *widget;
+
+	widget = glade_xml_get_widget (xml, "fragment_spinbutton");
 	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
@@ -1072,9 +1095,70 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
 
+	widget = glade_xml_get_widget (xml, "tunmtu_checkbutton");
+	g_assert (widget);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (tunmtu_toggled_cb), xml);
+
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUNNEL_MTU);
+	if (value && strlen (value)) {
+		long int tmp;
+
+		errno = 0;
+		tmp = strtol (value, NULL, 10);
+		if (errno == 0 && tmp > 0 && tmp < 65536) {
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+			widget = glade_xml_get_widget (xml, "tunmtu_spinbutton");
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
+			gtk_widget_set_sensitive (widget, TRUE);
+		}
+	} else {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+
+		widget = glade_xml_get_widget (xml, "tunmtu_spinbutton");
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1500.0);
+		gtk_widget_set_sensitive (widget, FALSE);
+	}
+
+	widget = glade_xml_get_widget (xml, "fragment_checkbutton");
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (fragment_toggled_cb), xml);
+
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FRAGMENT_SIZE);
+	if (value && strlen (value)) {
+		long int tmp;
+
+		errno = 0;
+		tmp = strtol (value, NULL, 10);
+		if (errno == 0 && tmp > 0 && tmp < 65536) {
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+			widget = glade_xml_get_widget (xml, "fragment_spinbutton");
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
+			gtk_widget_set_sensitive (widget, TRUE);
+		}
+	} else {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+
+		widget = glade_xml_get_widget (xml, "fragment_spinbutton");
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1300.0);
+		gtk_widget_set_sensitive (widget, FALSE);
+	}
+
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MSSFIX);
+	if (value && !strcmp (value, "yes")) {
+		widget = glade_xml_get_widget (xml, "mssfix_checkbutton");
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+	}
+
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO);
 	if (value && !strcmp (value, "yes")) {
 		widget = glade_xml_get_widget (xml, "lzo_checkbutton");
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+	}
+
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MSSFIX);
+	if (value && !strcmp (value, "yes")) {
+		widget = glade_xml_get_widget (xml, "mssfix_checkbutton");
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
@@ -1188,6 +1272,24 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_RENEG_SECONDS), g_strdup_printf ("%d", reneg_seconds));
 	}
 
+	widget = glade_xml_get_widget (xml, "tunmtu_checkbutton");
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int tunmtu_size;
+
+		widget = glade_xml_get_widget (xml, "tunmtu_spinbutton");
+		tunmtu_size = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TUNNEL_MTU), g_strdup_printf ("%d", tunmtu_size));
+	}
+
+	widget = glade_xml_get_widget (xml, "fragment_checkbutton");
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int fragment_size;
+
+		widget = glade_xml_get_widget (xml, "fragment_spinbutton");
+		fragment_size = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_FRAGMENT_SIZE), g_strdup_printf ("%d", fragment_size));
+	}
+
 	widget = glade_xml_get_widget (xml, "port_checkbutton");
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		int port;
@@ -1200,6 +1302,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	widget = glade_xml_get_widget (xml, "lzo_checkbutton");
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_COMP_LZO), g_strdup ("yes"));
+
+	widget = glade_xml_get_widget (xml, "mssfix_checkbutton");
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_MSSFIX), g_strdup ("yes"));
 
 	widget = glade_xml_get_widget (xml, "tcp_checkbutton");
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))

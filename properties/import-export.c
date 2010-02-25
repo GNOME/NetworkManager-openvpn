@@ -62,6 +62,9 @@
 #define TLS_REMOTE_TAG "tls-remote"
 #define PORT_TAG "port"
 #define RPORT_TAG "rport"
+#define MSSFIX_TAG "mssfix"
+#define TUNMTU_TAG "tun-mtu"
+#define FRAGMENT_TAG "fragment"
 
 
 static char *
@@ -259,6 +262,53 @@ do_import (const char *path, char **lines, GError **error)
 			} else
 				g_warning ("%s: unknown proto option '%s'", __func__, *line);
 
+			continue;
+		}
+
+		if (!strncmp (*line, MSSFIX_TAG, strlen (MSSFIX_TAG))) {
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
+			continue;
+		}
+
+		if (!strncmp (*line, TUNMTU_TAG, strlen (TUNMTU_TAG))) {
+			items = get_args (*line + strlen (TUNMTU_TAG));
+			if (!items)
+				continue;
+
+			if (g_strv_length (items) >= 1) {
+				glong secs;
+
+				errno = 0;
+				secs = strtol (items[0], NULL, 10);
+				if ((errno == 0) && (secs >= 0) && (secs < 0xffff)) {
+					char *tmp = g_strdup_printf ("%d", (guint32) secs);
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU, tmp);
+					g_free (tmp);
+				} else
+					g_warning ("%s: invalid size in option '%s'", __func__, *line);
+			}
+			g_strfreev (items);
+			continue;
+		}
+
+		if (!strncmp (*line, FRAGMENT_TAG, strlen (FRAGMENT_TAG))) {
+			items = get_args (*line + strlen (FRAGMENT_TAG));
+			if (!items)
+				continue;
+
+			if (g_strv_length (items) >= 1) {
+				glong secs;
+
+				errno = 0;
+				secs = strtol (items[0], NULL, 10);
+				if ((errno == 0) && (secs >= 0) && (secs < 0xffff)) {
+					char *tmp = g_strdup_printf ("%d", (guint32) secs);
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, tmp);
+					g_free (tmp);
+				} else
+					g_warning ("%s: invalid size in option '%s'", __func__, *line);
+			}
+			g_strfreev (items);
 			continue;
 		}
 
@@ -641,6 +691,20 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	if (use_lzo)
 		fprintf (f, "comp-lzo yes\n");
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
+	if (value && strlen (value)) {
+		if (!strcmp (value, "yes"))
+			fprintf (f, MSSFIX_TAG "\n");
+	}
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
+	if (value && strlen (value))
+		fprintf (f, TUNMTU_TAG " %d\n", (int) strtol (value, NULL, 10));
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
+	if (value && strlen (value))
+		fprintf (f, FRAGMENT_TAG " %d\n", (int) strtol (value, NULL, 10));
 
 	fprintf (f, "dev %s\n", device_tun ? "tun" : "tap");
 	fprintf (f, "proto %s\n", proto_udp ? "udp" : "tcp");
