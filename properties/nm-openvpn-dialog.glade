@@ -8,10 +8,12 @@
       <widget class="GtkVBox" id="openvpn-vbox">
         <property name="visible">True</property>
         <property name="border_width">12</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">16</property>
         <child>
           <widget class="GtkVBox" id="vbox8">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <widget class="GtkLabel" id="label22">
@@ -83,6 +85,7 @@
         <child>
           <widget class="GtkVBox" id="vbox11">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <widget class="GtkLabel" id="label25">
@@ -835,7 +838,6 @@
                       <widget class="GtkImage" id="image1">
                         <property name="visible">True</property>
                         <property name="stock">gtk-preferences</property>
-                        <property name="icon-size">4</property>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -883,6 +885,7 @@
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
           <widget class="GtkNotebook" id="options_notebook">
@@ -892,6 +895,7 @@
               <widget class="GtkVBox" id="vbox1">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
                 <child>
                   <widget class="GtkHBox" id="hbox1">
