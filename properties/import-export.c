@@ -65,6 +65,7 @@
 #define MSSFIX_TAG "mssfix"
 #define TUNMTU_TAG "tun-mtu"
 #define FRAGMENT_TAG "fragment"
+#define PKCS12_TAG "pkcs12"
 
 
 static char *
@@ -388,6 +389,11 @@ do_import (const char *path, char **lines, GError **error)
 			}
 		}
 
+		if ( handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL) &&
+		     handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CERT, s_vpn, default_path, NULL) &&
+		     handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
+			continue;
+
 		if (handle_path_item (*line, CA_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL))
 			continue;
 
@@ -652,12 +658,18 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	         port ? " " : "",
 	         port ? port : "");
 
-	if (cacert)
-		fprintf (f, "ca %s\n", cacert);
-	if (user_cert)
-		fprintf (f, "cert %s\n", user_cert);
-	if (private_key)
-		fprintf(f, "key %s\n", private_key);
+	/* Handle PKCS#12 (all certs are the same file) */
+	if (   cacert && user_cert && private_key
+	    && !strcmp (cacert, user_cert) && !strcmp (cacert, private_key))
+		fprintf (f, "pkcs12 %s\n", cacert);
+	else {
+		if (cacert)
+			fprintf (f, "ca %s\n", cacert);
+		if (user_cert)
+			fprintf (f, "cert %s\n", user_cert);
+		if (private_key)
+			fprintf(f, "key %s\n", private_key);
+	}
 
 	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
 	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS))

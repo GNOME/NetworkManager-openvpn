@@ -35,7 +35,8 @@ libnm_openvpn_properties_la_LIBADD =    \
         $(GTK_LIBS)                     \
         $(GCONF_LIBS)                   \
         $(NETWORK_MANAGER_LIBS)         \
-        $(top_builddir)/common-gnome/libnm-openvpn-common-gnome.la
+        $(top_builddir)/common-gnome/libnm-openvpn-common-gnome.la \
+        $(top_builddir)/common/libnm-openvpn-common.la
 
 libnm_openvpn_properties_la_LDFLAGS =   \
         -avoid-version

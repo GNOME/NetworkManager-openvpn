@@ -35,11 +35,13 @@
 #include <glib/gi18n-lib.h>
 #include <gnome-keyring-memory.h>
 #include <nm-setting-connection.h>
+#include <nm-setting-8021x.h>
 
 #include "auth-helpers.h"
 #include "nm-openvpn.h"
 #include "src/nm-openvpn-service.h"
 #include "common-gnome/keyring-helpers.h"
+#include "common/utils.h"
 
 static void
 show_password (GtkToggleButton *togglebutton, GtkEntry *password_entry)
@@ -129,6 +131,47 @@ fill_vpn_passwords (GladeXML *xml,
 	}
 }
 
+static void
+tls_cert_changed_cb (GtkWidget *widget, GtkWidget *next_widget)
+{
+	GtkFileChooser *this, *next;
+	char *fname, *next_fname;
+
+	/* If the just-changed file chooser is a PKCS#12 file, then all of the
+	 * TLS filechoosers have to be PKCS#12.  But if it just changed to something
+	 * other than a PKCS#12 file, then clear out the other file choosers.
+	 *
+	 * Basically, all the choosers have to contain PKCS#12 files, or none of
+	 * them can, because PKCS#12 files contain everything required for the TLS
+	 * connection (CA, client cert, private key).
+	 */
+
+	this = GTK_FILE_CHOOSER (widget);
+	next = GTK_FILE_CHOOSER (next_widget);
+
+	fname = gtk_file_chooser_get_filename (this);
+	if (is_pkcs12 (fname)) {
+		/* Make sure all choosers have this PKCS#12 file */
+		next_fname = gtk_file_chooser_get_filename (next);
+		if (!next_fname || strcmp (fname, next_fname)) {
+			/* Next chooser was different, make it the same as the first */
+			gtk_file_chooser_set_filename (next, fname);
+		}
+		g_free (fname);
+		g_free (next_fname);
+		return;
+	}
+	g_free (fname);
+
+	/* Just-chosen file isn't PKCS#12 or no file was chosen, so clear out other
+	 * file selectors that have PKCS#12 files in them.
+	 */
+	next_fname = gtk_file_chooser_get_filename (next);
+	if (is_pkcs12 (next_fname))
+		gtk_file_chooser_set_filename (next, NULL);
+	g_free (next_fname);
+}
+
 void
 tls_pw_init_auth_widget (GladeXML *xml,
                          GtkSizeGroup *group,
@@ -138,7 +181,7 @@ tls_pw_init_auth_widget (GladeXML *xml,
                          ChangedCallback changed_cb,
                          gpointer user_data)
 {
-	GtkWidget *widget;
+	GtkWidget *widget, *ca, *cert, *key;
 	const char *value;
 	char *tmp;
 	GtkFileFilter *filter;
@@ -149,59 +192,68 @@ tls_pw_init_auth_widget (GladeXML *xml,
 	g_return_if_fail (prefix != NULL);
 
 	tmp = g_strdup_printf ("%s_ca_cert_chooser", prefix);
-	widget = glade_xml_get_widget (xml, tmp);
+	ca = glade_xml_get_widget (xml, tmp);
 	g_free (tmp);
 
-	gtk_size_group_add_widget (group, widget);
-	filter = tls_file_chooser_filter_new ();
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
-	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (widget), TRUE);
-	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (widget),
+	gtk_size_group_add_widget (group, ca);
+	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
+		filter = tls_file_chooser_filter_new (TRUE);
+	else
+		filter = tls_file_chooser_filter_new (FALSE);
+
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (ca), filter);
+	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (ca), TRUE);
+	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (ca),
 	                                   _("Choose a Certificate Authority certificate..."));
-	g_signal_connect (G_OBJECT (widget), "selection-changed", G_CALLBACK (changed_cb), user_data);
+	g_signal_connect (G_OBJECT (ca), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
 		if (value && strlen (value))
-			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
+			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (ca), value);
 	}
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		tmp = g_strdup_printf ("%s_user_cert_chooser", prefix);
-		widget = glade_xml_get_widget (xml, tmp);
+		cert = glade_xml_get_widget (xml, tmp);
 		g_free (tmp);
 
-		gtk_size_group_add_widget (group, widget);
-		filter = tls_file_chooser_filter_new ();
-		gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
-		gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (widget), TRUE);
-		gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (widget),
+		gtk_size_group_add_widget (group, cert);
+		filter = tls_file_chooser_filter_new (TRUE);
+		gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (cert), filter);
+		gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (cert), TRUE);
+		gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (cert),
 		                                   _("Choose your personal certificate..."));
-		g_signal_connect (G_OBJECT (widget), "selection-changed", G_CALLBACK (changed_cb), user_data);
+		g_signal_connect (G_OBJECT (cert), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
 		if (s_vpn) {
 			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
 			if (value && strlen (value))
-				gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
+				gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (cert), value);
 		}
 
 		tmp = g_strdup_printf ("%s_private_key_chooser", prefix);
-		widget = glade_xml_get_widget (xml, tmp);
+		key = glade_xml_get_widget (xml, tmp);
 		g_free (tmp);
 
-		gtk_size_group_add_widget (group, widget);
-		filter = tls_file_chooser_filter_new ();
-		gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
-		gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (widget), TRUE);
-		gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (widget),
+		gtk_size_group_add_widget (group, key);
+		filter = tls_file_chooser_filter_new (TRUE);
+		gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (key), filter);
+		gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (key), TRUE);
+		gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (key),
 		                                   _("Choose your private key..."));
-		g_signal_connect (G_OBJECT (widget), "selection-changed", G_CALLBACK (changed_cb), user_data);
+		g_signal_connect (G_OBJECT (key), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
 		if (s_vpn) {
 			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
 			if (value && strlen (value))
-				gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
+				gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (key), value);
 		}
+
+		/* Link choosers to the PKCS#12 changer callback */
+		g_signal_connect (ca, "selection-changed", G_CALLBACK (tls_cert_changed_cb), cert);
+		g_signal_connect (cert, "selection-changed", G_CALLBACK (tls_cert_changed_cb), key);
+		g_signal_connect (key, "selection-changed", G_CALLBACK (tls_cert_changed_cb), ca);
 	}
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD) || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
@@ -317,19 +369,23 @@ validate_file_chooser (GladeXML *xml, const char *name)
 {
 	GtkWidget *widget;
 	char *str;
+	gboolean valid = FALSE;
 
 	widget = glade_xml_get_widget (xml, name);
 	str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-	if (!str || !strlen (str))
-		return FALSE;
-	return TRUE;
+	if (str && strlen (str))
+		valid = TRUE;
+	g_free (str);
+	return valid;
 }
 
 static gboolean
 validate_tls (GladeXML *xml, const char *prefix, GError **error)
 {
 	char *tmp;
-	gboolean valid;
+	gboolean valid, encrypted = FALSE;
+	GtkWidget *widget;
+	char *str;
 
 	tmp = g_strdup_printf ("%s_ca_cert_chooser", prefix);
 	valid = validate_file_chooser (xml, tmp);
@@ -354,6 +410,7 @@ validate_tls (GladeXML *xml, const char *prefix, GError **error)
 	}
 
 	tmp = g_strdup_printf ("%s_private_key_chooser", prefix);
+	widget = glade_xml_get_widget (xml, tmp);
 	valid = validate_file_chooser (xml, tmp);
 	g_free (tmp);
 	if (!valid) {
@@ -362,6 +419,24 @@ validate_tls (GladeXML *xml, const char *prefix, GError **error)
 		             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_KEY);
 		return FALSE;
+	}
+
+	/* Encrypted certificates require a password */
+	str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+	encrypted = is_pkcs12 (str) || is_encrypted_pem (str);
+	g_free (str);
+	if (encrypted) {
+		tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
+		widget = glade_xml_get_widget (xml, tmp);
+		g_free (tmp);
+
+		if (!gtk_entry_get_text_length (GTK_ENTRY (widget))) {
+			g_set_error (error,
+			             OPENVPN_PLUGIN_UI_ERROR,
+			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             NM_OPENVPN_KEY_CERTPASS);
+			return FALSE;
+		}
 	}
 
 	return TRUE;
@@ -461,12 +536,8 @@ update_from_filechooser (GladeXML *xml,
 	g_free (tmp);
 
 	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-	if (!filename)
-		return;
-
-	if (strlen (filename))
+	if (filename && strlen (filename))
 		nm_setting_vpn_add_data_item (s_vpn, key, filename);
-	
 	g_free (filename);
 }
 
@@ -630,6 +701,7 @@ tls_default_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 	char *contents = NULL, *p, *ext;
 	gsize bytes_read = 0;
 	gboolean show = FALSE;
+	gboolean pkcs_allowed = GPOINTER_TO_UINT (data);
 	struct stat statbuf;
 
 	if (!filter_info->filename)
@@ -642,6 +714,12 @@ tls_default_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 	ext = g_ascii_strdown (p, -1);
 	if (!ext)
 		return FALSE;
+
+	if (pkcs_allowed && !strcmp (ext, ".p12") && is_pkcs12 (filter_info->filename)) {
+		g_free (ext);
+		return TRUE;
+	}
+
 	if (strcmp (ext, ".pem") && strcmp (ext, ".crt") && strcmp (ext, ".key") && strcmp (ext, ".cer")) {
 		g_free (ext);
 		return FALSE;
@@ -682,13 +760,14 @@ out:
 }
 
 GtkFileFilter *
-tls_file_chooser_filter_new (void)
+tls_file_chooser_filter_new (gboolean pkcs_allowed)
 {
 	GtkFileFilter *filter;
 
 	filter = gtk_file_filter_new ();
-	gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME, tls_default_filter, NULL, NULL);
-	gtk_file_filter_set_name (filter, _("PEM certificates (*.pem, *.crt, *.key, *.cer)"));
+	gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME, tls_default_filter, GUINT_TO_POINTER (pkcs_allowed), NULL);
+	gtk_file_filter_set_name (filter, pkcs_allowed ? _("PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)")
+	                                               : _("PEM certificates (*.pem, *.crt, *.key, *.cer)"));
 	return filter;
 }
 

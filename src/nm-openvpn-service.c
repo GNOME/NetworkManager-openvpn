@@ -52,6 +52,7 @@
 
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"
+#include "common/utils.h"
 
 #define NM_OPENVPN_HELPER_PATH		LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
 
@@ -630,6 +631,43 @@ add_openvpn_arg_int (GPtrArray *args, const char *arg)
 	return TRUE;
 }
 
+static void
+add_cert_args (GPtrArray *args, NMSettingVPN *s_vpn)
+{
+	const char *ca, *cert, *key;
+
+	g_return_if_fail (args != NULL);
+	g_return_if_fail (s_vpn != NULL);
+
+	ca = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
+	cert = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
+	key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+
+	if (   ca && strlen (ca)
+	    && cert && strlen (cert)
+	    && key && strlen (key)
+	    && !strcmp (ca, cert)
+	    && !strcmp (ca, key)) {
+		add_openvpn_arg (args, "--pkcs12");
+		add_openvpn_arg (args, ca);
+	} else {
+		if (ca && strlen (ca)) {
+			add_openvpn_arg (args, "--ca");
+			add_openvpn_arg (args, ca);
+		}
+
+		if (cert && strlen (cert)) {
+			add_openvpn_arg (args, "--cert");
+			add_openvpn_arg (args, cert);
+		}
+
+		if (key && strlen (key)) {
+			add_openvpn_arg (args, "--key");
+			add_openvpn_arg (args, key);
+		}
+	}
+}
+
 static gboolean
 nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  NMSettingVPN *s_vpn,
@@ -847,24 +885,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Now append configuration options which are dependent on the configuration type */
 	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)) {
 		add_openvpn_arg (args, "--client");
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
-		if (tmp && strlen (tmp)) {
-			add_openvpn_arg (args, "--ca");
-			add_openvpn_arg (args, tmp);
-		}
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
-		if (tmp && strlen (tmp)) {
-			add_openvpn_arg (args, "--cert");
-			add_openvpn_arg (args, tmp);
-		}
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (tmp && strlen (tmp)) {
-			add_openvpn_arg (args, "--key");
-			add_openvpn_arg (args, tmp);
-		}
+		add_cert_args (args, s_vpn);
 	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
 		if (tmp && strlen (tmp)) {
@@ -916,25 +937,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		add_openvpn_arg (args, "--client");
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
-		if (tmp && strlen (tmp)) {
-			add_openvpn_arg (args, "--ca");
-			add_openvpn_arg (args, tmp);
-		}
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
-		if (tmp && strlen (tmp)) {
-			add_openvpn_arg (args, "--cert");
-			add_openvpn_arg (args, tmp);
-		}
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (tmp && strlen (tmp)) {
-			add_openvpn_arg (args, "--key");
-			add_openvpn_arg (args, tmp);
-		}
-
+		add_cert_args (args, s_vpn);
 		/* Use user/path authentication */
 		add_openvpn_arg (args, "--auth-user-pass");
 	} else {
@@ -1097,8 +1100,13 @@ real_need_secrets (NMVPNPlugin *plugin,
 	}
 
 	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		const char *key;
+
 		/* Will require a password and maybe private key password */
-		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
+
+		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+		if (   (is_pkcs12 (key) || is_encrypted_pem (key))
+		    && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
 			need_secrets = TRUE;
 
 		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
@@ -1108,8 +1116,12 @@ real_need_secrets (NMVPNPlugin *plugin,
 		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
 			need_secrets = TRUE;
 	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)) {
+		const char *key;
+
 		/* May require private key password */
-		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
+		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+		if (   (is_pkcs12 (key) || is_encrypted_pem (key))
+		    && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
 			need_secrets = TRUE;
 	}
 
