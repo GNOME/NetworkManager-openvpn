@@ -26,7 +26,7 @@
 gboolean
 is_pkcs12 (const char *filepath)
 {
-	NMSetting8021xCKFormat ck_format = NM_SETTING_802_1X_CK_FORMAT_UNKNOWN;
+	NMSetting8021xCKType ck_type = NM_SETTING_802_1X_CK_TYPE_UNKNOWN;
 	NMSetting8021x *s_8021x;
 
 	if (!filepath || !strlen (filepath))
@@ -38,15 +38,14 @@ is_pkcs12 (const char *filepath)
 	s_8021x = (NMSetting8021x *) nm_setting_802_1x_new ();
 	g_return_val_if_fail (s_8021x != NULL, FALSE);
 
-	nm_setting_802_1x_set_private_key (s_8021x,
-	                                   filepath,
-	                                   NULL,
-	                                   NM_SETTING_802_1X_CK_SCHEME_PATH,
-	                                   &ck_format,
-	                                   NULL);
+	nm_setting_802_1x_set_private_key_from_file (s_8021x,
+	                                             filepath,
+	                                             NULL,
+	                                             &ck_type,
+	                                             NULL);
 	g_object_unref (s_8021x);
 
-	return (ck_format == NM_SETTING_802_1X_CK_FORMAT_PKCS12);
+	return (ck_type == NM_SETTING_802_1X_CK_TYPE_PKCS12);
 }
 
 #define PROC_TYPE_TAG "Proc-Type: 4,ENCRYPTED"
