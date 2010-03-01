@@ -6,6 +6,7 @@ EXTRA_DIST = \
 	static.ovpn \
 	port.ovpn \
 	rport.ovpn \
-	tun-opts.conf
+	tun-opts.conf \
+	pkcs12.ovpn
 
 

@@ -36,6 +36,7 @@
 #include <nm-setting-connection.h>
 
 #include "common-gnome/keyring-helpers.h"
+#include "common/utils.h"
 #include "src/nm-openvpn-service.h"
 #include "gnome-two-password-dialog.h"
 
@@ -49,40 +50,6 @@ typedef struct {
 	gboolean need_certpass;
 	char *certpass;
 } PasswordsInfo;
-
-#define PROC_TYPE_TAG "Proc-Type: 4,ENCRYPTED"
-
-/** Checks if a key is encrypted
- * The key file is read and it is checked if it contains a line reading
- * Proc-Type: 4,ENCRYPTED
- * This is defined in RFC 1421 (PEM)
- * @param filename the path to the file
- * @return returns true if the key is encrypted, false otherwise
- */
-static gboolean
-pem_is_encrypted (const char *filename)
-{
-	GIOChannel *pem_chan;
-	char       *str = NULL;
-	gboolean encrypted = FALSE;
-
-	pem_chan = g_io_channel_new_file (filename, "r", NULL);
-	if (!pem_chan)
-		return FALSE;
-
-	while (g_io_channel_read_line (pem_chan, &str, NULL, NULL, NULL) != G_IO_STATUS_EOF) {
-		if (strncmp (str, PROC_TYPE_TAG, strlen (PROC_TYPE_TAG)) == 0) {
-			encrypted = TRUE;
-			break;
-		}
-		g_free (str);
-	}
-
-	g_io_channel_shutdown (pem_chan, FALSE, NULL);
-	g_io_channel_unref (pem_chan);
-	return encrypted;
-}
-
 
 static void
 clear_secrets (PasswordsInfo *info)
@@ -289,8 +256,7 @@ get_password_types (PasswordsInfo *info)
 		key = g_strdup_printf ("%s/%s/%s", connection_path, NM_SETTING_VPN_SETTING_NAME,
 		                       NM_OPENVPN_KEY_KEY);
 		str = gconf_client_get_string (gconf_client, key, NULL);
-		if (str)
-			info->need_certpass = pem_is_encrypted (str);
+		info->need_certpass = (is_pkcs12 (str) || is_encrypted_pem (str));
 		g_free (str);
 		g_free (key);
 	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {

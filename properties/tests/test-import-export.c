@@ -354,6 +354,115 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir)
 }
 
 static void
+test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMSettingConnection *s_con;
+	NMSettingIP4Config *s_ip4;
+	NMSettingVPN *s_vpn;
+	const char *expected_id = "pkcs12";
+	char *expected_path;
+
+	connection = get_basic_connection ("pkcs12-import", plugin, dir, "pkcs12.ovpn");
+	ASSERT (connection != NULL, "pkcs12-import", "failed to import connection");
+
+	/* Connection setting */
+	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	ASSERT (s_con != NULL,
+	        "pkcs12-import", "missing 'connection' setting");
+
+	ASSERT (strcmp (nm_setting_connection_get_id (s_con), expected_id) == 0,
+	        "pkcs12-import", "unexpected connection ID");
+
+	ASSERT (nm_setting_connection_get_uuid (s_con) == NULL,
+	        "pkcs12-import", "unexpected valid UUID");
+
+	/* IP4 setting */
+	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
+	ASSERT (s_ip4 == NULL,
+	        "pkcs12-import", "unexpected 'ip4-config' setting");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        "pkcs12-import", "missing 'vpn' setting");
+
+	/* Data items */
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE, "173.8.149.245");
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_PORT, "1194");
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+
+	expected_path = g_strdup_printf ("%s/keys/mine.p12", dir);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_CA, expected_path);
+	g_free (expected_path);
+
+	expected_path = g_strdup_printf ("%s/keys/mine.p12", dir);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_CERT, expected_path);
+	g_free (expected_path);
+
+	expected_path = g_strdup_printf ("%s/keys/mine.p12", dir);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_KEY, expected_path);
+	g_free (expected_path);
+
+	/* Secrets */
+	test_secret ("pkcs12-import-secrets", s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
+	test_secret ("pkcs12-import-secrets", s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
+
+	g_object_unref (connection);
+}
+
+#define PKCS12_EXPORTED_NAME "pkcs12.ovpntest"
+static void
+test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+	int ret;
+
+	connection = get_basic_connection ("pkcs12-export", plugin, dir, "pkcs12.ovpn");
+	ASSERT (connection != NULL, "pkcs12-export", "failed to import connection");
+
+	path = g_build_path ("/", dir, PKCS12_EXPORTED_NAME, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL ("pkcs12-export", "export failed with missing error");
+		else
+			FAIL ("pkcs12-export", "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection ("pkcs12-export", plugin, dir, PKCS12_EXPORTED_NAME);
+	ret = unlink (path);
+	ASSERT (connection != NULL, "pkcs12-export", "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        "pkcs12-export", "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
+static void
 test_non_utf8_import (NMVpnPluginUiInterface *plugin, const char *dir)
 {
 	NMConnection *connection;
@@ -388,7 +497,7 @@ test_non_utf8_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	        "non-utf8-import", "missing 'vpn' setting");
 
 	expected_path = g_strdup_printf ("%s/%s", dir, expected_cacert);
-	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_CA, expected_path);
+	test_item ("non-utf8-import-data", s_vpn, NM_OPENVPN_KEY_CA, expected_path);
 	g_free (expected_path);
 
 	g_object_unref (connection);
@@ -666,6 +775,9 @@ int main (int argc, char **argv)
 
 	test_tls_import (plugin, argv[1]);
 	test_tls_export (plugin, argv[1]);
+
+	test_pkcs12_import (plugin, argv[1]);
+	test_pkcs12_export (plugin, argv[1]);
 
 	test_non_utf8_import (plugin, argv[1]);
 
