@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2010-02-25 20:52+0000\n"
-"PO-Revision-Date: 2010-03-01 00:18+0100\n"
+"POT-Creation-Date: 2010-03-01 19:27+0000\n"
+"PO-Revision-Date: 2010-03-01 22:24+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -63,61 +63,66 @@ msgstr "_Recordar la contraseña para esta sesión"
 msgid "_Save password in keyring"
 msgstr "_Guardar la contraseña en el depósito de claves"
 
-#: ../auth-dialog/main.c:127
+#: ../auth-dialog/main.c:94
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Debe autenticarse para acceder a la red privada virtual «%s»."
 
-#: ../auth-dialog/main.c:128
+#: ../auth-dialog/main.c:95
 msgid "Authenticate VPN"
 msgstr "Autenticación VPN"
 
-#: ../auth-dialog/main.c:149
+#: ../auth-dialog/main.c:116
 msgid "Certificate pass_word:"
 msgstr "_Contraseña del certificado:"
 
-#: ../auth-dialog/main.c:163
+#: ../auth-dialog/main.c:130
 msgid "Certificate password:"
 msgstr "Contraseña del certificado:"
 
-#: ../properties/auth-helpers.c:160
+#: ../properties/auth-helpers.c:207
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Elija un certificado de una autoridad de certificados…"
 
-#: ../properties/auth-helpers.c:179
+#: ../properties/auth-helpers.c:226
 msgid "Choose your personal certificate..."
 msgstr "Elija su certificado personal…"
 
-#: ../properties/auth-helpers.c:197
+#: ../properties/auth-helpers.c:244
 msgid "Choose your private key..."
 msgstr "Elija su clave privada…"
 
-#: ../properties/auth-helpers.c:250
+#: ../properties/auth-helpers.c:302
 msgid "Choose an OpenVPN static key..."
 msgstr "Elija una clave estática OpenVPN…"
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:973
-#: ../properties/auth-helpers.c:1217
+#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1052
+#: ../properties/auth-helpers.c:1296
 msgid "None"
 msgstr "Ninguno"
 
-#: ../properties/auth-helpers.c:691
+#: ../properties/auth-helpers.c:769
+#| msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
+msgstr "Certificados PEM o PKCD#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
+
+#: ../properties/auth-helpers.c:770
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Certificados PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:751
+#: ../properties/auth-helpers.c:830
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Claves estáticas OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:895 ../properties/auth-helpers.c:965
+#: ../properties/auth-helpers.c:974 ../properties/auth-helpers.c:1044
 msgid "Default"
 msgstr "Predeterminado"
 
-#: ../properties/auth-helpers.c:975
+#: ../properties/auth-helpers.c:1054
 msgid "MD-5"
 msgstr "MD5"
 
-#: ../properties/auth-helpers.c:977
+#: ../properties/auth-helpers.c:1056
 msgid "SHA-1"
 msgstr "SHA-1"
 
@@ -281,7 +286,6 @@ msgid "Use additional TLS authentication"
 msgstr "Usar autenticación TLS adicional"
 
 #: ../properties/nm-openvpn-dialog.glade.h:31
-#| msgid "Use custom _renegotiation interval:"
 msgid "Use custom UDP _fragment size:"
 msgstr "Usar tamaño de _fragmentación UDP personalizado:"
 
