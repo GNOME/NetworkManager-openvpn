@@ -73,6 +73,7 @@
 #define NM_OPENVPN_AUTH_NONE "none"
 #define NM_OPENVPN_AUTH_MD5  "MD5"
 #define NM_OPENVPN_AUTH_SHA1 "SHA1"
+#define NM_OPENVPN_AUTH_RIPEMD160 "RIPEMD160"
 
 #define NM_OPENVPN_CONTYPE_TLS          "tls"
 #define NM_OPENVPN_CONTYPE_STATIC_KEY   "static-key"
