@@ -558,6 +558,10 @@ validate_auth (const char *auth)
 		if (   !strcmp (auth, NM_OPENVPN_AUTH_NONE)
 		    || !strcmp (auth, NM_OPENVPN_AUTH_MD5)
 		    || !strcmp (auth, NM_OPENVPN_AUTH_SHA1)
+		    || !strcmp (auth, NM_OPENVPN_AUTH_SHA224)
+		    || !strcmp (auth, NM_OPENVPN_AUTH_SHA256)
+		    || !strcmp (auth, NM_OPENVPN_AUTH_SHA384)
+		    || !strcmp (auth, NM_OPENVPN_AUTH_SHA512)
 		    || !strcmp (auth, NM_OPENVPN_AUTH_RIPEMD160))
 			return TRUE;
 	}
