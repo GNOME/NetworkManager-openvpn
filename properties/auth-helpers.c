@@ -1032,6 +1032,10 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 		NM_OPENVPN_AUTH_NONE,
 		NM_OPENVPN_AUTH_MD5,
 		NM_OPENVPN_AUTH_SHA1,
+		NM_OPENVPN_AUTH_SHA224,
+		NM_OPENVPN_AUTH_SHA256,
+		NM_OPENVPN_AUTH_SHA384,
+		NM_OPENVPN_AUTH_SHA512,
 		NM_OPENVPN_AUTH_RIPEMD160,
 		NULL
 	};
@@ -1055,6 +1059,14 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 			name = _("MD-5");
 		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA1))
 			name = _("SHA-1");
+		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA224))
+			name = _("SHA-224");
+		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA256))
+			name = _("SHA-256");
+		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA384))
+			name = _("SHA-384");
+		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA512))
+			name = _("SHA-512");
 		else if (!strcmp (*item, NM_OPENVPN_AUTH_RIPEMD160))
 			name = _("RIPEMD-160");
 		else
