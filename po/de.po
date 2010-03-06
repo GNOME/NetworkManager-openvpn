@@ -3,23 +3,22 @@
 # This file is distributed under the same license as the NetworkManager package.
 # Thomas Gier <info@thomasgier.de>, 2007.
 # Hauke Mehrtens <hauke@hauke-m.de>, 2008.
-# Christian Kirbach <Christian.Kirbach@googlemail.com>, 2008, 2009.
 # Mario Blättermann <mariobl@gnome.org>, 2009, 2010.
 # Christoph Göhre <chris@sigxcpu.org>, 2009.
-#
+# Christian Kirbach <Christian.Kirbach@googlemail.com>, 2008, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2010-02-04 21:44+0000\n"
-"PO-Revision-Date: 2010-02-25 12:04+0100\n"
-"Last-Translator: Mario Blättermann <mariobl@gnome.org>\n"
+"POT-Creation-Date: 2010-03-06 06:52+0000\n"
+"PO-Revision-Date: 2010-03-06 11:30+0100\n"
+"Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
@@ -55,66 +54,90 @@ msgstr "_Passwort für dieser Sitzung behalten"
 msgid "_Save password in keyring"
 msgstr "Passwort im _Schlüsselbund speichern"
 
-#: ../auth-dialog/main.c:127
+#: ../auth-dialog/main.c:94
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr ""
 "Sie müssen sich authentifizieren, um auf das Virtuelle Private Netz »%s« "
 "zuzugreifen."
 
-#: ../auth-dialog/main.c:128
+#: ../auth-dialog/main.c:95
 msgid "Authenticate VPN"
 msgstr "VPN authentifizieren"
 
-#: ../auth-dialog/main.c:149
+#: ../auth-dialog/main.c:116
 msgid "Certificate pass_word:"
 msgstr "Zertifikatspass_wort:"
 
-#: ../auth-dialog/main.c:163
+#: ../auth-dialog/main.c:130
 msgid "Certificate password:"
 msgstr "Zertifikatspasswort:"
 
-#: ../properties/auth-helpers.c:160
+#: ../properties/auth-helpers.c:207
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Zertifikat einer Zertifizierungsstelle auswählen..."
 
-#: ../properties/auth-helpers.c:179
+#: ../properties/auth-helpers.c:226
 msgid "Choose your personal certificate..."
 msgstr "Persönliches Zertifikat auswählen …"
 
-#: ../properties/auth-helpers.c:197
+#: ../properties/auth-helpers.c:244
 msgid "Choose your private key..."
 msgstr "Privaten Schlüssel auswählen …"
 
-#: ../properties/auth-helpers.c:250
+#: ../properties/auth-helpers.c:302
 msgid "Choose an OpenVPN static key..."
 msgstr "Statischen OpenVPN-Schlüssel auswählen …"
 
 # CHECK keine/keiner
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:950
-#: ../properties/auth-helpers.c:1133
+#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1057
+#: ../properties/auth-helpers.c:1311
 msgid "None"
 msgstr "keine"
 
-#: ../properties/auth-helpers.c:691
+#: ../properties/auth-helpers.c:769
+msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
+msgstr "PEM- oder PKCS#12-Zertifikate (*.pem, *.crt, *.key, *.cer, *.p12)"
+
+#: ../properties/auth-helpers.c:770
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM-Zertifikate (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:751
+#: ../properties/auth-helpers.c:830
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statische OpenVPN-Schlüssel (*.key)"
 
-#: ../properties/auth-helpers.c:872 ../properties/auth-helpers.c:942
+#: ../properties/auth-helpers.c:974 ../properties/auth-helpers.c:1049
 msgid "Default"
 msgstr "Vorgabe"
 
-#: ../properties/auth-helpers.c:952
+#: ../properties/auth-helpers.c:1059
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:954
+#: ../properties/auth-helpers.c:1061
 msgid "SHA-1"
 msgstr "SHA-1"
+
+#: ../properties/auth-helpers.c:1063
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: ../properties/auth-helpers.c:1065
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: ../properties/auth-helpers.c:1067
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: ../properties/auth-helpers.c:1069
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: ../properties/auth-helpers.c:1071
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -225,61 +248,73 @@ msgid "Remote IP Address:"
 msgstr "Entfernte IP-Adresse:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:20
+msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
+msgstr "Maximale TCP-Segmentgröße (MSS) des Tunnels einschränken"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Security"
 msgstr "Sicherheit"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:22
 msgid "Show passwords"
 msgstr "Passwort anzeigen"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:23
 msgid "Static Key:"
 msgstr "Statischer Schlüssel:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:24
 msgid "Subject Match:"
 msgstr "Betreff-Übereinstimmung:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:25
 msgid "TLS Authentication"
 msgstr "TLS-Authentifizierung"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Type:"
 msgstr "Art:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "Use L_ZO data compression"
 msgstr "L_ZO-Komprimierung verwenden"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:28
 msgid "Use a TA_P device"
 msgstr "TA_P-Gerät verwenden"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "Use a _TCP connection"
 msgstr "_TCP-Verbindung verwenden"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
+#: ../properties/nm-openvpn-dialog.glade.h:30
 msgid "Use additional TLS authentication"
 msgstr "Zusätzliche TLS-Authentifizierung verwenden"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
+#: ../properties/nm-openvpn-dialog.glade.h:31
+msgid "Use custom UDP _fragment size:"
+msgstr "Angepasste UDP-_Fragmentgröße verwenden:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:32
 msgid "Use custom _renegotiation interval:"
 msgstr "Benutze_rdefinierten Intervall für erneute Verhandlung verwenden:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:31
+#: ../properties/nm-openvpn-dialog.glade.h:33
+msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
+msgstr "Angepasste größte Übertragungseinheit (MTU) für den _Tunnel verwenden:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:34
 msgid "Use custom gateway p_ort:"
 msgstr "_Gateway-Port:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:32
+#: ../properties/nm-openvpn-dialog.glade.h:35
 msgid "User Certificate:"
 msgstr "Zertifikat des Benutzers:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:33
+#: ../properties/nm-openvpn-dialog.glade.h:36
 msgid "User name:"
 msgstr "Benutzername:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:34
+#: ../properties/nm-openvpn-dialog.glade.h:37
 msgid "_Gateway:"
 msgstr "_Gateway:"
