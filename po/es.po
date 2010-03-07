@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2010-03-01 19:27+0000\n"
-"PO-Revision-Date: 2010-03-01 22:24+0100\n"
+"POT-Creation-Date: 2010-03-06 06:52+0000\n"
+"PO-Revision-Date: 2010-03-07 14:48+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -96,13 +96,12 @@ msgstr "Elija su clave privada…"
 msgid "Choose an OpenVPN static key..."
 msgstr "Elija una clave estática OpenVPN…"
 
-#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1052
-#: ../properties/auth-helpers.c:1296
+#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1057
+#: ../properties/auth-helpers.c:1311
 msgid "None"
 msgstr "Ninguno"
 
 #: ../properties/auth-helpers.c:769
-#| msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "Certificados PEM o PKCD#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
 
@@ -114,17 +113,41 @@ msgstr "Certificados PEM (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Claves estáticas OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:974 ../properties/auth-helpers.c:1044
+#: ../properties/auth-helpers.c:974 ../properties/auth-helpers.c:1049
 msgid "Default"
 msgstr "Predeterminado"
 
-#: ../properties/auth-helpers.c:1054
+#: ../properties/auth-helpers.c:1059
 msgid "MD-5"
 msgstr "MD5"
 
-#: ../properties/auth-helpers.c:1056
+#: ../properties/auth-helpers.c:1061
 msgid "SHA-1"
 msgstr "SHA-1"
+
+#: ../properties/auth-helpers.c:1063
+#| msgid "SHA-1"
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: ../properties/auth-helpers.c:1065
+#| msgid "SHA-1"
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: ../properties/auth-helpers.c:1067
+#| msgid "SHA-1"
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: ../properties/auth-helpers.c:1069
+#| msgid "SHA-1"
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: ../properties/auth-helpers.c:1071
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
