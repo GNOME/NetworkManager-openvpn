@@ -9,6 +9,6 @@ libnm_openvpn_common_la_SOURCES= \
 	utils.c \
 	utils.h
 
-libnm_openvpn_common_gnome_la_LIBADD = \
+libnm_openvpn_common_la_LIBADD = \
 	$(NETWORK_MANAGER_LIBS)
 
