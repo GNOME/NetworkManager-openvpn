@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2010-02-25 20:52+0000\n"
-"PO-Revision-Date: 2010-02-25 22:41+0100\n"
+"POT-Creation-Date: 2010-03-10 07:09+0000\n"
+"PO-Revision-Date: 2010-03-10 16:07+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -54,63 +54,87 @@ msgstr "_Zapamatovat heslo pro toto sezení"
 msgid "_Save password in keyring"
 msgstr "_Uložit heslo do svazku klíčů"
 
-#: ../auth-dialog/main.c:127
+#: ../auth-dialog/main.c:94
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Pro přístup do VPN '%s' se musíte autentizovat."
 
-#: ../auth-dialog/main.c:128
+#: ../auth-dialog/main.c:95
 msgid "Authenticate VPN"
 msgstr "Ověřování VPN"
 
-#: ../auth-dialog/main.c:149
+#: ../auth-dialog/main.c:116
 msgid "Certificate pass_word:"
 msgstr "Heslo _certifikátu:"
 
-#: ../auth-dialog/main.c:163
+#: ../auth-dialog/main.c:130
 msgid "Certificate password:"
 msgstr "Heslo certifikátu:"
 
-#: ../properties/auth-helpers.c:160
+#: ../properties/auth-helpers.c:207
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Zvolit certifikát certifikační autority..."
 
-#: ../properties/auth-helpers.c:179
+#: ../properties/auth-helpers.c:226
 msgid "Choose your personal certificate..."
 msgstr "Zvolit váš osobní certifikát..."
 
-#: ../properties/auth-helpers.c:197
+#: ../properties/auth-helpers.c:244
 msgid "Choose your private key..."
 msgstr "Zvolit váš osobní klíč..."
 
-#: ../properties/auth-helpers.c:250
+#: ../properties/auth-helpers.c:302
 msgid "Choose an OpenVPN static key..."
 msgstr "Zvolit statický klíč OpenVPN..."
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:973
-#: ../properties/auth-helpers.c:1217
+#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1057
+#: ../properties/auth-helpers.c:1311
 msgid "None"
 msgstr "Žádný"
 
-#: ../properties/auth-helpers.c:691
+#: ../properties/auth-helpers.c:769
+msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
+msgstr "Certifikáty PEM nebo PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
+
+#: ../properties/auth-helpers.c:770
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Certifikáty PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:751
+#: ../properties/auth-helpers.c:830
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statické klíče OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:895 ../properties/auth-helpers.c:965
+#: ../properties/auth-helpers.c:974 ../properties/auth-helpers.c:1049
 msgid "Default"
 msgstr "Výchozí"
 
-#: ../properties/auth-helpers.c:975
+#: ../properties/auth-helpers.c:1059
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:977
+#: ../properties/auth-helpers.c:1061
 msgid "SHA-1"
 msgstr "SHA-1"
+
+#: ../properties/auth-helpers.c:1063
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: ../properties/auth-helpers.c:1065
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: ../properties/auth-helpers.c:1067
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: ../properties/auth-helpers.c:1069
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: ../properties/auth-helpers.c:1071
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
