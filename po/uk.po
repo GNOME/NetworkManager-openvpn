@@ -7,438 +7,259 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-16 17:14+0200\n"
-"PO-Revision-Date: 2007-02-16 03:32+0200\n"
+"POT-Creation-Date: 2010-04-02 14:38+0300\n"
+"PO-Revision-Date: 2010-04-16 03:32+0200\n"
 "Last-Translator: Maxim Dziumanenko <dziumanenko@gmail.com>\n"
-"Language-Team: Ukrainian <uk@li.org>\n"
+"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:145
+#: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:146
+#: ../auth-dialog/gnome-two-password-dialog.c:131
 msgid "_Secondary Password:"
 msgstr "_Вторинний пароль:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:263
+#: ../auth-dialog/gnome-two-password-dialog.c:248
 msgid "_Username:"
-msgstr "_Ім'я:"
+msgstr "_Ім'я користувача:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:265
+#: ../auth-dialog/gnome-two-password-dialog.c:250
 msgid "_Domain:"
 msgstr "_Домен"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:357
+#: ../auth-dialog/gnome-two-password-dialog.c:342
 msgid "Connect _anonymously"
 msgstr "З'єднуватись _анонімно"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:362
+#: ../auth-dialog/gnome-two-password-dialog.c:347
 msgid "Connect as _user:"
 msgstr "З'єднуватись як _користувач"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:471
+#: ../auth-dialog/gnome-two-password-dialog.c:456
 msgid "_Remember password for this session"
 msgstr "Па_м'ятати пароль для цього сеансу"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:473
+#: ../auth-dialog/gnome-two-password-dialog.c:458
 msgid "_Save password in keyring"
 msgstr "З_берегти пароль у в'язці паролів"
 
-#: ../auth-dialog/main.c:214
+#: ../auth-dialog/main.c:127
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr ""
 "Для доступу до віртуальної приватної мережі '%s' потрібна автентифікація."
 
-#: ../auth-dialog/main.c:215
+#: ../auth-dialog/main.c:128
 msgid "Authenticate VPN"
 msgstr "Автентифікація VPN"
 
-#: ../auth-dialog/main.c:227
+#: ../auth-dialog/main.c:149
 msgid "Certificate pass_word:"
 msgstr "Па_роль сертифікату:"
 
-#: ../auth-dialog/main.c:252
+#: ../auth-dialog/main.c:163
 msgid "Certificate password:"
 msgstr "Пароль сертифікату:"
 
-#: ../nm-openvpn.desktop.in.h:1
-msgid "Add, Remove, and Edit VPN Connections"
-msgstr "Додавання, видалення та редагування з'єднань типу VPN"
+#: ../properties/auth-helpers.c:160
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Виберіть сертифікат Центру сертифікації..."
 
-#: ../nm-openvpn.desktop.in.h:2
-msgid "VPN Connection Manager (OpenVPN)"
-msgstr "Менеджер з'єднань VPN (OpenVPN)"
+#: ../properties/auth-helpers.c:179
+msgid "Choose your personal certificate..."
+msgstr "Виберіть ваш персональний сертифікат..."
 
-#: ../properties/nm-openvpn.c:130
-msgid "OpenVPN Client"
-msgstr "Клієнт OpenVPN"
+#: ../properties/auth-helpers.c:197
+msgid "Choose your private key..."
+msgstr "Виберіть ваш особистий ключ..."
 
-#: ../properties/nm-openvpn.c:729
-msgid "The following OpenVPN connection will be created:"
-msgstr "Буде створене наступне з'єднання OpenVPN:"
+#: ../properties/auth-helpers.c:250
+msgid "Choose an OpenVPN static key..."
+msgstr "Виберіть статичний ключ OpenVPN..."
 
-#: ../properties/nm-openvpn.c:731
-#, c-format
-msgid "Name:  %s"
-msgstr "Назва:  %s"
+#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:949
+#: ../properties/auth-helpers.c:1126
+msgid "None"
+msgstr "Немає"
 
-#: ../properties/nm-openvpn.c:739
-msgid "Connection Type: X.509 Certificates"
-msgstr "Тип з'єднання: сертифікати X.509"
+#: ../properties/auth-helpers.c:691
+msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgstr "Сертифікати PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/nm-openvpn.c:742 ../properties/nm-openvpn.c:769
-#: ../properties/nm-openvpn.c:781
-#, c-format
-msgid "CA:  %s"
-msgstr "CA:  %s"
+#: ../properties/auth-helpers.c:751
+msgid "OpenVPN Static Keys (*.key)"
+msgstr "Статичні ключі OpenVPN (*.key)"
 
-#: ../properties/nm-openvpn.c:745 ../properties/nm-openvpn.c:784
-#, c-format
-msgid "Cert:  %s"
-msgstr "Сертифікат:  %s"
+#: ../properties/auth-helpers.c:871 ../properties/auth-helpers.c:941
+msgid "Default"
+msgstr "Типово"
 
-#: ../properties/nm-openvpn.c:748 ../properties/nm-openvpn.c:787
-#, c-format
-msgid "Key:  %s"
-msgstr "Ключ:  %s"
+#: ../properties/auth-helpers.c:951
+msgid "MD-5"
+msgstr "MD-5"
 
-#: ../properties/nm-openvpn.c:752
-msgid "Connection Type: Shared Key"
-msgstr "Тип з'єднання: спільний ключ"
+#: ../properties/auth-helpers.c:953
+msgid "SHA-1"
+msgstr "SHA-1"
 
-#: ../properties/nm-openvpn.c:755
-#, c-format
-msgid "Shared Key:  %s"
-msgstr "Спільний ключ:  %s"
+#: ../properties/nm-openvpn.c:53
+msgid "OpenVPN"
+msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:758
-#, c-format
-msgid "Local IP:  %s"
-msgstr "Локальна адреса IP:  %s"
+#: ../properties/nm-openvpn.c:54
+msgid "Compatible with the OpenVPN server."
+msgstr "Сумісний з сервером OpenVPN."
 
-#: ../properties/nm-openvpn.c:761
-#, c-format
-msgid "Remote IP:  %s"
-msgstr "Віддалена адреса IP:  %s"
+#: ../properties/nm-openvpn.c:322
+msgid "Certificates (TLS)"
+msgstr "Сертифікати (TLS)"
 
-#: ../properties/nm-openvpn.c:766
-msgid "Connection Type: Password"
-msgstr "Тип з'єднання: пароль"
-
-#: ../properties/nm-openvpn.c:772 ../properties/nm-openvpn.c:790
-#, c-format
-msgid "Username:  %s"
-msgstr "Ім'я користувача:  %s"
-
-#: ../properties/nm-openvpn.c:778
-msgid "Connection Type: X.509 with Password Authentication"
-msgstr "Тип з'єднання: автентифікація X.509 з паролем"
-
-#: ../properties/nm-openvpn.c:796
-#, c-format
-msgid "Remote:  %s"
-msgstr "Віддалений вузол:  %s"
-
-#: ../properties/nm-openvpn.c:799
-#, c-format
-msgid "Device: %s"
-msgstr "Пристрій: %s"
-
-#: ../properties/nm-openvpn.c:799
-msgid "TAP"
-msgstr "TAP"
-
-#: ../properties/nm-openvpn.c:799
-msgid "TUN"
-msgstr "TUN"
-
-#: ../properties/nm-openvpn.c:802
-#, c-format
-msgid "Protocol: %s"
-msgstr "Протокол: %s"
-
-#: ../properties/nm-openvpn.c:802
-msgid "TCP"
-msgstr "TCP"
-
-#: ../properties/nm-openvpn.c:802
-msgid "UDP"
-msgstr "UDP"
-
-#: ../properties/nm-openvpn.c:806
-#, c-format
-msgid "Routes:  %s"
-msgstr "Маршрутизатор:  %s"
-
-#: ../properties/nm-openvpn.c:810
-#, c-format
-msgid "Use LZO Compression: %s"
-msgstr "Використовується стиснення LZO: %s"
-
-#: ../properties/nm-openvpn.c:810
-msgid "Yes"
-msgstr "Так"
-
-#: ../properties/nm-openvpn.c:810
-msgid "No"
-msgstr "Ні"
-
-#: ../properties/nm-openvpn.c:814
-#, c-format
-msgid "Cipher:  %s"
-msgstr "Шифтр:  %s"
-
-#: ../properties/nm-openvpn.c:819
-#, c-format
-msgid "TLS auth:  %s %s"
-msgstr "Аутентифікація TLS:  %s %s"
-
-#: ../properties/nm-openvpn.c:823
-msgid "The connection details can be changed using the \"Edit\" button."
-msgstr "Подробиці про з'єднання можна змінити кнопкою \"Правка\"."
-
-#: ../properties/nm-openvpn.c:1003
-msgid "Cannot import settings"
-msgstr "Не вдається імпортувати параметри"
-
-#: ../properties/nm-openvpn.c:1005
-#, c-format
-msgid "The VPN settings file '%s' does not contain valid data."
-msgstr "Файл параметрів VPN '%s' містить некоректні дані."
-
-#: ../properties/nm-openvpn.c:1042
-msgid "Select file to import"
-msgstr "Виберіть файл для імпорту"
-
-#: ../properties/nm-openvpn.c:1122 ../properties/nm-openvpn.c:1134
-msgid "Select CA to use"
-msgstr "Виберіть CA"
-
-#: ../properties/nm-openvpn.c:1125
-msgid "Select certificate to use"
-msgstr "Виберіть сертифікат"
-
-#: ../properties/nm-openvpn.c:1128
-msgid "Select key to use"
-msgstr "Виберіть ключ"
-
-#: ../properties/nm-openvpn.c:1131
-msgid "Select shared key to use"
-msgstr "Виберіть спільний ключ"
-
-#: ../properties/nm-openvpn.c:1137
-msgid "Select TA to use"
-msgstr "Виберіть TA"
-
-#. printf ("in impl_export\n");
-#: ../properties/nm-openvpn.c:1326
-msgid "Save as..."
-msgstr "Зберегти як..."
-
-#: ../properties/nm-openvpn.c:1356
-#, c-format
-msgid "A file named \"%s\" already exists."
-msgstr "Файл з назвою \"%s\" вже існує."
-
-#: ../properties/nm-openvpn.c:1359
-msgid "Do you want to replace it with the one you are saving?"
-msgstr "Замінити його?"
-
-#: ../properties/nm-openvpn.c:1373
-msgid "Failed to export configuration"
-msgstr "Помилка при експорті конфігурації"
-
-#: ../properties/nm-openvpn.c:1375
-#, c-format
-msgid "Failed to save file %s"
-msgstr "Помилка при збереженні файлу %s"
-
-#: ../properties/nm-openvpn-dialog.glade.h:1
-msgid "0"
-msgstr "0"
-
-#: ../properties/nm-openvpn-dialog.glade.h:2
-msgid "1"
-msgstr "1"
-
-#: ../properties/nm-openvpn-dialog.glade.h:3
-msgid "<b>Connection Name</b>"
-msgstr "<b>Назва з'єднання</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:4
-msgid "<b>Optional Information</b>"
-msgstr "<b>Необов'язкова інформація</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:5
-msgid "<b>Required Information</b>"
-msgstr "<b>Обов'язкова інформація</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:6
-msgid "<i>example: 172.16.0.0/16 10.11.12.0/24</i>"
-msgstr "<i>приклад: 172.16.0.0/16 10.11.12.0/24</i>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:7
-msgid "CA  file:"
-msgstr "Файл  CA:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:8
-msgid "CA file:"
-msgstr "Файл CA:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:9
-msgid "Certificate:"
-msgstr "Сертифікат:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:10
-msgid "Connection Type:"
-msgstr "Тип з'єднання:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:11
-msgid "Direction:"
-msgstr "Напрямок:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:12
-msgid "Key:"
-msgstr "Ключ:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:13
-msgid "Local IP:"
-msgstr "Локальна адреса IP:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:14
+#: ../properties/nm-openvpn.c:336
 msgid "Password"
 msgstr "Пароль"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn.c:353
+msgid "Password with Certificates (TLS)"
+msgstr "Пароль з сертифікатами (TLS)"
+
+#: ../properties/nm-openvpn.c:365
+msgid "Static Key"
+msgstr "Статичний ключ"
+
+#: ../properties/nm-openvpn-dialog.glade.h:1
+msgid " "
+msgstr " "
+
+#: ../properties/nm-openvpn-dialog.glade.h:2
+msgid "<b>Authentication</b>"
+msgstr "<b>Автентифікації</b>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:3
+msgid "<b>General</b>"
+msgstr "<b>Загальні</b>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:4
 msgid ""
-"Please enter the information provided by your system administrator below. Do "
-"not enter your password here as you will be prompted when connecting."
+"<i>If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.</i>"
 msgstr ""
-"Нижче введіть інформацію, що надана системним адміністратором. Не вводьте "
-"тут ваш пароль, пароль буде запитаний на етапі встановлення з'єднання."
+"<i>Якщо використовується напрямок ключа, він має бути протилежним напрямком "
+"відносно того, який використовує друга сторона. Наприклад, якщо друга "
+"сторона використовує \"1\", це з'єднання має використовувати \"0\". Якщо ви "
+"не впевнені, яке значення використовувати, зв'яжіться із системним "
+"адміністратором.</i>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
-msgid ""
-"Please note that the file you import is not an OpenVPN configuration file. "
-"Ask your administrator for the file."
-msgstr ""
-"Зауважте, файл, що імпортується, не є файлом конфігурації OpenVPN. Попросіть "
-"системного адміністратора надати вам файл."
+#: ../properties/nm-openvpn-dialog.glade.h:5
+msgid "Ad_vanced..."
+msgstr "_Додатково..."
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
-msgid "Remote IP:"
-msgstr "Віддалена адреса IP:"
+#: ../properties/nm-openvpn-dialog.glade.h:6
+msgid "CA Certificate:"
+msgstr "Сертифікат CA:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
-msgid "Shared Key:"
-msgstr "Спільний ключ:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:19
-msgid "Shared key"
-msgstr "Спільний ключ"
-
-#: ../properties/nm-openvpn-dialog.glade.h:20
-msgid "Use LZO compression"
-msgstr "Використовувати стиснення LZO"
-
-#: ../properties/nm-openvpn-dialog.glade.h:21
-msgid "Use TAP device"
-msgstr "Використовувати пристрій TAP"
-
-#: ../properties/nm-openvpn-dialog.glade.h:22
-msgid "Use TCP connection"
-msgstr "Використовувати з'єднання TCP"
-
-#: ../properties/nm-openvpn-dialog.glade.h:23
-msgid "Use TLS auth:"
-msgstr "Автентифікація TLS:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:24
-msgid "Use cipher:"
+#: ../properties/nm-openvpn-dialog.glade.h:7
+msgid "Cipher:"
 msgstr "Шифр:"
 
+#: ../properties/nm-openvpn-dialog.glade.h:8
+msgid "General"
+msgstr "Загальне"
+
+#: ../properties/nm-openvpn-dialog.glade.h:9
+msgid "HMAC Authentication:"
+msgstr "Аутентифікація HMAC"
+
+#: ../properties/nm-openvpn-dialog.glade.h:10
+msgid "Key Direction:"
+msgstr "Напрямок ключа:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:11
+msgid "Key File:"
+msgstr "Напрямок ключа:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:12
+msgid "Local IP Address:"
+msgstr "Локальна IP-адреса:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:13
+msgid "OpenVPN Advanced Options"
+msgstr "Додаткові параметри OpenVPN"
+
+#: ../properties/nm-openvpn-dialog.glade.h:14
+msgid "Password:"
+msgstr "Пароль:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:15
+msgid "Private Key Password:"
+msgstr "Пароль особистого ключа:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:16
+msgid "Private Key:"
+msgstr "Особистий ключ:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:17
+msgid "Remote IP Address:"
+msgstr "Віддалена IP-адреса:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:18
+msgid "Security"
+msgstr "Захист"
+
+#: ../properties/nm-openvpn-dialog.glade.h:19
+msgid "Show passwords"
+msgstr "Показати паролі"
+
+#: ../properties/nm-openvpn-dialog.glade.h:20
+msgid "Static Key:"
+msgstr "Статичний ключ:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:21
+msgid "TLS Authentication"
+msgstr "Автентифікація TLS"
+
+#: ../properties/nm-openvpn-dialog.glade.h:22
+msgid "Type:"
+msgstr "Тип:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:23
+msgid "Use L_ZO data compression"
+msgstr "Використовувати стиснення L_ZO"
+
+#: ../properties/nm-openvpn-dialog.glade.h:24
+msgid "Use a TA_P device"
+msgstr "Використовувати пристрій TA_P"
+
 #: ../properties/nm-openvpn-dialog.glade.h:25
-msgid "Username:"
-msgstr "Користувач:"
+msgid "Use a _TCP connection"
+msgstr "Використовувати з'єднання _TCP"
 
 #: ../properties/nm-openvpn-dialog.glade.h:26
-msgid "X.509"
-msgstr "X.509"
+msgid "Use additional TLS authentication"
+msgstr "Додаткова автентифікація TLS"
 
 #: ../properties/nm-openvpn-dialog.glade.h:27
-msgid ""
-"X.509 Certificates\n"
-"Pre-shared key\n"
-"Password Authentication\n"
-"X.509 with Password Authentication"
-msgstr ""
-"Сертифікати X.509\n"
-"Спільний ключ\n"
-"Пароль\n"
-"X.509 з паролем"
+msgid "Use custom _renegotiation interval:"
+msgstr "Використовувати власний _повторних переговорів інтервал:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:28
+msgid "Use custom gateway p_ort:"
+msgstr "Використовувати інший _порт шлюзу:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:29
+msgid "User Certificate:"
+msgstr "Сертифікат користувача:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:30
+msgid "User name:"
+msgstr "Користувач:"
 
 #: ../properties/nm-openvpn-dialog.glade.h:31
 msgid "_Gateway:"
 msgstr "_Шлюз:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:32
-msgid "_Import Saved Configuration..."
-msgstr "_Імпорт збереженої конфігурації..."
-
-#: ../properties/nm-openvpn-dialog.glade.h:33
-msgid ""
-"_Name used to identify the connection to the private network, e.g. \"Campus "
-"VPN\" or \"Corporate Network\""
-msgstr ""
-"_Назва, що використовується для ідентифікації з'єднання з приватною мережею, "
-"наприклад \"Campus VPN\" чи \"Corporate Network\""
-
-#: ../properties/nm-openvpn-dialog.glade.h:34
-msgid "_Only use VPN connection for these addresses"
-msgstr "Використовувати VPN _лише для цих адрес"
-
-#: ../properties/nm-openvpn-dialog.glade.h:35
-msgid "none"
-msgstr "немає"
-
-#: ../src/nm-openvpn-service.c:127
-msgid ""
-"The VPN login failed because the user name and password were not accepted or "
-"the certificate password was wrong."
-msgstr ""
-"Помилка входу у VPN, оскільки ім'я користувача та пароль не були прийняті "
-"або неправильний пароль до сертифікату."
-
-#: ../src/nm-openvpn-service.c:129
-msgid "The VPN login failed because the VPN program could not be started."
-msgstr "Помилка входу у VPN, оскільки не вдається запустити програму VPN."
-
-#: ../src/nm-openvpn-service.c:131
-msgid ""
-"The VPN login failed because the VPN program could not connect to the VPN "
-"server."
-msgstr ""
-"Помилка входу у VPN, оскільки програма VPN не може з'єднатись з сервером VPN."
-
-#: ../src/nm-openvpn-service.c:133
-msgid ""
-"The VPN login failed because the VPN configuration options were invalid."
-msgstr "Помилка входу у VPN, оскільки конфігурація VPN була неправильною."
-
-#: ../src/nm-openvpn-service.c:135
-msgid ""
-"The VPN login failed because the VPN program received an invalid "
-"configuration from the VPN server."
-msgstr ""
-"Помилка входу у VPN, оскільки програма VPN отримала неправильну конфігурацію "
-"від сервера VPN."
-
-#: ../src/nm-openvpn-service.c:137
-msgid "VPN connection failed"
-msgstr "Помилка з'єднання VPN"
