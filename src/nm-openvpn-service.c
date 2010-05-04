@@ -1110,8 +1110,7 @@ real_need_secrets (NMVPNPlugin *plugin,
 		/* Will require a password and maybe private key password */
 
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (   (is_pkcs12 (key) || is_encrypted_pem (key))
-		    && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
+		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
 			need_secrets = TRUE;
 
 		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
@@ -1125,8 +1124,7 @@ real_need_secrets (NMVPNPlugin *plugin,
 
 		/* May require private key password */
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (   (is_pkcs12 (key) || is_encrypted_pem (key))
-		    && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
+		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
 			need_secrets = TRUE;
 	}
 

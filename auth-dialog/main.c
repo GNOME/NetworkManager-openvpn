@@ -256,7 +256,7 @@ get_password_types (PasswordsInfo *info)
 		key = g_strdup_printf ("%s/%s/%s", connection_path, NM_SETTING_VPN_SETTING_NAME,
 		                       NM_OPENVPN_KEY_KEY);
 		str = gconf_client_get_string (gconf_client, key, NULL);
-		info->need_certpass = (is_pkcs12 (str) || is_encrypted_pem (str));
+		info->need_certpass = is_encrypted (str);
 		g_free (str);
 		g_free (key);
 	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {

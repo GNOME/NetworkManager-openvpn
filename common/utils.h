@@ -26,7 +26,7 @@
 
 gboolean is_pkcs12 (const char *filepath);
 
-gboolean is_encrypted_pem (const char *filename);
+gboolean is_encrypted (const char *filename);
 
 #endif  /* UTILS_H */
 
