@@ -1004,6 +1004,45 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	return TRUE;
 }
 
+static const char *
+check_need_secrets (NMSettingVPN *s_vpn, gboolean *need_secrets)
+{
+	const char *tmp, *key, *ctype;
+
+	g_return_val_if_fail (s_vpn != NULL, FALSE);
+	g_return_val_if_fail (need_secrets != NULL, FALSE);
+
+	*need_secrets = FALSE;
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
+	ctype = validate_connection_type (tmp);
+	if (!ctype)
+		return NULL;
+
+	if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		/* Will require a password and maybe private key password */
+		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
+			*need_secrets = TRUE;
+
+		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
+			*need_secrets = TRUE;
+	} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD)) {
+		/* Will require a password */
+		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
+			*need_secrets = TRUE;
+	} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_TLS)) {
+		/* May require private key password */
+		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
+			*need_secrets = TRUE;
+	} else {
+		/* Static key doesn't need passwords */
+	}
+
+	return ctype;
+}
+
 static gboolean
 real_connect (NMVPNPlugin   *plugin,
               NMConnection  *connection,
@@ -1012,7 +1051,7 @@ real_connect (NMVPNPlugin   *plugin,
 	NMSettingVPN *s_vpn;
 	const char *connection_type;
 	const char *user_name;
-	const char *tmp;
+	gboolean need_secrets;
 
 	s_vpn = NM_SETTING_VPN (nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN));
 	if (!s_vpn) {
@@ -1024,11 +1063,8 @@ real_connect (NMVPNPlugin   *plugin,
 		return FALSE;
 	}
 
-	user_name = nm_setting_vpn_get_user_name (s_vpn);
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	
-	connection_type = validate_connection_type (tmp);
-	
+	/* Check if we need secrets and validate the connection type */
+	connection_type = check_need_secrets (s_vpn, &need_secrets);
 	if (!connection_type) {
 		g_set_error (error,
 		             NM_VPN_PLUGIN_ERROR,
@@ -1036,7 +1072,9 @@ real_connect (NMVPNPlugin   *plugin,
 		             "%s",
 		             "Invalid connection type.");
 		return FALSE;
-	}	
+	}
+
+	user_name = nm_setting_vpn_get_user_name (s_vpn);
 
 	/* Need a username for any password-based connection types */
 	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
@@ -1055,8 +1093,8 @@ real_connect (NMVPNPlugin   *plugin,
 	if (!nm_openvpn_properties_validate (s_vpn, error))
 		return FALSE;
 
-	/* Static Key doesn't need secrets; the rest do */
-	if (strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
+	/* Validate secrets */
+	if (need_secrets) {
 		if (!nm_openvpn_secrets_validate (s_vpn, error))
 			return FALSE;
 	}
@@ -1077,7 +1115,6 @@ real_need_secrets (NMVPNPlugin *plugin,
 	NMSettingVPN *s_vpn;
 	const char *connection_type;
 	gboolean need_secrets = FALSE;
-	const char *tmp;
 
 	g_return_val_if_fail (NM_IS_VPN_PLUGIN (plugin), FALSE);
 	g_return_val_if_fail (NM_IS_CONNECTION (connection), FALSE);
@@ -1092,9 +1129,7 @@ real_need_secrets (NMVPNPlugin *plugin,
 		return FALSE;
 	}
 
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	connection_type = validate_connection_type (tmp);
-	
+	connection_type = check_need_secrets (s_vpn, &need_secrets);
 	if (!connection_type) {
 		g_set_error (error,
 		             NM_VPN_PLUGIN_ERROR,
@@ -1102,30 +1137,6 @@ real_need_secrets (NMVPNPlugin *plugin,
 		             "%s",
 		             "Invalid connection type.");
 		return FALSE;
-	}
-
-	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		const char *key;
-
-		/* Will require a password and maybe private key password */
-
-		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
-			need_secrets = TRUE;
-
-		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
-			need_secrets = TRUE;
-	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		/* Will require a password */
-		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
-			need_secrets = TRUE;
-	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)) {
-		const char *key;
-
-		/* May require private key password */
-		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
-			need_secrets = TRUE;
 	}
 
 	if (need_secrets)
