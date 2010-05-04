@@ -423,7 +423,7 @@ validate_tls (GladeXML *xml, const char *prefix, GError **error)
 
 	/* Encrypted certificates require a password */
 	str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-	encrypted = is_pkcs12 (str) || is_encrypted_pem (str);
+	encrypted = is_encrypted (str);
 	g_free (str);
 	if (encrypted) {
 		tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
@@ -693,6 +693,7 @@ find_tag (const char *tag, const char *buf, gsize len)
 
 static const char *pem_rsa_key_begin = "-----BEGIN RSA PRIVATE KEY-----";
 static const char *pem_dsa_key_begin = "-----BEGIN DSA PRIVATE KEY-----";
+static const char *pem_pkcs8_key_begin = "-----BEGIN ENCRYPTED PRIVATE KEY-----";
 static const char *pem_cert_begin = "-----BEGIN CERTIFICATE-----";
 
 static gboolean
@@ -750,6 +751,11 @@ tls_default_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 	}
 
 	if (find_tag (pem_cert_begin, (const char *) contents, bytes_read)) {
+		show = TRUE;
+		goto out;
+	}
+
+	if (find_tag (pem_pkcs8_key_begin, (const char *) contents, bytes_read)) {
 		show = TRUE;
 		goto out;
 	}

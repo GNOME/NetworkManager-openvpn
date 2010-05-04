@@ -50,16 +50,14 @@ is_pkcs12 (const char *filepath)
 }
 
 #define PROC_TYPE_TAG "Proc-Type: 4,ENCRYPTED"
+#define PKCS8_TAG "-----BEGIN ENCRYPTED PRIVATE KEY-----"
 
-/** Checks if a key is encrypted
- * The key file is read and it is checked if it contains a line reading
- * Proc-Type: 4,ENCRYPTED
- * This is defined in RFC 1421 (PEM)
+/** Checks if a file appears to be an encrypted private key.
  * @param filename the path to the file
  * @return returns true if the key is encrypted, false otherwise
  */
 gboolean
-is_encrypted_pem (const char *filename)
+is_encrypted (const char *filename)
 {
 	GIOChannel *pem_chan;
 	char *str = NULL;
@@ -68,15 +66,18 @@ is_encrypted_pem (const char *filename)
 	if (!filename || !strlen (filename))
 		return FALSE;
 
+	if (is_pkcs12 (filename))
+		return TRUE;
+
 	pem_chan = g_io_channel_new_file (filename, "r", NULL);
 	if (!pem_chan)
 		return FALSE;
 
-	while (g_io_channel_read_line (pem_chan, &str, NULL, NULL, NULL) != G_IO_STATUS_EOF) {
-		if (strncmp (str, PROC_TYPE_TAG, strlen (PROC_TYPE_TAG)) == 0) {
+	while (   g_io_channel_read_line (pem_chan, &str, NULL, NULL, NULL) != G_IO_STATUS_EOF
+	       && !encrypted) {
+		if (   !strncmp (str, PROC_TYPE_TAG, strlen (PROC_TYPE_TAG))
+		    || !strncmp (str, PKCS8_TAG, strlen (PKCS8_TAG)))
 			encrypted = TRUE;
-			break;
-		}
 		g_free (str);
 	}
 
