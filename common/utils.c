@@ -72,12 +72,14 @@ is_encrypted (const char *filename)
 	if (!pem_chan)
 		return FALSE;
 
-	while (   g_io_channel_read_line (pem_chan, &str, NULL, NULL, NULL) != G_IO_STATUS_EOF
-	       && !encrypted) {
-		if (   !strncmp (str, PROC_TYPE_TAG, strlen (PROC_TYPE_TAG))
-		    || !strncmp (str, PKCS8_TAG, strlen (PKCS8_TAG)))
-			encrypted = TRUE;
-		g_free (str);
+	while (g_io_channel_read_line (pem_chan, &str, NULL, NULL, NULL) != G_IO_STATUS_EOF) {
+		if (str) {
+			if (g_str_has_prefix (str, PROC_TYPE_TAG) || g_str_has_prefix (str, PKCS8_TAG)) {
+				encrypted = TRUE;
+				break;
+			}
+			g_free (str);
+		}
 	}
 
 	g_io_channel_shutdown (pem_chan, FALSE, NULL);
