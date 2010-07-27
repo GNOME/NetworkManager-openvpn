@@ -47,6 +47,8 @@
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"
 
+extern char **environ;
+
 /* These are here because nm-dbus-glib-types.h isn't exported */
 #define DBUS_TYPE_G_ARRAY_OF_UINT          (dbus_g_type_get_collection ("GArray", G_TYPE_UINT))
 #define DBUS_TYPE_G_ARRAY_OF_ARRAY_OF_UINT (dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_ARRAY_OF_UINT))
@@ -371,6 +373,7 @@ main (int argc, char *argv[])
 	GValue *dns_domain = NULL;
 	struct in_addr temp_addr;
 	gboolean tapdev = FALSE;
+	char **iter;
 
 	g_type_init ();
 
@@ -378,6 +381,14 @@ main (int argc, char *argv[])
 	if (!connection) {
 		nm_warning ("Could not get the system bus: %s", err->message);
 		exit (1);
+	}
+
+	if (argc >= 2 && !g_strcmp0 (argv[1], "--helper-debug")) {
+		g_message ("openvpn script environment ---------------------------");
+		iter = environ;
+		while (iter && *iter)
+			g_print ("%s\n", *iter++);
+		g_message ("------------------------------------------------------");
 	}
 
 	config = g_hash_table_new (g_str_hash, g_str_equal);

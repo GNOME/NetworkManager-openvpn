@@ -869,7 +869,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Up script, called when connection has been established or has been restarted */
 	add_openvpn_arg (args, "--up");
-	add_openvpn_arg (args, NM_OPENVPN_HELPER_PATH);
+	if (getenv ("OPENVPN_DEBUG"))
+		add_openvpn_arg (args, NM_OPENVPN_HELPER_PATH " --helper-debug");
+	else
+		add_openvpn_arg (args, NM_OPENVPN_HELPER_PATH);
 	add_openvpn_arg (args, "--up-restart");
 
 	/* Keep key and tun if restart is needed */
