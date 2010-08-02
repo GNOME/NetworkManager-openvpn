@@ -238,7 +238,11 @@ advanced_button_clicked_cb (GtkWidget *button, gpointer user_data)
 	const char *contype = NULL;
 
 	toplevel = gtk_widget_get_toplevel (priv->widget);
+#if GTK_CHECK_VERSION(2,20,0)
+	g_return_if_fail (gtk_widget_is_toplevel (toplevel));
+#else
 	g_return_if_fail (GTK_WIDGET_TOPLEVEL (toplevel));
+#endif
 
 	widget = glade_xml_get_widget (priv->xml, "auth_combo");
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
