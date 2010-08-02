@@ -163,15 +163,15 @@ dialog_show_callback (GtkWidget *widget, gpointer callback_data)
 
 	password_dialog = GNOME_TWO_PASSWORD_DIALOG (callback_data);
 
-	if (GTK_WIDGET_VISIBLE (password_dialog->details->username_entry) &&
+	if (gtk_widget_get_visible (password_dialog->details->username_entry) &&
 	    !password_dialog->details->readonly_username) {
 		gtk_widget_grab_focus (password_dialog->details->username_entry);
-	} else if (GTK_WIDGET_VISIBLE (password_dialog->details->domain_entry) &&
+	} else if (gtk_widget_get_visible (password_dialog->details->domain_entry) &&
 		   !password_dialog->details->readonly_domain) {
 		gtk_widget_grab_focus (password_dialog->details->domain_entry);
-	} else if (GTK_WIDGET_VISIBLE (password_dialog->details->password_entry)) {
+	} else if (gtk_widget_get_visible (password_dialog->details->password_entry)) {
 		gtk_widget_grab_focus (password_dialog->details->password_entry);
-	} else if (GTK_WIDGET_VISIBLE (password_dialog->details->password_entry_secondary)) {
+	} else if (gtk_widget_get_visible (password_dialog->details->password_entry_secondary)) {
 		gtk_widget_grab_focus (password_dialog->details->password_entry_secondary);
 	}
 }
@@ -265,14 +265,14 @@ username_entry_activate (GtkWidget *widget, GtkWidget *dialog)
 
 	password_dialog = GNOME_TWO_PASSWORD_DIALOG (dialog);
 	
-	if (GTK_WIDGET_VISIBLE (password_dialog->details->domain_entry) &&
-	    GTK_WIDGET_SENSITIVE (password_dialog->details->domain_entry))
+	if (gtk_widget_get_visible (password_dialog->details->domain_entry) &&
+	    gtk_widget_get_sensitive (password_dialog->details->domain_entry))
 		gtk_widget_grab_focus (password_dialog->details->domain_entry);
-	else if (GTK_WIDGET_VISIBLE (password_dialog->details->password_entry) &&
-		 GTK_WIDGET_SENSITIVE (password_dialog->details->password_entry))
+	else if (gtk_widget_get_visible (password_dialog->details->password_entry) &&
+		 gtk_widget_get_sensitive (password_dialog->details->password_entry))
 		gtk_widget_grab_focus (password_dialog->details->password_entry);
-	else if (GTK_WIDGET_VISIBLE (password_dialog->details->password_entry_secondary) &&
-		 GTK_WIDGET_SENSITIVE (password_dialog->details->password_entry_secondary))
+	else if (gtk_widget_get_visible (password_dialog->details->password_entry_secondary) &&
+		 gtk_widget_get_sensitive (password_dialog->details->password_entry_secondary))
 		gtk_widget_grab_focus (password_dialog->details->password_entry_secondary);
 }
 
@@ -283,11 +283,11 @@ domain_entry_activate (GtkWidget *widget, GtkWidget *dialog)
 
 	password_dialog = GNOME_TWO_PASSWORD_DIALOG (dialog);
 	
-	if (GTK_WIDGET_VISIBLE (password_dialog->details->password_entry) &&
-	    GTK_WIDGET_SENSITIVE (password_dialog->details->password_entry))
+	if (gtk_widget_get_visible (password_dialog->details->password_entry) &&
+	    gtk_widget_get_sensitive (password_dialog->details->password_entry))
 		gtk_widget_grab_focus (password_dialog->details->password_entry);
-	else if (GTK_WIDGET_VISIBLE (password_dialog->details->password_entry_secondary) &&
-		 GTK_WIDGET_SENSITIVE (password_dialog->details->password_entry_secondary))
+	else if (gtk_widget_get_visible (password_dialog->details->password_entry_secondary) &&
+		 gtk_widget_get_sensitive (password_dialog->details->password_entry_secondary))
 		gtk_widget_grab_focus (password_dialog->details->password_entry_secondary);
 }
 
@@ -309,6 +309,7 @@ gnome_two_password_dialog_new (const char	*dialog_title,
 	GtkWidget *main_vbox;
 	GtkWidget *dialog_icon;
 	GSList *group;
+	GtkBox *content, *action_area;
 
 	password_dialog = GNOME_TWO_PASSWORD_DIALOG (gtk_widget_new (gnome_two_password_dialog_get_type (), NULL));
 	dialog = GTK_DIALOG (password_dialog);
@@ -322,12 +323,15 @@ gnome_two_password_dialog_new (const char	*dialog_title,
 				NULL);
 	gtk_dialog_set_default_response (GTK_DIALOG (password_dialog), GTK_RESPONSE_OK);
 
+	content = GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog)));
+	action_area = GTK_BOX (gtk_dialog_get_action_area (GTK_DIALOG (dialog)));
+
 	/* Setup the dialog */
 	gtk_dialog_set_has_separator (dialog, FALSE);
         gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-        gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-        gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-        gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+	gtk_box_set_spacing (content, 2); /* 2 * 5 + 2 = 12 */
+	gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+	gtk_box_set_spacing (action_area, 6);
 
  	gtk_window_set_position (GTK_WINDOW (password_dialog), GTK_WIN_POS_CENTER);
 	gtk_window_set_modal (GTK_WINDOW (password_dialog), TRUE);
@@ -444,13 +448,9 @@ gnome_two_password_dialog_new (const char	*dialog_title,
 
 	gtk_box_pack_start (GTK_BOX (hbox), main_vbox, FALSE, FALSE, 0);
 
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (password_dialog)->vbox),
-			    hbox,
-			    TRUE,	/* expand */
-			    TRUE,	/* fill */
-			    0);       	/* padding */
+	gtk_box_pack_start (content, hbox, TRUE, TRUE, 0);
 	
-	gtk_widget_show_all (GTK_DIALOG (password_dialog)->vbox);
+	gtk_widget_show_all (GTK_WIDGET (content));
 
 	password_dialog->details->remember_session_button =
 		gtk_check_button_new_with_mnemonic (_("_Remember password for this session"));
