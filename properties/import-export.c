@@ -209,7 +209,7 @@ do_import (const char *path, char **lines, GError **error)
 	gboolean have_pass = FALSE, have_sk = FALSE;
 	const char *ctype = NULL;
 	char *basename;
-	char *default_path;
+	char *default_path, *tmp, *tmp2;
 
 	connection = nm_connection_new ();
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
@@ -221,7 +221,15 @@ do_import (const char *path, char **lines, GError **error)
 	
 	/* Get the default path for ca, cert, key file, these files maybe
 	 * in same path with the configuration file */
-	default_path = g_path_get_dirname (path);
+	if (g_path_is_absolute (path))
+		default_path = g_path_get_dirname (path);
+	else {
+		tmp = g_get_current_dir ();
+		tmp2 = g_path_get_dirname (path);
+		default_path = g_build_filename (tmp, tmp2, NULL);
+		g_free (tmp);
+		g_free (tmp2);
+	}
 
 	basename = g_path_get_basename (path);
 	last_dot = strrchr (basename, '.');
@@ -282,7 +290,7 @@ do_import (const char *path, char **lines, GError **error)
 				errno = 0;
 				secs = strtol (items[0], NULL, 10);
 				if ((errno == 0) && (secs >= 0) && (secs < 0xffff)) {
-					char *tmp = g_strdup_printf ("%d", (guint32) secs);
+					tmp = g_strdup_printf ("%d", (guint32) secs);
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU, tmp);
 					g_free (tmp);
 				} else
@@ -303,7 +311,7 @@ do_import (const char *path, char **lines, GError **error)
 				errno = 0;
 				secs = strtol (items[0], NULL, 10);
 				if ((errno == 0) && (secs >= 0) && (secs < 0xffff)) {
-					char *tmp = g_strdup_printf ("%d", (guint32) secs);
+					tmp = g_strdup_printf ("%d", (guint32) secs);
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, tmp);
 					g_free (tmp);
 				} else
@@ -329,7 +337,7 @@ do_import (const char *path, char **lines, GError **error)
 				errno = 0;
 				secs = strtol (items[0], NULL, 10);
 				if ((errno == 0) && (secs >= 0) && (secs < 604800)) {
-					char *tmp = g_strdup_printf ("%d", (guint32) secs);
+					tmp = g_strdup_printf ("%d", (guint32) secs);
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, tmp);
 					g_free (tmp);
 				} else
@@ -349,8 +357,6 @@ do_import (const char *path, char **lines, GError **error)
 				have_remote = TRUE;
 
 				if (g_strv_length (items) >= 2) {
-					char *tmp;
-
 					tmp = parse_port (items[1], *line);
 					if (tmp) {
 						nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PORT, tmp);
@@ -367,8 +373,6 @@ do_import (const char *path, char **lines, GError **error)
 
 		if (   !strncmp (*line, PORT_TAG, strlen (PORT_TAG))
 		    || !strncmp (*line, RPORT_TAG, strlen (RPORT_TAG))) {
-			char *tmp;
-
 			/* Port specified in 'remote' always takes precedence */
 			if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT))
 				continue;

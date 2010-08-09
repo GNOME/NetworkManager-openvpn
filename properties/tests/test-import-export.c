@@ -753,7 +753,7 @@ int main (int argc, char **argv)
 	DBusGConnection *bus;
 	char *basename;
 	NMVpnPluginUiInterface *plugin = NULL;
-	char *test_dir;
+	char *tmp, *tmp2, *test_dir;
 
 	if (argc != 2)
 		FAIL ("args", "usage: %s <conf path>", argv[0]);
@@ -771,9 +771,18 @@ int main (int argc, char **argv)
 	        "plugin-init", "failed to initialize UI plugin");
 
 	/* Strip off trailing '/' from tests directory if present */
-	test_dir = argv[1];
-	if (test_dir[strlen (test_dir) - 1] == '/')
-		test_dir[strlen (test_dir) - 1] = '\0';
+	tmp = argv[1];
+	if (tmp[strlen (tmp) - 1] == '/')
+		tmp[strlen (tmp) - 1] = '\0';
+
+	if (g_path_is_absolute (tmp))
+		test_dir = g_strdup (tmp);
+	else {
+		tmp2 = g_get_current_dir ();
+		test_dir = g_build_filename (tmp2, tmp, NULL);
+		g_free (tmp2);
+	}
+
 	/* The tests */
 	test_password_import (plugin, test_dir);
 	test_password_export (plugin, test_dir);
