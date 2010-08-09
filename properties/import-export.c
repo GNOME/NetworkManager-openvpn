@@ -43,29 +43,29 @@
 #include "nm-openvpn.h"
 #include "../src/nm-openvpn-service.h"
 
+#define AUTH_TAG "auth "
+#define AUTH_USER_PASS_TAG "auth-user-pass "
+#define CA_TAG "ca "
+#define CERT_TAG "cert "
+#define CIPHER_TAG "cipher "
 #define CLIENT_TAG "client"
-#define TLS_CLIENT_TAG "tls-client"
+#define COMP_TAG "comp-lzo "
 #define DEV_TAG "dev "
+#define FRAGMENT_TAG "fragment "
+#define IFCONFIG_TAG "ifconfig "
+#define KEY_TAG "key "
+#define MSSFIX_TAG "mssfix "
+#define PKCS12_TAG "pkcs12 "
+#define PORT_TAG "port "
 #define PROTO_TAG "proto "
 #define REMOTE_TAG "remote "
-#define CA_TAG "ca"
-#define CERT_TAG "cert"
-#define KEY_TAG "key"
-#define CIPHER_TAG "cipher"
-#define COMP_TAG "comp-lzo"
-#define IFCONFIG_TAG "ifconfig "
-#define SECRET_TAG "secret"
-#define AUTH_USER_PASS_TAG "auth-user-pass"
-#define TLS_AUTH_TAG "tls-auth"
-#define AUTH_TAG "auth "
-#define RENEG_SEC_TAG "reneg-sec"
-#define TLS_REMOTE_TAG "tls-remote"
-#define PORT_TAG "port"
-#define RPORT_TAG "rport"
-#define MSSFIX_TAG "mssfix"
-#define TUNMTU_TAG "tun-mtu"
-#define FRAGMENT_TAG "fragment"
-#define PKCS12_TAG "pkcs12"
+#define RENEG_SEC_TAG "reneg-sec "
+#define RPORT_TAG "rport "
+#define SECRET_TAG "secret "
+#define TLS_AUTH_TAG "tls-auth "
+#define TLS_CLIENT_TAG "tls-client"
+#define TLS_REMOTE_TAG "tls-remote "
+#define TUNMTU_TAG "tun-mtu "
 
 
 static char *
@@ -413,6 +413,7 @@ do_import (const char *path, char **lines, GError **error)
 			                  NM_OPENVPN_KEY_STATIC_KEY_DIRECTION,
 			                  leftover,
 			                  s_vpn);
+			have_sk = TRUE;
 			continue;
 		}
 
@@ -478,9 +479,6 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 	}
-
-	if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY))
-		have_sk = TRUE;
 
 	if (!have_client && !have_sk) {
 		g_set_error (error,

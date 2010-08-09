@@ -223,7 +223,7 @@ test_password_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("password-export", plugin, dir, PASSWORD_EXPORTED_NAME);
 	ret = unlink (path);
-	ASSERT (connection != NULL, "password-export", "failed to re-import connection");
+	ASSERT (reimported != NULL, "password-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
 	 * make the connection comparison below fail.
@@ -338,7 +338,7 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("tls-export", plugin, dir, TLS_EXPORTED_NAME);
 	ret = unlink (path);
-	ASSERT (connection != NULL, "tls-export", "failed to re-import connection");
+	ASSERT (reimported != NULL, "tls-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
 	 * make the connection comparison below fail.
@@ -447,7 +447,7 @@ test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("pkcs12-export", plugin, dir, PKCS12_EXPORTED_NAME);
 	ret = unlink (path);
-	ASSERT (connection != NULL, "pkcs12-export", "failed to re-import connection");
+	ASSERT (reimported != NULL, "pkcs12-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
 	 * make the connection comparison below fail.
@@ -590,7 +590,7 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("static-key-export", plugin, dir, STATIC_KEY_EXPORTED_NAME);
 	ret = unlink (path);
-	ASSERT (connection != NULL, "static-key-export", "failed to re-import connection");
+	ASSERT (reimported != NULL, "static-key-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
 	 * make the connection comparison below fail.
@@ -669,7 +669,7 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection (detail, plugin, dir, exported_name);
 	ret = unlink (path);
-	ASSERT (connection != NULL, detail, "failed to re-import connection");
+	ASSERT (reimported != NULL, detail, "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
 	 * make the connection comparison below fail.
@@ -732,7 +732,7 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("tunopts-export", plugin, dir, TUNOPTS_EXPORTED_NAME);
 	ret = unlink (path);
-	ASSERT (connection != NULL, "tunopts-export", "failed to re-import connection");
+	ASSERT (reimported != NULL, "tunopts-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
 	 * make the connection comparison below fail.

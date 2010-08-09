@@ -1,12 +1,12 @@
 EXTRA_DIST = \
-	password.conf \
-	tls.ovpn \
 	iso885915.ovpn \
-	static.key \
-	static.ovpn \
+	password.conf \
+	pkcs12.ovpn \
 	port.ovpn \
 	rport.ovpn \
-	tun-opts.conf \
-	pkcs12.ovpn
+	static.key \
+	static.ovpn \
+	tls.ovpn \
+	tun-opts.conf
 
 
