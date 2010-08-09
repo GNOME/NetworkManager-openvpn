@@ -753,6 +753,7 @@ int main (int argc, char **argv)
 	DBusGConnection *bus;
 	char *basename;
 	NMVpnPluginUiInterface *plugin = NULL;
+	char *test_dir;
 
 	if (argc != 2)
 		FAIL ("args", "usage: %s <conf path>", argv[0]);
@@ -769,29 +770,33 @@ int main (int argc, char **argv)
 	ASSERT (plugin != NULL,
 	        "plugin-init", "failed to initialize UI plugin");
 
+	/* Strip off trailing '/' from tests directory if present */
+	test_dir = argv[1];
+	if (test_dir[strlen (test_dir) - 1] == '/')
+		test_dir[strlen (test_dir) - 1] = '\0';
 	/* The tests */
-	test_password_import (plugin, argv[1]);
-	test_password_export (plugin, argv[1]);
+	test_password_import (plugin, test_dir);
+	test_password_export (plugin, test_dir);
 
-	test_tls_import (plugin, argv[1]);
-	test_tls_export (plugin, argv[1]);
+	test_tls_import (plugin, test_dir);
+	test_tls_export (plugin, test_dir);
 
-	test_pkcs12_import (plugin, argv[1]);
-	test_pkcs12_export (plugin, argv[1]);
+	test_pkcs12_import (plugin, test_dir);
+	test_pkcs12_export (plugin, test_dir);
 
-	test_non_utf8_import (plugin, argv[1]);
+	test_non_utf8_import (plugin, test_dir);
 
-	test_static_key_import (plugin, argv[1]);
-	test_static_key_export (plugin, argv[1]);
+	test_static_key_import (plugin, test_dir);
+	test_static_key_export (plugin, test_dir);
 
-	test_port_import (plugin, "port-import", argv[1], "port.ovpn", "port", "2345");
-	test_port_export (plugin, "port-export", argv[1], "port.ovpn", "port.ovpntest");
+	test_port_import (plugin, "port-import", test_dir, "port.ovpn", "port", "2345");
+	test_port_export (plugin, "port-export", test_dir, "port.ovpn", "port.ovpntest");
 
-	test_port_import (plugin, "rport-import", argv[1], "rport.ovpn", "rport", "6789");
-	test_port_export (plugin, "rport-export", argv[1], "rport.ovpn", "rport.ovpntest");
+	test_port_import (plugin, "rport-import", test_dir, "rport.ovpn", "rport", "6789");
+	test_port_export (plugin, "rport-export", test_dir, "rport.ovpn", "rport.ovpntest");
 
-	test_tun_opts_import (plugin, argv[1]);
-	test_tun_opts_export (plugin, argv[1]);
+	test_tun_opts_import (plugin, test_dir);
+	test_tun_opts_export (plugin, test_dir);
 
 	g_object_unref (plugin);
 
