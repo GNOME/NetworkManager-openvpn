@@ -2,7 +2,7 @@
 /* nm-openvpn-service - openvpn integration with NetworkManager
  *
  * Copyright (C) 2005 - 2008 Tim Niemueller <tim@niemueller.de>
- * Copyright (C) 2005 - 2008 Dan Williams <dcbw@redhat.com>
+ * Copyright (C) 2005 - 2010 Dan Williams <dcbw@redhat.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,12 @@
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"
 #include "common/utils.h"
+
+#if !defined(DIST_VERSION)
+# define DIST_VERSION VERSION
+#endif
+
+static gboolean debug = FALSE;
 
 #define NM_OPENVPN_HELPER_PATH		LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
 
@@ -815,7 +821,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 
-	if (getenv ("OPENVPN_DEBUG")) {
+	if (debug) {
 		add_openvpn_arg (args, "--verb");
 		add_openvpn_arg (args, "10");
 	} else {
@@ -869,7 +875,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Up script, called when connection has been established or has been restarted */
 	add_openvpn_arg (args, "--up");
-	if (getenv ("OPENVPN_DEBUG"))
+	if (debug)
 		add_openvpn_arg (args, NM_OPENVPN_HELPER_PATH " --helper-debug");
 	else
 		add_openvpn_arg (args, NM_OPENVPN_HELPER_PATH);
@@ -1248,8 +1254,35 @@ main (int argc, char *argv[])
 {
 	NMOpenvpnPlugin *plugin;
 	GMainLoop *main_loop;
+	gboolean persist = FALSE;
+	GOptionContext *opt_ctx = NULL;
+
+	GOptionEntry options[] = {
+		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, "Don't quit when VPN connection terminates", NULL },
+		{ "debug", 0, 0, G_OPTION_ARG_NONE, &debug, "Enable verbose debug logging (may expose passwords)", NULL },
+		{NULL}
+	};
 
 	g_type_init ();
+
+	/* Parse options */
+	opt_ctx = g_option_context_new ("");
+	g_option_context_set_translation_domain (opt_ctx, "UTF-8");
+	g_option_context_set_ignore_unknown_options (opt_ctx, FALSE);
+	g_option_context_set_help_enabled (opt_ctx, TRUE);
+	g_option_context_add_main_entries (opt_ctx, options, NULL);
+
+	g_option_context_set_summary (opt_ctx,
+		"nm-vpnc-service provides integrated OpenVPN capability to NetworkManager.");
+
+	g_option_context_parse (opt_ctx, &argc, &argv, NULL);
+	g_option_context_free (opt_ctx);
+
+	if (getenv ("OPENVPN_DEBUG"))
+		debug = TRUE;
+
+	if (debug)
+		g_message ("nm-openvpn-service (version " DIST_VERSION ") starting...");
 
 	if (system ("/sbin/modprobe tun") == -1)
 		exit (EXIT_FAILURE);
@@ -1260,9 +1293,8 @@ main (int argc, char *argv[])
 
 	main_loop = g_main_loop_new (NULL, FALSE);
 
-	g_signal_connect (plugin, "quit",
-				   G_CALLBACK (quit_mainloop),
-				   main_loop);
+	if (!persist)
+		g_signal_connect (plugin, "quit", G_CALLBACK (quit_mainloop), main_loop);
 
 	g_main_loop_run (main_loop);
 
