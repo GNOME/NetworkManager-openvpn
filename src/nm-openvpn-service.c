@@ -70,6 +70,8 @@ typedef struct {
 	char *username;
 	char *password;
 	char *priv_key_pass;
+	char *proxy_username;
+	char *proxy_password;
 	GIOChannel *socket_channel;
 	guint socket_channel_eventid;
 } NMOpenvpnPluginIOData;
@@ -102,6 +104,10 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_MSSFIX,               G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PROTO_TCP,            G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PORT,                 G_TYPE_INT, 1, 65535, FALSE },
+	{ NM_OPENVPN_KEY_HTTP_PROXY,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_HTTP_PROXY_PORT,      G_TYPE_INT, 1, 65535, FALSE },
+	{ NM_OPENVPN_KEY_HTTP_PROXY_RETRY,     G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_IP,            G_TYPE_STRING, 0, 0, TRUE },
 	{ NM_OPENVPN_KEY_RENEG_SECONDS,        G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -120,6 +126,7 @@ static ValidProperty valid_secrets[] = {
 	{ NM_OPENVPN_KEY_PASSWORD,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CERTPASS,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NOSECRET,             G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,  G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
 
@@ -283,7 +290,19 @@ nm_openvpn_disconnect_management_socket (NMOpenvpnPlugin *plugin)
 	g_io_channel_unref (io_data->socket_channel);
 
 	g_free (io_data->username);
+	g_free (io_data->proxy_username);
+
+	if (io_data->password)
+		memset (io_data->password, 0, strlen (io_data->password));
 	g_free (io_data->password);
+
+	if (io_data->priv_key_pass)
+		memset (io_data->priv_key_pass, 0, strlen (io_data->priv_key_pass));
+	g_free (io_data->priv_key_pass);
+
+	if (io_data->proxy_password)
+		memset (io_data->proxy_password, 0, strlen (io_data->proxy_password));
+	g_free (io_data->proxy_password);
 
 	g_free (priv->io_data);
 	priv->io_data = NULL;
@@ -338,6 +357,33 @@ get_detail (const char *input, const char *prefix)
 	return ret;
 }
 
+static void
+write_user_pass (GIOChannel *channel,
+                 const char *authtype,
+                 const char *user,
+                 const char *pass)
+{
+	char *quser, *qpass, *buf;
+
+	/* Quote strings passed back to openvpn */
+	quser = ovpn_quote_string (user);
+	qpass = ovpn_quote_string (pass);
+	buf = g_strdup_printf ("username \"%s\" \"%s\"\n"
+	                       "password \"%s\" \"%s\"\n",
+	                       authtype, quser,
+	                       authtype, qpass);
+	memset (qpass, 0, strlen (qpass));
+	g_free (qpass);
+	g_free (quser);
+
+	/* Will always write everything in blocking channels (on success) */
+	g_io_channel_write_chars (channel, buf, strlen (buf), NULL, NULL);
+	g_io_channel_flush (channel, NULL);
+
+	memset (buf, 0, strlen (buf));
+	g_free (buf);
+}
+
 static gboolean
 handle_management_socket (NMVPNPlugin *plugin,
                           GIOChannel *source,
@@ -347,7 +393,6 @@ handle_management_socket (NMVPNPlugin *plugin,
 	NMOpenvpnPluginIOData *io_data = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin)->io_data;
 	gboolean again = TRUE;
 	char *str = NULL, *auth = NULL, *buf;
-	gsize written;
 
 	if (!(condition & G_IO_IN))
 		return TRUE;
@@ -361,25 +406,9 @@ handle_management_socket (NMVPNPlugin *plugin,
 	auth = get_detail (str, ">PASSWORD:Need '");
 	if (auth) {
 		if (strcmp (auth, "Auth") == 0) {
-			if (io_data->username != NULL && io_data->password != NULL) {
-				char *quser, *qpass;
-
-				/* Quote strings passed back to openvpn */
-				quser = ovpn_quote_string (io_data->username);
-				qpass = ovpn_quote_string (io_data->password);
-				buf = g_strdup_printf ("username \"%s\" \"%s\"\n"
-				                       "password \"%s\" \"%s\"\n",
-				                       auth, quser,
-				                       auth, qpass);
-				memset (qpass, 0, strlen (qpass));
-				g_free (qpass);
-				g_free (quser);
-
-				/* Will always write everything in blocking channels (on success) */
-				g_io_channel_write_chars (source, buf, strlen (buf), &written, NULL);
-				g_io_channel_flush (source, NULL);
-				g_free (buf);
-			} else
+			if (io_data->username != NULL && io_data->password != NULL)
+				write_user_pass (source, auth, io_data->username, io_data->password);
+			else
 				nm_warning ("Auth requested but one of username or password is missing");
 		} else if (!strcmp (auth, "Private Key")) {
 			if (io_data->priv_key_pass) {
@@ -392,11 +421,16 @@ handle_management_socket (NMVPNPlugin *plugin,
 				g_free (qpass);
 
 				/* Will always write everything in blocking channels (on success) */
-				g_io_channel_write_chars (source, buf, strlen (buf), &written, NULL);
+				g_io_channel_write_chars (source, buf, strlen (buf), NULL, NULL);
 				g_io_channel_flush (source, NULL);
 				g_free (buf);
 			} else
 				nm_warning ("Certificate password requested but private key password == NULL");
+		} else if (strcmp (auth, "HTTP Proxy") == 0) {
+			if (io_data->proxy_username != NULL && io_data->proxy_password != NULL)
+				write_user_pass (source, auth, io_data->proxy_username, io_data->proxy_password);
+			else
+				nm_warning ("HTTP Proxy auth requested but either proxy username or password is missing");
 		} else {
 			nm_warning ("No clue what to send for username/password request for '%s'", auth);
 			if (out_failure)
@@ -686,7 +720,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  GError **error)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-	const char *openvpn_binary, *auth, *connection_type, *tmp;
+	const char *openvpn_binary, *auth, *connection_type, *tmp, *tmp2;
 	GPtrArray *args;
 	GSource *openvpn_watch;
 	GPid pid;
@@ -733,6 +767,19 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg (args, "--remote");
 		add_openvpn_arg (args, tmp);
 	}
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY);
+	tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PORT);
+	if (tmp && strlen (tmp) && tmp2 && strlen (tmp2)) {
+		add_openvpn_arg (args, "--http-proxy");
+		add_openvpn_arg (args, tmp);
+		add_openvpn_arg (args, tmp2);
+		add_openvpn_arg (args, "'auto'");  /* Automatic proxy auth method detection */
+	}
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_RETRY);
+	if (tmp && strlen (tmp))
+		add_openvpn_arg (args, "--http-proxy-retry");
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
 	if (tmp && !strcmp (tmp, "yes"))
@@ -988,24 +1035,28 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	*/
 	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
-	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		NMOpenvpnPluginIOData *io_data;
+	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
+	    || nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME)) {
 
-		io_data = g_new0 (NMOpenvpnPluginIOData, 1);
+		priv->io_data = g_malloc0 (sizeof (NMOpenvpnPluginIOData));
 
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME);
-		io_data->username = tmp ? g_strdup (tmp) : NULL;
+		priv->io_data->username = tmp ? g_strdup (tmp) : NULL;
 		/* Use the default username if it wasn't overridden by the user */
-		if (!io_data->username && default_username)
-			io_data->username = g_strdup (default_username);
+		if (!priv->io_data->username && default_username)
+			priv->io_data->username = g_strdup (default_username);
 
 		tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD);
-		io_data->password = tmp ? g_strdup (tmp) : NULL;
+		priv->io_data->password = tmp ? g_strdup (tmp) : NULL;
 
 		tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS);
-		io_data->priv_key_pass = tmp ? g_strdup (tmp) : NULL;
+		priv->io_data->priv_key_pass = tmp ? g_strdup (tmp) : NULL;
 
-		priv->io_data = io_data;
+		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
+		priv->io_data->proxy_username = tmp ? g_strdup (tmp) : NULL;
+
+		tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
+		priv->io_data->proxy_password = tmp ? g_strdup (tmp) : NULL;
 
 		nm_openvpn_schedule_connect_timer (plugin);
 	}
@@ -1048,6 +1099,11 @@ check_need_secrets (NMSettingVPN *s_vpn, gboolean *need_secrets)
 	} else {
 		/* Static key doesn't need passwords */
 	}
+
+	/* HTTP Proxy might require a password; assume so if there's an HTTP proxy username */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
+	if (tmp && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
+		*need_secrets = TRUE;
 
 	return ctype;
 }
