@@ -104,9 +104,10 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_MSSFIX,               G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PROTO_TCP,            G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PORT,                 G_TYPE_INT, 1, 65535, FALSE },
-	{ NM_OPENVPN_KEY_HTTP_PROXY,           G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_HTTP_PROXY_PORT,      G_TYPE_INT, 1, 65535, FALSE },
-	{ NM_OPENVPN_KEY_HTTP_PROXY_RETRY,     G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PROXY_TYPE,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PROXY_SERVER,         G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PROXY_PORT,           G_TYPE_INT, 1, 65535, FALSE },
+	{ NM_OPENVPN_KEY_PROXY_RETRY,          G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_IP,            G_TYPE_STRING, 0, 0, TRUE },
@@ -720,7 +721,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  GError **error)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-	const char *openvpn_binary, *auth, *connection_type, *tmp, *tmp2;
+	const char *openvpn_binary, *auth, *connection_type, *tmp, *tmp2, *tmp3, *tmp4;
 	GPtrArray *args;
 	GSource *openvpn_watch;
 	GPid pid;
@@ -768,18 +769,35 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg (args, tmp);
 	}
 
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY);
-	tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PORT);
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE);
+	tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER);
+	tmp3 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT);
+	tmp4 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY);
 	if (tmp && strlen (tmp) && tmp2 && strlen (tmp2)) {
-		add_openvpn_arg (args, "--http-proxy");
-		add_openvpn_arg (args, tmp);
-		add_openvpn_arg (args, tmp2);
-		add_openvpn_arg (args, "'auto'");  /* Automatic proxy auth method detection */
+		if (!strcmp (tmp, "http")) {
+			add_openvpn_arg (args, "--http-proxy");
+			add_openvpn_arg (args, tmp2);
+			if (tmp3 && strlen (tmp3))
+				add_openvpn_arg (args, tmp3);
+			add_openvpn_arg (args, "'auto'");  /* Automatic proxy auth method detection */
+			if (tmp4)
+				add_openvpn_arg (args, "--http-proxy-retry");
+		} else if (!strcmp (tmp, "socks")) {
+			add_openvpn_arg (args, "--socks-proxy");
+			add_openvpn_arg (args, tmp2);
+			if (tmp3 && strlen (tmp3))
+				add_openvpn_arg (args, tmp3);
+			if (tmp4)
+				add_openvpn_arg (args, "--socks-proxy-retry");
+		} else {
+			g_set_error (error,
+				         NM_VPN_PLUGIN_ERROR,
+				         NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+				         "Invalid proxy type '%s'.",
+				         tmp);
+			return FALSE;
+		}
 	}
-
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_RETRY);
-	if (tmp && strlen (tmp))
-		add_openvpn_arg (args, "--http-proxy-retry");
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
 	if (tmp && !strcmp (tmp, "yes"))
