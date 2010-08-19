@@ -63,6 +63,10 @@ gboolean auth_widget_save_secrets (GladeXML *xml,
 								   const char *uuid,
 								   const char *name);
 
+gboolean advanced_save_secrets (GHashTable *advanced,
+                                const char *uuid,
+                                const char *name);
+
 GtkFileFilter *tls_file_chooser_filter_new (gboolean pkcs_allowed);
 
 GtkFileFilter *sk_file_chooser_filter_new (void);

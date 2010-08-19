@@ -58,6 +58,8 @@
 #define PKCS12_TAG "pkcs12 "
 #define PORT_TAG "port "
 #define PROTO_TAG "proto "
+#define PROXY_TAG "http-proxy "
+#define PROXY_RETRY_TAG "http-proxy-retry"
 #define REMOTE_TAG "remote "
 #define RENEG_SEC_TAG "reneg-sec "
 #define RPORT_TAG "rport "
@@ -195,6 +197,46 @@ parse_port (const char *str, const char *line)
 
 	g_warning ("%s: invalid remote port in option '%s'", __func__, line);
 	return NULL;
+}
+
+static gboolean
+parse_http_proxy_auth (const char *str, char **out_user, char **out_pass)
+{
+	char *contents = NULL;
+	GError *error = NULL;
+	char **lines, **iter;
+
+	g_return_val_if_fail (out_user != NULL, FALSE);
+	g_return_val_if_fail (out_pass != NULL, FALSE);
+
+	if (!str || !strcmp (str, "stdin") || !strcmp (str, "auto"))
+		return TRUE;
+
+	/* Grab user/pass from authfile */
+	if (!g_file_get_contents (str, &contents, NULL, &error)) {
+		g_warning ("%s: unable to read HTTP proxy authfile '%s': (%d) %s",
+		           __func__, str, error ? error->code : -1,
+		           error && error->message ? error->message : "(unknown)");
+		g_clear_error (&error);
+		return FALSE;
+	}
+
+	lines = g_strsplit_set (contents, "\n\r", 0);
+	for (iter = lines; iter && *iter; iter++) {
+		if (!strlen (*iter))
+			continue;
+		if (!*out_user)
+			*out_user = g_strdup (g_strstrip (*iter));
+		else if (!*out_pass) {
+			*out_pass = g_strdup (g_strstrip (*iter));
+			break;
+		}
+	}
+	if (lines)
+		g_strfreev (lines);
+	g_free (contents);
+
+	return *out_user && *out_pass;
 }
 
 NMConnection *
@@ -343,6 +385,58 @@ do_import (const char *path, char **lines, GError **error)
 				} else
 					g_warning ("%s: invalid time length in option '%s'", __func__, *line);
 			}
+			g_strfreev (items);
+			continue;
+		}
+
+		if (!strncmp (*line, PROXY_RETRY_TAG, strlen (PROXY_RETRY_TAG))) {
+			nm_setting_vpn_add_data_item (s_vpn,
+			                              g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_RETRY),
+			                              g_strdup ("yes"));
+			continue;
+		}
+
+		if (!strncmp (*line, PROXY_TAG, strlen (PROXY_TAG))) {
+			gboolean success = FALSE;
+
+			items = get_args (*line + strlen (PROXY_TAG));
+			if (!items)
+				continue;
+
+			if (g_strv_length (items) >= 2) {
+				glong port;
+				char *s_port = NULL;
+				char *user = NULL, *pass = NULL;
+
+				if (g_strv_length (items) >= 3)
+					success = parse_http_proxy_auth (items[2], &user, &pass);
+
+				if (success) {
+					success = FALSE;
+					errno = 0;
+					port = strtol (items[1], NULL, 10);
+					if ((errno == 0) && (port > 0) && (port < 65536)) {
+						s_port = g_strdup_printf ("%d", (guint32) port);
+						success = TRUE;
+					}
+				}
+
+				if (success) {
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY, items[0]);
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PORT, s_port);
+					if (user)
+						nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, user);
+					if (pass)
+						nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, pass);
+				}
+				g_free (s_port);
+				g_free (user);
+				g_free (pass);
+			}
+
+			if (!success)
+				g_warning ("%s: invalid http proxy port in option '%s'", __func__, *line);
+
 			g_strfreev (items);
 			continue;
 		}

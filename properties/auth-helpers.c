@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /***************************************************************************
  *
- * Copyright (C) 2008 Dan Williams, <dcbw@redhat.com>
+ * Copyright (C) 2008 - 2010 Dan Williams, <dcbw@redhat.com>
  * Copyright (C) 2008 Tambet Ingo, <tambet@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -845,6 +845,10 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_FRAGMENT_SIZE,
 	NM_OPENVPN_KEY_TAP_DEV,
 	NM_OPENVPN_KEY_PROTO_TCP,
+	NM_OPENVPN_KEY_HTTP_PROXY,
+	NM_OPENVPN_KEY_HTTP_PROXY_PORT,
+	NM_OPENVPN_KEY_HTTP_PROXY_RETRY,
+	NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,
 	NM_OPENVPN_KEY_CIPHER,
 	NM_OPENVPN_KEY_AUTH,
 	NM_OPENVPN_KEY_TA_DIR,
@@ -874,11 +878,21 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 {
 	GHashTable *hash;
 	NMSettingVPN *s_vpn;
+	const char *secret;
 
 	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
 	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
 	nm_setting_vpn_foreach_data_item (s_vpn, copy_values, hash);
+
+	/* HTTP Proxy password is special */
+	secret = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
+	if (secret) {
+		g_hash_table_insert (hash,
+		                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD),
+		                     g_strdup (secret));
+	}
+
 	return hash;
 }
 
@@ -1116,6 +1130,38 @@ tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 	gtk_widget_set_sensitive (widget, use_auth);
 }
 
+#define PROXY_TYPE_NONE 0
+#define PROXY_TYPE_HTTP 1
+
+static void
+proxy_type_changed (GtkComboBox *combo, gpointer user_data)
+{
+	GladeXML *xml = GLADE_XML (user_data);
+	gboolean sensitive;
+	GtkWidget *widget;
+	guint32 i = 0;
+	const char *widgets[] = {
+		"proxy_desc_label", "proxy_server_label", "proxy_server_entry",
+		"proxy_port_label", "proxy_port_spinbutton", "proxy_retry_checkbutton",
+		"proxy_username_label", "proxy_password_label", "proxy_username_entry",
+		"proxy_password_entry", NULL
+	};
+
+	sensitive = (gtk_combo_box_get_active (combo) == PROXY_TYPE_HTTP);
+	while (widgets[i]) {
+		widget = glade_xml_get_widget (xml, widgets[i++]);
+		gtk_widget_set_sensitive (widget, sensitive);
+	}
+
+	/* HTTP Proxy option requires TCP; but don't reset the TCP checkbutton
+	 * to false when the user disables HTTP proxy; leave it checked.
+	 */
+	widget = glade_xml_get_widget (xml, "tcp_checkbutton");
+	if (sensitive == TRUE)
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+	gtk_widget_set_sensitive (widget, !sensitive);
+}
+
 #define TA_DIR_COL_NAME 0
 #define TA_DIR_COL_NUM 1
 
@@ -1125,8 +1171,11 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	GladeXML *xml;
 	GtkWidget *dialog = NULL;
 	char *glade_file = NULL;
-	GtkWidget *widget;
-	const char *value;
+	GtkWidget *widget, *combo;
+	const char *value, *value2;
+	GtkListStore *store;
+	GtkTreeIter iter;
+	guint32 active = 0;
 
 	g_return_val_if_fail (hash != NULL, NULL);
 
@@ -1169,6 +1218,56 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0.0);
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
+
+	/* Proxy support */
+	combo = glade_xml_get_widget (xml, "proxy_type_combo");
+
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter, 0, _("Not required"), -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter, 0, _("HTTP Proxy"), -1);
+
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY);
+	value2 = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_PORT);
+	if (value && strlen (value) && value2 && strlen (value2)) {
+		long int tmp = 8080;
+
+		active = 1;
+
+		widget = glade_xml_get_widget (xml, "proxy_server_entry");
+		gtk_entry_set_text (GTK_ENTRY (widget), value);
+
+		errno = 0;
+		tmp = strtol (value2, NULL, 10);
+		if (errno != 0 || tmp < 1 || tmp > 65535)
+			tmp = 8080;
+		widget = glade_xml_get_widget (xml, "proxy_port_spinbutton");
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
+
+		widget = glade_xml_get_widget (xml, "proxy_retry_checkbutton");
+		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_RETRY);
+		if (value && !strcmp (value, "yes"))
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
+		if (value && strlen (value)) {
+			widget = glade_xml_get_widget (xml, "proxy_username_entry");
+			gtk_entry_set_text (GTK_ENTRY (widget), value);
+		}
+
+		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
+		if (value && strlen (value)) {
+			widget = glade_xml_get_widget (xml, "proxy_password_entry");
+			gtk_entry_set_text (GTK_ENTRY (widget), value);
+		}
+	}
+
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
+	g_object_unref (store);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), active);
+	proxy_type_changed (GTK_COMBO_BOX (combo), xml);
+	g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (proxy_type_changed), xml);
 
 	widget = glade_xml_get_widget (xml, "port_checkbutton");
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (port_toggled_cb), xml);
@@ -1291,10 +1390,9 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		GtkListStore *store;
-		GtkTreeIter iter;
-		int direction = -1, active = -1;
+		int direction = -1;
 
+		active = -1;
 		widget = glade_xml_get_widget (xml, "tls_auth_checkbutton");
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
 		if (value && strlen (value))
@@ -1352,7 +1450,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	GtkWidget *widget;
 	GladeXML *xml;
 	const char *contype = NULL;
-	const char *value = NULL;
+	const char *value;
 
 	g_return_val_if_fail (dialog != NULL, NULL);
 	if (error)
@@ -1397,6 +1495,46 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		widget = glade_xml_get_widget (xml, "port_spinbutton");
 		port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_PORT), g_strdup_printf ("%d", port));
+	}
+
+	/* HTTP proxy support */
+	widget = glade_xml_get_widget (xml, "proxy_type_combo");
+	if (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == PROXY_TYPE_HTTP) {
+		widget = glade_xml_get_widget (xml, "proxy_server_entry");
+		value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+
+		if (value && strlen (value)) {
+			int proxy_port;
+
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_HTTP_PROXY), g_strdup (value));
+
+			widget = glade_xml_get_widget (xml, "proxy_port_spinbutton");
+			proxy_port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+			if (!proxy_port)
+				proxy_port = 8080;
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PORT),
+			                     g_strdup_printf ("%d", proxy_port));
+
+			widget = glade_xml_get_widget (xml, "proxy_retry_checkbutton");
+			if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_RETRY), g_strdup ("yes"));
+
+			widget = glade_xml_get_widget (xml, "proxy_username_entry");
+			value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+			if (value && strlen (value)) {
+				g_hash_table_insert (hash,
+				                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_USERNAME),
+				                     g_strdup (value));
+			}
+
+			widget = glade_xml_get_widget (xml, "proxy_password_entry");
+			value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+			if (value && strlen (value)) {
+				g_hash_table_insert (hash,
+				                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD),
+				                     g_strdup (value));
+			}
+		}
 	}
 
 	widget = glade_xml_get_widget (xml, "lzo_checkbutton");
@@ -1481,5 +1619,26 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	}
 
 	return hash;
+}
+
+gboolean
+advanced_save_secrets (GHashTable *advanced,
+                       const char *uuid,
+                       const char *name)
+{
+	const char *secret;
+	GnomeKeyringResult result;
+	gboolean ret;
+
+	secret = g_hash_table_lookup (advanced, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
+	if (secret && strlen (secret)) {
+		result = keyring_helpers_save_secret (uuid, name, NULL, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, secret);
+		ret = result == GNOME_KEYRING_RESULT_OK;
+		if (!ret)
+			g_warning ("%s: failed to save HTTP proxy password to keyring.", __func__);
+	} else
+		ret = keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
+
+	return ret;
 }
 

@@ -5,7 +5,7 @@
  * nm-openvpn.c : GNOME UI dialogs for configuring openvpn VPN connections
  *
  * Copyright (C) 2005 Tim Niemueller <tim@niemueller.de>
- * Copyright (C) 2008 Dan Williams, <dcbw@redhat.com>
+ * Copyright (C) 2008 - 2010 Dan Williams, <dcbw@redhat.com>
  * Based on work by David Zeuthen, <davidz@redhat.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -399,7 +399,13 @@ hash_copy_advanced (gpointer key, gpointer data, gpointer user_data)
 	NMSettingVPN *s_vpn = NM_SETTING_VPN (user_data);
 	const char *value = (const char *) data;
 
-	nm_setting_vpn_add_data_item (s_vpn, (const char *) key, value);
+	g_return_if_fail (value && strlen (value));
+
+	/* HTTP Proxy password is a secret, not a data item */
+	if (!strcmp (value, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
+		nm_setting_vpn_add_secret (s_vpn, (const char *) key, value);
+	else
+		nm_setting_vpn_add_data_item (s_vpn, (const char *) key, value);
 }
 
 static const char *
@@ -483,6 +489,8 @@ save_secrets (NMVpnPluginUiWidgetInterface *iface,
 	auth_type = get_auth_type (priv->xml);
 	if (auth_type)
 		ret = auth_widget_save_secrets (priv->xml, auth_type, uuid, id);
+	if (ret)
+		ret = advanced_save_secrets (priv->advanced, uuid, id);
 
 	if (!ret)
 		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR,

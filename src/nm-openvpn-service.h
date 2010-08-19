@@ -50,6 +50,10 @@
 #define NM_OPENVPN_KEY_MSSFIX "mssfix"
 #define NM_OPENVPN_KEY_PORT "port"
 #define NM_OPENVPN_KEY_PROTO_TCP "proto-tcp"
+#define NM_OPENVPN_KEY_HTTP_PROXY "http-proxy"
+#define NM_OPENVPN_KEY_HTTP_PROXY_PORT "http-proxy-port"
+#define NM_OPENVPN_KEY_HTTP_PROXY_RETRY "http-proxy-retry"
+#define NM_OPENVPN_KEY_HTTP_PROXY_USERNAME "http-proxy-username"
 #define NM_OPENVPN_KEY_REMOTE "remote"
 #define NM_OPENVPN_KEY_REMOTE_IP "remote-ip"
 #define NM_OPENVPN_KEY_STATIC_KEY "static-key"
@@ -63,6 +67,7 @@
 
 #define NM_OPENVPN_KEY_PASSWORD "password"
 #define NM_OPENVPN_KEY_CERTPASS "cert-pass"
+#define NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD "http-proxy-password"
 /* Internal auth-dialog -> service token indicating that no secrets are
  * required for the connection.
  */
