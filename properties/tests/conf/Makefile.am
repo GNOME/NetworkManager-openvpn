@@ -7,6 +7,9 @@ EXTRA_DIST = \
 	static.key \
 	static.ovpn \
 	tls.ovpn \
-	tun-opts.conf
+	tun-opts.conf \
+	proxy-http.ovpn \
+	httpauthfile \
+	proxy-socks.ovpn
 
 

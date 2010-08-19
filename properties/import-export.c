@@ -202,24 +202,35 @@ parse_port (const char *str, const char *line)
 }
 
 static gboolean
-parse_http_proxy_auth (const char *str, char **out_user, char **out_pass)
+parse_http_proxy_auth (const char *path,
+                       const char *file,
+                       char **out_user,
+                       char **out_pass)
 {
-	char *contents = NULL;
+	char *contents = NULL, *abspath = NULL, *tmp;
 	GError *error = NULL;
 	char **lines, **iter;
 
 	g_return_val_if_fail (out_user != NULL, FALSE);
 	g_return_val_if_fail (out_pass != NULL, FALSE);
 
-	if (!str || !strcmp (str, "stdin") || !strcmp (str, "auto"))
+	if (!file || !strcmp (file, "stdin") || !strcmp (file, "auto") || !strcmp (file, "'auto'"))
 		return TRUE;
 
+	if (!g_path_is_absolute (file)) {
+		tmp = g_path_get_dirname (path);
+		abspath = g_build_path ("/", tmp, file, NULL);
+		g_free (tmp);
+	} else
+		abspath = g_strdup (file);
+
 	/* Grab user/pass from authfile */
-	if (!g_file_get_contents (str, &contents, NULL, &error)) {
+	if (!g_file_get_contents (abspath, &contents, NULL, &error)) {
 		g_warning ("%s: unable to read HTTP proxy authfile '%s': (%d) %s",
-		           __func__, str, error ? error->code : -1,
+		           __func__, abspath, error ? error->code : -1,
 		           error && error->message ? error->message : "(unknown)");
 		g_clear_error (&error);
+		g_free (abspath);
 		return FALSE;
 	}
 
@@ -237,6 +248,7 @@ parse_http_proxy_auth (const char *str, char **out_user, char **out_pass)
 	if (lines)
 		g_strfreev (lines);
 	g_free (contents);
+	g_free (abspath);
 
 	return *out_user && *out_pass;
 }
@@ -404,11 +416,15 @@ do_import (const char *path, char **lines, GError **error)
 		socks_proxy = g_str_has_prefix (*line, SOCKS_PROXY_TAG);
 		if ((http_proxy || socks_proxy) && !proxy_set) {
 			gboolean success = FALSE;
+			const char *proxy_type = NULL;
 
-			if (http_proxy)
+			if (http_proxy) {
 				items = get_args (*line + strlen (HTTP_PROXY_TAG));
-			else if (socks_proxy)
+				proxy_type = "http";
+			} else if (socks_proxy) {
 				items = get_args (*line + strlen (SOCKS_PROXY_TAG));
+				proxy_type = "socks";
+			}
 			if (!items)
 				continue;
 
@@ -417,10 +433,9 @@ do_import (const char *path, char **lines, GError **error)
 				char *s_port = NULL;
 				char *user = NULL, *pass = NULL;
 
+				success = TRUE;
 				if (http_proxy && g_strv_length (items) >= 3)
-					success = parse_http_proxy_auth (items[2], &user, &pass);
-				else if (socks_proxy)
-					success = TRUE;
+					success = parse_http_proxy_auth (path, items[2], &user, &pass);
 
 				if (success) {
 					success = FALSE;
@@ -432,7 +447,9 @@ do_import (const char *path, char **lines, GError **error)
 					}
 				}
 
-				if (success) {
+				if (success && proxy_type) {
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, proxy_type);
+
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, items[0]);
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, s_port);
 					if (user)
@@ -447,7 +464,7 @@ do_import (const char *path, char **lines, GError **error)
 			}
 
 			if (!success)
-				g_warning ("%s: invalid http proxy port in option '%s'", __func__, *line);
+				g_warning ("%s: invalid proxy option '%s'", __func__, *line);
 
 			g_strfreev (items);
 			continue;
@@ -666,6 +683,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	gboolean use_lzo = FALSE;
 	gboolean reneg_exists = FALSE;
 	guint32 reneg = 0;
+	const char *proxy_type = NULL;
+	const char *proxy_server = NULL;
+	const char *proxy_port = NULL;
+	const char *proxy_retry = NULL;
 
 	s_con = NM_SETTING_CONNECTION (nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION));
 	g_assert (s_con);
@@ -842,6 +863,27 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			         tls_auth,
 			         tls_auth_dir ? " " : "",
 			         tls_auth_dir ? tls_auth_dir : "");
+		}
+	}
+
+	/* Proxy stuff */
+	proxy_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE);
+	if (proxy_type && strlen (proxy_type)) {
+		proxy_server = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER);
+		proxy_port = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT);
+		proxy_retry = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY);
+		if (!strcmp (proxy_type, "http") && proxy_server && proxy_port) {
+			if (!proxy_port)
+				proxy_port = "8080";
+			fprintf (f, "http-proxy %s %s\n", proxy_server, proxy_port);
+			if (proxy_retry && !strcmp (proxy_retry, "yes"))
+				fprintf (f, "http-proxy-retry\n");
+		} else if (!strcmp (proxy_type, "socks") && proxy_server && proxy_port) {
+			if (!proxy_port)
+				proxy_port = "1080";
+			fprintf (f, "socks-proxy %s %s\n", proxy_server, proxy_port);
+			if (proxy_retry && !strcmp (proxy_retry, "yes"))
+				fprintf (f, "socks-proxy-retry\n");
 		}
 	}
 
