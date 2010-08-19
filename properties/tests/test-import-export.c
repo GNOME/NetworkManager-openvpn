@@ -747,6 +747,177 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	g_free (path);
 }
 
+static void
+test_proxy_http_import (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection ("proxy-http-import", plugin, dir, "proxy-http.ovpn");
+	ASSERT (connection != NULL, "proxy-http-import", "failed to import connection");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        "proxy-http-import", "missing 'vpn' setting");
+
+	/* Data items */
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "0");
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE, "test.server.com");
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_PORT, "443");
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_CERT, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_KEY, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_TA, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_CIPHER, "AES-256-CBC");
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, "http");
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, "10.1.1.1");
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_PORT, "8080");
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, "myusername");
+	test_secret ("proxy-http-import-secrets", s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, "mypassword");
+
+	g_object_unref (connection);
+}
+
+#define PROXY_HTTP_EXPORTED_NAME "proxy-http.ovpntest"
+static void
+test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+	int ret;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection ("proxy-http-export", plugin, dir, "proxy-http.ovpn");
+	ASSERT (connection != NULL, "proxy-http-export", "failed to import connection");
+
+	path = g_build_path ("/", dir, PROXY_HTTP_EXPORTED_NAME, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL ("proxy-http-export", "export failed with missing error");
+		else
+			FAIL ("proxy-http-export", "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection ("proxy-http-export", plugin, dir, PROXY_HTTP_EXPORTED_NAME);
+	ret = unlink (path);
+	ASSERT (reimported != NULL, "proxy-http-export", "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	/* Also clear the HTTP Proxy username.  We don't export that either since it
+	 * goes into a separate authfile.
+	 */
+	s_vpn = NM_SETTING_VPN (nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN));
+	nm_setting_vpn_remove_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        "proxy-http-export", "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
+static void
+test_proxy_socks_import (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection ("proxy-socks-import", plugin, dir, "proxy-socks.ovpn");
+	ASSERT (connection != NULL, "proxy-socks-import", "failed to import connection");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        "proxy-socks-import", "missing 'vpn' setting");
+
+	/* Data items */
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "0");
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE, "test.server.com");
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_PORT, "443");
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_CERT, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_KEY, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_TA, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_CIPHER, "AES-256-CBC");
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, "socks");
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, "10.1.1.1");
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_PORT, "1080");
+
+	g_object_unref (connection);
+}
+
+#define PROXY_SOCKS_EXPORTED_NAME "proxy-socks.ovpntest"
+static void
+test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+	int ret;
+
+	connection = get_basic_connection ("proxy-socks-export", plugin, dir, "proxy-socks.ovpn");
+	ASSERT (connection != NULL, "proxy-socks-export", "failed to import connection");
+
+	path = g_build_path ("/", dir, PROXY_SOCKS_EXPORTED_NAME, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL ("proxy-socks-export", "export failed with missing error");
+		else
+			FAIL ("proxy-socks-export", "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection ("proxy-socks-export", plugin, dir, PROXY_SOCKS_EXPORTED_NAME);
+	ret = unlink (path);
+	ASSERT (reimported != NULL, "proxy-socks-export", "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        "proxy-socks-export", "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
@@ -806,6 +977,12 @@ int main (int argc, char **argv)
 
 	test_tun_opts_import (plugin, test_dir);
 	test_tun_opts_export (plugin, test_dir);
+
+	test_proxy_http_import (plugin, test_dir);
+	test_proxy_http_export (plugin, test_dir);
+
+	test_proxy_socks_import (plugin, test_dir);
+	test_proxy_socks_export (plugin, test_dir);
 
 	g_object_unref (plugin);
 
