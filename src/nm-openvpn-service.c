@@ -777,16 +777,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		if (!strcmp (tmp, "http")) {
 			add_openvpn_arg (args, "--http-proxy");
 			add_openvpn_arg (args, tmp2);
-			if (tmp3 && strlen (tmp3))
-				add_openvpn_arg (args, tmp3);
+			add_openvpn_arg (args, tmp3 ? tmp3 : "8080");
 			add_openvpn_arg (args, "'auto'");  /* Automatic proxy auth method detection */
 			if (tmp4)
 				add_openvpn_arg (args, "--http-proxy-retry");
 		} else if (!strcmp (tmp, "socks")) {
 			add_openvpn_arg (args, "--socks-proxy");
 			add_openvpn_arg (args, tmp2);
-			if (tmp3 && strlen (tmp3))
-				add_openvpn_arg (args, tmp3);
+			add_openvpn_arg (args, tmp3 ? tmp3 : "1080");
 			if (tmp4)
 				add_openvpn_arg (args, "--socks-proxy-retry");
 		} else {
