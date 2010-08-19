@@ -58,8 +58,10 @@
 #define PKCS12_TAG "pkcs12 "
 #define PORT_TAG "port "
 #define PROTO_TAG "proto "
-#define PROXY_TAG "http-proxy "
-#define PROXY_RETRY_TAG "http-proxy-retry"
+#define HTTP_PROXY_TAG "http-proxy "
+#define HTTP_PROXY_RETRY_TAG "http-proxy-retry"
+#define SOCKS_PROXY_TAG "socks-proxy "
+#define SOCKS_PROXY_RETRY_TAG "socks-proxy-retry"
 #define REMOTE_TAG "remote "
 #define RENEG_SEC_TAG "reneg-sec "
 #define RPORT_TAG "rport "
@@ -252,6 +254,7 @@ do_import (const char *path, char **lines, GError **error)
 	const char *ctype = NULL;
 	char *basename;
 	char *default_path, *tmp, *tmp2;
+	gboolean http_proxy = FALSE, socks_proxy = FALSE, proxy_set = FALSE;
 
 	connection = nm_connection_new ();
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
@@ -281,7 +284,7 @@ do_import (const char *path, char **lines, GError **error)
 	g_free (basename);
 
 	for (line = lines; *line; line++) {
-		char *comment, **items, *leftover = NULL;
+		char *comment, **items = NULL, *leftover = NULL;
 
 		if ((comment = strchr (*line, '#')))
 			*comment = '\0';
@@ -389,17 +392,23 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 
-		if (!strncmp (*line, PROXY_RETRY_TAG, strlen (PROXY_RETRY_TAG))) {
+		if (   !strncmp (*line, HTTP_PROXY_RETRY_TAG, strlen (HTTP_PROXY_RETRY_TAG))
+		    || !strncmp (*line, SOCKS_PROXY_RETRY_TAG, strlen (SOCKS_PROXY_RETRY_TAG))) {
 			nm_setting_vpn_add_data_item (s_vpn,
-			                              g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_RETRY),
+			                              g_strdup (NM_OPENVPN_KEY_PROXY_RETRY),
 			                              g_strdup ("yes"));
 			continue;
 		}
 
-		if (!strncmp (*line, PROXY_TAG, strlen (PROXY_TAG))) {
+		http_proxy = g_str_has_prefix (*line, HTTP_PROXY_TAG);
+		socks_proxy = g_str_has_prefix (*line, SOCKS_PROXY_TAG);
+		if ((http_proxy || socks_proxy) && !proxy_set) {
 			gboolean success = FALSE;
 
-			items = get_args (*line + strlen (PROXY_TAG));
+			if (http_proxy)
+				items = get_args (*line + strlen (HTTP_PROXY_TAG));
+			else if (socks_proxy)
+				items = get_args (*line + strlen (SOCKS_PROXY_TAG));
 			if (!items)
 				continue;
 
@@ -408,8 +417,10 @@ do_import (const char *path, char **lines, GError **error)
 				char *s_port = NULL;
 				char *user = NULL, *pass = NULL;
 
-				if (g_strv_length (items) >= 3)
+				if (http_proxy && g_strv_length (items) >= 3)
 					success = parse_http_proxy_auth (items[2], &user, &pass);
+				else if (socks_proxy)
+					success = TRUE;
 
 				if (success) {
 					success = FALSE;
@@ -422,12 +433,13 @@ do_import (const char *path, char **lines, GError **error)
 				}
 
 				if (success) {
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY, items[0]);
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PORT, s_port);
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, items[0]);
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, s_port);
 					if (user)
 						nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, user);
 					if (pass)
 						nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, pass);
+					proxy_set = TRUE;
 				}
 				g_free (s_port);
 				g_free (user);
