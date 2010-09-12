@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-12 08:40+0100\n"
-"PO-Revision-Date: 2010-03-12 08:40+0100\n"
+"POT-Creation-Date: 2010-09-12 20:02+0200\n"
+"PO-Revision-Date: 2010-09-12 20:03+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -34,11 +34,11 @@ msgstr "_Användarnamn:"
 msgid "_Domain:"
 msgstr "_Domän:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:342
+#: ../auth-dialog/gnome-two-password-dialog.c:346
 msgid "Connect _anonymously"
 msgstr "Anslut anon_ymt"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:347
+#: ../auth-dialog/gnome-two-password-dialog.c:351
 msgid "Connect as _user:"
 msgstr "Anslut som _användare:"
 
@@ -84,55 +84,68 @@ msgid "Choose an OpenVPN static key..."
 msgstr "Välj en statisk OpenVPN-nyckel..."
 
 #: ../properties/auth-helpers.c:326
-#: ../properties/auth-helpers.c:1057
-#: ../properties/auth-helpers.c:1311
+#: ../properties/auth-helpers.c:1078
+#: ../properties/auth-helpers.c:1443
 msgid "None"
 msgstr "Ingen"
 
-#: ../properties/auth-helpers.c:769
+#: ../properties/auth-helpers.c:775
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM eller PKCS#12-certifikat (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:770
+#: ../properties/auth-helpers.c:776
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM-certifikat (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:830
+#: ../properties/auth-helpers.c:836
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statiska OpenVPN-nycklar (*.key)"
 
-#: ../properties/auth-helpers.c:974
-#: ../properties/auth-helpers.c:1049
+#: ../properties/auth-helpers.c:995
+#: ../properties/auth-helpers.c:1070
 msgid "Default"
 msgstr "Standard"
 
-#: ../properties/auth-helpers.c:1059
+#: ../properties/auth-helpers.c:1080
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1061
+#: ../properties/auth-helpers.c:1082
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1063
+#: ../properties/auth-helpers.c:1084
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1065
+#: ../properties/auth-helpers.c:1086
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1067
+#: ../properties/auth-helpers.c:1088
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1069
+#: ../properties/auth-helpers.c:1090
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1071
+#: ../properties/auth-helpers.c:1092
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
+
+#: ../properties/auth-helpers.c:1245
+#: ../properties/nm-openvpn-dialog.glade.h:16
+msgid "Not required"
+msgstr "Krävs inte"
+
+#: ../properties/auth-helpers.c:1247
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/auth-helpers.c:1249
+msgid "SOCKS"
+msgstr "SOCKS"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -183,126 +196,158 @@ msgid "<i>If key direction is used, it must be the opposite of that used on the 
 msgstr "<i>Om nyckelriktning används så måste den vara motsatsen till den som används på VPN-parten.  Till exempel om parten använder \"1\" måste denna anslutning vara \"0\".  Om du är osäker vilket värde du ska använda kan du kontakta din systemadministratör.</i>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:7
+msgid "<i>Select this option if your organization requires the use of a proxy server to access the Internet.</i>"
+msgstr "<i>Välj detta alternativ om din organisation kräver att en proxyserver används för att komma åt Internet.</i>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "Ad_vanced..."
 msgstr "A_vancerat..."
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:9
 msgid "CA Certificate:"
 msgstr "CA-certifikat:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Cipher:"
 msgstr "Skiffer:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:10
+#: ../properties/nm-openvpn-dialog.glade.h:11
 msgid "General"
 msgstr "Allmänt"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
+#: ../properties/nm-openvpn-dialog.glade.h:12
 msgid "HMAC Authentication:"
 msgstr "HMAC-autentisering:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:12
+#: ../properties/nm-openvpn-dialog.glade.h:13
 msgid "Key Direction:"
 msgstr "Nyckelriktning:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
+#: ../properties/nm-openvpn-dialog.glade.h:14
 msgid "Key File:"
 msgstr "Nyckelfil:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
+#: ../properties/nm-openvpn-dialog.glade.h:15
 msgid "Local IP Address:"
 msgstr "Lokal IP-adress:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:17
 msgid "OpenVPN Advanced Options"
 msgstr "Avancerade alternativ för OpenVPN"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Password:"
 msgstr "Lösenord:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
+#: ../properties/nm-openvpn-dialog.glade.h:19
+msgid "Port:"
+msgstr "Port:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:20
 msgid "Private Key Password:"
 msgstr "Lösenord för privat nyckel:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Private Key:"
 msgstr "Privat nyckel:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:22
+msgid "Proxies"
+msgstr "Proxyservrar"
+
+#: ../properties/nm-openvpn-dialog.glade.h:23
+msgid "Proxy Password:"
+msgstr "Lösenord för proxy:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:24
+msgid "Proxy Type:"
+msgstr "Proxytyp:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:25
+msgid "Proxy Username:"
+msgstr "Användarnamn för proxy:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Remote IP Address:"
 msgstr "Fjärr-IP-adress:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
 msgstr "Begränsa TCP Maximum Segment Size (MSS) för tunneln"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:28
+msgid "Retry indefinitely when errors occur"
+msgstr "Försök om och om igen när fel uppstår"
+
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "Security"
 msgstr "Säkerhet"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:30
+msgid "Server Address:"
+msgstr "Serveradress:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:31
 msgid "Show passwords"
 msgstr "Visa lösenord"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:32
 msgid "Static Key:"
 msgstr "Statisk nyckel:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:33
 msgid "Subject Match:"
 msgstr "Matcha följande:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:34
 msgid "TLS Authentication"
 msgstr "TLS-autentisering"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:35
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:36
 msgid "Use L_ZO data compression"
 msgstr "Använd L_ZO-datakomprimering"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:37
 msgid "Use a TA_P device"
 msgstr "Använd en TA_P-enhet"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
+#: ../properties/nm-openvpn-dialog.glade.h:38
 msgid "Use a _TCP connection"
 msgstr "Använd en _TCP-anslutning"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
+#: ../properties/nm-openvpn-dialog.glade.h:39
 msgid "Use additional TLS authentication"
 msgstr "Använd ytterligare TLS-autentisering"
 
-#: ../properties/nm-openvpn-dialog.glade.h:31
+#: ../properties/nm-openvpn-dialog.glade.h:40
 msgid "Use custom UDP _fragment size:"
 msgstr "Använd anpassad storlek på UDP-_fragment:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:32
+#: ../properties/nm-openvpn-dialog.glade.h:41
 msgid "Use custom _renegotiation interval:"
 msgstr "Använd anpassat intervall för _omförhandling:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:33
+#: ../properties/nm-openvpn-dialog.glade.h:42
 msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
 msgstr "Använd anpassad Maximum Transmission Unit (MTU) för _tunneln:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:34
+#: ../properties/nm-openvpn-dialog.glade.h:43
 msgid "Use custom gateway p_ort:"
 msgstr "Använd anpassad gatewayp_ort:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:35
+#: ../properties/nm-openvpn-dialog.glade.h:44
 msgid "User Certificate:"
 msgstr "Användarcertifikat:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:36
+#: ../properties/nm-openvpn-dialog.glade.h:45
 msgid "User name:"
 msgstr "Användarnamn:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:37
+#: ../properties/nm-openvpn-dialog.glade.h:46
 msgid "_Gateway:"
 msgstr "_Gateway:"
 
@@ -352,8 +397,6 @@ msgstr "_Gateway:"
 #~ msgstr "Anslutningstyp: X.509 med lösenordsautentisering"
 #~ msgid "Remote:  %s"
 #~ msgstr "Fjärr:  %s"
-#~ msgid "Port:  %s"
-#~ msgstr "Port:  %s"
 #~ msgid "Device: %s"
 #~ msgstr "Enhet: %s"
 #~ msgid "TAP"
@@ -506,8 +549,6 @@ msgstr "_Gateway:"
 #~ msgstr "CA-fil:"
 #~ msgid "Optional"
 #~ msgstr "Valfritt"
-#~ msgid "Username:"
-#~ msgstr "Användarnamn:"
 #~ msgid "X.509"
 #~ msgstr "X.509"
 #~ msgid "X.509/Pass"
@@ -573,8 +614,6 @@ msgstr "_Gateway:"
 #~ msgstr ""
 #~ "VPN-inloggningen misslyckades eftersom användarnamnet och lösenordet inte "
 #~ "accepterades."
-#~ msgid "_Group Password:"
-#~ msgstr "_Grupplösenord:"
 #~ msgid "Group Name:"
 #~ msgstr "Gruppnamn:"
 #~ msgid "Override user name"
