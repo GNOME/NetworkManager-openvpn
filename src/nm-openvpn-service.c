@@ -957,8 +957,9 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Query on the management socket for user/pass */
 	add_openvpn_arg (args, "--management-query-passwords");
 
-	/* do not let openvpn setup routes, NM will handle it */
+	/* do not let openvpn setup routes or addresses, NM will handle it */
 	add_openvpn_arg (args, "--route-noexec");
+	add_openvpn_arg (args, "--ifconfig-noexec");
 
 	/* Now append configuration options which are dependent on the configuration type */
 	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)) {
