@@ -1,17 +1,18 @@
 # Bulgarian translation of network-manager-openvpn po-file
-# Copyright (C) 2007, 2008 Free Software Foundation, Inc.
+# Copyright (C) 2007, 2008, 2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the network-manager-openvpn package.
-# Alexander Shopov <ash@contact.bg>, 2007, 2008.
+# Alexander Shopov <ash@contact.bg>, 2007, 2008, 2010.
 # Krasimir Chonov <mk2616@abv.bg>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-11 22:09+0200\n"
-"PO-Revision-Date: 2010-03-11 22:09+0200\n"
+"POT-Creation-Date: 2010-10-02 10:52+0300\n"
+"PO-Revision-Date: 2010-10-02 10:52+0300\n"
 "Last-Translator: Krasimir Chonov <mk2616@abv.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,11 +34,11 @@ msgstr "Потребителско _име:"
 msgid "_Domain:"
 msgstr "_Домейн:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:342
+#: ../auth-dialog/gnome-two-password-dialog.c:346
 msgid "Connect _anonymously"
 msgstr "_Анонимно свързване"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:347
+#: ../auth-dialog/gnome-two-password-dialog.c:351
 msgid "Connect as _user:"
 msgstr "Свързване _като потребителя:"
 
@@ -82,55 +83,68 @@ msgstr "Изберете личния си ключ…"
 msgid "Choose an OpenVPN static key..."
 msgstr "Изберете статичния ключ на OpenVPN…"
 
-#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1057
-#: ../properties/auth-helpers.c:1311
+#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1078
+#: ../properties/auth-helpers.c:1443
 msgid "None"
 msgstr "Няма"
 
-#: ../properties/auth-helpers.c:769
+#: ../properties/auth-helpers.c:775
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr ""
 "Сертификати във формат PEM или PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:770
+#: ../properties/auth-helpers.c:776
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Сертификати във формат PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:830
+#: ../properties/auth-helpers.c:836
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Статични ключове за OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:974 ../properties/auth-helpers.c:1049
+#: ../properties/auth-helpers.c:995 ../properties/auth-helpers.c:1070
 msgid "Default"
 msgstr "Стандартно"
 
-#: ../properties/auth-helpers.c:1059
+#: ../properties/auth-helpers.c:1080
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1061
+#: ../properties/auth-helpers.c:1082
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1063
+#: ../properties/auth-helpers.c:1084
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1065
+#: ../properties/auth-helpers.c:1086
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1067
+#: ../properties/auth-helpers.c:1088
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1069
+#: ../properties/auth-helpers.c:1090
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1071
+#: ../properties/auth-helpers.c:1092
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
+
+#: ../properties/auth-helpers.c:1245
+#: ../properties/nm-openvpn-dialog.glade.h:16
+msgid "Not required"
+msgstr "Не е задължително"
+
+#: ../properties/auth-helpers.c:1247
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/auth-helpers.c:1249
+msgid "SOCKS"
+msgstr "SOCKS"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -188,125 +202,161 @@ msgstr ""
 "администратор.</i>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:7
+msgid ""
+"<i>Select this option if your organization requires the use of a proxy "
+"server to access the Internet.</i>"
+msgstr ""
+"<i>Изберете тази настройка, ако организацията, в която се намирате, ви "
+"задължава да използвате сървър-посредник за връзката ви към Internet.</i>"
+
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "Ad_vanced..."
 msgstr "_Допълнителни…"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:9
 msgid "CA Certificate:"
 msgstr "Сертификат на сертифициращата организация:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Cipher:"
 msgstr "Шифър:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:10
+#: ../properties/nm-openvpn-dialog.glade.h:11
 msgid "General"
 msgstr "Общи"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
+#: ../properties/nm-openvpn-dialog.glade.h:12
 msgid "HMAC Authentication:"
 msgstr "Идентификация с HMAC:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:12
+#: ../properties/nm-openvpn-dialog.glade.h:13
 msgid "Key Direction:"
 msgstr "Посока на ключа:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
+#: ../properties/nm-openvpn-dialog.glade.h:14
 msgid "Key File:"
 msgstr "Файл-ключ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
+#: ../properties/nm-openvpn-dialog.glade.h:15
 msgid "Local IP Address:"
 msgstr "Локален адрес:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:17
 msgid "OpenVPN Advanced Options"
 msgstr "Допълнителни настройки на OpenVPN"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Password:"
 msgstr "Парола:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
+#: ../properties/nm-openvpn-dialog.glade.h:19
+msgid "Port:"
+msgstr "Порт:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:20
 msgid "Private Key Password:"
 msgstr "Частен ключ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Private Key:"
 msgstr "Частен ключ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:22
+msgid "Proxies"
+msgstr "Посредници"
+
+#: ../properties/nm-openvpn-dialog.glade.h:23
+msgid "Proxy Password:"
+msgstr "Парола за посредника:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:24
+msgid "Proxy Type:"
+msgstr "Вид посредник:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:25
+msgid "Proxy Username:"
+msgstr "Потребителско _име за посредника:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Remote IP Address:"
 msgstr "Отдалечен адрес:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
 msgstr "Ограничаване на максималния размер на сегментите (MSS) по TCP"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:28
+msgid "Retry indefinitely when errors occur"
+msgstr "При появата на грешка да се повтаря до безкрай"
+
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "Security"
 msgstr "Сигурност"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:30
+msgid "Server Address:"
+msgstr "Адрес на сървъра:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:31
 msgid "Show passwords"
 msgstr "Показване на паролите"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:32
 msgid "Static Key:"
 msgstr "Статичен ключ:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:33
 msgid "Subject Match:"
 msgstr "Съвпадане на темата:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:34
 msgid "TLS Authentication"
 msgstr "Идентификация с TSL"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:35
 msgid "Type:"
 msgstr "Вид:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:36
 msgid "Use L_ZO data compression"
 msgstr "Използване на _компресия LZO"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:37
 msgid "Use a TA_P device"
 msgstr "Използване на _устройство TAP"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
+#: ../properties/nm-openvpn-dialog.glade.h:38
 msgid "Use a _TCP connection"
 msgstr "Използване на _връзка по TCP"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
+#: ../properties/nm-openvpn-dialog.glade.h:39
 msgid "Use additional TLS authentication"
 msgstr "Използване на допълнителна идентификация с TLS"
 
-#: ../properties/nm-openvpn-dialog.glade.h:31
+#: ../properties/nm-openvpn-dialog.glade.h:40
 msgid "Use custom UDP _fragment size:"
 msgstr "Различен размер на _фрагментите на UDP:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:32
+#: ../properties/nm-openvpn-dialog.glade.h:41
 msgid "Use custom _renegotiation interval:"
 msgstr "_Различен интервал на предоговаряне:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:33
+#: ../properties/nm-openvpn-dialog.glade.h:42
 msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
 msgstr "Различен _максимален размер на пакета (MTU) за тунела:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:34
+#: ../properties/nm-openvpn-dialog.glade.h:43
 msgid "Use custom gateway p_ort:"
 msgstr "_Потребителски порт на шлюза:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:35
+#: ../properties/nm-openvpn-dialog.glade.h:44
 msgid "User Certificate:"
 msgstr "Потребителски сертификат:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:36
+#: ../properties/nm-openvpn-dialog.glade.h:45
 msgid "User name:"
 msgstr "Потребителско име:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:37
+#: ../properties/nm-openvpn-dialog.glade.h:46
 msgid "_Gateway:"
 msgstr "_Шлюз:"
