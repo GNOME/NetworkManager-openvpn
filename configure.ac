@@ -65,7 +65,11 @@ PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.74)
 AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
 
-PKG_CHECK_MODULES(NETWORK_MANAGER, NetworkManager >= 0.8.1 libnm-util >= 0.8.1 libnm-glib libnm-glib-vpn)
+PKG_CHECK_MODULES(NETWORK_MANAGER,
+                  NetworkManager >= 0.8.1.997
+                  libnm-util >= 0.8.1.997
+                  libnm-glib >= 0.8.1.997
+                  libnm-glib-vpn >= 0.8.1.997)
 AC_SUBST(NETWORK_MANAGER_CFLAGS)
 AC_SUBST(NETWORK_MANAGER_LIBS)
 
