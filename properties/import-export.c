@@ -680,17 +680,17 @@ do_import (const char *path, char **lines, GError **error)
 	}
 
 	if (!have_client && !have_sk) {
-		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
-		             "The file to import wasn't a valid OpenVPN client configuration.");
+		g_set_error_literal (error,
+		                     OPENVPN_PLUGIN_UI_ERROR,
+		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
+		                     _("The file to import wasn't a valid OpenVPN client configuration."));
 		g_object_unref (connection);
 		connection = NULL;
 	} else if (!have_remote) {
-		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
-		             "The file to import wasn't a valid OpenVPN configure (no remote).");
+		g_set_error_literal (error,
+		                     OPENVPN_PLUGIN_UI_ERROR,
+		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
+		                     _("The file to import wasn't a valid OpenVPN configure (no remote)."));
 		g_object_unref (connection);
 		connection = NULL;
 	} else {
@@ -800,7 +800,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	f = fopen (path, "w");
 	if (!f) {
-		g_set_error (error, 0, 0, "could not open file for writing");
+		g_set_error_literal (error, 0, 0, _("could not open file for writing"));
 		return FALSE;
 	}
 
@@ -808,7 +808,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && strlen (value))
 		gateways = value;
 	else {
-		g_set_error (error, 0, 0, "connection was incomplete (missing gateway)");
+		g_set_error_literal (error, 0, 0, _("connection was incomplete (missing gateway)"));
 		goto done;
 	}
 

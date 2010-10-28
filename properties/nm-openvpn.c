@@ -550,7 +550,7 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 
 	object = NM_VPN_PLUGIN_UI_WIDGET_INTERFACE (g_object_new (OPENVPN_TYPE_PLUGIN_UI_WIDGET, NULL));
 	if (!object) {
-		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR, 0, "could not create openvpn object");
+		g_set_error_literal (error, OPENVPN_PLUGIN_UI_ERROR, 0, _("could not create openvpn object"));
 		return NULL;
 	}
 
@@ -576,7 +576,7 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 
 	priv->widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "openvpn-vbox"));
 	if (!priv->widget) {
-		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR, 0, "could not load UI widget");
+		g_set_error_literal (error, OPENVPN_PLUGIN_UI_ERROR, 0, _("could not load UI widget"));
 		g_object_unref (object);
 		return NULL;
 	}
@@ -664,10 +664,10 @@ import (NMVpnPluginUiInterface *iface, const char *path, GError **error)
 	             && !g_str_has_suffix (ext, ".conf")
 	             && !g_str_has_suffix (ext, ".cnf")
 	             && !g_str_has_suffix (ext, ".ovpntest"))) {   /* Special extension for testcases */
-		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
-		             "unknown OpenVPN file extension");
+		g_set_error_literal (error,
+		                     OPENVPN_PLUGIN_UI_ERROR,
+		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
+		                     _("unknown OpenVPN file extension"));
 		goto out;
 	}
 
@@ -692,10 +692,10 @@ import (NMVpnPluginUiInterface *iface, const char *path, GError **error)
 
 	lines = g_strsplit_set (contents, "\r\n", 0);
 	if (g_strv_length (lines) <= 1) {
-		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE,
-		             "not a valid OpenVPN configuration file");
+		g_set_error_literal (error,
+		                     OPENVPN_PLUGIN_UI_ERROR,
+		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE,
+		                     _("not a valid OpenVPN configuration file"));
 		goto out;
 	}
 

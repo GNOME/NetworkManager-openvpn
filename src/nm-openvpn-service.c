@@ -255,11 +255,10 @@ nm_openvpn_properties_validate (NMSettingVPN *s_vpn, GError **error)
 
 	nm_setting_vpn_foreach_data_item (s_vpn, validate_one_property, &info);
 	if (!info.have_items) {
-		g_set_error (error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             "%s",
-		             _("No VPN configuration options."));
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		                     _("No VPN configuration options."));
 		return FALSE;
 	}
 
@@ -886,33 +885,30 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
 	if (!openvpn_binary) {
-		g_set_error (error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             "%s",
-		             _("Could not find the openvpn binary."));
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		                     _("Could not find the openvpn binary."));
 		return FALSE;
 	}
-  
- 	auth = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
- 	if (auth) {
- 		if (!validate_auth(auth)) {
- 			g_set_error (error,
- 			             NM_VPN_PLUGIN_ERROR,
- 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
- 			             "%s",
- 			             _("Invalid HMAC auth."));
- 			return FALSE;
- 		}
- 	}
+
+	auth = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
+	if (auth) {
+		if (!validate_auth(auth)) {
+			g_set_error_literal (error,
+			                     NM_VPN_PLUGIN_ERROR,
+			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			                     _("Invalid HMAC auth."));
+			return FALSE;
+		}
+	}
 
 	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
 	if (!validate_connection_type (connection_type)) {
-		g_set_error (error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             "%s",
-		             _("Invalid connection type."));
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		                     _("Invalid connection type."));
 		return FALSE;
 	}
 
@@ -1225,11 +1221,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
 		if (!tmp) {
 			/* Insufficient data (FIXME: this should really be detected when validating the properties */
-			g_set_error (error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "%s",
-			             _("Missing required local IP address for static key mode."));
+			g_set_error_literal (error,
+			                     NM_VPN_PLUGIN_ERROR,
+			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			                     _("Missing required local IP address for static key mode."));
 			free_openvpn_args (args);
 			return FALSE;
 		}
@@ -1238,11 +1233,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
 		if (!tmp) {
 			/* Insufficient data (FIXME: this should really be detected when validating the properties */
-			g_set_error (error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "%s",
-			             _("Missing required remote IP address for static key mode."));
+			g_set_error_literal (error,
+			                     NM_VPN_PLUGIN_ERROR,
+			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			                     _("Missing required remote IP address for static key mode."));
 			free_openvpn_args (args);
 			return FALSE;
 		}
