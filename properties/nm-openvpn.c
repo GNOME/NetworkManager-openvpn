@@ -659,18 +659,11 @@ import (NMVpnPluginUiInterface *iface, const char *path, GError **error)
 	char *ext;
 
 	ext = strrchr (path, '.');
-	if (!ext) {
-		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
-		             "unknown OpenVPN file extension");
-		goto out;
-	}
 
-	if (   strcmp (ext, ".ovpn")
-	    && strcmp (ext, ".conf")
-	    && strcmp (ext, ".cnf")
-	    && strcmp (ext, ".ovpntest")) {   /* Special extension for testcases */
+	if (!ext || (   !g_str_has_suffix (ext, ".ovpn")
+	             && !g_str_has_suffix (ext, ".conf")
+	             && !g_str_has_suffix (ext, ".cnf")
+	             && !g_str_has_suffix (ext, ".ovpntest"))) {   /* Special extension for testcases */
 		g_set_error (error,
 		             OPENVPN_PLUGIN_UI_ERROR,
 		             OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,

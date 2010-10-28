@@ -851,12 +851,13 @@ tls_default_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 	if (!ext)
 		return FALSE;
 
-	if (pkcs_allowed && !strcmp (ext, ".p12") && is_pkcs12 (filter_info->filename)) {
+	if (pkcs_allowed && g_str_has_suffix (ext, ".p12") && is_pkcs12 (filter_info->filename)) {
 		g_free (ext);
 		return TRUE;
 	}
 
-	if (strcmp (ext, ".pem") && strcmp (ext, ".crt") && strcmp (ext, ".key") && strcmp (ext, ".cer")) {
+	if (!g_str_has_suffix (ext, ".pem") && !g_str_has_suffix (ext, ".crt") &&
+		!g_str_has_suffix (ext, ".key") && !g_str_has_suffix (ext, ".cer")) {
 		g_free (ext);
 		return FALSE;
 	}
@@ -940,7 +941,7 @@ sk_default_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 	ext = g_ascii_strdown (p, -1);
 	if (!ext)
 		return FALSE;
-	if (strcmp (ext, ".key")) {
+	if (!g_str_has_suffix (ext, ".key")) {
 		g_free (ext);
 		return FALSE;
 	}
