@@ -148,7 +148,7 @@ handle_path_item (const char *line,
 }
 
 static char **
-get_args (const char *line)
+get_args (const char *line, int *nitems)
 {
 	char **split, **sanitized, **tmp, **tmp2;
 
@@ -161,6 +161,8 @@ get_args (const char *line)
 	}
 
 	g_strfreev (split);
+	*nitems = g_strv_length (sanitized);
+
 	return sanitized;
 }
 
@@ -267,6 +269,7 @@ do_import (const char *path, char **lines, GError **error)
 	char *basename;
 	char *default_path, *tmp, *tmp2;
 	gboolean http_proxy = FALSE, socks_proxy = FALSE, proxy_set = FALSE;
+	int nitems;
 
 	connection = nm_connection_new ();
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
@@ -306,28 +309,46 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 
 		if (   !strncmp (*line, CLIENT_TAG, strlen (CLIENT_TAG))
-		    || !strncmp (*line, TLS_CLIENT_TAG, strlen (TLS_CLIENT_TAG)))
+		    || !strncmp (*line, TLS_CLIENT_TAG, strlen (TLS_CLIENT_TAG))) {
 			have_client = TRUE;
+			continue;
+		}
 
 		if (!strncmp (*line, DEV_TAG, strlen (DEV_TAG))) {
-			if (strstr (*line, "tun")) {
-				/* ignore; default is tun */
-			} else if (strstr (*line, "tap")) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV, "yes");
+			items = get_args (*line + strlen (DEV_TAG), &nitems);
+			if (nitems == 1) {
+				if (g_str_has_prefix (items[0], "tun")) {
+					/* ignore; default is tun */
+				} else if (g_str_has_prefix (items[0], "tap"))
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV, "yes");
+				else
+					g_warning ("%s: unknown %s option '%s'", __func__, DEV_TAG, *line);
 			} else
-				g_warning ("%s: unknown dev option '%s'", __func__, *line);
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
 
+			g_strfreev (items);
 			continue;
 		}
 
 		if (!strncmp (*line, PROTO_TAG, strlen (PROTO_TAG))) {
-			if (strstr (*line, "udp")) {
-				/* ignore; udp is default */
-			} else if (strstr (*line, "tcp")) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+			items = get_args (*line + strlen (PROTO_TAG), &nitems);
+			if (nitems == 1) {
+				/* Valid parameters are "udp", "tcp-client" and "tcp-server".
+				 * 'tcp' isn't technically valid, but it used to be accepted so
+				 * we'll handle it here anyway.
+				 */
+				if (!strcmp (items[0], "udp")) {
+					/* ignore; udp is default */
+				} else if (   !strcmp (items[0], "tcp-client")
+				           || !strcmp (items[0], "tcp-server")
+				           || !strcmp (items[0], "tcp")) {
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+				} else
+					g_warning ("%s: unknown %s option '%s'", __func__, PROTO_TAG, *line);
 			} else
-				g_warning ("%s: unknown proto option '%s'", __func__, *line);
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
 
+			g_strfreev (items);
 			continue;
 		}
 
@@ -337,11 +358,8 @@ do_import (const char *path, char **lines, GError **error)
 		}
 
 		if (!strncmp (*line, TUNMTU_TAG, strlen (TUNMTU_TAG))) {
-			items = get_args (*line + strlen (TUNMTU_TAG));
-			if (!items)
-				continue;
-
-			if (g_strv_length (items) >= 1) {
+			items = get_args (*line + strlen (TUNMTU_TAG), &nitems);
+			if (nitems == 1) {
 				glong secs;
 
 				errno = 0;
@@ -352,17 +370,17 @@ do_import (const char *path, char **lines, GError **error)
 					g_free (tmp);
 				} else
 					g_warning ("%s: invalid size in option '%s'", __func__, *line);
-			}
+			} else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+
 			g_strfreev (items);
 			continue;
 		}
 
 		if (!strncmp (*line, FRAGMENT_TAG, strlen (FRAGMENT_TAG))) {
-			items = get_args (*line + strlen (FRAGMENT_TAG));
-			if (!items)
-				continue;
+			items = get_args (*line + strlen (FRAGMENT_TAG), &nitems);
 
-			if (g_strv_length (items) >= 1) {
+			if (nitems == 1) {
 				glong secs;
 
 				errno = 0;
@@ -373,7 +391,9 @@ do_import (const char *path, char **lines, GError **error)
 					g_free (tmp);
 				} else
 					g_warning ("%s: invalid size in option '%s'", __func__, *line);
-			}
+			} else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+
 			g_strfreev (items);
 			continue;
 		}
@@ -384,11 +404,9 @@ do_import (const char *path, char **lines, GError **error)
 		}
 
 		if (!strncmp (*line, RENEG_SEC_TAG, strlen (RENEG_SEC_TAG))) {
-			items = get_args (*line + strlen (RENEG_SEC_TAG));
-			if (!items)
-				continue;
+			items = get_args (*line + strlen (RENEG_SEC_TAG), &nitems);
 
-			if (g_strv_length (items) >= 1) {
+			if (nitems == 1) {
 				glong secs;
 
 				errno = 0;
@@ -419,22 +437,20 @@ do_import (const char *path, char **lines, GError **error)
 			const char *proxy_type = NULL;
 
 			if (http_proxy) {
-				items = get_args (*line + strlen (HTTP_PROXY_TAG));
+				items = get_args (*line + strlen (HTTP_PROXY_TAG), &nitems);
 				proxy_type = "http";
 			} else if (socks_proxy) {
-				items = get_args (*line + strlen (SOCKS_PROXY_TAG));
+				items = get_args (*line + strlen (SOCKS_PROXY_TAG), &nitems);
 				proxy_type = "socks";
 			}
-			if (!items)
-				continue;
 
-			if (g_strv_length (items) >= 2) {
+			if (nitems >= 2) {
 				glong port;
 				char *s_port = NULL;
 				char *user = NULL, *pass = NULL;
 
 				success = TRUE;
-				if (http_proxy && g_strv_length (items) >= 3)
+				if (http_proxy && nitems >= 3)
 					success = parse_http_proxy_auth (path, items[2], &user, &pass);
 
 				if (success) {
@@ -471,26 +487,26 @@ do_import (const char *path, char **lines, GError **error)
 		}
 
 		if (!strncmp (*line, REMOTE_TAG, strlen (REMOTE_TAG))) {
-			items = get_args (*line + strlen (REMOTE_TAG));
-			if (!items)
-				continue;
-
-			if (g_strv_length (items) >= 1) {
+			items = get_args (*line + strlen (REMOTE_TAG), &nitems);
+			if (nitems >= 1 && nitems <= 3) {
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, items[0]);
 				have_remote = TRUE;
 
-				if (g_strv_length (items) >= 2) {
+				if (nitems >= 2) {
 					tmp = parse_port (items[1], *line);
 					if (tmp) {
 						nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PORT, tmp);
 						g_free (tmp);
+
+						if (nitems == 3) {
+							 /* TODO */
+						}
 					}
 				}
-			}
-			g_strfreev (items);
+			} else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
 
-			if (!nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE))
-				g_warning ("%s: unknown remote option '%s'", __func__, *line);
+			g_strfreev (items);
 			continue;
 		}
 
@@ -501,19 +517,23 @@ do_import (const char *path, char **lines, GError **error)
 				continue;
 
 			if (!strncmp (*line, PORT_TAG, strlen (PORT_TAG)))
-				items = get_args (*line + strlen (PORT_TAG));
+				items = get_args (*line + strlen (PORT_TAG), &nitems);
 			else if (!strncmp (*line, RPORT_TAG, strlen (RPORT_TAG)))
-				items = get_args (*line + strlen (RPORT_TAG));
+				items = get_args (*line + strlen (RPORT_TAG), &nitems);
 			else
 				g_assert_not_reached ();
 
-			if (g_strv_length (items) >= 1) {
+			if (nitems == 1) {
 				tmp = parse_port (items[0], *line);
 				if (tmp) {
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PORT, tmp);
 					g_free (tmp);
 				}
-			}
+			} else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+
+			g_strfreev (items);
+			continue;
 		}
 
 		if ( handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL) &&
@@ -550,38 +570,36 @@ do_import (const char *path, char **lines, GError **error)
 		}
 
 		if (!strncmp (*line, CIPHER_TAG, strlen (CIPHER_TAG))) {
-			items = get_args (*line + strlen (CIPHER_TAG));
-			if (!items)
-				continue;
-
-			if (g_strv_length (items))
+			items = get_args (*line + strlen (CIPHER_TAG), &nitems);
+			if (nitems == 1)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER, items[0]);
+			else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
 
 			g_strfreev (items);
 			continue;
 		}
 
-		/* tls-remote */
 		if (!strncmp (*line, TLS_REMOTE_TAG, strlen (TLS_REMOTE_TAG))) {
 			char *unquoted = unquote (*line + strlen (TLS_REMOTE_TAG), NULL);
 
 			if (unquoted) {
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, unquoted);
 				g_free (unquoted);
-			}
+			} else
+				g_warning ("%s: unknown %s option '%s'", __func__, TLS_REMOTE_TAG, *line);
+
 			continue;
 		}
 
 		if (!strncmp (*line, IFCONFIG_TAG, strlen (IFCONFIG_TAG))) {
-			items = get_args (*line + strlen (IFCONFIG_TAG));
-			if (!items)
-				continue;
-
-			if (g_strv_length (items) == 2) {
+			items = get_args (*line + strlen (IFCONFIG_TAG), &nitems);
+			if (nitems == 2) {
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, items[0]);
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, items[1]);
 			} else
-				g_warning ("%s: unknown ifconfig option '%s'", __func__, *line);
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+
 			g_strfreev (items);
 			continue;
 		}
@@ -592,12 +610,11 @@ do_import (const char *path, char **lines, GError **error)
 		}
 
 		if (!strncmp (*line, AUTH_TAG, strlen (AUTH_TAG))) {
-			items = get_args (*line + strlen (AUTH_TAG));
-			if (!items)
-				continue;
-
-			if (g_strv_length (items))
+			items = get_args (*line + strlen (AUTH_TAG), &nitems);
+			if (nitems == 1)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH, items[0]);
+			else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
 			g_strfreev (items);
 			continue;
 		}
