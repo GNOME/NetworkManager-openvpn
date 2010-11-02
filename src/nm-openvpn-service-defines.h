@@ -34,6 +34,7 @@
 #define NM_OPENVPN_KEY_KEYSIZE "keysize"
 #define NM_OPENVPN_KEY_COMP_LZO "comp-lzo"
 #define NM_OPENVPN_KEY_CONNECTION_TYPE "connection-type"
+#define NM_OPENVPN_KEY_FLOAT "float"
 #define NM_OPENVPN_KEY_FRAGMENT_SIZE "fragment-size"
 #define NM_OPENVPN_KEY_KEY "key"
 #define NM_OPENVPN_KEY_LOCAL_IP "local-ip" /* ??? */

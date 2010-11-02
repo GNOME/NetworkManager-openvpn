@@ -52,6 +52,7 @@
 #define KEYSIZE_TAG "keysize "
 #define CLIENT_TAG "client"
 #define COMP_TAG "comp-lzo"
+#define FLOAT_TAG "float"
 #define DEV_TAG "dev "
 #define DEV_TYPE_TAG "dev-type "
 #define FRAGMENT_TAG "fragment "
@@ -439,6 +440,11 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 
+		if (!strncmp (*line, FLOAT_TAG, strlen (FLOAT_TAG))) {
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
+			continue;
+		}
+
 		if (!strncmp (*line, RENEG_SEC_TAG, strlen (RENEG_SEC_TAG))) {
 			items = get_args (*line + strlen (RENEG_SEC_TAG), &nitems);
 
@@ -816,6 +822,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	gboolean success = FALSE;
 	gboolean proto_udp = TRUE;
 	gboolean use_lzo = FALSE;
+	gboolean use_float = FALSE;
 	gboolean reneg_exists = FALSE;
 	guint32 reneg = 0;
 	gboolean keysize_exists = FALSE;
@@ -916,6 +923,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
 	if (value && !strcmp (value, "yes"))
 		use_lzo = TRUE;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT);
+	if (value && !strcmp (value, "yes"))
+		use_float = TRUE;
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER);
 	if (value && strlen (value))
@@ -1023,6 +1034,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	if (use_lzo)
 		fprintf (f, "comp-lzo yes\n");
+
+	if (use_float)
+		fprintf (f, "float\n");
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
 	if (value && strlen (value)) {

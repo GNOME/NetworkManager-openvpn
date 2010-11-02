@@ -979,6 +979,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_PORT,
 	NM_OPENVPN_KEY_COMP_LZO,
 	NM_OPENVPN_KEY_MSSFIX,
+	NM_OPENVPN_KEY_FLOAT,
 	NM_OPENVPN_KEY_TUNNEL_MTU,
 	NM_OPENVPN_KEY_FRAGMENT_SIZE,
 	NM_OPENVPN_KEY_TAP_DEV,
@@ -1667,6 +1668,12 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FLOAT);
+	if (value && !strcmp (value, "yes")) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "float_checkbutton"));
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+	}
+
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROTO_TCP);
 	if (value && !strcmp (value, "yes")) {
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
@@ -1939,6 +1946,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_MSSFIX), g_strdup ("yes"));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "float_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_FLOAT), g_strdup ("yes"));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))

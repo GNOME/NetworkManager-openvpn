@@ -1477,6 +1477,28 @@ config: remote-random</property>
                     <property name="position">8</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="float_checkbutton">
+                    <property name="label" translatable="yes">Accept authenticated packets from any address (F_loat)</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Allow remote peer to change its IP address and/or port number, such as due to DHCP (this is the default if --remote is not used).  --float when specified with --remote allows an OpenVPN session to initially connect to a  peer  at  a  known  address, however if packets arrive from a new address and pass all authentication tests, the new address will take control of the session.  This is useful when you are connecting to a peer which holds a dynamic address such as a dial-in user or DHCP client.
+
+Essentially, --float tells OpenVPN to accept authenticated packets from any address, not only the address which was specified in the --remote option.
+
+config: float</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">9</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="tab">
