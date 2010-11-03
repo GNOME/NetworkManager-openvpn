@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn NM_0_8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-29 07:48+0900\n"
-"PO-Revision-Date: 2010-07-30 00:12+0900\n"
+"POT-Creation-Date: 2010-11-03 19:18+0900\n"
+"PO-Revision-Date: 2010-11-03 19:17+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <takeshi.aihana@gmail.com>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,27 +25,27 @@ msgstr "パスワード(_P):"
 msgid "_Secondary Password:"
 msgstr "２番目のパスワード(_S):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:248
+#: ../auth-dialog/gnome-two-password-dialog.c:268
 msgid "_Username:"
 msgstr "ユーザ名(_U):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:250
+#: ../auth-dialog/gnome-two-password-dialog.c:270
 msgid "_Domain:"
 msgstr "ドメイン(_D):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:342
+#: ../auth-dialog/gnome-two-password-dialog.c:366
 msgid "Connect _anonymously"
 msgstr "匿名で接続する(_A)"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:347
+#: ../auth-dialog/gnome-two-password-dialog.c:371
 msgid "Connect as _user:"
 msgstr "ユーザとして接続する(_U):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:456
+#: ../auth-dialog/gnome-two-password-dialog.c:476
 msgid "_Remember password for this session"
 msgstr "このセッションのパスワードを記憶する(_R)"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:458
+#: ../auth-dialog/gnome-two-password-dialog.c:478
 msgid "_Save password in keyring"
 msgstr "パスワードをキーリングに保存する(_S)"
 
@@ -81,8 +82,8 @@ msgstr "秘密鍵の選択..."
 msgid "Choose an OpenVPN static key..."
 msgstr "OpenVPN 向け静的鍵の選択..."
 
-#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1063
-#: ../properties/auth-helpers.c:1317
+#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1078
+#: ../properties/auth-helpers.c:1443
 msgid "None"
 msgstr "なし"
 
@@ -98,37 +99,50 @@ msgstr "PEM 証明書の類 (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN の静的鍵 (*.key)"
 
-#: ../properties/auth-helpers.c:980 ../properties/auth-helpers.c:1055
+#: ../properties/auth-helpers.c:995 ../properties/auth-helpers.c:1070
 msgid "Default"
 msgstr "デフォルト"
 
-#: ../properties/auth-helpers.c:1065
+#: ../properties/auth-helpers.c:1080
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1067
+#: ../properties/auth-helpers.c:1082
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1069
+#: ../properties/auth-helpers.c:1084
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1071
+#: ../properties/auth-helpers.c:1086
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1073
+#: ../properties/auth-helpers.c:1088
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1075
+#: ../properties/auth-helpers.c:1090
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1077
+#: ../properties/auth-helpers.c:1092
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
+
+#: ../properties/auth-helpers.c:1245
+#: ../properties/nm-openvpn-dialog.glade.h:16
+msgid "Not required"
+msgstr "必要なし"
+
+#: ../properties/auth-helpers.c:1247
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/auth-helpers.c:1249
+msgid "SOCKS"
+msgstr "SOCKS"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -138,19 +152,19 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "OpenVPN サーバと互換性があります"
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:326
 msgid "Certificates (TLS)"
 msgstr "証明書 (TLS)"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:340
 msgid "Password"
 msgstr "パスワード"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:357
 msgid "Password with Certificates (TLS)"
 msgstr "証明書ありのパスワード (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn.c:369
 msgid "Static Key"
 msgstr "静的鍵"
 
@@ -186,125 +200,161 @@ msgstr ""
 "みて下さい。</i>"
 
 #: ../properties/nm-openvpn-dialog.glade.h:7
+msgid ""
+"<i>Select this option if your organization requires the use of a proxy "
+"server to access the Internet.</i>"
+msgstr ""
+"(<i>あなたの所属している組織がプロキシ・サーバを利用してインターネットに接続"
+"することを義務づけている場合は、このオプションを選択してみて下さい</i>)"
+
+#: ../properties/nm-openvpn-dialog.glade.h:8
 msgid "Ad_vanced..."
 msgstr "拡張(_V)..."
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
+#: ../properties/nm-openvpn-dialog.glade.h:9
 msgid "CA Certificate:"
 msgstr "CA の証明書:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
+#: ../properties/nm-openvpn-dialog.glade.h:10
 msgid "Cipher:"
 msgstr "暗号:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:10
+#: ../properties/nm-openvpn-dialog.glade.h:11
 msgid "General"
 msgstr "全般"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
+#: ../properties/nm-openvpn-dialog.glade.h:12
 msgid "HMAC Authentication:"
 msgstr "HMAC 認証:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:12
+#: ../properties/nm-openvpn-dialog.glade.h:13
 msgid "Key Direction:"
 msgstr "鍵の向き:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
+#: ../properties/nm-openvpn-dialog.glade.h:14
 msgid "Key File:"
 msgstr "鍵のファイル:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
+#: ../properties/nm-openvpn-dialog.glade.h:15
 msgid "Local IP Address:"
 msgstr "ローカルの IP-アドレス:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
+#: ../properties/nm-openvpn-dialog.glade.h:17
 msgid "OpenVPN Advanced Options"
 msgstr "OpenVPN の拡張オプション"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
+#: ../properties/nm-openvpn-dialog.glade.h:18
 msgid "Password:"
 msgstr "パスワード:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
+#: ../properties/nm-openvpn-dialog.glade.h:19
+msgid "Port:"
+msgstr "ポート番号:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:20
 msgid "Private Key Password:"
 msgstr "秘密鍵のパスワード:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
+#: ../properties/nm-openvpn-dialog.glade.h:21
 msgid "Private Key:"
 msgstr "秘密鍵:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
+#: ../properties/nm-openvpn-dialog.glade.h:22
+msgid "Proxies"
+msgstr "プロキシ"
+
+#: ../properties/nm-openvpn-dialog.glade.h:23
+msgid "Proxy Password:"
+msgstr "プロキシのパスワード:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:24
+msgid "Proxy Type:"
+msgstr "プロキシの種類:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:25
+msgid "Proxy Username:"
+msgstr "プロキシのユーザ名:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:26
 msgid "Remote IP Address:"
 msgstr "リモートの IP-アドレス:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
+#: ../properties/nm-openvpn-dialog.glade.h:27
 msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
 msgstr "トンネル TCP 最大セグメント長 (MSS) を制限する"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
+#: ../properties/nm-openvpn-dialog.glade.h:28
+msgid "Retry indefinitely when errors occur"
+msgstr "エラーが発生したら何回か繰り返す"
+
+#: ../properties/nm-openvpn-dialog.glade.h:29
 msgid "Security"
 msgstr "セキュリティ"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
+#: ../properties/nm-openvpn-dialog.glade.h:30
+msgid "Server Address:"
+msgstr "サーバのアドレス:"
+
+#: ../properties/nm-openvpn-dialog.glade.h:31
 msgid "Show passwords"
 msgstr "パスワードを表示する"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
+#: ../properties/nm-openvpn-dialog.glade.h:32
 msgid "Static Key:"
 msgstr "静的鍵:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
+#: ../properties/nm-openvpn-dialog.glade.h:33
 msgid "Subject Match:"
 msgstr "検索するサブジェクト:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
+#: ../properties/nm-openvpn-dialog.glade.h:34
 msgid "TLS Authentication"
 msgstr "TLS 認証"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
+#: ../properties/nm-openvpn-dialog.glade.h:35
 msgid "Type:"
 msgstr "種類:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
+#: ../properties/nm-openvpn-dialog.glade.h:36
 msgid "Use L_ZO data compression"
 msgstr "LZ0 データ圧縮を使用する(_Z)"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
+#: ../properties/nm-openvpn-dialog.glade.h:37
 msgid "Use a TA_P device"
 msgstr "TAP デバイスを使用する(_P)"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
+#: ../properties/nm-openvpn-dialog.glade.h:38
 msgid "Use a _TCP connection"
 msgstr "TCP 接続を使用する(_T)"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
+#: ../properties/nm-openvpn-dialog.glade.h:39
 msgid "Use additional TLS authentication"
 msgstr "追加の TLS 認証を使用する"
 
-#: ../properties/nm-openvpn-dialog.glade.h:31
+#: ../properties/nm-openvpn-dialog.glade.h:40
 msgid "Use custom UDP _fragment size:"
 msgstr "UDP のフラグメント・サイズを指定する(_F):"
 
-#: ../properties/nm-openvpn-dialog.glade.h:32
+#: ../properties/nm-openvpn-dialog.glade.h:41
 msgid "Use custom _renegotiation interval:"
 msgstr "再ネゴシエーションの間隔を指定する(_R):"
 
-#: ../properties/nm-openvpn-dialog.glade.h:33
+#: ../properties/nm-openvpn-dialog.glade.h:42
 msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
 msgstr "送信可能なフレームの最大サイズを指定する(_T):"
 
-#: ../properties/nm-openvpn-dialog.glade.h:34
+#: ../properties/nm-openvpn-dialog.glade.h:43
 msgid "Use custom gateway p_ort:"
 msgstr "ゲートウェイのポートを指定する(_O):"
 
-#: ../properties/nm-openvpn-dialog.glade.h:35
+#: ../properties/nm-openvpn-dialog.glade.h:44
 msgid "User Certificate:"
 msgstr "ユーザの証明書:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:36
+#: ../properties/nm-openvpn-dialog.glade.h:45
 msgid "User name:"
 msgstr "ユーザ名:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:37
+#: ../properties/nm-openvpn-dialog.glade.h:46
 msgid "_Gateway:"
 msgstr "ゲートウェイ(_G):"
