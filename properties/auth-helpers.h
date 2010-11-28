@@ -24,21 +24,20 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include <nm-connection.h>
 #include <nm-setting-vpn.h>
 
 typedef void (*ChangedCallback) (GtkWidget *widget, gpointer user_data);
 
-void fill_vpn_passwords (GladeXML *xml,
+void fill_vpn_passwords (GtkBuilder *builder,
 						 GtkSizeGroup *group,
 						 NMConnection *connection,
 						 const char *contype,
 						 ChangedCallback changed_cb,
 						 gpointer user_data);
 
-void tls_pw_init_auth_widget (GladeXML *xml,
+void tls_pw_init_auth_widget (GtkBuilder *builder,
                               GtkSizeGroup *group,
                               NMSettingVPN *s_vpn,
                               const char *contype,
@@ -46,19 +45,19 @@ void tls_pw_init_auth_widget (GladeXML *xml,
                               ChangedCallback changed_cb,
                               gpointer user_data);
 
-void sk_init_auth_widget (GladeXML *xml,
+void sk_init_auth_widget (GtkBuilder *builder,
                           GtkSizeGroup *group,
                           NMSettingVPN *s_vpn,
                           ChangedCallback changed_cb,
                           gpointer user_data);
 
-gboolean auth_widget_check_validity (GladeXML *xml, const char *contype, GError **error);
+gboolean auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **error);
 
-gboolean auth_widget_update_connection (GladeXML *xml,
+gboolean auth_widget_update_connection (GtkBuilder *builder,
                                         const char *contype,
                                         NMSettingVPN *s_vpn);
 
-gboolean auth_widget_save_secrets (GladeXML *xml,
+gboolean auth_widget_save_secrets (GtkBuilder *builder,
 								   const char *contype,
 								   const char *uuid,
 								   const char *name);

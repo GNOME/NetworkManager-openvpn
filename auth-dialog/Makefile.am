@@ -8,7 +8,7 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 	$(GNOMEKEYRING_CFLAGS) \
 	-I$(top_srcdir)/
 	-DICONDIR=\""$(datadir)/pixmaps"\"	\
-	-DGLADEDIR=\""$(gladedir)"\"		\
+	-DUIDIR=\""$(uidir)"\"		\
 	-DBINDIR=\""$(bindir)"\"		\
 	-DG_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED		\
