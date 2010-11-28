@@ -35,7 +35,6 @@
 #include <glib/gi18n-lib.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #define NM_VPN_API_SUBJECT_TO_CHANGE
 
@@ -74,7 +73,7 @@ G_DEFINE_TYPE_EXTENDED (OpenvpnPluginUiWidget, openvpn_plugin_ui_widget, G_TYPE_
 #define OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidgetPrivate))
 
 typedef struct {
-	GladeXML *xml;
+	GtkBuilder *builder;
 	GtkWidget *widget;
 	GtkSizeGroup *group;
 	GtkWindowGroup *window_group;
@@ -137,7 +136,7 @@ check_validity (OpenvpnPluginUiWidget *self, GError **error)
 	GtkTreeIter iter;
 	const char *contype = NULL;
 
-	widget = glade_xml_get_widget (priv->xml, "gateway_entry");
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
 	if (!str || !strlen (str)) {
 		g_set_error (error,
@@ -147,13 +146,13 @@ check_validity (OpenvpnPluginUiWidget *self, GError **error)
 		return FALSE;
 	}
 
-	widget = glade_xml_get_widget (priv->xml, "auth_combo");
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_combo"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 	g_assert (model);
 	g_assert (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter));
 
 	gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &contype, -1);
-	if (!auth_widget_check_validity (priv->xml, contype, error))
+	if (!auth_widget_check_validity (priv->builder, contype, error))
 		return FALSE;
 
 	return TRUE;
@@ -176,9 +175,9 @@ auth_combo_changed_cb (GtkWidget *combo, gpointer user_data)
 	GtkTreeIter iter;
 	gint new_page = 0;
 
-	auth_notebook = glade_xml_get_widget (priv->xml, "auth_notebook");
+	auth_notebook = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_notebook"));
 	g_assert (auth_notebook);
-	show_passwords = glade_xml_get_widget (priv->xml, "show_passwords");
+	show_passwords = GTK_WIDGET (gtk_builder_get_object (priv->builder, "show_passwords"));
 	g_assert (auth_notebook);
 
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
@@ -240,7 +239,7 @@ advanced_button_clicked_cb (GtkWidget *button, gpointer user_data)
 	toplevel = gtk_widget_get_toplevel (priv->widget);
 	g_return_if_fail (gtk_widget_is_toplevel (toplevel));
 
-	widget = glade_xml_get_widget (priv->xml, "auth_combo");
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_combo"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter))
 		gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &contype, -1);
@@ -280,7 +279,7 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 
 	priv->group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
-	widget = glade_xml_get_widget (priv->xml, "gateway_entry");
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
 	if (!widget)
 		return FALSE;
 	gtk_size_group_add_widget (priv->group, widget);
@@ -291,7 +290,7 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 	}
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (stuff_changed_cb), self);
 
-	widget = glade_xml_get_widget (priv->xml, "auth_combo");
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_combo"));
 	if (!widget)
 		return FALSE;
 	gtk_size_group_add_widget (priv->group, widget);
@@ -311,10 +310,10 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 	}
 
 	/* TLS auth widget */
-	tls_pw_init_auth_widget (priv->xml, priv->group, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
 	                         NM_OPENVPN_CONTYPE_TLS, "tls",
 	                         stuff_changed_cb, self);
-	fill_vpn_passwords (priv->xml, priv->group, connection,
+	fill_vpn_passwords (priv->builder, priv->group, connection,
 						NM_OPENVPN_CONTYPE_TLS, stuff_changed_cb, self);
 
 	gtk_list_store_append (store, &iter);
@@ -325,10 +324,10 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 	                    -1);
 
 	/* Password auth widget */
-	tls_pw_init_auth_widget (priv->xml, priv->group, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
 	                         NM_OPENVPN_CONTYPE_PASSWORD, "pw",
 	                         stuff_changed_cb, self);
-	fill_vpn_passwords (priv->xml, priv->group, connection,
+	fill_vpn_passwords (priv->builder, priv->group, connection,
 						NM_OPENVPN_CONTYPE_PASSWORD, stuff_changed_cb, self);
 
 	gtk_list_store_append (store, &iter);
@@ -341,10 +340,10 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 		active = 1;
 
 	/* Password+TLS auth widget */
-	tls_pw_init_auth_widget (priv->xml, priv->group, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
 	                         NM_OPENVPN_CONTYPE_PASSWORD_TLS, "pw_tls",
 	                         stuff_changed_cb, self);
-	fill_vpn_passwords (priv->xml, priv->group, connection,
+	fill_vpn_passwords (priv->builder, priv->group, connection,
 						NM_OPENVPN_CONTYPE_PASSWORD_TLS, stuff_changed_cb, self);
 
 
@@ -358,7 +357,7 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 		active = 2;
 
 	/* Static key auth widget */
-	sk_init_auth_widget (priv->xml, priv->group, s_vpn, stuff_changed_cb, self);
+	sk_init_auth_widget (priv->builder, priv->group, s_vpn, stuff_changed_cb, self);
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
@@ -374,7 +373,7 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 	g_signal_connect (widget, "changed", G_CALLBACK (auth_combo_changed_cb), self);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active < 0 ? 0 : active);
 
-	widget = glade_xml_get_widget (priv->xml, "advanced_button");
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "advanced_button"));
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (advanced_button_clicked_cb), self);
 
 	return TRUE;
@@ -405,14 +404,14 @@ hash_copy_advanced (gpointer key, gpointer data, gpointer user_data)
 }
 
 static const char *
-get_auth_type (GladeXML *glade_xml)
+get_auth_type (GtkBuilder *builder)
 {
 	GtkComboBox *combo;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	const char *auth_type = NULL;
 
-	combo = GTK_COMBO_BOX (glade_xml_get_widget (glade_xml, "auth_combo"));
+	combo = GTK_COMBO_BOX (GTK_WIDGET (gtk_builder_get_object (builder, "auth_combo")));
 	model = gtk_combo_box_get_model (combo);
 	if (gtk_combo_box_get_active_iter (combo, &iter))
 		gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &auth_type, -1);
@@ -440,15 +439,15 @@ update_connection (NMVpnPluginUiWidgetInterface *iface,
 	g_object_set (s_vpn, NM_SETTING_VPN_SERVICE_TYPE, NM_DBUS_SERVICE_OPENVPN, NULL);
 
 	/* Gateway */
-	widget = glade_xml_get_widget (priv->xml, "gateway_entry");
+	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
 	str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
 	if (str && strlen (str))
 		nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, str);
 
-	auth_type = get_auth_type (priv->xml);
+	auth_type = get_auth_type (priv->builder);
 	if (auth_type) {
 		nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, auth_type);
-		auth_widget_update_connection (priv->xml, auth_type, s_vpn);
+		auth_widget_update_connection (priv->builder, auth_type, s_vpn);
 	}
 
 	if (priv->advanced)
@@ -482,9 +481,9 @@ save_secrets (NMVpnPluginUiWidgetInterface *iface,
 	id = nm_setting_connection_get_id (s_con);
 	uuid = nm_setting_connection_get_uuid (s_con);
 
-	auth_type = get_auth_type (priv->xml);
+	auth_type = get_auth_type (priv->builder);
 	if (auth_type)
-		ret = auth_widget_save_secrets (priv->xml, auth_type, uuid, id);
+		ret = auth_widget_save_secrets (priv->builder, auth_type, uuid, id);
 	if (ret)
 		ret = advanced_save_secrets (priv->advanced, uuid, id);
 
@@ -500,7 +499,7 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 {
 	NMVpnPluginUiWidgetInterface *object;
 	OpenvpnPluginUiWidgetPrivate *priv;
-	char *glade_file;
+	char *ui_file;
 
 	if (error)
 		g_return_val_if_fail (*error == NULL, NULL);
@@ -513,18 +512,25 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 
 	priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (object);
 
-	glade_file = g_strdup_printf ("%s/%s", GLADEDIR, "nm-openvpn-dialog.glade");
-	priv->xml = glade_xml_new (glade_file, "openvpn-vbox", GETTEXT_PACKAGE);
-	if (priv->xml == NULL) {
+	ui_file = g_strdup_printf ("%s/%s", UIDIR, "nm-openvpn-dialog.ui");
+	priv->builder = gtk_builder_new ();
+
+	if (!gtk_builder_add_from_file (priv->builder, ui_file, error)) {
+		g_warning ("Couldn't load builder file: %s",
+		           error && *error ? (*error)->message : "(unknown)");
+		g_clear_error (error);
 		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR, 0,
-		             "could not load required resources at %s", glade_file);
-		g_free (glade_file);
+		             "could not load required resources from %s", ui_file);
+		g_free (ui_file);
 		g_object_unref (object);
 		return NULL;
 	}
-	g_free (glade_file);
 
-	priv->widget = glade_xml_get_widget (priv->xml, "openvpn-vbox");
+	gtk_builder_set_translation_domain (priv->builder, GETTEXT_PACKAGE);
+
+	g_free (ui_file);
+
+	priv->widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "openvpn-vbox"));
 	if (!priv->widget) {
 		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR, 0, "could not load UI widget");
 		g_object_unref (object);
@@ -563,8 +569,8 @@ dispose (GObject *object)
 	if (priv->widget)
 		g_object_unref (priv->widget);
 
-	if (priv->xml)
-		g_object_unref (priv->xml);
+	if (priv->builder)
+		g_object_unref (priv->builder);
 
 	if (priv->advanced)
 		g_hash_table_destroy (priv->advanced);

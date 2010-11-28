@@ -50,19 +50,19 @@ show_password (GtkToggleButton *togglebutton, GtkEntry *password_entry)
 }
 
 static GtkWidget *
-fill_password (GladeXML *xml,
-			   const char *widget_name,
-			   NMConnection *connection,
-			   gboolean priv_key_password)
+fill_password (GtkBuilder *builder,
+               const char *widget_name,
+               NMConnection *connection,
+               gboolean priv_key_password)
 {
 	GtkWidget *widget;
 	GtkWidget *show_passwords;
 	char *password;
 
-	widget = glade_xml_get_widget (xml, widget_name);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
 	g_assert (widget);
 
-	show_passwords = glade_xml_get_widget (xml, "show_passwords");
+	show_passwords = GTK_WIDGET (gtk_builder_get_object (builder, "show_passwords"));
 	g_signal_connect (show_passwords, "toggled", G_CALLBACK (show_password), widget);
 
 	if (!connection)
@@ -100,25 +100,25 @@ fill_password (GladeXML *xml,
 }
 
 void
-fill_vpn_passwords (GladeXML *xml,
-					GtkSizeGroup *group,
-					NMConnection *connection,
-					const char *contype,
-					ChangedCallback changed_cb,
-					gpointer user_data)
+fill_vpn_passwords (GtkBuilder *builder,
+                    GtkSizeGroup *group,
+                    NMConnection *connection,
+                    const char *contype,
+                    ChangedCallback changed_cb,
+                    gpointer user_data)
 {
 	GtkWidget *w = NULL;
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS))
-		w = fill_password (xml, "tls_private_key_password_entry", connection, TRUE);
+		w = fill_password (builder, "tls_private_key_password_entry", connection, TRUE);
 	else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD))
-		w = fill_password (xml, "pw_password_entry", connection, FALSE);
+		w = fill_password (builder, "pw_password_entry", connection, FALSE);
 	else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		GtkWidget *w2 = NULL;
 
-		w = fill_password (xml, "pw_tls_password_entry", connection, FALSE);
+		w = fill_password (builder, "pw_tls_password_entry", connection, FALSE);
 	
-		w2 = fill_password (xml, "pw_tls_private_key_password_entry", connection, TRUE);
+		w2 = fill_password (builder, "pw_tls_private_key_password_entry", connection, TRUE);
 		if (w2) {
 			gtk_size_group_add_widget (group, w2);
 			g_signal_connect (w2, "changed", G_CALLBACK (changed_cb), user_data);
@@ -173,7 +173,7 @@ tls_cert_changed_cb (GtkWidget *widget, GtkWidget *next_widget)
 }
 
 void
-tls_pw_init_auth_widget (GladeXML *xml,
+tls_pw_init_auth_widget (GtkBuilder *builder,
                          GtkSizeGroup *group,
                          NMSettingVPN *s_vpn,
                          const char *contype,
@@ -186,13 +186,13 @@ tls_pw_init_auth_widget (GladeXML *xml,
 	char *tmp;
 	GtkFileFilter *filter;
 
-	g_return_if_fail (xml != NULL);
+	g_return_if_fail (builder != NULL);
 	g_return_if_fail (group != NULL);
 	g_return_if_fail (changed_cb != NULL);
 	g_return_if_fail (prefix != NULL);
 
 	tmp = g_strdup_printf ("%s_ca_cert_chooser", prefix);
-	ca = glade_xml_get_widget (xml, tmp);
+	ca = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 	g_free (tmp);
 
 	gtk_size_group_add_widget (group, ca);
@@ -215,7 +215,7 @@ tls_pw_init_auth_widget (GladeXML *xml,
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		tmp = g_strdup_printf ("%s_user_cert_chooser", prefix);
-		cert = glade_xml_get_widget (xml, tmp);
+		cert = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 		g_free (tmp);
 
 		gtk_size_group_add_widget (group, cert);
@@ -233,7 +233,7 @@ tls_pw_init_auth_widget (GladeXML *xml,
 		}
 
 		tmp = g_strdup_printf ("%s_private_key_chooser", prefix);
-		key = glade_xml_get_widget (xml, tmp);
+		key = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 		g_free (tmp);
 
 		gtk_size_group_add_widget (group, key);
@@ -258,7 +258,7 @@ tls_pw_init_auth_widget (GladeXML *xml,
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD) || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		tmp = g_strdup_printf ("%s_username_entry", prefix);
-		widget = glade_xml_get_widget (xml, tmp);
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 		g_free (tmp);
 
 		gtk_size_group_add_widget (group, widget);
@@ -275,7 +275,7 @@ tls_pw_init_auth_widget (GladeXML *xml,
 #define SK_DIR_COL_NUM  1
 
 void
-sk_init_auth_widget (GladeXML *xml,
+sk_init_auth_widget (GtkBuilder *builder,
                      GtkSizeGroup *group,
                      NMSettingVPN *s_vpn,
                      ChangedCallback changed_cb,
@@ -289,11 +289,11 @@ sk_init_auth_widget (GladeXML *xml,
 	gint direction = -1;
 	GtkFileFilter *filter;
 
-	g_return_if_fail (xml != NULL);
+	g_return_if_fail (builder != NULL);
 	g_return_if_fail (group != NULL);
 	g_return_if_fail (changed_cb != NULL);
 
-	widget = glade_xml_get_widget (xml, "sk_key_chooser");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_key_chooser"));
 	gtk_size_group_add_widget (group, widget);
 	filter = sk_file_chooser_filter_new ();
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
@@ -335,17 +335,17 @@ sk_init_auth_widget (GladeXML *xml,
 	if (direction == 1)
 		active = 2;
 
-	widget = glade_xml_get_widget (xml, "sk_direction_combo");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_direction_combo"));
 	gtk_size_group_add_widget (group, widget);
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 	g_object_unref (store);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active < 0 ? 0 : active);
 
-	widget = glade_xml_get_widget (xml, "sk_dir_help_label");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_dir_help_label"));
 	gtk_size_group_add_widget (group, widget);
 
-	widget = glade_xml_get_widget (xml, "sk_local_address_entry");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_local_address_entry"));
 	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
 	if (s_vpn) {
@@ -354,7 +354,7 @@ sk_init_auth_widget (GladeXML *xml,
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 	}
 
-	widget = glade_xml_get_widget (xml, "sk_remote_address_entry");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_remote_address_entry"));
 	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
 	if (s_vpn) {
@@ -365,13 +365,13 @@ sk_init_auth_widget (GladeXML *xml,
 }
 
 static gboolean
-validate_file_chooser (GladeXML *xml, const char *name)
+validate_file_chooser (GtkBuilder *builder, const char *name)
 {
 	GtkWidget *widget;
 	char *str;
 	gboolean valid = FALSE;
 
-	widget = glade_xml_get_widget (xml, name);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, name));
 	str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
 	if (str && strlen (str))
 		valid = TRUE;
@@ -380,7 +380,7 @@ validate_file_chooser (GladeXML *xml, const char *name)
 }
 
 static gboolean
-validate_tls (GladeXML *xml, const char *prefix, GError **error)
+validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 {
 	char *tmp;
 	gboolean valid, encrypted = FALSE;
@@ -388,7 +388,7 @@ validate_tls (GladeXML *xml, const char *prefix, GError **error)
 	char *str;
 
 	tmp = g_strdup_printf ("%s_ca_cert_chooser", prefix);
-	valid = validate_file_chooser (xml, tmp);
+	valid = validate_file_chooser (builder, tmp);
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
@@ -399,7 +399,7 @@ validate_tls (GladeXML *xml, const char *prefix, GError **error)
 	}
 
 	tmp = g_strdup_printf ("%s_user_cert_chooser", prefix);
-	valid = validate_file_chooser (xml, tmp);
+	valid = validate_file_chooser (builder, tmp);
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
@@ -410,8 +410,8 @@ validate_tls (GladeXML *xml, const char *prefix, GError **error)
 	}
 
 	tmp = g_strdup_printf ("%s_private_key_chooser", prefix);
-	widget = glade_xml_get_widget (xml, tmp);
-	valid = validate_file_chooser (xml, tmp);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
+	valid = validate_file_chooser (builder, tmp);
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
@@ -427,7 +427,7 @@ validate_tls (GladeXML *xml, const char *prefix, GError **error)
 	g_free (str);
 	if (encrypted) {
 		tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
-		widget = glade_xml_get_widget (xml, tmp);
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 		g_free (tmp);
 
 		if (!gtk_entry_get_text_length (GTK_ENTRY (widget))) {
@@ -443,19 +443,19 @@ validate_tls (GladeXML *xml, const char *prefix, GError **error)
 }
 
 gboolean
-auth_widget_check_validity (GladeXML *xml, const char *contype, GError **error)
+auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **error)
 {
 	GtkWidget *widget;
 	const char *str;
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS)) {
-		if (!validate_tls (xml, "tls", error))
+		if (!validate_tls (builder, "tls", error))
 			return FALSE;
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		if (!validate_tls (xml, "pw_tls", error))
+		if (!validate_tls (builder, "pw_tls", error))
 			return FALSE;
 
-		widget = glade_xml_get_widget (xml, "pw_tls_username_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "pw_tls_username_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
@@ -465,14 +465,14 @@ auth_widget_check_validity (GladeXML *xml, const char *contype, GError **error)
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		if (!validate_file_chooser (xml, "pw_ca_cert_chooser")) {
+		if (!validate_file_chooser (builder, "pw_ca_cert_chooser")) {
 			g_set_error (error,
 			             OPENVPN_PLUGIN_UI_ERROR,
 			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_CA);
 			return FALSE;
 		}
-		widget = glade_xml_get_widget (xml, "pw_username_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "pw_username_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
@@ -482,7 +482,7 @@ auth_widget_check_validity (GladeXML *xml, const char *contype, GError **error)
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
-		if (!validate_file_chooser (xml, "sk_key_chooser")) {
+		if (!validate_file_chooser (builder, "sk_key_chooser")) {
 			g_set_error (error,
 			             OPENVPN_PLUGIN_UI_ERROR,
 			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
@@ -490,7 +490,7 @@ auth_widget_check_validity (GladeXML *xml, const char *contype, GError **error)
 			return FALSE;
 		}
 
-		widget = glade_xml_get_widget (xml, "sk_local_address_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_local_address_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
@@ -500,7 +500,7 @@ auth_widget_check_validity (GladeXML *xml, const char *contype, GError **error)
 			return FALSE;
 		}
 
-		widget = glade_xml_get_widget (xml, "sk_remote_address_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_remote_address_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
@@ -516,7 +516,7 @@ auth_widget_check_validity (GladeXML *xml, const char *contype, GError **error)
 }
 
 static void
-update_from_filechooser (GladeXML *xml,
+update_from_filechooser (GtkBuilder *builder,
                          const char *key,
                          const char *prefix,
                          const char *widget_name,
@@ -525,14 +525,14 @@ update_from_filechooser (GladeXML *xml,
 	GtkWidget *widget;
 	char *tmp, *filename;
 
-	g_return_if_fail (xml != NULL);
+	g_return_if_fail (builder != NULL);
 	g_return_if_fail (key != NULL);
 	g_return_if_fail (prefix != NULL);
 	g_return_if_fail (widget_name != NULL);
 	g_return_if_fail (s_vpn != NULL);
 
 	tmp = g_strdup_printf ("%s_%s", prefix, widget_name);
-	widget = glade_xml_get_widget (xml, tmp);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 	g_free (tmp);
 
 	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
@@ -542,26 +542,26 @@ update_from_filechooser (GladeXML *xml,
 }
 
 static void
-update_tls (GladeXML *xml, const char *prefix, NMSettingVPN *s_vpn)
+update_tls (GtkBuilder *builder, const char *prefix, NMSettingVPN *s_vpn)
 {
-	update_from_filechooser (xml, NM_OPENVPN_KEY_CA, prefix, "ca_cert_chooser", s_vpn);
-	update_from_filechooser (xml, NM_OPENVPN_KEY_CERT, prefix, "user_cert_chooser", s_vpn);
-	update_from_filechooser (xml, NM_OPENVPN_KEY_KEY, prefix, "private_key_chooser", s_vpn);
+	update_from_filechooser (builder, NM_OPENVPN_KEY_CA, prefix, "ca_cert_chooser", s_vpn);
+	update_from_filechooser (builder, NM_OPENVPN_KEY_CERT, prefix, "user_cert_chooser", s_vpn);
+	update_from_filechooser (builder, NM_OPENVPN_KEY_KEY, prefix, "private_key_chooser", s_vpn);
 }
 
 static void
-update_username (GladeXML *xml, const char *prefix, NMSettingVPN *s_vpn)
+update_username (GtkBuilder *builder, const char *prefix, NMSettingVPN *s_vpn)
 {
 	GtkWidget *widget;
 	char *tmp;
 	const char *str;
 
-	g_return_if_fail (xml != NULL);
+	g_return_if_fail (builder != NULL);
 	g_return_if_fail (prefix != NULL);
 	g_return_if_fail (s_vpn != NULL);
 
 	tmp = g_strdup_printf ("%s_username_entry", prefix);
-	widget = glade_xml_get_widget (xml, tmp);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 	g_free (tmp);
 
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
@@ -570,7 +570,7 @@ update_username (GladeXML *xml, const char *prefix, NMSettingVPN *s_vpn)
 }
 
 gboolean
-auth_widget_update_connection (GladeXML *xml,
+auth_widget_update_connection (GtkBuilder *builder,
                                const char *contype,
                                NMSettingVPN *s_vpn)
 {
@@ -580,19 +580,19 @@ auth_widget_update_connection (GladeXML *xml,
 	const char *str;
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS)) {
-		update_tls (xml, "tls", s_vpn);
+		update_tls (builder, "tls", s_vpn);
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		update_from_filechooser (xml, NM_OPENVPN_KEY_CA, "pw", "ca_cert_chooser", s_vpn);
-		update_username (xml, "pw", s_vpn);
+		update_from_filechooser (builder, NM_OPENVPN_KEY_CA, "pw", "ca_cert_chooser", s_vpn);
+		update_username (builder, "pw", s_vpn);
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		update_tls (xml, "pw_tls", s_vpn);
-		update_username (xml, "pw_tls", s_vpn);
+		update_tls (builder, "pw_tls", s_vpn);
+		update_username (builder, "pw_tls", s_vpn);
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		/* Update static key */
-		update_from_filechooser (xml, NM_OPENVPN_KEY_STATIC_KEY, "sk", "key_chooser", s_vpn);
+		update_from_filechooser (builder, NM_OPENVPN_KEY_STATIC_KEY, "sk", "key_chooser", s_vpn);
 
 		/* Update direction */
-		widget = glade_xml_get_widget (xml, "sk_direction_combo");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_direction_combo"));
 		g_assert (widget);
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
@@ -607,14 +607,14 @@ auth_widget_update_connection (GladeXML *xml,
 		}
 
 		/* Update local address */
-		widget = glade_xml_get_widget (xml, "sk_local_address_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_local_address_entry"));
 		g_assert (widget);
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (str && strlen (str))
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, str);
 
 		/* Update remote address */
-		widget = glade_xml_get_widget (xml, "sk_remote_address_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_remote_address_entry"));
 		g_assert (widget);
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (str && strlen (str))
@@ -626,7 +626,7 @@ auth_widget_update_connection (GladeXML *xml,
 }
 
 static gboolean
-save_secret (GladeXML *xml,
+save_secret (GtkBuilder *builder,
 			 const char *widget_name,
 			 const char *vpn_uuid,
 			 const char *vpn_name,
@@ -637,7 +637,7 @@ save_secret (GladeXML *xml,
 	GnomeKeyringResult result;
 	gboolean ret;
 
-	w = glade_xml_get_widget (xml, widget_name);
+	w = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
 	g_assert (w);
 	secret = gtk_entry_get_text (GTK_ENTRY (w));
 	if (secret && strlen (secret)) {
@@ -652,7 +652,7 @@ save_secret (GladeXML *xml,
 }
 
 gboolean
-auth_widget_save_secrets (GladeXML *xml,
+auth_widget_save_secrets (GtkBuilder *builder,
 						  const char *contype,
 						  const char *uuid,
 						  const char *name)
@@ -660,12 +660,12 @@ auth_widget_save_secrets (GladeXML *xml,
 	gboolean ret;
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS))
-		ret = save_secret (xml, "tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
+		ret = save_secret (builder, "tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
 	else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD))
-		ret = save_secret (xml, "pw_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
+		ret = save_secret (builder, "pw_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
 	else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		ret = save_secret (xml, "pw_tls_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
-		ret = save_secret (xml, "pw_tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
+		ret = save_secret (builder, "pw_tls_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
+		ret = save_secret (builder, "pw_tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY))
 		/* No secrets here */
 		ret = TRUE;
@@ -900,40 +900,40 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 static void
 port_toggled_cb (GtkWidget *check, gpointer user_data)
 {
-	GladeXML *xml = (GladeXML *) user_data;
+	GtkBuilder *builder = (GtkBuilder *) user_data;
 	GtkWidget *widget;
 
-	widget = glade_xml_get_widget (xml, "port_spinbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
 	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
 static void
 tunmtu_toggled_cb (GtkWidget *check, gpointer user_data)
 {
-	GladeXML *xml = (GladeXML *) user_data;
+	GtkBuilder *builder = (GtkBuilder *) user_data;
 	GtkWidget *widget;
 
-	widget = glade_xml_get_widget (xml, "tunmtu_spinbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
 	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
 static void
 fragment_toggled_cb (GtkWidget *check, gpointer user_data)
 {
-	GladeXML *xml = (GladeXML *) user_data;
+	GtkBuilder *builder = (GtkBuilder *) user_data;
 	GtkWidget *widget;
 
-	widget = glade_xml_get_widget (xml, "fragment_spinbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
 	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
 static void
 reneg_toggled_cb (GtkWidget *check, gpointer user_data)
 {
-	GladeXML *xml = (GladeXML *) user_data;
+	GtkBuilder *builder = (GtkBuilder *) user_data;
 	GtkWidget *widget;
 
-	widget = glade_xml_get_widget (xml, "reneg_spinbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
 	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
@@ -1113,21 +1113,21 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 static void
 tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 {
-	GladeXML *xml = (GladeXML *) user_data;
+	GtkBuilder *builder = (GtkBuilder *) user_data;
 	gboolean use_auth = FALSE;
 
-	widget = glade_xml_get_widget (xml, "tls_auth_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
 	use_auth = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
-	widget = glade_xml_get_widget (xml, "tls_dir_help_label");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_dir_help_label"));
 	gtk_widget_set_sensitive (widget, use_auth);
-	widget = glade_xml_get_widget (xml, "direction_label");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_label"));
 	gtk_widget_set_sensitive (widget, use_auth);
-	widget = glade_xml_get_widget (xml, "tls_auth_label");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_label"));
 	gtk_widget_set_sensitive (widget, use_auth);
-	widget = glade_xml_get_widget (xml, "tls_auth_chooser");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
 	gtk_widget_set_sensitive (widget, use_auth);
-	widget = glade_xml_get_widget (xml, "direction_combo");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
 	gtk_widget_set_sensitive (widget, use_auth);
 }
 
@@ -1138,7 +1138,7 @@ tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 static void
 proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 {
-	GladeXML *xml = GLADE_XML (user_data);
+	GtkBuilder *builder = GTK_BUILDER (user_data);
 	gboolean sensitive;
 	GtkWidget *widget;
 	guint32 i = 0;
@@ -1158,7 +1158,7 @@ proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 	sensitive = (active > PROXY_TYPE_NONE);
 
 	while (widgets[i]) {
-		widget = glade_xml_get_widget (xml, widgets[i++]);
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, widgets[i++]));
 		gtk_widget_set_sensitive (widget, sensitive);
 	}
 
@@ -1166,7 +1166,7 @@ proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 	if (active == PROXY_TYPE_SOCKS) {
 		i = 0;
 		while (user_pass_widgets[i]) {
-			widget = glade_xml_get_widget (xml, user_pass_widgets[i++]);
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, user_pass_widgets[i++]));
 			gtk_widget_set_sensitive (widget, FALSE);
 		}
 	}
@@ -1174,7 +1174,7 @@ proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 	/* Proxy options require TCP; but don't reset the TCP checkbutton
 	 * to false when the user disables HTTP proxy; leave it checked.
 	 */
-	widget = glade_xml_get_widget (xml, "tcp_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
 	if (sensitive == TRUE)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	gtk_widget_set_sensitive (widget, !sensitive);
@@ -1186,35 +1186,43 @@ proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 GtkWidget *
 advanced_dialog_new (GHashTable *hash, const char *contype)
 {
-	GladeXML *xml;
+	GtkBuilder *builder;
 	GtkWidget *dialog = NULL;
-	char *glade_file = NULL;
+	char *ui_file = NULL;
 	GtkWidget *widget, *combo;
 	const char *value, *value2;
 	GtkListStore *store;
 	GtkTreeIter iter;
 	guint32 active = PROXY_TYPE_NONE;
+	GError *error = NULL;
 
 	g_return_val_if_fail (hash != NULL, NULL);
 
-	glade_file = g_strdup_printf ("%s/%s", GLADEDIR, "nm-openvpn-dialog.glade");
-	xml = glade_xml_new (glade_file, "openvpn-advanced-dialog", GETTEXT_PACKAGE);
-	if (xml == NULL)
-		goto out;
+	ui_file = g_strdup_printf ("%s/%s", UIDIR, "nm-openvpn-dialog.ui");
+	builder = gtk_builder_new ();
 
-	dialog = glade_xml_get_widget (xml, "openvpn-advanced-dialog");
+	if (!gtk_builder_add_from_file (builder, ui_file, &error)) {
+		g_warning ("Couldn't load builder file: %s", error->message);
+		g_error_free (error);
+		g_object_unref (G_OBJECT (builder));
+		goto out;
+	}
+
+	gtk_builder_set_translation_domain (builder, GETTEXT_PACKAGE);
+
+	dialog = GTK_WIDGET (gtk_builder_get_object (builder, "openvpn-advanced-dialog"));
 	if (!dialog) {
-		g_object_unref (G_OBJECT (xml));
+		g_object_unref (G_OBJECT (builder));
 		goto out;
 	}
 	gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
-	g_object_set_data_full (G_OBJECT (dialog), "glade-xml",
-	                        xml, (GDestroyNotify) g_object_unref);
+	g_object_set_data_full (G_OBJECT (dialog), "builder",
+	                        builder, (GDestroyNotify) g_object_unref);
 	g_object_set_data (G_OBJECT (dialog), "connection-type", GINT_TO_POINTER (contype));
 
-	widget = glade_xml_get_widget (xml, "reneg_checkbutton");
-	g_signal_connect ( G_OBJECT (widget), "toggled", G_CALLBACK (reneg_toggled_cb), xml);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_checkbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (reneg_toggled_cb), builder);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_RENEG_SECONDS);
 	if (value && strlen (value)) {
@@ -1225,20 +1233,20 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		if (errno == 0 && tmp >= 0 && tmp < 604800) {  /* up to a week? */
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
-			widget = glade_xml_get_widget (xml, "reneg_spinbutton");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
 			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
 		}
 		gtk_widget_set_sensitive (widget, TRUE);
 	} else {
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
 
-		widget = glade_xml_get_widget (xml, "reneg_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0.0);
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
 
 	/* Proxy support */
-	combo = glade_xml_get_widget (xml, "proxy_type_combo");
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_type_combo"));
 
 	store = gtk_list_store_new (1, G_TYPE_STRING);
 	gtk_list_store_append (store, &iter);
@@ -1253,30 +1261,30 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	if (value && strlen (value) && value2 && strlen (value2)) {
 		long int tmp = 0;
 
-		widget = glade_xml_get_widget (xml, "proxy_server_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_server_entry"));
 		gtk_entry_set_text (GTK_ENTRY (widget), value);
 
 		errno = 0;
 		tmp = strtol (value2, NULL, 10);
 		if (errno != 0 || tmp < 0 || tmp > 65535)
 			tmp = 0;
-		widget = glade_xml_get_widget (xml, "proxy_port_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_port_spinbutton"));
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
 
-		widget = glade_xml_get_widget (xml, "proxy_retry_checkbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_retry_checkbutton"));
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROXY_RETRY);
 		if (value && !strcmp (value, "yes"))
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
 		if (value && strlen (value)) {
-			widget = glade_xml_get_widget (xml, "proxy_username_entry");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_username_entry"));
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 		}
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
 		if (value && strlen (value)) {
-			widget = glade_xml_get_widget (xml, "proxy_password_entry");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 		}
 	}
@@ -1294,11 +1302,11 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
 	g_object_unref (store);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), active);
-	proxy_type_changed (GTK_COMBO_BOX (combo), xml);
-	g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (proxy_type_changed), xml);
+	proxy_type_changed (GTK_COMBO_BOX (combo), builder);
+	g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (proxy_type_changed), builder);
 
-	widget = glade_xml_get_widget (xml, "port_checkbutton");
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (port_toggled_cb), xml);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_checkbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (port_toggled_cb), builder);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PORT);
 	if (value && strlen (value)) {
@@ -1309,7 +1317,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		if (errno == 0 && tmp > 0 && tmp < 65536 && tmp != 1194) {
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
-			widget = glade_xml_get_widget (xml, "port_spinbutton");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
 			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget),
 			                           (gdouble) tmp);
 		}
@@ -1317,14 +1325,14 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	} else {
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
 
-		widget = glade_xml_get_widget (xml, "port_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1194.0);
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
 
-	widget = glade_xml_get_widget (xml, "tunmtu_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_checkbutton"));
 	g_assert (widget);
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (tunmtu_toggled_cb), xml);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (tunmtu_toggled_cb), builder);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUNNEL_MTU);
 	if (value && strlen (value)) {
@@ -1335,20 +1343,20 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		if (errno == 0 && tmp > 0 && tmp < 65536) {
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
-			widget = glade_xml_get_widget (xml, "tunmtu_spinbutton");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
 			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
 			gtk_widget_set_sensitive (widget, TRUE);
 		}
 	} else {
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
 
-		widget = glade_xml_get_widget (xml, "tunmtu_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1500.0);
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
 
-	widget = glade_xml_get_widget (xml, "fragment_checkbutton");
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (fragment_toggled_cb), xml);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_checkbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (fragment_toggled_cb), builder);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 	if (value && strlen (value)) {
@@ -1359,59 +1367,59 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		if (errno == 0 && tmp > 0 && tmp < 65536) {
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
-			widget = glade_xml_get_widget (xml, "fragment_spinbutton");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
 			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
 			gtk_widget_set_sensitive (widget, TRUE);
 		}
 	} else {
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
 
-		widget = glade_xml_get_widget (xml, "fragment_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1300.0);
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MSSFIX);
 	if (value && !strcmp (value, "yes")) {
-		widget = glade_xml_get_widget (xml, "mssfix_checkbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO);
 	if (value && !strcmp (value, "yes")) {
-		widget = glade_xml_get_widget (xml, "lzo_checkbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_checkbutton"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MSSFIX);
 	if (value && !strcmp (value, "yes")) {
-		widget = glade_xml_get_widget (xml, "mssfix_checkbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROTO_TCP);
 	if (value && !strcmp (value, "yes")) {
-		widget = glade_xml_get_widget (xml, "tcp_checkbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TAP_DEV);
 	if (value && !strcmp (value, "yes")) {
-		widget = glade_xml_get_widget (xml, "tap_checkbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tap_checkbutton"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
-	widget = glade_xml_get_widget (xml, "cipher_combo");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
 	populate_cipher_combo (GTK_COMBO_BOX (widget), value);
 
-	widget = glade_xml_get_widget (xml, "hmacauth_combo");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "hmacauth_combo"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_AUTH);
 	populate_hmacauth_combo (GTK_COMBO_BOX (widget), value);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_REMOTE);
 	if (value && strlen (value)) {
-		widget = glade_xml_get_widget (xml, "tls_remote_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
 		gtk_entry_set_text (GTK_ENTRY(widget), value);
 	}
 
@@ -1421,14 +1429,14 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		int direction = -1;
 
 		active = -1;
-		widget = glade_xml_get_widget (xml, "tls_auth_checkbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
 		if (value && strlen (value))
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-		g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (tls_auth_toggled_cb), xml);
-		tls_auth_toggled_cb (widget, xml);
+		g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (tls_auth_toggled_cb), builder);
+		tls_auth_toggled_cb (widget, builder);
 
-		widget = glade_xml_get_widget (xml, "direction_combo");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA_DIR);
 		if (value && strlen (value)) {
 			direction = (int) strtol (value, NULL, 10);
@@ -1458,16 +1466,16 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
 		if (value && strlen (value)) {
-			widget = glade_xml_get_widget (xml, "tls_auth_chooser");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
 			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
 		}
 	} else {
-		widget = glade_xml_get_widget (xml, "options_notebook");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "options_notebook"));
 		gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2);
 	}
 
 out:
-	g_free (glade_file);
+	g_free (ui_file);
 	return dialog;
 }
 
@@ -1476,7 +1484,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 {
 	GHashTable *hash;
 	GtkWidget *widget;
-	GladeXML *xml;
+	GtkBuilder *builder;
 	const char *contype = NULL;
 	const char *value;
 	int proxy_type = PROXY_TYPE_NONE;
@@ -1485,52 +1493,52 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	if (error)
 		g_return_val_if_fail (*error == NULL, NULL);
 
-	xml = g_object_get_data (G_OBJECT (dialog), "glade-xml");
-	g_return_val_if_fail (xml != NULL, NULL);
+	builder = g_object_get_data (G_OBJECT (dialog), "builder");
+	g_return_val_if_fail (builder != NULL, NULL);
 
 	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-	widget = glade_xml_get_widget (xml, "reneg_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		int reneg_seconds;
 
-		widget = glade_xml_get_widget (xml, "reneg_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
 		reneg_seconds = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_RENEG_SECONDS), g_strdup_printf ("%d", reneg_seconds));
 	}
 
-	widget = glade_xml_get_widget (xml, "tunmtu_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		int tunmtu_size;
 
-		widget = glade_xml_get_widget (xml, "tunmtu_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
 		tunmtu_size = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TUNNEL_MTU), g_strdup_printf ("%d", tunmtu_size));
 	}
 
-	widget = glade_xml_get_widget (xml, "fragment_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		int fragment_size;
 
-		widget = glade_xml_get_widget (xml, "fragment_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
 		fragment_size = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_FRAGMENT_SIZE), g_strdup_printf ("%d", fragment_size));
 	}
 
-	widget = glade_xml_get_widget (xml, "port_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		int port;
 
-		widget = glade_xml_get_widget (xml, "port_spinbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
 		port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_PORT), g_strdup_printf ("%d", port));
 	}
 
 	/* Proxy support */
-	widget = glade_xml_get_widget (xml, "proxy_type_combo");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_type_combo"));
 	proxy_type = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 	if (proxy_type != PROXY_TYPE_NONE) {
-		widget = glade_xml_get_widget (xml, "proxy_server_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_server_entry"));
 		value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
 		if (value && strlen (value)) {
 			int proxy_port;
@@ -1542,19 +1550,19 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 
 			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_PROXY_SERVER), g_strdup (value));
 
-			widget = glade_xml_get_widget (xml, "proxy_port_spinbutton");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_port_spinbutton"));
 			proxy_port = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 			if (proxy_port > 0) {
 				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_PROXY_PORT),
 				                     g_strdup_printf ("%d", proxy_port));
 			}
 
-			widget = glade_xml_get_widget (xml, "proxy_retry_checkbutton");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_retry_checkbutton"));
 			if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_PROXY_RETRY), g_strdup ("yes"));
 
 			if (proxy_type == PROXY_TYPE_HTTP) {
-				widget = glade_xml_get_widget (xml, "proxy_username_entry");
+				widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_username_entry"));
 				value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
 				if (value && strlen (value)) {
 					g_hash_table_insert (hash,
@@ -1562,7 +1570,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 					                     g_strdup (value));
 				}
 
-				widget = glade_xml_get_widget (xml, "proxy_password_entry");
+				widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
 				value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
 				if (value && strlen (value)) {
 					g_hash_table_insert (hash,
@@ -1573,19 +1581,19 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		}
 	}
 
-	widget = glade_xml_get_widget (xml, "lzo_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_COMP_LZO), g_strdup ("yes"));
 
-	widget = glade_xml_get_widget (xml, "mssfix_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_MSSFIX), g_strdup ("yes"));
 
-	widget = glade_xml_get_widget (xml, "tcp_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_PROTO_TCP), g_strdup ("yes"));
 
-	widget = glade_xml_get_widget (xml, "tap_checkbutton");
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tap_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TAP_DEV), g_strdup ("yes"));
 
@@ -1596,7 +1604,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		GtkTreeModel *model;
 		GtkTreeIter iter;
 
-		widget = glade_xml_get_widget (xml, "cipher_combo");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
 			char *cipher = NULL;
@@ -1610,7 +1618,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 			}
 		}
 		
-		widget = glade_xml_get_widget (xml, "hmacauth_combo");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "hmacauth_combo"));
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
 			char *hmacauth = NULL;
@@ -1624,23 +1632,23 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 			}
 		}
 
-		widget = glade_xml_get_widget (xml, "tls_remote_entry");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
 		value = gtk_entry_get_text (GTK_ENTRY(widget));
 		if (value && strlen (value))
 			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TLS_REMOTE), g_strdup (value));
 
-		widget = glade_xml_get_widget (xml, "tls_auth_checkbutton");
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 			char *filename;
 
-			widget = glade_xml_get_widget (xml, "tls_auth_chooser");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
 			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
 			if (filename && strlen (filename)) {
 				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TA), g_strdup (filename));
 			}
 			g_free (filename);
 
-			widget = glade_xml_get_widget (xml, "direction_combo");
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
 			model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 			if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
 				int direction = -1;

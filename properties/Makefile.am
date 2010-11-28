@@ -11,11 +11,10 @@ libnm_openvpn_properties_la_SOURCES = \
 	import-export.c \
 	import-export.h
 
-gladedir = $(datadir)/gnome-vpn-properties/openvpn
-glade_DATA = nm-openvpn-dialog.glade
+uidir = $(datadir)/gnome-vpn-properties/openvpn
+ui_DATA = nm-openvpn-dialog.ui
 
 libnm_openvpn_properties_la_CFLAGS =                    \
-        $(GLADE_CFLAGS)                                 \
         $(GTK_CFLAGS)                                   \
         $(GCONF_CFLAGS)                                 \
         $(NETWORK_MANAGER_CFLAGS)                       \
@@ -23,7 +22,7 @@ libnm_openvpn_properties_la_CFLAGS =                    \
         $(DISABLE_DEPRECATED)                           \
         -I$(top_srcdir)/                                \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
-        -DGLADEDIR=\""$(gladedir)"\"                    \
+        -DUIDIR=\""$(uidir)"\"                    \
         -DG_DISABLE_DEPRECATED                          \
         -DGDK_DISABLE_DEPRECATED                        \
         -DGNOME_DISABLE_DEPRECATED                      \
@@ -31,7 +30,6 @@ libnm_openvpn_properties_la_CFLAGS =                    \
         -DVERSION=\"$(VERSION)\"
 
 libnm_openvpn_properties_la_LIBADD =    \
-        $(GLADE_LIBS)                   \
         $(GTK_LIBS)                     \
         $(GCONF_LIBS)                   \
         $(NETWORK_MANAGER_LIBS)         \
@@ -41,7 +39,7 @@ libnm_openvpn_properties_la_LIBADD =    \
 libnm_openvpn_properties_la_LDFLAGS =   \
         -avoid-version
 
-CLEANFILES = *.bak *.gladep *~
+CLEANFILES = *.bak *~
 
 EXTRA_DIST =                            \
-        $(glade_DATA)
+        $(ui_DATA)
