@@ -695,6 +695,7 @@ static const char *pem_rsa_key_begin = "-----BEGIN RSA PRIVATE KEY-----";
 static const char *pem_dsa_key_begin = "-----BEGIN DSA PRIVATE KEY-----";
 static const char *pem_pkcs8_key_begin = "-----BEGIN ENCRYPTED PRIVATE KEY-----";
 static const char *pem_cert_begin = "-----BEGIN CERTIFICATE-----";
+static const char *pem_unenc_key_begin = "-----BEGIN PRIVATE KEY-----";
 
 static gboolean
 tls_default_filter (const GtkFileFilterInfo *filter_info, gpointer data)
@@ -756,6 +757,11 @@ tls_default_filter (const GtkFileFilterInfo *filter_info, gpointer data)
 	}
 
 	if (find_tag (pem_pkcs8_key_begin, (const char *) contents, bytes_read)) {
+		show = TRUE;
+		goto out;
+	}
+
+	if (find_tag (pem_unenc_key_begin, (const char *) contents, bytes_read)) {
 		show = TRUE;
 		goto out;
 	}
