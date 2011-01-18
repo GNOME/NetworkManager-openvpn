@@ -15,7 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Copyright (C) 2008 - 2010 Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (C) 2008 - 2011 Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
  *
  **************************************************************************/
 
@@ -411,7 +411,7 @@ do_import (const char *path, char **lines, GError **error)
 
 				errno = 0;
 				secs = strtol (items[0], NULL, 10);
-				if ((errno == 0) && (secs >= 0) && (secs < 604800)) {
+				if ((errno == 0) && (secs >= 0) && (secs <= 604800)) {
 					tmp = g_strdup_printf ("%d", (guint32) secs);
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, tmp);
 					g_free (tmp);
