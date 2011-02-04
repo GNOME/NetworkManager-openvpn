@@ -2,6 +2,7 @@
 /***************************************************************************
  *
  * Copyright (C) 2008 - 2010 Dan Williams, <dcbw@redhat.com>
+ * Copyright (C) 2008 - 2011 Red Hat, Inc.
  * Copyright (C) 2008 Tambet Ingo, <tambet@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -1153,11 +1154,11 @@ proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 		"proxy_desc_label", "proxy_server_label", "proxy_server_entry",
 		"proxy_port_label", "proxy_port_spinbutton", "proxy_retry_checkbutton",
 		"proxy_username_label", "proxy_password_label", "proxy_username_entry",
-		"proxy_password_entry", NULL
+		"proxy_password_entry", "show_proxy_password", NULL
 	};
 	const char *user_pass_widgets[] = {
 		"proxy_username_label", "proxy_password_label", "proxy_username_entry",
-		"proxy_password_entry", NULL
+		"proxy_password_entry", "show_proxy_password", NULL
 	};
 
 	active = gtk_combo_box_get_active (combo);
@@ -1184,6 +1185,20 @@ proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 	if (sensitive == TRUE)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	gtk_widget_set_sensitive (widget, !sensitive);
+}
+
+static void
+show_proxy_password_toggled_cb (GtkCheckButton *button, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	GtkWidget *widget;
+	gboolean visible;
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
+	g_assert (widget);
+
+	visible = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+	gtk_entry_set_visibility (GTK_ENTRY (widget), visible);
 }
 
 #define TA_DIR_COL_NAME 0
@@ -1310,6 +1325,9 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), active);
 	proxy_type_changed (GTK_COMBO_BOX (combo), builder);
 	g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (proxy_type_changed), builder);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "show_proxy_password"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (show_proxy_password_toggled_cb), builder);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_checkbutton"));
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (port_toggled_cb), builder);
