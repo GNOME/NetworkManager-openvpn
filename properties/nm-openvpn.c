@@ -6,6 +6,7 @@
  *
  * Copyright (C) 2005 Tim Niemueller <tim@niemueller.de>
  * Copyright (C) 2008 - 2010 Dan Williams, <dcbw@redhat.com>
+ * Copyright (C) 2008 - 2011 Red Hat, Inc.
  * Based on work by David Zeuthen, <davidz@redhat.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -457,6 +458,39 @@ update_connection (NMVpnPluginUiWidgetInterface *iface,
 	if (priv->advanced)
 		g_hash_table_foreach (priv->advanced, hash_copy_advanced, s_vpn);
 
+	/* System secrets get stored in the connection, user secrets are saved
+	 * via the save_secrets() hook.
+	 */
+	if (nm_connection_get_scope (connection) == NM_CONNECTION_SCOPE_SYSTEM) {
+		if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_TLS)) {
+			/* Certificates (TLS) */
+			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "tls_private_key_password_entry"));
+			str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+			if (str && strlen (str))
+				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
+		} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_PASSWORD)) {
+			/* Password */
+			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_password_entry"));
+			str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+			if (str && strlen (str))
+				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
+		} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+			/* Password with Certificates (TLS) */
+			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_tls_password_entry"));
+			str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+			if (str && strlen (str))
+				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
+
+			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_tls_private_key_password_entry"));
+			str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+			if (str && strlen (str))
+				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
+		} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_STATIC_KEY))
+			; /* No secrets here */
+		else
+			g_assert_not_reached ();
+	}
+
 	nm_connection_add_setting (connection, NM_SETTING (s_vpn));
 	valid = TRUE;
 
@@ -476,7 +510,7 @@ save_secrets (NMVpnPluginUiWidgetInterface *iface,
 	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
 	if (!s_con) {
 		g_set_error (error,
-					 OPENVPN_PLUGIN_UI_ERROR,
+		             OPENVPN_PLUGIN_UI_ERROR,
 		             OPENVPN_PLUGIN_UI_ERROR_INVALID_CONNECTION,
 		             "%s", "missing 'connection' setting");
 		return FALSE;
@@ -493,8 +527,8 @@ save_secrets (NMVpnPluginUiWidgetInterface *iface,
 
 	if (!ret)
 		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR,
-					 OPENVPN_PLUGIN_UI_ERROR_UNKNOWN,
-					 "%s", "Saving secrets to gnome keyring failed.");
+		             OPENVPN_PLUGIN_UI_ERROR_UNKNOWN,
+		             "%s", "Saving secrets to gnome keyring failed.");
 	return ret;
 }
 
