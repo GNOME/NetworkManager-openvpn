@@ -206,7 +206,6 @@ test_password_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("password-export", plugin, dir, "password.conf");
 	ASSERT (connection != NULL, "password-export", "failed to import connection");
@@ -222,7 +221,7 @@ test_password_export (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("password-export", plugin, dir, PASSWORD_EXPORTED_NAME);
-	ret = unlink (path);
+	(void) unlink (path);
 	ASSERT (reimported != NULL, "password-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
@@ -321,7 +320,6 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("tls-export", plugin, dir, "tls.ovpn");
 	ASSERT (connection != NULL, "tls-export", "failed to import connection");
@@ -337,7 +335,7 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("tls-export", plugin, dir, TLS_EXPORTED_NAME);
-	ret = unlink (path);
+	(void) unlink (path);
 	ASSERT (reimported != NULL, "tls-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
@@ -430,7 +428,6 @@ test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("pkcs12-export", plugin, dir, "pkcs12.ovpn");
 	ASSERT (connection != NULL, "pkcs12-export", "failed to import connection");
@@ -446,7 +443,7 @@ test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("pkcs12-export", plugin, dir, PKCS12_EXPORTED_NAME);
-	ret = unlink (path);
+	(void) unlink (path);
 	ASSERT (reimported != NULL, "pkcs12-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
@@ -573,7 +570,6 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("static-key-export", plugin, dir, "static.ovpn");
 	ASSERT (connection != NULL, "static-key-export", "failed to import connection");
@@ -589,7 +585,7 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("static-key-export", plugin, dir, STATIC_KEY_EXPORTED_NAME);
-	ret = unlink (path);
+	(void) unlink (path);
 	ASSERT (reimported != NULL, "static-key-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
@@ -652,7 +648,6 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection (detail, plugin, dir, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -668,7 +663,7 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection (detail, plugin, dir, exported_name);
-	ret = unlink (path);
+	(void) unlink (path);
 	ASSERT (reimported != NULL, detail, "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
@@ -715,7 +710,6 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("tunopts-export", plugin, dir, "tun-opts.conf");
 	ASSERT (connection != NULL, "tunopts-export", "failed to import connection");
@@ -731,7 +725,7 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("tunopts-export", plugin, dir, TUNOPTS_EXPORTED_NAME);
-	ret = unlink (path);
+	(void) unlink (path);
 	ASSERT (reimported != NULL, "tunopts-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
@@ -798,7 +792,6 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 	NMSettingVPN *s_vpn;
 
 	connection = get_basic_connection ("proxy-http-export", plugin, dir, "proxy-http.ovpn");
@@ -815,7 +808,7 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("proxy-http-export", plugin, dir, PROXY_HTTP_EXPORTED_NAME);
-	ret = unlink (path);
+	(void) unlink (path);
 	ASSERT (reimported != NULL, "proxy-http-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
@@ -886,7 +879,6 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("proxy-socks-export", plugin, dir, "proxy-socks.ovpn");
 	ASSERT (connection != NULL, "proxy-socks-export", "failed to import connection");
@@ -902,7 +894,7 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("proxy-socks-export", plugin, dir, PROXY_SOCKS_EXPORTED_NAME);
-	ret = unlink (path);
+	(void) unlink (path);
 	ASSERT (reimported != NULL, "proxy-socks-export", "failed to re-import connection");
 
 	/* Clear secrets first, since they don't get exported, and thus would
@@ -921,7 +913,6 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir)
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
-	DBusGConnection *bus;
 	char *basename;
 	NMVpnPluginUiInterface *plugin = NULL;
 	char *tmp, *tmp2, *test_dir;
@@ -930,7 +921,7 @@ int main (int argc, char **argv)
 		FAIL ("args", "usage: %s <conf path>", argv[0]);
 
 	g_type_init ();
-	bus = dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
+	dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
 
 	if (!nm_utils_init (&error))
 		FAIL ("nm-utils-init", "failed to initialize libnm-util: %s", error->message);
