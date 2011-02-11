@@ -74,7 +74,17 @@ AC_SUBST(NETWORK_MANAGER_CFLAGS)
 AC_SUBST(NETWORK_MANAGER_LIBS)
 
 if test x"$with_gnome" != xno; then
-	PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.20)
+	AC_ARG_WITH([gtk2], AS_HELP_STRING([--with-gtk2], [Use GTK+ 2.x instead of GTK+ 3.x]),
+	            with_gtk2="$withval",with_gtk2=no)
+	gtkver=3
+	case "${with_gtk2}" in
+		yes)	PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.20)
+			gtkver=2
+			;;
+		*)	PKG_CHECK_MODULES(GTK, gtk+-3.0 >= 2.91.4)
+			;;
+	esac
+	AM_CONDITIONAL(USE_GTK2, test x"$gtkver" = "x2")
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
 
