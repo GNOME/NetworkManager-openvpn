@@ -56,9 +56,12 @@ fill_password (GtkBuilder *builder,
                NMConnection *connection,
                gboolean priv_key_password)
 {
+	NMSettingVPN *s_vpn;
 	GtkWidget *widget;
 	GtkWidget *show_passwords;
-	char *password;
+	const char *tmp;
+	char *keyring_pw;
+	gboolean unused;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
 	g_assert (widget);
@@ -69,32 +72,23 @@ fill_password (GtkBuilder *builder,
 	if (!connection)
 		return widget;
 
-	password = NULL;
-
-	if (nm_connection_get_scope (connection) == NM_CONNECTION_SCOPE_SYSTEM) {
-		NMSettingVPN *s_vpn;
-
-		s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
-		if (s_vpn) {
-			const char *tmp;
-
-			tmp = nm_setting_vpn_get_secret (s_vpn, priv_key_password ? NM_OPENVPN_KEY_CERTPASS : NM_OPENVPN_KEY_PASSWORD);
-			if (tmp)
-				password = gnome_keyring_memory_strdup (tmp);
+	/* Grab from the connection first */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	if (s_vpn) {
+		tmp = nm_setting_vpn_get_secret (s_vpn, priv_key_password ? NM_OPENVPN_KEY_CERTPASS : NM_OPENVPN_KEY_PASSWORD);
+		if (tmp) {
+			gtk_entry_set_text (GTK_ENTRY (widget), tmp);
+			return widget;
 		}
-	} else {
-		NMSettingConnection *s_con;
-		gboolean unused;
-
-		s_con = NM_SETTING_CONNECTION (nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION));
-		password = keyring_helpers_lookup_secret (nm_setting_connection_get_uuid (s_con),
-		                                          priv_key_password ? NM_OPENVPN_KEY_CERTPASS : NM_OPENVPN_KEY_PASSWORD,
-		                                          &unused);
 	}
 
-	if (password) {
-		gtk_entry_set_text (GTK_ENTRY (widget), password);
-		gnome_keyring_memory_free (password);
+	/* If not the connection then from the keyring */
+	keyring_pw = keyring_helpers_lookup_secret (nm_connection_get_uuid (connection),
+	                                            priv_key_password ? NM_OPENVPN_KEY_CERTPASS : NM_OPENVPN_KEY_PASSWORD,
+	                                            &unused);
+	if (keyring_pw) {
+		gtk_entry_set_text (GTK_ENTRY (widget), keyring_pw);
+		gnome_keyring_memory_free (keyring_pw);
 	}
 
 	return widget;
@@ -655,22 +649,47 @@ save_secret (GtkBuilder *builder,
 gboolean
 auth_widget_save_secrets (GtkBuilder *builder,
 						  const char *contype,
-						  const char *uuid,
-						  const char *name)
+						  NMConnection *connection)
 {
-	gboolean ret;
+	NMSetting *s_vpn;
+	gboolean ret = TRUE;
+	const char *uuid, *name;
+	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
+	NMSettingSecretFlags certpw_flags = NM_SETTING_SECRET_FLAG_NONE;
 
-	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS))
-		ret = save_secret (builder, "tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
-	else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD))
-		ret = save_secret (builder, "pw_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
-	else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		ret = save_secret (builder, "pw_tls_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
-		ret = save_secret (builder, "pw_tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
-	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY))
+	uuid = nm_connection_get_uuid (connection);
+	name = nm_connection_get_id (connection);
+
+	s_vpn = nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	if (!s_vpn)
+		return FALSE;
+
+	nm_setting_get_secret_flags (s_vpn, NM_OPENVPN_KEY_PASSWORD, &pw_flags, NULL);
+	nm_setting_get_secret_flags (s_vpn, NM_OPENVPN_KEY_CERTPASS, &certpw_flags, NULL);
+
+	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS)) {
+		if (certpw_flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)
+			ret = save_secret (builder, "tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
+		else
+			keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_CERTPASS);
+	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
+		if (pw_flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)
+			ret = save_secret (builder, "pw_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
+		else
+			keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_PASSWORD);
+	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		if (pw_flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)
+			ret = save_secret (builder, "pw_tls_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
+		else
+			keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_PASSWORD);
+
+		if (certpw_flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)
+			ret = save_secret (builder, "pw_tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
+		else
+			keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_CERTPASS);
+	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		/* No secrets here */
-		ret = TRUE;
-	else
+	} else
 		g_assert_not_reached ();
 
 	return ret;
@@ -1690,19 +1709,29 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 }
 
 gboolean
-advanced_save_secrets (GHashTable *advanced,
-                       const char *uuid,
-                       const char *name)
+advanced_save_secrets (GHashTable *advanced, NMConnection *connection)
 {
-	const char *secret;
+	NMSetting *s_vpn;
+	const char *secret, *uuid, *name;
 	GnomeKeyringResult result;
-	gboolean ret;
+	gboolean ret = FALSE;
+	NMSettingSecretFlags flags = NM_SETTING_SECRET_FLAG_NONE;
+
+	s_vpn = nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	if (!s_vpn)
+		return FALSE;
+	nm_setting_get_secret_flags (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, &flags, NULL);
+
+	uuid = nm_connection_get_uuid (connection);
+	name = nm_connection_get_id (connection);
 
 	secret = g_hash_table_lookup (advanced, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
-	if (secret && strlen (secret)) {
+	if (secret && strlen (secret) && (flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)) {
+		/* Only save the proxy password if it's agent-owned */
 		result = keyring_helpers_save_secret (uuid, name, NULL, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, secret);
-		ret = result == GNOME_KEYRING_RESULT_OK;
-		if (!ret)
+		if (result == GNOME_KEYRING_RESULT_OK)
+			ret = TRUE;
+		else
 			g_warning ("%s: failed to save HTTP proxy password to keyring.", __func__);
 	} else
 		ret = keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);

@@ -59,12 +59,9 @@ gboolean auth_widget_update_connection (GtkBuilder *builder,
 
 gboolean auth_widget_save_secrets (GtkBuilder *builder,
 								   const char *contype,
-								   const char *uuid,
-								   const char *name);
+								   NMConnection *connection);
 
-gboolean advanced_save_secrets (GHashTable *advanced,
-                                const char *uuid,
-                                const char *name);
+gboolean advanced_save_secrets (GHashTable *advanced, NMConnection *connection);
 
 GtkFileFilter *tls_file_chooser_filter_new (gboolean pkcs_allowed);
 
