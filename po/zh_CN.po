@@ -4,17 +4,18 @@
 # Funda Wang <fundawang@linux.net.cn>, 2004.
 # Wei Mingzhi <whistler@openoffice.org>, 2009.
 # Aron Xu <happyaron.xu@gmail.com>, 2009.
-# du baodao <centerpoint@139.com>
+# du baodao <centerpoint@139.com>, 2010.
+# Lele Long <schemacs@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2010-08-03 16:24+0000\n"
-"PO-Revision-Date: 2010-08-11 20:35+0800\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-02-12 23:56+0800\n"
+"PO-Revision-Date: 2011-02-12 23:57+0800\n"
 "Last-Translator: du baodao <centerpoint@139.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -69,70 +70,82 @@ msgstr "证书密码(_W)："
 msgid "Certificate password:"
 msgstr "证书密码："
 
-#: ../properties/auth-helpers.c:207
+#: ../properties/auth-helpers.c:208
 msgid "Choose a Certificate Authority certificate..."
 msgstr "选择一个认证机构证书..."
 
-#: ../properties/auth-helpers.c:226
+#: ../properties/auth-helpers.c:227
 msgid "Choose your personal certificate..."
 msgstr "选择您的个人证书..."
 
-#: ../properties/auth-helpers.c:244
+#: ../properties/auth-helpers.c:245
 msgid "Choose your private key..."
 msgstr "选择您的私钥..."
 
-#: ../properties/auth-helpers.c:302
+#: ../properties/auth-helpers.c:303
 msgid "Choose an OpenVPN static key..."
 msgstr "选择一个 OpenVPN 静态密钥..."
 
-#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1063
-#: ../properties/auth-helpers.c:1317
+#: ../properties/auth-helpers.c:327 ../properties/auth-helpers.c:1085
+#: ../properties/auth-helpers.c:1475
 msgid "None"
 msgstr "无"
 
-#: ../properties/auth-helpers.c:775
+#: ../properties/auth-helpers.c:782
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM 或者 PKCS#12 证书 (*.pem, *.crt, *.key, *.cer,*.p12)"
 
-#: ../properties/auth-helpers.c:776
+#: ../properties/auth-helpers.c:783
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM 证书 (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:836
+#: ../properties/auth-helpers.c:843
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN 静态密钥 (*.key)"
 
-#: ../properties/auth-helpers.c:980 ../properties/auth-helpers.c:1055
+#: ../properties/auth-helpers.c:1002 ../properties/auth-helpers.c:1077
 msgid "Default"
 msgstr "默认"
 
-#: ../properties/auth-helpers.c:1065
+#: ../properties/auth-helpers.c:1087
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1067
+#: ../properties/auth-helpers.c:1089
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1069
+#: ../properties/auth-helpers.c:1091
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1071
+#: ../properties/auth-helpers.c:1093
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1073
+#: ../properties/auth-helpers.c:1095
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1075
+#: ../properties/auth-helpers.c:1097
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1077
+#: ../properties/auth-helpers.c:1099
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
+
+#: ../properties/auth-helpers.c:1274
+msgid "Not required"
+msgstr "可选"
+
+#: ../properties/auth-helpers.c:1276
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/auth-helpers.c:1278
+msgid "SOCKS"
+msgstr "SOCKS"
 
 #: ../properties/nm-openvpn.c:53
 msgid "OpenVPN"
@@ -158,158 +171,124 @@ msgstr "带有证书的密码 (TLS)"
 msgid "Static Key"
 msgstr "静态密钥"
 
-#: ../properties/nm-openvpn-dialog.glade.h:1
-msgid " "
-msgstr " "
+#~ msgid " "
+#~ msgstr " "
 
-#: ../properties/nm-openvpn-dialog.glade.h:2
-msgid "<b>Authentication</b>"
-msgstr "<b>认证</b>"
+#~ msgid "<b>Authentication</b>"
+#~ msgstr "<b>认证</b>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:3
-msgid "<b>General</b>"
-msgstr "<b>一般</b>"
+#~ msgid "<b>General</b>"
+#~ msgstr "<b>一般</b>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:4
-msgid ""
-"<i>Connect only to servers whose certificate matches the given subject.\n"
-"Example: /CN=myvpn.company.com</i>"
-msgstr ""
-"<i>仅连接到证书符合给定主题的服务器\n"
-"例子： /CN=myvpn.company.com</i>"
+#~ msgid ""
+#~ "<i>Connect only to servers whose certificate matches the given subject.\n"
+#~ "Example: /CN=myvpn.company.com</i>"
+#~ msgstr ""
+#~ "<i>仅连接到证书符合给定主题的服务器\n"
+#~ "例子： /CN=myvpn.company.com</i>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:6
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>如果启用密钥方向，它必须与 VPN 端使用的密钥方向相反。例如，VPN 端使用 "
-"'1'，此连接必须使用 '0'。如果您不确认您应该使用何值，请联系网络管理员。</i>"
+#~ msgid ""
+#~ "<i>If key direction is used, it must be the opposite of that used on the "
+#~ "VPN peer.  For example, if the peer uses '1', this connection must use "
+#~ "'0'.  If you are unsure what value to use, contact your system "
+#~ "administrator.</i>"
+#~ msgstr ""
+#~ "<i>如果启用密钥方向，它必须与 VPN 端使用的密钥方向相反。例如，VPN 端使用 "
+#~ "'1'，此连接必须使用 '0'。如果您不确认您应该使用何值，请联系网络管理员。</"
+#~ "i>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:7
-msgid "Ad_vanced..."
-msgstr "高级(_V)..."
+#~ msgid "Ad_vanced..."
+#~ msgstr "高级(_V)..."
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
-msgid "CA Certificate:"
-msgstr "CA 认证："
+#~ msgid "CA Certificate:"
+#~ msgstr "CA 认证："
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
-msgid "Cipher:"
-msgstr "加密："
+#~ msgid "Cipher:"
+#~ msgstr "加密："
 
-#: ../properties/nm-openvpn-dialog.glade.h:10
-msgid "General"
-msgstr "一般"
+#~ msgid "General"
+#~ msgstr "一般"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
-msgid "HMAC Authentication:"
-msgstr "HMAC 认证："
+#~ msgid "HMAC Authentication:"
+#~ msgstr "HMAC 认证："
 
-#: ../properties/nm-openvpn-dialog.glade.h:12
-msgid "Key Direction:"
-msgstr "密钥方向："
+#~ msgid "Key Direction:"
+#~ msgstr "密钥方向："
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
-msgid "Key File:"
-msgstr "密钥文件："
+#~ msgid "Key File:"
+#~ msgstr "密钥文件："
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
-msgid "Local IP Address:"
-msgstr "本地 IP 地址："
+#~ msgid "Local IP Address:"
+#~ msgstr "本地 IP 地址："
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
-msgid "OpenVPN Advanced Options"
-msgstr "OpenVPN 高级选项"
+#~ msgid "OpenVPN Advanced Options"
+#~ msgstr "OpenVPN 高级选项"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
-msgid "Password:"
-msgstr "密码："
+#~ msgid "Password:"
+#~ msgstr "密码："
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
-msgid "Private Key Password:"
-msgstr "私钥密码："
+#~ msgid "Private Key Password:"
+#~ msgstr "私钥密码："
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
-msgid "Private Key:"
-msgstr "私钥："
+#~ msgid "Private Key:"
+#~ msgstr "私钥："
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
-msgid "Remote IP Address:"
-msgstr "远程 IP 地址："
+#~ msgid "Remote IP Address:"
+#~ msgstr "远程 IP 地址："
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
-msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
-msgstr "限制隧道 TCP 最大段长度(MSS)"
+#~ msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
+#~ msgstr "限制隧道 TCP 最大段长度(MSS)"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
-msgid "Security"
-msgstr "安全性"
+#~ msgid "Security"
+#~ msgstr "安全性"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
-msgid "Show passwords"
-msgstr "显示密码"
+#~ msgid "Show passwords"
+#~ msgstr "显示密码"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
-msgid "Static Key:"
-msgstr "静态密钥："
+#~ msgid "Static Key:"
+#~ msgstr "静态密钥："
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
-msgid "Subject Match:"
-msgstr "主题匹配："
+#~ msgid "Subject Match:"
+#~ msgstr "主题匹配："
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
-msgid "TLS Authentication"
-msgstr "TLS 认证"
+#~ msgid "TLS Authentication"
+#~ msgstr "TLS 认证"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
-msgid "Type:"
-msgstr "类型："
+#~ msgid "Type:"
+#~ msgstr "类型："
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
-msgid "Use L_ZO data compression"
-msgstr "使用 L_ZO 压缩"
+#~ msgid "Use L_ZO data compression"
+#~ msgstr "使用 L_ZO 压缩"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
-msgid "Use a TA_P device"
-msgstr "便用 TA_P 设备"
+#~ msgid "Use a TA_P device"
+#~ msgstr "便用 TA_P 设备"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
-msgid "Use a _TCP connection"
-msgstr "使用 _TCP 连接"
+#~ msgid "Use a _TCP connection"
+#~ msgstr "使用 _TCP 连接"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
-msgid "Use additional TLS authentication"
-msgstr "使用附加 TLS 认证"
+#~ msgid "Use additional TLS authentication"
+#~ msgstr "使用附加 TLS 认证"
 
-#: ../properties/nm-openvpn-dialog.glade.h:31
-msgid "Use custom UDP _fragment size:"
-msgstr "使用自定义用户数据报段长度(_F)："
+#~ msgid "Use custom UDP _fragment size:"
+#~ msgstr "使用自定义用户数据报段长度(_F)："
 
-#: ../properties/nm-openvpn-dialog.glade.h:32
-msgid "Use custom _renegotiation interval:"
-msgstr "使用自定义重新协商间隔(_R)："
+#~ msgid "Use custom _renegotiation interval:"
+#~ msgstr "使用自定义重新协商间隔(_R)："
 
-#: ../properties/nm-openvpn-dialog.glade.h:33
-msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
-msgstr "使用自定义最大传输单元(MTU)(_T)"
+#~ msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
+#~ msgstr "使用自定义最大传输单元(MTU)(_T)"
 
-#: ../properties/nm-openvpn-dialog.glade.h:34
-msgid "Use custom gateway p_ort:"
-msgstr "使用自定义网关端口(_O)："
+#~ msgid "Use custom gateway p_ort:"
+#~ msgstr "使用自定义网关端口(_O)："
 
-#: ../properties/nm-openvpn-dialog.glade.h:35
-msgid "User Certificate:"
-msgstr "用户证书："
+#~ msgid "User Certificate:"
+#~ msgstr "用户证书："
 
-#: ../properties/nm-openvpn-dialog.glade.h:36
-msgid "User name:"
-msgstr "用户名："
+#~ msgid "User name:"
+#~ msgstr "用户名："
 
-#: ../properties/nm-openvpn-dialog.glade.h:37
-msgid "_Gateway:"
-msgstr "网关(_G)："
+#~ msgid "_Gateway:"
+#~ msgstr "网关(_G)："
 
 #~ msgid "Add, Remove, and Edit VPN Connections"
 #~ msgstr "添加、删除和编辑 VPN 连接"
