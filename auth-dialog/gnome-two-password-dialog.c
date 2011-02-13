@@ -327,7 +327,9 @@ gnome_two_password_dialog_new (const char	*dialog_title,
 	action_area = GTK_BOX (gtk_dialog_get_action_area (GTK_DIALOG (dialog)));
 
 	/* Setup the dialog */
+#if !GTK_CHECK_VERSION (2,22,0)
 	gtk_dialog_set_has_separator (dialog, FALSE);
+#endif
         gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
 	gtk_box_set_spacing (content, 2); /* 2 * 5 + 2 = 12 */
 	gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);

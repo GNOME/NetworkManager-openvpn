@@ -454,38 +454,33 @@ update_connection (NMVpnPluginUiWidgetInterface *iface,
 	if (priv->advanced)
 		g_hash_table_foreach (priv->advanced, hash_copy_advanced, s_vpn);
 
-	/* System secrets get stored in the connection, user secrets are saved
-	 * via the save_secrets() hook.
-	 */
-	if (nm_connection_get_scope (connection) == NM_CONNECTION_SCOPE_SYSTEM) {
-		if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_TLS)) {
-			/* Certificates (TLS) */
-			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "tls_private_key_password_entry"));
-			str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-			if (str && strlen (str))
-				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
-		} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_PASSWORD)) {
-			/* Password */
-			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_password_entry"));
-			str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-			if (str && strlen (str))
-				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
-		} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-			/* Password with Certificates (TLS) */
-			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_tls_password_entry"));
-			str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-			if (str && strlen (str))
-				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
+	if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_TLS)) {
+		/* Certificates (TLS) */
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "tls_private_key_password_entry"));
+		str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+		if (str && strlen (str))
+			nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
+	} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_PASSWORD)) {
+		/* Password */
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_password_entry"));
+		str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+		if (str && strlen (str))
+			nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
+	} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		/* Password with Certificates (TLS) */
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_tls_password_entry"));
+		str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+		if (str && strlen (str))
+			nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
 
-			widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_tls_private_key_password_entry"));
-			str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-			if (str && strlen (str))
-				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
-		} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_STATIC_KEY))
-			; /* No secrets here */
-		else
-			g_assert_not_reached ();
-	}
+		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_tls_private_key_password_entry"));
+		str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+		if (str && strlen (str))
+			nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
+	} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_STATIC_KEY))
+		; /* No secrets here */
+	else
+		g_assert_not_reached ();
 
 	nm_connection_add_setting (connection, NM_SETTING (s_vpn));
 	valid = TRUE;
@@ -499,27 +494,14 @@ save_secrets (NMVpnPluginUiWidgetInterface *iface,
               GError **error)
 {
 	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (iface);
-	NMSettingConnection *s_con;
-	const char *auth_type, *uuid, *id;
+	const char *auth_type;
 	gboolean ret = FALSE;
-
-	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
-	if (!s_con) {
-		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_INVALID_CONNECTION,
-		             "%s", "missing 'connection' setting");
-		return FALSE;
-	}
-
-	id = nm_setting_connection_get_id (s_con);
-	uuid = nm_setting_connection_get_uuid (s_con);
 
 	auth_type = get_auth_type (priv->builder);
 	if (auth_type)
-		ret = auth_widget_save_secrets (priv->builder, auth_type, uuid, id);
+		ret = auth_widget_save_secrets (priv->builder, auth_type, connection);
 	if (ret)
-		ret = advanced_save_secrets (priv->advanced, uuid, id);
+		ret = advanced_save_secrets (priv->advanced, connection);
 
 	if (!ret)
 		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR,

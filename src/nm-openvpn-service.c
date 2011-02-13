@@ -121,6 +121,10 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_TLS_REMOTE,	       G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TUNNEL_MTU,           G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_USERNAME,             G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PASSWORD"-flags",     G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CERTPASS"-flags",     G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_NOSECRET,             G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags", G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
 
@@ -1201,6 +1205,11 @@ real_need_secrets (NMVPNPlugin *plugin,
 
 	g_return_val_if_fail (NM_IS_VPN_PLUGIN (plugin), FALSE);
 	g_return_val_if_fail (NM_IS_CONNECTION (connection), FALSE);
+
+	if (debug) {
+		g_message ("%s: connection -------------------------------------", __func__);
+		nm_connection_dump (connection);
+	}
 
 	s_vpn = NM_SETTING_VPN (nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN));
 	if (!s_vpn) {

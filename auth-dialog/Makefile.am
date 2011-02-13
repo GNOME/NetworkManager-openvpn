@@ -3,7 +3,6 @@ libexec_PROGRAMS = nm-openvpn-auth-dialog
 nm_openvpn_auth_dialog_CPPFLAGS =			\
 	$(GTHREAD_CFLAGS)			\
 	$(GTK_CFLAGS)				\
-	$(GCONF_CFLAGS)				\
 	$(NETWORK_MANAGER_CFLAGS)		\
 	$(GNOMEKEYRING_CFLAGS) \
 	-I$(top_srcdir)/
@@ -16,14 +15,14 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
 	-DVERSION=\"$(VERSION)\"
 
-nm_openvpn_auth_dialog_SOURCES =			\
-	main.c					\
-	gnome-two-password-dialog.c		\
+nm_openvpn_auth_dialog_SOURCES = \
+	main.c \
+	gnome-two-password-dialog.c \
 	gnome-two-password-dialog.h
 
-nm_openvpn_auth_dialog_LDADD =			\
-	$(GTK_LIBS)				\
-	$(GCONF_LIBS)				\
+nm_openvpn_auth_dialog_LDADD = \
+	$(GTK_LIBS) \
+	$(NETWORK_MANAGER_LIBS) \
 	$(top_builddir)/common-gnome/libnm-openvpn-common-gnome.la \
 	$(top_builddir)/common/libnm-openvpn-common.la
 

@@ -676,7 +676,6 @@ gboolean
 do_export (const char *path, NMConnection *connection, GError **error)
 {
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
 	NMSettingVPN *s_vpn;
 	FILE *f;
 	const char *value;
@@ -708,7 +707,6 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	s_con = NM_SETTING_CONNECTION (nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION));
 	g_assert (s_con);
 
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
 	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
 
 	f = fopen (path, "w");
