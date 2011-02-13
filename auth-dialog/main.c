@@ -295,9 +295,9 @@ main (int argc, char *argv[])
 	                 &new_password,
 	                 g_hash_table_lookup (secrets, NM_OPENVPN_KEY_CERTPASS),
 	                 &new_certpass)) {
-		if (need_password)
+		if (need_password && new_password)
 			printf ("%s\n%s\n", NM_OPENVPN_KEY_PASSWORD, new_password);
-		if (need_certpass)
+		if (need_certpass && new_certpass)
 			printf ("%s\n%s\n", NM_OPENVPN_KEY_CERTPASS, new_certpass);
 	}
 	printf ("\n\n");
