@@ -65,13 +65,13 @@ PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.74)
 AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
 
-PKG_CHECK_MODULES(NETWORK_MANAGER,
+PKG_CHECK_MODULES(NM,
 	NetworkManager >= 0.8.992
 	libnm-util >= 0.8.992
 	libnm-glib >= 0.8.992
 	libnm-glib-vpn >= 0.8.992)
-AC_SUBST(NETWORK_MANAGER_CFLAGS)
-AC_SUBST(NETWORK_MANAGER_LIBS)
+AC_SUBST(NM_CFLAGS)
+AC_SUBST(NM_LIBS)
 
 if test x"$with_gnome" != xno; then
 	AC_ARG_WITH([gtkver], AS_HELP_STRING([--with-gtkver], [The major version of GTK+ to build with]),

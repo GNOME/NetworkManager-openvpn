@@ -1,6 +1,6 @@
 AM_CPPFLAGS = \
 	$(DBUS_CFLAGS) \
-	$(NETWORK_MANAGER_CFLAGS) \
+	$(NM_CFLAGS) \
 	-DG_DISABLE_DEPRECATED \
 	-DBINDIR=\"$(bindir)\" \
 	-DPREFIX=\""$(prefix)"\" \
@@ -19,7 +19,7 @@ nm_openvpn_service_SOURCES = \
 	nm-openvpn-service.h
 
 nm_openvpn_service_LDADD = \
-	$(NETWORK_MANAGER_LIBS) \
+	$(NM_LIBS) \
         $(top_builddir)/common/libnm-openvpn-common.la
 
 nm_openvpn_service_openvpn_helper_SOURCES = \
@@ -27,6 +27,6 @@ nm_openvpn_service_openvpn_helper_SOURCES = \
 
 nm_openvpn_service_openvpn_helper_LDADD = \
 	$(DBUS_LIBS) \
-	$(NETWORK_MANAGER_LIBS)
+	$(NM_LIBS)
 
 CLEANFILES = *~

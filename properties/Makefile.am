@@ -16,7 +16,7 @@ ui_DATA = nm-openvpn-dialog.ui
 
 libnm_openvpn_properties_la_CFLAGS =                    \
         $(GTK_CFLAGS)                                   \
-        $(NETWORK_MANAGER_CFLAGS)                       \
+        $(NM_CFLAGS)                       \
         $(GNOMEKEYRING_CFLAGS)                          \
         $(DISABLE_DEPRECATED)                           \
         -I$(top_srcdir)/                                \
@@ -30,7 +30,7 @@ libnm_openvpn_properties_la_CFLAGS =                    \
 
 libnm_openvpn_properties_la_LIBADD =    \
         $(GTK_LIBS)                     \
-        $(NETWORK_MANAGER_LIBS)         \
+        $(NM_LIBS)         \
         $(top_builddir)/common-gnome/libnm-openvpn-common-gnome.la \
         $(top_builddir)/common/libnm-openvpn-common.la
 
