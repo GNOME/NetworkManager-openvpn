@@ -1,15 +1,15 @@
-# translation of network-manager-openvpn.master.gu.po to Gujarati
+# translation of gu.po to Gujarati
 # Gujarati translation of network-manager-openvpn.
 # Copyright (C) 2009 network-manager-openvpn's COPYRIGHT HOLDER
 # This file is distributed under the same license as the network-manager-openvpn package.
 #
-# Sweta Kothari <swkothar@redhat.com>, 2009.
+# Sweta Kothari <swkothar@redhat.com>, 2009, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: network-manager-openvpn.master.gu\n"
+"Project-Id-Version: gu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2009-09-28 11:36+0000\n"
-"PO-Revision-Date: 2009-10-28 15:22+0530\n"
+"POT-Creation-Date: 2010-12-25 21:16+0000\n"
+"PO-Revision-Date: 2011-02-18 11:13+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -34,11 +34,11 @@ msgstr "વપરાશકર્તા નામ (_U):"
 msgid "_Domain:"
 msgstr "ડોમેઇન (_D):"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:342
+#: ../auth-dialog/gnome-two-password-dialog.c:346
 msgid "Connect _anonymously"
 msgstr "અવ્યસ્થિત રીતે જોડાવો (_a)"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:347
+#: ../auth-dialog/gnome-two-password-dialog.c:351
 msgid "Connect as _user:"
 msgstr "વપરાશકર્તા તરીકે જોડાવો (_u)"
 
@@ -50,215 +50,126 @@ msgstr "આ સત્ર માટે પાસવર્ડને યાદ ર�
 msgid "_Save password in keyring"
 msgstr "કિરીંગ માં પાસવર્ડને સંગ્રહો (_S)"
 
-#: ../auth-dialog/main.c:127
+#: ../auth-dialog/main.c:94
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "વર્ચ્યુઅલ ખાનગી નેટવર્ક '%s' ને દાખલ કરવા માટે તમારે સત્તાધિકરણની જરૂર છે."
 
-#: ../auth-dialog/main.c:128
+#: ../auth-dialog/main.c:95
 msgid "Authenticate VPN"
 msgstr "સત્તાધિકરણ VPN"
 
-#: ../auth-dialog/main.c:149
+#: ../auth-dialog/main.c:116
 msgid "Certificate pass_word:"
 msgstr "પ્રમાણપત્ર પાસવર્ડ (_w):"
 
-#: ../auth-dialog/main.c:163
+#: ../auth-dialog/main.c:130
 msgid "Certificate password:"
 msgstr "પ્રમાણપત્ર પાસવર્ડ:"
 
-#: ../properties/auth-helpers.c:160
+#: ../properties/auth-helpers.c:207
 msgid "Choose a Certificate Authority certificate..."
 msgstr "સત્તા પ્રમાણપત્રને પસંદ કરો..."
 
-#: ../properties/auth-helpers.c:179
+#: ../properties/auth-helpers.c:226
 msgid "Choose your personal certificate..."
 msgstr "તમારા વ્યક્તિગત પ્રમાણપત્રને પસંદ કરો..."
 
-#: ../properties/auth-helpers.c:197
+#: ../properties/auth-helpers.c:244
 msgid "Choose your private key..."
 msgstr "તમારી ખાનગી કીને પસંદ કરો..."
 
-#: ../properties/auth-helpers.c:250
+#: ../properties/auth-helpers.c:302
 msgid "Choose an OpenVPN static key..."
 msgstr "OpenVPN સ્થિર કીને પસંદ કરો..."
 
-#: ../properties/auth-helpers.c:274 ../properties/auth-helpers.c:949
-#: ../properties/auth-helpers.c:1126
+#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1078
+#: ../properties/auth-helpers.c:1451
 msgid "None"
 msgstr "કંઇ નહિં"
 
-#: ../properties/auth-helpers.c:691
+#: ../properties/auth-helpers.c:775
+#| msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
+msgstr "PEM અથવા PKCS#12 પ્રમાણપત્રો (*.pem, *.crt, *.key, *.cer, *.p12)"
+
+#: ../properties/auth-helpers.c:776
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM પ્રમાણપત્રો (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:751
+#: ../properties/auth-helpers.c:836
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN સ્ટેટીક કીઓ (*.key)"
 
-#: ../properties/auth-helpers.c:871 ../properties/auth-helpers.c:941
+#: ../properties/auth-helpers.c:995 ../properties/auth-helpers.c:1070
 msgid "Default"
 msgstr "મૂળભૂત"
 
-#: ../properties/auth-helpers.c:951
+#: ../properties/auth-helpers.c:1080
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:953
+#: ../properties/auth-helpers.c:1082
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/auth-helpers.c:1084
+#| msgid "SHA-1"
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: ../properties/auth-helpers.c:1086
+#| msgid "SHA-1"
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: ../properties/auth-helpers.c:1088
+#| msgid "SHA-1"
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: ../properties/auth-helpers.c:1090
+#| msgid "SHA-1"
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: ../properties/auth-helpers.c:1092
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
+
+#: ../properties/auth-helpers.c:1253
+msgid "Not required"
+msgstr "જરૂરી નથી"
+
+#: ../properties/auth-helpers.c:1255
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/auth-helpers.c:1257
+msgid "SOCKS"
+msgstr "SOCKS"
+
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "OpenVPN સર્વર સાથે સુસંગત."
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:321
 msgid "Certificates (TLS)"
 msgstr "પ્રમાણપત્રો (TLS)"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:335
 msgid "Password"
 msgstr "પાસવર્ડ"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:352
 msgid "Password with Certificates (TLS)"
 msgstr "પ્રમાણપત્રો સાથે પાસવર્ડ (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn.c:364
 msgid "Static Key"
 msgstr "સ્ટેટીક કી"
-
-#: ../properties/nm-openvpn-dialog.glade.h:1
-msgid " "
-msgstr " "
-
-#: ../properties/nm-openvpn-dialog.glade.h:2
-msgid "<b>Authentication</b>"
-msgstr "<b>સત્તાધિકરણ</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:3
-msgid "<b>General</b>"
-msgstr "<b>સામાન્ય</b>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:4
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>જો કીની દિશા વપરાયેલ હોય તો, તે VPN પીઅર પર વાપરેલથી વિરુદ્દ હોવુ જ જોઇએ.  "
-"ઉદાહરણ માટે, જો પીઅર '1' ને વાપરે છે, આ જોડાણ એ '0' ને વાપરવુ જ જોઇએ.  જો કઇ કિંમત "
-"વાપરવાની છે તે માટે અચોક્કસ હોય તો, તમારા સિસ્ટમ વહીવટકર્તાનો સંપર્ક કરો.</i>"
-
-#: ../properties/nm-openvpn-dialog.glade.h:5
-msgid "Ad_vanced..."
-msgstr "ઉન્નત (_v)..."
-
-#: ../properties/nm-openvpn-dialog.glade.h:6
-msgid "CA Certificate:"
-msgstr "CA પ્રમાણપત્ર:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:7
-msgid "Cipher:"
-msgstr "સાઇફર:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:8
-msgid "General"
-msgstr "સામાન્ય"
-
-#: ../properties/nm-openvpn-dialog.glade.h:9
-msgid "HMAC Authentication:"
-msgstr "HMAC સત્તાધિકરણ:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:10
-msgid "Key Direction:"
-msgstr "કી દિશા:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:11
-msgid "Key File:"
-msgstr "કી ફાઇલ:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:12
-msgid "Local IP Address:"
-msgstr "સ્થાનિય IP સરનામું:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:13
-msgid "OpenVPN Advanced Options"
-msgstr "OpenVPN ઉન્નત્ત થયેલ વિકલ્પો"
-
-#: ../properties/nm-openvpn-dialog.glade.h:14
-msgid "Password:"
-msgstr "પાસવર્ડ:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:15
-msgid "Private Key Password:"
-msgstr "ખાનગી કી પાસવર્ડ:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:16
-msgid "Private Key:"
-msgstr "ખાનગી કી:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:17
-msgid "Remote IP Address:"
-msgstr "દૂરસ્થ IP સરનામું:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:18
-msgid "Security"
-msgstr "સુરક્ષા"
-
-#: ../properties/nm-openvpn-dialog.glade.h:19
-msgid "Show passwords"
-msgstr "પાસવર્ડોને બતાવો"
-
-#: ../properties/nm-openvpn-dialog.glade.h:20
-msgid "Static Key:"
-msgstr "સ્ટેટીક કી:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:21
-msgid "TLS Authentication"
-msgstr "TLS સત્તાધિકરણ"
-
-#: ../properties/nm-openvpn-dialog.glade.h:22
-msgid "Type:"
-msgstr "પ્રકાર:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:23
-msgid "Use L_ZO data compression"
-msgstr "LZO માહિતી દબાણને વાપરો (_Z)"
-
-#: ../properties/nm-openvpn-dialog.glade.h:24
-msgid "Use a TA_P device"
-msgstr "TAP ઉપકરણ ને વાપરો (_P)"
-
-#: ../properties/nm-openvpn-dialog.glade.h:25
-msgid "Use a _TCP connection"
-msgstr "TCP જોડાણને વાપરો (_T)"
-
-#: ../properties/nm-openvpn-dialog.glade.h:26
-msgid "Use additional TLS authentication"
-msgstr "વધારાનાં TLS સત્તાધિકરણને વાપરો"
-
-#: ../properties/nm-openvpn-dialog.glade.h:27
-msgid "Use custom _renegotiation interval:"
-msgstr "કસ્ટમ પુન:મંત્રણા અંતરાલને વાપરો (_r):"
-
-#: ../properties/nm-openvpn-dialog.glade.h:28
-msgid "Use custom gateway p_ort:"
-msgstr "વૈવિધ્ય ગેટવે પોર્ટને વાપરો (_o):"
-
-#: ../properties/nm-openvpn-dialog.glade.h:29
-msgid "User Certificate:"
-msgstr "વપરાશકર્તા પ્રમાણપત્ર:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:30
-msgid "User name:"
-msgstr "વપરાશકર્તા નામ:"
-
-#: ../properties/nm-openvpn-dialog.glade.h:31
-msgid "_Gateway:"
-msgstr "ગેટવે (_G):"
 
