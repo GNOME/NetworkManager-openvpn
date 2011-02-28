@@ -4,22 +4,23 @@
 #
 # David Lodge <dave@cirt.net>, 2006.
 # Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2010.
+# Rudolfs <rudolfs.mazurs@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager OpenVPN plugin\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=NetworkManager&component=VPN: openvpn\n"
-"POT-Creation-Date: 2010-03-06 06:52+0000\n"
-"PO-Revision-Date: 2010-03-26 11:14+0200\n"
-"Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
-"Language-Team: Latviešu <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2010-12-25 21:16+0000\n"
+"PO-Revision-Date: 2011-02-07 02:01+0200\n"
+"Last-Translator: Rudolfs <rudolfs.mazurs@gmail.com>\n"
+"Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: Latvian\n"
 "X-Poedit-Country: LATVIA\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.1\n"
 
 #: ../auth-dialog/gnome-two-password-dialog.c:130
 msgid "_Password:"
@@ -37,11 +38,11 @@ msgstr "_Lietotājvārds:"
 msgid "_Domain:"
 msgstr "_Domēns:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:342
+#: ../auth-dialog/gnome-two-password-dialog.c:346
 msgid "Connect _anonymously"
 msgstr "Savienoties _anonīmi"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:347
+#: ../auth-dialog/gnome-two-password-dialog.c:351
 msgid "Connect as _user:"
 msgstr "Savienoties kā _lietotājam:"
 
@@ -86,259 +87,232 @@ msgstr "Izvēlieties savu privāto atslēgu..."
 msgid "Choose an OpenVPN static key..."
 msgstr "Izvēlieties OpenVPN statisko atslēgu..."
 
-#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1057
-#: ../properties/auth-helpers.c:1311
-#| msgid "No"
+#: ../properties/auth-helpers.c:326 ../properties/auth-helpers.c:1078
+#: ../properties/auth-helpers.c:1451
 msgid "None"
 msgstr "Nav"
 
-#: ../properties/auth-helpers.c:769
+#: ../properties/auth-helpers.c:775
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM vai PKCS#12 sertifikāti (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:770
+#: ../properties/auth-helpers.c:776
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM sertifikāti (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:830
+#: ../properties/auth-helpers.c:836
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN statiskās atslēgas (*.key)"
 
-#: ../properties/auth-helpers.c:974 ../properties/auth-helpers.c:1049
-#| msgid "(Default: 1194)"
+#: ../properties/auth-helpers.c:995 ../properties/auth-helpers.c:1070
 msgid "Default"
 msgstr "Noklusētais"
 
-#: ../properties/auth-helpers.c:1059
+#: ../properties/auth-helpers.c:1080
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1061
+#: ../properties/auth-helpers.c:1082
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1063
+#: ../properties/auth-helpers.c:1084
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1065
+#: ../properties/auth-helpers.c:1086
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1067
+#: ../properties/auth-helpers.c:1088
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1069
+#: ../properties/auth-helpers.c:1090
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1071
+#: ../properties/auth-helpers.c:1092
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/nm-openvpn.c:53
-#| msgid "OpenVPN Client"
+#: ../properties/auth-helpers.c:1253
+msgid "Not required"
+msgstr "Nav nepieciešams"
+
+#: ../properties/auth-helpers.c:1255
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/auth-helpers.c:1257
+msgid "SOCKS"
+msgstr "SOCKS"
+
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "Savietojams ar OpenVPN serveri."
 
-#: ../properties/nm-openvpn.c:322
-#| msgid "C_ertificate:"
+#: ../properties/nm-openvpn.c:321
 msgid "Certificates (TLS)"
 msgstr "Sertifikāti (TLS)"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:335
 msgid "Password"
 msgstr "Parole"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:352
 msgid "Password with Certificates (TLS)"
 msgstr "Parole ar sertifikātu (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn.c:364
 msgid "Static Key"
 msgstr "Statiskā atslēga"
 
-#: ../properties/nm-openvpn-dialog.glade.h:1
-msgid " "
-msgstr " "
+#~ msgid " "
+#~ msgstr " "
 
-#: ../properties/nm-openvpn-dialog.glade.h:2
-#| msgid "<b>Required Information</b>"
-msgid "<b>Authentication</b>"
-msgstr "<b>Autentifikācija</b>"
+#~| msgid "<b>Required Information</b>"
+#~ msgid "<b>Authentication</b>"
+#~ msgstr "<b>Autentifikācija</b>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:3
-msgid "<b>General</b>"
-msgstr "<b>Vispārējs</b>"
+#~ msgid "<b>General</b>"
+#~ msgstr "<b>Vispārējs</b>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:4
-msgid ""
-"<i>Connect only to servers whose certificate matches the given subject.\n"
-"Example: /CN=myvpn.company.com</i>"
-msgstr ""
-"<i>Savienoties tikai ar serveriem, kuru sertifikāts atbilst dotajam "
-"subjektam.\n"
-"Piemēram: /CN=myvpn.company.com</i>"
+#~ msgid ""
+#~ "<i>Connect only to servers whose certificate matches the given subject.\n"
+#~ "Example: /CN=myvpn.company.com</i>"
+#~ msgstr ""
+#~ "<i>Savienoties tikai ar serveriem, kuru sertifikāts atbilst dotajam "
+#~ "subjektam.\n"
+#~ "Piemēram: /CN=myvpn.company.com</i>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:6
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>Ja tiek izmantota virziena atslēga, tai ir jābūt pretējai, nekā otram "
-"dalībniekam VPN. Piemēram, ja dalībnieks izmanto '1', tad šim savienojumam "
-"jāizmanto '0'. Ja nezināt, kādu vērtību izmantot, sazinieties ar sistēmas "
-"administratoru.</i>"
+#~ msgid ""
+#~ "<i>If key direction is used, it must be the opposite of that used on the "
+#~ "VPN peer.  For example, if the peer uses '1', this connection must use "
+#~ "'0'.  If you are unsure what value to use, contact your system "
+#~ "administrator.</i>"
+#~ msgstr ""
+#~ "<i>Ja tiek izmantota virziena atslēga, tai ir jābūt pretējai, nekā otram "
+#~ "dalībniekam VPN. Piemēram, ja dalībnieks izmanto '1', tad šim "
+#~ "savienojumam jāizmanto '0'. Ja nezināt, kādu vērtību izmantot, "
+#~ "sazinieties ar sistēmas administratoru.</i>"
 
-#: ../properties/nm-openvpn-dialog.glade.h:7
-#| msgid "Ad_vanced"
-msgid "Ad_vanced..."
-msgstr "_Paplašināts"
+#~| msgid "Ad_vanced"
+#~ msgid "Ad_vanced..."
+#~ msgstr "_Paplašināts"
 
-#: ../properties/nm-openvpn-dialog.glade.h:8
-#| msgid "C_ertificate:"
-msgid "CA Certificate:"
-msgstr "CA Sertifikāts:"
+#~| msgid "C_ertificate:"
+#~ msgid "CA Certificate:"
+#~ msgstr "CA Sertifikāts:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:9
-#| msgid "Cipher:  %s"
-msgid "Cipher:"
-msgstr "Šifrs:"
+#~| msgid "Cipher:  %s"
+#~ msgid "Cipher:"
+#~ msgstr "Šifrs:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:10
-msgid "General"
-msgstr "Vispārējs"
+#~ msgid "General"
+#~ msgstr "Vispārējs"
 
-#: ../properties/nm-openvpn-dialog.glade.h:11
-#| msgid "Authenticate VPN"
-msgid "HMAC Authentication:"
-msgstr "HMAC autentifikācija:"
+#~| msgid "Authenticate VPN"
+#~ msgid "HMAC Authentication:"
+#~ msgstr "HMAC autentifikācija:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:12
-#| msgid "Direction:"
-msgid "Key Direction:"
-msgstr "Atslēgas virziens:"
+#~| msgid "Direction:"
+#~ msgid "Key Direction:"
+#~ msgstr "Atslēgas virziens:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:13
-msgid "Key File:"
-msgstr "Atslēgas fails:"
+#~ msgid "Key File:"
+#~ msgstr "Atslēgas fails:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:14
-#| msgid "Local IP:  %s"
-msgid "Local IP Address:"
-msgstr "Lokālā IP adrese:"
+#~| msgid "Local IP:  %s"
+#~ msgid "Local IP Address:"
+#~ msgstr "Lokālā IP adrese:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:15
-msgid "OpenVPN Advanced Options"
-msgstr "OpenVPN paplašinātās opcijas"
+#~ msgid "OpenVPN Advanced Options"
+#~ msgstr "OpenVPN paplašinātās opcijas"
 
-#: ../properties/nm-openvpn-dialog.glade.h:16
-#| msgid "_Password:"
-msgid "Password:"
-msgstr "Parole:"
+#~| msgid "_Password:"
+#~ msgid "Password:"
+#~ msgstr "Parole:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:17
-#| msgid "Certificate password:"
-msgid "Private Key Password:"
-msgstr "Privātās atslēgas parole:"
+#~| msgid "Certificate password:"
+#~ msgid "Private Key Password:"
+#~ msgstr "Privātās atslēgas parole:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:18
-#| msgid "Shared Key:"
-msgid "Private Key:"
-msgstr "Privātā atslēga:"
+#~| msgid "Shared Key:"
+#~ msgid "Private Key:"
+#~ msgstr "Privātā atslēga:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:19
-#| msgid "_Remote IP:"
-msgid "Remote IP Address:"
-msgstr "Attālinātā IP adrese:"
+#~| msgid "_Remote IP:"
+#~ msgid "Remote IP Address:"
+#~ msgstr "Attālinātā IP adrese:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:20
-msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
-msgstr "Ierobežot tuneļa TCP maksimālo segmenta izmēru (MSS)"
+#~ msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
+#~ msgstr "Ierobežot tuneļa TCP maksimālo segmenta izmēru (MSS)"
 
-#: ../properties/nm-openvpn-dialog.glade.h:21
-msgid "Security"
-msgstr "Drošība"
+#~ msgid "Security"
+#~ msgstr "Drošība"
 
-#: ../properties/nm-openvpn-dialog.glade.h:22
-#| msgid "Password"
-msgid "Show passwords"
-msgstr "Rādīt paroles"
+#~| msgid "Password"
+#~ msgid "Show passwords"
+#~ msgstr "Rādīt paroles"
 
-#: ../properties/nm-openvpn-dialog.glade.h:23
-#| msgid "Shared Key:"
-msgid "Static Key:"
-msgstr "Statiskās atslēgas:"
+#~| msgid "Shared Key:"
+#~ msgid "Static Key:"
+#~ msgstr "Statiskās atslēgas:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:24
-msgid "Subject Match:"
-msgstr "Subjekta atbilstība:"
+#~ msgid "Subject Match:"
+#~ msgstr "Subjekta atbilstība:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:25
-#| msgid "Authenticate VPN"
-msgid "TLS Authentication"
-msgstr "TLS autentifikācija"
+#~| msgid "Authenticate VPN"
+#~ msgid "TLS Authentication"
+#~ msgstr "TLS autentifikācija"
 
-#: ../properties/nm-openvpn-dialog.glade.h:26
-msgid "Type:"
-msgstr "Tips:"
+#~ msgid "Type:"
+#~ msgstr "Tips:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:27
-#| msgid "Use L_ZO compression"
-msgid "Use L_ZO data compression"
-msgstr "Lietot L_ZO datu kompresiju"
+#~| msgid "Use L_ZO compression"
+#~ msgid "Use L_ZO data compression"
+#~ msgstr "Lietot L_ZO datu kompresiju"
 
-#: ../properties/nm-openvpn-dialog.glade.h:28
-#| msgid "Use TA_P device"
-msgid "Use a TA_P device"
-msgstr "Lietot TA_P iekārtu"
+#~| msgid "Use TA_P device"
+#~ msgid "Use a TA_P device"
+#~ msgstr "Lietot TA_P iekārtu"
 
-#: ../properties/nm-openvpn-dialog.glade.h:29
-#| msgid "Use _TCP connection"
-msgid "Use a _TCP connection"
-msgstr "Lietot _TCP savienojumu"
+#~| msgid "Use _TCP connection"
+#~ msgid "Use a _TCP connection"
+#~ msgstr "Lietot _TCP savienojumu"
 
-#: ../properties/nm-openvpn-dialog.glade.h:30
-msgid "Use additional TLS authentication"
-msgstr "Lietot papildus TLS autentifikāciju"
+#~ msgid "Use additional TLS authentication"
+#~ msgstr "Lietot papildus TLS autentifikāciju"
 
-#: ../properties/nm-openvpn-dialog.glade.h:31
-msgid "Use custom UDP _fragment size:"
-msgstr "Lietot pielāgotu UDP _fragmenta izmēru:"
+#~ msgid "Use custom UDP _fragment size:"
+#~ msgstr "Lietot pielāgotu UDP _fragmenta izmēru:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:32
-msgid "Use custom _renegotiation interval:"
-msgstr "Izmantot pielāgotu atkā_rtotās vienošanās intervālu:"
+#~ msgid "Use custom _renegotiation interval:"
+#~ msgstr "Izmantot pielāgotu atkā_rtotās vienošanās intervālu:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:33
-msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
-msgstr "Izmantot pielāgotu _tuneļa maksimālo pārraides bloku (MTU):"
+#~ msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
+#~ msgstr "Izmantot pielāgotu _tuneļa maksimālo pārraides bloku (MTU):"
 
-#: ../properties/nm-openvpn-dialog.glade.h:34
-#| msgid "_Gateway port:"
-msgid "Use custom gateway p_ort:"
-msgstr "Izmantot pielāgotu vārtejas p_ortu: "
+#~| msgid "_Gateway port:"
+#~ msgid "Use custom gateway p_ort:"
+#~ msgstr "Izmantot pielāgotu vārtejas p_ortu: "
 
-#: ../properties/nm-openvpn-dialog.glade.h:35
-#| msgid "C_ertificate:"
-msgid "User Certificate:"
-msgstr "Lietotāja sertifikāts:"
+#~| msgid "C_ertificate:"
+#~ msgid "User Certificate:"
+#~ msgstr "Lietotāja sertifikāts:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:36
-#| msgid "_User name:"
-msgid "User name:"
-msgstr "Lietotājvārds:"
+#~| msgid "_User name:"
+#~ msgid "User name:"
+#~ msgstr "Lietotājvārds:"
 
-#: ../properties/nm-openvpn-dialog.glade.h:37
-#| msgid "_Gateway port:"
-msgid "_Gateway:"
-msgstr "_Vārteja:"
+#~| msgid "_Gateway port:"
+#~ msgid "_Gateway:"
+#~ msgstr "_Vārteja:"
 
 #~ msgid "The following OpenVPN connection will be created:"
 #~ msgstr "Tiks izveidots OpenVPN savienojums:"
