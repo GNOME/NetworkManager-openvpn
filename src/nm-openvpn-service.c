@@ -415,7 +415,7 @@ handle_management_socket (NMVPNPlugin *plugin,
 			if (io_data->username != NULL && io_data->password != NULL)
 				write_user_pass (source, auth, io_data->username, io_data->password);
 			else
-				nm_warning ("Auth requested but one of username or password is missing");
+				g_warning ("Auth requested but one of username or password is missing");
 		} else if (!strcmp (auth, "Private Key")) {
 			if (io_data->priv_key_pass) {
 				char *qpass;
@@ -431,14 +431,14 @@ handle_management_socket (NMVPNPlugin *plugin,
 				g_io_channel_flush (source, NULL);
 				g_free (buf);
 			} else
-				nm_warning ("Certificate password requested but private key password == NULL");
+				g_warning ("Certificate password requested but private key password == NULL");
 		} else if (strcmp (auth, "HTTP Proxy") == 0) {
 			if (io_data->proxy_username != NULL && io_data->proxy_password != NULL)
 				write_user_pass (source, auth, io_data->proxy_username, io_data->proxy_password);
 			else
-				nm_warning ("HTTP Proxy auth requested but either proxy username or password is missing");
+				g_warning ("HTTP Proxy auth requested but either proxy username or password is missing");
 		} else {
-			nm_warning ("No clue what to send for username/password request for '%s'", auth);
+			g_warning ("No clue what to send for username/password request for '%s'", auth);
 			if (out_failure)
 				*out_failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
 			again = FALSE;
@@ -449,11 +449,11 @@ handle_management_socket (NMVPNPlugin *plugin,
 	auth = get_detail (str, ">PASSWORD:Verification Failed: '");
 	if (auth) {
 		if (!strcmp (auth, "Auth"))
-			nm_warning ("Password verification failed");
+			g_warning ("Password verification failed");
 		else if (!strcmp (auth, "Private Key"))
-			nm_warning ("Private key verification failed");
+			g_warning ("Private key verification failed");
 		else
-			nm_warning ("Unknown verification failed: %s", auth);
+			g_warning ("Unknown verification failed: %s", auth);
 
 		g_free (auth);
 
@@ -501,7 +501,7 @@ nm_openvpn_connect_timer_cb (gpointer data)
 
 	serv_addr.sin_family = AF_INET;
 	if (inet_pton (AF_INET, "127.0.0.1", &(serv_addr.sin_addr)) <= 0)
-		nm_warning ("%s: could not convert 127.0.0.1", __func__);
+		g_warning ("%s: could not convert 127.0.0.1", __func__);
 	serv_addr.sin_port = htons (1194);
  
 	connected = (connect (socket_fd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) == 0);
@@ -512,7 +512,7 @@ nm_openvpn_connect_timer_cb (gpointer data)
 
 		priv->connect_timer = 0;
 
-		nm_warning ("Could not open management socket");
+		g_warning ("Could not open management socket");
 		nm_vpn_plugin_failure (NM_VPN_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
 		nm_vpn_plugin_set_state (NM_VPN_PLUGIN (plugin), NM_VPN_SERVICE_STATE_STOPPED);
 	} else {
@@ -555,14 +555,14 @@ openvpn_watch_cb (GPid pid, gint status, gpointer user_data)
 	if (WIFEXITED (status)) {
 		error = WEXITSTATUS (status);
 		if (error != 0)
-			nm_warning ("openvpn exited with error code %d", error);
+			g_warning ("openvpn exited with error code %d", error);
     }
 	else if (WIFSTOPPED (status))
-		nm_warning ("openvpn stopped unexpectedly with signal %d", WSTOPSIG (status));
+		g_warning ("openvpn stopped unexpectedly with signal %d", WSTOPSIG (status));
 	else if (WIFSIGNALED (status))
-		nm_warning ("openvpn died with signal %d", WTERMSIG (status));
+		g_warning ("openvpn died with signal %d", WTERMSIG (status));
 	else
-		nm_warning ("openvpn died from an unknown cause");
+		g_warning ("openvpn died from an unknown cause");
   
 	/* Reap child if needed. */
 	waitpid (priv->pid, NULL, WNOHANG);
@@ -1042,7 +1042,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 	free_openvpn_args (args);
 
-	nm_info ("openvpn started with pid %d", pid);
+	g_message ("openvpn started with pid %d", pid);
 
 	priv->pid = pid;
 	openvpn_watch = g_child_watch_source_new (pid);
@@ -1260,7 +1260,7 @@ real_disconnect (NMVPNPlugin	 *plugin,
 		else
 			kill (priv->pid, SIGKILL);
 
-		nm_info ("Terminated openvpn daemon with PID %d.", priv->pid);
+		g_message ("Terminated openvpn daemon with PID %d.", priv->pid);
 		priv->pid = 0;
 	}
 

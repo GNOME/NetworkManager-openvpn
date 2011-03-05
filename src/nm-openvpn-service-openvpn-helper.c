@@ -59,7 +59,7 @@ helper_failed (DBusGConnection *connection, const char *reason)
 	DBusGProxy *proxy;
 	GError *err = NULL;
 
-	nm_warning ("nm-openvpn-service-openvpn-helper did not receive a valid %s from openvpn", reason);
+	g_warning ("nm-openvpn-service-openvpn-helper did not receive a valid %s from openvpn", reason);
 
 	proxy = dbus_g_proxy_new_for_name (connection,
 								NM_DBUS_SERVICE_OPENVPN,
@@ -72,7 +72,7 @@ helper_failed (DBusGConnection *connection, const char *reason)
 				    G_TYPE_INVALID);
 
 	if (err) {
-		nm_warning ("Could not send failure information: %s", err->message);
+		g_warning ("Could not send failure information: %s", err->message);
 		g_error_free (err);
 	}
 
@@ -99,7 +99,7 @@ send_ip4_config (DBusGConnection *connection, GHashTable *config)
 				    G_TYPE_INVALID);
 
 	if (err) {
-		nm_warning ("Could not send failure information: %s", err->message);
+		g_warning ("Could not send failure information: %s", err->message);
 		g_error_free (err);
 	}
 
@@ -226,14 +226,14 @@ get_routes (void)
 			break;
 
 		if (inet_pton (AF_INET, tmp, &network) <= 0) {
-			nm_warning ("Ignoring invalid static route address '%s'", tmp ? tmp : "NULL");
+			g_warning ("Ignoring invalid static route address '%s'", tmp ? tmp : "NULL");
 			continue;
 		}
 
 		snprintf (buf, BUFLEN, "route_netmask_%d", i);
 		tmp = getenv (buf);
 		if (!tmp || inet_pton (AF_INET, tmp, &netmask) <= 0) {
-			nm_warning ("Ignoring invalid static route netmask '%s'", tmp ? tmp : "NULL");
+			g_warning ("Ignoring invalid static route netmask '%s'", tmp ? tmp : "NULL");
 			continue;
 		}
 
@@ -241,7 +241,7 @@ get_routes (void)
 		tmp = getenv (buf);
 		/* gateway can be missing */
 		if (tmp && (inet_pton (AF_INET, tmp, &gateway) <= 0)) {
-			nm_warning ("Ignoring invalid static route gateway '%s'", tmp ? tmp : "NULL");
+			g_warning ("Ignoring invalid static route gateway '%s'", tmp ? tmp : "NULL");
 			continue;
 		}
 
@@ -254,7 +254,7 @@ get_routes (void)
 			errno = 0;
 			tmp_metric = strtol (tmp, NULL, 10);
 			if (errno || tmp_metric < 0 || tmp_metric > G_MAXUINT32) {
-				nm_warning ("Ignoring invalid static route metric '%s'", tmp);
+				g_warning ("Ignoring invalid static route metric '%s'", tmp);
 				continue;
 			}
 			metric = (guint32) tmp_metric;
@@ -379,7 +379,7 @@ main (int argc, char *argv[])
 
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
 	if (!connection) {
-		nm_warning ("Could not get the system bus: %s", err->message);
+		g_warning ("Could not get the system bus: %s", err->message);
 		exit (1);
 	}
 
@@ -463,7 +463,7 @@ main (int argc, char *argv[])
 			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 		}
 	} else
-		nm_warning ("No IP4 netmask/prefix (missing or invalid 'ifconfig_netmask')");
+		g_warning ("No IP4 netmask/prefix (missing or invalid 'ifconfig_netmask')");
 
 	val = get_routes ();
 	if (val)
@@ -508,7 +508,7 @@ main (int argc, char *argv[])
 		errno = 0;
 		mtu = strtol (tmp, NULL, 10);
 		if (errno || mtu < 0 || mtu > 20000) {
-			nm_warning ("Ignoring invalid tunnel MTU '%s'", tmp);
+			g_warning ("Ignoring invalid tunnel MTU '%s'", tmp);
 		} else {
 			val = uint_to_gvalue ((guint32) mtu);
 			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_MTU, val);
