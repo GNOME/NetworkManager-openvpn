@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-24 10:07+0100\n"
-"PO-Revision-Date: 2011-02-24 10:08+0100\n"
+"POT-Creation-Date: 2011-03-14 18:56+0100\n"
+"PO-Revision-Date: 2011-03-14 19:00+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -131,7 +131,7 @@ msgstr "SHA-512"
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1293
+#: ../properties/auth-helpers.c:1293 ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Ikke nødvendig"
 
@@ -166,3 +166,192 @@ msgstr "Passord med sertifikater (TLS)"
 #: ../properties/nm-openvpn.c:365
 msgid "Static Key"
 msgstr "Statisk nøkkel"
+
+#: ../properties/nm-openvpn-dialog.ui.h:1
+msgid " "
+msgstr " "
+
+#: ../properties/nm-openvpn-dialog.ui.h:2
+msgid "<b>Authentication</b>"
+msgstr "<b>Autentisering</b>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:3
+msgid "<b>General</b>"
+msgstr "<b>Generelt</b>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:4
+msgid ""
+"<i>Connect only to servers whose certificate matches the given subject.\n"
+"Example: /CN=myvpn.company.com</i>"
+msgstr ""
+"<i>Koble kun til tjenere hvis sertifikat passer oppgitt emne.\n"
+"Eksempel: /CN=mittvpn.firma.no</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:6
+msgid ""
+"<i>If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.</i>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:7
+msgid ""
+"<i>Select this option if your organization requires the use of a proxy "
+"server to access the Internet.</i>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:8
+msgid "Ad_vanced..."
+msgstr "A_vansert …"
+
+#: ../properties/nm-openvpn-dialog.ui.h:9
+msgid "CA Certificate:"
+msgstr "CA-sertifikat:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:10
+msgid "Cipher:"
+msgstr "Cipher:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:11
+msgid "General"
+msgstr "Generelt"
+
+#: ../properties/nm-openvpn-dialog.ui.h:12
+msgid "HMAC Authentication:"
+msgstr "HMAC-autentisering"
+
+#: ../properties/nm-openvpn-dialog.ui.h:13
+msgid "Key Direction:"
+msgstr "Nøkkelretning:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:14
+msgid "Key File:"
+msgstr "Nøkkelfil:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:15
+msgid "Local IP Address:"
+msgstr "Lokal IP-adresse:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:17
+msgid "OpenVPN Advanced Options"
+msgstr "Avanserte alternativer for OpenVPN"
+
+#: ../properties/nm-openvpn-dialog.ui.h:18
+msgid "Password:"
+msgstr "Passord:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:19
+msgid "Port:"
+msgstr "Port:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:20
+msgid "Private Key Password:"
+msgstr "Passord for privat nøkkel:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:21
+msgid "Private Key:"
+msgstr "Privat nøkkel:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:22
+msgid "Proxies"
+msgstr "Proxyer"
+
+#: ../properties/nm-openvpn-dialog.ui.h:23
+msgid "Proxy Password:"
+msgstr "Passord for proxy:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:24
+msgid "Proxy Type:"
+msgstr "Type proxy:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:25
+msgid "Proxy Username:"
+msgstr "Brukernavn for proxy:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:26
+msgid "Remote IP Address:"
+msgstr "Ekstern IP-adresse:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:27
+msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:28
+msgid "Retry indefinitely when errors occur"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:29
+msgid "Security"
+msgstr "Sikkerhet"
+
+#: ../properties/nm-openvpn-dialog.ui.h:30
+msgid "Server Address:"
+msgstr "Tjeneradresse:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:31
+msgid "Show password"
+msgstr "Vis passord"
+
+#: ../properties/nm-openvpn-dialog.ui.h:32
+msgid "Show passwords"
+msgstr "Vis passord"
+
+#: ../properties/nm-openvpn-dialog.ui.h:33
+msgid "Static Key:"
+msgstr "Statisk nøkkel:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:34
+msgid "Subject Match:"
+msgstr "Emnesøk:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:35
+msgid "TLS Authentication"
+msgstr "TLS-autentisering"
+
+#: ../properties/nm-openvpn-dialog.ui.h:36
+msgid "Type:"
+msgstr "Type:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:37
+msgid "Use L_ZO data compression"
+msgstr "Bruk L_ZO-datakomprimering"
+
+#: ../properties/nm-openvpn-dialog.ui.h:38
+msgid "Use a TA_P device"
+msgstr "Bruk en TA_P-enhet"
+
+#: ../properties/nm-openvpn-dialog.ui.h:39
+msgid "Use a _TCP connection"
+msgstr "Bruk en _TCP-tilkobling"
+
+#: ../properties/nm-openvpn-dialog.ui.h:40
+msgid "Use additional TLS authentication"
+msgstr "Bruk ekstra TLS-autentisering"
+
+#: ../properties/nm-openvpn-dialog.ui.h:41
+msgid "Use custom UDP _fragment size:"
+msgstr "Bruk egendefinert _fragmentstørrelse for UDP:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:42
+msgid "Use custom _renegotiation interval:"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:43
+msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:44
+msgid "Use custom gateway p_ort:"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:45
+msgid "User Certificate:"
+msgstr "Brukersertifikat:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:46
+msgid "User name:"
+msgstr "Brukernavn:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:47
+msgid "_Gateway:"
+msgstr "_Portner:"
