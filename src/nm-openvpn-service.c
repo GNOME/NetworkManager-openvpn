@@ -189,7 +189,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "invalid address '%s'",
+			             _("invalid address '%s'"),
 			             key);
 			break;
 		case G_TYPE_INT:
@@ -201,7 +201,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "invalid integer property '%s' or out of range [%d -> %d]",
+			             _("invalid integer property '%s' or out of range [%d -> %d]"),
 			             key, prop.int_min, prop.int_max);
 			break;
 		case G_TYPE_BOOLEAN:
@@ -211,14 +211,14 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "invalid boolean property '%s' (not yes or no)",
+			             _("invalid boolean property '%s' (not yes or no)"),
 			             key);
 			break;
 		default:
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "unhandled property '%s' type %s",
+			             _("unhandled property '%s' type %s"),
 			             key, g_type_name (prop.type));
 			break;
 		}
@@ -229,7 +229,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 		g_set_error (info->error,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             "property '%s' invalid or not supported",
+		             _("property '%s' invalid or not supported"),
 		             key);
 	}
 }
@@ -246,7 +246,7 @@ nm_openvpn_properties_validate (NMSettingVPN *s_vpn, GError **error)
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		             "%s",
-		             "No VPN configuration options.");
+		             _("No VPN configuration options."));
 		return FALSE;
 	}
 
@@ -269,7 +269,7 @@ nm_openvpn_secrets_validate (NMSettingVPN *s_vpn, GError **error)
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		             "%s",
-		             "No VPN secrets!");
+		             _("No VPN secrets!"));
 		return FALSE;
 	}
 
@@ -738,7 +738,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		             "%s",
-		             "Could not find the openvpn binary.");
+		             _("Could not find the openvpn binary."));
 		return FALSE;
 	}
   
@@ -749,7 +749,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
  			             NM_VPN_PLUGIN_ERROR,
  			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
  			             "%s",
- 			             "Invalid HMAC auth.");
+ 			             _("Invalid HMAC auth."));
  			return FALSE;
  		}
  	}
@@ -761,7 +761,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		             "%s",
-		             "Invalid connection type.");
+		             _("Invalid connection type."));
 		return FALSE;
 	}
 
@@ -796,7 +796,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 				         NM_VPN_PLUGIN_ERROR,
 				         NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-				         "Invalid proxy type '%s'.",
+				         _("Invalid proxy type '%s'."),
 				         tmp);
 			return FALSE;
 		}
@@ -832,7 +832,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "Invalid port number '%s'.",
+			             _("Invalid port number '%s'."),
 			             tmp);
 			free_openvpn_args (args);
 			return FALSE;
@@ -882,7 +882,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "Invalid reneg seconds '%s'.",
+			             _("Invalid reneg seconds '%s'."),
 			             tmp);
 			free_openvpn_args (args);
 			return FALSE;
@@ -906,7 +906,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "Invalid TUN MTU size '%s'.",
+			             _("Invalid TUN MTU size '%s'."),
 			             tmp);
 			free_openvpn_args (args);
 			return FALSE;
@@ -921,7 +921,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             "Invalid fragment size '%s'.",
+			             _("Invalid fragment size '%s'."),
 			             tmp);
 			free_openvpn_args (args);
 			return FALSE;
@@ -989,7 +989,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             "%s",
-			             "Missing required local IP address for static key mode.");
+			             _("Missing required local IP address for static key mode."));
 			free_openvpn_args (args);
 			return FALSE;
 		}
@@ -1002,7 +1002,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             "%s",
-			             "Missing required remote IP address for static key mode.");
+			             _("Missing required remote IP address for static key mode."));
 			free_openvpn_args (args);
 			return FALSE;
 		}
@@ -1027,7 +1027,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		g_set_error (error,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             "Unknown connection type '%s'.",
+		             _("Unknown connection type '%s'."),
 		             connection_type);
 		free_openvpn_args (args);
 		return FALSE;
@@ -1146,7 +1146,7 @@ real_connect (NMVPNPlugin   *plugin,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
 		             "%s",
-		             "Could not process the request because the VPN connection settings were invalid.");
+		             _("Could not process the request because the VPN connection settings were invalid."));
 		return FALSE;
 	}
 
@@ -1157,7 +1157,7 @@ real_connect (NMVPNPlugin   *plugin,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		             "%s",
-		             "Invalid connection type.");
+		             _("Invalid connection type."));
 		return FALSE;
 	}
 
@@ -1171,7 +1171,7 @@ real_connect (NMVPNPlugin   *plugin,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
 			             "%s",
-			             "Could not process the request because no username was provided.");
+			             _("Could not process the request because no username was provided."));
 			return FALSE;
 		}
 	}
@@ -1217,7 +1217,7 @@ real_need_secrets (NMVPNPlugin *plugin,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
 		             "%s",
-		             "Could not process the request because the VPN connection settings were invalid.");
+		             _("Could not process the request because the VPN connection settings were invalid."));
 		return FALSE;
 	}
 
@@ -1227,7 +1227,7 @@ real_need_secrets (NMVPNPlugin *plugin,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		             "%s",
-		             "Invalid connection type.");
+		             _("Invalid connection type."));
 		return FALSE;
 	}
 
@@ -1361,8 +1361,8 @@ main (int argc, char *argv[])
 	GOptionContext *opt_ctx = NULL;
 
 	GOptionEntry options[] = {
-		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, "Don't quit when VPN connection terminates", NULL },
-		{ "debug", 0, 0, G_OPTION_ARG_NONE, &debug, "Enable verbose debug logging (may expose passwords)", NULL },
+		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don't quit when VPN connection terminates"), NULL },
+		{ "debug", 0, 0, G_OPTION_ARG_NONE, &debug, N_("Enable verbose debug logging (may expose passwords)"), NULL },
 		{NULL}
 	};
 
@@ -1376,7 +1376,7 @@ main (int argc, char *argv[])
 	g_option_context_add_main_entries (opt_ctx, options, NULL);
 
 	g_option_context_set_summary (opt_ctx,
-		"nm-vpnc-service provides integrated OpenVPN capability to NetworkManager.");
+		_("nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."));
 
 	g_option_context_parse (opt_ctx, &argc, &argv, NULL);
 	g_option_context_free (opt_ctx);
