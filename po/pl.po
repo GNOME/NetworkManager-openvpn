@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-15 14:04+0100\n"
-"PO-Revision-Date: 2011-03-15 14:05+0100\n"
+"POT-Creation-Date: 2011-04-04 08:29+0200\n"
+"PO-Revision-Date: 2011-04-04 08:30+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -368,3 +368,118 @@ msgstr "Nazwa użytkownika:"
 #: ../properties/nm-openvpn-dialog.ui.h:47
 msgid "_Gateway:"
 msgstr "_Brama:"
+
+#: ../src/nm-openvpn-service.c:192
+#, c-format
+msgid "invalid address '%s'"
+msgstr "nieprawidłowy adres \"%s\""
+
+#: ../src/nm-openvpn-service.c:204
+#, c-format
+msgid "invalid integer property '%s' or out of range [%d -> %d]"
+msgstr ""
+"nieprawidłowa własność liczby całkowitej \"%s\" lub jest poza zakresem [%d -"
+"> %d]"
+
+#: ../src/nm-openvpn-service.c:214
+#, c-format
+msgid "invalid boolean property '%s' (not yes or no)"
+msgstr ""
+"nieprawidłowa własność zmiennej logicznej \"%s\" (nie wynosi \"yes\" lub \"no"
+"\")"
+
+#: ../src/nm-openvpn-service.c:221
+#, c-format
+msgid "unhandled property '%s' type %s"
+msgstr "nieobsługiwana własność \"%s\" typu \"%s\""
+
+#: ../src/nm-openvpn-service.c:232
+#, c-format
+msgid "property '%s' invalid or not supported"
+msgstr "własność \"%s\" jest nieprawidłowa lub nieobsługiwana"
+
+#: ../src/nm-openvpn-service.c:249
+msgid "No VPN configuration options."
+msgstr "Brak opcji konfiguracji VPN."
+
+#: ../src/nm-openvpn-service.c:272
+msgid "No VPN secrets!"
+msgstr "Brak haseł VPN."
+
+#: ../src/nm-openvpn-service.c:741
+msgid "Could not find the openvpn binary."
+msgstr "Nie można odnaleźć pliku binarnego openvpn."
+
+#: ../src/nm-openvpn-service.c:752
+msgid "Invalid HMAC auth."
+msgstr "Nieprawidłowe uwierzytelnienie HMAC."
+
+#: ../src/nm-openvpn-service.c:764 ../src/nm-openvpn-service.c:1160
+#: ../src/nm-openvpn-service.c:1230
+msgid "Invalid connection type."
+msgstr "Nieprawidłowy typ połączenia."
+
+#: ../src/nm-openvpn-service.c:799
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Nieprawidłowy typ pośrednika \"%s\"."
+
+#: ../src/nm-openvpn-service.c:835
+#, c-format
+msgid "Invalid port number '%s'."
+msgstr "Nieprawidłowy numer portu \"%s\"."
+
+#: ../src/nm-openvpn-service.c:885
+#, c-format
+msgid "Invalid reneg seconds '%s'."
+msgstr "Nieprawidłowe sekundy renegocjacji \"%s\"."
+
+#: ../src/nm-openvpn-service.c:909
+#, c-format
+msgid "Invalid TUN MTU size '%s'."
+msgstr "Nieprawidłowy rozmiar TUN MTU \"%s\"."
+
+#: ../src/nm-openvpn-service.c:924
+#, c-format
+msgid "Invalid fragment size '%s'."
+msgstr "Nieprawidłowy rozmiar fragmentu \"%s\"."
+
+#: ../src/nm-openvpn-service.c:992
+msgid "Missing required local IP address for static key mode."
+msgstr "Brak wymaganego lokalnego adresu IP dla trybu klucza statycznego."
+
+#: ../src/nm-openvpn-service.c:1005
+msgid "Missing required remote IP address for static key mode."
+msgstr "Brak wymaganego zdalnego adresu IP dla trybu klucza statycznego."
+
+#: ../src/nm-openvpn-service.c:1030
+#, c-format
+msgid "Unknown connection type '%s'."
+msgstr "Nieznany typ połączenia \"%s\"."
+
+#: ../src/nm-openvpn-service.c:1149 ../src/nm-openvpn-service.c:1220
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr ""
+"Nie można przetworzyć żądania, ponieważ ustawienia połączenia VPN są "
+"nieprawidłowe."
+
+#: ../src/nm-openvpn-service.c:1174
+msgid "Could not process the request because no username was provided."
+msgstr "Nie można przetworzyć żądania, ponieważ nie podano nazwy użytkownika."
+
+#: ../src/nm-openvpn-service.c:1364
+msgid "Don't quit when VPN connection terminates"
+msgstr "Nie kończy działania, kiedy połączenie VPN jest kończone"
+
+#: ../src/nm-openvpn-service.c:1365
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr "Włącza więcej komunikatów debugowania (może wyjawić hasła)"
+
+#: ../src/nm-openvpn-service.c:1379
+msgid ""
+"nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
+"nm-openvpn-service dostarcza zintegrowaną możliwość nawiązywania połączeń "
+"OpenVPN dla usługi NetworkManager."
