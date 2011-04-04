@@ -287,9 +287,12 @@ nm_openvpn_disconnect_management_socket (NMOpenvpnPlugin *plugin)
 	if (!io_data)
 		return;
 
-	g_source_remove (io_data->socket_channel_eventid);
-	g_io_channel_shutdown (io_data->socket_channel, FALSE, NULL);
-	g_io_channel_unref (io_data->socket_channel);
+	if (io_data->socket_channel_eventid)
+		g_source_remove (io_data->socket_channel_eventid);
+	if (io_data->socket_channel) {
+		g_io_channel_shutdown (io_data->socket_channel, FALSE, NULL);
+		g_io_channel_unref (io_data->socket_channel);
+	}
 
 	g_free (io_data->username);
 	g_free (io_data->proxy_username);
