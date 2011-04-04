@@ -50,8 +50,10 @@ get_secrets (const char *vpn_name,
              gboolean retry,
              gboolean allow_interaction,
              const char *in_pass,
+             NMSettingSecretFlags pw_flags,
              char **out_password,
              const char *in_certpass,
+             NMSettingSecretFlags cp_flags,
              char **out_certpass)
 {
 	GnomeTwoPasswordDialog *dialog;
@@ -65,26 +67,38 @@ get_secrets (const char *vpn_name,
 	g_return_val_if_fail (out_certpass != NULL, FALSE);
 
 	if (need_password) {
-		if (in_pass)
-			password = gnome_keyring_memory_strdup (in_pass);
-		else
-			password = keyring_helpers_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_PASSWORD, &is_session);
-		if (!password)
+		if (!(pw_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
+			if (in_pass)
+				password = gnome_keyring_memory_strdup (in_pass);
+			else
+				password = keyring_helpers_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_PASSWORD, &is_session);
+		}
+		if (!password && !(pw_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
 			need_secret = TRUE;
 	}
 
 	if (need_certpass) {
-		if (in_certpass)
-			certpass = gnome_keyring_memory_strdup (in_certpass);
-		else
-			certpass = keyring_helpers_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_CERTPASS, &is_session);
-		if (!certpass)
+		if (!(cp_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
+			if (in_certpass)
+				certpass = gnome_keyring_memory_strdup (in_certpass);
+			else
+				certpass = keyring_helpers_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_CERTPASS, &is_session);
+		}
+		if (!certpass && !(cp_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
 			need_secret = TRUE;
 	}
 
 	/* Have all passwords and we're not supposed to ask the user again */
-	if ((!need_secret && !retry) || !allow_interaction)
+	if (!need_secret && !retry)
 		return TRUE;
+
+	if (allow_interaction == FALSE) {
+		if (need_password)
+			*out_password = password;
+		if (need_certpass)
+			*out_certpass = certpass;
+		return TRUE;
+	}
 
 	prompt = g_strdup_printf (_("You need to authenticate to access the Virtual Private Network '%s'."), vpn_name);
 	dialog = GNOME_TWO_PASSWORD_DIALOG (gnome_two_password_dialog_new (_("Authenticate VPN"), prompt, NULL, NULL, FALSE));
@@ -189,19 +203,25 @@ get_password_types (GHashTable *data,
                     gboolean *out_need_certpass)
 {
 	const char *ctype, *val;
+	NMSettingSecretFlags flags = NM_SETTING_SECRET_FLAG_NONE;
 
 	ctype = g_hash_table_lookup (data, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	if (ctype) {
-		if (!strcmp (ctype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-			/* Normal user password */
-			if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
-				*out_need_password = TRUE;
+	g_return_if_fail (ctype != NULL);
 
-			/* Encrypted private key password */
-			val = g_hash_table_lookup (data, NM_OPENVPN_KEY_KEY);
-			if (val)
-				*out_need_certpass = is_encrypted (val);
-		} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD))
+	if (!strcmp (ctype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		/* Normal user password */
+		nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &flags);
+		if (   !strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
+		    && !(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
+			*out_need_password = TRUE;
+
+		/* Encrypted private key password */
+		val = g_hash_table_lookup (data, NM_OPENVPN_KEY_KEY);
+		if (val)
+			*out_need_certpass = is_encrypted (val);
+	} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD)) {
+		nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &flags);
+		if (!(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
 			*out_need_password = TRUE;
 	}
 }
@@ -241,6 +261,8 @@ main (int argc, char *argv[])
 	GHashTable *data = NULL, *secrets = NULL;
 	gboolean need_password = FALSE, need_certpass = FALSE;
 	char *new_password = NULL, *new_certpass = NULL;
+	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
+	NMSettingSecretFlags cp_flags = NM_SETTING_SECRET_FLAG_NONE;
 	GOptionContext *context;
 	GOptionEntry entries[] = {
 			{ "reprompt", 'r', 0, G_OPTION_ARG_NONE, &retry, "Reprompt for passwords", NULL},
@@ -279,12 +301,13 @@ main (int argc, char *argv[])
 	}
 
 	get_password_types (data, &need_password, &need_certpass);
-
 	if (!need_password && !need_certpass) {
 		printf ("%s\n%s\n\n\n", NM_OPENVPN_KEY_NOSECRET, "true");
 		return 0;
 	}
 
+	nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &pw_flags);
+	nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_CERTPASS, &cp_flags);
 	if (get_secrets (vpn_name,
 	                 vpn_uuid,
 	                 need_password,
@@ -292,8 +315,10 @@ main (int argc, char *argv[])
 	                 retry,
 	                 allow_interaction,
 	                 g_hash_table_lookup (secrets, NM_OPENVPN_KEY_PASSWORD),
+	                 pw_flags,
 	                 &new_password,
 	                 g_hash_table_lookup (secrets, NM_OPENVPN_KEY_CERTPASS),
+	                 cp_flags,
 	                 &new_certpass)) {
 		if (need_password && new_password)
 			printf ("%s\n%s\n", NM_OPENVPN_KEY_PASSWORD, new_password);
