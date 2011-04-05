@@ -29,6 +29,8 @@ endif
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 	sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' $< >$@
 
+DISTCHECK_CONFIGURE_FLAGS = --with-tests=yes
+
 EXTRA_DIST = nm-openvpn-service.name.in \
              $(dbusservice_DATA)  \
              $(desktopfile) \
