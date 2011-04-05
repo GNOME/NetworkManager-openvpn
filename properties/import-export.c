@@ -42,6 +42,7 @@
 #include "import-export.h"
 #include "nm-openvpn.h"
 #include "../src/nm-openvpn-service.h"
+#include "../common/utils.h"
 
 #define AUTH_TAG "auth "
 #define AUTH_USER_PASS_TAG "auth-user-pass"
@@ -470,8 +471,13 @@ do_import (const char *path, char **lines, GError **error)
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, s_port);
 					if (user)
 						nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, user);
-					if (pass)
+					if (pass) {
 						nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, pass);
+						nm_setting_set_secret_flags (NM_SETTING (s_vpn),
+						                             NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
+						                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+						                             NULL);
+					}
 					proxy_set = TRUE;
 				}
 				g_free (s_port);
@@ -660,6 +666,28 @@ do_import (const char *path, char **lines, GError **error)
 			ctype = NM_OPENVPN_CONTYPE_TLS;
 
 		nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, ctype);
+
+		/* Default secret flags to be agent-owned */
+		if (have_pass) {
+			nm_setting_set_secret_flags (NM_SETTING (s_vpn),
+			                             NM_OPENVPN_KEY_PASSWORD,
+			                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+			                             NULL);
+		}
+		if (have_certs) {
+			const char *key_path;
+
+			key_path = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+			if (key_path && is_encrypted (key_path)) {
+				/* If there should be a private key password, default it to
+				 * being agent-owned.
+				 */
+				nm_setting_set_secret_flags (NM_SETTING (s_vpn),
+				                             NM_OPENVPN_KEY_CERTPASS,
+				                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+				                             NULL);
+			}
+		}
 	}
 
 	g_free (default_path);
