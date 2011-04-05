@@ -25,7 +25,7 @@ test_import_export_LDADD = \
 if WITH_TESTS
 
 check-local: test-import-export
-	$(abs_builddir)/test-import-export $(abs_srcdir)/conf
+	$(abs_builddir)/test-import-export $(abs_srcdir)/conf $(abs_builddir)/conf
 
 endif
 

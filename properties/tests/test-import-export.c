@@ -199,7 +199,7 @@ remove_secrets (NMConnection *connection)
 
 #define PASSWORD_EXPORTED_NAME "password.ovpntest"
 static void
-test_password_export (NMVpnPluginUiInterface *plugin, const char *dir)
+test_password_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -210,7 +210,7 @@ test_password_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	connection = get_basic_connection ("password-export", plugin, dir, "password.conf");
 	ASSERT (connection != NULL, "password-export", "failed to import connection");
 
-	path = g_build_path ("/", dir, PASSWORD_EXPORTED_NAME, NULL);
+	path = g_build_path ("/", tmpdir, PASSWORD_EXPORTED_NAME, NULL);
 	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
@@ -220,7 +220,7 @@ test_password_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	}
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection ("password-export", plugin, dir, PASSWORD_EXPORTED_NAME);
+	reimported = get_basic_connection ("password-export", plugin, tmpdir, PASSWORD_EXPORTED_NAME);
 	(void) unlink (path);
 	ASSERT (reimported != NULL, "password-export", "failed to re-import connection");
 
@@ -313,7 +313,7 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define TLS_EXPORTED_NAME "tls.ovpntest"
 static void
-test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir)
+test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -324,7 +324,7 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	connection = get_basic_connection ("tls-export", plugin, dir, "tls.ovpn");
 	ASSERT (connection != NULL, "tls-export", "failed to import connection");
 
-	path = g_build_path ("/", dir, TLS_EXPORTED_NAME, NULL);
+	path = g_build_path ("/", tmpdir, TLS_EXPORTED_NAME, NULL);
 	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
@@ -334,7 +334,7 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	}
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection ("tls-export", plugin, dir, TLS_EXPORTED_NAME);
+	reimported = get_basic_connection ("tls-export", plugin, tmpdir, TLS_EXPORTED_NAME);
 	(void) unlink (path);
 	ASSERT (reimported != NULL, "tls-export", "failed to re-import connection");
 
@@ -421,7 +421,7 @@ test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define PKCS12_EXPORTED_NAME "pkcs12.ovpntest"
 static void
-test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir)
+test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -432,7 +432,7 @@ test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	connection = get_basic_connection ("pkcs12-export", plugin, dir, "pkcs12.ovpn");
 	ASSERT (connection != NULL, "pkcs12-export", "failed to import connection");
 
-	path = g_build_path ("/", dir, PKCS12_EXPORTED_NAME, NULL);
+	path = g_build_path ("/", tmpdir, PKCS12_EXPORTED_NAME, NULL);
 	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
@@ -442,7 +442,7 @@ test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	}
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection ("pkcs12-export", plugin, dir, PKCS12_EXPORTED_NAME);
+	reimported = get_basic_connection ("pkcs12-export", plugin, tmpdir, PKCS12_EXPORTED_NAME);
 	(void) unlink (path);
 	ASSERT (reimported != NULL, "pkcs12-export", "failed to re-import connection");
 
@@ -563,7 +563,7 @@ test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define STATIC_KEY_EXPORTED_NAME "static.ovpntest"
 static void
-test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir)
+test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -574,7 +574,7 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	connection = get_basic_connection ("static-key-export", plugin, dir, "static.ovpn");
 	ASSERT (connection != NULL, "static-key-export", "failed to import connection");
 
-	path = g_build_path ("/", dir, STATIC_KEY_EXPORTED_NAME, NULL);
+	path = g_build_path ("/", tmpdir, STATIC_KEY_EXPORTED_NAME, NULL);
 	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
@@ -584,7 +584,7 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	}
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection ("static-key-export", plugin, dir, STATIC_KEY_EXPORTED_NAME);
+	reimported = get_basic_connection ("static-key-export", plugin, tmpdir, STATIC_KEY_EXPORTED_NAME);
 	(void) unlink (path);
 	ASSERT (reimported != NULL, "static-key-export", "failed to re-import connection");
 
@@ -640,6 +640,7 @@ static void
 test_port_export (NMVpnPluginUiInterface *plugin,
                   const char *detail,
                   const char *dir,
+                  const char *tmpdir,
                   const char *file,
                   const char *exported_name)
 {
@@ -652,7 +653,7 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 	connection = get_basic_connection (detail, plugin, dir, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
 
-	path = g_build_path ("/", dir, exported_name, NULL);
+	path = g_build_path ("/", tmpdir, exported_name, NULL);
 	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
@@ -662,7 +663,7 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 	}
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (detail, plugin, dir, exported_name);
+	reimported = get_basic_connection (detail, plugin, tmpdir, exported_name);
 	(void) unlink (path);
 	ASSERT (reimported != NULL, detail, "failed to re-import connection");
 
@@ -703,7 +704,7 @@ test_tun_opts_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define TUNOPTS_EXPORTED_NAME "tun-opts.ovpntest"
 static void
-test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir)
+test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -714,7 +715,7 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	connection = get_basic_connection ("tunopts-export", plugin, dir, "tun-opts.conf");
 	ASSERT (connection != NULL, "tunopts-export", "failed to import connection");
 
-	path = g_build_path ("/", dir, TUNOPTS_EXPORTED_NAME, NULL);
+	path = g_build_path ("/", tmpdir, TUNOPTS_EXPORTED_NAME, NULL);
 	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
@@ -724,7 +725,7 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	}
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection ("tunopts-export", plugin, dir, TUNOPTS_EXPORTED_NAME);
+	reimported = get_basic_connection ("tunopts-export", plugin, tmpdir, TUNOPTS_EXPORTED_NAME);
 	(void) unlink (path);
 	ASSERT (reimported != NULL, "tunopts-export", "failed to re-import connection");
 
@@ -785,7 +786,7 @@ test_proxy_http_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define PROXY_HTTP_EXPORTED_NAME "proxy-http.ovpntest"
 static void
-test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir)
+test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -797,7 +798,7 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	connection = get_basic_connection ("proxy-http-export", plugin, dir, "proxy-http.ovpn");
 	ASSERT (connection != NULL, "proxy-http-export", "failed to import connection");
 
-	path = g_build_path ("/", dir, PROXY_HTTP_EXPORTED_NAME, NULL);
+	path = g_build_path ("/", tmpdir, PROXY_HTTP_EXPORTED_NAME, NULL);
 	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
@@ -807,7 +808,7 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	}
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection ("proxy-http-export", plugin, dir, PROXY_HTTP_EXPORTED_NAME);
+	reimported = get_basic_connection ("proxy-http-export", plugin, tmpdir, PROXY_HTTP_EXPORTED_NAME);
 	(void) unlink (path);
 	ASSERT (reimported != NULL, "proxy-http-export", "failed to re-import connection");
 
@@ -872,7 +873,7 @@ test_proxy_socks_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define PROXY_SOCKS_EXPORTED_NAME "proxy-socks.ovpntest"
 static void
-test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir)
+test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -883,7 +884,7 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	connection = get_basic_connection ("proxy-socks-export", plugin, dir, "proxy-socks.ovpn");
 	ASSERT (connection != NULL, "proxy-socks-export", "failed to import connection");
 
-	path = g_build_path ("/", dir, PROXY_SOCKS_EXPORTED_NAME, NULL);
+	path = g_build_path ("/", tmpdir, PROXY_SOCKS_EXPORTED_NAME, NULL);
 	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
@@ -893,7 +894,7 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir)
 	}
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection ("proxy-socks-export", plugin, dir, PROXY_SOCKS_EXPORTED_NAME);
+	reimported = get_basic_connection ("proxy-socks-export", plugin, tmpdir, PROXY_SOCKS_EXPORTED_NAME);
 	(void) unlink (path);
 	ASSERT (reimported != NULL, "proxy-socks-export", "failed to re-import connection");
 
@@ -917,8 +918,8 @@ int main (int argc, char **argv)
 	NMVpnPluginUiInterface *plugin = NULL;
 	char *tmp, *tmp2, *test_dir;
 
-	if (argc != 2)
-		FAIL ("args", "usage: %s <conf path>", argv[0]);
+	if (argc != 3)
+		FAIL ("args", "usage: %s <conf path> <tmp dir>", argv[0]);
 
 	g_type_init ();
 	dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
@@ -947,33 +948,33 @@ int main (int argc, char **argv)
 
 	/* The tests */
 	test_password_import (plugin, test_dir);
-	test_password_export (plugin, test_dir);
+	test_password_export (plugin, test_dir, argv[2]);
 
 	test_tls_import (plugin, test_dir);
-	test_tls_export (plugin, test_dir);
+	test_tls_export (plugin, test_dir, argv[2]);
 
 	test_pkcs12_import (plugin, test_dir);
-	test_pkcs12_export (plugin, test_dir);
+	test_pkcs12_export (plugin, test_dir, argv[2]);
 
 	test_non_utf8_import (plugin, test_dir);
 
 	test_static_key_import (plugin, test_dir);
-	test_static_key_export (plugin, test_dir);
+	test_static_key_export (plugin, test_dir, argv[2]);
 
 	test_port_import (plugin, "port-import", test_dir, "port.ovpn", "port", "2345");
-	test_port_export (plugin, "port-export", test_dir, "port.ovpn", "port.ovpntest");
+	test_port_export (plugin, "port-export", test_dir, argv[2], "port.ovpn", "port.ovpntest");
 
 	test_port_import (plugin, "rport-import", test_dir, "rport.ovpn", "rport", "6789");
-	test_port_export (plugin, "rport-export", test_dir, "rport.ovpn", "rport.ovpntest");
+	test_port_export (plugin, "rport-export", test_dir, argv[2], "rport.ovpn", "rport.ovpntest");
 
 	test_tun_opts_import (plugin, test_dir);
-	test_tun_opts_export (plugin, test_dir);
+	test_tun_opts_export (plugin, test_dir, argv[2]);
 
 	test_proxy_http_import (plugin, test_dir);
-	test_proxy_http_export (plugin, test_dir);
+	test_proxy_http_export (plugin, test_dir, argv[2]);
 
 	test_proxy_socks_import (plugin, test_dir);
-	test_proxy_socks_export (plugin, test_dir);
+	test_proxy_socks_export (plugin, test_dir, argv[2]);
 
 	g_object_unref (plugin);
 
