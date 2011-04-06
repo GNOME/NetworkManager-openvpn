@@ -113,7 +113,7 @@ unquote (const char *line, char **leftover)
 			*p = *item;
 	}
 	if (leftover && *item)
-		*leftover = item + 1;
+		*leftover = g_strdup (item + 1);
 
 	g_free (tmp);
 	return unquoted;
@@ -134,8 +134,13 @@ handle_path_item (const char *line,
 		return FALSE;
 
 	file = unquote (line + strlen (tag), leftover);
-	if (!file)
+	if (!file) {
+		if (leftover) {
+			g_free (*leftover);
+			leftover = NULL;
+		}
 		return FALSE;
+	}
 
 	/* If file isn't an absolute file name, add the default path */
 	if (!g_path_is_absolute (file))
@@ -562,6 +567,7 @@ do_import (const char *path, char **lines, GError **error)
 			                  NM_OPENVPN_KEY_STATIC_KEY_DIRECTION,
 			                  leftover,
 			                  s_vpn);
+			g_free (leftover);
 			have_sk = TRUE;
 			continue;
 		}
@@ -572,6 +578,7 @@ do_import (const char *path, char **lines, GError **error)
 			                  NM_OPENVPN_KEY_TA_DIR,
 			                  leftover,
 			                  s_vpn);
+			g_free (leftover);
 			continue;
 		}
 
