@@ -694,6 +694,8 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *proxy_server = NULL;
 	const char *proxy_port = NULL;
 	const char *proxy_retry = NULL;
+	const char *proxy_username = NULL;
+	const char *proxy_password = NULL;
 
 	s_con = NM_SETTING_CONNECTION (nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION));
 	g_assert (s_con);
@@ -879,12 +881,39 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		proxy_server = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER);
 		proxy_port = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT);
 		proxy_retry = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY);
+		proxy_username = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
+		proxy_password = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
+
 		if (!strcmp (proxy_type, "http") && proxy_server && proxy_port) {
+			char *authfile, *authcontents, *base, *dirname;
+
 			if (!proxy_port)
 				proxy_port = "8080";
-			fprintf (f, "http-proxy %s %s\n", proxy_server, proxy_port);
+
+			/* If there's a username, need to write an authfile */
+			base = g_path_get_basename (path);
+			dirname = g_path_get_dirname (path);
+			authfile = g_strdup_printf ("%s/%s-httpauthfile", dirname, base);
+			g_free (base);
+			g_free (dirname);
+
+			fprintf (f, "http-proxy %s %s%s%s\n",
+			         proxy_server,
+			         proxy_port,
+			         proxy_username ? " " : "",
+			         proxy_username ? authfile : "");
 			if (proxy_retry && !strcmp (proxy_retry, "yes"))
 				fprintf (f, "http-proxy-retry\n");
+
+			/* Write out the authfile */
+			if (proxy_username) {
+				authcontents = g_strdup_printf ("%s\n%s\n",
+				                                proxy_username,
+				                                proxy_password ? proxy_password : "");
+				g_file_set_contents (authfile, authcontents, -1, NULL);
+				g_free (authcontents);
+			}
+			g_free (authfile);
 		} else if (!strcmp (proxy_type, "socks") && proxy_server && proxy_port) {
 			if (!proxy_port)
 				proxy_port = "1080";
