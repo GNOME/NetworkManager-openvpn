@@ -793,7 +793,6 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir, const c
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	NMSettingVPN *s_vpn;
 
 	connection = get_basic_connection ("proxy-http-export", plugin, dir, "proxy-http.ovpn");
 	ASSERT (connection != NULL, "proxy-http-export", "failed to import connection");
@@ -810,25 +809,19 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir, const c
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection ("proxy-http-export", plugin, tmpdir, PROXY_HTTP_EXPORTED_NAME);
 	(void) unlink (path);
+	g_free (path);
 	ASSERT (reimported != NULL, "proxy-http-export", "failed to re-import connection");
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-
-	/* Also clear the HTTP Proxy username.  We don't export that either since it
-	 * goes into a separate authfile.
-	 */
-	s_vpn = NM_SETTING_VPN (nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN));
-	nm_setting_vpn_remove_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
 
 	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
 	        "proxy-http-export", "original and reimported connection differ");
 
+	/* Unlink the proxy authfile */
+	path = g_strdup_printf ("%s/%s-httpauthfile", tmpdir, PROXY_HTTP_EXPORTED_NAME);
+	(void) unlink (path);
+	g_free (path);
+
 	g_object_unref (reimported);
 	g_object_unref (connection);
-	g_free (path);
 }
 
 static void
