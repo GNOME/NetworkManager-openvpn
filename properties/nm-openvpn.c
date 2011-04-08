@@ -80,6 +80,7 @@ typedef struct {
 	GtkWindowGroup *window_group;
 	gboolean window_added;
 	GHashTable *advanced;
+	gboolean new_connection;
 } OpenvpnPluginUiWidgetPrivate;
 
 
@@ -482,6 +483,30 @@ update_connection (NMVpnPluginUiWidgetInterface *iface,
 	else
 		g_assert_not_reached ();
 
+	/* Default to agent-owned secrets for new connections */
+	if (priv->new_connection) {
+		if (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD)) {
+			nm_setting_set_secret_flags (NM_SETTING (s_vpn),
+			                             NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
+			                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+			                             NULL);
+		}
+
+		if (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD)) {
+			nm_setting_set_secret_flags (NM_SETTING (s_vpn),
+			                             NM_OPENVPN_KEY_PASSWORD,
+			                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+			                             NULL);
+		}
+
+		if (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS)) {
+			nm_setting_set_secret_flags (NM_SETTING (s_vpn),
+			                             NM_OPENVPN_KEY_CERTPASS,
+			                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+			                             NULL);
+		}
+	}
+
 	nm_connection_add_setting (connection, NM_SETTING (s_vpn));
 	valid = TRUE;
 
@@ -510,12 +535,23 @@ save_secrets (NMVpnPluginUiWidgetInterface *iface,
 	return ret;
 }
 
+static void
+is_new_func (const char *key, const char *value, gpointer user_data)
+{
+	gboolean *is_new = user_data;
+
+	/* If there are any VPN data items the connection isn't new */
+	*is_new = FALSE;
+}
+
 static NMVpnPluginUiWidgetInterface *
 nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 {
 	NMVpnPluginUiWidgetInterface *object;
 	OpenvpnPluginUiWidgetPrivate *priv;
 	char *ui_file;
+	gboolean new = TRUE;
+	NMSettingVPN *s_vpn;
 
 	if (error)
 		g_return_val_if_fail (*error == NULL, NULL);
@@ -555,6 +591,11 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 	g_object_ref_sink (priv->widget);
 
 	priv->window_group = gtk_window_group_new ();
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	if (s_vpn)
+		nm_setting_vpn_foreach_data_item (s_vpn, is_new_func, &new);
+	priv->new_connection = new;
 
 	if (!init_plugin_ui (OPENVPN_PLUGIN_UI_WIDGET (object), connection, error)) {
 		g_object_unref (object);
