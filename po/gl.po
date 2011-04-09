@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-15 01:17+0100\n"
-"PO-Revision-Date: 2011-03-15 01:19+0100\n"
+"POT-Creation-Date: 2011-04-09 20:59+0200\n"
+"PO-Revision-Date: 2011-04-09 21:04+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -53,20 +53,20 @@ msgstr "Lemb_rar o contrasinal para esta sesión"
 msgid "_Save password in keyring"
 msgstr "_Gardar o contrasinal no anel de chaves"
 
-#: ../auth-dialog/main.c:89
+#: ../auth-dialog/main.c:103
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Precisa autenticarse para acceder á rede privada virtual (VPN) '%s'."
 
-#: ../auth-dialog/main.c:90
+#: ../auth-dialog/main.c:104
 msgid "Authenticate VPN"
 msgstr "Autenticar VPN"
 
-#: ../auth-dialog/main.c:111
+#: ../auth-dialog/main.c:125
 msgid "Certificate pass_word:"
 msgstr "_Contrasinal do certificado:"
 
-#: ../auth-dialog/main.c:125
+#: ../auth-dialog/main.c:139
 msgid "Certificate password:"
 msgstr "Contrasinal do certificado:"
 
@@ -155,19 +155,19 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Compatíbel co servidor OpenVPN."
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:323
 msgid "Certificates (TLS)"
 msgstr "Certificados (TLS)"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:337
 msgid "Password"
 msgstr "Contrasinal"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:354
 msgid "Password with Certificates (TLS)"
 msgstr "Contrasinal con certificados (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn.c:366
 msgid "Static Key"
 msgstr "Chave estática"
 
@@ -366,3 +366,117 @@ msgstr "Nome de usuario:"
 #: ../properties/nm-openvpn-dialog.ui.h:47
 msgid "_Gateway:"
 msgstr "_Pasarela:"
+
+#: ../src/nm-openvpn-service.c:192
+#, c-format
+msgid "invalid address '%s'"
+msgstr "enderezo «%s» non válido"
+
+#: ../src/nm-openvpn-service.c:204
+#, c-format
+msgid "invalid integer property '%s' or out of range [%d -> %d]"
+msgstr "propiedade enteira «%s» non válida ou fóra de rango [%d -> %d]"
+
+#: ../src/nm-openvpn-service.c:214
+#, c-format
+msgid "invalid boolean property '%s' (not yes or no)"
+msgstr "propiedade booleana «%s» inválida (non «yes» ou «non»)"
+
+#: ../src/nm-openvpn-service.c:221
+#, c-format
+msgid "unhandled property '%s' type %s"
+msgstr "propiedade «%s» do tipo %s non se xestiona"
+
+#: ../src/nm-openvpn-service.c:232
+#, c-format
+msgid "property '%s' invalid or not supported"
+msgstr "a propiedade «%s» non é válida ou non se admite"
+
+#: ../src/nm-openvpn-service.c:249
+msgid "No VPN configuration options."
+msgstr "Non hai opcións de configuración da VPN."
+
+#: ../src/nm-openvpn-service.c:272
+msgid "No VPN secrets!"
+msgstr "Non hai segredos de VPN!"
+
+#: ../src/nm-openvpn-service.c:744
+msgid "Could not find the openvpn binary."
+msgstr "Non foi posíbel atopar o binario de openvpn."
+
+#: ../src/nm-openvpn-service.c:755
+msgid "Invalid HMAC auth."
+msgstr "Autenticación HMAC non válida."
+
+#: ../src/nm-openvpn-service.c:767 ../src/nm-openvpn-service.c:1163
+#: ../src/nm-openvpn-service.c:1233
+msgid "Invalid connection type."
+msgstr "Tipo de conexión non válido."
+
+#: ../src/nm-openvpn-service.c:802
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Tipo de proxy «%s» non válido."
+
+#: ../src/nm-openvpn-service.c:838
+#, c-format
+msgid "Invalid port number '%s'."
+msgstr "Número de porto non válido «%s»."
+
+#: ../src/nm-openvpn-service.c:888
+#, c-format
+msgid "Invalid reneg seconds '%s'."
+msgstr "Segundos de renegociación «%s» non válidos."
+
+#: ../src/nm-openvpn-service.c:912
+#, c-format
+msgid "Invalid TUN MTU size '%s'."
+msgstr "Tamaño MTU do TUN «%s» non válido."
+
+#: ../src/nm-openvpn-service.c:927
+#, c-format
+msgid "Invalid fragment size '%s'."
+msgstr "Tamaño do fragmento «%s» non válido."
+
+#: ../src/nm-openvpn-service.c:995
+msgid "Missing required local IP address for static key mode."
+msgstr "Falta o enderezo IP local requirido polo modo de chave estática."
+
+#: ../src/nm-openvpn-service.c:1008
+msgid "Missing required remote IP address for static key mode."
+msgstr "Falta o enderezo IP remoto requirido polo modo de chave estático."
+
+#: ../src/nm-openvpn-service.c:1033
+#, c-format
+msgid "Unknown connection type '%s'."
+msgstr "Tipo de conexión «%s» non válido."
+
+#: ../src/nm-openvpn-service.c:1152 ../src/nm-openvpn-service.c:1223
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr ""
+"Non foi posíbel procesar a solicitude debido a que as configuracións da "
+"conexión VPN non son válidos."
+
+#: ../src/nm-openvpn-service.c:1177
+msgid "Could not process the request because no username was provided."
+msgstr ""
+"Non foi posíbel procesar a solicitude debido a que non se forneceu un nome "
+"de usuario."
+
+#: ../src/nm-openvpn-service.c:1367
+msgid "Don't quit when VPN connection terminates"
+msgstr "Non saír cando unha conexión VPN remata."
+
+#: ../src/nm-openvpn-service.c:1368
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr ""
+"Activar o modo detallado de rexistro de depuración (pode mostrar "
+"contrasinais en claro)."
+
+#: ../src/nm-openvpn-service.c:1382
+msgid ""
+"nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
+"nm-vpnc-service fornece a capacidade de integrar OpenVPN con NetworkManager."
