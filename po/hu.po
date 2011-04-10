@@ -4,19 +4,20 @@
 #
 # Gabor Halaszvari <g.halaszvari at portmax dot hu>, 2006.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2006, 2007, 2008, 2009, 2010, 2011.
+# Mate Ory <orymate at ubuntu dot com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-14 19:23+0100\n"
-"PO-Revision-Date: 2011-03-14 19:23+0100\n"
+"POT-Creation-Date: 2011-04-10 10:58+0200\n"
+"PO-Revision-Date: 2011-04-03 11:23+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome at fsf dot hu>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: VIM - Vi IMproved 7.3\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../auth-dialog/gnome-two-password-dialog.c:130
@@ -51,20 +52,20 @@ msgstr "Je_lszó megjegyzése a munkamenetre"
 msgid "_Save password in keyring"
 msgstr "Jelszó mentése a _kulcstartóra"
 
-#: ../auth-dialog/main.c:89
+#: ../auth-dialog/main.c:103
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Azonosítania kell magát a(z) „%s” virtuális magánhálózat eléréséhez."
 
-#: ../auth-dialog/main.c:90
+#: ../auth-dialog/main.c:104
 msgid "Authenticate VPN"
 msgstr "VPN azonosítás"
 
-#: ../auth-dialog/main.c:111
+#: ../auth-dialog/main.c:125
 msgid "Certificate pass_word:"
 msgstr "Tanúsítvány _jelszava:"
 
-#: ../auth-dialog/main.c:125
+#: ../auth-dialog/main.c:139
 msgid "Certificate password:"
 msgstr "Tanúsítvány jelszava:"
 
@@ -153,19 +154,19 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Kompatibilis az OpenVPN kiszolgálóval."
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:323
 msgid "Certificates (TLS)"
 msgstr "Tanúsítványok (TLS)"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:337
 msgid "Password"
 msgstr "Jelszó"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:354
 msgid "Password with Certificates (TLS)"
 msgstr "Jelszó tanúsítványokkal (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn.c:366
 msgid "Static Key"
 msgstr "Statikus kulcs"
 
@@ -239,7 +240,7 @@ msgstr "Kulcsfájl:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:15
 msgid "Local IP Address:"
-msgstr "Helyi IP cím:"
+msgstr "Helyi IP-cím:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
 msgid "OpenVPN Advanced Options"
@@ -279,7 +280,7 @@ msgstr "Proxy felhasználói név:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:26
 msgid "Remote IP Address:"
-msgstr "Távoli IP cím:"
+msgstr "Távoli IP-cím:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:27
 msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
@@ -365,3 +366,114 @@ msgstr "Felhasználónév:"
 msgid "_Gateway:"
 msgstr "Á_tjáró:"
 
+#: ../src/nm-openvpn-service.c:192
+#, c-format
+msgid "invalid address '%s'"
+msgstr "érvénytelen cím: „%s”"
+
+#: ../src/nm-openvpn-service.c:204
+#, c-format
+msgid "invalid integer property '%s' or out of range [%d -> %d]"
+msgstr "érvénytelen, vagy a(z) %2$d…%3$d tartományon kívüli egész érték: „%1$s”"
+
+#: ../src/nm-openvpn-service.c:214
+#, c-format
+msgid "invalid boolean property '%s' (not yes or no)"
+msgstr "érvénytelen logikai érték: „%s” (érvényes értékek: yes, no)"
+
+#: ../src/nm-openvpn-service.c:221
+#, c-format
+msgid "unhandled property '%s' type %s"
+msgstr "kezeletlen %2$s típusú érték: „%1$s”"
+
+#: ../src/nm-openvpn-service.c:232
+#, c-format
+msgid "property '%s' invalid or not supported"
+msgstr "érvénytelen vagy nem támogatott érték: „%s”"
+
+#: ../src/nm-openvpn-service.c:249
+msgid "No VPN configuration options."
+msgstr "Nincsenek VPN-beállítások."
+
+#: ../src/nm-openvpn-service.c:272
+msgid "No VPN secrets!"
+msgstr "Nincs VPN-titok!"
+
+#: ../src/nm-openvpn-service.c:744
+msgid "Could not find the openvpn binary."
+msgstr "Nem található az openvpn program."
+
+#: ../src/nm-openvpn-service.c:755
+msgid "Invalid HMAC auth."
+msgstr "Érvénytelen HMAC azonosítás."
+
+#: ../src/nm-openvpn-service.c:767 ../src/nm-openvpn-service.c:1163
+#: ../src/nm-openvpn-service.c:1233
+msgid "Invalid connection type."
+msgstr "Érvénytelen kapcsolattípus."
+
+#: ../src/nm-openvpn-service.c:802
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Érvénytelen proxytípus: „%s”."
+
+#: ../src/nm-openvpn-service.c:838
+#, c-format
+msgid "Invalid port number '%s'."
+msgstr "Érvénytelen portszám: „%s”."
+
+#: ../src/nm-openvpn-service.c:888
+#, c-format
+msgid "Invalid reneg seconds '%s'."
+msgstr "Érvénytelen reneg seconds érték: „%s”."
+
+#: ../src/nm-openvpn-service.c:912
+#, c-format
+msgid "Invalid TUN MTU size '%s'."
+msgstr "Érvénytelen TUN MTU érték: „%s”."
+
+#: ../src/nm-openvpn-service.c:927
+#, c-format
+msgid "Invalid fragment size '%s'."
+msgstr "Érvénytelen töredékméret: „%s”."
+
+#: ../src/nm-openvpn-service.c:995
+msgid "Missing required local IP address for static key mode."
+msgstr "Hiányzó helyi IP-cím a statikus kulcsos módhoz."
+
+#: ../src/nm-openvpn-service.c:1008
+msgid "Missing required remote IP address for static key mode."
+msgstr "Hiányzó távoli IP-cím a statikus kulcsos módhoz."
+
+#: ../src/nm-openvpn-service.c:1033
+#, c-format
+msgid "Unknown connection type '%s'."
+msgstr "Ismeretlen kapcsolattípus: „%s”."
+
+#: ../src/nm-openvpn-service.c:1152 ../src/nm-openvpn-service.c:1223
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr ""
+"A kérés feldolgozása sikertelen, mivel a VPN-kapcsolat beállításai "
+"érvénytelenek."
+
+#: ../src/nm-openvpn-service.c:1177
+msgid "Could not process the request because no username was provided."
+msgstr "A kérés feldolgozása sikertelen, mivel nem adott meg felhasználónevet."
+
+#: ../src/nm-openvpn-service.c:1367
+msgid "Don't quit when VPN connection terminates"
+msgstr "Ne lépjen ki, ha a VPN kapcsolat megszakad"
+
+#: ../src/nm-openvpn-service.c:1368
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr ""
+"Részletes hibakeresési naplózás engedélyezése (jelszavak is  a naplóba "
+"kerülhetnek)"
+
+#: ../src/nm-openvpn-service.c:1382
+msgid ""
+"nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
+"Az nm-vpnc-service integrált OpenVPN-támogatást nyújt a Hálózatkezelőhöz."
