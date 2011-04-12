@@ -10,6 +10,7 @@ EXTRA_DIST = \
 	tun-opts.conf \
 	proxy-http.ovpn \
 	httpauthfile \
-	proxy-socks.ovpn
+	proxy-socks.ovpn \
+	proxy-http-with-auth.ovpn
 
 
