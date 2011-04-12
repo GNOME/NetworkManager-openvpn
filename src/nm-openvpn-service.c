@@ -786,7 +786,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			add_openvpn_arg (args, "--http-proxy");
 			add_openvpn_arg (args, tmp2);
 			add_openvpn_arg (args, tmp3 ? tmp3 : "8080");
-			add_openvpn_arg (args, "'auto'");  /* Automatic proxy auth method detection */
+			add_openvpn_arg (args, "auto");  /* Automatic proxy auth method detection */
 			if (tmp4)
 				add_openvpn_arg (args, "--http-proxy-retry");
 		} else if (!strcmp (tmp, "socks")) {
