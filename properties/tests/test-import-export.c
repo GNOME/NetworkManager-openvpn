@@ -831,6 +831,48 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir, const c
 }
 
 static void
+test_proxy_http_with_auth_import (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection ("proxy-http-with-auth-import", plugin, dir, "proxy-http-with-auth.ovpn");
+	ASSERT (connection != NULL, "proxy-http-with-auth-import", "failed to import connection");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        "proxy-http-with-auth-import", "missing 'vpn' setting");
+
+	/* Data items */
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "0");
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE, "test.server.com");
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_PORT, "443");
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_CERT, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_KEY, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_TA, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_CIPHER, "AES-256-CBC");
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, "http");
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, "proxy.domain.tld");
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_PROXY_PORT, "3128");
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, "myusername");
+	test_secret ("proxy-http-with-auth-import-secrets", s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, "mypassword");
+
+	g_object_unref (connection);
+}
+
+static void
 test_proxy_socks_import (NMVpnPluginUiInterface *plugin, const char *dir)
 {
 	NMConnection *connection;
@@ -973,6 +1015,8 @@ int main (int argc, char **argv)
 
 	test_proxy_http_import (plugin, test_dir);
 	test_proxy_http_export (plugin, test_dir, argv[2]);
+
+	test_proxy_http_with_auth_import (plugin, test_dir);
 
 	test_proxy_socks_import (plugin, test_dir);
 	test_proxy_socks_export (plugin, test_dir, argv[2]);
