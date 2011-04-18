@@ -206,7 +206,6 @@ test_password_export (NMVpnPluginUiInterface *plugin, const char *dir, const cha
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("password-export", plugin, dir, "password.conf");
 	ASSERT (connection != NULL, "password-export", "failed to import connection");
@@ -321,7 +320,6 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tm
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("tls-export", plugin, dir, "tls.ovpn");
 	ASSERT (connection != NULL, "tls-export", "failed to import connection");
@@ -430,7 +428,6 @@ test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir, const char 
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("pkcs12-export", plugin, dir, "pkcs12.ovpn");
 	ASSERT (connection != NULL, "pkcs12-export", "failed to import connection");
@@ -573,7 +570,6 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir, const c
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("static-key-export", plugin, dir, "static.ovpn");
 	ASSERT (connection != NULL, "static-key-export", "failed to import connection");
@@ -653,7 +649,6 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection (detail, plugin, dir, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -716,7 +711,6 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir, const cha
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("tunopts-export", plugin, dir, "tun-opts.conf");
 	ASSERT (connection != NULL, "tunopts-export", "failed to import connection");
@@ -921,7 +915,6 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir, const 
 	char *path;
 	gboolean success;
 	GError *error = NULL;
-	int ret;
 
 	connection = get_basic_connection ("proxy-socks-export", plugin, dir, "proxy-socks.ovpn");
 	ASSERT (connection != NULL, "proxy-socks-export", "failed to import connection");
