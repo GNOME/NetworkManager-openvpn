@@ -7,15 +7,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn.HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-13 19:29+0200\n"
-"PO-Revision-Date: 2011-02-15 12:26+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=Networ"
+"kManager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2011-03-14 18:00+0000\n"
+"PO-Revision-Date: 2011-03-16 11:59+0300\n"
 "Last-Translator: Michael Kotsarinis <mk73628@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.6.1\n"
 
@@ -135,7 +136,7 @@ msgstr "SHA-512"
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1293
+#: ../properties/auth-helpers.c:1293 ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Δεν απαιτείται"
 
@@ -171,124 +172,204 @@ msgstr "Συνθηματικό με πιστοποιητικά (TLS)"
 msgid "Static Key"
 msgstr "Στατικό Κλειδί"
 
-#~ msgid " "
-#~ msgstr " "
+#: ../properties/nm-openvpn-dialog.ui.h:1
+msgid " "
+msgstr " "
 
-#~ msgid "<b>Authentication</b>"
-#~ msgstr "<b>Πιστοποίηση</b>"
+#: ../properties/nm-openvpn-dialog.ui.h:2
+msgid "<b>Authentication</b>"
+msgstr "<b>Πιστοποίηση</b>"
 
-#~ msgid "<b>General</b>"
-#~ msgstr "<b>Γενικά</b>"
+#: ../properties/nm-openvpn-dialog.ui.h:3
+msgid "<b>General</b>"
+msgstr "<b>Γενικά</b>"
 
-#~ msgid ""
-#~ "<i>Connect only to servers whose certificate matches the given subject.\n"
-#~ "Example: /CN=myvpn.company.com</i>"
-#~ msgstr ""
-#~ "<i>Σύνδεση μόνοι σε εξυπηρετητές με τους που το πιστοποιητικό τους "
-#~ "ταιριάζει με το δοθέν θέμα.\n"
-#~ "Παράδειγμα: /CN=myvpn.company.com</i>"
+#: ../properties/nm-openvpn-dialog.ui.h:4
+msgid ""
+"<i>Connect only to servers whose certificate matches the given subject.\n"
+"Example: /CN=myvpn.company.com</i>"
+msgstr ""
+"<i>Σύνδεση μόνοι σε εξυπηρετητές με τους που το πιστοποιητικό τους ταιριάζει "
+"με το δοθέν θέμα.\n"
+"Παράδειγμα: /CN=myvpn.company.com</i>"
 
-#~ msgid ""
-#~ "<i>If key direction is used, it must be the opposite of that used on the "
-#~ "VPN peer.  For example, if the peer uses '1', this connection must use "
-#~ "'0'.  If you are unsure what value to use, contact your system "
-#~ "administrator.</i>"
-#~ msgstr ""
-#~ "<i>Αν χρησιμοποιηθεί η κατεύθυνση του κλειδιού, θα πρέπει να είναι "
-#~ "αντίθετη από την κατεύθυνση του άλλου υπολογιστή. Για παράδειγμα, αν ο "
-#~ "άλλος υπολογιστής χρησιμοποιεί '1', αυτή η σύνδεση θα πρέπει να "
-#~ "χρησιμοποιεί '0'. Αν δεν είστε βέβαιοι για το ποια τιμή πρέπει να "
-#~ "χρησιμοποιήσετε, επικοινωνήστε με το διαχειριστή του συστήματος.</i>"
+#: ../properties/nm-openvpn-dialog.ui.h:6
+msgid ""
+"<i>If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.</i>"
+msgstr ""
+"<i>Αν χρησιμοποιηθεί η κατεύθυνση του κλειδιού, θα πρέπει να είναι αντίθετη "
+"από την κατεύθυνση του άλλου υπολογιστή. Για παράδειγμα, αν ο άλλος "
+"υπολογιστής χρησιμοποιεί '1', αυτή η σύνδεση θα πρέπει να χρησιμοποιεί '0'. "
+"Αν δεν είστε βέβαιοι για το ποια τιμή πρέπει να χρησιμοποιήσετε, "
+"επικοινωνήστε με το διαχειριστή του συστήματος.</i>"
 
-#~ msgid "Ad_vanced..."
-#~ msgstr "Για προ_χωρημένους..."
+#: ../properties/nm-openvpn-dialog.ui.h:7
+msgid ""
+"<i>Select this option if your organization requires the use of a proxy "
+"server to access the Internet.</i>"
+msgstr ""
+"<i>Επιλέξτε αν ο οργανισμός σας απαιτεί τη χρήση διαμεσολαβητή για πρόσβαση "
+"στο διαδίκτυο.</i>"
 
-#~ msgid "CA Certificate:"
-#~ msgstr "Πι_στοποιητικό CA:"
+#: ../properties/nm-openvpn-dialog.ui.h:8
+msgid "Ad_vanced..."
+msgstr "Για προ_χωρημένους..."
 
-#~ msgid "Cipher:"
-#~ msgstr "Αλγόριθμος κρυπτογράφησης:"
+#: ../properties/nm-openvpn-dialog.ui.h:9
+msgid "CA Certificate:"
+msgstr "Πι_στοποιητικό CA:"
 
-#~ msgid "General"
-#~ msgstr "Γενικά"
+#: ../properties/nm-openvpn-dialog.ui.h:10
+msgid "Cipher:"
+msgstr "Αλγόριθμος κρυπτογράφησης:"
 
-#~ msgid "HMAC Authentication:"
-#~ msgstr "Πιστοποίηση HMAC:"
+#: ../properties/nm-openvpn-dialog.ui.h:11
+msgid "General"
+msgstr "Γενικά"
 
-#~ msgid "Key Direction:"
-#~ msgstr "Κατεύθυνση κλειδιού:"
+#: ../properties/nm-openvpn-dialog.ui.h:12
+msgid "HMAC Authentication:"
+msgstr "Πιστοποίηση HMAC:"
 
-#~ msgid "Key File:"
-#~ msgstr "Αρχείο κλειδιού:"
+#: ../properties/nm-openvpn-dialog.ui.h:13
+msgid "Key Direction:"
+msgstr "Κατεύθυνση κλειδιού:"
 
-#~ msgid "Local IP Address:"
-#~ msgstr "Τοπική διεύθυνση IP:"
+#: ../properties/nm-openvpn-dialog.ui.h:14
+msgid "Key File:"
+msgstr "Αρχείο κλειδιού:"
 
-#~ msgid "OpenVPN Advanced Options"
-#~ msgstr "Προχωρημένες επιλογές OpenVPN"
+#: ../properties/nm-openvpn-dialog.ui.h:15
+msgid "Local IP Address:"
+msgstr "Τοπική διεύθυνση IP:"
 
-#~ msgid "Password:"
-#~ msgstr "Συνθηματικό:"
+#: ../properties/nm-openvpn-dialog.ui.h:17
+msgid "OpenVPN Advanced Options"
+msgstr "Προχωρημένες επιλογές OpenVPN"
 
-#~ msgid "Private Key Password:"
-#~ msgstr "Συνθηματικό ιδιωτικού κλειδιού:"
+#: ../properties/nm-openvpn-dialog.ui.h:18
+msgid "Password:"
+msgstr "Συνθηματικό:"
 
-#~ msgid "Private Key:"
-#~ msgstr "Ιδιωτικό κλειδί:"
+#: ../properties/nm-openvpn-dialog.ui.h:19
+msgid "Port:"
+msgstr "Θύρα:"
 
-#~ msgid "Remote IP Address:"
-#~ msgstr "Απομακρυσμένη διεύθυνση IP:"
+#: ../properties/nm-openvpn-dialog.ui.h:20
+msgid "Private Key Password:"
+msgstr "Συνθηματικό ιδιωτικού κλειδιού:"
 
-#~ msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
-#~ msgstr "Περιορισμός tunnel TCP Maximum Segment Size (MSS)"
+#: ../properties/nm-openvpn-dialog.ui.h:21
+msgid "Private Key:"
+msgstr "Ιδιωτικό κλειδί:"
 
-#~ msgid "Security"
-#~ msgstr "Ασφάλεια"
+#: ../properties/nm-openvpn-dialog.ui.h:22
+msgid "Proxies"
+msgstr "Διαμεσολαβητές"
 
-#~ msgid "Show passwords"
-#~ msgstr "Εμφάνιση συνθηματικών"
+#: ../properties/nm-openvpn-dialog.ui.h:23
+#| msgid "Password:"
+msgid "Proxy Password:"
+msgstr "Συνθηματικό διαμεσολαβητή:"
 
-#~ msgid "Static Key:"
-#~ msgstr "Στατικό Κλειδί:"
+#: ../properties/nm-openvpn-dialog.ui.h:24
+#| msgid "Type:"
+msgid "Proxy Type:"
+msgstr "Τύπος διαμεσολαβητή:"
 
-#~ msgid "Subject Match:"
-#~ msgstr "Ταίριασμα θέματος:"
+#: ../properties/nm-openvpn-dialog.ui.h:25
+#| msgid "_Username:"
+msgid "Proxy Username:"
+msgstr "Όνομα χρήστη διαμεσολαβητή:"
 
-#~ msgid "TLS Authentication"
-#~ msgstr "Πιστοποίηση TLS:"
+#: ../properties/nm-openvpn-dialog.ui.h:26
+msgid "Remote IP Address:"
+msgstr "Απομακρυσμένη διεύθυνση IP:"
 
-#~ msgid "Type:"
-#~ msgstr "Τύπος:"
+#: ../properties/nm-openvpn-dialog.ui.h:27
+msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
+msgstr "Περιορισμός tunnel TCP Maximum Segment Size (MSS)"
 
-#~ msgid "Use L_ZO data compression"
-#~ msgstr "Χρήση συμπίεσης L_ZO"
+#: ../properties/nm-openvpn-dialog.ui.h:28
+msgid "Retry indefinitely when errors occur"
+msgstr "Επανάληψη επ' άπειρον όταν προκύπτουν σφάλματα"
 
-#~ msgid "Use a TA_P device"
-#~ msgstr "Χρήση συσκευής TA_P"
+#: ../properties/nm-openvpn-dialog.ui.h:29
+msgid "Security"
+msgstr "Ασφάλεια"
 
-#~ msgid "Use a _TCP connection"
-#~ msgstr "Χρήση σύνδεσης _TCP"
+#: ../properties/nm-openvpn-dialog.ui.h:30
+#| msgid "Remote IP Address:"
+msgid "Server Address:"
+msgstr "Διεύθυνση διακομιστή:"
 
-#~ msgid "Use additional TLS authentication"
-#~ msgstr "Χρήση επιπλέον πιστοποίησης TLS"
+#: ../properties/nm-openvpn-dialog.ui.h:31
+#| msgid "Show passwords"
+msgid "Show password"
+msgstr "Εμφάνιση συνθηματικού"
 
-#~ msgid "Use custom UDP _fragment size:"
-#~ msgstr "Χρήση προσαρμοσμένου μεγέθους UDP _fragment:"
+#: ../properties/nm-openvpn-dialog.ui.h:32
+msgid "Show passwords"
+msgstr "Εμφάνιση συνθηματικών"
 
-#~ msgid "Use custom _renegotiation interval:"
-#~ msgstr "Χρήση προσαρμοσμένου χρονικού διαστήματος επανα_διαπραγμάτευσης:"
+#: ../properties/nm-openvpn-dialog.ui.h:33
+msgid "Static Key:"
+msgstr "Στατικό Κλειδί:"
 
-#~ msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
-#~ msgstr "Χρήση προσαρμοσμένου _tunnel Maximum Transmission Unit (MTU):"
+#: ../properties/nm-openvpn-dialog.ui.h:34
+msgid "Subject Match:"
+msgstr "Ταίριασμα θέματος:"
 
-#~ msgid "Use custom gateway p_ort:"
-#~ msgstr "Χρήση προσαρμοσμένης _θύρας gateway :"
+#: ../properties/nm-openvpn-dialog.ui.h:35
+msgid "TLS Authentication"
+msgstr "Πιστοποίηση TLS:"
 
-#~ msgid "User Certificate:"
-#~ msgstr "Πιστοποιητικό χρήστη:"
+#: ../properties/nm-openvpn-dialog.ui.h:36
+msgid "Type:"
+msgstr "Τύπος:"
 
-#~ msgid "User name:"
-#~ msgstr "Όνομα χρήστη:"
+#: ../properties/nm-openvpn-dialog.ui.h:37
+msgid "Use L_ZO data compression"
+msgstr "Χρήση συμπίεσης L_ZO"
 
-#~ msgid "_Gateway:"
-#~ msgstr "_Gateway:"
+#: ../properties/nm-openvpn-dialog.ui.h:38
+msgid "Use a TA_P device"
+msgstr "Χρήση συσκευής TA_P"
+
+#: ../properties/nm-openvpn-dialog.ui.h:39
+msgid "Use a _TCP connection"
+msgstr "Χρήση σύνδεσης _TCP"
+
+#: ../properties/nm-openvpn-dialog.ui.h:40
+msgid "Use additional TLS authentication"
+msgstr "Χρήση επιπλέον πιστοποίησης TLS"
+
+#: ../properties/nm-openvpn-dialog.ui.h:41
+msgid "Use custom UDP _fragment size:"
+msgstr "Χρήση προσαρμοσμένου μεγέθους UDP _fragment:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:42
+msgid "Use custom _renegotiation interval:"
+msgstr "Χρήση προσαρμοσμένου χρονικού διαστήματος επανα_διαπραγμάτευσης:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:43
+msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
+msgstr "Χρήση προσαρμοσμένου _tunnel Maximum Transmission Unit (MTU):"
+
+#: ../properties/nm-openvpn-dialog.ui.h:44
+msgid "Use custom gateway p_ort:"
+msgstr "Χρήση προσαρμοσμένης _θύρας gateway :"
+
+#: ../properties/nm-openvpn-dialog.ui.h:45
+msgid "User Certificate:"
+msgstr "Πιστοποιητικό χρήστη:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:46
+msgid "User name:"
+msgstr "Όνομα χρήστη:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:47
+msgid "_Gateway:"
+msgstr "_Gateway:"
