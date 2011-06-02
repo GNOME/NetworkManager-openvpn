@@ -88,11 +88,10 @@ get_secrets (const char *vpn_name,
 			need_secret = TRUE;
 	}
 
-	/* Have all passwords and we're not supposed to ask the user again */
-	if (!need_secret && !retry)
-		return TRUE;
-
-	if (allow_interaction == FALSE) {
+	/* Either interaction is not allowed so pass back any passwords we have
+	 * without asking the user, or we've got all the passwords we need already.
+	 */
+	if (allow_interaction == FALSE || (!need_secret && !retry)) {
 		if (need_password)
 			*out_password = password;
 		if (need_certpass)
