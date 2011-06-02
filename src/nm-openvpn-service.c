@@ -601,6 +601,7 @@ validate_auth (const char *auth)
 {
 	if (auth) {
 		if (   !strcmp (auth, NM_OPENVPN_AUTH_NONE)
+		    || !strcmp (auth, NM_OPENVPN_AUTH_RSA_MD4)
 		    || !strcmp (auth, NM_OPENVPN_AUTH_MD5)
 		    || !strcmp (auth, NM_OPENVPN_AUTH_SHA1)
 		    || !strcmp (auth, NM_OPENVPN_AUTH_SHA224)
