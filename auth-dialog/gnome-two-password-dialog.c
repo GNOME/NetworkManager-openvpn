@@ -358,7 +358,11 @@ gnome_two_password_dialog_new (const char	*dialog_title,
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (password_dialog->details->connect_with_no_userpass_button), TRUE);
 	}
 	
+#if GTK_CHECK_VERSION (3,1,6)
+	password_dialog->details->radio_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+#else
 	password_dialog->details->radio_vbox = gtk_vbox_new (FALSE, 6);
+#endif
 	gtk_box_pack_start (GTK_BOX (password_dialog->details->radio_vbox),
 		password_dialog->details->connect_with_no_userpass_button,
 		FALSE, FALSE, 0);	
@@ -422,14 +426,22 @@ gnome_two_password_dialog_new (const char	*dialog_title,
 	add_table_rows (password_dialog);
 
 	/* Adds some eye-candy to the dialog */
+#if GTK_CHECK_VERSION (3,1,6)
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+#else
 	hbox = gtk_hbox_new (FALSE, 12);
+#endif
  	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
 	dialog_icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
 	gtk_misc_set_alignment (GTK_MISC (dialog_icon), 0.5, 0.0);
 	gtk_box_pack_start (GTK_BOX (hbox), dialog_icon, FALSE, FALSE, 0);
 
 	/* Fills the vbox */
+#if GTK_CHECK_VERSION (3,1,6)
+	main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
+#else
 	main_vbox = gtk_vbox_new (FALSE, 18);
+#endif
 
 	if (message) {
 		message_label = GTK_LABEL (gtk_label_new (message));
@@ -440,7 +452,11 @@ gnome_two_password_dialog_new (const char	*dialog_title,
 				    FALSE, FALSE, 0);
 	}
 
+#if GTK_CHECK_VERSION (3,1,6)
+	vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+#else
 	vbox = gtk_vbox_new (FALSE, 6);
+#endif
 	gtk_box_pack_start (GTK_BOX (main_vbox), vbox, FALSE, FALSE, 0);
 
 	gtk_box_pack_start (GTK_BOX (vbox), password_dialog->details->radio_vbox,
