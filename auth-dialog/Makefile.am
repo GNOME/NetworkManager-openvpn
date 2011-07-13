@@ -23,7 +23,7 @@ nm_openvpn_auth_dialog_SOURCES = \
 nm_openvpn_auth_dialog_LDADD = \
 	$(GTK_LIBS) \
 	$(NM_LIBS) \
-	$(top_builddir)/common-gnome/libnm-openvpn-common-gnome.la \
+	$(GNOMEKEYRING_LIBS) \
 	$(top_builddir)/common/libnm-openvpn-common.la
 
 CLEANFILES = *~
