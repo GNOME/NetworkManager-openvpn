@@ -39,7 +39,7 @@
 
 #include "common/utils.h"
 #include "src/nm-openvpn-service.h"
-#include "gnome-two-password-dialog.h"
+#include "vpn-password-dialog.h"
 
 #define KEYRING_UUID_TAG "connection-uuid"
 #define KEYRING_SN_TAG "setting-name"
@@ -88,7 +88,7 @@ get_secrets (const char *vpn_name,
              NMSettingSecretFlags cp_flags,
              char **out_certpass)
 {
-	GnomeTwoPasswordDialog *dialog;
+	VpnPasswordDialog *dialog;
 	char *prompt, *password = NULL, *certpass = NULL;
 	gboolean success = FALSE, need_secret = FALSE;
 
@@ -131,64 +131,48 @@ get_secrets (const char *vpn_name,
 	}
 
 	prompt = g_strdup_printf (_("You need to authenticate to access the Virtual Private Network '%s'."), vpn_name);
-	dialog = GNOME_TWO_PASSWORD_DIALOG (gnome_two_password_dialog_new (_("Authenticate VPN"), prompt, NULL, NULL, FALSE));
+	dialog = VPN_PASSWORD_DIALOG (vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
 	g_free (prompt);
-
-	gnome_two_password_dialog_set_show_username (dialog, FALSE);
-	gnome_two_password_dialog_set_show_userpass_buttons (dialog, FALSE);
-	gnome_two_password_dialog_set_show_domain (dialog, FALSE);
-	gnome_two_password_dialog_set_show_remember (dialog, TRUE);
-
-	/* If nothing was found in the keyring, default to not remembering any secrets */
-	if (password || certpass) {
-		/* Otherwise set default remember based on which keyring the secrets were found in */
-		gnome_two_password_dialog_set_remember (dialog, GNOME_TWO_PASSWORD_DIALOG_REMEMBER_FOREVER);
-	} else
-		gnome_two_password_dialog_set_remember (dialog, GNOME_TWO_PASSWORD_DIALOG_REMEMBER_NOTHING);
 
 	/* pre-fill dialog with the password */
 	if (need_password && need_certpass) {
-		gnome_two_password_dialog_set_show_password_secondary (dialog, TRUE);
-		gnome_two_password_dialog_set_password_secondary_label (dialog, _("Certificate pass_word:") );
+		vpn_password_dialog_set_show_password_secondary (dialog, TRUE);
+		vpn_password_dialog_set_password_secondary_label (dialog, _("Certificate pass_word:") );
 
 		/* if retrying, put in the passwords from the keyring */
 		if (password)
-			gnome_two_password_dialog_set_password (dialog, password);
+			vpn_password_dialog_set_password (dialog, password);
 		if (certpass)
-			gnome_two_password_dialog_set_password_secondary (dialog, certpass);
+			vpn_password_dialog_set_password_secondary (dialog, certpass);
 	} else {
-		gnome_two_password_dialog_set_show_password_secondary (dialog, FALSE);
+		vpn_password_dialog_set_show_password_secondary (dialog, FALSE);
 		if (need_password) {
 			/* if retrying, put in the passwords from the keyring */
 			if (password)
-				gnome_two_password_dialog_set_password (dialog, password);
+				vpn_password_dialog_set_password (dialog, password);
 		} else if (need_certpass) {
-			gnome_two_password_dialog_set_password_primary_label (dialog, _("Certificate password:"));
+			vpn_password_dialog_set_password_label (dialog, _("Certificate password:"));
 			/* if retrying, put in the passwords from the keyring */
 			if (certpass)
-				gnome_two_password_dialog_set_password (dialog, certpass);
+				vpn_password_dialog_set_password (dialog, certpass);
 		}
 	}
 
-	if (password) {
-		memset (password, 0, strlen (password));
+	if (password)
 		gnome_keyring_memory_free (password);
-	}
-	if (certpass) {
-		memset (certpass, 0, strlen (certpass));
+	if (certpass)
 		gnome_keyring_memory_free (certpass);
-	}
 
 	gtk_widget_show (GTK_WIDGET (dialog));
 
-	if (gnome_two_password_dialog_run_and_block (dialog)) {
+	if (vpn_password_dialog_run_and_block (dialog)) {
 		if (need_password)
-			*out_password = gnome_keyring_memory_strdup (gnome_two_password_dialog_get_password (dialog));
+			*out_password = gnome_keyring_memory_strdup (vpn_password_dialog_get_password (dialog));
 		if (need_certpass) {
 			if (need_password)
-				*out_certpass = gnome_keyring_memory_strdup (gnome_two_password_dialog_get_password_secondary (dialog));
+				*out_certpass = gnome_keyring_memory_strdup (vpn_password_dialog_get_password_secondary (dialog));
 			else
-				*out_certpass = gnome_keyring_memory_strdup (gnome_two_password_dialog_get_password (dialog));
+				*out_certpass = gnome_keyring_memory_strdup (vpn_password_dialog_get_password (dialog));
 		}
 
 		success = TRUE;
@@ -310,33 +294,30 @@ main (int argc, char *argv[])
 
 	nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &pw_flags);
 	nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_CERTPASS, &cp_flags);
-	if (get_secrets (vpn_name,
-	                 vpn_uuid,
-	                 need_password,
-	                 need_certpass,
-	                 retry,
-	                 allow_interaction,
-	                 g_hash_table_lookup (secrets, NM_OPENVPN_KEY_PASSWORD),
-	                 pw_flags,
-	                 &new_password,
-	                 g_hash_table_lookup (secrets, NM_OPENVPN_KEY_CERTPASS),
-	                 cp_flags,
-	                 &new_certpass)) {
-		if (need_password && new_password)
-			printf ("%s\n%s\n", NM_OPENVPN_KEY_PASSWORD, new_password);
-		if (need_certpass && new_certpass)
-			printf ("%s\n%s\n", NM_OPENVPN_KEY_CERTPASS, new_certpass);
-	}
+	if (!get_secrets (vpn_name,
+	                  vpn_uuid,
+	                  need_password,
+	                  need_certpass,
+	                  retry,
+	                  allow_interaction,
+	                  g_hash_table_lookup (secrets, NM_OPENVPN_KEY_PASSWORD),
+	                  pw_flags,
+	                  &new_password,
+	                  g_hash_table_lookup (secrets, NM_OPENVPN_KEY_CERTPASS),
+	                  cp_flags,
+	                  &new_certpass))
+		return 1;  /* canceled */
+
+	if (need_password && new_password)
+		printf ("%s\n%s\n", NM_OPENVPN_KEY_PASSWORD, new_password);
+	if (need_certpass && new_certpass)
+		printf ("%s\n%s\n", NM_OPENVPN_KEY_CERTPASS, new_certpass);
 	printf ("\n\n");
 
-	if (new_password) {
-		memset (new_password, 0, strlen (new_password));
+	if (new_password)
 		gnome_keyring_memory_free (new_password);
-	}
-	if (new_certpass) {
-		memset (new_certpass, 0, strlen (new_certpass));
+	if (new_certpass)
 		gnome_keyring_memory_free (new_certpass);
-	}
 
 	/* for good measure, flush stdout since Kansas is going Bye-Bye */
 	fflush (stdout);

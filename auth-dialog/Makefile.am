@@ -17,8 +17,8 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 
 nm_openvpn_auth_dialog_SOURCES = \
 	main.c \
-	gnome-two-password-dialog.c \
-	gnome-two-password-dialog.h
+	vpn-password-dialog.c \
+	vpn-password-dialog.h
 
 nm_openvpn_auth_dialog_LDADD = \
 	$(GTK_LIBS) \
