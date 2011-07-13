@@ -30,16 +30,9 @@
 
 typedef void (*ChangedCallback) (GtkWidget *widget, gpointer user_data);
 
-void fill_vpn_passwords (GtkBuilder *builder,
-						 GtkSizeGroup *group,
-						 NMConnection *connection,
-						 const char *contype,
-						 ChangedCallback changed_cb,
-						 gpointer user_data);
-
 void tls_pw_init_auth_widget (GtkBuilder *builder,
                               GtkSizeGroup *group,
-                              NMSettingVPN *s_vpn,
+                              NMConnection *connection,
                               const char *contype,
                               const char *prefix,
                               ChangedCallback changed_cb,
@@ -47,7 +40,7 @@ void tls_pw_init_auth_widget (GtkBuilder *builder,
 
 void sk_init_auth_widget (GtkBuilder *builder,
                           GtkSizeGroup *group,
-                          NMSettingVPN *s_vpn,
+                          NMConnection *connection,
                           ChangedCallback changed_cb,
                           gpointer user_data);
 

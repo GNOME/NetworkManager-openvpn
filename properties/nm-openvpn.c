@@ -277,13 +277,12 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 	const char *value;
 	const char *contype = NM_OPENVPN_CONTYPE_TLS;
 
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 
 	priv->group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
-	if (!widget)
-		return FALSE;
+	g_return_val_if_fail (widget != NULL, FALSE);
 	gtk_size_group_add_widget (priv->group, widget);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
@@ -293,8 +292,7 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (stuff_changed_cb), self);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_combo"));
-	if (!widget)
-		return FALSE;
+	g_return_val_if_fail (widget != NULL, FALSE);
 	gtk_size_group_add_widget (priv->group, widget);
 
 	store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING);
@@ -312,12 +310,9 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 	}
 
 	/* TLS auth widget */
-	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, priv->group, connection,
 	                         NM_OPENVPN_CONTYPE_TLS, "tls",
 	                         stuff_changed_cb, self);
-	fill_vpn_passwords (priv->builder, priv->group, connection,
-						NM_OPENVPN_CONTYPE_TLS, stuff_changed_cb, self);
-
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
 	                    COL_AUTH_NAME, _("Certificates (TLS)"),
@@ -326,12 +321,9 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 	                    -1);
 
 	/* Password auth widget */
-	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, priv->group, connection,
 	                         NM_OPENVPN_CONTYPE_PASSWORD, "pw",
 	                         stuff_changed_cb, self);
-	fill_vpn_passwords (priv->builder, priv->group, connection,
-						NM_OPENVPN_CONTYPE_PASSWORD, stuff_changed_cb, self);
-
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
 	                    COL_AUTH_NAME, _("Password"),
@@ -342,13 +334,9 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 		active = 1;
 
 	/* Password+TLS auth widget */
-	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, priv->group, connection,
 	                         NM_OPENVPN_CONTYPE_PASSWORD_TLS, "pw_tls",
 	                         stuff_changed_cb, self);
-	fill_vpn_passwords (priv->builder, priv->group, connection,
-						NM_OPENVPN_CONTYPE_PASSWORD_TLS, stuff_changed_cb, self);
-
-
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
 	                    COL_AUTH_NAME, _("Password with Certificates (TLS)"),
@@ -359,7 +347,7 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 		active = 2;
 
 	/* Static key auth widget */
-	sk_init_auth_widget (priv->builder, priv->group, s_vpn, stuff_changed_cb, self);
+	sk_init_auth_widget (priv->builder, priv->group, connection, stuff_changed_cb, self);
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
@@ -405,18 +393,21 @@ hash_copy_advanced (gpointer key, gpointer data, gpointer user_data)
 		nm_setting_vpn_add_data_item (s_vpn, (const char *) key, value);
 }
 
-static const char *
+static char *
 get_auth_type (GtkBuilder *builder)
 {
 	GtkComboBox *combo;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	const char *auth_type = NULL;
+	char *auth_type = NULL;
+	gboolean success;
 
 	combo = GTK_COMBO_BOX (GTK_WIDGET (gtk_builder_get_object (builder, "auth_combo")));
 	model = gtk_combo_box_get_model (combo);
-	if (gtk_combo_box_get_active_iter (combo, &iter))
-		gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &auth_type, -1);
+
+	success = gtk_combo_box_get_active_iter (combo, &iter);
+	g_return_val_if_fail (success == TRUE, NULL);
+	gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &auth_type, -1);
 
 	return auth_type;
 }
@@ -430,8 +421,7 @@ update_connection (NMVpnPluginUiWidgetInterface *iface,
 	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (self);
 	NMSettingVPN *s_vpn;
 	GtkWidget *widget;
-	char *str;
-	const char *auth_type;
+	char *str, *auth_type;
 	gboolean valid = FALSE;
 
 	if (!check_validity (self, error))
@@ -450,38 +440,11 @@ update_connection (NMVpnPluginUiWidgetInterface *iface,
 	if (auth_type) {
 		nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, auth_type);
 		auth_widget_update_connection (priv->builder, auth_type, s_vpn);
+		g_free (auth_type);
 	}
 
 	if (priv->advanced)
 		g_hash_table_foreach (priv->advanced, hash_copy_advanced, s_vpn);
-
-	if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_TLS)) {
-		/* Certificates (TLS) */
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "tls_private_key_password_entry"));
-		str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-		if (str && strlen (str))
-			nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
-	} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		/* Password */
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_password_entry"));
-		str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-		if (str && strlen (str))
-			nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
-	} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		/* Password with Certificates (TLS) */
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_tls_password_entry"));
-		str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-		if (str && strlen (str))
-			nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "pw_tls_private_key_password_entry"));
-		str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-		if (str && strlen (str))
-			nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
-	} else if (!strcmp (auth_type, NM_OPENVPN_CONTYPE_STATIC_KEY))
-		; /* No secrets here */
-	else
-		g_assert_not_reached ();
 
 	/* Default to agent-owned secrets for new connections */
 	if (priv->new_connection) {
@@ -519,19 +482,24 @@ save_secrets (NMVpnPluginUiWidgetInterface *iface,
               GError **error)
 {
 	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (iface);
-	const char *auth_type;
+	char *auth_type;
 	gboolean ret = FALSE;
 
 	auth_type = get_auth_type (priv->builder);
-	if (auth_type)
+	if (auth_type) {
 		ret = auth_widget_save_secrets (priv->builder, auth_type, connection);
+		g_free (auth_type);
+	}
+
 	if (ret)
 		ret = advanced_save_secrets (priv->advanced, connection);
 
-	if (!ret)
+	if (!ret) {
 		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR,
 		             OPENVPN_PLUGIN_UI_ERROR_UNKNOWN,
 		             "%s", "Saving secrets to gnome keyring failed.");
+	}
+
 	return ret;
 }
 
