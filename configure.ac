@@ -128,7 +128,6 @@ AC_CONFIG_FILES([
 Makefile
 src/Makefile
 common/Makefile
-common-gnome/Makefile
 auth-dialog/Makefile
 properties/Makefile
 properties/tests/Makefile
