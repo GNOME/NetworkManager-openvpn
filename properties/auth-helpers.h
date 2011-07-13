@@ -32,7 +32,7 @@ typedef void (*ChangedCallback) (GtkWidget *widget, gpointer user_data);
 
 void tls_pw_init_auth_widget (GtkBuilder *builder,
                               GtkSizeGroup *group,
-                              NMConnection *connection,
+                              NMSettingVPN *s_vpn,
                               const char *contype,
                               const char *prefix,
                               ChangedCallback changed_cb,
@@ -40,7 +40,7 @@ void tls_pw_init_auth_widget (GtkBuilder *builder,
 
 void sk_init_auth_widget (GtkBuilder *builder,
                           GtkSizeGroup *group,
-                          NMConnection *connection,
+                          NMSettingVPN *s_vpn,
                           ChangedCallback changed_cb,
                           gpointer user_data);
 
@@ -49,12 +49,6 @@ gboolean auth_widget_check_validity (GtkBuilder *builder, const char *contype, G
 gboolean auth_widget_update_connection (GtkBuilder *builder,
                                         const char *contype,
                                         NMSettingVPN *s_vpn);
-
-gboolean auth_widget_save_secrets (GtkBuilder *builder,
-								   const char *contype,
-								   NMConnection *connection);
-
-gboolean advanced_save_secrets (GHashTable *advanced, NMConnection *connection);
 
 GtkFileFilter *tls_file_chooser_filter_new (gboolean pkcs_allowed);
 

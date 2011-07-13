@@ -28,10 +28,9 @@ libnm_openvpn_properties_la_CFLAGS =                    \
         -DGNOMELOCALEDIR=\"$(datadir)/locale\"          \
         -DVERSION=\"$(VERSION)\"
 
-libnm_openvpn_properties_la_LIBADD =    \
-        $(GTK_LIBS)                     \
-        $(NM_LIBS)         \
-        $(top_builddir)/common-gnome/libnm-openvpn-common-gnome.la \
+libnm_openvpn_properties_la_LIBADD = \
+        $(GTK_LIBS) \
+        $(NM_LIBS) \
         $(top_builddir)/common/libnm-openvpn-common.la
 
 libnm_openvpn_properties_la_LDFLAGS =   \

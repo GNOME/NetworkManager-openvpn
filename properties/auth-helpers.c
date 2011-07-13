@@ -34,14 +34,12 @@
 #include <errno.h>
 
 #include <glib/gi18n-lib.h>
-#include <gnome-keyring-memory.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-8021x.h>
 
 #include "auth-helpers.h"
 #include "nm-openvpn.h"
 #include "src/nm-openvpn-service.h"
-#include "common-gnome/keyring-helpers.h"
 #include "common/utils.h"
 
 static void
@@ -51,17 +49,15 @@ show_password (GtkToggleButton *togglebutton, GtkEntry *password_entry)
 }
 
 static GtkWidget *
-fill_password (GtkBuilder *builder,
-               const char *widget_name,
-               NMConnection *connection,
-               gboolean priv_key_password)
+setup_secret_widget (GtkBuilder *builder,
+                     const char *widget_name,
+                     NMSettingVPN *s_vpn,
+                     const char *secret_key)
 {
-	NMSettingVPN *s_vpn;
+	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	GtkWidget *widget;
 	GtkWidget *show_passwords;
 	const char *tmp;
-	char *keyring_pw;
-	gboolean unused;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
 	g_assert (widget);
@@ -69,26 +65,13 @@ fill_password (GtkBuilder *builder,
 	show_passwords = GTK_WIDGET (gtk_builder_get_object (builder, "show_passwords"));
 	g_signal_connect (show_passwords, "toggled", G_CALLBACK (show_password), widget);
 
-	if (!connection)
-		return widget;
-
-	/* Grab from the connection first */
-	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (s_vpn) {
-		tmp = nm_setting_vpn_get_secret (s_vpn, priv_key_password ? NM_OPENVPN_KEY_CERTPASS : NM_OPENVPN_KEY_PASSWORD);
-		if (tmp) {
+		tmp = nm_setting_vpn_get_secret (s_vpn, secret_key);
+		if (tmp)
 			gtk_entry_set_text (GTK_ENTRY (widget), tmp);
-			return widget;
-		}
-	}
 
-	/* If not the connection then from the keyring */
-	keyring_pw = keyring_helpers_lookup_secret (nm_connection_get_uuid (connection),
-	                                            priv_key_password ? NM_OPENVPN_KEY_CERTPASS : NM_OPENVPN_KEY_PASSWORD,
-	                                            &unused);
-	if (keyring_pw) {
-		gtk_entry_set_text (GTK_ENTRY (widget), keyring_pw);
-		gnome_keyring_memory_free (keyring_pw);
+		nm_setting_get_secret_flags (NM_SETTING (s_vpn), secret_key, &pw_flags, NULL);
+		g_object_set_data (G_OBJECT (widget), "flags", GUINT_TO_POINTER (pw_flags));
 	}
 
 	return widget;
@@ -138,14 +121,12 @@ tls_cert_changed_cb (GtkWidget *widget, GtkWidget *next_widget)
 static void
 tls_setup (GtkBuilder *builder,
            GtkSizeGroup *group,
-           NMConnection *connection,
+           NMSettingVPN *s_vpn,
            const char *prefix,
            GtkWidget *ca_chooser,
            ChangedCallback changed_cb,
            gpointer user_data)
 {
-	NMSettingVPN *s_vpn;
-	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	GtkWidget *widget, *cert, *key;
 	const char *value;
 	char *tmp;
@@ -163,7 +144,6 @@ tls_setup (GtkBuilder *builder,
 	                                   _("Choose your personal certificate..."));
 	g_signal_connect (G_OBJECT (cert), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
-	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
 		if (value && strlen (value))
@@ -195,27 +175,20 @@ tls_setup (GtkBuilder *builder,
 
 	/* Fill in the private key password */
 	tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
-	widget = fill_password (builder, tmp, connection, TRUE);
+	widget = setup_secret_widget (builder, tmp, s_vpn, NM_OPENVPN_KEY_CERTPASS);
 	g_free (tmp);
 	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (widget, "changed", G_CALLBACK (changed_cb), user_data);
-
-	if (s_vpn) {
-		nm_setting_get_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_CERTPASS, &pw_flags, NULL);
-		g_object_set_data (G_OBJECT (widget), "flags", GUINT_TO_POINTER (pw_flags));
-	}
 }
 
 static void
 pw_setup (GtkBuilder *builder,
           GtkSizeGroup *group, 
-          NMConnection *connection,
+          NMSettingVPN *s_vpn,
           const char *prefix,
           ChangedCallback changed_cb,
           gpointer user_data)
 {
-	NMSettingVPN *s_vpn;
-	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	GtkWidget *widget;
 	const char *value;
 	char *tmp;
@@ -225,7 +198,6 @@ pw_setup (GtkBuilder *builder,
 	g_free (tmp);
 	gtk_size_group_add_widget (group, widget);
 
-	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME);
 		if (value && strlen (value))
@@ -235,27 +207,21 @@ pw_setup (GtkBuilder *builder,
 
 	/* Fill in the user password */
 	tmp = g_strdup_printf ("%s_password_entry", prefix);
-	widget = fill_password (builder, tmp, connection, FALSE);
+	widget = setup_secret_widget (builder, tmp, s_vpn, NM_OPENVPN_KEY_PASSWORD);
 	g_free (tmp);
 	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (widget, "changed", G_CALLBACK (changed_cb), user_data);
-
-	if (s_vpn) {
-		nm_setting_get_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_PASSWORD, &pw_flags, NULL);
-		g_object_set_data (G_OBJECT (widget), "flags", GUINT_TO_POINTER (pw_flags));
-	}
 }
 
 void
 tls_pw_init_auth_widget (GtkBuilder *builder,
                          GtkSizeGroup *group,
-                         NMConnection *connection,
+                         NMSettingVPN *s_vpn,
                          const char *contype,
                          const char *prefix,
                          ChangedCallback changed_cb,
                          gpointer user_data)
 {
-	NMSettingVPN *s_vpn;
 	GtkWidget *ca;
 	const char *value;
 	char *tmp;
@@ -288,7 +254,6 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 	                                   _("Choose a Certificate Authority certificate..."));
 	g_signal_connect (G_OBJECT (ca), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
-	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
 		if (value && strlen (value))
@@ -297,9 +262,9 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 
 	/* Set up the rest of the options */
 	if (tls)
-		tls_setup (builder, group, connection, prefix, ca, changed_cb, user_data);
+		tls_setup (builder, group, s_vpn, prefix, ca, changed_cb, user_data);
 	if (pw)
-		pw_setup (builder, group, connection, prefix, changed_cb, user_data);
+		pw_setup (builder, group, s_vpn, prefix, changed_cb, user_data);
 }
 
 #define SK_DIR_COL_NAME 0
@@ -308,11 +273,10 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 void
 sk_init_auth_widget (GtkBuilder *builder,
                      GtkSizeGroup *group,
-                     NMConnection *connection,
+                     NMSettingVPN *s_vpn,
                      ChangedCallback changed_cb,
                      gpointer user_data)
 {
-	NMSettingVPN *s_vpn;
 	GtkWidget *widget;
 	const char *value = NULL;
 	GtkListStore *store;
@@ -334,7 +298,6 @@ sk_init_auth_widget (GtkBuilder *builder,
 	                                   _("Choose an OpenVPN static key..."));
 	g_signal_connect (G_OBJECT (widget), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
-	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
 		if (value && strlen (value))
@@ -688,81 +651,6 @@ auth_widget_update_connection (GtkBuilder *builder,
 		g_assert_not_reached ();
 
 	return TRUE;
-}
-
-static gboolean
-save_secret (GtkBuilder *builder,
-			 const char *widget_name,
-			 const char *vpn_uuid,
-			 const char *vpn_name,
-			 const char *secret_name)
-{
-	GtkWidget *w;
-	const char *secret;
-	GnomeKeyringResult result;
-	gboolean ret;
-
-	w = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
-	g_assert (w);
-	secret = gtk_entry_get_text (GTK_ENTRY (w));
-	if (secret && strlen (secret)) {
-		result = keyring_helpers_save_secret (vpn_uuid, vpn_name, NULL, secret_name, secret);
-		ret = result == GNOME_KEYRING_RESULT_OK;
-		if (!ret)
-			g_warning ("%s: failed to save user password to keyring.", __func__);
-	} else
-		ret = keyring_helpers_delete_secret (vpn_uuid, secret_name);
-
-	return ret;
-}
-
-gboolean
-auth_widget_save_secrets (GtkBuilder *builder,
-						  const char *contype,
-						  NMConnection *connection)
-{
-	NMSetting *s_vpn;
-	gboolean ret = TRUE;
-	const char *uuid, *name;
-	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
-	NMSettingSecretFlags certpw_flags = NM_SETTING_SECRET_FLAG_NONE;
-
-	uuid = nm_connection_get_uuid (connection);
-	name = nm_connection_get_id (connection);
-
-	s_vpn = nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
-	if (!s_vpn)
-		return FALSE;
-
-	nm_setting_get_secret_flags (s_vpn, NM_OPENVPN_KEY_PASSWORD, &pw_flags, NULL);
-	nm_setting_get_secret_flags (s_vpn, NM_OPENVPN_KEY_CERTPASS, &certpw_flags, NULL);
-
-	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS)) {
-		if (certpw_flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)
-			ret = save_secret (builder, "tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
-		else
-			keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_CERTPASS);
-	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		if (pw_flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)
-			ret = save_secret (builder, "pw_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
-		else
-			keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_PASSWORD);
-	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		if (pw_flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)
-			ret = save_secret (builder, "pw_tls_password_entry", uuid, name, NM_OPENVPN_KEY_PASSWORD);
-		else
-			keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_PASSWORD);
-
-		if (certpw_flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)
-			ret = save_secret (builder, "pw_tls_private_key_password_entry", uuid, name, NM_OPENVPN_KEY_CERTPASS);
-		else
-			keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_CERTPASS);
-	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
-		/* No secrets here */
-	} else
-		g_assert_not_reached ();
-
-	return ret;
 }
 
 static const char *
@@ -1798,36 +1686,5 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	}
 
 	return hash;
-}
-
-gboolean
-advanced_save_secrets (GHashTable *advanced, NMConnection *connection)
-{
-	NMSetting *s_vpn;
-	const char *secret, *uuid, *name;
-	GnomeKeyringResult result;
-	gboolean ret = FALSE;
-	NMSettingSecretFlags flags = NM_SETTING_SECRET_FLAG_NONE;
-
-	s_vpn = nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
-	if (!s_vpn)
-		return FALSE;
-	nm_setting_get_secret_flags (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, &flags, NULL);
-
-	uuid = nm_connection_get_uuid (connection);
-	name = nm_connection_get_id (connection);
-
-	secret = g_hash_table_lookup (advanced, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
-	if (secret && strlen (secret) && (flags & NM_SETTING_SECRET_FLAG_AGENT_OWNED)) {
-		/* Only save the proxy password if it's agent-owned */
-		result = keyring_helpers_save_secret (uuid, name, NULL, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, secret);
-		if (result == GNOME_KEYRING_RESULT_OK)
-			ret = TRUE;
-		else
-			g_warning ("%s: failed to save HTTP proxy password to keyring.", __func__);
-	} else
-		ret = keyring_helpers_delete_secret (uuid, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
-
-	return ret;
 }
 
