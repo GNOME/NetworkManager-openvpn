@@ -32,6 +32,8 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="liststore1"/>
+  <object class="GtkListStore" id="liststore2"/>
   <object class="GtkListStore" id="model1">
     <columns>
       <!-- column-name gchararray -->
@@ -1295,7 +1297,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="n_rows">3</property>
-                        <property name="n_columns">2</property>
+                        <property name="n_columns">3</property>
                         <property name="column_spacing">6</property>
                         <property name="row_spacing">6</property>
                         <child>
@@ -1335,7 +1337,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
                             <property name="y_options"></property>
@@ -1393,7 +1395,27 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="pw_pass_type_combo">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="model">liststore1</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer7"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
@@ -1418,7 +1440,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="n_rows">6</property>
-                        <property name="n_columns">2</property>
+                        <property name="n_columns">3</property>
                         <property name="column_spacing">6</property>
                         <property name="row_spacing">6</property>
                         <child>
@@ -1437,7 +1459,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="top_attach">5</property>
                             <property name="bottom_attach">6</property>
                             <property name="y_options"></property>
@@ -1471,7 +1493,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="top_attach">4</property>
                             <property name="bottom_attach">5</property>
                             <property name="y_options"></property>
@@ -1540,7 +1562,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
                             <property name="y_options"></property>
@@ -1561,7 +1583,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="top_attach">3</property>
                             <property name="bottom_attach">4</property>
                             <property name="y_options"></property>
@@ -1619,7 +1641,27 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="y_options"></property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="pw_tls_pass_type_combo">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="model">liststore2</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer8"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
                             <property name="y_options"></property>
                           </packing>
                         </child>
@@ -1835,6 +1877,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
+                    <property name="y_options">GTK_EXPAND</property>
                   </packing>
                 </child>
                 <child>
@@ -1878,8 +1921,8 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
