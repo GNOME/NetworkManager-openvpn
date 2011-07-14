@@ -9,173 +9,165 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2011-06-10 18:05+0000\n"
-"PO-Revision-Date: 2011-06-11 18:09+0100\n"
+"POT-Creation-Date: 2011-07-14 03:13+0000\n"
+"PO-Revision-Date: 2011-07-14 08:13+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
 "X-Poedit-Country: SLOVENIA\n"
 "X-Poedit-Language: Slovenian\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:130
+#: ../auth-dialog/vpn-password-dialog.c:95
 msgid "_Password:"
 msgstr "_Geslo:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:131
+#: ../auth-dialog/vpn-password-dialog.c:97
 msgid "_Secondary Password:"
 msgstr "_Drugotno geslo:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:248
-msgid "_Username:"
-msgstr "_Uporabniško ime:"
+#: ../auth-dialog/vpn-password-dialog.c:239
+msgid "Sh_ow passwords"
+msgstr "_Pokaži gesla"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:250
-msgid "_Domain:"
-msgstr "_Domena:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:348
-msgid "Connect _anonymously"
-msgstr "Poveži se _brezimno"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:353
-msgid "Connect as _user:"
-msgstr "Poveži se kot _uporabnik:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:458
-msgid "_Remember password for this session"
-msgstr "_Zapomni si geslo za to sejo"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:460
-msgid "_Save password in keyring"
-msgstr "Shrani geslo v _zbirko ključev"
-
-#: ../auth-dialog/main.c:102
+#: ../auth-dialog/main.c:133
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Dostop do navideznega zasebnega omrežja '%s' zahteva overitev."
 
-#: ../auth-dialog/main.c:103
+#: ../auth-dialog/main.c:134
 msgid "Authenticate VPN"
 msgstr "Overi VPN"
 
-#: ../auth-dialog/main.c:124
+#: ../auth-dialog/main.c:140
 msgid "Certificate pass_word:"
 msgstr "G_eslo potrdila:"
 
-#: ../auth-dialog/main.c:138
+#: ../auth-dialog/main.c:154
 msgid "Certificate password:"
 msgstr "Geslo potrdila:"
 
-#: ../properties/auth-helpers.c:202
-msgid "Choose a Certificate Authority certificate..."
-msgstr "Izbor pooblastitelja potrdila ..."
-
-#: ../properties/auth-helpers.c:221
+#: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
 msgstr "Izbor osebnega potrdila ..."
 
-#: ../properties/auth-helpers.c:239
+#: ../properties/auth-helpers.c:166
 msgid "Choose your private key..."
 msgstr "Izbor osebnega ključa ..."
 
-#: ../properties/auth-helpers.c:297
+#: ../properties/auth-helpers.c:238
+msgid "Saved"
+msgstr "Shranjeno"
+
+#: ../properties/auth-helpers.c:246
+msgid "Always Ask"
+msgstr "Vedno vprašaj"
+
+#: ../properties/auth-helpers.c:251
+msgid "Not Required"
+msgstr "Ni zahtevano"
+
+#: ../properties/auth-helpers.c:341
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Izbor pooblastitelja potrdila ..."
+
+#: ../properties/auth-helpers.c:385
 msgid "Choose an OpenVPN static key..."
 msgstr "Izbor OpenVPN stalnega ključa ..."
 
-#: ../properties/auth-helpers.c:321
-#: ../properties/auth-helpers.c:1105
-#: ../properties/auth-helpers.c:1497
+#: ../properties/auth-helpers.c:409
+#: ../properties/auth-helpers.c:1169
+#: ../properties/auth-helpers.c:1571
 msgid "None"
 msgstr "Brez"
 
-#: ../properties/auth-helpers.c:801
+#: ../properties/auth-helpers.c:865
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM ali PKCS#12 potrdila (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:802
+#: ../properties/auth-helpers.c:866
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Potrdila PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:926
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Stalni ključi OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1021
-#: ../properties/auth-helpers.c:1097
+#: ../properties/auth-helpers.c:1085
+#: ../properties/auth-helpers.c:1161
 msgid "Default"
 msgstr "Privzeto"
 
-#: ../properties/auth-helpers.c:1107
+#: ../properties/auth-helpers.c:1171
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1109
+#: ../properties/auth-helpers.c:1173
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1111
+#: ../properties/auth-helpers.c:1175
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1113
+#: ../properties/auth-helpers.c:1177
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1115
+#: ../properties/auth-helpers.c:1179
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1117
+#: ../properties/auth-helpers.c:1181
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1119
+#: ../properties/auth-helpers.c:1183
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1121
+#: ../properties/auth-helpers.c:1185
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1296
+#: ../properties/auth-helpers.c:1360
 #: ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Ni zahtevano"
 
-#: ../properties/auth-helpers.c:1298
+#: ../properties/auth-helpers.c:1362
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1300
+#: ../properties/auth-helpers.c:1364
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "Združljivo s strežnikom OpenVPN."
 
-#: ../properties/nm-openvpn.c:323
+#: ../properties/nm-openvpn.c:317
 msgid "Certificates (TLS)"
 msgstr "Potrdila (TLS)"
 
-#: ../properties/nm-openvpn.c:337
+#: ../properties/nm-openvpn.c:328
 msgid "Password"
 msgstr "Geslo"
 
-#: ../properties/nm-openvpn.c:354
+#: ../properties/nm-openvpn.c:341
 msgid "Password with Certificates (TLS)"
 msgstr "Geslo s potrdilom (TLS)"
 
-#: ../properties/nm-openvpn.c:366
+#: ../properties/nm-openvpn.c:353
 msgid "Static Key"
 msgstr "Stalni ključ"
 
@@ -469,3 +461,20 @@ msgstr "Omogoči podrobno beleženje razhroščevanja (lahko razkrije gesla)"
 msgid "nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
 msgstr "Storitev nm-vpnc-service omoboča podporo OpenVPN znotraj programa NetworkManager."
 
+#~ msgid "_Username:"
+#~ msgstr "_Uporabniško ime:"
+
+#~ msgid "_Domain:"
+#~ msgstr "_Domena:"
+
+#~ msgid "Connect _anonymously"
+#~ msgstr "Poveži se _brezimno"
+
+#~ msgid "Connect as _user:"
+#~ msgstr "Poveži se kot _uporabnik:"
+
+#~ msgid "_Remember password for this session"
+#~ msgstr "_Zapomni si geslo za to sejo"
+
+#~ msgid "_Save password in keyring"
+#~ msgstr "Shrani geslo v _zbirko ključev"
