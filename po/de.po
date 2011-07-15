@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2011-06-10 18:05+0000\n"
-"PO-Revision-Date: 2011-06-16 20:11+0100\n"
+"POT-Creation-Date: 2011-07-14 03:13+0000\n"
+"PO-Revision-Date: 2011-07-15 20:40+0100\n"
 "Last-Translator: Mario Blättermann <mariobl@freenet.de>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,162 +21,152 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:130
+#: ../auth-dialog/vpn-password-dialog.c:95
 msgid "_Password:"
 msgstr "_Passwort:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:131
+#: ../auth-dialog/vpn-password-dialog.c:97
 msgid "_Secondary Password:"
 msgstr "_Sekundäres Passwort:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:248
-msgid "_Username:"
-msgstr "_Benutzername:"
+#: ../auth-dialog/vpn-password-dialog.c:239
+msgid "Sh_ow passwords"
+msgstr "Passwörter an_zeigen"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:250
-msgid "_Domain:"
-msgstr "_Domäne:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:348
-msgid "Connect _anonymously"
-msgstr "_Anonym verbinden"
-
-# CHECK ACCELERATOR
-#: ../auth-dialog/gnome-two-password-dialog.c:353
-msgid "Connect as _user:"
-msgstr "Als _Benutzer verbinden:"
-
-# CHECK ACCELERATOR
-#: ../auth-dialog/gnome-two-password-dialog.c:458
-msgid "_Remember password for this session"
-msgstr "_Passwort für dieser Sitzung behalten"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:460
-msgid "_Save password in keyring"
-msgstr "Passwort im _Schlüsselbund speichern"
-
-#: ../auth-dialog/main.c:102
+#: ../auth-dialog/main.c:133
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr ""
 "Sie müssen sich legitimieren, um auf das Virtuelle Private Netz »%s« "
 "zuzugreifen."
 
-#: ../auth-dialog/main.c:103
+#: ../auth-dialog/main.c:134
 msgid "Authenticate VPN"
 msgstr "VPN legitimieren"
 
-#: ../auth-dialog/main.c:124
+#: ../auth-dialog/main.c:140
 msgid "Certificate pass_word:"
 msgstr "Zertifikatspass_wort:"
 
-#: ../auth-dialog/main.c:138
+#: ../auth-dialog/main.c:154
 msgid "Certificate password:"
 msgstr "Zertifikatspasswort:"
 
-#: ../properties/auth-helpers.c:202
-msgid "Choose a Certificate Authority certificate..."
-msgstr "Zertifikat einer Zertifizierungsstelle auswählen …"
-
-#: ../properties/auth-helpers.c:221
+#: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
 msgstr "Persönliches Zertifikat auswählen …"
 
-#: ../properties/auth-helpers.c:239
+#: ../properties/auth-helpers.c:166
 msgid "Choose your private key..."
 msgstr "Privaten Schlüssel auswählen …"
 
-#: ../properties/auth-helpers.c:297
+#: ../properties/auth-helpers.c:238
+msgid "Saved"
+msgstr "Gespeichert"
+
+#: ../properties/auth-helpers.c:246
+msgid "Always Ask"
+msgstr "Immer fragen"
+
+#: ../properties/auth-helpers.c:251
+msgid "Not Required"
+msgstr "Nicht notwendig"
+
+#: ../properties/auth-helpers.c:341
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Zertifikat einer Zertifizierungsstelle auswählen …"
+
+#: ../properties/auth-helpers.c:385
 msgid "Choose an OpenVPN static key..."
 msgstr "Statischen OpenVPN-Schlüssel auswählen …"
 
 # CHECK keine/keiner
-#: ../properties/auth-helpers.c:321 ../properties/auth-helpers.c:1105
-#: ../properties/auth-helpers.c:1497
+#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1169
+#: ../properties/auth-helpers.c:1571
 msgid "None"
 msgstr "keine"
 
-#: ../properties/auth-helpers.c:801
+#: ../properties/auth-helpers.c:865
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM- oder PKCS#12-Zertifikate (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:802
+#: ../properties/auth-helpers.c:866
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM-Zertifikate (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:926
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statische OpenVPN-Schlüssel (*.key)"
 
-#: ../properties/auth-helpers.c:1021 ../properties/auth-helpers.c:1097
+#: ../properties/auth-helpers.c:1085 ../properties/auth-helpers.c:1161
 msgid "Default"
 msgstr "Vorgabe"
 
-#: ../properties/auth-helpers.c:1107
+#: ../properties/auth-helpers.c:1171
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1109
+#: ../properties/auth-helpers.c:1173
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1111
+#: ../properties/auth-helpers.c:1175
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1113
+#: ../properties/auth-helpers.c:1177
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1115
+#: ../properties/auth-helpers.c:1179
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1117
+#: ../properties/auth-helpers.c:1181
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1119
+#: ../properties/auth-helpers.c:1183
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1121
+#: ../properties/auth-helpers.c:1185
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1296 ../properties/nm-openvpn-dialog.ui.h:16
+#: ../properties/auth-helpers.c:1360 ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Nicht notwendig"
 
-#: ../properties/auth-helpers.c:1298
+#: ../properties/auth-helpers.c:1362
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1300
+#: ../properties/auth-helpers.c:1364
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "Kompatibel zum OpenVPN-Server"
 
-#: ../properties/nm-openvpn.c:323
+#: ../properties/nm-openvpn.c:317
 msgid "Certificates (TLS)"
 msgstr "Zertifikate (TLS):"
 
-#: ../properties/nm-openvpn.c:337
+#: ../properties/nm-openvpn.c:328
 msgid "Password"
 msgstr "Passwort"
 
-#: ../properties/nm-openvpn.c:354
+#: ../properties/nm-openvpn.c:341
 msgid "Password with Certificates (TLS)"
 msgstr "Passwort und Zertifikate (TLS)"
 
-#: ../properties/nm-openvpn.c:366
+#: ../properties/nm-openvpn.c:353
 msgid "Static Key"
 msgstr "Statischer Schlüssel"
 
@@ -489,3 +479,12 @@ msgstr ""
 msgid ""
 "nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
 msgstr "nm-vpnc-service integriert OpenVPN-Funktionalität in NetworkManager."
+
+#~ msgid "_Username:"
+#~ msgstr "_Benutzername:"
+
+#~ msgid "_Domain:"
+#~ msgstr "_Domäne:"
+
+#~ msgid "Connect _anonymously"
+#~ msgstr "_Anonym verbinden"
