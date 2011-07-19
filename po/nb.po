@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-14 18:56+0100\n"
-"PO-Revision-Date: 2011-03-14 19:00+0100\n"
+"POT-Creation-Date: 2011-07-19 13:25+0200\n"
+"PO-Revision-Date: 2011-07-19 13:27+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -16,154 +16,150 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:130
+#: ../auth-dialog/vpn-password-dialog.c:95
 msgid "_Password:"
 msgstr "_Passord:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:131
+#: ../auth-dialog/vpn-password-dialog.c:97
 msgid "_Secondary Password:"
 msgstr "_Sekundært passord:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:248
-msgid "_Username:"
-msgstr "Br_ukernavn:"
+#: ../auth-dialog/vpn-password-dialog.c:239
+msgid "Sh_ow passwords"
+msgstr "Vis pass_ord"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:250
-msgid "_Domain:"
-msgstr "_Domene:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:348
-msgid "Connect _anonymously"
-msgstr "Koble til _anonymt"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:353
-msgid "Connect as _user:"
-msgstr "Koble til som br_uker:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:458
-msgid "_Remember password for this session"
-msgstr "_Husk passordet for denne sesjonen"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:460
-msgid "_Save password in keyring"
-msgstr "_Lagre passord i nøkkelring"
-
-#: ../auth-dialog/main.c:89
+#: ../auth-dialog/main.c:133
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr ""
 "Du må autentisere deg for å få tilgang til virtuelt privat nettverk «%s»."
 
-#: ../auth-dialog/main.c:90
+#: ../auth-dialog/main.c:134
 msgid "Authenticate VPN"
 msgstr "Autentiser VPN"
 
-#: ../auth-dialog/main.c:111
+#: ../auth-dialog/main.c:140
 msgid "Certificate pass_word:"
 msgstr "Pass_ord for sertifikat:"
 
-#: ../auth-dialog/main.c:125
+#: ../auth-dialog/main.c:154
 msgid "Certificate password:"
 msgstr "Passord for sertifikat:"
 
-#: ../properties/auth-helpers.c:202
-msgid "Choose a Certificate Authority certificate..."
-msgstr "Velg et sertifikat fra en sertifikatmyndighet …"
-
-#: ../properties/auth-helpers.c:221
+#: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
 msgstr "Velg ditt personlige sertifikat …"
 
-#: ../properties/auth-helpers.c:239
+#: ../properties/auth-helpers.c:166
 msgid "Choose your private key..."
 msgstr "Velg din private nøkkel …"
 
-#: ../properties/auth-helpers.c:297
+#: ../properties/auth-helpers.c:238
+msgid "Saved"
+msgstr "Lagret"
+
+#: ../properties/auth-helpers.c:246
+msgid "Always Ask"
+msgstr "Alltid spør"
+
+#: ../properties/auth-helpers.c:251
+msgid "Not Required"
+msgstr "Ikke nødvendig"
+
+#: ../properties/auth-helpers.c:341
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Velg et sertifikat fra en sertifikatmyndighet …"
+
+#: ../properties/auth-helpers.c:385
 msgid "Choose an OpenVPN static key..."
 msgstr "Velg en statisk nøkkel for OpenVPN …"
 
-#: ../properties/auth-helpers.c:321 ../properties/auth-helpers.c:1104
-#: ../properties/auth-helpers.c:1494
+#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1169
+#: ../properties/auth-helpers.c:1571
 msgid "None"
 msgstr "Ingen"
 
-#: ../properties/auth-helpers.c:801
+#: ../properties/auth-helpers.c:865
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM- eller PKCS#12-sertifikater (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:802
+#: ../properties/auth-helpers.c:866
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM-sertifikater (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:926
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statiske nøkler for OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1021 ../properties/auth-helpers.c:1096
+#: ../properties/auth-helpers.c:1085 ../properties/auth-helpers.c:1161
 msgid "Default"
 msgstr "Forvalg"
 
-#: ../properties/auth-helpers.c:1106
+#: ../properties/auth-helpers.c:1171
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../properties/auth-helpers.c:1173
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1108
+#: ../properties/auth-helpers.c:1175
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1110
+#: ../properties/auth-helpers.c:1177
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1112
+#: ../properties/auth-helpers.c:1179
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1114
+#: ../properties/auth-helpers.c:1181
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1116
+#: ../properties/auth-helpers.c:1183
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1118
+#: ../properties/auth-helpers.c:1185
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1293 ../properties/nm-openvpn-dialog.ui.h:16
+#: ../properties/auth-helpers.c:1360 ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Ikke nødvendig"
 
-#: ../properties/auth-helpers.c:1295
+#: ../properties/auth-helpers.c:1362
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1297
+#: ../properties/auth-helpers.c:1364
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "Kompatibel med OpenVPN-tjeneren."
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:317
 msgid "Certificates (TLS)"
 msgstr "Sertifikater (TLS)"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:328
 msgid "Password"
 msgstr "Passord:"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:341
 msgid "Password with Certificates (TLS)"
 msgstr "Passord med sertifikater (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn.c:353
 msgid "Static Key"
 msgstr "Statisk nøkkel"
 
@@ -355,3 +351,110 @@ msgstr "Brukernavn:"
 #: ../properties/nm-openvpn-dialog.ui.h:47
 msgid "_Gateway:"
 msgstr "_Portner:"
+
+#: ../src/nm-openvpn-service.c:192
+#, c-format
+msgid "invalid address '%s'"
+msgstr "ugyldig adresse «%s»"
+
+#: ../src/nm-openvpn-service.c:204
+#, c-format
+msgid "invalid integer property '%s' or out of range [%d -> %d]"
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:214
+#, c-format
+msgid "invalid boolean property '%s' (not yes or no)"
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:221
+#, c-format
+msgid "unhandled property '%s' type %s"
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:232
+#, c-format
+msgid "property '%s' invalid or not supported"
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:249
+msgid "No VPN configuration options."
+msgstr "Ingen konfigurasjonsalternativer for VPN."
+
+#: ../src/nm-openvpn-service.c:272
+msgid "No VPN secrets!"
+msgstr "Ingen VPN-hemmeligheter!"
+
+#: ../src/nm-openvpn-service.c:745
+msgid "Could not find the openvpn binary."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:756
+msgid "Invalid HMAC auth."
+msgstr "Ugyldig HMAC-autentisering."
+
+#: ../src/nm-openvpn-service.c:768 ../src/nm-openvpn-service.c:1164
+#: ../src/nm-openvpn-service.c:1234
+msgid "Invalid connection type."
+msgstr "Ugyldig tilkoblingstype."
+
+#: ../src/nm-openvpn-service.c:803
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Ugyldig proxytype «%s»."
+
+#: ../src/nm-openvpn-service.c:839
+#, c-format
+msgid "Invalid port number '%s'."
+msgstr "Ugyldig portnummer «%s»."
+
+#: ../src/nm-openvpn-service.c:889
+#, c-format
+msgid "Invalid reneg seconds '%s'."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:913
+#, c-format
+msgid "Invalid TUN MTU size '%s'."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:928
+#, c-format
+msgid "Invalid fragment size '%s'."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:996
+msgid "Missing required local IP address for static key mode."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:1009
+msgid "Missing required remote IP address for static key mode."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:1034
+#, c-format
+msgid "Unknown connection type '%s'."
+msgstr "Ukjent tilkoblingstype «%s»."
+
+#: ../src/nm-openvpn-service.c:1153 ../src/nm-openvpn-service.c:1224
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:1178
+msgid "Could not process the request because no username was provided."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:1368
+msgid "Don't quit when VPN connection terminates"
+msgstr "Ikke avslutt når VPN-tilkobling termineres"
+
+#: ../src/nm-openvpn-service.c:1369
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:1383
+msgid ""
+"nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
