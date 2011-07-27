@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2011-05-21 21:00+0000\n"
-"PO-Revision-Date: 2011-05-23 16:24-0300\n"
+"POT-Creation-Date: 2011-07-16 13:16+0000\n"
+"PO-Revision-Date: 2011-07-21 20:43-0300\n"
 "Last-Translator: Antonio Fernandes C. Neto <fernandesn@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,153 +23,149 @@ msgstr ""
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: BRAZIL\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:130
+#: ../auth-dialog/vpn-password-dialog.c:95
 msgid "_Password:"
 msgstr "_Senha:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:131
+#: ../auth-dialog/vpn-password-dialog.c:97
 msgid "_Secondary Password:"
 msgstr "_Senha secundária:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:248
-msgid "_Username:"
-msgstr "Nome de _usuário:"
+#: ../auth-dialog/vpn-password-dialog.c:239
+msgid "Sh_ow passwords"
+msgstr "M_ostrar senhas"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:250
-msgid "_Domain:"
-msgstr "_Domínio:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:348
-msgid "Connect _anonymously"
-msgstr "Conectar _anonimamente"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:353
-msgid "Connect as _user:"
-msgstr "Conectar como _usuário:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:458
-msgid "_Remember password for this session"
-msgstr "_Lembrar senha para esta sessão"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:460
-msgid "_Save password in keyring"
-msgstr "_Salvar senha no chaveiro"
-
-#: ../auth-dialog/main.c:103
+#: ../auth-dialog/main.c:133
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Você precisa se autenticar para acessar a Rede Privada Virtual \"%s\"."
 
-#: ../auth-dialog/main.c:104
+#: ../auth-dialog/main.c:134
 msgid "Authenticate VPN"
 msgstr "Autenticar VPN"
 
-#: ../auth-dialog/main.c:125
+#: ../auth-dialog/main.c:140
 msgid "Certificate pass_word:"
 msgstr "Sen_ha do certificado:"
 
-#: ../auth-dialog/main.c:139
+#: ../auth-dialog/main.c:154
 msgid "Certificate password:"
 msgstr "Senha do certificado:"
 
-#: ../properties/auth-helpers.c:202
-msgid "Choose a Certificate Authority certificate..."
-msgstr "Escolha um certificado de Autoridade Certificadora..."
-
-#: ../properties/auth-helpers.c:221
+#: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
 msgstr "Escolha seu certificado pessoal..."
 
-#: ../properties/auth-helpers.c:239
+#: ../properties/auth-helpers.c:166
 msgid "Choose your private key..."
 msgstr "Escolha sua chave privada..."
 
-#: ../properties/auth-helpers.c:297
+#: ../properties/auth-helpers.c:238
+msgid "Saved"
+msgstr "Salvo"
+
+#: ../properties/auth-helpers.c:246
+msgid "Always Ask"
+msgstr "Perguntar sempre"
+
+#: ../properties/auth-helpers.c:251
+msgid "Not Required"
+msgstr "Não requerido"
+
+#: ../properties/auth-helpers.c:341
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Escolha um certificado de Autoridade Certificadora..."
+
+#: ../properties/auth-helpers.c:385
 msgid "Choose an OpenVPN static key..."
 msgstr "Escolha uma chave estática do OpenVPN..."
 
-#: ../properties/auth-helpers.c:321 ../properties/auth-helpers.c:1104
-#: ../properties/auth-helpers.c:1494
+#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1169
+#: ../properties/auth-helpers.c:1571
 msgid "None"
 msgstr "Nenhum"
 
-#: ../properties/auth-helpers.c:801
+#: ../properties/auth-helpers.c:865
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "Certificados PEM ou PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:802
+#: ../properties/auth-helpers.c:866
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Certificados PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:926
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Chaves estáticas do OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1021 ../properties/auth-helpers.c:1096
+#: ../properties/auth-helpers.c:1085 ../properties/auth-helpers.c:1161
 msgid "Default"
 msgstr "Padrão"
 
-#: ../properties/auth-helpers.c:1106
+#: ../properties/auth-helpers.c:1171
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../properties/auth-helpers.c:1173
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1108
+#: ../properties/auth-helpers.c:1175
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1110
+#: ../properties/auth-helpers.c:1177
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1112
+#: ../properties/auth-helpers.c:1179
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1114
+#: ../properties/auth-helpers.c:1181
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1116
+#: ../properties/auth-helpers.c:1183
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1118
+#: ../properties/auth-helpers.c:1185
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1293 ../properties/nm-openvpn-dialog.ui.h:16
+#: ../properties/auth-helpers.c:1360 ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Não requerido"
 
-#: ../properties/auth-helpers.c:1295
+#: ../properties/auth-helpers.c:1362
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1297
+#: ../properties/auth-helpers.c:1364
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "Compatível com o servidor OpenVPN."
 
-#: ../properties/nm-openvpn.c:323
+#: ../properties/nm-openvpn.c:317
 msgid "Certificates (TLS)"
 msgstr "Certificados (TLS)"
 
-#: ../properties/nm-openvpn.c:337
+#: ../properties/nm-openvpn.c:328
 msgid "Password"
 msgstr "Senha"
 
-#: ../properties/nm-openvpn.c:354
+#: ../properties/nm-openvpn.c:341
 msgid "Password with Certificates (TLS)"
 msgstr "Senha com certificados (TLS)"
 
-#: ../properties/nm-openvpn.c:366
+#: ../properties/nm-openvpn.c:353
 msgid "Static Key"
 msgstr "Chave estática"
 
@@ -402,60 +398,60 @@ msgstr "Sem opções de configurações de VPN."
 msgid "No VPN secrets!"
 msgstr "VPN sem segredos!"
 
-#: ../src/nm-openvpn-service.c:744
+#: ../src/nm-openvpn-service.c:745
 msgid "Could not find the openvpn binary."
 msgstr "Não foi possível encontrar o executável do openvpn."
 
-#: ../src/nm-openvpn-service.c:755
+#: ../src/nm-openvpn-service.c:756
 msgid "Invalid HMAC auth."
 msgstr "Autenticação HMAC inválida."
 
-#: ../src/nm-openvpn-service.c:767 ../src/nm-openvpn-service.c:1163
-#: ../src/nm-openvpn-service.c:1233
+#: ../src/nm-openvpn-service.c:768 ../src/nm-openvpn-service.c:1164
+#: ../src/nm-openvpn-service.c:1234
 msgid "Invalid connection type."
 msgstr "Tipo de conexão inválida."
 
-#: ../src/nm-openvpn-service.c:802
+#: ../src/nm-openvpn-service.c:803
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Tipo de proxy inválido \"%s\"."
 
-#: ../src/nm-openvpn-service.c:838
+#: ../src/nm-openvpn-service.c:839
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Número da porta inválida \"%s\"."
 
-#: ../src/nm-openvpn-service.c:888
+#: ../src/nm-openvpn-service.c:889
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Segundos de renegociação inválidos \"%s\"."
 
-#: ../src/nm-openvpn-service.c:912
+#: ../src/nm-openvpn-service.c:913
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Tamanho TUN MTU inválido \"%s\"."
 
-#: ../src/nm-openvpn-service.c:927
+#: ../src/nm-openvpn-service.c:928
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Tamanho do fragmento inválido \"%s\"."
 
-#: ../src/nm-openvpn-service.c:995
+#: ../src/nm-openvpn-service.c:996
 msgid "Missing required local IP address for static key mode."
 msgstr ""
 "Faltando o endereço de IP local necessário para o modo de chave estática."
 
-#: ../src/nm-openvpn-service.c:1008
+#: ../src/nm-openvpn-service.c:1009
 msgid "Missing required remote IP address for static key mode."
 msgstr ""
 "Faltando o endereço de IP remoto necessário para o modo de chave estática."
 
-#: ../src/nm-openvpn-service.c:1033
+#: ../src/nm-openvpn-service.c:1034
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Tipo de conexão desconhecida \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1152 ../src/nm-openvpn-service.c:1223
+#: ../src/nm-openvpn-service.c:1153 ../src/nm-openvpn-service.c:1224
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -463,26 +459,44 @@ msgstr ""
 "Não foi possível processar a requisição porque as configurações de conexão "
 "VPN eram inválidas."
 
-#: ../src/nm-openvpn-service.c:1177
+#: ../src/nm-openvpn-service.c:1178
 msgid "Could not process the request because no username was provided."
 msgstr ""
 "Não foi possível processar a requisição porque o nome de usuário não foi "
 "fornecido."
 
-#: ../src/nm-openvpn-service.c:1367
+#: ../src/nm-openvpn-service.c:1368
 msgid "Don't quit when VPN connection terminates"
 msgstr "Não sair quando terminar a conexão VPN"
 
-#: ../src/nm-openvpn-service.c:1368
+#: ../src/nm-openvpn-service.c:1369
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Habilitar o log de depuração (pode expor senhas)"
 
-#: ../src/nm-openvpn-service.c:1382
+#: ../src/nm-openvpn-service.c:1383
 msgid ""
 "nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
 "nm-vpnc-service fornece integração dos recursos do OpenVPN para o "
 "NetworkManager."
+
+#~ msgid "_Username:"
+#~ msgstr "Nome de _usuário:"
+
+#~ msgid "_Domain:"
+#~ msgstr "_Domínio:"
+
+#~ msgid "Connect _anonymously"
+#~ msgstr "Conectar _anonimamente"
+
+#~ msgid "Connect as _user:"
+#~ msgstr "Conectar como _usuário:"
+
+#~ msgid "_Remember password for this session"
+#~ msgstr "_Lembrar senha para esta sessão"
+
+#~ msgid "_Save password in keyring"
+#~ msgstr "_Salvar senha no chaveiro"
 
 #~ msgid "gtk-cancel"
 #~ msgstr "gtk-cancel"
