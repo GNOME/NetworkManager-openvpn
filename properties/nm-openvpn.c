@@ -507,6 +507,8 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 	ui_file = g_strdup_printf ("%s/%s", UIDIR, "nm-openvpn-dialog.ui");
 	priv->builder = gtk_builder_new ();
 
+	gtk_builder_set_translation_domain (priv->builder, GETTEXT_PACKAGE);
+
 	if (!gtk_builder_add_from_file (priv->builder, ui_file, error)) {
 		g_warning ("Couldn't load builder file: %s",
 		           error && *error ? (*error)->message : "(unknown)");
@@ -517,8 +519,6 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 		g_object_unref (object);
 		return NULL;
 	}
-
-	gtk_builder_set_translation_domain (priv->builder, GETTEXT_PACKAGE);
 
 	g_free (ui_file);
 
