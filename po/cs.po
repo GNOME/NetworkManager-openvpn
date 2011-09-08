@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2011-03-29 21:58+0000\n"
-"PO-Revision-Date: 2011-04-02 17:05+0100\n"
+"POT-Creation-Date: 2011-07-14 03:13+0000\n"
+"PO-Revision-Date: 2011-09-05 08:07+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,156 +23,154 @@ msgstr ""
 "X-Poedit-Country: CZECH REPUBLIC\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:130
+#: ../auth-dialog/vpn-password-dialog.c:95
 msgid "_Password:"
 msgstr "_Heslo:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:131
+#: ../auth-dialog/vpn-password-dialog.c:97
 msgid "_Secondary Password:"
 msgstr "_Sekundární heslo:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:248
-msgid "_Username:"
-msgstr "_Uživ. jméno:"
+#: ../auth-dialog/vpn-password-dialog.c:239
+#| msgid "Show passwords"
+msgid "Sh_ow passwords"
+msgstr "Z_obrazit hesla"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:250
-msgid "_Domain:"
-msgstr "_Doména:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:348
-msgid "Connect _anonymously"
-msgstr "Připojit _anonymně"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:353
-msgid "Connect as _user:"
-msgstr "Připojit jako _uživatel:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:458
-msgid "_Remember password for this session"
-msgstr "_Zapamatovat heslo pro toto sezení"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:460
-msgid "_Save password in keyring"
-msgstr "_Uložit heslo do klíčenky"
-
-#: ../auth-dialog/main.c:89
+#: ../auth-dialog/main.c:133
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Pro přístup do VPN „%s“ se musíte autentizovat."
 
-#: ../auth-dialog/main.c:90
+#: ../auth-dialog/main.c:134
 msgid "Authenticate VPN"
 msgstr "Ověřování VPN"
 
-#: ../auth-dialog/main.c:111
+#: ../auth-dialog/main.c:140
 msgid "Certificate pass_word:"
 msgstr "Heslo _certifikátu:"
 
-#: ../auth-dialog/main.c:125
+#: ../auth-dialog/main.c:154
 msgid "Certificate password:"
 msgstr "Heslo certifikátu:"
 
-#: ../properties/auth-helpers.c:202
-msgid "Choose a Certificate Authority certificate..."
-msgstr "Zvolit certifikát certifikační autority…"
-
-#: ../properties/auth-helpers.c:221
+#: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
 msgstr "Zvolit svůj osobní certifikát…"
 
-#: ../properties/auth-helpers.c:239
+#: ../properties/auth-helpers.c:166
 msgid "Choose your private key..."
 msgstr "Zvolit svůj osobní klíč…"
 
-#: ../properties/auth-helpers.c:297
+#: ../properties/auth-helpers.c:238
+msgid "Saved"
+msgstr "Uloženo"
+
+#: ../properties/auth-helpers.c:246
+msgid "Always Ask"
+msgstr "Vždy se dotázat"
+
+#: ../properties/auth-helpers.c:251
+#| msgid "Not required"
+msgid "Not Required"
+msgstr "Není vyžadováno"
+
+#: ../properties/auth-helpers.c:341
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Zvolit certifikát certifikační autority…"
+
+#: ../properties/auth-helpers.c:385
 msgid "Choose an OpenVPN static key..."
 msgstr "Zvolit statický klíč OpenVPN…"
 
-#: ../properties/auth-helpers.c:321
-#: ../properties/auth-helpers.c:1104
-#: ../properties/auth-helpers.c:1494
+#: ../properties/auth-helpers.c:409
+#: ../properties/auth-helpers.c:1169
+#: ../properties/auth-helpers.c:1571
 msgid "None"
 msgstr "Žádný"
 
-#: ../properties/auth-helpers.c:801
+#: ../properties/auth-helpers.c:865
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "Certifikáty PEM nebo PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:802
+#: ../properties/auth-helpers.c:866
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Certifikáty PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:926
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statické klíče OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1021
-#: ../properties/auth-helpers.c:1096
+#: ../properties/auth-helpers.c:1085
+#: ../properties/auth-helpers.c:1161
 msgid "Default"
 msgstr "Výchozí"
 
-#: ../properties/auth-helpers.c:1106
+#: ../properties/auth-helpers.c:1171
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../properties/auth-helpers.c:1173
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1108
+#: ../properties/auth-helpers.c:1175
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1110
+#: ../properties/auth-helpers.c:1177
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1112
+#: ../properties/auth-helpers.c:1179
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1114
+#: ../properties/auth-helpers.c:1181
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1116
+#: ../properties/auth-helpers.c:1183
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1118
+#: ../properties/auth-helpers.c:1185
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1293
+#: ../properties/auth-helpers.c:1360
 #: ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Není vyžadováno"
 
-#: ../properties/auth-helpers.c:1295
+#: ../properties/auth-helpers.c:1362
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1297
+#: ../properties/auth-helpers.c:1364
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "Kompatibilní s OpenVPN serverem."
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:317
 msgid "Certificates (TLS)"
 msgstr "Certifikáty (TLS)"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:328
 msgid "Password"
 msgstr "Heslo"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:341
 msgid "Password with Certificates (TLS)"
 msgstr "Heslo s certifikáty (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn.c:353
 msgid "Static Key"
 msgstr "Statický klíč"
 
@@ -293,7 +291,6 @@ msgid "Server Address:"
 msgstr "Adresa serveru:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:31
-#| msgid "Show passwords"
 msgid "Show password"
 msgstr "Zobrazit heslo"
 
@@ -374,7 +371,7 @@ msgstr "celočíselná volba „%s“ není platná nebo je mimo rozsah [%d -> %
 #: ../src/nm-openvpn-service.c:214
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
-msgstr "pravdivostní volba „%s“ není platná (není ano či ne)"
+msgstr "pravdivostní volba „%s“ není platná (není ANO nebo NE)"
 
 #: ../src/nm-openvpn-service.c:221
 #, c-format
@@ -394,76 +391,75 @@ msgstr "Žádné volby nastavení VPN."
 msgid "No VPN secrets!"
 msgstr "Žádná hesla VPN!"
 
-#: ../src/nm-openvpn-service.c:741
+#: ../src/nm-openvpn-service.c:745
 msgid "Could not find the openvpn binary."
 msgstr "Nelze nalézt program openvpn."
 
-#: ../src/nm-openvpn-service.c:752
+#: ../src/nm-openvpn-service.c:756
 msgid "Invalid HMAC auth."
 msgstr "Neplatná autentizace HMAC."
 
-#: ../src/nm-openvpn-service.c:764
-#: ../src/nm-openvpn-service.c:1160
-#: ../src/nm-openvpn-service.c:1230
+#: ../src/nm-openvpn-service.c:768
+#: ../src/nm-openvpn-service.c:1164
+#: ../src/nm-openvpn-service.c:1234
 msgid "Invalid connection type."
 msgstr "Neplatný typ připojení."
 
-#: ../src/nm-openvpn-service.c:799
+#: ../src/nm-openvpn-service.c:803
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Neplatný typ proxy „%s“."
 
-#: ../src/nm-openvpn-service.c:835
+#: ../src/nm-openvpn-service.c:839
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Neplatné číslo portu „%s“."
 
-#: ../src/nm-openvpn-service.c:885
+#: ../src/nm-openvpn-service.c:889
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Neplatná doba opětovného vyjednávání „%s“."
 
-#: ../src/nm-openvpn-service.c:909
+#: ../src/nm-openvpn-service.c:913
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Neplatná velikost TUN MTU „%s“."
 
-#: ../src/nm-openvpn-service.c:924
+#: ../src/nm-openvpn-service.c:928
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Neplatná velikost fragmentu „%s“."
 
-#: ../src/nm-openvpn-service.c:992
+#: ../src/nm-openvpn-service.c:996
 msgid "Missing required local IP address for static key mode."
 msgstr "Chybí požadovaná místní adresa IP pro mód se statickým klíčem."
 
-#: ../src/nm-openvpn-service.c:1005
+#: ../src/nm-openvpn-service.c:1009
 msgid "Missing required remote IP address for static key mode."
 msgstr "Chybí požadovaná vzdálená adresa IP pro mód se statickým klíčem."
 
-#: ../src/nm-openvpn-service.c:1030
+#: ../src/nm-openvpn-service.c:1034
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Neznámý typ připojení „%s“."
 
-#: ../src/nm-openvpn-service.c:1149
-#: ../src/nm-openvpn-service.c:1220
+#: ../src/nm-openvpn-service.c:1153
+#: ../src/nm-openvpn-service.c:1224
 msgid "Could not process the request because the VPN connection settings were invalid."
 msgstr "Nelze zpracovat požadavek, protože nastavení VPN nejsou platná."
 
-#: ../src/nm-openvpn-service.c:1174
+#: ../src/nm-openvpn-service.c:1178
 msgid "Could not process the request because no username was provided."
 msgstr "Nelze zpracovat požadavek, protože nebylo poskytnuto uživatelské jméno."
 
-#: ../src/nm-openvpn-service.c:1364
+#: ../src/nm-openvpn-service.c:1368
 msgid "Don't quit when VPN connection terminates"
 msgstr "Nevypínat, když se spojení VPN ukončuje"
 
-#: ../src/nm-openvpn-service.c:1365
+#: ../src/nm-openvpn-service.c:1369
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Povolit podrobný ladicí výpis (může prozradit hesla)"
 
-#: ../src/nm-openvpn-service.c:1379
+#: ../src/nm-openvpn-service.c:1383
 msgid "nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
 msgstr "nm-vpnc-service poskytuje podporu OpenVPN integrovanou do aplikace NetworkManager."
-
