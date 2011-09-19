@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager OpenVPN plugin\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2011-03-29 21:58+0000\n"
-"PO-Revision-Date: 2011-03-31 02:43+0300\n"
+"POT-Creation-Date: 2011-07-14 03:13+0000\n"
+"PO-Revision-Date: 2011-09-16 13:36+0300\n"
 "Last-Translator: Rūdofls Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -21,155 +21,154 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Language: Latvian\n"
 "X-Poedit-Country: LATVIA\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.2\n"
+"Language: lv\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:130
+#: ../auth-dialog/vpn-password-dialog.c:95
 msgid "_Password:"
 msgstr "_Parole:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:131
+#: ../auth-dialog/vpn-password-dialog.c:97
 msgid "_Secondary Password:"
 msgstr "_Sekundārā parole:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:248
-msgid "_Username:"
-msgstr "_Lietotājvārds:"
+#: ../auth-dialog/vpn-password-dialog.c:239
+#| msgid "Show passwords"
+msgid "Sh_ow passwords"
+msgstr "Rādīt par_oles"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:250
-msgid "_Domain:"
-msgstr "_Domēns:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:348
-msgid "Connect _anonymously"
-msgstr "Savienoties _anonīmi"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:353
-msgid "Connect as _user:"
-msgstr "Savienoties kā _lietotājam:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:458
-msgid "_Remember password for this session"
-msgstr "Atce_rēties paroli šai sesijai"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:460
-msgid "_Save password in keyring"
-msgstr "_Saglabāt paroli saišķī"
-
-#: ../auth-dialog/main.c:89
+#: ../auth-dialog/main.c:133
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Jums jāautentificējas, lai lietotu virtuālo privāto tīklu '%s'."
 
-#: ../auth-dialog/main.c:90
+#: ../auth-dialog/main.c:134
 msgid "Authenticate VPN"
 msgstr "Autentificēt VPN"
 
-#: ../auth-dialog/main.c:111
+#: ../auth-dialog/main.c:140
 msgid "Certificate pass_word:"
 msgstr "Sertifikāta _parole:"
 
-#: ../auth-dialog/main.c:125
+#: ../auth-dialog/main.c:154
 msgid "Certificate password:"
 msgstr "Sertifikāta parole:"
 
-#: ../properties/auth-helpers.c:202
-msgid "Choose a Certificate Authority certificate..."
-msgstr "Izvēlieties sertificēšanas institūcijas (CA) sertifikātu..."
-
-#: ../properties/auth-helpers.c:221
+#: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
 msgstr "Izvēlieties savu personīgo sertifikātu..."
 
-#: ../properties/auth-helpers.c:239
+#: ../properties/auth-helpers.c:166
 msgid "Choose your private key..."
 msgstr "Izvēlieties savu privāto atslēgu..."
 
-#: ../properties/auth-helpers.c:297
+#: ../properties/auth-helpers.c:238
+msgid "Saved"
+msgstr "Saglabāts"
+
+#: ../properties/auth-helpers.c:246
+msgid "Always Ask"
+msgstr "Vienmēr jautāt"
+
+#: ../properties/auth-helpers.c:251
+#| msgid "Not required"
+msgid "Not Required"
+msgstr "Nav nepieciešams"
+
+#: ../properties/auth-helpers.c:341
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Izvēlieties sertificēšanas institūcijas (CA) sertifikātu..."
+
+#: ../properties/auth-helpers.c:385
 msgid "Choose an OpenVPN static key..."
 msgstr "Izvēlieties OpenVPN statisko atslēgu..."
 
-#: ../properties/auth-helpers.c:321 ../properties/auth-helpers.c:1104
-#: ../properties/auth-helpers.c:1494
+#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1169
+#: ../properties/auth-helpers.c:1571
 msgid "None"
 msgstr "Nav"
 
-#: ../properties/auth-helpers.c:801
+#: ../properties/auth-helpers.c:865
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM vai PKCS#12 sertifikāti (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:802
+#: ../properties/auth-helpers.c:866
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM sertifikāti (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:926
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN statiskās atslēgas (*.key)"
 
-#: ../properties/auth-helpers.c:1021 ../properties/auth-helpers.c:1096
+#: ../properties/auth-helpers.c:1085 ../properties/auth-helpers.c:1161
 msgid "Default"
 msgstr "Noklusētais"
 
-#: ../properties/auth-helpers.c:1106
+#: ../properties/auth-helpers.c:1171
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../properties/auth-helpers.c:1173
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1108
+#: ../properties/auth-helpers.c:1175
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1110
+#: ../properties/auth-helpers.c:1177
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1112
+#: ../properties/auth-helpers.c:1179
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1114
+#: ../properties/auth-helpers.c:1181
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1116
+#: ../properties/auth-helpers.c:1183
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1118
+#: ../properties/auth-helpers.c:1185
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1293 ../properties/nm-openvpn-dialog.ui.h:16
+#: ../properties/auth-helpers.c:1360 ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Nav nepieciešams"
 
-#: ../properties/auth-helpers.c:1295
+#: ../properties/auth-helpers.c:1362
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1297
+#: ../properties/auth-helpers.c:1364
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "Savietojams ar OpenVPN serveri."
 
-#: ../properties/nm-openvpn.c:322
+#: ../properties/nm-openvpn.c:317
 msgid "Certificates (TLS)"
 msgstr "Sertifikāti (TLS)"
 
-#: ../properties/nm-openvpn.c:336
+#: ../properties/nm-openvpn.c:328
 msgid "Password"
 msgstr "Parole"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:341
 msgid "Password with Certificates (TLS)"
 msgstr "Parole ar sertifikātu (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn.c:353
 msgid "Static Key"
 msgstr "Statiskā atslēga"
 
@@ -254,7 +253,6 @@ msgid "Password:"
 msgstr "Parole:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:19
-#| msgid "Port:  %s"
 msgid "Port:"
 msgstr "Ports:"
 
@@ -271,17 +269,14 @@ msgid "Proxies"
 msgstr "Starpnieki"
 
 #: ../properties/nm-openvpn-dialog.ui.h:23
-#| msgid "Password:"
 msgid "Proxy Password:"
 msgstr "Starpnieka parole:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:24
-#| msgid "Type:"
 msgid "Proxy Type:"
 msgstr "Starpnieka tips:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:25
-#| msgid "Username:"
 msgid "Proxy Username:"
 msgstr "Starpnieka lietotājvārds:"
 
@@ -302,12 +297,10 @@ msgid "Security"
 msgstr "Drošība"
 
 #: ../properties/nm-openvpn-dialog.ui.h:30
-#| msgid "Remote IP Address:"
 msgid "Server Address:"
 msgstr "Servera adrese:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:31
-#| msgid "Show passwords"
 msgid "Show password"
 msgstr "Rādīt paroli"
 
@@ -401,7 +394,6 @@ msgid "property '%s' invalid or not supported"
 msgstr "īpašība '%s' nederīga vai nav atbalstīta"
 
 #: ../src/nm-openvpn-service.c:249
-#| msgid "OpenVPN Configuration"
 msgid "No VPN configuration options."
 msgstr "Nav VPN konfigurācijas opciju."
 
@@ -409,62 +401,58 @@ msgstr "Nav VPN konfigurācijas opciju."
 msgid "No VPN secrets!"
 msgstr "Nav VPN noslēpumu!"
 
-#: ../src/nm-openvpn-service.c:741
+#: ../src/nm-openvpn-service.c:745
 msgid "Could not find the openvpn binary."
 msgstr "Nevarēja atrast openvpn bināro failu."
 
-#: ../src/nm-openvpn-service.c:752
+#: ../src/nm-openvpn-service.c:756
 msgid "Invalid HMAC auth."
 msgstr "Nederīgs HMAC auth."
 
-#: ../src/nm-openvpn-service.c:764 ../src/nm-openvpn-service.c:1160
-#: ../src/nm-openvpn-service.c:1230
-#| msgid "Co_nnection type:"
+#: ../src/nm-openvpn-service.c:768 ../src/nm-openvpn-service.c:1164
+#: ../src/nm-openvpn-service.c:1234
 msgid "Invalid connection type."
 msgstr "Nederīgs savienojuma tips."
 
-#: ../src/nm-openvpn-service.c:799
+#: ../src/nm-openvpn-service.c:803
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Nederīgs starpnieka tips '%s'."
 
-#: ../src/nm-openvpn-service.c:835
+#: ../src/nm-openvpn-service.c:839
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Nederīgs porta numurs '%s'."
 
-#: ../src/nm-openvpn-service.c:885
+#: ../src/nm-openvpn-service.c:889
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Nederīgas reneg sekundes '%s'."
 
-#: ../src/nm-openvpn-service.c:909
+#: ../src/nm-openvpn-service.c:913
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Nederīgs TUN MTU izmērs '%s'."
 
-#: ../src/nm-openvpn-service.c:924
+#: ../src/nm-openvpn-service.c:928
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Nederīgs fragmenta izmērs '%s'."
 
-#: ../src/nm-openvpn-service.c:992
+#: ../src/nm-openvpn-service.c:996
 msgid "Missing required local IP address for static key mode."
 msgstr "Trūkst vajadzīgā lokālā IP adrese statiskās atslēgas režīmam."
 
-#: ../src/nm-openvpn-service.c:1005
+#: ../src/nm-openvpn-service.c:1009
 msgid "Missing required remote IP address for static key mode."
 msgstr "Trūkst vajadzīgā attālinātā IP adrese statiskās atslēgas režīmam."
 
-#: ../src/nm-openvpn-service.c:1030
+#: ../src/nm-openvpn-service.c:1034
 #, c-format
-#| msgid "Co_nnection type:"
 msgid "Unknown connection type '%s'."
 msgstr "Nezināms savienojuma tips '%s'."
 
-#: ../src/nm-openvpn-service.c:1149 ../src/nm-openvpn-service.c:1220
-#| msgid ""
-#| "The VPN login failed because the VPN configuration options were invalid."
+#: ../src/nm-openvpn-service.c:1153 ../src/nm-openvpn-service.c:1224
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -472,22 +460,40 @@ msgstr ""
 "Neizdevās apstrādāt pieprasījumu, jo VPN savienojuma iestatījumi bija "
 "nederīgi."
 
-#: ../src/nm-openvpn-service.c:1174
+#: ../src/nm-openvpn-service.c:1178
 msgid "Could not process the request because no username was provided."
 msgstr "Neizdevās apstrādāt pieprasījumu, jo netika dots lietotāja vārds."
 
-#: ../src/nm-openvpn-service.c:1364
+#: ../src/nm-openvpn-service.c:1368
 msgid "Don't quit when VPN connection terminates"
 msgstr "Neiziet, kad tiek pārtraukts VPN savienojums"
 
-#: ../src/nm-openvpn-service.c:1365
+#: ../src/nm-openvpn-service.c:1369
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Aktivēt detalizētu atkļūdošanas reģistrēšanu (var atklāt paroles)"
 
-#: ../src/nm-openvpn-service.c:1379
+#: ../src/nm-openvpn-service.c:1383
 msgid ""
 "nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
 msgstr "nm-vpnc-service nodrošina NetworkManager integrētu OpenVPN iespēju."
+
+#~ msgid "_Username:"
+#~ msgstr "_Lietotājvārds:"
+
+#~ msgid "_Domain:"
+#~ msgstr "_Domēns:"
+
+#~ msgid "Connect _anonymously"
+#~ msgstr "Savienoties _anonīmi"
+
+#~ msgid "Connect as _user:"
+#~ msgstr "Savienoties kā _lietotājam:"
+
+#~ msgid "_Remember password for this session"
+#~ msgstr "Atce_rēties paroli šai sesijai"
+
+#~ msgid "_Save password in keyring"
+#~ msgstr "_Saglabāt paroli saišķī"
 
 #~ msgid "The following OpenVPN connection will be created:"
 #~ msgstr "Tiks izveidots OpenVPN savienojums:"
