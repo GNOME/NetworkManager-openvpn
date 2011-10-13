@@ -182,6 +182,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="tooltip_text" translatable="yes">TCP/UDP port number for local peer.&#10;config: port</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -196,6 +197,7 @@
                         <property name="adjustment">adjustment1</property>
                         <property name="climb_rate">1</property>
                         <property name="numeric">True</property>
+                        <property name="tooltip_text" translatable="yes">TCP/UDP port number for local peer.&#10;config: port</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -224,6 +226,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="tooltip_text" translatable="yes">Renegotiate data channel key after the specified number of seconds.&#10;config: reneg-sec</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -238,6 +241,7 @@
                         <property name="adjustment">adjustment2</property>
                         <property name="climb_rate">1</property>
                         <property name="numeric">True</property>
+                        <property name="tooltip_text" translatable="yes">Renegotiate data channel key after the specified number of seconds.&#10;config: reneg-sec</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -261,6 +265,7 @@
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="tooltip_text" translatable="yes">Use fast LZO compression.&#10;config: comp-lzo</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -277,6 +282,7 @@
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="tooltip_text" translatable="yes">Use TCP for communicating with remote host.&#10;config: proto tcp-client | udp</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -293,6 +299,7 @@
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="tooltip_text" translatable="yes">Use TAP virtual network device instead of TUN.&#10;config: dev tap | tun</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -314,6 +321,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="tooltip_text" translatable="yes">Take the TUN device MTU to be the specified value and derive the link MTU from it.&#10;config: tun-mtu</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -329,6 +337,7 @@
                         <property name="adjustment">adjustment3</property>
                         <property name="climb_rate">1</property>
                         <property name="numeric">True</property>
+                        <property name="tooltip_text" translatable="yes">Take the TUN device MTU to be the specified value and derive the link MTU from it.&#10;config: tun-mtu</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -357,6 +366,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="tooltip_text" translatable="yes">Enable internal datagram fragmentation with this maximum size.&#10;config: fragment</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -372,6 +382,7 @@
                         <property name="adjustment">adjustment4</property>
                         <property name="climb_rate">1</property>
                         <property name="numeric">True</property>
+                        <property name="tooltip_text" translatable="yes">Enable internal datagram fragmentation with this maximum size.&#10;config: fragment</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -395,6 +406,7 @@
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
+                    <property name="tooltip_text" translatable="yes">Restrict tunnel TCP MSS.&#10;config: mssfix</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -439,6 +451,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">model3</property>
+                        <property name="tooltip_text" translatable="yes">Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in Cipher Block Chaining mode).&#10;config: cipher</property>
                         <child>
                           <object class="GtkCellRendererText" id="renderer3"/>
                           <attributes>
@@ -456,6 +469,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">model4</property>
+                        <property name="tooltip_text" translatable="yes">Authenticate packets with HMAC using message digest algorithm. The default is SHA1.&#10;config: auth</property>
                         <child>
                           <object class="GtkCellRendererText" id="renderer4"/>
                           <attributes>
@@ -572,6 +586,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
+                            <property name="tooltip_text" translatable="yes">Accept connections only from a host with X509 name or common name equal to the specified one.&#10;config: tls-remote</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -605,6 +620,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                             <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
+                            <property name="tooltip_text" translatable="yes">Add an additional layer of HMAC authentication.</property>
                           </object>
                           <packing>
                             <property name="right_attach">2</property>
@@ -659,6 +675,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="tls_auth_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Add an additional layer of HMAC authentication on top of the TLS control channel to protect against DoS attacks.&#10;config: tls-auth &lt;file&gt; [direction]</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -670,6 +687,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">model5</property>
+                                <property name="tooltip_text" translatable="yes">Direction parameter for static key mode.&#10;config: tls-auth &lt;file&gt; [direction]</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="renderer5"/>
                                   <attributes>
@@ -756,6 +774,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                         <property name="can_focus">False</property>
                         <property name="model">model6</property>
                         <property name="button_sensitivity">on</property>
+                        <property name="tooltip_text" translatable="yes">Proxy type: HTTP or Socks.&#10;config: http-proxy or socks-proxy</property>
                         <child>
                           <object class="GtkCellRendererText" id="renderer6"/>
                           <attributes>
@@ -825,6 +844,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
+                                <property name="tooltip_text" translatable="yes">Connect to remote host through a proxy with this address.&#10;config: http-proxy or socks-proxy</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -856,6 +876,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="adjustment">adjustment5</property>
                                 <property name="climb_rate">1</property>
                                 <property name="numeric">True</property>
+                                <property name="tooltip_text" translatable="yes">Connect to remote host through a proxy with this port.&#10;config: http-proxy or socks-proxy</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -881,6 +902,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                         <property name="receives_default">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="draw_indicator">True</property>
+                        <property name="tooltip_text" translatable="yes">Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.&#10;config: http-proxy-retry or socks-proxy-retry</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -920,6 +942,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
+                        <property name="tooltip_text" translatable="yes">HTTP/Socks proxy username passed to OpenVPN when prompted for it.</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -934,6 +957,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                         <property name="can_focus">True</property>
                         <property name="visibility">False</property>
                         <property name="invisible_char">●</property>
+                        <property name="tooltip_text" translatable="yes">HTTP/Socks proxy password passed to OpenVPN when prompted for it.</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1058,6 +1082,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                       <object class="GtkEntry" id="gateway_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Remote host name or IP address.&#10;config: remote</property>
                       </object>
                     </child>
                   </object>
@@ -1158,6 +1183,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="visibility">False</property>
+                                <property name="tooltip_text" translatable="yes">Password for private key</property>
                               </object>
                             </child>
                           </object>
@@ -1192,6 +1218,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="tls_private_key_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Local peer's private key in .pem format.&#10;config: key</property>
                               </object>
                             </child>
                           </object>
@@ -1226,6 +1253,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="tls_ca_cert_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Certificate authority (CA) file in .pem format.&#10;config: ca</property>
                               </object>
                             </child>
                           </object>
@@ -1271,6 +1299,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="tls_user_cert_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Local peer's signed certificate in .pem format (signed by CA of CA Certificate).&#10;config: cert</property>
                               </object>
                             </child>
                           </object>
@@ -1311,6 +1340,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="visibility">False</property>
+                                <property name="tooltip_text" translatable="yes">Password passed to OpenVPN when prompted for it.&#10;config: auth-user-pass</property>
                               </object>
                             </child>
                           </object>
@@ -1332,6 +1362,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="pw_ca_cert_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Certificate authority (CA) file in .pem format.&#10;config: ca</property>
                               </object>
                             </child>
                           </object>
@@ -1390,6 +1421,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkEntry" id="pw_username_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Username passed to OpenVPN when prompted for it.&#10;config: auth-user-pass</property>
                               </object>
                             </child>
                           </object>
@@ -1454,6 +1486,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="visibility">False</property>
+                                <property name="tooltip_text" translatable="yes">Password for private key</property>
                               </object>
                             </child>
                           </object>
@@ -1488,6 +1521,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="pw_tls_private_key_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Local peer's private key in .pem format.&#10;config: key</property>
                               </object>
                             </child>
                           </object>
@@ -1536,6 +1570,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="visibility">False</property>
+                                <property name="tooltip_text" translatable="yes">Password passed to OpenVPN when prompted for it.&#10;config: auth-user-pass</property>
                               </object>
                             </child>
                           </object>
@@ -1557,6 +1592,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="pw_tls_user_cert_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Local peer's signed certificate in .pem format (signed by CA of CA Certificate).&#10;config: cert</property>
                               </object>
                             </child>
                           </object>
@@ -1578,6 +1614,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="pw_tls_ca_cert_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Certificate authority (CA) file in .pem format.&#10;config: ca</property>
                               </object>
                             </child>
                           </object>
@@ -1636,6 +1673,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkEntry" id="pw_tls_username_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Username passed to OpenVPN when prompted for it.&#10;config: auth-user-pass</property>
                               </object>
                             </child>
                           </object>
@@ -1699,6 +1737,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkEntry" id="sk_local_address_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">IP address of the local VPN endpoint.&#10;config: ifconfig &lt;l&gt; &lt;rn&gt;</property>
                               </object>
                             </child>
                           </object>
@@ -1746,6 +1785,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkEntry" id="sk_remote_address_entry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">IP address of the remote VPN endpoint.&#10;config: ifconfig &lt;l&gt; &lt;rn&gt;</property>
                               </object>
                             </child>
                           </object>
@@ -1791,6 +1831,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkFileChooserButton" id="sk_key_chooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Pre-shared file for Static Key encryption mode (non-TLS).&#10;config: static &lt;file&gt;</property>
                               </object>
                             </child>
                           </object>
@@ -1811,6 +1852,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">model1</property>
+                                <property name="tooltip_text" translatable="yes">Direction for Static Key encryption mode (non-TLS).&#10;config: static &lt;file&gt; [direction]</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="renderer1"/>
                                   <attributes>
@@ -1903,6 +1945,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">model2</property>
+                        <property name="tooltip_text" translatable="yes">Select an authentication mode.</property>
                         <child>
                           <object class="GtkCellRendererText" id="renderer2"/>
                           <attributes>
