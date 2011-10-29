@@ -7,12 +7,14 @@
 # Leonid Kanter <leon@asplinux.ru>, 2007, 2008.
 # Артём Попов <artfwo@gmail.com>, 2009.
 # Yuri Kozlov <yuray@komyakino.ru>, 2010, 2011.
+# Stas Solovey <whats_up@tut.by>, 2011.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn trunk\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2011-06-02 18:16+0000\n"
-"PO-Revision-Date: 2011-06-10 22:00+0300\n"
+"POT-Creation-Date: 2011-08-26 18:23+0000\n"
+"PO-Revision-Date: 2011-10-29 15:18+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,156 +23,152 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Lokalize 1.0\n"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:130
+#: ../auth-dialog/vpn-password-dialog.c:95
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:131
+#: ../auth-dialog/vpn-password-dialog.c:97
 msgid "_Secondary Password:"
 msgstr "_Вторичный пароль:"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:248
-msgid "_Username:"
-msgstr "_Имя пользователя:"
+#: ../auth-dialog/vpn-password-dialog.c:239
+msgid "Sh_ow passwords"
+msgstr "Показ_ывать пароли"
 
-#: ../auth-dialog/gnome-two-password-dialog.c:250
-msgid "_Domain:"
-msgstr "_Домен:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:348
-msgid "Connect _anonymously"
-msgstr "Подключаться _анонимно"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:353
-msgid "Connect as _user:"
-msgstr "_Подключаться как пользователь:"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:458
-msgid "_Remember password for this session"
-msgstr "_Запомнить пароль для этого сеанса"
-
-#: ../auth-dialog/gnome-two-password-dialog.c:460
-msgid "_Save password in keyring"
-msgstr "_Сохранить пароль на брелоке"
-
-#: ../auth-dialog/main.c:102
+#: ../auth-dialog/main.c:133
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Для доступа к виртуальной частной сети «%s» требуется аутентификация."
 
-#: ../auth-dialog/main.c:103
+#: ../auth-dialog/main.c:134
 msgid "Authenticate VPN"
 msgstr "Аутентификация VPN"
 
-#: ../auth-dialog/main.c:124
+#: ../auth-dialog/main.c:140
 msgid "Certificate pass_word:"
 msgstr "Па_роль к сертификату:"
 
-#: ../auth-dialog/main.c:138
+#: ../auth-dialog/main.c:154
 msgid "Certificate password:"
 msgstr "Пароль к сертификату:"
 
-#: ../properties/auth-helpers.c:202
-msgid "Choose a Certificate Authority certificate..."
-msgstr "Выберите сертификат центра сертификации…"
-
-#: ../properties/auth-helpers.c:221
+#: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
 msgstr "Выберите свой персональный сертификат…"
 
-#: ../properties/auth-helpers.c:239
+#: ../properties/auth-helpers.c:166
 msgid "Choose your private key..."
 msgstr "Выберите свой личный ключ…"
 
-#: ../properties/auth-helpers.c:297
+#: ../properties/auth-helpers.c:238
+msgid "Saved"
+msgstr "Сохранённые"
+
+#: ../properties/auth-helpers.c:246
+msgid "Always Ask"
+msgstr "Всегда спрашивать"
+
+#: ../properties/auth-helpers.c:251
+msgid "Not Required"
+msgstr "Не требуется"
+
+#: ../properties/auth-helpers.c:341
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Выберите сертификат центра сертификации…"
+
+#: ../properties/auth-helpers.c:385
 msgid "Choose an OpenVPN static key..."
 msgstr "Выберите статический ключ OpenVPN…"
 
-#: ../properties/auth-helpers.c:321
-#: ../properties/auth-helpers.c:1104
-#: ../properties/auth-helpers.c:1494
+#: ../properties/auth-helpers.c:409
+#: ../properties/auth-helpers.c:1169
+#: ../properties/auth-helpers.c:1571
 msgid "None"
 msgstr "Нет"
 
-#: ../properties/auth-helpers.c:801
+#: ../properties/auth-helpers.c:865
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "Сертификаты PEM или PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:802
+#: ../properties/auth-helpers.c:866
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Сертификаты PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:862
+#: ../properties/auth-helpers.c:926
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Статические ключи OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1021
-#: ../properties/auth-helpers.c:1096
+#: ../properties/auth-helpers.c:1085
+#: ../properties/auth-helpers.c:1161
 msgid "Default"
 msgstr "По умолчанию"
 
-#: ../properties/auth-helpers.c:1106
+#: ../properties/auth-helpers.c:1171
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../properties/auth-helpers.c:1173
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1108
+#: ../properties/auth-helpers.c:1175
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1110
+#: ../properties/auth-helpers.c:1177
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1112
+#: ../properties/auth-helpers.c:1179
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1114
+#: ../properties/auth-helpers.c:1181
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1116
+#: ../properties/auth-helpers.c:1183
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1118
+#: ../properties/auth-helpers.c:1185
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1293
+#: ../properties/auth-helpers.c:1360
 #: ../properties/nm-openvpn-dialog.ui.h:16
 msgid "Not required"
 msgstr "Не требуется"
 
-#: ../properties/auth-helpers.c:1295
+#: ../properties/auth-helpers.c:1362
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1297
+#: ../properties/auth-helpers.c:1364
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:54
+#: ../properties/nm-openvpn.c:53
 msgid "Compatible with the OpenVPN server."
 msgstr "Совместим с сервером OpenVPN."
 
-#: ../properties/nm-openvpn.c:323
+#: ../properties/nm-openvpn.c:317
 msgid "Certificates (TLS)"
 msgstr "Сертификаты (TLS)"
 
-#: ../properties/nm-openvpn.c:337
+#: ../properties/nm-openvpn.c:328
 msgid "Password"
 msgstr "Пароль"
 
-#: ../properties/nm-openvpn.c:354
+#: ../properties/nm-openvpn.c:341
 msgid "Password with Certificates (TLS)"
 msgstr "Пароль с сертификатами (TLS)"
 
-#: ../properties/nm-openvpn.c:366
+#: ../properties/nm-openvpn.c:353
 msgid "Static Key"
 msgstr "Статический ключ"
 
@@ -391,76 +389,76 @@ msgstr "Нет параметров настройки VPN."
 msgid "No VPN secrets!"
 msgstr "Нет VPN-ключей!"
 
-#: ../src/nm-openvpn-service.c:744
+#: ../src/nm-openvpn-service.c:745
 msgid "Could not find the openvpn binary."
 msgstr "Не удалось найти исполняемый файл openvpn."
 
-#: ../src/nm-openvpn-service.c:755
+#: ../src/nm-openvpn-service.c:756
 msgid "Invalid HMAC auth."
 msgstr "Некорректная аутентификация HMAC."
 
-#: ../src/nm-openvpn-service.c:767
-#: ../src/nm-openvpn-service.c:1163
-#: ../src/nm-openvpn-service.c:1233
+#: ../src/nm-openvpn-service.c:768
+#: ../src/nm-openvpn-service.c:1164
+#: ../src/nm-openvpn-service.c:1234
 msgid "Invalid connection type."
 msgstr "Некорректный тип подключения."
 
-#: ../src/nm-openvpn-service.c:802
+#: ../src/nm-openvpn-service.c:803
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Некорректный тип прокси «%s»."
 
-#: ../src/nm-openvpn-service.c:838
+#: ../src/nm-openvpn-service.c:839
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Некорректный номер порта «%s»."
 
-#: ../src/nm-openvpn-service.c:888
+#: ../src/nm-openvpn-service.c:889
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Некорректное число секунд «%s» для пересогласования."
 
-#: ../src/nm-openvpn-service.c:912
+#: ../src/nm-openvpn-service.c:913
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Некорректный размер TUN MTU «%s»."
 
-#: ../src/nm-openvpn-service.c:927
+#: ../src/nm-openvpn-service.c:928
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Некорректный размер фрагмента «%s»."
 
-#: ../src/nm-openvpn-service.c:995
+#: ../src/nm-openvpn-service.c:996
 msgid "Missing required local IP address for static key mode."
 msgstr "Отсутствует необходимый локальный IP-адрес для режима со статическим ключом."
 
-#: ../src/nm-openvpn-service.c:1008
+#: ../src/nm-openvpn-service.c:1009
 msgid "Missing required remote IP address for static key mode."
 msgstr "Отсутствует необходимый удалённый IP-адрес для режима со статическим ключом."
 
-#: ../src/nm-openvpn-service.c:1033
+#: ../src/nm-openvpn-service.c:1034
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Неизвестный тип подключения «%s»."
 
-#: ../src/nm-openvpn-service.c:1152
-#: ../src/nm-openvpn-service.c:1223
+#: ../src/nm-openvpn-service.c:1153
+#: ../src/nm-openvpn-service.c:1224
 msgid "Could not process the request because the VPN connection settings were invalid."
 msgstr "Не удалось обработать запрос, так как настройки подключения VPN некорректны."
 
-#: ../src/nm-openvpn-service.c:1177
+#: ../src/nm-openvpn-service.c:1178
 msgid "Could not process the request because no username was provided."
 msgstr "Не удалось обработать запрос, так как не указано имя пользователя."
 
-#: ../src/nm-openvpn-service.c:1367
+#: ../src/nm-openvpn-service.c:1368
 msgid "Don't quit when VPN connection terminates"
 msgstr "Не завершать работу при отключении VPN"
 
-#: ../src/nm-openvpn-service.c:1368
+#: ../src/nm-openvpn-service.c:1369
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Включить подробный режим отладки (могут отображаться пароли)"
 
-#: ../src/nm-openvpn-service.c:1382
+#: ../src/nm-openvpn-service.c:1383
 msgid "nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
 msgstr "nm-vpnc-service позволяет использовать OpenVPN в NetworkManager."
 
