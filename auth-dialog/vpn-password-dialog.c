@@ -281,6 +281,7 @@ vpn_password_dialog_new (const char *title,
 		message_label = GTK_LABEL (gtk_label_new (message));
 		gtk_label_set_justify (message_label, GTK_JUSTIFY_LEFT);
 		gtk_label_set_line_wrap (message_label, TRUE);
+		gtk_label_set_max_width_chars (message_label, 35);
 		gtk_size_group_add_widget (priv->group, GTK_WIDGET (message_label));
 		gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (message_label), FALSE, FALSE, 0);
 		gtk_size_group_add_widget (priv->group, priv->table_alignment);
