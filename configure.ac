@@ -1,6 +1,6 @@
 AC_PREREQ(2.52)
 
-AC_INIT(NetworkManager-openvpn, 0.9.1.95, dcbw@redhat.com, NetworkManager-openvpn)
+AC_INIT(NetworkManager-openvpn, 0.9.2.0, dcbw@redhat.com, NetworkManager-openvpn)
 AM_INIT_AUTOMAKE([1.9 subdir-objects tar-ustar no-dist-gzip dist-bzip2])
 AM_MAINTAINER_MODE
 
@@ -66,10 +66,10 @@ AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
 
 PKG_CHECK_MODULES(NM,
-	NetworkManager >= 0.9.1
-	libnm-util >= 0.9.1
-	libnm-glib >= 0.9.1
-	libnm-glib-vpn >= 0.9.1)
+	NetworkManager >= 0.9.2
+	libnm-util >= 0.9.2
+	libnm-glib >= 0.9.2
+	libnm-glib-vpn >= 0.9.2)
 AC_SUBST(NM_CFLAGS)
 AC_SUBST(NM_LIBS)
 
