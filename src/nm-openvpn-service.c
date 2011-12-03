@@ -211,6 +211,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             /* Translators: keep "yes" and "no" untranslated! */
 			             _("invalid boolean property '%s' (not yes or no)"),
 			             key);
 			break;
