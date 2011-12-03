@@ -4,16 +4,16 @@
 # package.
 #
 # Tino Meinen <a.t.meinen@chello.nl>, 2006, 2007.
-# Wouter Bolsterlee <wbolster@gnome.org>, 2008.
+# Wouter Bolsterlee <wbolster@gnome.org>, 2008, 2011.
 # Rachid BM <rachidbm@ubuntu.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-vpnc\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-03 20:37+0100\n"
-"PO-Revision-Date: 2011-08-19 16:58+0200\n"
-"Last-Translator: Rachid BM <rachidbm@ubuntu.com>\n"
+"POT-Creation-Date: 2011-12-03 20:52+0100\n"
+"PO-Revision-Date: 2011-12-03 20:52+0100\n"
+"Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -39,8 +39,8 @@ msgstr "Wachtw_oorden tonen"
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr ""
-"Om toegang te krijgen tot het Virtual Private Network ‘%s’ moet u uzelf "
-"aanmelden."
+"U moet zich aanmelden om toegang te krijgen tot het Virtual Private Network "
+"‘%s’."
 
 #: ../auth-dialog/main.c:134
 msgid "Authenticate VPN"
@@ -76,11 +76,11 @@ msgstr "Niet vereist"
 
 #: ../properties/auth-helpers.c:341
 msgid "Choose a Certificate Authority certificate..."
-msgstr "Kies een certificaat van een certificaat-autoriteit (CA)…"
+msgstr "Certificaat van certificaat-autoriteit (CA) kiezen…"
 
 #: ../properties/auth-helpers.c:385
 msgid "Choose an OpenVPN static key..."
-msgstr "Kies een vaste OpenVPN-sleutel…"
+msgstr "Statische OpenVPN-sleutel kiezen…"
 
 #: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1169
 #: ../properties/auth-helpers.c:1571
@@ -97,7 +97,7 @@ msgstr "PEM-certificaten (*.pem, *.crt, *.key, *.cer)"
 
 #: ../properties/auth-helpers.c:926
 msgid "OpenVPN Static Keys (*.key)"
-msgstr "Vaste OpenVPN-sleutels (*.key)"
+msgstr "Statische OpenVPN-sleutels (*.key)"
 
 #: ../properties/auth-helpers.c:1085 ../properties/auth-helpers.c:1161
 msgid "Default"
@@ -190,7 +190,7 @@ msgid ""
 msgstr ""
 "<i>Alleen verbinden met server waarvan het certificaat overeenkomt met het "
 "gegeven onderwerp.\n"
-"Bijvoorbeeld: /CN=myvpn.bedrijf.com</i>"
+"Bijvoorbeeld: /CN=vpn.example.org</i>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:6
 msgid ""
@@ -208,8 +208,8 @@ msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
 msgstr ""
-"<i>Deze optie kunt u gebruiken wanneer uw organisatie een proxy-server "
-"gebruikt om toegang te verkrijgen tot het Internet.</i>"
+"<i>Gebruik deze optie als uw organisatie een proxy-server gebruikt voor "
+"Internet-toegang.</i>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:8
 msgid ""
@@ -229,9 +229,8 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:11
-#, fuzzy
 msgid "Add an additional layer of HMAC authentication."
-msgstr "Extra TLS-authenticatie gebruiken"
+msgstr "Extra layer met HMAC-authenticatie gebruiken"
 
 #: ../properties/nm-openvpn-dialog.ui.h:12
 msgid ""
@@ -293,7 +292,7 @@ msgstr "Algemeen"
 
 #: ../properties/nm-openvpn-dialog.ui.h:23
 msgid "HMAC Authentication:"
-msgstr "HMAC Authentication:"
+msgstr "HMAC-authenticatie:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:24
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
@@ -409,7 +408,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:51
 msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
-msgstr "Maximale segmentgrootte (MSS) van TCP-tunnel beperken"
+msgstr "Maximale TCP segmentgrootte (MSS) van tunnel beperken"
 
 #: ../properties/nm-openvpn-dialog.ui.h:52
 msgid ""
@@ -501,7 +500,7 @@ msgstr "Aangepaste UDP-fragmentgrootte gebruiken:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:72
 msgid "Use custom _renegotiation interval:"
-msgstr "Aangepaste interval voor he_ronderhandeling gebruiken:"
+msgstr "Aangepast interval voor _heronderhandeling gebruiken:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:73
 msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
@@ -541,105 +540,106 @@ msgstr "ongeldig adres ‘%s’"
 #: ../src/nm-openvpn-service.c:204
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
-msgstr "eigenschap ‘%s’ is geen geheel getal of buiten bereik [%d -> %d]"
+msgstr "eigenschap ‘%s’ is geen geheel getal of buiten bereik [%d → %d]"
 
-#: ../src/nm-openvpn-service.c:214
+#. Translators: keep "yes" and "no" untranslated!
+#: ../src/nm-openvpn-service.c:215
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
-msgstr "ongeldige booleaanse waarde voor eigenschap ‘%s’ (geen ja of nee)"
+msgstr "ongeldige booleaanse waarde voor eigenschap ‘%s’ (geen ‘yes’ of ‘no’)"
 
-#: ../src/nm-openvpn-service.c:221
+#: ../src/nm-openvpn-service.c:222
 #, c-format
 msgid "unhandled property '%s' type %s"
-msgstr "onbehandelde eigenschap ‘%s’ type %s"
+msgstr "niet-afgehandelde eigenschap ‘%s’ type %s"
 
-#: ../src/nm-openvpn-service.c:232
+#: ../src/nm-openvpn-service.c:233
 #, c-format
 msgid "property '%s' invalid or not supported"
 msgstr "eigenschap ‘%s’ is ongeldig of wordt niet ondersteund"
 
-#: ../src/nm-openvpn-service.c:249
+#: ../src/nm-openvpn-service.c:250
 msgid "No VPN configuration options."
-msgstr "Geen VPN-configuratieopties."
+msgstr "Geen VPN-configuratieopties"
 
-#: ../src/nm-openvpn-service.c:272
+#: ../src/nm-openvpn-service.c:273
 msgid "No VPN secrets!"
 msgstr "Geen VPN-geheimen!"
 
-#: ../src/nm-openvpn-service.c:745
+#: ../src/nm-openvpn-service.c:746
 msgid "Could not find the openvpn binary."
-msgstr "Kon de binairy openvpn niet vinden."
+msgstr "Kon de binary ‘openvpn’ niet vinden."
 
-#: ../src/nm-openvpn-service.c:756
+#: ../src/nm-openvpn-service.c:757
 msgid "Invalid HMAC auth."
-msgstr "Ongeldige HMAC auth."
+msgstr "Ongeldige HMAC-auth."
 
-#: ../src/nm-openvpn-service.c:768 ../src/nm-openvpn-service.c:1164
-#: ../src/nm-openvpn-service.c:1234
+#: ../src/nm-openvpn-service.c:769 ../src/nm-openvpn-service.c:1165
+#: ../src/nm-openvpn-service.c:1235
 msgid "Invalid connection type."
 msgstr "Ongeldig verbindingstype."
 
-#: ../src/nm-openvpn-service.c:803
+#: ../src/nm-openvpn-service.c:804
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Ongeldig proxy-type ‘%s’."
 
-#: ../src/nm-openvpn-service.c:839
+#: ../src/nm-openvpn-service.c:840
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Ongeldig poortnummer ‘%s’."
 
-#: ../src/nm-openvpn-service.c:889
+#: ../src/nm-openvpn-service.c:890
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Ongeldige (heronderhandelings)seconden ‘%s’."
 
-#: ../src/nm-openvpn-service.c:913
+#: ../src/nm-openvpn-service.c:914
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Ongeldige TUN MTU-grootte ‘%s’."
 
-#: ../src/nm-openvpn-service.c:928
+#: ../src/nm-openvpn-service.c:929
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Ongeldige fragmentgrootte ‘%s’."
 
-#: ../src/nm-openvpn-service.c:996
+#: ../src/nm-openvpn-service.c:997
 msgid "Missing required local IP address for static key mode."
-msgstr "Het lokale IP-adres voor vaste sleutelmodus ontbreekt."
+msgstr "Het lokale IP-adres voor statische sleutelmodus ontbreekt."
 
-#: ../src/nm-openvpn-service.c:1009
+#: ../src/nm-openvpn-service.c:1010
 msgid "Missing required remote IP address for static key mode."
-msgstr "Het IP-adres op afstand voor vaste sleutelmodus ontbreekt."
+msgstr "Het IP-adres op afstand voor statische sleutelmodus ontbreekt."
 
-#: ../src/nm-openvpn-service.c:1034
+#: ../src/nm-openvpn-service.c:1035
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Onbekend verbindingstype ‘%s’."
 
-#: ../src/nm-openvpn-service.c:1153 ../src/nm-openvpn-service.c:1224
+#: ../src/nm-openvpn-service.c:1154 ../src/nm-openvpn-service.c:1225
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr ""
-"Aanmelding bij het VPN is mislukt omdat de verbindingsinstellingen van het "
-"VPN ongeldig waren."
+"De aanvraag kon niet in behandeling genomen worden, omdat de "
+"verbindingsinstellingen van het VPN ongeldig waren."
 
-#: ../src/nm-openvpn-service.c:1178
+#: ../src/nm-openvpn-service.c:1179
 msgid "Could not process the request because no username was provided."
 msgstr ""
 "Aanmelding bij het VPN is mislukt omdat de verbindingsinstellingen van het "
 "VPN ongeldig waren."
 
-#: ../src/nm-openvpn-service.c:1368
-msgid "Don't quit when VPN connection terminates"
-msgstr "Niet afsluiten wanneer de VPN-verbinding beëindigt"
-
 #: ../src/nm-openvpn-service.c:1369
+msgid "Don't quit when VPN connection terminates"
+msgstr "Niet afsluiten wanneer de VPN-verbinding verbroken wordt"
+
+#: ../src/nm-openvpn-service.c:1370
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Uitgebreide debug-logging inschakelen (kan wachtwoorden blootleggen)"
 
-#: ../src/nm-openvpn-service.c:1383
+#: ../src/nm-openvpn-service.c:1384
 msgid ""
 "nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
