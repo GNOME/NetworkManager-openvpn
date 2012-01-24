@@ -566,11 +566,13 @@
                               <object class="GtkLabel" id="label33">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="valign">start</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">&lt;i&gt;Connect only to servers whose certificate matches the given subject.
 Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
+                                <property name="width_chars">30</property>
                               </object>
                             </child>
                           </object>
@@ -630,6 +632,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           <object class="GtkTable" id="table8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">start</property>
                             <property name="n_rows">3</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">12</property>
@@ -656,10 +659,12 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                                   <object class="GtkLabel" id="tls_dir_help_label">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="valign">start</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">&lt;i&gt;If key direction is used, it must be the opposite of that used on the VPN peer.  For example, if the peer uses '1', this connection must use '0'.  If you are unsure what value to use, contact your system administrator.&lt;/i&gt;</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
+                                    <property name="width_chars">45</property>
                                   </object>
                                 </child>
                               </object>
@@ -804,10 +809,12 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                       <object class="GtkLabel" id="proxy_desc_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">start</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">&lt;i&gt;Select this option if your organization requires the use of a proxy server to access the Internet.&lt;/i&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
+                        <property name="width_chars">35</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1880,10 +1887,12 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                               <object class="GtkLabel" id="sk_dir_help_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="valign">start</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">&lt;i&gt;If key direction is used, it must be the opposite of that used on the VPN peer.  For example, if the peer uses '1', this connection must use '0'.  If you are unsure what value to use, contact your system administrator.&lt;/i&gt;</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
+                                <property name="width_chars">38</property>
                               </object>
                             </child>
                           </object>
