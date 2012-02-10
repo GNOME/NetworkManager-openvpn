@@ -1515,6 +1515,8 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	const char *contype = NULL;
 	const char *value;
 	int proxy_type = PROXY_TYPE_NONE;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 
 	g_return_val_if_fail (dialog != NULL, NULL);
 	if (error)
@@ -1624,40 +1626,38 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TAP_DEV), g_strdup ("yes"));
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
+	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
+		char *cipher = NULL;
+		gboolean is_default = TRUE;
+
+		gtk_tree_model_get (model, &iter,
+		                    TLS_CIPHER_COL_NAME, &cipher,
+		                    TLS_CIPHER_COL_DEFAULT, &is_default, -1);
+		if (!is_default && cipher) {
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CIPHER), g_strdup (cipher));
+		}
+	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "hmacauth_combo"));
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
+	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
+		char *hmacauth = NULL;
+		gboolean is_default = TRUE;
+
+		gtk_tree_model_get (model, &iter,
+		                    HMACAUTH_COL_VALUE, &hmacauth,
+		                    HMACAUTH_COL_DEFAULT, &is_default, -1);
+		if (!is_default && hmacauth) {
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_AUTH), g_strdup (hmacauth));
+		}
+	}
+
 	contype = g_object_get_data (G_OBJECT (dialog), "connection-type");
 	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		GtkTreeModel *model;
-		GtkTreeIter iter;
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
-		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
-		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-			char *cipher = NULL;
-			gboolean is_default = TRUE;
-
-			gtk_tree_model_get (model, &iter,
-			                    TLS_CIPHER_COL_NAME, &cipher,
-			                    TLS_CIPHER_COL_DEFAULT, &is_default, -1);
-			if (!is_default && cipher) {
-				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CIPHER), g_strdup (cipher));
-			}
-		}
-		
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "hmacauth_combo"));
-		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
-		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-			char *hmacauth = NULL;
-			gboolean is_default = TRUE;
-
-			gtk_tree_model_get (model, &iter,
-			                    HMACAUTH_COL_VALUE, &hmacauth,
-			                    HMACAUTH_COL_DEFAULT, &is_default, -1);
-			if (!is_default && hmacauth) {
-				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_AUTH), g_strdup (hmacauth));
-			}
-		}
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
 		value = gtk_entry_get_text (GTK_ENTRY(widget));
