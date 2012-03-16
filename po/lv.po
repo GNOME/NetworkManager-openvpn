@@ -5,15 +5,15 @@
 # David Lodge <dave@cirt.net>, 2006.
 # Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2010.
 # Rudolfs <rudolfs.mazurs@gmail.com>, 2011.
-# Rūdofls Mazurs <rudolfs.mazurs@gmail.com>, 2011.
+# Rūdofls Mazurs <rudolfs.mazurs@gmail.com>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager OpenVPN plugin\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
-"cgi?product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2011-07-14 03:13+0000\n"
-"PO-Revision-Date: 2011-09-16 13:36+0300\n"
-"Last-Translator: Rūdofls Mazurs <rudolfs.mazurs@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2011-10-31 08:29+0000\n"
+"PO-Revision-Date: 2012-03-15 21:54+0200\n"
+"Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +33,6 @@ msgid "_Secondary Password:"
 msgstr "_Sekundārā parole:"
 
 #: ../auth-dialog/vpn-password-dialog.c:239
-#| msgid "Show passwords"
 msgid "Sh_ow passwords"
 msgstr "Rādīt par_oles"
 
@@ -71,7 +70,6 @@ msgid "Always Ask"
 msgstr "Vienmēr jautāt"
 
 #: ../properties/auth-helpers.c:251
-#| msgid "Not required"
 msgid "Not Required"
 msgstr "Nav nepieciešams"
 
@@ -136,7 +134,7 @@ msgstr "SHA-512"
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1360 ../properties/nm-openvpn-dialog.ui.h:16
+#: ../properties/auth-helpers.c:1360 ../properties/nm-openvpn-dialog.ui.h:33
 msgid "Not required"
 msgstr "Nav nepieciešams"
 
@@ -213,158 +211,332 @@ msgstr ""
 "lai piekļūtu Internetam.</i>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:8
+msgid ""
+"Accept connections only from a host with X509 name or common name equal to "
+"the specified one.&#10;config: tls-remote"
+msgstr ""
+"Pieņemt savienojumus tikai no serveriem ar X509 nosaukumu vai parastu "
+"nosaukumu kas ir vienāds ar norādīto.&#10;config: tls-remote"
+
+#: ../properties/nm-openvpn-dialog.ui.h:9
 msgid "Ad_vanced..."
 msgstr "_Paplašināts"
 
-#: ../properties/nm-openvpn-dialog.ui.h:9
+#: ../properties/nm-openvpn-dialog.ui.h:10
+msgid ""
+"Add an additional layer of HMAC authentication on top of the TLS control "
+"channel to protect against DoS attacks.&#10;config: tls-auth <file> "
+"[direction]"
+msgstr ""
+"Pievienot papildu HMAC autentifikācijas slāni uz TLS vadības kanāla, lai "
+"aizsargātos pret DoS uzbrukumiem.&#10;config: tls-auth <file> "
+"[virziens]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:11
+#| msgid "Use additional TLS authentication"
+msgid "Add an additional layer of HMAC authentication."
+msgstr "Lietot papildu slāni HMAC autentifikācijai."
+
+#: ../properties/nm-openvpn-dialog.ui.h:12
+msgid ""
+"Authenticate packets with HMAC using message digest algorithm. The default "
+"is SHA1.&#10;config: auth"
+msgstr ""
+"Autentificēt pakotnes ar HMAC izmantojot ziņojumu sagremošanas algoritmu. "
+"Noklusētais ir SHA1.&#10;config: auth"
+
+#: ../properties/nm-openvpn-dialog.ui.h:13
 msgid "CA Certificate:"
 msgstr "CA Sertifikāts:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:10
+#: ../properties/nm-openvpn-dialog.ui.h:14
+msgid "Certificate authority (CA) file in .pem format.&#10;config: ca"
+msgstr "Sertifikāta institūcijas (CA) fails .pem formātā.&#10;config: ca"
+
+#: ../properties/nm-openvpn-dialog.ui.h:15
 msgid "Cipher:"
 msgstr "Šifrs:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:11
+#: ../properties/nm-openvpn-dialog.ui.h:16
+msgid ""
+"Connect to remote host through a proxy with this address.&#10;config: http-"
+"proxy or socks-proxy"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:17
+msgid ""
+"Connect to remote host through a proxy with this port.&#10;config: http-"
+"proxy or socks-proxy"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:18
+msgid ""
+"Direction for Static Key encryption mode (non-TLS).&#10;config: static "
+"<file> [direction]"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:19
+msgid ""
+"Direction parameter for static key mode.&#10;config: tls-auth <file> "
+"[direction]"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:20
+msgid ""
+"Enable internal datagram fragmentation with this maximum size.&#10;config: "
+"fragment"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:21
+msgid ""
+"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
+"Cipher Block Chaining mode).&#10;config: cipher"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:22
 msgid "General"
 msgstr "Vispārējs"
 
-#: ../properties/nm-openvpn-dialog.ui.h:12
+#: ../properties/nm-openvpn-dialog.ui.h:23
 msgid "HMAC Authentication:"
 msgstr "HMAC autentifikācija:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:13
+#: ../properties/nm-openvpn-dialog.ui.h:24
+msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:25
+msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:26
+msgid "IP address of the local VPN endpoint.&#10;config: ifconfig <l> <rn>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:27
+msgid "IP address of the remote VPN endpoint.&#10;config: ifconfig <l> <rn>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:28
 msgid "Key Direction:"
 msgstr "Atslēgas virziens:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:14
+#: ../properties/nm-openvpn-dialog.ui.h:29
 msgid "Key File:"
 msgstr "Atslēgas fails:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:15
+#: ../properties/nm-openvpn-dialog.ui.h:30
 msgid "Local IP Address:"
 msgstr "Lokālā IP adrese:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:17
+#: ../properties/nm-openvpn-dialog.ui.h:31
+msgid "Local peer's private key in .pem format.&#10;config: key"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:32
+msgid ""
+"Local peer's signed certificate in .pem format (signed by CA of CA "
+"Certificate).&#10;config: cert"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:34
 msgid "OpenVPN Advanced Options"
 msgstr "OpenVPN paplašinātās opcijas"
 
-#: ../properties/nm-openvpn-dialog.ui.h:18
+#: ../properties/nm-openvpn-dialog.ui.h:35
+#, fuzzy
+#| msgid "Choose your private key..."
+msgid "Password for private key"
+msgstr "Izvēlieties savu privāto atslēgu..."
+
+#: ../properties/nm-openvpn-dialog.ui.h:36
+msgid ""
+"Password passed to OpenVPN when prompted for it.&#10;config: auth-user-pass"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:37
 msgid "Password:"
 msgstr "Parole:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:19
+#: ../properties/nm-openvpn-dialog.ui.h:38
 msgid "Port:"
 msgstr "Ports:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:20
+#: ../properties/nm-openvpn-dialog.ui.h:39
+msgid ""
+"Pre-shared file for Static Key encryption mode (non-TLS).&#10;config: static "
+"<file>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:40
 msgid "Private Key Password:"
 msgstr "Privātās atslēgas parole:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:21
+#: ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Private Key:"
 msgstr "Privātā atslēga:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:22
+#: ../properties/nm-openvpn-dialog.ui.h:42
 msgid "Proxies"
 msgstr "Starpnieki"
 
-#: ../properties/nm-openvpn-dialog.ui.h:23
+#: ../properties/nm-openvpn-dialog.ui.h:43
 msgid "Proxy Password:"
 msgstr "Starpnieka parole:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:24
+#: ../properties/nm-openvpn-dialog.ui.h:44
 msgid "Proxy Type:"
 msgstr "Starpnieka tips:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:25
+#: ../properties/nm-openvpn-dialog.ui.h:45
 msgid "Proxy Username:"
 msgstr "Starpnieka lietotājvārds:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:26
+#: ../properties/nm-openvpn-dialog.ui.h:46
+msgid "Proxy type: HTTP or Socks.&#10;config: http-proxy or socks-proxy"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:47
 msgid "Remote IP Address:"
 msgstr "Attālinātā IP adrese:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:27
+#: ../properties/nm-openvpn-dialog.ui.h:48
+msgid "Remote host name or IP address.&#10;config: remote"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:49
+msgid ""
+"Renegotiate data channel key after the specified number of seconds.&#10;"
+"config: reneg-sec"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:50
+msgid "Restrict tunnel TCP MSS.&#10;config: mssfix"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:51
 msgid "Restrict tunnel TCP Maximum Segment Size (MSS)"
 msgstr "Ierobežot tuneļa TCP maksimālo segmenta izmēru (MSS)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:28
+#: ../properties/nm-openvpn-dialog.ui.h:52
+msgid ""
+"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.&#10;"
+"config: http-proxy-retry or socks-proxy-retry"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:53
 msgid "Retry indefinitely when errors occur"
 msgstr "Mēģināt atkal nebeidzami ilgi, ja gadās kļūda"
 
-#: ../properties/nm-openvpn-dialog.ui.h:29
+#: ../properties/nm-openvpn-dialog.ui.h:54
 msgid "Security"
 msgstr "Drošība"
 
-#: ../properties/nm-openvpn-dialog.ui.h:30
+#: ../properties/nm-openvpn-dialog.ui.h:55
+#, fuzzy
+#| msgid "TLS Authentication"
+msgid "Select an authentication mode."
+msgstr "TLS autentifikācija"
+
+#: ../properties/nm-openvpn-dialog.ui.h:56
 msgid "Server Address:"
 msgstr "Servera adrese:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:31
+#: ../properties/nm-openvpn-dialog.ui.h:57
 msgid "Show password"
 msgstr "Rādīt paroli"
 
-#: ../properties/nm-openvpn-dialog.ui.h:32
+#: ../properties/nm-openvpn-dialog.ui.h:58
 msgid "Show passwords"
 msgstr "Rādīt paroles"
 
-#: ../properties/nm-openvpn-dialog.ui.h:33
+#: ../properties/nm-openvpn-dialog.ui.h:59
 msgid "Static Key:"
 msgstr "Statiskās atslēgas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:34
+#: ../properties/nm-openvpn-dialog.ui.h:60
 msgid "Subject Match:"
 msgstr "Subjekta atbilstība:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:35
+#: ../properties/nm-openvpn-dialog.ui.h:61
+msgid "TCP/UDP port number for local peer.&#10;config: port"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:62
 msgid "TLS Authentication"
 msgstr "TLS autentifikācija"
 
-#: ../properties/nm-openvpn-dialog.ui.h:36
+#: ../properties/nm-openvpn-dialog.ui.h:63
+msgid ""
+"Take the TUN device MTU to be the specified value and derive the link MTU "
+"from it.&#10;config: tun-mtu"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:64
 msgid "Type:"
 msgstr "Tips:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:37
+#: ../properties/nm-openvpn-dialog.ui.h:65
 msgid "Use L_ZO data compression"
 msgstr "Lietot L_ZO datu kompresiju"
 
-#: ../properties/nm-openvpn-dialog.ui.h:38
+#: ../properties/nm-openvpn-dialog.ui.h:66
+msgid ""
+"Use TAP virtual network device instead of TUN.&#10;config: dev tap | tun"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:67
+msgid ""
+"Use TCP for communicating with remote host.&#10;config: proto tcp-client | "
+"udp"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:68
 msgid "Use a TA_P device"
 msgstr "Lietot TA_P iekārtu"
 
-#: ../properties/nm-openvpn-dialog.ui.h:39
+#: ../properties/nm-openvpn-dialog.ui.h:69
 msgid "Use a _TCP connection"
 msgstr "Lietot _TCP savienojumu"
 
-#: ../properties/nm-openvpn-dialog.ui.h:40
+#: ../properties/nm-openvpn-dialog.ui.h:70
 msgid "Use additional TLS authentication"
 msgstr "Lietot papildus TLS autentifikāciju"
 
-#: ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/nm-openvpn-dialog.ui.h:71
 msgid "Use custom UDP _fragment size:"
 msgstr "Lietot pielāgotu UDP _fragmenta izmēru:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:42
+#: ../properties/nm-openvpn-dialog.ui.h:72
 msgid "Use custom _renegotiation interval:"
 msgstr "Izmantot pielāgotu atkā_rtotās vienošanās intervālu:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:43
+#: ../properties/nm-openvpn-dialog.ui.h:73
 msgid "Use custom _tunnel Maximum Transmission Unit (MTU):"
 msgstr "Izmantot pielāgotu _tuneļa maksimālo pārraides bloku (MTU):"
 
-#: ../properties/nm-openvpn-dialog.ui.h:44
+#: ../properties/nm-openvpn-dialog.ui.h:74
 msgid "Use custom gateway p_ort:"
 msgstr "Izmantot pielāgotu vārtejas p_ortu: "
 
-#: ../properties/nm-openvpn-dialog.ui.h:45
+#: ../properties/nm-openvpn-dialog.ui.h:75
+msgid "Use fast LZO compression.&#10;config: comp-lzo"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:76
 msgid "User Certificate:"
 msgstr "Lietotāja sertifikāts:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:46
+#: ../properties/nm-openvpn-dialog.ui.h:77
 msgid "User name:"
 msgstr "Lietotājvārds:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:47
+#: ../properties/nm-openvpn-dialog.ui.h:78
+msgid ""
+"Username passed to OpenVPN when prompted for it.&#10;config: auth-user-pass"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:79
 msgid "_Gateway:"
 msgstr "_Vārteja:"
 
