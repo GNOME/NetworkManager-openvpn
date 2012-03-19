@@ -184,7 +184,8 @@ get_secrets (const char *vpn_name,
 			*out_password = password;
 		if (need_certpass)
 			*out_certpass = certpass;
-		goto out;
+		g_free (prompt);
+		return TRUE;
 	}
 
 	dialog = VPN_PASSWORD_DIALOG (vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
