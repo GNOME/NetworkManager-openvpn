@@ -414,6 +414,23 @@
                     <property name="position">7</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="remote_random_checkbutton">
+                    <property name="label" translatable="yes">Rando_mize remote hosts</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <property name="tooltip_text" translatable="yes">Randomize the order of gataways list (remote) as a kind of basic load-balancing measure.&#10;config: remote-random</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">8</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="tab">
@@ -1089,7 +1106,7 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                       <object class="GtkEntry" id="gateway_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Remote host name or IP address.&#10;config: remote</property>
+                        <property name="tooltip_text" translatable="yes">Remote host name or IP address. You can specify multiple items for redundancy (use commas to separate the entries).&#10;config: remote</property>
                       </object>
                     </child>
                   </object>

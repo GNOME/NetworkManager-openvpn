@@ -56,6 +56,7 @@
 #define NM_OPENVPN_KEY_PROXY_RETRY "proxy-retry"
 #define NM_OPENVPN_KEY_HTTP_PROXY_USERNAME "http-proxy-username"
 #define NM_OPENVPN_KEY_REMOTE "remote"
+#define NM_OPENVPN_KEY_REMOTE_RANDOM "remote-random"
 #define NM_OPENVPN_KEY_REMOTE_IP "remote-ip"
 #define NM_OPENVPN_KEY_STATIC_KEY "static-key"
 #define NM_OPENVPN_KEY_STATIC_KEY_DIRECTION "static-key-direction"
