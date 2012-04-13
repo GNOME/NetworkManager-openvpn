@@ -213,10 +213,12 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:8
 msgid ""
 "Accept connections only from a host with X509 name or common name equal to "
-"the specified one.&#10;config: tls-remote"
+"the specified one.\n"
+"config: tls-remote"
 msgstr ""
 "Pieņemt savienojumus tikai no serveriem ar X509 nosaukumu vai parastu "
-"nosaukumu kas ir vienāds ar norādīto.&#10;config: tls-remote"
+"nosaukumu kas ir vienāds ar norādīto.\n"
+"config: tls-remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:9
 msgid "Ad_vanced..."
@@ -225,11 +227,13 @@ msgstr "_Paplašināts"
 #: ../properties/nm-openvpn-dialog.ui.h:10
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
-"channel to protect against DoS attacks.&#10;config: tls-auth <file> "
+"channel to protect against DoS attacks.\n"
+"config: tls-auth <file> "
 "[direction]"
 msgstr ""
 "Pievienot papildu HMAC autentifikācijas slāni uz TLS vadības kanāla, lai "
-"aizsargātos pret DoS uzbrukumiem.&#10;config: tls-auth <file> "
+"aizsargātos pret DoS uzbrukumiem.\n"
+"config: tls-auth <file> "
 "[virziens]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:11
@@ -240,18 +244,24 @@ msgstr "Lietot papildu slāni HMAC autentifikācijai."
 #: ../properties/nm-openvpn-dialog.ui.h:12
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
-"is SHA1.&#10;config: auth"
+"is SHA1.\n"
+"config: auth"
 msgstr ""
 "Autentificēt pakotnes ar HMAC izmantojot ziņojumu sagremošanas algoritmu. "
-"Noklusētais ir SHA1.&#10;config: auth"
+"Noklusētais ir SHA1.\n"
+"config: auth"
 
 #: ../properties/nm-openvpn-dialog.ui.h:13
 msgid "CA Certificate:"
 msgstr "CA Sertifikāts:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:14
-msgid "Certificate authority (CA) file in .pem format.&#10;config: ca"
-msgstr "Sertifikāta institūcijas (CA) fails .pem formātā.&#10;config: ca"
+msgid ""
+"Certificate authority (CA) file in .pem format.\n"
+"config: ca"
+msgstr ""
+"Sertifikāta institūcijas (CA) fails .pem formātā.\n"
+"config: ca"
 
 #: ../properties/nm-openvpn-dialog.ui.h:15
 msgid "Ci_pher:"
@@ -259,38 +269,44 @@ msgstr "Šifrs:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:16
 msgid ""
-"Connect to remote host through a proxy with this address.&#10;config: http-"
+"Connect to remote host through a proxy with this address.\n"
+"config: http-"
 "proxy or socks-proxy"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
 msgid ""
-"Connect to remote host through a proxy with this port.&#10;config: http-"
+"Connect to remote host through a proxy with this port.\n"
+"config: http-"
 "proxy or socks-proxy"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:18
 msgid ""
-"Direction for Static Key encryption mode (non-TLS).&#10;config: static "
+"Direction for Static Key encryption mode (non-TLS).\n"
+"config: static "
 "<file> [direction]"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:19
 msgid ""
-"Direction parameter for static key mode.&#10;config: tls-auth <file> "
+"Direction parameter for static key mode.\n"
+"config: tls-auth <file> "
 "[direction]"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:20
 msgid ""
-"Enable internal datagram fragmentation with this maximum size.&#10;config: "
+"Enable internal datagram fragmentation with this maximum size.\n"
+"config: "
 "fragment"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:21
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
-"Cipher Block Chaining mode).&#10;config: cipher"
+"Cipher Block Chaining mode).\n"
+"config: cipher"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:22
@@ -310,11 +326,15 @@ msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:26
-msgid "IP address of the local VPN endpoint.&#10;config: ifconfig <l> <rn>"
+msgid ""
+"IP address of the local VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:27
-msgid "IP address of the remote VPN endpoint.&#10;config: ifconfig <l> <rn>"
+msgid ""
+"IP address of the remote VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:28
@@ -330,13 +350,16 @@ msgid "Local IP Address:"
 msgstr "Lokālā IP adrese:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:31
-msgid "Local peer's private key in .pem format.&#10;config: key"
+msgid ""
+"Local peer's private key in .pem format.\n"
+"config: key"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:32
 msgid ""
 "Local peer's signed certificate in .pem format (signed by CA of CA "
-"Certificate).&#10;config: cert"
+"Certificate).\n"
+"config: cert"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:34
@@ -351,7 +374,8 @@ msgstr "Izvēlieties savu privāto atslēgu..."
 
 #: ../properties/nm-openvpn-dialog.ui.h:36
 msgid ""
-"Password passed to OpenVPN when prompted for it.&#10;config: auth-user-pass"
+"Password passed to OpenVPN when prompted for it.\n"
+"config: auth-user-pass"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:37
@@ -364,7 +388,8 @@ msgstr "Ports:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:39
 msgid ""
-"Pre-shared file for Static Key encryption mode (non-TLS).&#10;config: static "
+"Pre-shared file for Static Key encryption mode (non-TLS).\n"
+"config: static "
 "<file>"
 msgstr ""
 
@@ -393,7 +418,9 @@ msgid "Proxy _Username:"
 msgstr "Starpnieka lietotājvārds:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:46
-msgid "Proxy type: HTTP or Socks.&#10;config: http-proxy or socks-proxy"
+msgid ""
+"Proxy type: HTTP or Socks.\n"
+"config: http-proxy or socks-proxy"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:47
@@ -401,17 +428,22 @@ msgid "Remote IP Address:"
 msgstr "Attālinātā IP adrese:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:48
-msgid "Remote host name or IP address.&#10;config: remote"
+msgid ""
+"Remote host name or IP address.\n"
+"config: remote"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:49
 msgid ""
-"Renegotiate data channel key after the specified number of seconds.&#10;"
+"Renegotiate data channel key after the specified number of seconds.\n"
+""
 "config: reneg-sec"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:50
-msgid "Restrict tunnel TCP MSS.&#10;config: mssfix"
+msgid ""
+"Restrict tunnel TCP MSS.\n"
+"config: mssfix"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:51
@@ -420,7 +452,8 @@ msgstr "Ierobežot tuneļa TCP maksimālo segmenta izmēru (MSS)"
 
 #: ../properties/nm-openvpn-dialog.ui.h:52
 msgid ""
-"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.&#10;"
+"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
+""
 "config: http-proxy-retry or socks-proxy-retry"
 msgstr ""
 
@@ -459,7 +492,9 @@ msgid "_Subject Match:"
 msgstr "Subjekta atbilstība:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:61
-msgid "TCP/UDP port number for local peer.&#10;config: port"
+msgid ""
+"TCP/UDP port number for local peer.\n"
+"config: port"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:62
@@ -469,7 +504,8 @@ msgstr "TLS autentifikācija"
 #: ../properties/nm-openvpn-dialog.ui.h:63
 msgid ""
 "Take the TUN device MTU to be the specified value and derive the link MTU "
-"from it.&#10;config: tun-mtu"
+"from it.\n"
+"config: tun-mtu"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:64
@@ -482,12 +518,14 @@ msgstr "Lietot L_ZO datu kompresiju"
 
 #: ../properties/nm-openvpn-dialog.ui.h:66
 msgid ""
-"Use TAP virtual network device instead of TUN.&#10;config: dev tap | tun"
+"Use TAP virtual network device instead of TUN.\n"
+"config: dev tap | tun"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:67
 msgid ""
-"Use TCP for communicating with remote host.&#10;config: proto tcp-client | "
+"Use TCP for communicating with remote host.\n"
+"config: proto tcp-client | "
 "udp"
 msgstr ""
 
@@ -520,7 +558,9 @@ msgid "Use custom gateway p_ort:"
 msgstr "Izmantot pielāgotu vārtejas p_ortu: "
 
 #: ../properties/nm-openvpn-dialog.ui.h:75
-msgid "Use fast LZO compression.&#10;config: comp-lzo"
+msgid ""
+"Use fast LZO compression.\n"
+"config: comp-lzo"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:76
@@ -533,7 +573,8 @@ msgstr "Lietotājvārds:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:78
 msgid ""
-"Username passed to OpenVPN when prompted for it.&#10;config: auth-user-pass"
+"Username passed to OpenVPN when prompted for it.\n"
+"config: auth-user-pass"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:79

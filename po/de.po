@@ -213,10 +213,12 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:8
 msgid ""
 "Accept connections only from a host with X509 name or common name equal to "
-"the specified one.&#10;config: tls-remote"
+"the specified one.\n"
+"config: tls-remote"
 msgstr ""
 "Nur Verbindungen von einem Rechner mit einem X509-Namen oder einem Namen "
-"annehmen, der dem angegebenen entspricht.&#10;config: tls-remote"
+"annehmen, der dem angegebenen entspricht.\n"
+"config: tls-remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:9
 msgid "Ad_vanced..."
@@ -225,12 +227,14 @@ msgstr "Er_weitert …"
 #: ../properties/nm-openvpn-dialog.ui.h:10
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
-"channel to protect against DoS attacks.&#10;config: tls-auth <file> "
+"channel to protect against DoS attacks.\n"
+"config: tls-auth <file> "
 "[direction]"
 msgstr ""
 "Eine zusätzliche HMAC-Legitimierungsebene oberhalb des TLS-Steuerkanals "
 "hinzufügen, um DoS-Attacken (verteilten Überlastungsangriffen) vorzubeugen."
-"&#10;config: tls-auth <Datei> [Richtung]"
+"\n"
+"config: tls-auth <Datei> [Richtung]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:11
 msgid "Add an additional layer of HMAC authentication."
@@ -239,18 +243,24 @@ msgstr "Zusätzliche Ebene zur HMAC-Legitimierung hinzufügen."
 #: ../properties/nm-openvpn-dialog.ui.h:12
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default is "
-"SHA1.&#10;config: auth"
+"SHA1.\n"
+"config: auth"
 msgstr ""
 "Pakete mit HMAC mittels Nachrichtenzusammenfassungs-Algorithmus legitimieren. "
-"Vorgabe ist SHA1.&#10;config: auth"
+"Vorgabe ist SHA1.\n"
+"config: auth"
 
 #: ../properties/nm-openvpn-dialog.ui.h:13
 msgid "CA Certificate:"
 msgstr "Zertifikat der Zertifizierungsstelle:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:14
-msgid "Certificate authority (CA) file in .pem format.&#10;config: ca"
-msgstr "Zertifizierungsstellendatei im .pem-Format.&#10;config: ca"
+msgid ""
+"Certificate authority (CA) file in .pem format.\n"
+"config: ca"
+msgstr ""
+"Zertifizierungsstellendatei im .pem-Format.\n"
+"config: ca"
 
 #: ../properties/nm-openvpn-dialog.ui.h:15
 msgid "Ci_pher:"
@@ -258,51 +268,63 @@ msgstr "Chiffre:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:16
 msgid ""
-"Connect to remote host through a proxy with this address.&#10;config: http-"
+"Connect to remote host through a proxy with this address.\n"
+"config: http-"
 "proxy or socks-proxy"
 msgstr ""
-"Zum entfernten Rechner über einen Proxy mit dieser Adresse verbinden.&#10;"
+"Zum entfernten Rechner über einen Proxy mit dieser Adresse verbinden.\n"
+""
 "config: http-proxy oder socks-proxy"
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
 msgid ""
-"Connect to remote host through a proxy with this port.&#10;config: http-proxy "
+"Connect to remote host through a proxy with this port.\n"
+"config: http-proxy "
 "or socks-proxy"
 msgstr ""
-"Zum entfernten Rechner über einen Proxy mit diesem Port verbinden.&#10;"
+"Zum entfernten Rechner über einen Proxy mit diesem Port verbinden.\n"
+""
 "config: http-proxy oder socks-proxy"
 
 #: ../properties/nm-openvpn-dialog.ui.h:18
 msgid ""
-"Direction for Static Key encryption mode (non-TLS).&#10;config: static <file> "
+"Direction for Static Key encryption mode (non-TLS).\n"
+"config: static <file> "
 "[direction]"
 msgstr ""
 "Richtung für den Verschlüsselungsmodus des statischen Schlüssels (Nicht-TLS)."
-"&#10;config: static <Datei> [Richtung]"
+"\n"
+"config: static <Datei> [Richtung]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:19
 msgid ""
-"Direction parameter for static key mode.&#10;config: tls-auth <file> "
+"Direction parameter for static key mode.\n"
+"config: tls-auth <file> "
 "[direction]"
 msgstr ""
-"Richtungsparameter für den Modus des statischen Schlüssels.&#10;config: tls-"
+"Richtungsparameter für den Modus des statischen Schlüssels.\n"
+"config: tls-"
 "auth <Datei> [Richtung]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:20
 msgid ""
-"Enable internal datagram fragmentation with this maximum size.&#10;config: "
+"Enable internal datagram fragmentation with this maximum size.\n"
+"config: "
 "fragment"
 msgstr ""
-"Interne Datenfragmentierung bis zu dieser Blockgröße erlauben.&#10;config: "
+"Interne Datenfragmentierung bis zu dieser Blockgröße erlauben.\n"
+"config: "
 "fragment"
 
 #: ../properties/nm-openvpn-dialog.ui.h:21
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
-"Cipher Block Chaining mode).&#10;config: cipher"
+"Cipher Block Chaining mode).\n"
+"config: cipher"
 msgstr ""
 "Pakete mit einem Verschlüsselungsalgorithmus verschlüsseln. Vorgabe ist BF-"
-"CBC (Blowfish im »Cipher Block Chaining«-Modus).&#10;config: cipher"
+"CBC (Blowfish im »Cipher Block Chaining«-Modus).\n"
+"config: cipher"
 
 #: ../properties/nm-openvpn-dialog.ui.h:22
 msgid "General"
@@ -324,14 +346,20 @@ msgstr ""
 "wird."
 
 #: ../properties/nm-openvpn-dialog.ui.h:26
-msgid "IP address of the local VPN endpoint.&#10;config: ifconfig <l> <rn>"
+msgid ""
+"IP address of the local VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
 msgstr ""
-"IP-Adresse des lokalen Endpunktes des VPN.&#10;config: ifconfig <l> <rn>"
+"IP-Adresse des lokalen Endpunktes des VPN.\n"
+"config: ifconfig <l> <rn>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:27
-msgid "IP address of the remote VPN endpoint.&#10;config: ifconfig <l> <rn>"
+msgid ""
+"IP address of the remote VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
 msgstr ""
-"IP-Adresse des entfernten Endpunktes des VPN.&#10;config: ifconfig <l> <rn>"
+"IP-Adresse des entfernten Endpunktes des VPN.\n"
+"config: ifconfig <l> <rn>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:28
 msgid "Key _Direction:"
@@ -346,16 +374,22 @@ msgid "Local IP Address:"
 msgstr "Lokale IP-Adresse:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:31
-msgid "Local peer's private key in .pem format.&#10;config: key"
-msgstr "Privater Schlüssel des lokalen Rechners im .pem-Format.&#10;config: key"
+msgid ""
+"Local peer's private key in .pem format.\n"
+"config: key"
+msgstr ""
+"Privater Schlüssel des lokalen Rechners im .pem-Format.\n"
+"config: key"
 
 #: ../properties/nm-openvpn-dialog.ui.h:32
 msgid ""
 "Local peer's signed certificate in .pem format (signed by CA of CA "
-"Certificate).&#10;config: cert"
+"Certificate).\n"
+"config: cert"
 msgstr ""
 "Signiertes Zertifikat des lokalen Rechners im .pem-Format (von einer "
-"Zertifizierungsstelle signiert).&#10;config: cert"
+"Zertifizierungsstelle signiert).\n"
+"config: cert"
 
 #: ../properties/nm-openvpn-dialog.ui.h:34
 msgid "OpenVPN Advanced Options"
@@ -367,9 +401,11 @@ msgstr "Passwort für privaten Schlüssel"
 
 #: ../properties/nm-openvpn-dialog.ui.h:36
 msgid ""
-"Password passed to OpenVPN when prompted for it.&#10;config: auth-user-pass"
+"Password passed to OpenVPN when prompted for it.\n"
+"config: auth-user-pass"
 msgstr ""
-"An OpenVPN zu übergebendes Passwort, sobald danach gefragt wird.&#10;config: "
+"An OpenVPN zu übergebendes Passwort, sobald danach gefragt wird.\n"
+"config: "
 "auth-user-pass"
 
 #: ../properties/nm-openvpn-dialog.ui.h:37
@@ -382,11 +418,13 @@ msgstr "Port:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:39
 msgid ""
-"Pre-shared file for Static Key encryption mode (non-TLS).&#10;config: static "
+"Pre-shared file for Static Key encryption mode (non-TLS).\n"
+"config: static "
 "<file>"
 msgstr ""
 "Voreingestellte Datei für Verschlüsselungsmodus des statischen Schlüssels "
-"(Nicht-TLS).&#10;config: static <file>"
+"(Nicht-TLS).\n"
+"config: static <file>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:40
 msgid "Private Key Password:"
@@ -413,28 +451,42 @@ msgid "Proxy _Username:"
 msgstr "Proxy-Benutzername:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:46
-msgid "Proxy type: HTTP or Socks.&#10;config: http-proxy or socks-proxy"
-msgstr "Proxy-Typ: HTTP oder Socks.&#10;config: http-proxy or socks-proxy"
+msgid ""
+"Proxy type: HTTP or Socks.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Proxy-Typ: HTTP oder Socks.\n"
+"config: http-proxy or socks-proxy"
 
 #: ../properties/nm-openvpn-dialog.ui.h:47
 msgid "Remote IP Address:"
 msgstr "Entfernte IP-Adresse:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:48
-msgid "Remote host name or IP address.&#10;config: remote"
-msgstr "Name des entfernten Rechners oder IP-Adresse.&#10;config: remote"
+msgid ""
+"Remote host name or IP address.\n"
+"config: remote"
+msgstr ""
+"Name des entfernten Rechners oder IP-Adresse.\n"
+"config: remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:49
 msgid ""
-"Renegotiate data channel key after the specified number of seconds.&#10;"
+"Renegotiate data channel key after the specified number of seconds.\n"
+""
 "config: reneg-sec"
 msgstr ""
 "Datenkanal-Schlüssel nach der angegebenen Anzahl an Sekunden neu aushandeln."
-"&#10;config: reneg-sec"
+"\n"
+"config: reneg-sec"
 
 #: ../properties/nm-openvpn-dialog.ui.h:50
-msgid "Restrict tunnel TCP MSS.&#10;config: mssfix"
-msgstr "Die TCP-MSS  des Tunnels beschränken.&#10;config: mssfix"
+msgid ""
+"Restrict tunnel TCP MSS.\n"
+"config: mssfix"
+msgstr ""
+"Die TCP-MSS  des Tunnels beschränken.\n"
+"config: mssfix"
 
 #: ../properties/nm-openvpn-dialog.ui.h:51
 msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
@@ -442,11 +494,13 @@ msgstr "Maximale TCP-Segmentgröße (MSS) des Tunnels einschränken"
 
 #: ../properties/nm-openvpn-dialog.ui.h:52
 msgid ""
-"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.&#10;config: "
+"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
+"config: "
 "http-proxy-retry or socks-proxy-retry"
 msgstr ""
 "Bei Proxy-Fehlern auf unbestimmte Zeit erneut versuchen, wodurch ein SIGUSR1-"
-"Reset simuliert wird.&#10;config: http-proxy-retry or socks-proxy-retry"
+"Reset simuliert wird.\n"
+"config: http-proxy-retry or socks-proxy-retry"
 
 #: ../properties/nm-openvpn-dialog.ui.h:53
 msgid "Retry indefinitely when errors occur"
@@ -481,8 +535,12 @@ msgid "_Subject Match:"
 msgstr "Betreff-Übereinstimmung:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:61
-msgid "TCP/UDP port number for local peer.&#10;config: port"
-msgstr "TCP/UDP-Portnummer für lokalen Rechner.&#10;config: port"
+msgid ""
+"TCP/UDP port number for local peer.\n"
+"config: port"
+msgstr ""
+"TCP/UDP-Portnummer für lokalen Rechner.\n"
+"config: port"
 
 #: ../properties/nm-openvpn-dialog.ui.h:62
 msgid "TLS Authentication"
@@ -491,10 +549,12 @@ msgstr "TLS-Legitimierung"
 #: ../properties/nm-openvpn-dialog.ui.h:63
 msgid ""
 "Take the TUN device MTU to be the specified value and derive the link MTU "
-"from it.&#10;config: tun-mtu"
+"from it.\n"
+"config: tun-mtu"
 msgstr ""
 "MTU des TUN-Gerätes als gegebenen Wert verwenden und daraus die MTU der "
-"Schnittstelle ableiten.&#10;config: tun-mtu"
+"Schnittstelle ableiten.\n"
+"config: tun-mtu"
 
 #: ../properties/nm-openvpn-dialog.ui.h:64
 msgid "Type:"
@@ -505,16 +565,21 @@ msgid "Use L_ZO data compression"
 msgstr "L_ZO-Komprimierung verwenden"
 
 #: ../properties/nm-openvpn-dialog.ui.h:66
-msgid "Use TAP virtual network device instead of TUN.&#10;config: dev tap | tun"
+msgid ""
+"Use TAP virtual network device instead of TUN.\n"
+"config: dev tap | tun"
 msgstr ""
-"Virtuelles TAP-Netzwerkgerät anstelle von TUN verwenden.&#10;config: dev tap "
+"Virtuelles TAP-Netzwerkgerät anstelle von TUN verwenden.\n"
+"config: dev tap "
 "| tun"
 
 #: ../properties/nm-openvpn-dialog.ui.h:67
 msgid ""
-"Use TCP for communicating with remote host.&#10;config: proto tcp-client | udp"
+"Use TCP for communicating with remote host.\n"
+"config: proto tcp-client | udp"
 msgstr ""
-"TCP zur Kommunikation mit der Gegenstelle verwenden.&#10;config: proto tcp-"
+"TCP zur Kommunikation mit der Gegenstelle verwenden.\n"
+"config: proto tcp-"
 "client | udp"
 
 #: ../properties/nm-openvpn-dialog.ui.h:68
@@ -546,8 +611,12 @@ msgid "Use custom gateway p_ort:"
 msgstr "_Gateway-Port:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:75
-msgid "Use fast LZO compression.&#10;config: comp-lzo"
-msgstr "Schnelle LZO-Kompression verwenden.&#10;config: comp-lzo"
+msgid ""
+"Use fast LZO compression.\n"
+"config: comp-lzo"
+msgstr ""
+"Schnelle LZO-Kompression verwenden.\n"
+"config: comp-lzo"
 
 #: ../properties/nm-openvpn-dialog.ui.h:76
 msgid "User Certificate:"
@@ -559,9 +628,11 @@ msgstr "Benutzername:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:78
 msgid ""
-"Username passed to OpenVPN when prompted for it.&#10;config: auth-user-pass"
+"Username passed to OpenVPN when prompted for it.\n"
+"config: auth-user-pass"
 msgstr ""
-"An OpenVPN übergebener Benutzername, wenn danach gefragt wird.&#10;config: "
+"An OpenVPN übergebener Benutzername, wenn danach gefragt wird.\n"
+"config: "
 "auth-user-pass"
 
 #: ../properties/nm-openvpn-dialog.ui.h:79
