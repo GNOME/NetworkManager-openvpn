@@ -4,14 +4,14 @@
 #
 # Jakub Friedl <jfriedl@suse.cz>, 2006.
 # Jiří Eischmann <jiri@eischmann.cz>, 2008.
-# Zdeněk Hataš <zdenek.hatas@gmail.com>, 2009, 2010, 2011.
+# Zdeněk Hataš <zdenek.hatas@gmail.com>, 2009, 2010, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2011-10-31 08:29+0000\n"
-"PO-Revision-Date: 2011-11-22 12:03+0100\n"
+"POT-Creation-Date: 2012-04-13 12:05+0000\n"
+"PO-Revision-Date: 2012-05-13 12:56+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -35,22 +35,31 @@ msgstr "_Sekundární heslo:"
 msgid "Sh_ow passwords"
 msgstr "Z_obrazit hesla"
 
-#: ../auth-dialog/main.c:133
+#. In other_ui mode, we don't actually show the dialog. Instead we pass back everything
+#. that is needed to build it
+#: ../auth-dialog/main.c:158
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Pro přístup do VPN „%s“ se musíte autentizovat."
 
-#: ../auth-dialog/main.c:134
+#: ../auth-dialog/main.c:167
+#: ../auth-dialog/main.c:191
 msgid "Authenticate VPN"
 msgstr "Ověřování VPN"
 
-#: ../auth-dialog/main.c:140
-msgid "Certificate pass_word:"
-msgstr "Heslo _certifikátu:"
+#: ../auth-dialog/main.c:170
+#: ../properties/nm-openvpn-dialog.ui.h:92
+msgid "Password:"
+msgstr "Heslo:"
 
-#: ../auth-dialog/main.c:154
+#: ../auth-dialog/main.c:172
+#: ../auth-dialog/main.c:210
 msgid "Certificate password:"
 msgstr "Heslo certifikátu:"
+
+#: ../auth-dialog/main.c:196
+msgid "Certificate pass_word:"
+msgstr "Heslo _certifikátu:"
 
 #: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
@@ -81,8 +90,8 @@ msgid "Choose an OpenVPN static key..."
 msgstr "Zvolit statický klíč OpenVPN…"
 
 #: ../properties/auth-helpers.c:409
-#: ../properties/auth-helpers.c:1169
-#: ../properties/auth-helpers.c:1571
+#: ../properties/auth-helpers.c:1170
+#: ../properties/auth-helpers.c:1578
 msgid "None"
 msgstr "Žádný"
 
@@ -98,53 +107,53 @@ msgstr "Certifikáty PEM (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statické klíče OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1085
-#: ../properties/auth-helpers.c:1161
+#: ../properties/auth-helpers.c:1086
+#: ../properties/auth-helpers.c:1162
 msgid "Default"
 msgstr "Výchozí"
 
-#: ../properties/auth-helpers.c:1171
+#: ../properties/auth-helpers.c:1172
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1173
+#: ../properties/auth-helpers.c:1174
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1175
+#: ../properties/auth-helpers.c:1176
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1177
+#: ../properties/auth-helpers.c:1178
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1179
+#: ../properties/auth-helpers.c:1180
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1181
+#: ../properties/auth-helpers.c:1182
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1183
+#: ../properties/auth-helpers.c:1184
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1185
+#: ../properties/auth-helpers.c:1186
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1360
-#: ../properties/nm-openvpn-dialog.ui.h:33
+#: ../properties/auth-helpers.c:1361
+#: ../properties/nm-openvpn-dialog.ui.h:2
 msgid "Not required"
 msgstr "Není vyžadováno"
 
-#: ../properties/auth-helpers.c:1362
+#: ../properties/auth-helpers.c:1363
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1364
+#: ../properties/auth-helpers.c:1365
 msgid "SOCKS"
 msgstr "SOCKS"
 
@@ -176,323 +185,15 @@ msgstr "Statický klíč"
 msgid " "
 msgstr " "
 
-#: ../properties/nm-openvpn-dialog.ui.h:2
-msgid "<b>Authentication</b>"
-msgstr "<b>Autentizace</b>"
-
 #: ../properties/nm-openvpn-dialog.ui.h:3
-msgid "<b>General</b>"
-msgstr "<b>Obecné</b>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:4
-msgid ""
-"<i>Connect only to servers whose certificate matches the given subject.\n"
-"Example: /CN=myvpn.company.com</i>"
-msgstr ""
-"<i>Připojit pouze k serverům, jejichž certifikát odpovídá danému subjektu.\n"
-"Příklad: /CN=mojevpn.firma.cz</i>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:6
-msgid "<i>If key direction is used, it must be the opposite of that used on the VPN peer.  For example, if the peer uses '1', this connection must use '0'.  If you are unsure what value to use, contact your system administrator.</i>"
-msgstr "<i>Pokud se používá směr klíče, musí být opačný k protějšku VPN. Například, když protějšek používá „1“, toto připojení musí použít „0“. Pokud si nejste jisti, jakou hodnotu použít, kontaktujte správce svého systému.</i>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:7
-msgid "<i>Select this option if your organization requires the use of a proxy server to access the Internet.</i>"
-msgstr "<i>Zvolte tuto možnost, pokud vaše organizace používá pro přístup do Internetu server proxy.</i>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:8
-msgid ""
-"Accept connections only from a host with X509 name or common name equal to the specified one.\n"
-"config: tls-remote"
-msgstr ""
-"Přijímat spojení pouze od uzlů jejichž název X509 nebo běžný název odpovídá specifikovanému.\n"
-"config: tls-remote"
-
-#: ../properties/nm-openvpn-dialog.ui.h:9
-msgid "Ad_vanced..."
-msgstr "P_okročilé…"
-
-#: ../properties/nm-openvpn-dialog.ui.h:10
-msgid ""
-"Add an additional layer of HMAC authentication on top of the TLS control channel to protect against DoS attacks.\n"
-"config: tls-auth <file> [direction]"
-msgstr ""
-"Chránit příkazový kanál TLS před útoky typu DoS přidáním další úrovně autentizace HMAC.\n"
-"config: tls-auth <soubor> [směr]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:11
-msgid "Add an additional layer of HMAC authentication."
-msgstr "Přidat další úroveň autentizace HMAC."
-
-#: ../properties/nm-openvpn-dialog.ui.h:12
-msgid ""
-"Authenticate packets with HMAC using message digest algorithm. The default is SHA1.\n"
-"config: auth"
-msgstr ""
-"Autentizovat pakety pomocí HMAC použitím algoritmu message digest. Výchozí je SHA1.\n"
-"config: auth"
-
-#: ../properties/nm-openvpn-dialog.ui.h:13
-msgid "CA Certificate:"
-msgstr "Certifikát CA:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:14
-msgid ""
-"Certificate authority (CA) file in .pem format.\n"
-"config: ca"
-msgstr ""
-"Soubor s certifikátem certifikační autority (CA) ve formátu .pem.\n"
-"config: ca"
-
-#: ../properties/nm-openvpn-dialog.ui.h:15
-msgid "Ci_pher:"
-msgstr "Šifra:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:16
-msgid ""
-"Connect to remote host through a proxy with this address.\n"
-"config: http-proxy or socks-proxy"
-msgstr ""
-"Připojit ke vzdálenému uzlu prostřednictvím proxy s touto adresou.\n"
-"config: http-proxy nebo socks-proxy"
-
-#: ../properties/nm-openvpn-dialog.ui.h:17
-msgid ""
-"Connect to remote host through a proxy with this port.\n"
-"config: http-proxy or socks-proxy"
-msgstr ""
-"Připojit ke vzdálenému uzlu prostřednictvím proxy s tímto portem.\n"
-"config: http-proxy nebo socks-proxy"
-
-#: ../properties/nm-openvpn-dialog.ui.h:18
-msgid ""
-"Direction for Static Key encryption mode (non-TLS).\n"
-"config: static <file> [direction]"
-msgstr ""
-"Směr pro režim šifrování statickým klíčem (non-TLS).\n"
-"config: static <soubor> [směr]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:19
-msgid ""
-"Direction parameter for static key mode.\n"
-"config: tls-auth <file> [direction]"
-msgstr ""
-"Parametr směru pro režim statického klíče.\n"
-"config: tls-auth <soubor> [směr]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:20
-msgid ""
-"Enable internal datagram fragmentation with this maximum size.\n"
-"config: fragment"
-msgstr ""
-"Povolit interní fragmentaci datagramů touto maximální délkou.\n"
-"config: fragment"
-
-#: ../properties/nm-openvpn-dialog.ui.h:21
-msgid ""
-"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in Cipher Block Chaining mode).\n"
-"config: cipher"
-msgstr ""
-"Šifrovací algoritmus pro kódování paketů. Výchozí je BF-CBC (Blowfish v režimu Cipher Blok Chaining).\n"
-"config: cipher"
-
-#: ../properties/nm-openvpn-dialog.ui.h:22
-msgid "General"
-msgstr "Obecné"
-
-#: ../properties/nm-openvpn-dialog.ui.h:23
-msgid "_HMAC Authentication:"
-msgstr "Autentizace HMAC:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:24
-msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
-msgstr "Heslo proxy HTTP/Socks předané na požadavek OpenVPN."
-
-#: ../properties/nm-openvpn-dialog.ui.h:25
-msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
-msgstr "Uživatelské jméno proxy HTTP/Socks předané na požadavek OpenVPN."
-
-#: ../properties/nm-openvpn-dialog.ui.h:26
-msgid ""
-"IP address of the local VPN endpoint.\n"
-"config: ifconfig <l> <rn>"
-msgstr ""
-"Adresa IP místního uzlu VPN.\n"
-"config: ifconfig <l> <rn>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:27
-msgid ""
-"IP address of the remote VPN endpoint.\n"
-"config: ifconfig <l> <rn>"
-msgstr ""
-"Adresa IP vzdáleného uzlu VPN.\n"
-"config: ifconfig <l> <rn>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:28
-msgid "Key _Direction:"
-msgstr "Směr klíče:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:29
-msgid "Key _File:"
-msgstr "Soubor klíče:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:30
-msgid "Local IP Address:"
-msgstr "Místní adresa IP:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:31
-msgid ""
-"Local peer's private key in .pem format.\n"
-"config: key"
-msgstr ""
-"Soukromý klíč místního zakončení ve formátu .pem.\n"
-"config: key"
-
-#: ../properties/nm-openvpn-dialog.ui.h:32
-msgid ""
-"Local peer's signed certificate in .pem format (signed by CA of CA Certificate).\n"
-"config: cert"
-msgstr ""
-"Podepsaný certifikát místního zakončení ve formátu .pem (Podepsaný certifikátem certifikační  autority).\n"
-"config: cert"
-
-#: ../properties/nm-openvpn-dialog.ui.h:34
 msgid "OpenVPN Advanced Options"
 msgstr "Pokročilé volby OpenVPN"
 
-#: ../properties/nm-openvpn-dialog.ui.h:35
-msgid "Password for private key"
-msgstr "Heslo k soukromému klíči"
+#: ../properties/nm-openvpn-dialog.ui.h:4
+msgid "Use custom gateway p_ort:"
+msgstr "P_oužít vlastní port brány:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:36
-msgid ""
-"Password passed to OpenVPN when prompted for it.\n"
-"config: auth-user-pass"
-msgstr ""
-"Heslo předané na požadavek OpenVPN.\n"
-"config: auth-user-pass"
-
-#: ../properties/nm-openvpn-dialog.ui.h:37
-msgid "Password:"
-msgstr "Heslo:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:38
-msgid "_Port:"
-msgstr "Port:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:39
-msgid ""
-"Pre-shared file for Static Key encryption mode (non-TLS).\n"
-"config: static <file>"
-msgstr ""
-"Sdílený soubor pro režim šifrování statickým klíčem (non-TLS).\n"
-"config: static <soubor>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:40
-msgid "Private Key Password:"
-msgstr "Heslo soukromého klíče:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:41
-msgid "Private Key:"
-msgstr "Soukromý klíč:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:42
-msgid "Proxies"
-msgstr "Servery proxy"
-
-#: ../properties/nm-openvpn-dialog.ui.h:43
-msgid "Proxy Passwor_d:"
-msgstr "Heslo proxy:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:44
-msgid "Proxy _Type:"
-msgstr "Typ proxy:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:45
-msgid "Proxy _Username:"
-msgstr "Uživatelské jméno proxy:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:46
-msgid ""
-"Proxy type: HTTP or Socks.\n"
-"config: http-proxy or socks-proxy"
-msgstr ""
-"Typ proxy: HTTP nebo Socks.\n"
-"config: http-proxy nebo socks-proxy"
-
-#: ../properties/nm-openvpn-dialog.ui.h:47
-msgid "Remote IP Address:"
-msgstr "Vzdálená adresa IP:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:48
-msgid ""
-"Remote host name or IP address. You can specify multiple items for redundancy (use commas to separate the entries).\n"
-"config: remote"
-msgstr ""
-"Název nebo adresa IP vzdáleného uzlu. (Je možné zadat více položek oddělených čárkami).\n"
-"config: remote"
-
-#: ../properties/nm-openvpn-dialog.ui.h:49
-msgid ""
-"Renegotiate data channel key after the specified number of seconds.\n"
-"config: reneg-sec"
-msgstr ""
-"Vyjednat nové klíče datového kanálu po zadaném počtu sekund.\n"
-"config: reneg-sec"
-
-#: ../properties/nm-openvpn-dialog.ui.h:50
-msgid ""
-"Restrict tunnel TCP MSS.\n"
-"config: mssfix"
-msgstr ""
-"Omezit TCP MSS tunelu.\n"
-"config: mssfix"
-
-#: ../properties/nm-openvpn-dialog.ui.h:51
-msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
-msgstr "Omezit maximální velikost _segmentu TCP u tunelu (MSS)"
-
-#: ../properties/nm-openvpn-dialog.ui.h:52
-msgid ""
-"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
-"config: http-proxy-retry or socks-proxy-retry"
-msgstr ""
-"Při chybě proxy opakovat do nekonečna. Simuluje reset signálem SIGUSR1.\n"
-"config: http-proxy-retry nebo socks-proxy-retry"
-
-#: ../properties/nm-openvpn-dialog.ui.h:53
-msgid "Retry indefinitely when errors occur"
-msgstr "Pokud nastane chyba, opakovat"
-
-#: ../properties/nm-openvpn-dialog.ui.h:54
-msgid "Security"
-msgstr "Zabezpečení"
-
-#: ../properties/nm-openvpn-dialog.ui.h:55
-msgid "Select an authentication mode."
-msgstr "Zvolete způsob autentizace."
-
-#: ../properties/nm-openvpn-dialog.ui.h:56
-msgid "Server _Address:"
-msgstr "Adresa serveru:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:57
-msgid "_Show password"
-msgstr "Zobrazit heslo"
-
-#: ../properties/nm-openvpn-dialog.ui.h:58
-msgid "_Show passwords"
-msgstr "Zobrazit hesla"
-
-#: ../properties/nm-openvpn-dialog.ui.h:59
-msgid "Static Key:"
-msgstr "Statický klíč:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:60
-msgid "_Subject Match:"
-msgstr "Subjekt odpovídá:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:61
+#: ../properties/nm-openvpn-dialog.ui.h:5
 msgid ""
 "TCP/UDP port number for local peer.\n"
 "config: port"
@@ -500,71 +201,23 @@ msgstr ""
 "Číslo portu TCP/UDP místního zakončení.\n"
 "config: port"
 
-#: ../properties/nm-openvpn-dialog.ui.h:62
-msgid "TLS Authentication"
-msgstr "Autentizace TLS"
-
-#: ../properties/nm-openvpn-dialog.ui.h:63
-msgid ""
-"Take the TUN device MTU to be the specified value and derive the link MTU from it.\n"
-"config: tun-mtu"
-msgstr ""
-"Odvodit MTU linky z MTU zařízení TUN.\n"
-"config: tun-mtu"
-
-#: ../properties/nm-openvpn-dialog.ui.h:64
-msgid "Type:"
-msgstr "Typ:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:65
-msgid "Use L_ZO data compression"
-msgstr "Použít komprimaci L_ZO"
-
-#: ../properties/nm-openvpn-dialog.ui.h:66
-msgid ""
-"Use TAP virtual network device instead of TUN.\n"
-"config: dev tap | tun"
-msgstr ""
-"Místo virtuálního síťového zařízení TUN použít zařízení TAP.\n"
-"config: dev tap | tun"
-
-#: ../properties/nm-openvpn-dialog.ui.h:67
-msgid ""
-"Use TCP for communicating with remote host.\n"
-"config: proto tcp-client | udp"
-msgstr ""
-"Pro komunikaci se vzdáleným uzlem použít TCP.\n"
-"config: proto tcp-client | udp"
-
-#: ../properties/nm-openvpn-dialog.ui.h:68
-msgid "Use a TA_P device"
-msgstr "Použít TA_P zařízení"
-
-#: ../properties/nm-openvpn-dialog.ui.h:69
-msgid "Use a _TCP connection"
-msgstr "Použít spojení _TCP"
-
-#: ../properties/nm-openvpn-dialog.ui.h:70
-msgid "Use additional _TLS authentication"
-msgstr "Použít dodatečnou autentizaci TLS"
-
-#: ../properties/nm-openvpn-dialog.ui.h:71
-msgid "Use custom UDP _fragment size:"
-msgstr "Použít vlastní velikost UDP _fragmentu:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:72
+#: ../properties/nm-openvpn-dialog.ui.h:7
 msgid "Use custom _renegotiation interval:"
 msgstr "Použít vlastní interval opětovného _připojení:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:73
-msgid "Use custom tunnel Maximum Transmission _Unit (MTU):"
-msgstr "Použít vlastní maximální velikost přenosové _jednotky (MTU):"
+#: ../properties/nm-openvpn-dialog.ui.h:8
+msgid ""
+"Renegotiate data channel key after the specified number of seconds.\n"
+"config: reneg-sec"
+msgstr ""
+"Vyjednat nové klíče datového kanálu po zadaném počtu sekund.\n"
+"config: reneg-sec"
 
-#: ../properties/nm-openvpn-dialog.ui.h:74
-msgid "Use custom gateway p_ort:"
-msgstr "P_oužít vlastní port brány:"
+#: ../properties/nm-openvpn-dialog.ui.h:10
+msgid "Use L_ZO data compression"
+msgstr "Použít komprimaci L_ZO"
 
-#: ../properties/nm-openvpn-dialog.ui.h:75
+#: ../properties/nm-openvpn-dialog.ui.h:11
 msgid ""
 "Use fast LZO compression.\n"
 "config: comp-lzo"
@@ -572,15 +225,327 @@ msgstr ""
 "Použít rychlou kompresi LZO.\n"
 "config: comp-lzo"
 
-#: ../properties/nm-openvpn-dialog.ui.h:76
+#: ../properties/nm-openvpn-dialog.ui.h:13
+msgid "Use a _TCP connection"
+msgstr "Použít spojení _TCP"
+
+#: ../properties/nm-openvpn-dialog.ui.h:14
+msgid ""
+"Use TCP for communicating with remote host.\n"
+"config: proto tcp-client | udp"
+msgstr ""
+"Pro komunikaci se vzdáleným uzlem použít TCP.\n"
+"config: proto tcp-client | udp"
+
+#: ../properties/nm-openvpn-dialog.ui.h:16
+msgid "Use a TA_P device"
+msgstr "Použít TA_P zařízení"
+
+#: ../properties/nm-openvpn-dialog.ui.h:17
+msgid ""
+"Use TAP virtual network device instead of TUN.\n"
+"config: dev tap | tun"
+msgstr ""
+"Místo virtuálního síťového zařízení TUN použít zařízení TAP.\n"
+"config: dev tap | tun"
+
+#: ../properties/nm-openvpn-dialog.ui.h:19
+msgid "Use custom tunnel Maximum Transmission _Unit (MTU):"
+msgstr "Použít vlastní maximální velikost přenosové _jednotky (MTU):"
+
+#: ../properties/nm-openvpn-dialog.ui.h:20
+msgid ""
+"Take the TUN device MTU to be the specified value and derive the link MTU from it.\n"
+"config: tun-mtu"
+msgstr ""
+"Odvodit MTU linky z MTU zařízení TUN.\n"
+"config: tun-mtu"
+
+#: ../properties/nm-openvpn-dialog.ui.h:22
+msgid "Use custom UDP _fragment size:"
+msgstr "Použít vlastní velikost UDP _fragmentu:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:23
+msgid ""
+"Enable internal datagram fragmentation with this maximum size.\n"
+"config: fragment"
+msgstr ""
+"Povolit interní fragmentaci datagramů touto maximální délkou.\n"
+"config: fragment"
+
+#: ../properties/nm-openvpn-dialog.ui.h:25
+msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
+msgstr "Omezit maximální velikost _segmentu TCP u tunelu (MSS)"
+
+#: ../properties/nm-openvpn-dialog.ui.h:26
+msgid ""
+"Restrict tunnel TCP MSS.\n"
+"config: mssfix"
+msgstr ""
+"Omezit TCP MSS tunelu.\n"
+"config: mssfix"
+
+#: ../properties/nm-openvpn-dialog.ui.h:28
+msgid "Rando_mize remote hosts"
+msgstr "_Náhodně seřadit vzdálené uzly"
+
+#: ../properties/nm-openvpn-dialog.ui.h:29
+msgid ""
+"Randomize the order of gateways list (remote) as a kind of basic load-balancing measure.\n"
+"config: remote-random"
+msgstr ""
+"Náhodně seřadit seznam bran (vzdálených) jako způsob rozložení zátěže.\n"
+"config: remote-random"
+
+#: ../properties/nm-openvpn-dialog.ui.h:31
+msgid "General"
+msgstr "Obecné"
+
+#: ../properties/nm-openvpn-dialog.ui.h:32
+msgid ""
+"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in Cipher Block Chaining mode).\n"
+"config: cipher"
+msgstr ""
+"Šifrovací algoritmus pro kódování paketů. Výchozí je BF-CBC (Blowfish v režimu Cipher Blok Chaining).\n"
+"config: cipher"
+
+#: ../properties/nm-openvpn-dialog.ui.h:34
+msgid ""
+"Authenticate packets with HMAC using message digest algorithm. The default is SHA1.\n"
+"config: auth"
+msgstr ""
+"Autentizovat pakety pomocí HMAC použitím algoritmu message digest. Výchozí je SHA1.\n"
+"config: auth"
+
+#: ../properties/nm-openvpn-dialog.ui.h:36
+msgid "Ci_pher:"
+msgstr "Šifra:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:37
+msgid "_HMAC Authentication:"
+msgstr "Autentizace HMAC:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:38
+msgid "Security"
+msgstr "Zabezpečení"
+
+#: ../properties/nm-openvpn-dialog.ui.h:39
+msgid "_Subject Match:"
+msgstr "Subjekt odpovídá:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:40
+msgid ""
+"<i>Connect only to servers whose certificate matches the given subject.\n"
+"Example: /CN=myvpn.company.com</i>"
+msgstr ""
+"<i>Připojit pouze k serverům, jejichž certifikát odpovídá danému subjektu.\n"
+"Příklad: /CN=mojevpn.firma.cz</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:42
+msgid ""
+"Accept connections only from a host with X509 name or common name equal to the specified one.\n"
+"config: tls-remote"
+msgstr ""
+"Přijímat spojení pouze od uzlů jejichž název X509 nebo běžný název odpovídá specifikovanému.\n"
+"config: tls-remote"
+
+#: ../properties/nm-openvpn-dialog.ui.h:44
+msgid "Use additional _TLS authentication"
+msgstr "Použít dodatečnou autentizaci TLS"
+
+#: ../properties/nm-openvpn-dialog.ui.h:45
+msgid "Add an additional layer of HMAC authentication."
+msgstr "Přidat další úroveň autentizace HMAC."
+
+#: ../properties/nm-openvpn-dialog.ui.h:46
+msgid "Key _Direction:"
+msgstr "Směr klíče:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:47
+msgid "<i>If key direction is used, it must be the opposite of that used on the VPN peer.  For example, if the peer uses '1', this connection must use '0'.  If you are unsure what value to use, contact your system administrator.</i>"
+msgstr "<i>Pokud se používá směr klíče, musí být opačný k protějšku VPN. Například, když protějšek používá „1“, toto připojení musí použít „0“. Pokud si nejste jisti, jakou hodnotu použít, kontaktujte správce svého systému.</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:48
+msgid ""
+"Add an additional layer of HMAC authentication on top of the TLS control channel to protect against DoS attacks.\n"
+"config: tls-auth <file> [direction]"
+msgstr ""
+"Chránit příkazový kanál TLS před útoky typu DoS přidáním další úrovně autentizace HMAC.\n"
+"config: tls-auth <soubor> [směr]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:50
+msgid ""
+"Direction parameter for static key mode.\n"
+"config: tls-auth <file> [direction]"
+msgstr ""
+"Parametr směru pro režim statického klíče.\n"
+"config: tls-auth <soubor> [směr]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:52
+msgid "Key _File:"
+msgstr "Soubor klíče:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:53
+msgid "TLS Authentication"
+msgstr "Autentizace TLS"
+
+#: ../properties/nm-openvpn-dialog.ui.h:54
+msgid ""
+"Proxy type: HTTP or Socks.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Typ proxy: HTTP nebo Socks.\n"
+"config: http-proxy nebo socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:56
+msgid "Proxy _Type:"
+msgstr "Typ proxy:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:57
+msgid "<i>Select this option if your organization requires the use of a proxy server to access the Internet.</i>"
+msgstr "<i>Zvolte tuto možnost, pokud vaše organizace používá pro přístup do Internetu server proxy.</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:58
+msgid "Server _Address:"
+msgstr "Adresa serveru:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:59
+msgid ""
+"Connect to remote host through a proxy with this address.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Připojit ke vzdálenému uzlu prostřednictvím proxy s touto adresou.\n"
+"config: http-proxy nebo socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:61
+msgid "_Port:"
+msgstr "Port:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:62
+msgid ""
+"Connect to remote host through a proxy with this port.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Připojit ke vzdálenému uzlu prostřednictvím proxy s tímto portem.\n"
+"config: http-proxy nebo socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:64
+msgid "_Retry indefinitely when errors occur"
+msgstr "Neustále o_pakovat pokud nastane chyba"
+
+#: ../properties/nm-openvpn-dialog.ui.h:65
+msgid ""
+"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
+"config: http-proxy-retry or socks-proxy-retry"
+msgstr ""
+"Při chybě proxy opakovat do nekonečna. Simuluje reset signálem SIGUSR1.\n"
+"config: http-proxy-retry nebo socks-proxy-retry"
+
+#: ../properties/nm-openvpn-dialog.ui.h:67
+msgid "Proxy _Username:"
+msgstr "Uživatelské jméno proxy:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:68
+msgid "Proxy Passwor_d:"
+msgstr "Heslo proxy:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:69
+msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
+msgstr "Uživatelské jméno proxy HTTP/Socks předané na požadavek OpenVPN."
+
+#: ../properties/nm-openvpn-dialog.ui.h:70
+msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
+msgstr "Heslo proxy HTTP/Socks předané na požadavek OpenVPN."
+
+#: ../properties/nm-openvpn-dialog.ui.h:71
+msgid "_Show password"
+msgstr "Zobrazit heslo"
+
+#: ../properties/nm-openvpn-dialog.ui.h:72
+msgid "Proxies"
+msgstr "Servery proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:73
+msgid "<b>General</b>"
+msgstr "<b>Obecné</b>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:74
+msgid "_Gateway:"
+msgstr "_Brána:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:75
+msgid ""
+"Remote host name or IP address. You can specify multiple items for redundancy (use commas to separate the entries).\n"
+"config: remote"
+msgstr ""
+"Název nebo adresa IP vzdáleného uzlu. (Je možné zadat více položek oddělených čárkami).\n"
+"config: remote"
+
+#: ../properties/nm-openvpn-dialog.ui.h:77
+msgid "<b>Authentication</b>"
+msgstr "<b>Autentizace</b>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:78
+msgid "_Show passwords"
+msgstr "Zobrazit hesla"
+
+#: ../properties/nm-openvpn-dialog.ui.h:79
+msgid "Password for private key"
+msgstr "Heslo k soukromému klíči"
+
+#: ../properties/nm-openvpn-dialog.ui.h:80
+msgid "Private Key Password:"
+msgstr "Heslo soukromého klíče:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:81
+msgid ""
+"Local peer's private key in .pem format.\n"
+"config: key"
+msgstr ""
+"Soukromý klíč místního zakončení ve formátu .pem.\n"
+"config: key"
+
+#: ../properties/nm-openvpn-dialog.ui.h:83
+msgid "Private Key:"
+msgstr "Soukromý klíč:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:84
+msgid ""
+"Certificate authority (CA) file in .pem format.\n"
+"config: ca"
+msgstr ""
+"Soubor s certifikátem certifikační autority (CA) ve formátu .pem.\n"
+"config: ca"
+
+#: ../properties/nm-openvpn-dialog.ui.h:86
+msgid "CA Certificate:"
+msgstr "Certifikát CA:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:87
 msgid "User Certificate:"
 msgstr "Uživatelský certifikát:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:77
+#: ../properties/nm-openvpn-dialog.ui.h:88
+msgid ""
+"Local peer's signed certificate in .pem format (signed by CA of CA Certificate).\n"
+"config: cert"
+msgstr ""
+"Podepsaný certifikát místního zakončení ve formátu .pem (Podepsaný certifikátem certifikační  autority).\n"
+"config: cert"
+
+#: ../properties/nm-openvpn-dialog.ui.h:90
+msgid ""
+"Password passed to OpenVPN when prompted for it.\n"
+"config: auth-user-pass"
+msgstr ""
+"Heslo předané na požadavek OpenVPN.\n"
+"config: auth-user-pass"
+
+#: ../properties/nm-openvpn-dialog.ui.h:93
 msgid "User name:"
 msgstr "Uživatelské jméno:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:78
+#: ../properties/nm-openvpn-dialog.ui.h:94
 msgid ""
 "Username passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -588,112 +553,169 @@ msgstr ""
 "Uživatelské jméno předané na požadavek OpenVPN.\n"
 "config: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:79
-msgid "_Gateway:"
-msgstr "_Brána:"
+#: ../properties/nm-openvpn-dialog.ui.h:96
+msgid ""
+"IP address of the local VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
+msgstr ""
+"Adresa IP místního uzlu VPN.\n"
+"config: ifconfig <l> <rn>"
 
-#: ../src/nm-openvpn-service.c:192
+#: ../properties/nm-openvpn-dialog.ui.h:98
+msgid "Remote IP Address:"
+msgstr "Vzdálená adresa IP:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:99
+msgid "Local IP Address:"
+msgstr "Místní adresa IP:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:100
+msgid ""
+"IP address of the remote VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
+msgstr ""
+"Adresa IP vzdáleného uzlu VPN.\n"
+"config: ifconfig <l> <rn>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:102
+msgid "Key Direction:"
+msgstr "Směr klíče:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:103
+msgid "Static Key:"
+msgstr "Statický klíč:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:104
+msgid ""
+"Pre-shared file for Static Key encryption mode (non-TLS).\n"
+"config: static <file>"
+msgstr ""
+"Sdílený soubor pro režim šifrování statickým klíčem (non-TLS).\n"
+"config: static <soubor>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:106
+msgid ""
+"Direction for Static Key encryption mode (non-TLS).\n"
+"config: static <file> [direction]"
+msgstr ""
+"Směr pro režim šifrování statickým klíčem (non-TLS).\n"
+"config: static <soubor> [směr]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:108
+msgid "Type:"
+msgstr "Typ:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:109
+msgid "Select an authentication mode."
+msgstr "Zvolete způsob autentizace."
+
+#: ../properties/nm-openvpn-dialog.ui.h:110
+msgid "Ad_vanced..."
+msgstr "P_okročilé…"
+
+#: ../src/nm-openvpn-service.c:193
 #, c-format
 msgid "invalid address '%s'"
 msgstr "neplatná adresa „%s“"
 
-#: ../src/nm-openvpn-service.c:204
+#: ../src/nm-openvpn-service.c:205
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
 msgstr "celočíselná volba „%s“ není platná nebo je mimo rozsah [%d -> %d]"
 
-#: ../src/nm-openvpn-service.c:214
+#. Translators: keep "yes" and "no" untranslated!
+#: ../src/nm-openvpn-service.c:216
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
-msgstr "pravdivostní volba „%s“ není platná (není ANO nebo NE)"
+msgstr "pravdivostní volba „%s“ není platná (není yes nebo no)"
 
-#: ../src/nm-openvpn-service.c:221
+#: ../src/nm-openvpn-service.c:223
 #, c-format
 msgid "unhandled property '%s' type %s"
 msgstr "neošetřená volba „%s“ typu %s"
 
-#: ../src/nm-openvpn-service.c:232
+#: ../src/nm-openvpn-service.c:234
 #, c-format
 msgid "property '%s' invalid or not supported"
 msgstr "volba „%s“ není platná nebo podporovaná"
 
-#: ../src/nm-openvpn-service.c:249
+#: ../src/nm-openvpn-service.c:251
 msgid "No VPN configuration options."
 msgstr "Žádné volby nastavení VPN."
 
-#: ../src/nm-openvpn-service.c:272
+#: ../src/nm-openvpn-service.c:274
 msgid "No VPN secrets!"
 msgstr "Žádná hesla VPN!"
 
-#: ../src/nm-openvpn-service.c:745
+#: ../src/nm-openvpn-service.c:747
 msgid "Could not find the openvpn binary."
 msgstr "Nelze nalézt program openvpn."
 
-#: ../src/nm-openvpn-service.c:756
+#: ../src/nm-openvpn-service.c:758
 msgid "Invalid HMAC auth."
 msgstr "Neplatná autentizace HMAC."
 
-#: ../src/nm-openvpn-service.c:768
-#: ../src/nm-openvpn-service.c:1164
-#: ../src/nm-openvpn-service.c:1234
+#: ../src/nm-openvpn-service.c:770
+#: ../src/nm-openvpn-service.c:1176
+#: ../src/nm-openvpn-service.c:1246
 msgid "Invalid connection type."
 msgstr "Neplatný typ připojení."
 
-#: ../src/nm-openvpn-service.c:803
+#: ../src/nm-openvpn-service.c:815
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Neplatný typ proxy „%s“."
 
-#: ../src/nm-openvpn-service.c:839
+#: ../src/nm-openvpn-service.c:851
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Neplatné číslo portu „%s“."
 
-#: ../src/nm-openvpn-service.c:889
+#: ../src/nm-openvpn-service.c:901
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Neplatná doba opětovného vyjednávání „%s“."
 
-#: ../src/nm-openvpn-service.c:913
+#: ../src/nm-openvpn-service.c:925
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Neplatná velikost TUN MTU „%s“."
 
-#: ../src/nm-openvpn-service.c:928
+#: ../src/nm-openvpn-service.c:940
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Neplatná velikost fragmentu „%s“."
 
-#: ../src/nm-openvpn-service.c:996
+#: ../src/nm-openvpn-service.c:1008
 msgid "Missing required local IP address for static key mode."
 msgstr "Chybí požadovaná místní adresa IP pro mód se statickým klíčem."
 
-#: ../src/nm-openvpn-service.c:1009
+#: ../src/nm-openvpn-service.c:1021
 msgid "Missing required remote IP address for static key mode."
 msgstr "Chybí požadovaná vzdálená adresa IP pro mód se statickým klíčem."
 
-#: ../src/nm-openvpn-service.c:1034
+#: ../src/nm-openvpn-service.c:1046
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Neznámý typ připojení „%s“."
 
-#: ../src/nm-openvpn-service.c:1153
-#: ../src/nm-openvpn-service.c:1224
+#: ../src/nm-openvpn-service.c:1165
+#: ../src/nm-openvpn-service.c:1236
 msgid "Could not process the request because the VPN connection settings were invalid."
 msgstr "Nelze zpracovat požadavek, protože nastavení VPN nejsou platná."
 
-#: ../src/nm-openvpn-service.c:1178
+#: ../src/nm-openvpn-service.c:1190
 msgid "Could not process the request because no username was provided."
 msgstr "Nelze zpracovat požadavek, protože nebylo poskytnuto uživatelské jméno."
 
-#: ../src/nm-openvpn-service.c:1368
+#: ../src/nm-openvpn-service.c:1380
 msgid "Don't quit when VPN connection terminates"
 msgstr "Nevypínat, když se spojení VPN ukončuje"
 
-#: ../src/nm-openvpn-service.c:1369
+#: ../src/nm-openvpn-service.c:1381
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Povolit podrobný ladicí výpis (může prozradit hesla)"
 
-#: ../src/nm-openvpn-service.c:1383
+#: ../src/nm-openvpn-service.c:1395
 msgid "nm-vpnc-service provides integrated OpenVPN capability to NetworkManager."
 msgstr "nm-vpnc-service poskytuje podporu OpenVPN integrovanou do aplikace NetworkManager."
