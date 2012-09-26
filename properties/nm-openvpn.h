@@ -46,7 +46,7 @@ GQuark openvpn_plugin_ui_error_quark (void);
 #define OPENVPN_PLUGIN_UI(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_PLUGIN_UI, OpenvpnPluginUi))
 #define OPENVPN_PLUGIN_UI_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_PLUGIN_UI, OpenvpnPluginUiClass))
 #define OPENVPN_IS_PLUGIN_UI(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OPENVPN_TYPE_PLUGIN_UI))
-#define OPENVPN_IS_PLUGIN_UI_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), OPENVPN_TYPE_PLUGIN_UI))
+#define OPENVPN_IS_PLUGIN_UI_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), OPENVPN_TYPE_PLUGIN_UI))
 #define OPENVPN_PLUGIN_UI_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), OPENVPN_TYPE_PLUGIN_UI, OpenvpnPluginUiClass))
 
 typedef struct _OpenvpnPluginUi OpenvpnPluginUi;
@@ -67,7 +67,7 @@ GType openvpn_plugin_ui_get_type (void);
 #define OPENVPN_PLUGIN_UI_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidget))
 #define OPENVPN_PLUGIN_UI_WIDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidgetClass))
 #define OPENVPN_IS_PLUGIN_UI_WIDGET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OPENVPN_TYPE_PLUGIN_UI_WIDGET))
-#define OPENVPN_IS_PLUGIN_UI_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), OPENVPN_TYPE_PLUGIN_UI_WIDGET))
+#define OPENVPN_IS_PLUGIN_UI_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), OPENVPN_TYPE_PLUGIN_UI_WIDGET))
 #define OPENVPN_PLUGIN_UI_WIDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidgetClass))
 
 typedef struct _OpenvpnPluginUiWidget OpenvpnPluginUiWidget;
