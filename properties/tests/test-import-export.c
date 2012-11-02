@@ -19,8 +19,6 @@
  */
 
 #include <string.h>
-#include <dbus/dbus.h>
-#include <dbus/dbus-glib.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <locale.h>
@@ -957,7 +955,6 @@ int main (int argc, char **argv)
 		FAIL ("args", "usage: %s <conf path> <tmp dir>", argv[0]);
 
 	g_type_init ();
-	dbus_g_bus_get (DBUS_BUS_SESSION, NULL);
 
 	if (!nm_utils_init (&error))
 		FAIL ("nm-utils-init", "failed to initialize libnm-util: %s", error->message);
