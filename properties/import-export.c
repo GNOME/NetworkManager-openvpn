@@ -70,6 +70,7 @@
 #define TLS_AUTH_TAG "tls-auth "
 #define TLS_CLIENT_TAG "tls-client"
 #define TLS_REMOTE_TAG "tls-remote "
+#define REMOTE_CERT_TLS_TAG "remote-cert-tls "
 #define TUNMTU_TAG "tun-mtu "
 
 
@@ -605,6 +606,20 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 
+		if (!strncmp (*line, REMOTE_CERT_TLS_TAG, strlen (REMOTE_CERT_TLS_TAG))) {
+			items = get_args (*line + strlen (REMOTE_CERT_TLS_TAG), &nitems);
+			if (nitems == 1) {
+				if (   !strcmp (items[0], NM_OPENVPN_REM_CERT_TLS_CLIENT)
+				    || !strcmp (items[0], NM_OPENVPN_REM_CERT_TLS_SERVER)) {
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, items[0]);
+				} else
+					g_warning ("%s: unknown %s option '%s'", __func__, REMOTE_CERT_TLS_TAG, *line);
+			}
+
+			g_strfreev (items);
+			continue;
+		}
+
 		if (!strncmp (*line, IFCONFIG_TAG, strlen (IFCONFIG_TAG))) {
 			items = get_args (*line + strlen (IFCONFIG_TAG), &nitems);
 			if (nitems == 2) {
@@ -726,6 +741,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
 	const char *tls_remote = NULL;
+	const char *remote_cert_tls = NULL;
 	const char *tls_auth = NULL;
 	const char *tls_auth_dir = NULL;
 	gboolean success = FALSE;
@@ -841,6 +857,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && strlen (value))
 		tls_auth_dir = value;
 
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
+	if (value && strlen (value))
+		remote_cert_tls = value;
+
 	/* Advanced values end */
 
 	fprintf (f, "client\n");
@@ -909,6 +929,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		if (tls_remote)
 			fprintf (f,"tls-remote \"%s\"\n", tls_remote);
+
+		if (remote_cert_tls)
+			fprintf (f,"remote-cert-tls %s\n", remote_cert_tls);
 
 		if (tls_auth) {
 			fprintf (f, "tls-auth %s%s%s\n",

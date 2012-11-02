@@ -947,6 +947,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_RENEG_SECONDS,
 	NM_OPENVPN_KEY_TLS_REMOTE,
 	NM_OPENVPN_KEY_REMOTE_RANDOM,
+	NM_OPENVPN_KEY_REMOTE_CERT_TLS,
 	NULL
 };
 
@@ -1199,6 +1200,53 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 	}
 
 	if (!active_initialized)
+		gtk_combo_box_set_active (box, 0);
+
+	g_object_unref (store);
+}
+
+static void
+remote_tls_cert_toggled_cb (GtkWidget *widget, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	gboolean use_remote_cert_tls = FALSE;
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_checkbutton"));
+	use_remote_cert_tls = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_label"));
+	gtk_widget_set_sensitive (widget, use_remote_cert_tls);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_combo"));
+	gtk_widget_set_sensitive (widget, use_remote_cert_tls);
+}
+
+#define REMOTE_CERT_COL_NAME 0
+#define REMOTE_CERT_COL_VALUE 1
+
+static void
+populate_remote_cert_tls_combo (GtkComboBox *box, const char *remote_cert)
+{
+	GtkListStore *store;
+	GtkTreeIter iter;
+
+	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+	gtk_combo_box_set_model (box, GTK_TREE_MODEL (store));
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    REMOTE_CERT_COL_NAME, _("Server"),
+	                    REMOTE_CERT_COL_VALUE, NM_OPENVPN_REM_CERT_TLS_SERVER,
+	                    -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    REMOTE_CERT_COL_NAME, _("Client"),
+	                    REMOTE_CERT_COL_VALUE, NM_OPENVPN_REM_CERT_TLS_CLIENT,
+	                    -1);
+
+	if (g_strcmp0 (remote_cert, NM_OPENVPN_REM_CERT_TLS_CLIENT) == 0)
+		gtk_combo_box_set_active (box, 1);
+	else
 		gtk_combo_box_set_active (box, 0);
 
 	g_object_unref (store);
@@ -1550,6 +1598,17 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_entry_set_text (GTK_ENTRY(widget), value);
 	}
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_checkbutton"));
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
+	if (value && strlen (value))
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (remote_tls_cert_toggled_cb), builder);
+	remote_tls_cert_toggled_cb (widget, builder);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_combo"));
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
+	populate_remote_cert_tls_combo (GTK_COMBO_BOX (widget), value);
+
 	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
@@ -1776,6 +1835,21 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		value = gtk_entry_get_text (GTK_ENTRY(widget));
 		if (value && strlen (value))
 			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TLS_REMOTE), g_strdup (value));
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_checkbutton"));
+		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_combo"));
+			model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
+			if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
+				char *remote_cert = NULL;
+
+				gtk_tree_model_get (model, &iter, REMOTE_CERT_COL_VALUE, &remote_cert, -1);
+				if (remote_cert)
+					g_hash_table_insert (hash,
+					                     g_strdup (NM_OPENVPN_KEY_REMOTE_CERT_TLS),
+					                     remote_cert);
+			}
+		}
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {

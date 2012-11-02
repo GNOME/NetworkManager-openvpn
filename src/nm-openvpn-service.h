@@ -66,6 +66,7 @@
 #define NM_OPENVPN_KEY_USERNAME "username"
 #define NM_OPENVPN_KEY_TAP_DEV "tap-dev"
 #define NM_OPENVPN_KEY_TLS_REMOTE "tls-remote"
+#define NM_OPENVPN_KEY_REMOTE_CERT_TLS "remote-cert-tls"
 
 #define NM_OPENVPN_KEY_PASSWORD "password"
 #define NM_OPENVPN_KEY_CERTPASS "cert-pass"
@@ -91,6 +92,10 @@
 #define NM_OPENVPN_CONTYPE_STATIC_KEY   "static-key"
 #define NM_OPENVPN_CONTYPE_PASSWORD     "password"
 #define NM_OPENVPN_CONTYPE_PASSWORD_TLS "password-tls"
+
+/* arguments of "--remote-cert-tls" */
+#define NM_OPENVPN_REM_CERT_TLS_CLIENT "client"
+#define NM_OPENVPN_REM_CERT_TLS_SERVER "server"
 
 typedef struct {
 	NMVPNPlugin parent;
