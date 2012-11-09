@@ -10,6 +10,7 @@ AM_CPPFLAGS = \
 	-DLIBEXECDIR=\""$(libexecdir)"\" \
 	-DLOCALSTATEDIR=\""$(localstatedir)"\" \
 	-DDATADIR=\"$(datadir)\" \
+	-DNM_OPENVPN_LOCALEDIR=\"$(datadir)/locale\"
 	-I$(top_srcdir)
 
 libexec_PROGRAMS = nm-openvpn-service nm-openvpn-service-openvpn-helper
