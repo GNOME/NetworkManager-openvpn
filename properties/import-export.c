@@ -15,7 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Copyright (C) 2008 - 2011 Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
+ * Copyright (C) 2008 - 2013 Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
  *
  **************************************************************************/
 
@@ -501,7 +501,10 @@ do_import (const char *path, char **lines, GError **error)
 		if (!strncmp (*line, REMOTE_TAG, strlen (REMOTE_TAG))) {
 			items = get_args (*line + strlen (REMOTE_TAG), &nitems);
 			if (nitems >= 1 && nitems <= 3) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, items[0]);
+				const char *prev = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
+				char *new_remote = g_strdup_printf ("%s%s%s", prev ? prev : "", prev ? ", " : "", items[0]);
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, new_remote);
+				g_free (new_remote);
 				have_remote = TRUE;
 
 				if (nitems >= 2) {
@@ -729,7 +732,8 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	NMSettingVPN *s_vpn;
 	FILE *f;
 	const char *value;
-	const char *gateway = NULL;
+	const char *gateways = NULL;
+	char **gw_list, **gw_iter;
 	const char *cipher = NULL;
 	const char *cacert = NULL;
 	const char *connection_type = NULL;
@@ -770,7 +774,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 	if (value && strlen (value))
-		gateway = value;
+		gateways = value;
 	else {
 		g_set_error (error, 0, 0, "connection was incomplete (missing gateway)");
 		goto done;
@@ -864,10 +868,17 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	/* Advanced values end */
 
 	fprintf (f, "client\n");
-	fprintf (f, "remote %s%s%s\n",
-	         gateway,
-	         port ? " " : "",
-	         port ? port : "");
+
+	gw_list = g_strsplit_set (gateways, " ,", 0);
+	for (gw_iter = gw_list; gw_iter && *gw_iter; gw_iter++) {
+		if (**gw_iter == '\0')
+			continue;
+		fprintf (f, "remote %s%s%s\n",
+		         *gw_iter,
+		         port ? " " : "",
+		         port ? port : "");
+	}
+	g_strfreev (gw_list);
 
 	/* Handle PKCS#12 (all certs are the same file) */
 	if (   cacert && user_cert && private_key
