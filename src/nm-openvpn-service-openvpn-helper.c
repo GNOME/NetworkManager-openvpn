@@ -375,7 +375,9 @@ main (int argc, char *argv[])
 	gboolean tapdev = FALSE;
 	char **iter;
 
+#if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
+#endif
 
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
 	if (!connection) {
