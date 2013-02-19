@@ -1115,6 +1115,7 @@ static const char *
 check_need_secrets (NMSettingVPN *s_vpn, gboolean *need_secrets)
 {
 	const char *tmp, *key, *ctype;
+	NMSettingSecretFlags secret_flags = NM_SETTING_SECRET_FLAG_NONE;
 
 	g_return_val_if_fail (s_vpn != NULL, FALSE);
 	g_return_val_if_fail (need_secrets != NULL, FALSE);
@@ -1132,12 +1133,22 @@ check_need_secrets (NMSettingVPN *s_vpn, gboolean *need_secrets)
 		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
 			*need_secrets = TRUE;
 
-		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
+		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD)) {
 			*need_secrets = TRUE;
+			if (nm_setting_get_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_PASSWORD, &secret_flags, NULL)) {
+				if (secret_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED)
+					*need_secrets = FALSE;
+			}
+		}
 	} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		/* Will require a password */
-		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD))
+		if (!nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD)) {
 			*need_secrets = TRUE;
+			if (nm_setting_get_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_PASSWORD, &secret_flags, NULL)) {
+				if (secret_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED)
+					*need_secrets = FALSE;
+			}
+		}
 	} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_TLS)) {
 		/* May require private key password */
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
