@@ -15,6 +15,7 @@ uidir = $(datadir)/gnome-vpn-properties/openvpn
 ui_DATA = nm-openvpn-dialog.ui
 
 libnm_openvpn_properties_la_CFLAGS =                    \
+        $(GLIB_CFLAGS)                                  \
         $(GTK_CFLAGS)                                   \
         $(NM_CFLAGS)                       \
         $(GNOMEKEYRING_CFLAGS)                          \

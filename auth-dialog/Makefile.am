@@ -1,7 +1,7 @@
 libexec_PROGRAMS = nm-openvpn-auth-dialog
 
 nm_openvpn_auth_dialog_CPPFLAGS =			\
-	$(GTHREAD_CFLAGS)			\
+	$(GLIB_CFLAGS)			\
 	$(GTK_CFLAGS)				\
 	$(NM_CFLAGS)		\
 	$(GNOMEKEYRING_CFLAGS) \
