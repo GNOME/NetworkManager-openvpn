@@ -36,10 +36,10 @@
 #include <nm-setting-vpn.h>
 #include <nm-setting-connection.h>
 #include <nm-vpn-plugin-utils.h>
+#include <nm-vpn-password-dialog.h>
 
 #include "common/utils.h"
 #include "src/nm-openvpn-service.h"
-#include "vpn-password-dialog.h"
 
 #define KEYRING_UUID_TAG "connection-uuid"
 #define KEYRING_SN_TAG "setting-name"
@@ -118,7 +118,7 @@ get_secrets (const char *vpn_name,
              NMSettingSecretFlags cp_flags,
              char **out_certpass)
 {
-	VpnPasswordDialog *dialog;
+	NMAVpnPasswordDialog *dialog;
 	char *prompt, *password = NULL, *certpass = NULL;
 	gboolean success = FALSE, need_secret = FALSE;
 
@@ -184,42 +184,42 @@ get_secrets (const char *vpn_name,
 		return TRUE;
 	}
 
-	dialog = VPN_PASSWORD_DIALOG (vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
+	dialog = NMA_VPN_PASSWORD_DIALOG (nma_vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
 
 	/* pre-fill dialog with the password */
 	if (need_password && need_certpass) {
-		vpn_password_dialog_set_show_password_secondary (dialog, TRUE);
-		vpn_password_dialog_set_password_secondary_label (dialog, _("Certificate pass_word:") );
+		nma_vpn_password_dialog_set_show_password_secondary (dialog, TRUE);
+		nma_vpn_password_dialog_set_password_secondary_label (dialog, _("Certificate pass_word:") );
 
 		/* if retrying, put in the passwords from the keyring */
 		if (password)
-			vpn_password_dialog_set_password (dialog, password);
+			nma_vpn_password_dialog_set_password (dialog, password);
 		if (certpass)
-			vpn_password_dialog_set_password_secondary (dialog, certpass);
+			nma_vpn_password_dialog_set_password_secondary (dialog, certpass);
 	} else {
-		vpn_password_dialog_set_show_password_secondary (dialog, FALSE);
+		nma_vpn_password_dialog_set_show_password_secondary (dialog, FALSE);
 		if (need_password) {
 			/* if retrying, put in the passwords from the keyring */
 			if (password)
-				vpn_password_dialog_set_password (dialog, password);
+				nma_vpn_password_dialog_set_password (dialog, password);
 		} else if (need_certpass) {
-			vpn_password_dialog_set_password_label (dialog, _("Certificate password:"));
+			nma_vpn_password_dialog_set_password_label (dialog, _("Certificate password:"));
 			/* if retrying, put in the passwords from the keyring */
 			if (certpass)
-				vpn_password_dialog_set_password (dialog, certpass);
+				nma_vpn_password_dialog_set_password (dialog, certpass);
 		}
 	}
 
 	gtk_widget_show (GTK_WIDGET (dialog));
 
-	if (vpn_password_dialog_run_and_block (dialog)) {
+	if (nma_vpn_password_dialog_run_and_block (dialog)) {
 		if (need_password)
-			*out_password = gnome_keyring_memory_strdup (vpn_password_dialog_get_password (dialog));
+			*out_password = gnome_keyring_memory_strdup (nma_vpn_password_dialog_get_password (dialog));
 		if (need_certpass) {
 			if (need_password)
-				*out_certpass = gnome_keyring_memory_strdup (vpn_password_dialog_get_password_secondary (dialog));
+				*out_certpass = gnome_keyring_memory_strdup (nma_vpn_password_dialog_get_password_secondary (dialog));
 			else
-				*out_certpass = gnome_keyring_memory_strdup (vpn_password_dialog_get_password (dialog));
+				*out_certpass = gnome_keyring_memory_strdup (nma_vpn_password_dialog_get_password (dialog));
 		}
 
 		success = TRUE;
