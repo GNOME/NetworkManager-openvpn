@@ -31,8 +31,9 @@
 #include <stdlib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <gnome-keyring.h>
-#include <gnome-keyring-memory.h>
+
+#define SECRET_API_SUBJECT_TO_CHANGE
+#include <libsecret/secret.h>
 #include <nm-setting-vpn.h>
 #include <nm-setting-connection.h>
 #include <nm-vpn-plugin-utils.h>
@@ -45,34 +46,47 @@
 #define KEYRING_SN_TAG "setting-name"
 #define KEYRING_SK_TAG "setting-key"
 
+static const SecretSchema network_manager_secret_schema = {
+	"org.freedesktop.NetworkManager.Connection",
+	SECRET_SCHEMA_DONT_MATCH_NAME,
+	{
+		{ KEYRING_UUID_TAG, SECRET_SCHEMA_ATTRIBUTE_STRING },
+		{ KEYRING_SN_TAG, SECRET_SCHEMA_ATTRIBUTE_STRING },
+		{ KEYRING_SK_TAG, SECRET_SCHEMA_ATTRIBUTE_STRING },
+		{ NULL, 0 },
+	}
+};
+
 #define UI_KEYFILE_GROUP "VPN Plugin UI"
 
 static char *
 keyring_lookup_secret (const char *uuid, const char *secret_name)
 {
-	GList *found_list = NULL;
-	GnomeKeyringResult ret;
-	GnomeKeyringFound *found;
+	GHashTable *attrs;
+	GList *list;
 	char *secret = NULL;
 
-	ret = gnome_keyring_find_itemsv_sync (GNOME_KEYRING_ITEM_GENERIC_SECRET,
-	                                      &found_list,
-	                                      KEYRING_UUID_TAG,
-	                                      GNOME_KEYRING_ATTRIBUTE_TYPE_STRING,
-	                                      uuid,
-	                                      KEYRING_SN_TAG,
-	                                      GNOME_KEYRING_ATTRIBUTE_TYPE_STRING,
-	                                      NM_SETTING_VPN_SETTING_NAME,
-	                                      KEYRING_SK_TAG,
-	                                      GNOME_KEYRING_ATTRIBUTE_TYPE_STRING,
-	                                      secret_name,
-	                                      NULL);
-	if (ret == GNOME_KEYRING_RESULT_OK && found_list) {
-		found = g_list_nth_data (found_list, 0);
-		secret = gnome_keyring_memory_strdup (found->secret);
+	attrs = secret_attributes_build (&network_manager_secret_schema,
+	                                 KEYRING_UUID_TAG, uuid,
+	                                 KEYRING_SN_TAG, NM_SETTING_VPN_SETTING_NAME,
+	                                 KEYRING_SK_TAG, secret_name,
+	                                 NULL);
+
+	list = secret_service_search_sync (NULL, &network_manager_secret_schema, attrs,
+	                                   SECRET_SEARCH_ALL | SECRET_SEARCH_UNLOCK | SECRET_SEARCH_LOAD_SECRETS,
+	                                   NULL, NULL);
+	if (list && list->data) {
+		SecretItem *item = list->data;
+		SecretValue *value = secret_item_get_secret (item);
+
+		if (value) {
+			secret = g_strdup (secret_value_get (value, NULL));
+			secret_value_unref (value);
+		}
 	}
 
-	gnome_keyring_found_list_free (found_list);
+	g_list_free_full (list, g_object_unref);
+	g_hash_table_unref (attrs);
 	return secret;
 }
 
@@ -130,7 +144,7 @@ get_secrets (const char *vpn_name,
 	if (need_password) {
 		if (!(pw_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
 			if (in_pass)
-				password = gnome_keyring_memory_strdup (in_pass);
+				password = g_strdup (in_pass);
 			else
 				password = keyring_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_PASSWORD);
 		}
@@ -141,7 +155,7 @@ get_secrets (const char *vpn_name,
 	if (need_certpass) {
 		if (!(cp_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
 			if (in_certpass)
-				certpass = gnome_keyring_memory_strdup (in_certpass);
+				certpass = g_strdup (in_certpass);
 			else
 				certpass = keyring_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_CERTPASS);
 		}
@@ -214,12 +228,12 @@ get_secrets (const char *vpn_name,
 
 	if (nma_vpn_password_dialog_run_and_block (dialog)) {
 		if (need_password)
-			*out_password = gnome_keyring_memory_strdup (nma_vpn_password_dialog_get_password (dialog));
+			*out_password = g_strdup (nma_vpn_password_dialog_get_password (dialog));
 		if (need_certpass) {
 			if (need_password)
-				*out_certpass = gnome_keyring_memory_strdup (nma_vpn_password_dialog_get_password_secondary (dialog));
+				*out_certpass = g_strdup (nma_vpn_password_dialog_get_password_secondary (dialog));
 			else
-				*out_certpass = gnome_keyring_memory_strdup (nma_vpn_password_dialog_get_password (dialog));
+				*out_certpass = g_strdup (nma_vpn_password_dialog_get_password (dialog));
 		}
 
 		success = TRUE;
@@ -228,8 +242,8 @@ get_secrets (const char *vpn_name,
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 
  out:
-	gnome_keyring_memory_free (password);
-	gnome_keyring_memory_free (certpass);
+	g_free (password);
+	g_free (certpass);
 
 	g_free (prompt);
 
@@ -386,9 +400,9 @@ main (int argc, char *argv[])
 		printf ("\n\n");
 
 		if (new_password)
-			gnome_keyring_memory_free (new_password);
+			g_free (new_password);
 		if (new_certpass)
-			gnome_keyring_memory_free (new_certpass);
+			g_free (new_certpass);
 
 		/* for good measure, flush stdout since Kansas is going Bye-Bye */
 		fflush (stdout);

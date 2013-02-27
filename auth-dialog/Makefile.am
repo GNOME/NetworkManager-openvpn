@@ -5,7 +5,7 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 	$(GTK_CFLAGS)				\
 	$(NM_CFLAGS)		\
 	$(NMGTK_CFLAGS)		\
-	$(GNOMEKEYRING_CFLAGS) \
+	$(LIBSECRET_CFLAGS) \
 	-I$(top_srcdir)/
 	-DICONDIR=\""$(datadir)/pixmaps"\"	\
 	-DUIDIR=\""$(uidir)"\"		\
@@ -23,7 +23,7 @@ nm_openvpn_auth_dialog_LDADD = \
 	$(GTK_LIBS) \
 	$(NM_LIBS) \
 	$(NMGTK_LIBS) \
-	$(GNOMEKEYRING_LIBS) \
+	$(LIBSECRET_LIBS) \
 	$(top_builddir)/common/libnm-openvpn-common.la
 
 CLEANFILES = *~
