@@ -4,7 +4,7 @@ service=org.freedesktop.NetworkManager.openvpn
 program=@LIBEXECDIR@/nm-openvpn-service
 
 [GNOME]
-auth-dialog=nm-openvpn-auth-dialog
-properties=libnm-openvpn-properties
+auth-dialog=@LIBEXECDIR@/nm-openvpn-auth-dialog
+properties=@LIBDIR@/libnm-openvpn-properties
 supports-external-ui-mode=true
 
