@@ -27,7 +27,9 @@ if WITH_GNOME
 endif
 
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
-	sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' $< >$@
+	sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
+	    -e 's|[@]LIBDIR[@]|$(libdir)|g' \
+	    $< >$@
 
 DISTCHECK_CONFIGURE_FLAGS = \
 	--with-tests=yes \
