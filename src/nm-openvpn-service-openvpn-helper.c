@@ -52,6 +52,7 @@ extern char **environ;
 /* These are here because nm-dbus-glib-types.h isn't exported */
 #define DBUS_TYPE_G_ARRAY_OF_UINT          (dbus_g_type_get_collection ("GArray", G_TYPE_UINT))
 #define DBUS_TYPE_G_ARRAY_OF_ARRAY_OF_UINT (dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_ARRAY_OF_UINT))
+#define DBUS_TYPE_G_PTR_ARRAY_OF_STRING    (dbus_g_type_get_collection ("GPtrArray", G_TYPE_STRING))
 
 static void
 helper_failed (DBusGConnection *connection, const char *reason)
@@ -198,6 +199,12 @@ parse_addr_list (GValue *value_array, const char *str)
 	}
 
 	return value_array;
+}
+
+static inline gboolean
+is_domain_valid (const char *str)
+{
+	return (str && (strlen(str) >= 1) && (strlen(str) <= 255));
 }
 
 static GValue *
@@ -370,7 +377,7 @@ main (int argc, char *argv[])
 	GError *err = NULL;
 	GValue *dns_list = NULL;
 	GValue *nbns_list = NULL;
-	GValue *dns_domain = NULL;
+	GPtrArray *dns_domains = NULL;
 	struct in_addr temp_addr;
 	gboolean tapdev = FALSE;
 	char **iter;
@@ -472,6 +479,7 @@ main (int argc, char *argv[])
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_ROUTES, val);
 
     	/* DNS and WINS servers */
+	dns_domains = g_ptr_array_sized_new (3);
 	for (i = 1; i < 256; i++) {
 		char *env_name;
 
@@ -491,16 +499,21 @@ main (int argc, char *argv[])
 			dns_list = parse_addr_list (dns_list, tmp + 4);
 		else if (g_str_has_prefix (tmp, "WINS "))
 			nbns_list = parse_addr_list (nbns_list, tmp + 5);
-		else if (g_str_has_prefix (tmp, "DOMAIN ") && !dns_domain)
-			dns_domain = str_to_gvalue (tmp + 7, FALSE);
+		else if (g_str_has_prefix (tmp, "DOMAIN ") && is_domain_valid (tmp + 7))
+			g_ptr_array_add (dns_domains, tmp + 7);
 	}
 
 	if (dns_list)
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_DNS, dns_list);
 	if (nbns_list)
 		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_NBNS, nbns_list);
-	if (dns_domain)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_DOMAIN, dns_domain);
+	if (dns_domains->len) {
+		val = g_slice_new0 (GValue);
+		g_value_init (val, DBUS_TYPE_G_PTR_ARRAY_OF_STRING);
+		g_value_take_boxed (val, dns_domains);
+		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_DOMAINS, val);
+	} else
+		g_ptr_array_free (dns_domains, TRUE);
 
 	/* Tunnel MTU */
 	tmp = getenv ("tun_mtu");
