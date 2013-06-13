@@ -17,16 +17,15 @@ ui_DATA = nm-openvpn-dialog.ui
 libnm_openvpn_properties_la_CFLAGS =                    \
         $(GLIB_CFLAGS)                                  \
         $(GTK_CFLAGS)                                   \
-        $(NM_CFLAGS)                       \
+        $(NM_CFLAGS)                                    \
         $(GNOMEKEYRING_CFLAGS)                          \
         $(DISABLE_DEPRECATED)                           \
         -I$(top_srcdir)/                                \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
-        -DUIDIR=\""$(uidir)"\"                    \
+        -DUIDIR=\""$(uidir)"\"                          \
         -DG_DISABLE_DEPRECATED                          \
         -DGDK_DISABLE_DEPRECATED                        \
-        -DGNOME_DISABLE_DEPRECATED                      \
-        -DGNOMELOCALEDIR=\"$(datadir)/locale\"          \
+        -DLOCALEDIR=\"$(datadir)/locale\"               \
         -DVERSION=\"$(VERSION)\"
 
 libnm_openvpn_properties_la_LIBADD = \
