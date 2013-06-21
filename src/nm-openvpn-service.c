@@ -69,11 +69,13 @@ G_DEFINE_TYPE (NMOpenvpnPlugin, nm_openvpn_plugin, NM_TYPE_VPN_PLUGIN)
 #define NM_OPENVPN_PLUGIN_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginPrivate))
 
 typedef struct {
+	char *default_username;
 	char *username;
 	char *password;
 	char *priv_key_pass;
 	char *proxy_username;
 	char *proxy_password;
+	char *pending_auth;
 	GIOChannel *socket_channel;
 	guint socket_channel_eventid;
 } NMOpenvpnPluginIOData;
@@ -83,6 +85,7 @@ typedef struct {
 	guint connect_timer;
 	guint connect_count;
 	NMOpenvpnPluginIOData *io_data;
+	gboolean interactive;
 } NMOpenvpnPluginPrivate;
 
 typedef struct {
@@ -268,17 +271,8 @@ nm_openvpn_secrets_validate (NMSettingVPN *s_vpn, GError **error)
 	ValidateInfo info = { &valid_secrets[0], &validate_error, FALSE };
 
 	nm_setting_vpn_foreach_secret (s_vpn, validate_one_property, &info);
-	if (!info.have_items) {
-		g_set_error (error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             "%s",
-		             _("No VPN secrets!"));
-		return FALSE;
-	}
-
 	if (validate_error) {
-		*error = validate_error;
+		g_propagate_error (error, validate_error);
 		return FALSE;
 	}
 	return TRUE;
@@ -304,6 +298,7 @@ nm_openvpn_disconnect_management_socket (NMOpenvpnPlugin *plugin)
 
 	g_free (io_data->username);
 	g_free (io_data->proxy_username);
+	g_free (io_data->pending_auth);
 
 	if (io_data->password)
 		memset (io_data->password, 0, strlen (io_data->password));
@@ -398,14 +393,104 @@ write_user_pass (GIOChannel *channel,
 }
 
 static gboolean
+handle_auth (NMOpenvpnPluginIOData *io_data,
+             const char *requested_auth,
+             const char **out_message,
+             char ***out_hints)
+{
+	gboolean handled = FALSE;
+	guint i = 0;
+	char **hints = NULL;
+
+	g_return_val_if_fail (requested_auth != NULL, FALSE);
+	g_return_val_if_fail (out_message != NULL, FALSE);
+	g_return_val_if_fail (out_hints != NULL, FALSE);
+
+	if (strcmp (requested_auth, "Auth") == 0) {
+		const char *username = io_data->username;
+
+		/* Fall back to the default username if it wasn't overridden by the user */
+		if (!username)
+			username = io_data->default_username;
+
+		if (username != NULL && io_data->password != NULL) {
+			write_user_pass (io_data->socket_channel,
+			                 requested_auth,
+			                 username,
+			                 io_data->password);
+		} else {
+			hints = g_new0 (char *, 3);
+			if (!username) {
+				hints[i++] = NM_OPENVPN_KEY_USERNAME;
+				*out_message = _("A username is required.");
+			}
+			if (!io_data->password) {
+				hints[i++] = NM_OPENVPN_KEY_PASSWORD;
+				*out_message = _("A password is required.");
+			}
+			if (!username && !io_data->password)
+				*out_message = _("A username and password are required.");
+		}
+		handled = TRUE;
+	} else if (!strcmp (requested_auth, "Private Key")) {
+		if (io_data->priv_key_pass) {
+			char *qpass, *buf;
+
+			/* Quote strings passed back to openvpn */
+			qpass = ovpn_quote_string (io_data->priv_key_pass);
+			buf = g_strdup_printf ("password \"%s\" \"%s\"\n", requested_auth, qpass);
+			memset (qpass, 0, strlen (qpass));
+			g_free (qpass);
+
+			/* Will always write everything in blocking channels (on success) */
+			g_io_channel_write_chars (io_data->socket_channel, buf, strlen (buf), NULL, NULL);
+			g_io_channel_flush (io_data->socket_channel, NULL);
+			g_free (buf);
+		} else {
+			hints = g_new0 (char *, 2);
+			hints[i++] = NM_OPENVPN_KEY_CERTPASS;
+			*out_message = _("A private key password is required.");
+		}
+		handled = TRUE;
+	} else if (strcmp (requested_auth, "HTTP Proxy") == 0) {
+		if (io_data->proxy_username != NULL && io_data->proxy_password != NULL) {
+			write_user_pass (io_data->socket_channel,
+			                 requested_auth,
+			                 io_data->proxy_username,
+			                 io_data->proxy_password);
+		} else {
+			hints = g_new0 (char *, 3);
+			if (!io_data->proxy_username) {
+				hints[i++] = NM_OPENVPN_KEY_HTTP_PROXY_USERNAME;
+				*out_message = _("An HTTP Proxy username is required.");
+			}
+			if (!io_data->proxy_password) {
+				hints[i++] = NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD;
+				*out_message = _("An HTTP Proxy password is required.");
+			}
+			if (!io_data->proxy_username && !io_data->proxy_password)
+				*out_message = _("An HTTP Proxy username and password are required.");
+		}
+		handled = TRUE;
+	}
+
+	*out_hints = hints;
+	return handled;
+}
+
+static gboolean
 handle_management_socket (NMVPNPlugin *plugin,
                           GIOChannel *source,
                           GIOCondition condition,
                           NMVPNPluginFailure *out_failure)
 {
-	NMOpenvpnPluginIOData *io_data = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin)->io_data;
+	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 	gboolean again = TRUE;
-	char *str = NULL, *auth = NULL, *buf;
+	char *str = NULL, *auth = NULL;
+	const char *message = NULL;
+	char **hints = NULL;
+
+	g_assert (out_failure);
 
 	if (!(condition & G_IO_IN))
 		return TRUE;
@@ -413,44 +498,45 @@ handle_management_socket (NMVPNPlugin *plugin,
 	if (g_io_channel_read_line (source, &str, NULL, NULL, NULL) != G_IO_STATUS_NORMAL)
 		return TRUE;
 
-	if (strlen (str) < 1)
-		goto out;
+	if (!str[0]) {
+		g_free (str);
+		return TRUE;
+	}
+
+	if (debug)
+		g_message ("VPN request '%s'", str);
 
 	auth = get_detail (str, ">PASSWORD:Need '");
 	if (auth) {
-		if (strcmp (auth, "Auth") == 0) {
-			if (io_data->username != NULL && io_data->password != NULL)
-				write_user_pass (source, auth, io_data->username, io_data->password);
-			else
-				g_warning ("Auth requested but one of username or password is missing");
-		} else if (!strcmp (auth, "Private Key")) {
-			if (io_data->priv_key_pass) {
-				char *qpass;
+		if (priv->io_data->pending_auth)
+			g_free (priv->io_data->pending_auth);
+		priv->io_data->pending_auth = auth;
 
-				/* Quote strings passed back to openvpn */
-				qpass = ovpn_quote_string (io_data->priv_key_pass);
-				buf = g_strdup_printf ("password \"%s\" \"%s\"\n", auth, qpass);
-				memset (qpass, 0, strlen (qpass));
-				g_free (qpass);
-
-				/* Will always write everything in blocking channels (on success) */
-				g_io_channel_write_chars (source, buf, strlen (buf), NULL, NULL);
-				g_io_channel_flush (source, NULL);
-				g_free (buf);
-			} else
-				g_warning ("Certificate password requested but private key password == NULL");
-		} else if (strcmp (auth, "HTTP Proxy") == 0) {
-			if (io_data->proxy_username != NULL && io_data->proxy_password != NULL)
-				write_user_pass (source, auth, io_data->proxy_username, io_data->proxy_password);
-			else
-				g_warning ("HTTP Proxy auth requested but either proxy username or password is missing");
+		if (handle_auth (priv->io_data, auth, &message, &hints)) {
+			/* Request new secrets if we need any */
+			if (priv->interactive) {
+				if (message) {
+					if (debug) {
+						char *joined = hints ? g_strjoinv (",", (char **) hints) : "none";
+						g_message ("Requesting new secrets: '%s' (%s)", message, joined);
+						g_free (joined);
+					}
+					nm_vpn_plugin_secrets_required (plugin, message, (const char **) hints);
+				}
+			} else {
+				/* Interactive not allowed, can't ask for more secrets */
+				g_warning ("More secrets required but cannot ask interactively");
+				*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
+				again = FALSE;
+			}
+			if (hints)
+				g_free (hints);  /* elements are 'const' */
 		} else {
-			g_warning ("No clue what to send for username/password request for '%s'", auth);
-			if (out_failure)
-				*out_failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
+			g_warning ("Unhandled management socket request '%s'", auth);
+			*out_failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
 			again = FALSE;
 		}
-		g_free (auth);
+		goto out;
 	}
 
 	auth = get_detail (str, ">PASSWORD:Verification Failed: '");
@@ -464,8 +550,7 @@ handle_management_socket (NMVPNPlugin *plugin,
 
 		g_free (auth);
 
-		if (out_failure)
-			*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
+		*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
 		again = FALSE;
 	}
 
@@ -727,6 +812,48 @@ add_cert_args (GPtrArray *args, NMSettingVPN *s_vpn)
 	}
 }
 
+static void
+update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
+                                 NMSettingVPN *s_vpn,
+                                 const char *default_username)
+{
+	const char *tmp;
+
+	if (default_username) {
+		g_free (io_data->default_username);
+		io_data->default_username = g_strdup (default_username);
+	}
+
+	g_free (io_data->username);
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME);
+	io_data->username = tmp ? g_strdup (tmp) : NULL;
+
+	if (io_data->password) {
+		memset (io_data->password, 0, strlen (io_data->password));
+		g_free (io_data->password);
+	}
+	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD);
+	io_data->password = tmp ? g_strdup (tmp) : NULL;
+
+	if (io_data->priv_key_pass) {
+		memset (io_data->priv_key_pass, 0, strlen (io_data->priv_key_pass));
+		g_free (io_data->priv_key_pass);
+	}
+	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS);
+	io_data->priv_key_pass = tmp ? g_strdup (tmp) : NULL;
+
+	g_free (io_data->proxy_username);
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
+	io_data->proxy_username = tmp ? g_strdup (tmp) : NULL;
+
+	if (io_data->proxy_password) {
+		memset (io_data->proxy_password, 0, strlen (io_data->proxy_password));
+		g_free (io_data->proxy_password);
+	}
+	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
+	io_data->proxy_password = tmp ? g_strdup (tmp) : NULL;
+}
+
 static gboolean
 nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  NMSettingVPN *s_vpn,
@@ -762,9 +889,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
  		}
  	}
 
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	connection_type = validate_connection_type (tmp);
-	if (!connection_type) {
+	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
+	if (!validate_connection_type (connection_type)) {
 		g_set_error (error,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
@@ -1086,25 +1212,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	    || nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME)) {
 
 		priv->io_data = g_malloc0 (sizeof (NMOpenvpnPluginIOData));
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME);
-		priv->io_data->username = tmp ? g_strdup (tmp) : NULL;
-		/* Use the default username if it wasn't overridden by the user */
-		if (!priv->io_data->username && default_username)
-			priv->io_data->username = g_strdup (default_username);
-
-		tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD);
-		priv->io_data->password = tmp ? g_strdup (tmp) : NULL;
-
-		tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS);
-		priv->io_data->priv_key_pass = tmp ? g_strdup (tmp) : NULL;
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
-		priv->io_data->proxy_username = tmp ? g_strdup (tmp) : NULL;
-
-		tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
-		priv->io_data->proxy_password = tmp ? g_strdup (tmp) : NULL;
-
+		update_io_data_from_vpn_setting (priv->io_data, s_vpn, default_username);
 		nm_openvpn_schedule_connect_timer (plugin);
 	}
 
@@ -1167,49 +1275,31 @@ check_need_secrets (NMSettingVPN *s_vpn, gboolean *need_secrets)
 }
 
 static gboolean
-real_connect (NMVPNPlugin   *plugin,
-              NMConnection  *connection,
-              GError       **error)
+_connect_common (NMVPNPlugin   *plugin,
+                 NMConnection  *connection,
+                 GHashTable    *details,
+                 GError       **error)
 {
 	NMSettingVPN *s_vpn;
 	const char *connection_type;
 	const char *user_name;
-	gboolean need_secrets;
 
-	s_vpn = NM_SETTING_VPN (nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN));
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
-		g_set_error (error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
-		             "%s",
-		             _("Could not process the request because the VPN connection settings were invalid."));
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
+		                     _("Could not process the request because the VPN connection settings were invalid."));
 		return FALSE;
 	}
 
-	/* Check if we need secrets and validate the connection type */
-	connection_type = check_need_secrets (s_vpn, &need_secrets);
-	if (!connection_type) {
-		g_set_error (error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             "%s",
-		             _("Invalid connection type."));
+	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
+	if (!validate_connection_type (connection_type)) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
+		                     _("Could not process the request because the openvpn connection type was invalid."));
 		return FALSE;
-	}
-
-	user_name = nm_setting_vpn_get_user_name (s_vpn);
-
-	/* Need a username for any password-based connection types */
-	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
-	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		if (!user_name && !nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME)) {
-			g_set_error (error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
-			             "%s",
-			             _("Could not process the request because no username was provided."));
-			return FALSE;
-		}
 	}
 
 	/* Validate the properties */
@@ -1217,15 +1307,35 @@ real_connect (NMVPNPlugin   *plugin,
 		return FALSE;
 
 	/* Validate secrets */
-	if (need_secrets) {
-		if (!nm_openvpn_secrets_validate (s_vpn, error))
-			return FALSE;
-	}
+	if (!nm_openvpn_secrets_validate (s_vpn, error))
+		return FALSE;
 
 	/* Finally try to start OpenVPN */
+	user_name = nm_setting_vpn_get_user_name (s_vpn);
 	if (!nm_openvpn_start_openvpn_binary (NM_OPENVPN_PLUGIN (plugin), s_vpn, user_name, error))
 		return FALSE;
 
+	return TRUE;
+}
+
+static gboolean
+real_connect (NMVPNPlugin   *plugin,
+              NMConnection  *connection,
+              GError       **error)
+{
+	return _connect_common (plugin, connection, NULL, error);
+}
+
+static gboolean
+real_connect_interactive (NMVPNPlugin   *plugin,
+                          NMConnection  *connection,
+                          GHashTable    *details,
+                          GError       **error)
+{
+	if (!_connect_common (plugin, connection, details, error))
+		return FALSE;
+
+	NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin)->interactive = TRUE;
 	return TRUE;
 }
 
@@ -1247,23 +1357,21 @@ real_need_secrets (NMVPNPlugin *plugin,
 		nm_connection_dump (connection);
 	}
 
-	s_vpn = NM_SETTING_VPN (nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN));
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
-		g_set_error (error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
-		             "%s",
-		             _("Could not process the request because the VPN connection settings were invalid."));
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
+		                     _("Could not process the request because the VPN connection settings were invalid."));
 		return FALSE;
 	}
 
 	connection_type = check_need_secrets (s_vpn, &need_secrets);
 	if (!connection_type) {
-		g_set_error (error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             "%s",
-		             _("Invalid connection type."));
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		                     _("Invalid connection type."));
 		return FALSE;
 	}
 
@@ -1271,6 +1379,50 @@ real_need_secrets (NMVPNPlugin *plugin,
 		*setting_name = NM_SETTING_VPN_SETTING_NAME;
 
 	return need_secrets;
+}
+
+static gboolean
+real_new_secrets (NMVPNPlugin *plugin,
+                  NMConnection *connection,
+                  GError **error)
+{
+	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
+	NMSettingVPN *s_vpn;
+	const char *message = NULL;
+	char **hints = NULL;
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	if (!s_vpn) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_CONNECTION_INVALID,
+		                     _("Could not process the request because the VPN connection settings were invalid."));
+		return FALSE;
+	}
+
+	if (debug)
+		g_message ("VPN received new secrets; sending to management interface");
+
+	update_io_data_from_vpn_setting (priv->io_data, s_vpn, NULL);
+
+	g_warn_if_fail (priv->io_data->pending_auth);
+	if (!handle_auth (priv->io_data, priv->io_data->pending_auth, &message, &hints)) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_GENERAL,
+		                     _("Unhandled pending authentication."));
+		return FALSE;
+	}
+
+	/* Request new secrets if we need any */
+	if (message) {
+		if (debug)
+			g_message ("Requesting new secrets: '%s'", message);
+		nm_vpn_plugin_secrets_required (plugin, message, (const char **) hints);
+	}
+	if (hints)
+		g_free (hints);  /* elements are 'const' */
+	return TRUE;
 }
 
 static gboolean
@@ -1318,8 +1470,10 @@ nm_openvpn_plugin_class_init (NMOpenvpnPluginClass *plugin_class)
 
 	/* virtual methods */
 	parent_class->connect      = real_connect;
+	parent_class->connect_interactive = real_connect_interactive;
 	parent_class->need_secrets = real_need_secrets;
 	parent_class->disconnect   = real_disconnect;
+	parent_class->new_secrets  = real_new_secrets;
 }
 
 static void
