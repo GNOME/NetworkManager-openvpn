@@ -251,9 +251,9 @@ get_secrets (const char *vpn_name,
 }
 
 static void
-get_password_types (GHashTable *data,
-                    gboolean *out_need_password,
-                    gboolean *out_need_certpass)
+get_passwords_required (GHashTable *data,
+                        gboolean *out_need_password,
+                        gboolean *out_need_certpass)
 {
 	const char *ctype, *val;
 	NMSettingSecretFlags flags = NM_SETTING_SECRET_FLAG_NONE;
@@ -355,7 +355,7 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	get_password_types (data, &need_password, &need_certpass);
+	get_passwords_required (data, &need_password, &need_certpass);
 	if (!need_password && !need_certpass) {
 		if (external_ui_mode) {
 			GKeyFile *keyfile;
