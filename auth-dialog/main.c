@@ -90,6 +90,31 @@ keyring_lookup_secret (const char *uuid, const char *secret_name)
 	return secret;
 }
 
+/*****************************************************************/
+
+typedef void (*NoSecretsRequiredFunc) (void);
+
+/* Returns TRUE on success, FALSE on cancel */
+typedef gboolean (*AskUserFunc) (const char *vpn_name,
+                                 const char *prompt,
+                                 gboolean need_password,
+                                 const char *existing_password,
+                                 char **out_new_password,
+                                 gboolean need_certpass,
+                                 const char *existing_certpass,
+                                 char **out_new_certpass);
+
+typedef void (*FinishFunc) (const char *vpn_name,
+                            const char *prompt,
+                            gboolean allow_interaction,
+                            gboolean need_password,
+                            const char *password,
+                            gboolean need_certpass,
+                            const char *certpass);
+
+/*****************************************************************/
+/* External UI mode stuff */
+
 static void
 keyfile_add_entry_info (GKeyFile    *keyfile,
                         const gchar *key,
@@ -117,137 +142,207 @@ keyfile_print_stdout (GKeyFile *keyfile)
 	g_free (data);
 }
 
-static gboolean
-get_secrets (const char *vpn_name,
-             const char *vpn_uuid,
-             gboolean need_password,
-             gboolean need_certpass,
-             gboolean retry,
-             gboolean allow_interaction,
-             gboolean external_ui_mode,
-             const char *in_pass,
-             NMSettingSecretFlags pw_flags,
-             char **out_password,
-             const char *in_certpass,
-             NMSettingSecretFlags cp_flags,
-             char **out_certpass)
+static void
+eui_no_secrets_required (void)
 {
-	NMAVpnPasswordDialog *dialog;
-	char *prompt, *password = NULL, *certpass = NULL;
-	gboolean success = FALSE, need_secret = FALSE;
+	GKeyFile *keyfile;
 
-	g_return_val_if_fail (vpn_name != NULL, FALSE);
-	g_return_val_if_fail (vpn_uuid != NULL, FALSE);
-	g_return_val_if_fail (out_password != NULL, FALSE);
-	g_return_val_if_fail (out_certpass != NULL, FALSE);
+	keyfile = g_key_file_new ();
+
+	g_key_file_set_integer (keyfile, UI_KEYFILE_GROUP, "Version", 2);
+	keyfile_add_entry_info (keyfile, NM_OPENVPN_KEY_NOSECRET, "true", "", TRUE, FALSE);
+	keyfile_print_stdout (keyfile);
+	g_key_file_unref (keyfile);
+}
+
+static void
+eui_finish (const char *vpn_name,
+            const char *prompt,
+            gboolean allow_interaction,
+            gboolean need_password,
+            const char *existing_password,
+            gboolean need_certpass,
+            const char *existing_certpass)
+{
+	GKeyFile *keyfile;
+	char *title;
+
+	keyfile = g_key_file_new ();
+
+	g_key_file_set_integer (keyfile, UI_KEYFILE_GROUP, "Version", 2);
+	g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Description", prompt);
+
+	title = g_strdup_printf (_("Authenticate VPN %s"), vpn_name);
+	g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Title", title);
+	g_free (title);
 
 	if (need_password) {
-		if (!(pw_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
-			if (in_pass)
-				password = g_strdup (in_pass);
-			else
-				password = keyring_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_PASSWORD);
-		}
-		if (!password && !(pw_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
-			need_secret = TRUE;
+		keyfile_add_entry_info (keyfile,
+		                        NM_OPENVPN_KEY_PASSWORD,
+		                        existing_password ? existing_password : "",
+		                        _("Password:"),
+		                        TRUE,
+		                        allow_interaction);
 	}
 
 	if (need_certpass) {
-		if (!(cp_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
-			if (in_certpass)
-				certpass = g_strdup (in_certpass);
-			else
-				certpass = keyring_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_CERTPASS);
-		}
-		if (!certpass && !(cp_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
-			need_secret = TRUE;
+		keyfile_add_entry_info (keyfile,
+		                        NM_OPENVPN_KEY_CERTPASS,
+		                        existing_certpass ? existing_certpass : "",
+		                        _("Certificate password:"),
+		                        TRUE,
+		                        allow_interaction);
 	}
 
-	/* In other_ui mode, we don't actually show the dialog. Instead we pass back everything
-	   that is needed to build it */
-	prompt = g_strdup_printf (_("You need to authenticate to access the Virtual Private Network '%s'."), vpn_name);
+	keyfile_print_stdout (keyfile);
+	g_key_file_unref (keyfile);
+}
 
-	if (external_ui_mode) {
-		GKeyFile *keyfile;
+/*****************************************************************/
 
-		keyfile = g_key_file_new ();
+static void
+std_no_secrets_required (void)
+{
+	printf ("%s\n%s\n\n\n", NM_OPENVPN_KEY_NOSECRET, "true");
+}
 
-		g_key_file_set_integer (keyfile, UI_KEYFILE_GROUP, "Version", 2);
-		g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Description", prompt);
-		g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Title", _("Authenticate VPN"));
+static gboolean
+std_ask_user (const char *vpn_name,
+              const char *prompt,
+              gboolean need_password,
+              const char *existing_password,
+              char **out_new_password,
+              gboolean need_certpass,
+              const char *existing_certpass,
+              char **out_new_certpass)
+{
+	NMAVpnPasswordDialog *dialog;
 
-		if (need_password)
-			keyfile_add_entry_info (keyfile, NM_OPENVPN_KEY_PASSWORD, password ? password : "", _("Password:"), TRUE, allow_interaction);
-		if (need_certpass)
-			keyfile_add_entry_info (keyfile, NM_OPENVPN_KEY_CERTPASS, certpass ? certpass : "", _("Certificate password:"), TRUE, allow_interaction);
-
-		keyfile_print_stdout (keyfile);
-		g_key_file_unref (keyfile);
-
-		success = TRUE;
-		goto out;
-	} else if (allow_interaction == FALSE || (!need_secret && !retry)) {
-		/* Either interaction is not allowed so pass back any passwords we have
-		 * without asking the user, or we've got all the passwords we need already.
-		 */
-		if (need_password)
-			*out_password = password;
-		if (need_certpass)
-			*out_certpass = certpass;
-		g_free (prompt);
-		return TRUE;
-	}
+	g_return_val_if_fail (vpn_name != NULL, FALSE);
+	g_return_val_if_fail (prompt != NULL, FALSE);
+	g_return_val_if_fail (out_new_password != NULL, FALSE);
+	g_return_val_if_fail (out_new_certpass != NULL, FALSE);
 
 	dialog = NMA_VPN_PASSWORD_DIALOG (nma_vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
 
-	/* pre-fill dialog with the password */
+	/* pre-fill dialog with existing passwords */
 	if (need_password && need_certpass) {
 		nma_vpn_password_dialog_set_show_password_secondary (dialog, TRUE);
 		nma_vpn_password_dialog_set_password_secondary_label (dialog, _("Certificate pass_word:") );
 
-		/* if retrying, put in the passwords from the keyring */
-		if (password)
-			nma_vpn_password_dialog_set_password (dialog, password);
-		if (certpass)
-			nma_vpn_password_dialog_set_password_secondary (dialog, certpass);
+		nma_vpn_password_dialog_set_password (dialog, existing_password);
+		nma_vpn_password_dialog_set_password_secondary (dialog, existing_certpass);
 	} else {
 		nma_vpn_password_dialog_set_show_password_secondary (dialog, FALSE);
-		if (need_password) {
-			/* if retrying, put in the passwords from the keyring */
-			if (password)
-				nma_vpn_password_dialog_set_password (dialog, password);
-		} else if (need_certpass) {
+		if (need_password)
+			nma_vpn_password_dialog_set_password (dialog, existing_password);
+		else if (need_certpass) {
 			nma_vpn_password_dialog_set_password_label (dialog, _("Certificate password:"));
-			/* if retrying, put in the passwords from the keyring */
-			if (certpass)
-				nma_vpn_password_dialog_set_password (dialog, certpass);
+			nma_vpn_password_dialog_set_password (dialog, existing_certpass);
 		}
 	}
 
 	gtk_widget_show (GTK_WIDGET (dialog));
 
-	if (nma_vpn_password_dialog_run_and_block (dialog)) {
-		if (need_password)
-			*out_password = g_strdup (nma_vpn_password_dialog_get_password (dialog));
-		if (need_certpass) {
-			if (need_password)
-				*out_certpass = g_strdup (nma_vpn_password_dialog_get_password_secondary (dialog));
-			else
-				*out_certpass = g_strdup (nma_vpn_password_dialog_get_password (dialog));
-		}
+	if (!nma_vpn_password_dialog_run_and_block (dialog))
+		return FALSE;
 
-		success = TRUE;
+	if (need_password)
+		*out_new_password = g_strdup (nma_vpn_password_dialog_get_password (dialog));
+
+	if (need_certpass) {
+		if (need_password)
+			*out_new_certpass = g_strdup (nma_vpn_password_dialog_get_password_secondary (dialog));
+		else
+			*out_new_certpass = g_strdup (nma_vpn_password_dialog_get_password (dialog));
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
+	return TRUE;
+}
 
- out:
-	g_free (password);
-	g_free (certpass);
+static void
+wait_for_quit (void)
+{
+	GString *str;
+	char c;
+	ssize_t n;
+	time_t start;
 
-	g_free (prompt);
+	str = g_string_sized_new (10);
+	start = time (NULL);
+	do {
+		errno = 0;
+		n = read (0, &c, 1);
+		if (n == 0 || (n < 0 && errno == EAGAIN))
+			g_usleep (G_USEC_PER_SEC / 10);
+		else if (n == 1) {
+			g_string_append_c (str, c);
+			if (strstr (str->str, "QUIT") || (str->len > 10))
+				break;
+		} else
+			break;
+	} while (time (NULL) < start + 20);
+	g_string_free (str, TRUE);
+}
 
-	return success;
+static void
+std_finish (const char *vpn_name,
+            const char *prompt,
+            gboolean allow_interaction,
+            gboolean need_password,
+            const char *password,
+            gboolean need_certpass,
+            const char *certpass)
+{
+	/* Send the passwords back to our parent */
+	if (need_password && password)
+		printf ("%s\n%s\n", NM_OPENVPN_KEY_PASSWORD, password);
+	if (need_certpass && certpass)
+		printf ("%s\n%s\n", NM_OPENVPN_KEY_CERTPASS, certpass);
+	printf ("\n\n");
+
+	/* for good measure, flush stdout since Kansas is going Bye-Bye */
+	fflush (stdout);
+
+	/* Wait for quit signal */
+	wait_for_quit ();
+}
+
+/*****************************************************************/
+
+static void
+get_existing_passwords (GHashTable *vpn_data,
+                        GHashTable *existing_secrets,
+                        const char *vpn_uuid,
+                        gboolean need_password,
+                        gboolean need_certpass,
+                        char **out_password,
+                        char **out_certpass)
+{
+	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
+	NMSettingSecretFlags cp_flags = NM_SETTING_SECRET_FLAG_NONE;
+
+	g_return_if_fail (out_password != NULL);
+	g_return_if_fail (out_certpass != NULL);
+
+	nm_vpn_plugin_utils_get_secret_flags (vpn_data, NM_OPENVPN_KEY_PASSWORD, &pw_flags);
+	if (need_password) {
+		if (!(pw_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
+			*out_password = g_strdup (g_hash_table_lookup (existing_secrets, NM_OPENVPN_KEY_PASSWORD));
+			if (!*out_password)
+				*out_password = keyring_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_PASSWORD);
+		}
+	}
+
+	nm_vpn_plugin_utils_get_secret_flags (vpn_data, NM_OPENVPN_KEY_CERTPASS, &cp_flags);
+	if (need_certpass) {
+		if (!(cp_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
+			*out_certpass = g_strdup (g_hash_table_lookup (existing_secrets, NM_OPENVPN_KEY_CERTPASS));
+			if (!*out_certpass)
+				*out_certpass = keyring_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_CERTPASS);
+		}
+	}
 }
 
 #define VPN_MSG_TAG "x-vpn-message:"
@@ -300,28 +395,12 @@ get_passwords_required (GHashTable *data,
 }
 
 static void
-wait_for_quit (void)
+free_secret (char *p)
 {
-	GString *str;
-	char c;
-	ssize_t n;
-	time_t start;
-
-	str = g_string_sized_new (10);
-	start = time (NULL);
-	do {
-		errno = 0;
-		n = read (0, &c, 1);
-		if (n == 0 || (n < 0 && errno == EAGAIN))
-			g_usleep (G_USEC_PER_SEC / 10);
-		else if (n == 1) {
-			g_string_append_c (str, c);
-			if (strstr (str->str, "QUIT") || (str->len > 10))
-				break;
-		} else
-			break;
-	} while (time (NULL) < start + 20);
-	g_string_free (str, TRUE);
+	if (p) {
+		memset (p, 0, strlen (p));
+		g_free (p);
+	}
 }
 
 int 
@@ -333,12 +412,16 @@ main (int argc, char *argv[])
 	gchar *vpn_service = NULL;
 	GHashTable *data = NULL, *secrets = NULL;
 	gboolean need_password = FALSE, need_certpass = FALSE;
+	char *existing_password = NULL, *existing_certpass = NULL;
 	char *new_password = NULL, *new_certpass = NULL;
 	char **hints = NULL;
 	char *prompt = NULL;
-	gboolean external_ui_mode = FALSE;
-	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
-	NMSettingSecretFlags cp_flags = NM_SETTING_SECRET_FLAG_NONE;
+	gboolean external_ui_mode = FALSE, canceled = FALSE, ask_user = FALSE;
+
+	NoSecretsRequiredFunc no_secrets_required_func = NULL;
+	AskUserFunc ask_user_func = NULL;
+	FinishFunc finish_func = NULL;
+
 	GOptionContext *context;
 	GOptionEntry entries[] = {
 			{ "reprompt", 'r', 0, G_OPTION_ARG_NONE, &retry, "Reprompt for passwords", NULL},
@@ -378,66 +461,66 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
+	if (external_ui_mode) {
+		no_secrets_required_func = eui_no_secrets_required;
+		finish_func = eui_finish;
+	} else {
+		no_secrets_required_func = std_no_secrets_required;
+		ask_user_func = std_ask_user;
+		finish_func = std_finish;
+	}
+
 	/* Determine which passwords are actually required, either from hints or
 	 * from looking at the VPN configuration.
 	 */
 	prompt = get_passwords_required (data, hints, &need_password, &need_certpass);
+	if (!prompt)
+		prompt = g_strdup_printf (_("You need to authenticate to access the Virtual Private Network '%s'."), vpn_name);
 
 	/* Exit early if we don't need any passwords */
-	if (!need_password && !need_certpass) {
-		if (external_ui_mode) {
-			GKeyFile *keyfile;
+	if (!need_password && !need_certpass)
+		no_secrets_required_func ();
+	else {
+		get_existing_passwords (data,
+		                        secrets,
+		                        vpn_uuid,
+		                        need_password,
+		                        need_certpass,
+		                        &existing_password,
+		                        &existing_certpass);
+		if (need_password && !existing_password)
+			ask_user = TRUE;
+		if (need_certpass && !existing_certpass)
+			ask_user = TRUE;
 
-			keyfile = g_key_file_new ();
-
-			g_key_file_set_integer (keyfile, UI_KEYFILE_GROUP, "Version", 2);
-			keyfile_add_entry_info (keyfile, NM_OPENVPN_KEY_NOSECRET, "true", "", TRUE, FALSE);
-			keyfile_print_stdout (keyfile);
-
-			g_key_file_unref (keyfile);
-		} else {
-			/* The older protocol */
-			printf ("%s\n%s\n\n\n", NM_OPENVPN_KEY_NOSECRET, "true");
+		/* If interaction is allowed then ask the user, otherwise pass back
+		 * whatever existing secrets we can find.
+		 */
+		if (ask_user_func && allow_interaction && (ask_user || retry)) {
+			canceled = !ask_user_func (vpn_name,
+			                           prompt,
+			                           need_password,
+			                           existing_password,
+			                           &new_password,
+			                           need_certpass,
+			                           existing_certpass,
+			                           &new_certpass);
 		}
 
-		g_free (prompt);
-		return 0;
-	}
+		if (!canceled) {
+			finish_func (vpn_name,
+			             prompt,
+			             allow_interaction,
+			             need_password,
+			             new_password ? new_password : existing_password,
+			             need_certpass,
+			             new_certpass ? new_certpass : existing_certpass);
+		}
 
-	nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &pw_flags);
-	nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_CERTPASS, &cp_flags);
-	if (!get_secrets (vpn_name,
-	                  vpn_uuid,
-	                  need_password,
-	                  need_certpass,
-	                  retry,
-	                  allow_interaction,
-	                  external_ui_mode,
-	                  g_hash_table_lookup (secrets, NM_OPENVPN_KEY_PASSWORD),
-	                  pw_flags,
-	                  &new_password,
-	                  g_hash_table_lookup (secrets, NM_OPENVPN_KEY_CERTPASS),
-	                  cp_flags,
-	                  &new_certpass))
-		return 1;  /* canceled */
-
-	if (!external_ui_mode) {
-		if (need_password && new_password)
-			printf ("%s\n%s\n", NM_OPENVPN_KEY_PASSWORD, new_password);
-		if (need_certpass && new_certpass)
-			printf ("%s\n%s\n", NM_OPENVPN_KEY_CERTPASS, new_certpass);
-		printf ("\n\n");
-
-		if (new_password)
-			g_free (new_password);
-		if (new_certpass)
-			g_free (new_certpass);
-
-		/* for good measure, flush stdout since Kansas is going Bye-Bye */
-		fflush (stdout);
-
-		/* Wait for quit signal */
-		wait_for_quit ();
+		free_secret (existing_password);
+		free_secret (existing_certpass);
+		free_secret (new_password);
+		free_secret (new_certpass);
 	}
 
 	if (data)
@@ -447,5 +530,5 @@ main (int argc, char *argv[])
 	if (hints)
 		g_strfreev (hints);
 	g_free (prompt);
-	return 0;
+	return canceled ? 1 : 0;
 }
