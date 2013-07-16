@@ -250,16 +250,34 @@ get_secrets (const char *vpn_name,
 	return success;
 }
 
-static void
+#define VPN_MSG_TAG "x-vpn-message:"
+
+static char *
 get_passwords_required (GHashTable *data,
+                        char **hints,
                         gboolean *out_need_password,
                         gboolean *out_need_certpass)
 {
 	const char *ctype, *val;
 	NMSettingSecretFlags flags = NM_SETTING_SECRET_FLAG_NONE;
+	char *prompt = NULL;
+	char **iter;
+
+	/* If hints are given, then always ask for what the hints require */
+	if (hints && g_strv_length (hints)) {
+		for (iter = hints; iter && *iter; iter++) {
+			if (!prompt && g_str_has_prefix (*iter, VPN_MSG_TAG))
+				prompt = g_strdup (*iter + strlen (VPN_MSG_TAG));
+			else if (strcmp (*iter, NM_OPENVPN_KEY_PASSWORD) == 0)
+				*out_need_password = TRUE;
+			else if (strcmp (*iter, NM_OPENVPN_KEY_CERTPASS) == 0)
+				*out_need_certpass = TRUE;
+		}
+		return prompt;
+	}
 
 	ctype = g_hash_table_lookup (data, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	g_return_if_fail (ctype != NULL);
+	g_return_val_if_fail (ctype != NULL, NULL);
 
 	if (!strcmp (ctype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		/* Normal user password */
@@ -277,6 +295,8 @@ get_passwords_required (GHashTable *data,
 		if (!(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
 			*out_need_password = TRUE;
 	}
+
+	return NULL;
 }
 
 static void
@@ -314,6 +334,8 @@ main (int argc, char *argv[])
 	GHashTable *data = NULL, *secrets = NULL;
 	gboolean need_password = FALSE, need_certpass = FALSE;
 	char *new_password = NULL, *new_certpass = NULL;
+	char **hints = NULL;
+	char *prompt = NULL;
 	gboolean external_ui_mode = FALSE;
 	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	NMSettingSecretFlags cp_flags = NM_SETTING_SECRET_FLAG_NONE;
@@ -325,6 +347,7 @@ main (int argc, char *argv[])
 			{ "service", 's', 0, G_OPTION_ARG_STRING, &vpn_service, "VPN service type", NULL},
 			{ "allow-interaction", 'i', 0, G_OPTION_ARG_NONE, &allow_interaction, "Allow user interaction", NULL},
 			{ "external-ui-mode", 0, 0, G_OPTION_ARG_NONE, &external_ui_mode, "External UI mode", NULL},
+			{ "hint", 't', 0, G_OPTION_ARG_STRING_ARRAY, &hints, "Hints from the VPN plugin", NULL},
 			{ NULL }
 		};
 
@@ -355,7 +378,12 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	get_passwords_required (data, &need_password, &need_certpass);
+	/* Determine which passwords are actually required, either from hints or
+	 * from looking at the VPN configuration.
+	 */
+	prompt = get_passwords_required (data, hints, &need_password, &need_certpass);
+
+	/* Exit early if we don't need any passwords */
 	if (!need_password && !need_certpass) {
 		if (external_ui_mode) {
 			GKeyFile *keyfile;
@@ -372,6 +400,7 @@ main (int argc, char *argv[])
 			printf ("%s\n%s\n\n\n", NM_OPENVPN_KEY_NOSECRET, "true");
 		}
 
+		g_free (prompt);
 		return 0;
 	}
 
@@ -415,5 +444,8 @@ main (int argc, char *argv[])
 		g_hash_table_unref (data);
 	if (secrets)
 		g_hash_table_unref (secrets);
+	if (hints)
+		g_strfreev (hints);
+	g_free (prompt);
 	return 0;
 }
