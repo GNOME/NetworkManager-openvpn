@@ -2,59 +2,53 @@
 # Copyright © 2008, 2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the NetworkManager package.
 # Žygimantas Beručka <zygis@gnome.org>, 2008, 2010.
-# Aurimas Černius <aurisc4@gmail.com>, 2010.
+# Aurimas Černius <aurisc4@gmail.com>, 2010, 2013.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn HEAD\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2012-11-09 21:50+0000\n"
-"PO-Revision-Date: 2012-11-24 16:59+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2013-08-02 20:41+0000\n"
+"PO-Revision-Date: 2013-08-17 00:45+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
-"Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
+"Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Virtaal 0.6.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
-#: ../auth-dialog/vpn-password-dialog.c:95
-msgid "_Password:"
-msgstr "_Slaptažodis:"
-
-#: ../auth-dialog/vpn-password-dialog.c:97
-msgid "_Secondary Password:"
-msgstr "_Antrinis slaptažodis:"
-
-#: ../auth-dialog/vpn-password-dialog.c:239
-msgid "Sh_ow passwords"
-msgstr "_Rodyti slaptažodžius"
-
-#. In other_ui mode, we don't actually show the dialog. Instead we pass back everything
-#. that is needed to build it
-#: ../auth-dialog/main.c:158
+#: ../auth-dialog/main.c:175
 #, c-format
-msgid "You need to authenticate to access the Virtual Private Network '%s'."
-msgstr "Norint gauti prieigą prie Virtualiojo Privačiojo Tinklo „%s“, reikia nustatyti jūsų tapatybę."
+#| msgid "Authenticate VPN"
+msgid "Authenticate VPN %s"
+msgstr "Nustatyti tapatybę VPN %s"
 
-#: ../auth-dialog/main.c:167
-#: ../auth-dialog/main.c:191
-msgid "Authenticate VPN"
-msgstr "Nustatyti tapatybę VPN"
-
-#: ../auth-dialog/main.c:170
-#: ../properties/nm-openvpn-dialog.ui.h:97
+#: ../auth-dialog/main.c:183 ../properties/nm-openvpn-dialog.ui.h:97
 msgid "Password:"
 msgstr "Slaptažodis:"
 
-#: ../auth-dialog/main.c:172
-#: ../auth-dialog/main.c:210
+#: ../auth-dialog/main.c:192 ../auth-dialog/main.c:240
 msgid "Certificate password:"
 msgstr "Liudijimo slaptažodis:"
 
-#: ../auth-dialog/main.c:196
+#: ../auth-dialog/main.c:226
+msgid "Authenticate VPN"
+msgstr "Nustatyti tapatybę VPN"
+
+#: ../auth-dialog/main.c:231
 msgid "Certificate pass_word:"
 msgstr "Liudijimo slaptažo_dis:"
+
+#: ../auth-dialog/main.c:478
+#, c-format
+msgid "You need to authenticate to access the Virtual Private Network '%s'."
+msgstr ""
+"Norint gauti prieigą prie Virtualiojo Privačiojo Tinklo „%s“, reikia "
+"nustatyti jūsų tapatybę."
 
 #: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
@@ -84,8 +78,7 @@ msgstr "Pasirinkite liudijimų įstaigos liudijimą..."
 msgid "Choose an OpenVPN static key..."
 msgstr "Pasirinkite OpenVPN statinį raktą..."
 
-#: ../properties/auth-helpers.c:409
-#: ../properties/auth-helpers.c:1171
+#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1171
 #: ../properties/auth-helpers.c:1637
 msgid "None"
 msgstr "Nėra"
@@ -102,8 +95,7 @@ msgstr "PEM liudijimai (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN statiniai raktai (*.key)"
 
-#: ../properties/auth-helpers.c:1087
-#: ../properties/auth-helpers.c:1163
+#: ../properties/auth-helpers.c:1087 ../properties/auth-helpers.c:1163
 msgid "Default"
 msgstr "Numatytasis"
 
@@ -147,8 +139,7 @@ msgstr "Serveris"
 msgid "Client"
 msgstr "Klientas"
 
-#: ../properties/auth-helpers.c:1409
-#: ../properties/nm-openvpn-dialog.ui.h:2
+#: ../properties/auth-helpers.c:1409 ../properties/nm-openvpn-dialog.ui.h:2
 msgid "Not required"
 msgstr "Nebūtina"
 
@@ -258,7 +249,8 @@ msgstr "Naudoti pasirinktinį _tunelio didžiausią perdavimo bloką (MTU):"
 
 #: ../properties/nm-openvpn-dialog.ui.h:20
 msgid ""
-"Take the TUN device MTU to be the specified value and derive the link MTU from it.\n"
+"Take the TUN device MTU to be the specified value and derive the link MTU "
+"from it.\n"
 "config: tun-mtu"
 msgstr ""
 "Nustatyti TUN įrenginio MTU į nurodytą vertę ir išvesti saito MTU iš jo.\n"
@@ -294,10 +286,12 @@ msgstr "_Atsitiktiniai nutolę serveriai"
 
 #: ../properties/nm-openvpn-dialog.ui.h:29
 msgid ""
-"Randomize the order of gateways list (remote) as a kind of basic load-balancing measure.\n"
+"Randomize the order of gateways list (remote) as a kind of basic load-"
+"balancing measure.\n"
 "config: remote-random"
 msgstr ""
-"Atsitiktinė kelvedžių sąrašo (nutolusių) tvarka kaip bazinė apkrovos balansavimo priemonė.\n"
+"Atsitiktinė kelvedžių sąrašo (nutolusių) tvarka kaip bazinė apkrovos "
+"balansavimo priemonė.\n"
 "konfig: remote-random"
 
 #: ../properties/nm-openvpn-dialog.ui.h:31
@@ -306,18 +300,22 @@ msgstr "Bendra"
 
 #: ../properties/nm-openvpn-dialog.ui.h:32
 msgid ""
-"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in Cipher Block Chaining mode).\n"
+"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
+"Cipher Block Chaining mode).\n"
 "config: cipher"
 msgstr ""
-"Šifruoti paketus šifravimo algoritmu. Numatytasis yra BF-CBC (Blowfish in Cipher Block Chaining mode).\n"
+"Šifruoti paketus šifravimo algoritmu. Numatytasis yra BF-CBC (Blowfish in "
+"Cipher Block Chaining mode).\n"
 "konfig: cipher"
 
 #: ../properties/nm-openvpn-dialog.ui.h:34
 msgid ""
-"Authenticate packets with HMAC using message digest algorithm. The default is SHA1.\n"
+"Authenticate packets with HMAC using message digest algorithm. The default "
+"is SHA1.\n"
 "config: auth"
 msgstr ""
-"Patvirtinti paketų tapatybę su HMAC naudojant pranešimų santraukos algoritmą. Numatytasis yra SHA1.\n"
+"Patvirtinti paketų tapatybę su HMAC naudojant pranešimų santraukos "
+"algoritmą. Numatytasis yra SHA1.\n"
 "konfig: auth"
 
 #: ../properties/nm-openvpn-dialog.ui.h:36
@@ -341,15 +339,18 @@ msgid ""
 "<i>Connect only to servers whose certificate matches the given subject.\n"
 "Example: /CN=myvpn.company.com</i>"
 msgstr ""
-"<i>Jungtis tik prie serverių, kurių liudijimai atitinka nurodytąjį subjektą.\n"
+"<i>Jungtis tik prie serverių, kurių liudijimai atitinka nurodytąjį "
+"subjektą.\n"
 "Pavyzdys: /CN=myvpn.company.com</i>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:42
 msgid ""
-"Accept connections only from a host with X509 name or common name equal to the specified one.\n"
+"Accept connections only from a host with X509 name or common name equal to "
+"the specified one.\n"
 "config: tls-remote"
 msgstr ""
-"Priimti ryšius tik iš serverio su X509 pavadinimu arba dažnu vardu, lygiu nurodytajam.\n"
+"Priimti ryšius tik iš serverio su X509 pavadinimu arba dažnu vardu, lygiu "
+"nurodytajam.\n"
 "konfig: tls-remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:44
@@ -357,8 +358,12 @@ msgid "_Verify peer (server) certificate usage signature"
 msgstr "_Patikrinti porininko (serverio) liudijimą naudojant parašą"
 
 #: ../properties/nm-openvpn-dialog.ui.h:45
-msgid "Require that peer certificate was signed with an explicit key usage and extended key usage based on RFC3280 TLS rules."
-msgstr "Reikalauti, kad porininko liudijimas būtų pasirašyti su išreikštiniu rakto naudojimu ir išplėstiniu rakto naudojimu pagal RFC3280 TLS taisykles."
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules."
+msgstr ""
+"Reikalauti, kad porininko liudijimas būtų pasirašyti su išreikštiniu rakto "
+"naudojimu ir išplėstiniu rakto naudojimu pagal RFC3280 TLS taisykles."
 
 #: ../properties/nm-openvpn-dialog.ui.h:46
 msgid "_Remote peer certificate TLS type:"
@@ -366,10 +371,12 @@ msgstr "_Nutoliusio porininko liudijimo TLS tipas:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:47
 msgid ""
-"Require that peer certificate was signed with an explicit key usage and extended key usage based on RFC3280 TLS rules.\n"
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules.\n"
 "config: remote-cert-tls client|server"
 msgstr ""
-"Reikalauti, kad porininko liudijimas būtų pasirašytas su išreikštiniu rakto naudojimu ir išplėstiniu rakto naudojimu pagal RFC3280 TLS taisykles.\n"
+"Reikalauti, kad porininko liudijimas būtų pasirašytas su išreikštiniu rakto "
+"naudojimu ir išplėstiniu rakto naudojimu pagal RFC3280 TLS taisykles.\n"
 "config: remote-cert-tls client|server"
 
 #: ../properties/nm-openvpn-dialog.ui.h:49
@@ -385,15 +392,24 @@ msgid "Key _Direction:"
 msgstr "Rakto kryptis:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:52
-msgid "<i>If key direction is used, it must be the opposite of that used on the VPN peer.  For example, if the peer uses '1', this connection must use '0'.  If you are unsure what value to use, contact your system administrator.</i>"
-msgstr "<i>Jeigu naudojama rakto kryptis, ji turi būti priešinga naudojamai VPN lygiarangyje. Pavyzdžiui, jeigu lygiarangyje naudojama „1“, šiam prisijungimui turi būti naudojama „0“. Jeigu nežinote, kokią reikšmę naudoti, susisiekite su savo sistemos administratoriumi.</i>"
+msgid ""
+"<i>If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.</i>"
+msgstr ""
+"<i>Jeigu naudojama rakto kryptis, ji turi būti priešinga naudojamai VPN "
+"lygiarangyje. Pavyzdžiui, jeigu lygiarangyje naudojama „1“, šiam "
+"prisijungimui turi būti naudojama „0“. Jeigu nežinote, kokią reikšmę "
+"naudoti, susisiekite su savo sistemos administratoriumi.</i>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:53
 msgid ""
-"Add an additional layer of HMAC authentication on top of the TLS control channel to protect against DoS attacks.\n"
+"Add an additional layer of HMAC authentication on top of the TLS control "
+"channel to protect against DoS attacks.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
-"Pridėti papildomą HMAC sluoksnį TSL valdymo kanalo tapatybės patvirtinimui apsaugai nuo DoS atakų.\n"
+"Pridėti papildomą HMAC sluoksnį TSL valdymo kanalo tapatybės patvirtinimui "
+"apsaugai nuo DoS atakų.\n"
 "konfig: tls-auth <failas> [kryptis]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:55
@@ -425,8 +441,12 @@ msgid "Proxy _Type:"
 msgstr "Tarpinio serverio tipas:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:62
-msgid "<i>Select this option if your organization requires the use of a proxy server to access the Internet.</i>"
-msgstr "<i>Pasirinkite šią parinktį, jei jūsų organizacija turi prieigą prie interneto per tarpinį serverį.</i>"
+msgid ""
+"<i>Select this option if your organization requires the use of a proxy "
+"server to access the Internet.</i>"
+msgstr ""
+"<i>Pasirinkite šią parinktį, jei jūsų organizacija turi prieigą prie "
+"interneto per tarpinį serverį.</i>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:63
 msgid "Server _Address:"
@@ -461,7 +481,8 @@ msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
 msgstr ""
-"Bandyti neribotai kilus tarpinio serverio klaidoms. Tai simuliuoja SIGUSR1 atstatymą.\n"
+"Bandyti neribotai kilus tarpinio serverio klaidoms. Tai simuliuoja SIGUSR1 "
+"atstatymą.\n"
 "konfig: http-proxy arba socks-proxy"
 
 #: ../properties/nm-openvpn-dialog.ui.h:72
@@ -474,11 +495,15 @@ msgstr "Tarpinio serverio slaptažodis:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:74
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
-msgstr "HTTP/Socks tarpinio serverio naudotojo vardas, perduodamas OpenVPN, kai jo prašoma."
+msgstr ""
+"HTTP/Socks tarpinio serverio naudotojo vardas, perduodamas OpenVPN, kai jo "
+"prašoma."
 
 #: ../properties/nm-openvpn-dialog.ui.h:75
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
-msgstr "HTTP/Socks tarpinio serverio slaptažodis, perduodamas OpenVPN, kai jo prašoma."
+msgstr ""
+"HTTP/Socks tarpinio serverio slaptažodis, perduodamas OpenVPN, kai jo "
+"prašoma."
 
 #: ../properties/nm-openvpn-dialog.ui.h:76
 msgid "_Show password"
@@ -498,10 +523,12 @@ msgstr "Š_liuzas:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:80
 msgid ""
-"Remote host name or IP address. You can specify multiple items for redundancy (use commas to separate the entries).\n"
+"Remote host name or IP address. You can specify multiple items for "
+"redundancy (use commas to separate the entries).\n"
 "config: remote"
 msgstr ""
-"Nutolusio serverio vardas arba IP adresas. Galite nurodyti kelis elementus (naudokite kablelius skyrimui).\n"
+"Nutolusio serverio vardas arba IP adresas. Galite nurodyti kelis elementus "
+"(naudokite kablelius skyrimui).\n"
 "konfig: remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:82
@@ -550,10 +577,12 @@ msgstr "Naudotojo liudijimas:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:93
 msgid ""
-"Local peer's signed certificate in .pem format (signed by CA of CA Certificate).\n"
+"Local peer's signed certificate in .pem format (signed by CA of CA "
+"Certificate).\n"
 "config: cert"
 msgstr ""
-"Vietinio porininko pasirašytas liudijimas .pem formatu (pasirašytas LĮ liudijimo įstaigos).\n"
+"Vietinio porininko pasirašytas liudijimas .pem formatu (pasirašytas LĮ "
+"liudijimo įstaigos).\n"
 "konfig: cert"
 
 #: ../properties/nm-openvpn-dialog.ui.h:95
@@ -636,110 +665,148 @@ msgstr "Pasirinkite tapatybės nustatymo veikseną."
 msgid "Ad_vanced..."
 msgstr "Išsa_miau..."
 
-#: ../src/nm-openvpn-service.c:194
+#: ../src/nm-openvpn-service.c:198
 #, c-format
 msgid "invalid address '%s'"
 msgstr "netinkamas adresas „%s“"
 
-#: ../src/nm-openvpn-service.c:206
+#: ../src/nm-openvpn-service.c:210
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
 msgstr "netinkama skaitinė savybė „%s“ arba už ribų [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:217
+#: ../src/nm-openvpn-service.c:221
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
 msgstr "netinkama loginė savybė „%s“ (ne taip arba ne)"
 
-#: ../src/nm-openvpn-service.c:224
+#: ../src/nm-openvpn-service.c:228
 #, c-format
 msgid "unhandled property '%s' type %s"
 msgstr "neapdorotas savybės „%s“ tipas %s"
 
-#: ../src/nm-openvpn-service.c:235
+#: ../src/nm-openvpn-service.c:239
 #, c-format
 msgid "property '%s' invalid or not supported"
 msgstr "savybė „%s“ netinkama arba nepalaikoma"
 
-#: ../src/nm-openvpn-service.c:252
+#: ../src/nm-openvpn-service.c:256
 msgid "No VPN configuration options."
 msgstr "Nėra VPN konfigūracijos parinkčių."
 
-#: ../src/nm-openvpn-service.c:275
-msgid "No VPN secrets!"
-msgstr "Nėra VPN paslapčių!"
+#: ../src/nm-openvpn-service.c:425
+msgid "A username is required."
+msgstr "Būtinas naudotojo vardas."
 
-#: ../src/nm-openvpn-service.c:748
+#: ../src/nm-openvpn-service.c:429
+msgid "A password is required."
+msgstr "Būtinas slaptažodis."
+
+#: ../src/nm-openvpn-service.c:432
+msgid "A username and password are required."
+msgstr "Būtinas naudotojo vardas ir slaptažodis."
+
+#: ../src/nm-openvpn-service.c:452
+#| msgid "Private Key Password:"
+msgid "A private key password is required."
+msgstr "Būtinas asmeninio rakto slaptažodis."
+
+#: ../src/nm-openvpn-service.c:465
+msgid "An HTTP Proxy username is required."
+msgstr "Būtinas HTTP tarpinio serverio naudotojo vardas."
+
+#: ../src/nm-openvpn-service.c:469
+msgid "An HTTP Proxy password is required."
+msgstr "Būtinas HTTP tarpinio serverio slaptažodis."
+
+#: ../src/nm-openvpn-service.c:472
+msgid "An HTTP Proxy username and password are required."
+msgstr "Būtinas HTTP tarpinio serverio naudotojo vardas ir slaptažodis."
+
+#: ../src/nm-openvpn-service.c:876
 msgid "Could not find the openvpn binary."
 msgstr "Nepavyko rasti openvpn programos."
 
-#: ../src/nm-openvpn-service.c:759
+#: ../src/nm-openvpn-service.c:887
 msgid "Invalid HMAC auth."
 msgstr "Netinkama HMAC tapatybė."
 
-#: ../src/nm-openvpn-service.c:771
-#: ../src/nm-openvpn-service.c:1184
-#: ../src/nm-openvpn-service.c:1254
+#: ../src/nm-openvpn-service.c:898 ../src/nm-openvpn-service.c:1374
 msgid "Invalid connection type."
 msgstr "Netinkamas prisijungimo tipas."
 
-#: ../src/nm-openvpn-service.c:816
+#: ../src/nm-openvpn-service.c:943
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Netinkamas tarpininko tipas „%s“."
 
-#: ../src/nm-openvpn-service.c:852
+#: ../src/nm-openvpn-service.c:979
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Netinkamas prievado numeris „%s“."
 
-#: ../src/nm-openvpn-service.c:909
+#: ../src/nm-openvpn-service.c:1036
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Netinkamos persijungimo sekundės „%s“."
 
-#: ../src/nm-openvpn-service.c:933
+#: ../src/nm-openvpn-service.c:1060
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Netinkamas TUN MTU dydis „%s“."
 
-#: ../src/nm-openvpn-service.c:948
+#: ../src/nm-openvpn-service.c:1075
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Netinkamas fragmento dydis „%s“."
 
-#: ../src/nm-openvpn-service.c:1016
+#: ../src/nm-openvpn-service.c:1143
 msgid "Missing required local IP address for static key mode."
 msgstr "Trūkstamas būtinas vietinis IP adresas statinio rakto veiksenai."
 
-#: ../src/nm-openvpn-service.c:1029
+#: ../src/nm-openvpn-service.c:1156
 msgid "Missing required remote IP address for static key mode."
 msgstr "Trūkstamas būtinas išorinis IP adresas statinio rakto veiksenai."
 
-#: ../src/nm-openvpn-service.c:1054
+#: ../src/nm-openvpn-service.c:1181
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Nežinomas ryšio tipas „%s“."
 
-#: ../src/nm-openvpn-service.c:1173
-#: ../src/nm-openvpn-service.c:1244
-msgid "Could not process the request because the VPN connection settings were invalid."
-msgstr "Nepavyko apdoroti užklausos, nes VPN prisijungimo nustatymai buvo netinkami."
+#: ../src/nm-openvpn-service.c:1292 ../src/nm-openvpn-service.c:1365
+#: ../src/nm-openvpn-service.c:1399
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr ""
+"Nepavyko apdoroti užklausos, nes VPN prisijungimo nustatymai buvo netinkami."
 
-#: ../src/nm-openvpn-service.c:1198
-msgid "Could not process the request because no username was provided."
-msgstr "Nepavyko apdoroti užklausos, nes nepateiktas naudotojo vardas."
+#: ../src/nm-openvpn-service.c:1301
+#| msgid ""
+#| "Could not process the request because the VPN connection settings were "
+#| "invalid."
+msgid ""
+"Could not process the request because the openvpn connection type was "
+"invalid."
+msgstr "Nepavyko apdoroti užklausos, nes openvpn ryšio tipas buvo netinkamas."
 
-#: ../src/nm-openvpn-service.c:1388
+#: ../src/nm-openvpn-service.c:1413
+#| msgid "Select an authentication mode."
+msgid "Unhandled pending authentication."
+msgstr "Neapdorotas laukiantis tapatybės nustatymas."
+
+#: ../src/nm-openvpn-service.c:1554
 msgid "Don't quit when VPN connection terminates"
 msgstr "Neišjungti, kai VPN ryšys baigiasi"
 
-#: ../src/nm-openvpn-service.c:1389
+#: ../src/nm-openvpn-service.c:1555
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Įjungti išsamų derinimo žurnalą (gali parodyti slaptažodžius)"
 
-#: ../src/nm-openvpn-service.c:1410
-msgid "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
-msgstr "nm-openvpn-service suteikia NetworkManager integruotą OpenVPN galimybę."
+#: ../src/nm-openvpn-service.c:1578
+msgid ""
+"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
+"nm-openvpn-service suteikia NetworkManager integruotą OpenVPN galimybę."
 
