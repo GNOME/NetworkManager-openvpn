@@ -692,7 +692,9 @@ get_suggested_name (NMVpnPluginUiInterface *iface, NMConnection *connection)
 static guint32
 get_capabilities (NMVpnPluginUiInterface *iface)
 {
-	return (NM_VPN_PLUGIN_UI_CAPABILITY_IMPORT | NM_VPN_PLUGIN_UI_CAPABILITY_EXPORT);
+	return (NM_VPN_PLUGIN_UI_CAPABILITY_IMPORT |
+	        NM_VPN_PLUGIN_UI_CAPABILITY_EXPORT |
+	        NM_VPN_PLUGIN_UI_CAPABILITY_IPV6);
 }
 
 static NMVpnPluginUiWidgetInterface *
