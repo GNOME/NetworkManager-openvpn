@@ -53,6 +53,9 @@ extern char **environ;
 #define DBUS_TYPE_G_ARRAY_OF_UINT          (dbus_g_type_get_collection ("GArray", G_TYPE_UINT))
 #define DBUS_TYPE_G_ARRAY_OF_ARRAY_OF_UINT (dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_ARRAY_OF_UINT))
 #define DBUS_TYPE_G_PTR_ARRAY_OF_STRING    (dbus_g_type_get_collection ("GPtrArray", G_TYPE_STRING))
+#define DBUS_TYPE_G_MAP_OF_VARIANT         (dbus_g_type_get_map ("GHashTable", G_TYPE_STRING, G_TYPE_VALUE))
+#define DBUS_TYPE_G_IP6_ROUTE              (dbus_g_type_get_struct ("GValueArray", DBUS_TYPE_G_UCHAR_ARRAY, G_TYPE_UINT, DBUS_TYPE_G_UCHAR_ARRAY, G_TYPE_UINT, G_TYPE_INVALID))
+#define DBUS_TYPE_G_ARRAY_OF_IP6_ROUTE     (dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_IP6_ROUTE))
 
 static void
 helper_failed (DBusGConnection *connection, const char *reason)
@@ -83,25 +86,49 @@ helper_failed (DBusGConnection *connection, const char *reason)
 }
 
 static void
-send_ip4_config (DBusGConnection *connection, GHashTable *config)
+send_config (DBusGConnection *connection, GHashTable *config,
+             GHashTable *ip4config, GHashTable *ip6config)
 {
 	DBusGProxy *proxy;
 	GError *err = NULL;
 
 	proxy = dbus_g_proxy_new_for_name (connection,
-								NM_DBUS_SERVICE_OPENVPN,
-								NM_VPN_DBUS_PLUGIN_PATH,
-								NM_VPN_DBUS_PLUGIN_INTERFACE);
+	                                   NM_DBUS_SERVICE_OPENVPN,
+	                                   NM_VPN_DBUS_PLUGIN_PATH,
+	                                   NM_VPN_DBUS_PLUGIN_INTERFACE);
 
-	dbus_g_proxy_call (proxy, "SetIp4Config", &err,
-				    dbus_g_type_get_map ("GHashTable", G_TYPE_STRING, G_TYPE_VALUE),
-				    config,
-				    G_TYPE_INVALID,
-				    G_TYPE_INVALID);
-
-	if (err) {
-		g_warning ("Could not send failure information: %s", err->message);
+	if (!dbus_g_proxy_call (proxy, "SetConfig", &err,
+	                        DBUS_TYPE_G_MAP_OF_VARIANT,
+	                        config,
+	                        G_TYPE_INVALID,
+	                        G_TYPE_INVALID) && err) {
+		g_warning ("Could not send configuration information: %s", err->message);
 		g_error_free (err);
+		err = NULL;
+	}
+
+	if (ip4config) {
+		if (!dbus_g_proxy_call (proxy, "SetIp4Config", &err,
+		                        DBUS_TYPE_G_MAP_OF_VARIANT,
+		                        ip4config,
+		                        G_TYPE_INVALID,
+		                        G_TYPE_INVALID) && err) {
+			g_warning ("Could not send IPv4 configuration information: %s", err->message);
+			g_error_free (err);
+			err = NULL;
+		}
+	}
+
+	if (ip6config) {
+		if (!dbus_g_proxy_call (proxy, "SetIp6Config", &err,
+		                        DBUS_TYPE_G_MAP_OF_VARIANT,
+		                        ip6config,
+		                        G_TYPE_INVALID,
+		                        G_TYPE_INVALID) && err) {
+			g_warning ("Could not send IPv6 configuration information: %s", err->message);
+			g_error_free (err);
+			err = NULL;
+		}
 	}
 
 	g_object_unref (proxy);
@@ -148,7 +175,18 @@ uint_to_gvalue (guint32 num)
 }
 
 static GValue *
-addr_to_gvalue (const char *str)
+bool_to_gvalue (gboolean b)
+{
+	GValue *val;
+
+	val = g_slice_new0 (GValue);
+	g_value_init (val, G_TYPE_BOOLEAN);
+	g_value_set_boolean (val, b);
+	return val;
+}
+
+static GValue *
+addr4_to_gvalue (const char *str)
 {
 	struct in_addr	temp_addr;
 	GValue *val;
@@ -168,11 +206,11 @@ addr_to_gvalue (const char *str)
 }
 
 static GValue *
-parse_addr_list (GValue *value_array, const char *str)
+parse_addr4_list (GValue *value_array, const char *str)
 {
 	char **split;
 	int i;
-	struct in_addr	temp_addr;
+	struct in_addr temp_addr;
 	GArray *array;
 
 	/* Empty */
@@ -197,8 +235,32 @@ parse_addr_list (GValue *value_array, const char *str)
 		g_value_init (value_array, DBUS_TYPE_G_UINT_ARRAY);
 		g_value_set_boxed (value_array, array);
 	}
+	if (!value_array)
+		g_array_free (array, TRUE);
 
 	return value_array;
+}
+
+static GValue *
+addr6_to_gvalue (const char *str)
+{
+	struct in6_addr temp_addr;
+	GValue *val;
+	GByteArray *ba;
+
+	/* Empty */
+	if (!str || strlen (str) < 1)
+		return NULL;
+
+	if (inet_pton (AF_INET6, str, &temp_addr) <= 0)
+		return NULL;
+
+	val = g_slice_new0 (GValue);
+	g_value_init (val, DBUS_TYPE_G_UCHAR_ARRAY);
+	ba = g_byte_array_new ();
+	g_byte_array_append (ba, (guint8 *) &temp_addr, sizeof (temp_addr));
+	g_value_take_boxed (val, ba);
+	return val;
 }
 
 static inline gboolean
@@ -207,15 +269,15 @@ is_domain_valid (const char *str)
 	return (str && (strlen(str) >= 1) && (strlen(str) <= 255));
 }
 
+#define BUFLEN 256
+
 static GValue *
-get_routes (void)
+get_ip4_routes (void)
 {
 	GValue *value = NULL;
 	GPtrArray *routes;
 	char *tmp;
 	int i;
-
-#define BUFLEN 256
 
 	routes = g_ptr_array_new ();
 
@@ -287,13 +349,105 @@ get_routes (void)
 }
 
 static GValue *
+get_ip6_routes (void)
+{
+	GValue *value = NULL;
+	GSList *routes;
+	char *tmp;
+	int i;
+
+	routes = NULL;
+
+	for (i = 1; i < 256; i++) {
+		NMIP6Route *route;
+		char buf[BUFLEN];
+		struct in6_addr network, gateway;
+		guint32 prefix;
+		gchar **dest_prefix;
+
+		snprintf (buf, BUFLEN, "route_ipv6_network_%d", i);
+		tmp = getenv (buf);
+		if (!tmp || strlen (tmp) < 1)
+			break;
+
+		/* Split network string in "dest/prefix" format */
+		dest_prefix = g_strsplit (tmp, "/", 2);
+
+		tmp = dest_prefix[0];
+		if (inet_pton (AF_INET6, tmp, &network) <= 0) {
+			g_warning ("Ignoring invalid static route address '%s'", tmp ? tmp : "NULL");
+			g_strfreev (dest_prefix);
+			continue;
+		}
+
+		tmp = dest_prefix[1];
+		if (tmp) {
+			long int tmp_prefix;
+
+			errno = 0;
+			tmp_prefix = strtol (tmp, NULL, 10);
+			if (errno || tmp_prefix <= 0 || tmp_prefix > 128) {
+				g_warning ("Ignoring invalid static route prefix '%s'", tmp ? tmp : "NULL");
+				g_strfreev (dest_prefix);
+				continue;
+			}
+			prefix = (guint32) tmp_prefix;
+		} else {
+			g_warning ("Ignoring static route %d with no prefix length", i);
+			g_strfreev (dest_prefix);
+			continue;
+		}
+		g_strfreev (dest_prefix);
+
+		snprintf (buf, BUFLEN, "route_ipv6_gateway_%d", i);
+		tmp = getenv (buf);
+		/* gateway can be missing */
+		if (tmp && (inet_pton (AF_INET6, tmp, &gateway) <= 0)) {
+			g_warning ("Ignoring invalid static route gateway '%s'", tmp ? tmp : "NULL");
+			continue;
+		}
+
+		route = nm_ip6_route_new ();
+		nm_ip6_route_set_dest (route, &network);
+		nm_ip6_route_set_prefix (route, prefix);
+		nm_ip6_route_set_next_hop (route, &gateway);
+
+		routes = g_slist_append (routes, route);
+	}
+
+	if (routes) {
+		GSList *iter;
+
+		value = g_slice_new0 (GValue);
+		g_value_init (value, DBUS_TYPE_G_ARRAY_OF_IP6_ROUTE);
+		nm_utils_ip6_routes_to_gvalue (routes, value);
+
+		for (iter = routes; iter; iter = iter->next)
+			nm_ip6_route_unref (iter->data);
+		g_slist_free (routes);
+	}
+
+	return value;
+}
+
+static GValue *
 trusted_remote_to_gvalue (void)
 {
 	char *tmp;
 	GValue *val = NULL;
-	struct in_addr addr;
 	const char *p;
 	gboolean is_name = FALSE;
+
+	tmp = getenv ("trusted_ip6");
+	if (tmp) {
+		val = addr6_to_gvalue(tmp);
+		if (val == NULL) {
+			g_warning ("%s: failed to convert VPN gateway address '%s' (%d)",
+			           __func__, tmp, errno);
+			return NULL;
+		}
+		return val;
+	}
 
 	tmp = getenv ("trusted_ip");
 	if (!tmp)
@@ -303,7 +457,7 @@ trusted_remote_to_gvalue (void)
 		return NULL;
 	}
 
-	/* Check if it seems to be a hostname hostname */
+	/* Check if it seems to be a hostname */
 	p = tmp;
 	while (*p) {
 		if (*p != '.' && !isdigit (*p)) {
@@ -313,12 +467,14 @@ trusted_remote_to_gvalue (void)
 		p++;
 	}
 
-	/* Resolve a hostname if required */
+	/* Resolve a hostname if required. Only look for IPv4 addresses */
 	if (is_name) {
+		struct in_addr addr;
 		struct addrinfo hints;
 		struct addrinfo *result = NULL, *rp;
 		int err;
 
+		addr.s_addr = 0;
 		memset (&hints, 0, sizeof (hints));
 
 		hints.ai_family = AF_INET;
@@ -345,22 +501,20 @@ trusted_remote_to_gvalue (void)
 		}
 
 		freeaddrinfo (result);
+		if (addr.s_addr != 0)
+			return uint_to_gvalue (addr.s_addr);
+		else {
+			g_warning ("%s: failed to convert or look up VPN gateway address '%s'",
+			           __func__, tmp);
+			return NULL;
+		}
 	} else {
-		errno = 0;
-		if (inet_pton (AF_INET, tmp, &addr) <= 0) {
+		val = addr4_to_gvalue (tmp);
+		if (val == NULL) {
 			g_warning ("%s: failed to convert VPN gateway address '%s' (%d)",
 			           __func__, tmp, errno);
 			return NULL;
 		}
-	}
-
-	if (addr.s_addr != 0) {
-		val = g_slice_new0 (GValue);
-		g_value_init (val, G_TYPE_UINT);
-		g_value_set_uint (val, addr.s_addr);
-	} else {
-		g_warning ("%s: failed to convert or look up VPN gateway address '%s'",
-		           __func__, tmp);
 	}
 
 	return val;
@@ -370,7 +524,7 @@ int
 main (int argc, char *argv[])
 {
 	DBusGConnection *connection;
-	GHashTable *config;
+	GHashTable *config, *ip4config, *ip6config;
 	char *tmp;
 	GValue *val;
 	int i;
@@ -401,39 +555,50 @@ main (int argc, char *argv[])
 	}
 
 	config = g_hash_table_new (g_str_hash, g_str_equal);
+	ip4config = g_hash_table_new (g_str_hash, g_str_equal);
+	ip6config = g_hash_table_new (g_str_hash, g_str_equal);
 
 	/* External world-visible VPN gateway */
 	val = trusted_remote_to_gvalue ();
 	if (val)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_EXT_GATEWAY, val);
+		g_hash_table_insert (config, NM_VPN_PLUGIN_CONFIG_EXT_GATEWAY, val);
 	else
 		helper_failed (connection, "VPN Gateway");
 
 	/* Internal VPN subnet gateway */
-	val = addr_to_gvalue (getenv ("route_vpn_gateway"));
+	tmp = getenv ("route_vpn_gateway");
+	val = addr4_to_gvalue (tmp);
 	if (val)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_INT_GATEWAY, val);
+		g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_INT_GATEWAY, val);
+	else {
+		val = addr6_to_gvalue (tmp);
+		if (val)
+			g_hash_table_insert (ip6config, NM_VPN_PLUGIN_IP6_CONFIG_INT_GATEWAY, val);
+	}
 
 	/* VPN device */
 	tmp = getenv ("dev");
 	val = str_to_gvalue (tmp, FALSE);
 	if (val)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_TUNDEV, val);
+		g_hash_table_insert (config, NM_VPN_PLUGIN_CONFIG_TUNDEV, val);
 	else
 		helper_failed (connection, "Tunnel Device");
 
 	if (strncmp (tmp, "tap", 3) == 0)
 		tapdev = TRUE;
 
-	/* IP address */
-	val = addr_to_gvalue (getenv ("ifconfig_local"));
-	if (val)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS, val);
-	else
-		helper_failed (connection, "IP4 Address");
+	/* IPv4 address */
+	tmp = getenv ("ifconfig_local");
+	if (tmp && strlen (tmp)) {
+		val = addr4_to_gvalue (tmp);
+		if (val)
+			g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS, val);
+		else
+			helper_failed (connection, "IP4 Address");
+	}
 
 	/* PTP address; for vpnc PTP address == internal IP4 address */
-	val = addr_to_gvalue (getenv ("ifconfig_remote"));
+	val = addr4_to_gvalue (getenv ("ifconfig_remote"));
 	if (val) {
 		/* Sigh.  Openvpn added 'topology' stuff in 2.1 that changes the meaning
 		 * of the ifconfig bits without actually telling you what they are
@@ -446,9 +611,9 @@ main (int argc, char *argv[])
 			/* probably a netmask, not a PTP address; topology == subnet */
 			addr = g_value_get_uint (val);
 			g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (addr));
-			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
+			g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 		} else
-			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PTP, val);
+			g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_PTP, val);
 	}
 
 	/* Netmask
@@ -463,22 +628,61 @@ main (int argc, char *argv[])
 		val = g_slice_new0 (GValue);
 		g_value_init (val, G_TYPE_UINT);
 		g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (temp_addr.s_addr));
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
+		g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 	} else if (!tapdev) {
-		if (!g_hash_table_lookup (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX)) {
+		if (!g_hash_table_lookup (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX)) {
 			val = g_slice_new0 (GValue);
 			g_value_init (val, G_TYPE_UINT);
 			g_value_set_uint (val, 32);
-			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
+			g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 		}
 	} else
 		g_warning ("No IP4 netmask/prefix (missing or invalid 'ifconfig_netmask')");
 
-	val = get_routes ();
+	val = get_ip4_routes ();
 	if (val)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_ROUTES, val);
+		g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_ROUTES, val);
 
-    	/* DNS and WINS servers */
+	/* IPv6 address */
+	tmp = getenv ("ifconfig_ipv6_local");
+	if (tmp && strlen (tmp)) {
+		val = addr6_to_gvalue (tmp);
+		if (val)
+			g_hash_table_insert (ip6config, NM_VPN_PLUGIN_IP6_CONFIG_ADDRESS, val);
+		else
+			helper_failed (connection, "IP6 Address");
+	}
+
+	/* IPv6 remote address */
+	tmp = getenv ("ifconfig_ipv6_remote");
+	if (tmp && strlen (tmp)) {
+		val = addr6_to_gvalue (tmp);
+		if (val)
+			g_hash_table_insert (ip6config, NM_VPN_PLUGIN_IP6_CONFIG_PTP, val);
+		else
+			helper_failed (connection, "IP6 PTP Address");
+	}
+
+	/* IPv6 netbits */
+	tmp = getenv ("ifconfig_ipv6_netbits");
+	if (tmp && strlen (tmp)) {
+		long int netbits;
+
+		errno = 0;
+		netbits = strtol (tmp, NULL, 10);
+		if (errno || netbits < 0 || netbits > 128) {
+			g_warning ("Ignoring invalid prefix '%s'", tmp);
+		} else {
+			val = uint_to_gvalue ((guint32) netbits);
+			g_hash_table_insert (ip6config, NM_VPN_PLUGIN_IP6_CONFIG_PREFIX, val);
+		}
+	}
+
+	val = get_ip6_routes ();
+	if (val)
+		g_hash_table_insert (ip6config, NM_VPN_PLUGIN_IP6_CONFIG_ROUTES, val);
+
+	/* DNS and WINS servers */
 	dns_domains = g_ptr_array_sized_new (3);
 	for (i = 1; i < 256; i++) {
 		char *env_name;
@@ -496,22 +700,22 @@ main (int argc, char *argv[])
 		tmp += 12; /* strlen ("dhcp-option ") */
 
 		if (g_str_has_prefix (tmp, "DNS "))
-			dns_list = parse_addr_list (dns_list, tmp + 4);
+			dns_list = parse_addr4_list (dns_list, tmp + 4);
 		else if (g_str_has_prefix (tmp, "WINS "))
-			nbns_list = parse_addr_list (nbns_list, tmp + 5);
+			nbns_list = parse_addr4_list (nbns_list, tmp + 5);
 		else if (g_str_has_prefix (tmp, "DOMAIN ") && is_domain_valid (tmp + 7))
 			g_ptr_array_add (dns_domains, tmp + 7);
 	}
 
 	if (dns_list)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_DNS, dns_list);
+		g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_DNS, dns_list);
 	if (nbns_list)
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_NBNS, nbns_list);
+		g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_NBNS, nbns_list);
 	if (dns_domains->len) {
 		val = g_slice_new0 (GValue);
 		g_value_init (val, DBUS_TYPE_G_PTR_ARRAY_OF_STRING);
 		g_value_take_boxed (val, dns_domains);
-		g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_DOMAINS, val);
+		g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_DOMAINS, val);
 	} else
 		g_ptr_array_free (dns_domains, TRUE);
 
@@ -526,12 +730,28 @@ main (int argc, char *argv[])
 			g_warning ("Ignoring invalid tunnel MTU '%s'", tmp);
 		} else {
 			val = uint_to_gvalue ((guint32) mtu);
-			g_hash_table_insert (config, NM_VPN_PLUGIN_IP4_CONFIG_MTU, val);
+			g_hash_table_insert (config, NM_VPN_PLUGIN_CONFIG_MTU, val);
 		}
 	}
 
+	if (g_hash_table_size (ip4config)) {
+		g_hash_table_insert (config, NM_VPN_PLUGIN_CONFIG_HAS_IP4,
+		                     bool_to_gvalue (TRUE));
+	} else {
+		g_hash_table_destroy (ip4config);
+		ip4config = NULL;
+	}
+
+	if (g_hash_table_size (ip6config)) {
+		g_hash_table_insert (config, NM_VPN_PLUGIN_CONFIG_HAS_IP6,
+		                     bool_to_gvalue (TRUE));
+	} else {
+		g_hash_table_destroy (ip6config);
+		ip6config = NULL;
+	}
+
 	/* Send the config info to nm-openvpn-service */
-	send_ip4_config (connection, config);
+	send_config (connection, config, ip4config, ip6config);
 
 	return 0;
 }
