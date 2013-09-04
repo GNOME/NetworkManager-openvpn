@@ -9,58 +9,50 @@
 # Jordi Jaen Pallares <jordi@suse.de>, 1999, 2000, 2001.
 # Pablo Iranzo Gómez <Pablo.Iranzo@uv.es>, 2000.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2012-11-07 22:00+0000\n"
-"PO-Revision-Date: 2012-11-08 12:53+0100\n"
+"POT-Creation-Date: 2013-08-02 20:41+0000\n"
+"PO-Revision-Date: 2013-09-04 14:28+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
+"Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Gtranslator 2.91.5\n"
 
-#: ../auth-dialog/vpn-password-dialog.c:95
-msgid "_Password:"
-msgstr "_Contraseña:"
-
-#: ../auth-dialog/vpn-password-dialog.c:97
-msgid "_Secondary Password:"
-msgstr "Contraseña _secundaria:"
-
-#: ../auth-dialog/vpn-password-dialog.c:239
-msgid "Sh_ow passwords"
-msgstr "M_ostrar contraseñas"
-
-#. In other_ui mode, we don't actually show the dialog. Instead we pass back everything
-#. that is needed to build it
-#: ../auth-dialog/main.c:158
+#: ../auth-dialog/main.c:175
 #, c-format
-msgid "You need to authenticate to access the Virtual Private Network '%s'."
-msgstr "Debe autenticarse para acceder a la red privada virtual «%s»."
+#| msgid "Authenticate VPN"
+msgid "Authenticate VPN %s"
+msgstr "Autenticar VPN %s"
 
-#: ../auth-dialog/main.c:167 ../auth-dialog/main.c:191
-msgid "Authenticate VPN"
-msgstr "Autenticación VPN"
-
-#: ../auth-dialog/main.c:170 ../properties/nm-openvpn-dialog.ui.h:97
+#: ../auth-dialog/main.c:183 ../properties/nm-openvpn-dialog.ui.h:97
 msgid "Password:"
 msgstr "Contraseña:"
 
-#: ../auth-dialog/main.c:172 ../auth-dialog/main.c:210
+#: ../auth-dialog/main.c:192 ../auth-dialog/main.c:240
 msgid "Certificate password:"
 msgstr "Contraseña del certificado:"
 
-#: ../auth-dialog/main.c:196
+#: ../auth-dialog/main.c:226
+msgid "Authenticate VPN"
+msgstr "Autenticación VPN"
+
+#: ../auth-dialog/main.c:231
 msgid "Certificate pass_word:"
 msgstr "_Contraseña del certificado:"
+
+#: ../auth-dialog/main.c:478
+#, c-format
+msgid "You need to authenticate to access the Virtual Private Network '%s'."
+msgstr "Debe autenticarse para acceder a la red privada virtual «%s»."
 
 #: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
@@ -683,92 +675,117 @@ msgstr "Seleccionar un modo de autenticación."
 msgid "Ad_vanced..."
 msgstr "A_vanzado…"
 
-#: ../src/nm-openvpn-service.c:194
+#: ../src/nm-openvpn-service.c:198
 #, c-format
 msgid "invalid address '%s'"
 msgstr "dirección «%s» no válida"
 
-#: ../src/nm-openvpn-service.c:206
+#: ../src/nm-openvpn-service.c:210
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
 msgstr "propiedad entera «%s» no válida o fuera de rango [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:217
+#: ../src/nm-openvpn-service.c:221
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
 msgstr "propiedad booleana «%s» no válida (no es «sí» o «no»)"
 
-#: ../src/nm-openvpn-service.c:224
+#: ../src/nm-openvpn-service.c:228
 #, c-format
 msgid "unhandled property '%s' type %s"
 msgstr "propiedad «%s» de tipo %s no controlada"
 
-#: ../src/nm-openvpn-service.c:235
+#: ../src/nm-openvpn-service.c:239
 #, c-format
 msgid "property '%s' invalid or not supported"
 msgstr "propiedad «%s» no válida o no soportada"
 
-#: ../src/nm-openvpn-service.c:252
+#: ../src/nm-openvpn-service.c:256
 msgid "No VPN configuration options."
 msgstr "No hay opciones de configuración de VPN."
 
-#: ../src/nm-openvpn-service.c:275
-msgid "No VPN secrets!"
-msgstr "No hay secretos VPN."
+#: ../src/nm-openvpn-service.c:425
+msgid "A username is required."
+msgstr "Se requiere un nombre de usuario."
 
-#: ../src/nm-openvpn-service.c:748
+#: ../src/nm-openvpn-service.c:429
+msgid "A password is required."
+msgstr "Se requiere una contraseña."
+
+#: ../src/nm-openvpn-service.c:432
+msgid "A username and password are required."
+msgstr "Se requiere un nombre de usuario y una contraseña."
+
+#: ../src/nm-openvpn-service.c:452
+#| msgid "Private Key Password:"
+msgid "A private key password is required."
+msgstr "Se requiere una contraseña de la clave privada."
+
+#: ../src/nm-openvpn-service.c:465
+msgid "An HTTP Proxy username is required."
+msgstr "Se requiere un nombre de usuario para el proxy HTTP."
+
+#: ../src/nm-openvpn-service.c:469
+msgid "An HTTP Proxy password is required."
+msgstr "Se requiere una contraseña para el proxy HTTP."
+
+#: ../src/nm-openvpn-service.c:472
+msgid "An HTTP Proxy username and password are required."
+msgstr "Se requiere un nombre de usuario y una contraseña para el proxy HTTP."
+
+#: ../src/nm-openvpn-service.c:876
 msgid "Could not find the openvpn binary."
 msgstr "No se pudo encontrar el ejecutable de openvpn."
 
-#: ../src/nm-openvpn-service.c:759
+#: ../src/nm-openvpn-service.c:887
 msgid "Invalid HMAC auth."
 msgstr "Autenticación HMAC no válida."
 
-#: ../src/nm-openvpn-service.c:771 ../src/nm-openvpn-service.c:1184
-#: ../src/nm-openvpn-service.c:1254
+#: ../src/nm-openvpn-service.c:898 ../src/nm-openvpn-service.c:1374
 msgid "Invalid connection type."
 msgstr "Tipo de conexión no válido."
 
-#: ../src/nm-openvpn-service.c:816
+#: ../src/nm-openvpn-service.c:943
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Tipo de proxy «%s» no válido."
 
-#: ../src/nm-openvpn-service.c:852
+#: ../src/nm-openvpn-service.c:979
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Número de puerto no válido «%s»."
 
-#: ../src/nm-openvpn-service.c:909
+#: ../src/nm-openvpn-service.c:1036
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Número de segundos de regenociación «%s» no válidos."
 
-#: ../src/nm-openvpn-service.c:933
+#: ../src/nm-openvpn-service.c:1060
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Tamaño de MTU del TUN «%s» no válido."
 
-#: ../src/nm-openvpn-service.c:948
+#: ../src/nm-openvpn-service.c:1075
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Tamaño de fragmento «%s» no válido."
 
-#: ../src/nm-openvpn-service.c:1016
+#: ../src/nm-openvpn-service.c:1143
 msgid "Missing required local IP address for static key mode."
 msgstr "Falta la dirección IP local para el modo de clave estática."
 
-#: ../src/nm-openvpn-service.c:1029
+#: ../src/nm-openvpn-service.c:1156
 msgid "Missing required remote IP address for static key mode."
 msgstr "Falta la dirección IP remota para el modo de clave estática."
 
-#: ../src/nm-openvpn-service.c:1054
+#: ../src/nm-openvpn-service.c:1181
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Tipo de conexión «%s» desconocido."
 
-#: ../src/nm-openvpn-service.c:1173 ../src/nm-openvpn-service.c:1244
+#: ../src/nm-openvpn-service.c:1292 ../src/nm-openvpn-service.c:1365
+#: ../src/nm-openvpn-service.c:1399
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -776,26 +793,53 @@ msgstr ""
 "No se pudo procesar la solicitud porque la configuración de la conexión VPN "
 "no es válida."
 
-#: ../src/nm-openvpn-service.c:1198
-msgid "Could not process the request because no username was provided."
+#: ../src/nm-openvpn-service.c:1301
+#| msgid ""
+#| "Could not process the request because the VPN connection settings were "
+#| "invalid."
+msgid ""
+"Could not process the request because the openvpn connection type was "
+"invalid."
 msgstr ""
-"No se pudo procesar la solicitud porque no se ha proporcionado un nombre de "
-"usuario."
+"No se pudo procesar la solicitud porque el tipo de la conexión openvpn no es "
+"válido."
 
-#: ../src/nm-openvpn-service.c:1388
+#: ../src/nm-openvpn-service.c:1413
+#| msgid "Select an authentication mode."
+msgid "Unhandled pending authentication."
+msgstr "Autenticación pendiente no manejada."
+
+#: ../src/nm-openvpn-service.c:1554
 msgid "Don't quit when VPN connection terminates"
 msgstr "No salir cuando la conexión VPN termine"
 
-#: ../src/nm-openvpn-service.c:1389
+#: ../src/nm-openvpn-service.c:1555
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 "Activar el registro de depurado detallado (puede mostrar las contraseñas)"
 
-#: ../src/nm-openvpn-service.c:1403
+#: ../src/nm-openvpn-service.c:1578
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
 "nm-openvpn-service proporciona la integración de OpenVPN con NetworkManager."
+
+#~ msgid "_Password:"
+#~ msgstr "_Contraseña:"
+
+#~ msgid "_Secondary Password:"
+#~ msgstr "Contraseña _secundaria:"
+
+#~ msgid "Sh_ow passwords"
+#~ msgstr "M_ostrar contraseñas"
+
+#~ msgid "No VPN secrets!"
+#~ msgstr "No hay secretos VPN."
+
+#~ msgid "Could not process the request because no username was provided."
+#~ msgstr ""
+#~ "No se pudo procesar la solicitud porque no se ha proporcionado un nombre "
+#~ "de usuario."
 
 #~ msgid "_Username:"
 #~ msgstr "Nombre de _usuario:"
