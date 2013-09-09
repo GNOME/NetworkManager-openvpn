@@ -49,6 +49,7 @@
 #define CA_TAG "ca "
 #define CERT_TAG "cert "
 #define CIPHER_TAG "cipher "
+#define KEYSIZE_TAG "keysize "
 #define CLIENT_TAG "client"
 #define COMP_TAG "comp-lzo"
 #define DEV_TAG "dev "
@@ -597,6 +598,25 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 
+		if (!strncmp (*line, KEYSIZE_TAG, strlen (KEYSIZE_TAG))) {
+			items = get_args (*line + strlen (KEYSIZE_TAG), &nitems);
+			if (nitems == 1) {
+				glong key_size;
+
+				errno = 0;
+				key_size = strtol (items[0], NULL, 10);
+				if ((errno == 0) && (key_size > 0) && (key_size <= 65535)) {
+					tmp = g_strdup_printf ("%d", (guint32) key_size);
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE, tmp);
+					g_free (tmp);
+				} else
+					g_warning ("%s: invalid key size in option '%s'", __func__, *line);
+			} else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+			g_strfreev (items);
+			continue;
+		}
+
 		if (!strncmp (*line, TLS_REMOTE_TAG, strlen (TLS_REMOTE_TAG))) {
 			char *unquoted = unquote (*line + strlen (TLS_REMOTE_TAG), NULL);
 
@@ -754,6 +774,8 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	gboolean use_lzo = FALSE;
 	gboolean reneg_exists = FALSE;
 	guint32 reneg = 0;
+	gboolean keysize_exists = FALSE;
+	guint32 keysize = 0;
 	const char *proxy_type = NULL;
 	const char *proxy_server = NULL;
 	const char *proxy_port = NULL;
@@ -845,6 +867,12 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && strlen (value))
 		cipher = value;
 
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE);
+	if (value && strlen (value)) {
+		keysize_exists = TRUE;
+		keysize = strtol (value, NULL, 10);
+	}
+
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
 	if (value && strlen (value))
 		local_ip = value;
@@ -912,6 +940,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	if (cipher)
 		fprintf (f, "cipher %s\n", cipher);
+
+	if (keysize_exists)
+		fprintf (f, "keysize %d\n", keysize);
 
 	if (use_lzo)
 		fprintf (f, "comp-lzo yes\n");

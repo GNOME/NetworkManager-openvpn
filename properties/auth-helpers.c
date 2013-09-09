@@ -941,6 +941,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_PROXY_RETRY,
 	NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,
 	NM_OPENVPN_KEY_CIPHER,
+	NM_OPENVPN_KEY_KEYSIZE,
 	NM_OPENVPN_KEY_AUTH,
 	NM_OPENVPN_KEY_TA_DIR,
 	NM_OPENVPN_KEY_TA,
@@ -1026,6 +1027,16 @@ reneg_toggled_cb (GtkWidget *check, gpointer user_data)
 	GtkWidget *widget;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
+	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+}
+
+static void
+keysize_toggled_cb (GtkWidget *check, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	GtkWidget *widget;
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
 	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
@@ -1588,6 +1599,31 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
 	populate_cipher_combo (GTK_COMBO_BOX (widget), value);
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_checkbutton"));
+	g_assert (widget);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (keysize_toggled_cb), builder);
+
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_KEYSIZE);
+	if (value && strlen (value)) {
+		long int tmp;
+
+		errno = 0;
+		tmp = strtol (value, NULL, 10);
+		if (errno == 0 && tmp > 0 && tmp < 65536) {
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
+			gtk_widget_set_sensitive (widget, TRUE);
+		}
+	} else {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 128.0);
+		gtk_widget_set_sensitive (widget, FALSE);
+	}
+
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "hmacauth_combo"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_AUTH);
 	populate_hmacauth_combo (GTK_COMBO_BOX (widget), value);
@@ -1810,6 +1846,15 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		if (!is_default && cipher) {
 			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CIPHER), g_strdup (cipher));
 		}
+	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int keysize_val;
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
+		keysize_val = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_KEYSIZE), g_strdup_printf ("%d", keysize_val));
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "hmacauth_combo"));

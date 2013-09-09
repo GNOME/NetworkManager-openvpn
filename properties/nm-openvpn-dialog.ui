@@ -32,6 +32,13 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="lower">1</property>
+    <property name="upper">65535</property>
+    <property name="value">128</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkListStore" id="liststore1"/>
   <object class="GtkListStore" id="liststore2"/>
   <object class="GtkListStore" id="model1">
@@ -507,6 +514,50 @@ config: cipher</property>
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="keysize_checkbutton">
+                        <property name="label" translatable="yes">Use custom _size of cipher key:</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="tooltip_text" translatable="yes">Set cipher key size to a custom value. If unspecified, it defaults to cipher-specific size.
+config: keysize &lt;n&gt;</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                        <property name="left_attach">0</property>
+                        <property name="right_attach">1</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="keysize_spinbutton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="invisible_char">●</property>
+                        <property name="adjustment">adjustment6</property>
+                        <property name="climb_rate">1</property>
+                        <property name="numeric">True</property>
+                        <property name="tooltip_text" translatable="yes">Set cipher key size to a custom value. If unspecified, it defaults to cipher-specific size.
+config: keysize &lt;n&gt;</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+
+                    <child>
                       <object class="GtkComboBox" id="hmacauth_combo">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -523,8 +574,8 @@ config: auth</property>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -549,8 +600,8 @@ config: auth</property>
                         <property name="mnemonic_widget">hmacauth_combo</property>
                       </object>
                       <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                       </packing>
                     </child>
                   </object>

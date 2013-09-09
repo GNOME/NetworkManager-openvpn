@@ -11,6 +11,7 @@ EXTRA_DIST = \
 	proxy-http.ovpn \
 	httpauthfile \
 	proxy-socks.ovpn \
-	proxy-http-with-auth.ovpn
+	proxy-http-with-auth.ovpn \
+	keysize.ovpn \
 
 

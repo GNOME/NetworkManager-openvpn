@@ -101,6 +101,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_CA,                   G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CERT,                 G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CIPHER,               G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_KEYSIZE,              G_TYPE_INT, 1, 65535, FALSE },
 	{ NM_OPENVPN_KEY_COMP_LZO,             G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CONNECTION_TYPE,      G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FRAGMENT_SIZE,        G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -991,6 +992,21 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (tmp && strlen (tmp)) {
 		add_openvpn_arg (args, "--cipher");
 		add_openvpn_arg (args, tmp);
+	}
+
+	/* Keysize */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE);
+	if (tmp && strlen (tmp)) {
+		add_openvpn_arg (args, "--keysize");
+		if (!add_openvpn_arg_int (args, tmp)) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("Invalid keysize '%s'."),
+			             tmp);
+			free_openvpn_args (args);
+			return FALSE;
+		}
 	}
 
 	/* Auth */

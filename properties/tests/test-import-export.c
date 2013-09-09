@@ -945,6 +945,66 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir, const 
 	g_free (path);
 }
 
+static void
+test_keysize_import (NMVpnPluginUiInterface *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection ("keysize-import", plugin, dir, "keysize.ovpn");
+	ASSERT (connection != NULL, "keysize-import", "failed to import connection");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        "keysize-import", "missing 'vpn' setting");
+
+	/* Data items */
+	test_item ("keysize-import-data", s_vpn, NM_OPENVPN_KEY_KEYSIZE, "512");
+
+	g_object_unref (connection);
+}
+
+#define KEYSIZE_EXPORTED_NAME "keysize.ovpntest"
+static void
+test_keysize_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+
+	connection = get_basic_connection ("keysize-export", plugin, dir, "keysize.ovpn");
+	ASSERT (connection != NULL, "keysize-export", "failed to import connection");
+
+	path = g_build_path ("/", tmpdir, KEYSIZE_EXPORTED_NAME, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL ("keysize-export", "export failed with missing error");
+		else
+			FAIL ("keysize-export", "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection ("keysize-export", plugin, tmpdir, KEYSIZE_EXPORTED_NAME);
+	(void) unlink (path);
+	ASSERT (reimported != NULL, "keysize-export", "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        "keysize-export", "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
@@ -1012,6 +1072,9 @@ int main (int argc, char **argv)
 
 	test_proxy_socks_import (plugin, test_dir);
 	test_proxy_socks_export (plugin, test_dir, argv[2]);
+
+	test_keysize_import (plugin, test_dir);
+	test_keysize_export (plugin, test_dir, argv[2]);
 
 	g_object_unref (plugin);
 
