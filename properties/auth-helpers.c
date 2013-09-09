@@ -991,53 +991,11 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 }
 
 static void
-port_toggled_cb (GtkWidget *check, gpointer user_data)
+checkbox_toggled_update_spin_cb (GtkWidget *check, gpointer user_data)
 {
-	GtkBuilder *builder = (GtkBuilder *) user_data;
-	GtkWidget *widget;
+	GtkWidget *spin = (GtkWidget*) user_data;
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
-	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
-}
-
-static void
-tunmtu_toggled_cb (GtkWidget *check, gpointer user_data)
-{
-	GtkBuilder *builder = (GtkBuilder *) user_data;
-	GtkWidget *widget;
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
-	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
-}
-
-static void
-fragment_toggled_cb (GtkWidget *check, gpointer user_data)
-{
-	GtkBuilder *builder = (GtkBuilder *) user_data;
-	GtkWidget *widget;
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
-	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
-}
-
-static void
-reneg_toggled_cb (GtkWidget *check, gpointer user_data)
-{
-	GtkBuilder *builder = (GtkBuilder *) user_data;
-	GtkWidget *widget;
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
-	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
-}
-
-static void
-keysize_toggled_cb (GtkWidget *check, gpointer user_data)
-{
-	GtkBuilder *builder = (GtkBuilder *) user_data;
-	GtkWidget *widget;
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
-	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+	gtk_widget_set_sensitive (spin, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
 static const char *
@@ -1356,7 +1314,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	GtkBuilder *builder;
 	GtkWidget *dialog = NULL;
 	char *ui_file = NULL;
-	GtkWidget *widget, *combo;
+	GtkWidget *widget, *combo, *spin;
 	const char *value, *value2;
 	GtkListStore *store;
 	GtkTreeIter iter;
@@ -1389,7 +1347,8 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	g_object_set_data (G_OBJECT (dialog), "connection-type", GINT_TO_POINTER (contype));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_checkbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (reneg_toggled_cb), builder);
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_RENEG_SECONDS);
 	if (value && strlen (value)) {
@@ -1486,7 +1445,8 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (show_proxy_password_toggled_cb), builder);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_checkbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (port_toggled_cb), builder);
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PORT);
 	if (value && strlen (value)) {
@@ -1512,7 +1472,8 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_checkbutton"));
 	g_assert (widget);
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (tunmtu_toggled_cb), builder);
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUNNEL_MTU);
 	if (value && strlen (value)) {
@@ -1536,7 +1497,8 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_checkbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (fragment_toggled_cb), builder);
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 	if (value && strlen (value)) {
@@ -1601,7 +1563,8 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_checkbutton"));
 	g_assert (widget);
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (keysize_toggled_cb), builder);
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_KEYSIZE);
 	if (value && strlen (value)) {
