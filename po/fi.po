@@ -4,58 +4,50 @@
 # Suomennos: http://gnome.fi/
 #
 # Ilkka Tuohela <hile@iki.fi>, 2006-2008.
-# Jiri Grönroos <jiri.gronroos@iki.fi>, 2012.
+# Jiri Grönroos <jiri.gronroos+l10n@iki.fi>, 2012, 2013.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2012-08-07 17:01+0000\n"
-"PO-Revision-Date: 2012-09-13 00:12+0300\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
-"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2013-09-11 07:05+0000\n"
+"PO-Revision-Date: 2013-09-22 19:54+0300\n"
+"Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
+"Language-Team: suomi <gnome-fi-laatu@lists.sourceforge.net>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
-#: ../auth-dialog/vpn-password-dialog.c:95
-msgid "_Password:"
-msgstr "_Salasana:"
-
-#: ../auth-dialog/vpn-password-dialog.c:97
-msgid "_Secondary Password:"
-msgstr "_Toissijainen salasana:"
-
-#: ../auth-dialog/vpn-password-dialog.c:239
-#| msgid "_Show passwords"
-msgid "Sh_ow passwords"
-msgstr "_Näytä salasanat"
-
-#. In other_ui mode, we don't actually show the dialog. Instead we pass back everything
-#. that is needed to build it
-#: ../auth-dialog/main.c:158
+#: ../auth-dialog/main.c:175
 #, c-format
-msgid "You need to authenticate to access the Virtual Private Network '%s'."
-msgstr "Yhteydenotto VPN-verkkoon \"%s\" vaatii kirjautumista."
+#| msgid "Authenticate VPN"
+msgid "Authenticate VPN %s"
+msgstr "Todenna VPN-yhteyden %s avaus"
 
-#: ../auth-dialog/main.c:167 ../auth-dialog/main.c:191
-msgid "Authenticate VPN"
-msgstr "Todenna VPN-yhteyden avaus"
-
-#: ../auth-dialog/main.c:170 ../properties/nm-openvpn-dialog.ui.h:92
+#: ../auth-dialog/main.c:183 ../properties/nm-openvpn-dialog.ui.h:100
 msgid "Password:"
 msgstr "Salasana:"
 
-#: ../auth-dialog/main.c:172 ../auth-dialog/main.c:210
+#: ../auth-dialog/main.c:192 ../auth-dialog/main.c:240
 msgid "Certificate password:"
 msgstr "Varmenteen salasana:"
 
-#: ../auth-dialog/main.c:196
+#: ../auth-dialog/main.c:226
+msgid "Authenticate VPN"
+msgstr "Todenna VPN-yhteyden avaus"
+
+#: ../auth-dialog/main.c:231
 msgid "Certificate pass_word:"
 msgstr "Varmenteen _salasana:"
+
+#: ../auth-dialog/main.c:478
+#, c-format
+msgid "You need to authenticate to access the Virtual Private Network '%s'."
+msgstr "Yhteydenotto VPN-verkkoon \"%s\" vaatii kirjautumista."
 
 #: ../properties/auth-helpers.c:148
 msgid "Choose your personal certificate..."
@@ -85,13 +77,12 @@ msgstr "Valitse CA-varmenne..."
 msgid "Choose an OpenVPN static key..."
 msgstr "Valitse OpenPVN:n kiinteä avain..."
 
-#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1170
-#: ../properties/auth-helpers.c:1578
+#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1140
+#: ../properties/auth-helpers.c:1636
 msgid "None"
 msgstr "Ei mitään"
 
 #: ../properties/auth-helpers.c:865
-#| msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM- tai PKCS#12-varmenteet (*.pem, *.crt, *.key, *.cer, *.p12)"
 
@@ -103,51 +94,59 @@ msgstr "PEM-varmenteet (*.pem, *.crt, *.key tai *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Kiinteät OpenVPN-avaimet (*.key)"
 
-#: ../properties/auth-helpers.c:1086 ../properties/auth-helpers.c:1162
+#: ../properties/auth-helpers.c:1056 ../properties/auth-helpers.c:1132
 msgid "Default"
 msgstr "Oletus"
 
-#: ../properties/auth-helpers.c:1172
+#: ../properties/auth-helpers.c:1142
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1174
+#: ../properties/auth-helpers.c:1144
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1176
+#: ../properties/auth-helpers.c:1146
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1178
+#: ../properties/auth-helpers.c:1148
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1180
+#: ../properties/auth-helpers.c:1150
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1182
+#: ../properties/auth-helpers.c:1152
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1184
+#: ../properties/auth-helpers.c:1154
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1186
+#: ../properties/auth-helpers.c:1156
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1361 ../properties/nm-openvpn-dialog.ui.h:2
+#: ../properties/auth-helpers.c:1207
+msgid "Server"
+msgstr "Palvelin"
+
+#: ../properties/auth-helpers.c:1212
+msgid "Client"
+msgstr ""
+
+#: ../properties/auth-helpers.c:1379 ../properties/nm-openvpn-dialog.ui.h:2
 msgid "Not required"
 msgstr "Ei vaadittu"
 
-#: ../properties/auth-helpers.c:1363
+#: ../properties/auth-helpers.c:1381
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1365
+#: ../properties/auth-helpers.c:1383
 msgid "SOCKS"
 msgstr "SOCKS"
 
@@ -248,7 +247,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:22
 msgid "Use custom UDP _fragment size:"
-msgstr ""
+msgstr "Käytä omavalintaisia _UDP-osien kokoa:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:23
 msgid ""
@@ -289,388 +288,439 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:34
+msgid "Use custom _size of cipher key:"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:35
+msgid ""
+"Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
+"specific size.\n"
+"config: keysize <n>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:37
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
 "is SHA1.\n"
 "config: auth"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:36
+#: ../properties/nm-openvpn-dialog.ui.h:39
 msgid "Ci_pher:"
 msgstr "Salausmenetelmä:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:37
-#| msgid "<b>Authentication</b>"
+#: ../properties/nm-openvpn-dialog.ui.h:40
 msgid "_HMAC Authentication:"
 msgstr "_HMAC-tunnistautuminen:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:38
+#: ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Security"
 msgstr "Salaus"
 
-#: ../properties/nm-openvpn-dialog.ui.h:39
+#: ../properties/nm-openvpn-dialog.ui.h:42
 msgid "_Subject Match:"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:40
+#: ../properties/nm-openvpn-dialog.ui.h:43
 msgid ""
 "<i>Connect only to servers whose certificate matches the given subject.\n"
 "Example: /CN=myvpn.company.com</i>"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:42
+#: ../properties/nm-openvpn-dialog.ui.h:45
 msgid ""
 "Accept connections only from a host with X509 name or common name equal to "
 "the specified one.\n"
 "config: tls-remote"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:44
+#: ../properties/nm-openvpn-dialog.ui.h:47
+msgid "_Verify peer (server) certificate usage signature"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:48
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules."
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:49
+msgid "_Remote peer certificate TLS type:"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:50
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules.\n"
+"config: remote-cert-tls client|server"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:52
 msgid "Use additional _TLS authentication"
 msgstr "Käytä lisäksi TLS-tunnistatumista"
 
-#: ../properties/nm-openvpn-dialog.ui.h:45
+#: ../properties/nm-openvpn-dialog.ui.h:53
 #, fuzzy
 #| msgid "Use additional _TLS authentication"
 msgid "Add an additional layer of HMAC authentication."
 msgstr "Käytä lisäksi TLS-tunnistatumista"
 
-#: ../properties/nm-openvpn-dialog.ui.h:46
+#: ../properties/nm-openvpn-dialog.ui.h:54
 msgid "Key _Direction:"
 msgstr "Avai_men suunta:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:47
+#: ../properties/nm-openvpn-dialog.ui.h:55
 msgid ""
 "<i>If key direction is used, it must be the opposite of that used on the VPN "
 "peer.  For example, if the peer uses '1', this connection must use '0'.  If "
 "you are unsure what value to use, contact your system administrator.</i>"
 msgstr ""
-"<i>Jos avaimen suuntaa käytetään, täytyy annetun arvon olla vastakkainen kuin "
-"VPN-yhteyden toisessa päässä. Jos esimerkiksi vastapäässä on arvo 1, tämän "
-"täytyy olla 0. Jos et tiedä mitä tässä pitäisi olla, kysy VPN-yhteytesi "
-"ylläpitäjältä lisätietoja.</i>"
+"<i>Jos avaimen suuntaa käytetään, täytyy annetun arvon olla vastakkainen "
+"kuin VPN-yhteyden toisessa päässä. Jos esimerkiksi vastapäässä on arvo 1, "
+"tämän täytyy olla 0. Jos et tiedä mitä tässä pitäisi olla, kysy VPN-"
+"yhteytesi ylläpitäjältä lisätietoja.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:48
+#: ../properties/nm-openvpn-dialog.ui.h:56
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:50
+#: ../properties/nm-openvpn-dialog.ui.h:58
 msgid ""
 "Direction parameter for static key mode.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:52
+#: ../properties/nm-openvpn-dialog.ui.h:60
 msgid "Key _File:"
 msgstr "_Avaintiedosto:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:53
-#| msgid "<b>Authentication</b>"
+#: ../properties/nm-openvpn-dialog.ui.h:61
 msgid "TLS Authentication"
 msgstr "TLS-tunnistautuminen"
 
-#: ../properties/nm-openvpn-dialog.ui.h:54
+#: ../properties/nm-openvpn-dialog.ui.h:62
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:56
+#: ../properties/nm-openvpn-dialog.ui.h:64
 msgid "Proxy _Type:"
 msgstr "_Välityspalvelimen tyyppi:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:57
+#: ../properties/nm-openvpn-dialog.ui.h:65
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:58
+#: ../properties/nm-openvpn-dialog.ui.h:66
 msgid "Server _Address:"
 msgstr "_Palvelimen osoite:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:59
+#: ../properties/nm-openvpn-dialog.ui.h:67
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:61
-#| msgid "Port:  %s"
+#: ../properties/nm-openvpn-dialog.ui.h:69
 msgid "_Port:"
 msgstr "P_ortti:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:62
+#: ../properties/nm-openvpn-dialog.ui.h:70
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:64
+#: ../properties/nm-openvpn-dialog.ui.h:72
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Yritä jatkuvasti uudelleen virheen tapahtuessa"
 
-#: ../properties/nm-openvpn-dialog.ui.h:65
+#: ../properties/nm-openvpn-dialog.ui.h:73
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:67
-#| msgid "_Username:"
+#: ../properties/nm-openvpn-dialog.ui.h:75
 msgid "Proxy _Username:"
 msgstr "Välityspalvelimen _käyttäjätunnus:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:68
-#| msgid "Password:"
+#: ../properties/nm-openvpn-dialog.ui.h:76
 msgid "Proxy Passwor_d:"
 msgstr "Välityspalvelimen _salasana:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:69
+#: ../properties/nm-openvpn-dialog.ui.h:77
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:70
+#: ../properties/nm-openvpn-dialog.ui.h:78
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:71
-#| msgid "_Show passwords"
+#: ../properties/nm-openvpn-dialog.ui.h:79
 msgid "_Show password"
 msgstr "Näyt_ä salasana"
 
-#: ../properties/nm-openvpn-dialog.ui.h:72
+#: ../properties/nm-openvpn-dialog.ui.h:80
 msgid "Proxies"
 msgstr "Välityspalvelimet"
 
-#: ../properties/nm-openvpn-dialog.ui.h:73
+#: ../properties/nm-openvpn-dialog.ui.h:81
 msgid "<b>General</b>"
 msgstr "<b>Yleisasetukset</b>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:74
+#: ../properties/nm-openvpn-dialog.ui.h:82
 msgid "_Gateway:"
 msgstr "_Yhdyskäytävä:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:75
+#: ../properties/nm-openvpn-dialog.ui.h:83
 msgid ""
 "Remote host name or IP address. You can specify multiple items for "
 "redundancy (use commas to separate the entries).\n"
 "config: remote"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:77
+#: ../properties/nm-openvpn-dialog.ui.h:85
 msgid "<b>Authentication</b>"
 msgstr "<b>Tunnistautuminen</b>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:78
+#: ../properties/nm-openvpn-dialog.ui.h:86
 msgid "_Show passwords"
 msgstr "_Näytä salasanat"
 
-#: ../properties/nm-openvpn-dialog.ui.h:79
-#| msgid "Choose your private key..."
+#: ../properties/nm-openvpn-dialog.ui.h:87
 msgid "Password for private key"
 msgstr "Yksityisen avaimen salasana"
 
-#: ../properties/nm-openvpn-dialog.ui.h:80
+#: ../properties/nm-openvpn-dialog.ui.h:88
 msgid "Private Key Password:"
 msgstr "Yksityisen avaimen salasana:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:81
+#: ../properties/nm-openvpn-dialog.ui.h:89
 msgid ""
 "Local peer's private key in .pem format.\n"
 "config: key"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:83
+#: ../properties/nm-openvpn-dialog.ui.h:91
 msgid "Private Key:"
 msgstr "Yksityinen avain:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:84
+#: ../properties/nm-openvpn-dialog.ui.h:92
 msgid ""
 "Certificate authority (CA) file in .pem format.\n"
 "config: ca"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:86
+#: ../properties/nm-openvpn-dialog.ui.h:94
 msgid "CA Certificate:"
 msgstr "CA-varmenne:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:87
+#: ../properties/nm-openvpn-dialog.ui.h:95
 msgid "User Certificate:"
 msgstr "Käyttäjän varmenne:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:88
+#: ../properties/nm-openvpn-dialog.ui.h:96
 msgid ""
 "Local peer's signed certificate in .pem format (signed by CA of CA "
 "Certificate).\n"
 "config: cert"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:90
+#: ../properties/nm-openvpn-dialog.ui.h:98
 msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:93
+#: ../properties/nm-openvpn-dialog.ui.h:101
 msgid "User name:"
 msgstr "Käyttäjätunnus:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:94
+#: ../properties/nm-openvpn-dialog.ui.h:102
 msgid ""
 "Username passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:96
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid ""
 "IP address of the local VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:98
-#| msgid "Local IP Address:"
+#: ../properties/nm-openvpn-dialog.ui.h:106
 msgid "Remote IP Address:"
 msgstr "Etä-IP-osoite:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:99
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Local IP Address:"
 msgstr "Paikallinen IP-osoite:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:100
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid ""
 "IP address of the remote VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
-#| msgid "Key _Direction:"
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid "Key Direction:"
 msgstr "Avaimen suunta:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:111
 msgid "Static Key:"
 msgstr "Kiinteä avain:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:114
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
 "config: static <file> [direction]"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid "Type:"
 msgstr "Tyyppi:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:117
 msgid "Select an authentication mode."
 msgstr "Valitse tunnistautumistapa."
 
-#: ../properties/nm-openvpn-dialog.ui.h:110
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Ad_vanced..."
 msgstr "_Lisäasetukset..."
 
-#: ../src/nm-openvpn-service.c:193
+#: ../src/nm-openvpn-service.c:199
 #, c-format
 msgid "invalid address '%s'"
 msgstr "virheellinen osoite \"%s\""
 
-#: ../src/nm-openvpn-service.c:205
+#: ../src/nm-openvpn-service.c:211
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
 msgstr ""
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:216
+#: ../src/nm-openvpn-service.c:222
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:223
+#: ../src/nm-openvpn-service.c:229
 #, c-format
 msgid "unhandled property '%s' type %s"
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:234
+#: ../src/nm-openvpn-service.c:240
 #, c-format
 msgid "property '%s' invalid or not supported"
-msgstr ""
+msgstr "ominaisuus \"%s\" on virheellinen tai se ei ole tuettu"
 
-#: ../src/nm-openvpn-service.c:251
+#: ../src/nm-openvpn-service.c:257
 #, fuzzy
 #| msgid "OpenVPN Configuration"
 msgid "No VPN configuration options."
 msgstr "OpenVPN-määrittely"
 
-#: ../src/nm-openvpn-service.c:274
-msgid "No VPN secrets!"
-msgstr ""
+#: ../src/nm-openvpn-service.c:426
+msgid "A username is required."
+msgstr "Käyttäjätunnus vaaditaan."
 
-#: ../src/nm-openvpn-service.c:747
+#: ../src/nm-openvpn-service.c:430
+msgid "A password is required."
+msgstr "Salasana vaaditaan."
+
+#: ../src/nm-openvpn-service.c:433
+msgid "A username and password are required."
+msgstr "Käyttäjätunnus ja salasana vaaditaan."
+
+#: ../src/nm-openvpn-service.c:453
+#, fuzzy
+#| msgid "Private Key Password:"
+msgid "A private key password is required."
+msgstr "Yksityisen avaimen salasana:"
+
+#: ../src/nm-openvpn-service.c:466
+msgid "An HTTP Proxy username is required."
+msgstr "HTTP-välityspalvelimen käyttäjätunnus vaaditaan."
+
+#: ../src/nm-openvpn-service.c:470
+msgid "An HTTP Proxy password is required."
+msgstr "HTTP-välityspalvelimen salasana vaaditaan."
+
+#: ../src/nm-openvpn-service.c:473
+msgid "An HTTP Proxy username and password are required."
+msgstr "HTTP-välityspalvelimen käyttäjätunnus ja salasana vaaditaan."
+
+#: ../src/nm-openvpn-service.c:877
 msgid "Could not find the openvpn binary."
 msgstr "openvpn-binääriohjelmaa ei löytynyt."
 
-#: ../src/nm-openvpn-service.c:758
+#: ../src/nm-openvpn-service.c:888
 msgid "Invalid HMAC auth."
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:770 ../src/nm-openvpn-service.c:1176
-#: ../src/nm-openvpn-service.c:1246
-#| msgid "Co_nnection type:"
+#: ../src/nm-openvpn-service.c:899 ../src/nm-openvpn-service.c:1390
 msgid "Invalid connection type."
 msgstr "Virheellinen yhteyden tyyppi."
 
-#: ../src/nm-openvpn-service.c:815
+#: ../src/nm-openvpn-service.c:944
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Virheellinen välityspalvelimen tyyppi \"%s\"."
 
-#: ../src/nm-openvpn-service.c:851
+#: ../src/nm-openvpn-service.c:980
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Virheellinen porttinumero \"%s\"."
 
-#: ../src/nm-openvpn-service.c:901
+#: ../src/nm-openvpn-service.c:1005
+#, fuzzy, c-format
+#| msgid "Invalid proxy type '%s'."
+msgid "Invalid keysize '%s'."
+msgstr "Virheellinen välityspalvelimen tyyppi \"%s\"."
+
+#: ../src/nm-openvpn-service.c:1052
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:925
+#: ../src/nm-openvpn-service.c:1076
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:940
+#: ../src/nm-openvpn-service.c:1091
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:1008
+#: ../src/nm-openvpn-service.c:1159
 msgid "Missing required local IP address for static key mode."
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:1021
+#: ../src/nm-openvpn-service.c:1172
 msgid "Missing required remote IP address for static key mode."
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:1046
+#: ../src/nm-openvpn-service.c:1197
 #, c-format
-#| msgid "Co_nnection type:"
 msgid "Unknown connection type '%s'."
 msgstr "Tuntematon yhteyden tyyppi \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1165 ../src/nm-openvpn-service.c:1236
-#| msgid ""
-#| "The VPN login failed because the VPN configuration options were invalid."
+#: ../src/nm-openvpn-service.c:1308 ../src/nm-openvpn-service.c:1381
+#: ../src/nm-openvpn-service.c:1415
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -678,22 +728,50 @@ msgstr ""
 "Pyynnön käsittely ei onnistunut, koska VPN-yhteyden asetukset olivat "
 "virheelliset."
 
-#: ../src/nm-openvpn-service.c:1190
-msgid "Could not process the request because no username was provided."
-msgstr "Pyynnön käsittely ei onnistunut, koska käyttäjätunnusta ei määritelty."
+#: ../src/nm-openvpn-service.c:1317
+#, fuzzy
+#| msgid ""
+#| "Could not process the request because the VPN connection settings were "
+#| "invalid."
+msgid ""
+"Could not process the request because the openvpn connection type was "
+"invalid."
+msgstr ""
+"Pyynnön käsittely ei onnistunut, koska VPN-yhteyden asetukset olivat "
+"virheelliset."
 
-#: ../src/nm-openvpn-service.c:1380
+#: ../src/nm-openvpn-service.c:1429
+#, fuzzy
+#| msgid "Select an authentication mode."
+msgid "Unhandled pending authentication."
+msgstr "Valitse tunnistautumistapa."
+
+#: ../src/nm-openvpn-service.c:1570
 msgid "Don't quit when VPN connection terminates"
 msgstr "Älä lopeta VPN-yhteyden päättyessä"
 
-#: ../src/nm-openvpn-service.c:1381
+#: ../src/nm-openvpn-service.c:1571
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:1395
+#: ../src/nm-openvpn-service.c:1594
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
+
+#~ msgid "_Password:"
+#~ msgstr "_Salasana:"
+
+#~ msgid "_Secondary Password:"
+#~ msgstr "_Toissijainen salasana:"
+
+#~| msgid "_Show passwords"
+#~ msgid "Sh_ow passwords"
+#~ msgstr "_Näytä salasanat"
+
+#~ msgid "Could not process the request because no username was provided."
+#~ msgstr ""
+#~ "Pyynnön käsittely ei onnistunut, koska käyttäjätunnusta ei määritelty."
 
 #~ msgid "_Domain:"
 #~ msgstr "_Toimialue:"
