@@ -176,23 +176,19 @@ eui_finish (const char *vpn_name,
 	g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Title", title);
 	g_free (title);
 
-	if (need_password) {
-		keyfile_add_entry_info (keyfile,
-		                        NM_OPENVPN_KEY_PASSWORD,
-		                        existing_password ? existing_password : "",
-		                        _("Password:"),
-		                        TRUE,
-		                        allow_interaction);
-	}
+	keyfile_add_entry_info (keyfile,
+	                        NM_OPENVPN_KEY_PASSWORD,
+	                        existing_password ? existing_password : "",
+	                        _("Password:"),
+	                        TRUE,
+	                        need_password && allow_interaction);
 
-	if (need_certpass) {
-		keyfile_add_entry_info (keyfile,
-		                        NM_OPENVPN_KEY_CERTPASS,
-		                        existing_certpass ? existing_certpass : "",
-		                        _("Certificate password:"),
-		                        TRUE,
-		                        allow_interaction);
-	}
+	keyfile_add_entry_info (keyfile,
+	                        NM_OPENVPN_KEY_CERTPASS,
+	                        existing_certpass ? existing_certpass : "",
+	                        _("Certificate password:"),
+	                        TRUE,
+	                        need_certpass && allow_interaction);
 
 	keyfile_print_stdout (keyfile);
 	g_key_file_unref (keyfile);
@@ -296,9 +292,9 @@ std_finish (const char *vpn_name,
             const char *certpass)
 {
 	/* Send the passwords back to our parent */
-	if (need_password && password)
+	if (password)
 		printf ("%s\n%s\n", NM_OPENVPN_KEY_PASSWORD, password);
-	if (need_certpass && certpass)
+	if (certpass)
 		printf ("%s\n%s\n", NM_OPENVPN_KEY_CERTPASS, certpass);
 	printf ("\n\n");
 
