@@ -515,20 +515,20 @@ handle_management_socket (NMVPNPlugin *plugin,
 
 		if (handle_auth (priv->io_data, auth, &message, &hints)) {
 			/* Request new secrets if we need any */
-			if (priv->interactive) {
-				if (message) {
+			if (message) {
+				if (priv->interactive) {
 					if (debug) {
 						char *joined = hints ? g_strjoinv (",", (char **) hints) : "none";
 						g_message ("Requesting new secrets: '%s' (%s)", message, joined);
 						g_free (joined);
 					}
 					nm_vpn_plugin_secrets_required (plugin, message, (const char **) hints);
+				} else {
+					/* Interactive not allowed, can't ask for more secrets */
+					g_warning ("More secrets required but cannot ask interactively");
+					*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
+					again = FALSE;
 				}
-			} else {
-				/* Interactive not allowed, can't ask for more secrets */
-				g_warning ("More secrets required but cannot ask interactively");
-				*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
-				again = FALSE;
 			}
 			if (hints)
 				g_free (hints);  /* elements are 'const' */
