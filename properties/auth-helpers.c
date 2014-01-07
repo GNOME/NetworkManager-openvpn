@@ -46,6 +46,8 @@
 #define PW_TYPE_ASK    1
 #define PW_TYPE_UNUSED 2
 
+#define BLOCK_HANDLER_ID "block-handler-id"
+
 static void
 show_password (GtkToggleButton *togglebutton, GtkEntry *password_entry)
 {
@@ -105,7 +107,10 @@ tls_cert_changed_cb (GtkWidget *widget, GtkWidget *next_widget)
 		next_fname = gtk_file_chooser_get_filename (next);
 		if (!next_fname || strcmp (fname, next_fname)) {
 			/* Next chooser was different, make it the same as the first */
+			gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (next_widget), BLOCK_HANDLER_ID));
+			g_signal_handler_block (G_OBJECT (next_widget), id);
 			gtk_file_chooser_set_filename (next, fname);
+			g_signal_handler_unblock (G_OBJECT (next_widget), id);
 		}
 		g_free (fname);
 		g_free (next_fname);
@@ -117,8 +122,12 @@ tls_cert_changed_cb (GtkWidget *widget, GtkWidget *next_widget)
 	 * file selectors that have PKCS#12 files in them.
 	 */
 	next_fname = gtk_file_chooser_get_filename (next);
-	if (is_pkcs12 (next_fname))
+	if (is_pkcs12 (next_fname)) {
+		gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (next_widget), BLOCK_HANDLER_ID));
+		g_signal_handler_block (G_OBJECT (next_widget), id);
 		gtk_file_chooser_set_filename (next, NULL);
+		g_signal_handler_unblock (G_OBJECT (next_widget), id);
+	}
 	g_free (next_fname);
 }
 
@@ -135,6 +144,7 @@ tls_setup (GtkBuilder *builder,
 	const char *value;
 	char *tmp;
 	GtkFileFilter *filter;
+	gulong id1, id2, id3;
 
 	tmp = g_strdup_printf ("%s_user_cert_chooser", prefix);
 	cert = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
@@ -173,9 +183,14 @@ tls_setup (GtkBuilder *builder,
 	}
 
 	/* Link choosers to the PKCS#12 changer callback */
-	g_signal_connect (ca_chooser, "selection-changed", G_CALLBACK (tls_cert_changed_cb), cert);
-	g_signal_connect (cert, "selection-changed", G_CALLBACK (tls_cert_changed_cb), key);
-	g_signal_connect (key, "selection-changed", G_CALLBACK (tls_cert_changed_cb), ca_chooser);
+	id1 = g_signal_connect (ca_chooser, "selection-changed", G_CALLBACK (tls_cert_changed_cb), cert);
+	id2 = g_signal_connect (cert, "selection-changed", G_CALLBACK (tls_cert_changed_cb), key);
+	id3 = g_signal_connect (key, "selection-changed", G_CALLBACK (tls_cert_changed_cb), ca_chooser);
+
+	/* Store handler id to be able to block the signal in tls_cert_changed_cb() */
+	g_object_set_data (ca_chooser, BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id1));
+	g_object_set_data (cert, BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id2));
+	g_object_set_data (key, BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id3));
 
 	/* Fill in the private key password */
 	tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
