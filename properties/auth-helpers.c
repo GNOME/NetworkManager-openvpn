@@ -188,9 +188,9 @@ tls_setup (GtkBuilder *builder,
 	id3 = g_signal_connect (key, "selection-changed", G_CALLBACK (tls_cert_changed_cb), ca_chooser);
 
 	/* Store handler id to be able to block the signal in tls_cert_changed_cb() */
-	g_object_set_data (ca_chooser, BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id1));
-	g_object_set_data (cert, BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id2));
-	g_object_set_data (key, BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id3));
+	g_object_set_data (G_OBJECT (ca_chooser), BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id1));
+	g_object_set_data (G_OBJECT (cert), BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id2));
+	g_object_set_data (G_OBJECT (key), BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id3));
 
 	/* Fill in the private key password */
 	tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
