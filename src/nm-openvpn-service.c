@@ -28,6 +28,7 @@
 #endif
 
 #include <glib/gi18n.h>
+#include <gio/gio.h>
 #include <dbus/dbus.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <dbus/dbus-glib.h>
@@ -1521,12 +1522,15 @@ NMOpenvpnPlugin *
 nm_openvpn_plugin_new (void)
 {
 	NMOpenvpnPlugin *plugin;
+	GError *error = NULL;
 
-	plugin =  (NMOpenvpnPlugin *) g_object_new (NM_TYPE_OPENVPN_PLUGIN,
-	                                            NM_VPN_PLUGIN_DBUS_SERVICE_NAME,
-	                                            NM_DBUS_SERVICE_OPENVPN,
-	                                            NULL);
-	if (plugin)
+	plugin = g_initable_new (NM_TYPE_OPENVPN_PLUGIN, NULL, &error,
+	                         NM_VPN_PLUGIN_DBUS_SERVICE_NAME, NM_DBUS_SERVICE_OPENVPN,
+	                         NULL);
+	if (!plugin) {
+		g_warning ("%s", error->message);
+		g_error_free (error);
+	} else
 		g_signal_connect (G_OBJECT (plugin), "state-changed", G_CALLBACK (plugin_state_changed), NULL);
 
 	return plugin;
