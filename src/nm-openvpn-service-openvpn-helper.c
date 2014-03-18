@@ -538,6 +538,7 @@ main (int argc, char *argv[])
 	int tapdev = -1;
 	char **iter;
 	int shift = 0;
+	gboolean is_restart;
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
@@ -587,6 +588,8 @@ main (int argc, char *argv[])
 	argv += shift;
 	argc -= shift;
 
+	is_restart = argc >= 7 && !g_strcmp0 (argv[6], "restart");
+
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
 	if (!connection) {
 		g_warning ("Could not get the system bus: %s", err->message);
@@ -628,6 +631,8 @@ main (int argc, char *argv[])
 
 	/* IPv4 address */
 	tmp = getenv ("ifconfig_local");
+	if (!tmp && is_restart)
+		tmp = argv[4];
 	if (tmp && strlen (tmp)) {
 		val = addr4_to_gvalue (tmp);
 		if (val)
@@ -637,13 +642,15 @@ main (int argc, char *argv[])
 	}
 
 	/* PTP address; for vpnc PTP address == internal IP4 address */
-	val = addr4_to_gvalue (getenv ("ifconfig_remote"));
+	tmp = getenv ("ifconfig_remote");
+	if (!tmp && is_restart)
+		tmp = argv[5];
+	val = addr4_to_gvalue (tmp);
 	if (val) {
 		/* Sigh.  Openvpn added 'topology' stuff in 2.1 that changes the meaning
 		 * of the ifconfig bits without actually telling you what they are
 		 * supposed to mean; basically relying on specific 'ifconfig' behavior.
 		 */
-		tmp = getenv ("ifconfig_remote");
 		if (tmp && !strncmp (tmp, "255.", 4)) {
 			guint32 addr;
 
