@@ -535,7 +535,7 @@ main (int argc, char *argv[])
 	GValue *nbns_list = NULL;
 	GPtrArray *dns_domains = NULL;
 	struct in_addr temp_addr;
-	gboolean tapdev = FALSE;
+	int tapdev = -1;
 	char **iter;
 	int shift = 0;
 
@@ -550,6 +550,10 @@ main (int argc, char *argv[])
 		}
 		if (!strcmp (argv[i], "--helper-debug"))
 			helper_debug = TRUE;
+		else if (!strcmp (argv[i], "--tun"))
+			tapdev = 0;
+		else if (!strcmp (argv[i], "--tap"))
+			tapdev = 1;
 		else
 			break;
 	}
@@ -619,8 +623,8 @@ main (int argc, char *argv[])
 	else
 		helper_failed (connection, "Tunnel Device");
 
-	if (strncmp (tmp, "tap", 3) == 0)
-		tapdev = TRUE;
+	if (tapdev == -1)
+		tapdev = strncmp (tmp, "tap", 3) == 0;
 
 	/* IPv4 address */
 	tmp = getenv ("ifconfig_local");
