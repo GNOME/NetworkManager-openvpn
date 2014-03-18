@@ -556,10 +556,25 @@ main (int argc, char *argv[])
 	shift = i - 1;
 
 	if (helper_debug) {
+		GString *args;
+
+		args = g_string_new (NULL);
+		for (i = 0; i < argc; i++) {
+			if (i > 0)
+				g_string_append_c (args, ' ');
+			if (shift && 1 + shift == i)
+				g_string_append (args, "  ");
+			tmp = g_strescape (argv[i], NULL);
+			g_string_append_printf (args, "\"%s\"", tmp);
+			g_free (tmp);
+		}
+
+		g_message ("command line: %s", args->str);
+		g_string_free (args, TRUE);
 		g_message ("openvpn script environment ---------------------------");
 		iter = environ;
 		while (iter && *iter)
-			g_print ("%s\n", *iter++);
+			g_message ("%s", *iter++);
 		g_message ("------------------------------------------------------");
 	}
 
