@@ -57,6 +57,8 @@ extern char **environ;
 #define DBUS_TYPE_G_IP6_ROUTE              (dbus_g_type_get_struct ("GValueArray", DBUS_TYPE_G_UCHAR_ARRAY, G_TYPE_UINT, DBUS_TYPE_G_UCHAR_ARRAY, G_TYPE_UINT, G_TYPE_INVALID))
 #define DBUS_TYPE_G_ARRAY_OF_IP6_ROUTE     (dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_IP6_ROUTE))
 
+static gboolean helper_debug = FALSE;
+
 static void
 helper_failed (DBusGConnection *connection, const char *reason)
 {
@@ -535,23 +537,41 @@ main (int argc, char *argv[])
 	struct in_addr temp_addr;
 	gboolean tapdev = FALSE;
 	char **iter;
+	int shift = 0;
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
 #endif
 
-	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
-	if (!connection) {
-		g_warning ("Could not get the system bus: %s", err->message);
-		exit (1);
+	for (i = 1; i < argc; i++) {
+		if (!strcmp (argv[i], "--")) {
+			i++;
+			break;
+		}
+		if (!strcmp (argv[i], "--helper-debug"))
+			helper_debug = TRUE;
+		else
+			break;
 	}
+	shift = i - 1;
 
-	if (argc >= 2 && !g_strcmp0 (argv[1], "--helper-debug")) {
+	if (helper_debug) {
 		g_message ("openvpn script environment ---------------------------");
 		iter = environ;
 		while (iter && *iter)
 			g_print ("%s\n", *iter++);
 		g_message ("------------------------------------------------------");
+	}
+
+	/* shift the arguments to the right leaving only those provided by openvpn */
+	argv[shift] = argv[0];
+	argv += shift;
+	argc -= shift;
+
+	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
+	if (!connection) {
+		g_warning ("Could not get the system bus: %s", err->message);
+		exit (1);
 	}
 
 	config = g_hash_table_new (g_str_hash, g_str_equal);
