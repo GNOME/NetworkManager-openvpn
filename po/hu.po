@@ -5,19 +5,21 @@
 # Gabor Halaszvari <g.halaszvari at portmax dot hu>, 2006.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
 # Mate Ory <orymate at ubuntu dot com>, 2011.
+# Balázs Úr <urbalazs@gmail.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-19 16:12+0200\n"
-"PO-Revision-Date: 2013-09-19 16:11+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2014-03-20 11:09+0000\n"
+"PO-Revision-Date: 2014-03-20 18:05+0100\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../auth-dialog/main.c:175
@@ -25,125 +27,133 @@ msgstr ""
 msgid "Authenticate VPN %s"
 msgstr "%s VPN azonosítása"
 
-#: ../auth-dialog/main.c:183 ../properties/nm-openvpn-dialog.ui.h:100
+#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-dialog.ui.h:100
 msgid "Password:"
 msgstr "Jelszó:"
 
-#: ../auth-dialog/main.c:192 ../auth-dialog/main.c:240
+#: ../auth-dialog/main.c:189 ../auth-dialog/main.c:236
 msgid "Certificate password:"
 msgstr "Tanúsítvány jelszava:"
 
-#: ../auth-dialog/main.c:226
+#: ../auth-dialog/main.c:222
 msgid "Authenticate VPN"
 msgstr "VPN azonosítás"
 
-#: ../auth-dialog/main.c:231
+#: ../auth-dialog/main.c:227
 msgid "Certificate pass_word:"
 msgstr "Tanúsítvány _jelszava:"
 
-#: ../auth-dialog/main.c:478
+#: ../auth-dialog/main.c:474
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Azonosítania kell magát a(z) „%s” virtuális magánhálózat eléréséhez."
 
-#: ../properties/auth-helpers.c:148
+#: ../nm-openvpn.desktop.in.h:1
+msgid "VPN Connection Manager (OpenVPN)"
+msgstr "VPN kapcsolatkezelő (OpenVPN)"
+
+#: ../nm-openvpn.desktop.in.h:2
+msgid "Add, Remove, and Edit VPN Connections"
+msgstr "VPN kapcsolatok hozzáadása, szerkesztése és eltávolítása"
+
+#: ../properties/auth-helpers.c:158
 msgid "Choose your personal certificate..."
 msgstr "Válassza ki a személyes tanúsítványát…"
 
-#: ../properties/auth-helpers.c:166
+#: ../properties/auth-helpers.c:176
 msgid "Choose your private key..."
 msgstr "Válassza ki a személyes kulcsát…"
 
-#: ../properties/auth-helpers.c:238
+#: ../properties/auth-helpers.c:253
 msgid "Saved"
 msgstr "Mentett"
 
-#: ../properties/auth-helpers.c:246
+#: ../properties/auth-helpers.c:261
 msgid "Always Ask"
 msgstr "Mindig kérdezzen"
 
-#: ../properties/auth-helpers.c:251
+#: ../properties/auth-helpers.c:266
 msgid "Not Required"
 msgstr "Nem szükséges"
 
-#: ../properties/auth-helpers.c:341
+#: ../properties/auth-helpers.c:356
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Válasszon hitelesítésszolgáltatói tanúsítványt…"
 
-#: ../properties/auth-helpers.c:385
+#: ../properties/auth-helpers.c:400
 msgid "Choose an OpenVPN static key..."
 msgstr "Válassza ki az OpenVPN statikus kulcsát…"
 
-#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1140
-#: ../properties/auth-helpers.c:1636
+#: ../properties/auth-helpers.c:424 ../properties/auth-helpers.c:1155
+#: ../properties/auth-helpers.c:1651
 msgid "None"
 msgstr "Nincs"
 
-#: ../properties/auth-helpers.c:865
+#: ../properties/auth-helpers.c:880
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM vagy PKCS#12 tanúsítványok (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:866
+#: ../properties/auth-helpers.c:881
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM tanúsítványok (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:926
+#: ../properties/auth-helpers.c:941
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN statikus kulcsok (*.key)"
 
-#: ../properties/auth-helpers.c:1056 ../properties/auth-helpers.c:1132
+#: ../properties/auth-helpers.c:1071 ../properties/auth-helpers.c:1147
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: ../properties/auth-helpers.c:1142
+#: ../properties/auth-helpers.c:1157
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1144
+#: ../properties/auth-helpers.c:1159
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1146
+#: ../properties/auth-helpers.c:1161
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1148
+#: ../properties/auth-helpers.c:1163
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1150
+#: ../properties/auth-helpers.c:1165
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1152
+#: ../properties/auth-helpers.c:1167
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1154
+#: ../properties/auth-helpers.c:1169
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1156
+#: ../properties/auth-helpers.c:1171
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1207
+#: ../properties/auth-helpers.c:1222
 msgid "Server"
 msgstr "Kiszolgáló"
 
-#: ../properties/auth-helpers.c:1212
+#: ../properties/auth-helpers.c:1227
 msgid "Client"
 msgstr "Kliens"
 
-#: ../properties/auth-helpers.c:1379 ../properties/nm-openvpn-dialog.ui.h:2
+#: ../properties/auth-helpers.c:1394 ../properties/nm-openvpn-dialog.ui.h:2
 msgid "Not required"
 msgstr "Nem szükséges"
 
-#: ../properties/auth-helpers.c:1381
+#: ../properties/auth-helpers.c:1396
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1383
+#: ../properties/auth-helpers.c:1398
 msgid "SOCKS"
 msgstr "SOCKS"
 
