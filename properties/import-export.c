@@ -432,9 +432,7 @@ do_import (const char *path, char **lines, GError **error)
 
 		if (   !strncmp (*line, HTTP_PROXY_RETRY_TAG, strlen (HTTP_PROXY_RETRY_TAG))
 		    || !strncmp (*line, SOCKS_PROXY_RETRY_TAG, strlen (SOCKS_PROXY_RETRY_TAG))) {
-			nm_setting_vpn_add_data_item (s_vpn,
-			                              g_strdup (NM_OPENVPN_KEY_PROXY_RETRY),
-			                              g_strdup ("yes"));
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY, "yes");
 			continue;
 		}
 
