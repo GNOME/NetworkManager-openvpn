@@ -66,6 +66,8 @@
 #define NM_OPENVPN_KEY_TUNNEL_MTU "tunnel-mtu"
 #define NM_OPENVPN_KEY_USERNAME "username"
 #define NM_OPENVPN_KEY_TAP_DEV "tap-dev"
+#define NM_OPENVPN_KEY_DEV "dev"
+#define NM_OPENVPN_KEY_DEV_TYPE "dev-type"
 #define NM_OPENVPN_KEY_TLS_REMOTE "tls-remote"
 #define NM_OPENVPN_KEY_REMOTE_CERT_TLS "remote-cert-tls"
 
