@@ -315,16 +315,76 @@ config: proto tcp-client | udp</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="tap_checkbutton">
-                    <property name="label" translatable="yes">Use a TA_P device</property>
+                  <object class="GtkHBox" id="hbox7">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="tooltip_text" translatable="yes">Use TAP virtual network device instead of TUN.
-config: dev tap | tun</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="dev_checkbutton">
+                        <property name="label" translatable="yes">Set virtual _device type:</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <property name="tooltip_text" translatable="yes">Explicitly set virtual device type and name (TUN/TAP).</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="dev_type_combo">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="model">model4</property>
+                        <property name="tooltip_text" translatable="yes">Explicitly set virtual device type (TUN/TAP).
+config: dev-type tun | tap</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="renderer10"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label35">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes"> and _name:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">dev_entry</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="dev_entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="width_chars">15</property>
+                        <property name="tooltip_text" translatable="yes">Use custom name for TUN/TAP virtual device (instead of default "tun" or "tap").
+config: dev &lt;name&gt;</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
