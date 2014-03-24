@@ -71,14 +71,14 @@ test_item (const char *test,
 
 	value = nm_setting_vpn_get_data_item (s_vpn, item);
 	if (expected == NULL) {
-		ASSERT (value == NULL, test, "unexpected '%s' item value (found '%s', expected NULL",
+		ASSERT (value == NULL, test, "unexpected '%s' item value (found '%s', expected NULL)",
 		        item, value);
 		return;
 	}
 
 	ASSERT (value != NULL, test, "missing '%s' item value", item);
 	ASSERT (strcmp (value, expected) == 0, test,
-	        "unexpected '%s' secret value (found '%s', expected '%s')",
+	        "unexpected '%s' item value (found '%s', expected '%s')",
 	        item, value, expected);
 }
 
@@ -94,7 +94,7 @@ test_secret (const char *test,
 
 	value = nm_setting_vpn_get_secret (s_vpn, item);
 	if (expected == NULL) {
-		ASSERT (value == NULL, test, "unexpected '%s' secret value (found '%s', expected NULL",
+		ASSERT (value == NULL, test, "unexpected '%s' secret value (found '%s', expected NULL)",
 		        item, value);
 		return;
 	}
