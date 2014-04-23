@@ -866,6 +866,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	GPtrArray *args;
 	GSource *openvpn_watch;
 	GPid pid;
+	gboolean dev_type_is_tap;
+	char *stmp;
 
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
@@ -956,10 +958,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Device, either tun or tap */
 	add_openvpn_arg (args, "--dev");
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV);
-	if (tmp && !strcmp (tmp, "yes"))
-		add_openvpn_arg (args, "tap");
-	else
-		add_openvpn_arg (args, "tun");
+	dev_type_is_tap = !g_strcmp0 (tmp, "yes");
+	add_openvpn_arg (args, dev_type_is_tap ? "tap" : "tun");
 
 	/* Protocol, either tcp or udp */
 	add_openvpn_arg (args, "--proto");
@@ -1110,10 +1110,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Up script, called when connection has been established or has been restarted */
 	add_openvpn_arg (args, "--up");
-	if (debug)
-		add_openvpn_arg (args, NM_OPENVPN_HELPER_PATH " --helper-debug");
-	else
-		add_openvpn_arg (args, NM_OPENVPN_HELPER_PATH);
+	stmp = g_strdup_printf ("%s%s %s --", NM_OPENVPN_HELPER_PATH, debug ? " --helper-debug" : "",
+	                        dev_type_is_tap ? "--tap" : "--tun");
+	add_openvpn_arg (args, stmp);
+	g_free (stmp);
 	add_openvpn_arg (args, "--up-restart");
 
 	/* Keep key and tun if restart is needed */

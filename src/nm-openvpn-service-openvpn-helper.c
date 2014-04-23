@@ -57,6 +57,8 @@ extern char **environ;
 #define DBUS_TYPE_G_IP6_ROUTE              (dbus_g_type_get_struct ("GValueArray", DBUS_TYPE_G_UCHAR_ARRAY, G_TYPE_UINT, DBUS_TYPE_G_UCHAR_ARRAY, G_TYPE_UINT, G_TYPE_INVALID))
 #define DBUS_TYPE_G_ARRAY_OF_IP6_ROUTE     (dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_IP6_ROUTE))
 
+static gboolean helper_debug = FALSE;
+
 static void
 helper_failed (DBusGConnection *connection, const char *reason)
 {
@@ -533,25 +535,65 @@ main (int argc, char *argv[])
 	GValue *nbns_list = NULL;
 	GPtrArray *dns_domains = NULL;
 	struct in_addr temp_addr;
-	gboolean tapdev = FALSE;
+	int tapdev = -1;
 	char **iter;
+	int shift = 0;
+	gboolean is_restart;
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
 #endif
 
+	for (i = 1; i < argc; i++) {
+		if (!strcmp (argv[i], "--")) {
+			i++;
+			break;
+		}
+		if (!strcmp (argv[i], "--helper-debug"))
+			helper_debug = TRUE;
+		else if (!strcmp (argv[i], "--tun"))
+			tapdev = 0;
+		else if (!strcmp (argv[i], "--tap"))
+			tapdev = 1;
+		else
+			break;
+	}
+	shift = i - 1;
+
+	if (helper_debug) {
+		GString *args;
+
+		args = g_string_new (NULL);
+		for (i = 0; i < argc; i++) {
+			if (i > 0)
+				g_string_append_c (args, ' ');
+			if (shift && 1 + shift == i)
+				g_string_append (args, "  ");
+			tmp = g_strescape (argv[i], NULL);
+			g_string_append_printf (args, "\"%s\"", tmp);
+			g_free (tmp);
+		}
+
+		g_message ("command line: %s", args->str);
+		g_string_free (args, TRUE);
+		g_message ("openvpn script environment ---------------------------");
+		iter = environ;
+		while (iter && *iter)
+			g_message ("%s", *iter++);
+		g_message ("------------------------------------------------------");
+	}
+
+	/* shift the arguments to the right leaving only those provided by openvpn */
+	argv[shift] = argv[0];
+	argv += shift;
+	argc -= shift;
+
+	is_restart = argc >= 7 && !g_strcmp0 (argv[6], "restart");
+
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
 	if (!connection) {
 		g_warning ("Could not get the system bus: %s", err->message);
 		exit (1);
-	}
-
-	if (argc >= 2 && !g_strcmp0 (argv[1], "--helper-debug")) {
-		g_message ("openvpn script environment ---------------------------");
-		iter = environ;
-		while (iter && *iter)
-			g_print ("%s\n", *iter++);
-		g_message ("------------------------------------------------------");
 	}
 
 	config = g_hash_table_new (g_str_hash, g_str_equal);
@@ -584,11 +626,13 @@ main (int argc, char *argv[])
 	else
 		helper_failed (connection, "Tunnel Device");
 
-	if (strncmp (tmp, "tap", 3) == 0)
-		tapdev = TRUE;
+	if (tapdev == -1)
+		tapdev = strncmp (tmp, "tap", 3) == 0;
 
 	/* IPv4 address */
 	tmp = getenv ("ifconfig_local");
+	if (!tmp && is_restart)
+		tmp = argv[4];
 	if (tmp && strlen (tmp)) {
 		val = addr4_to_gvalue (tmp);
 		if (val)
@@ -598,13 +642,15 @@ main (int argc, char *argv[])
 	}
 
 	/* PTP address; for vpnc PTP address == internal IP4 address */
-	val = addr4_to_gvalue (getenv ("ifconfig_remote"));
+	tmp = getenv ("ifconfig_remote");
+	if (!tmp && is_restart)
+		tmp = argv[5];
+	val = addr4_to_gvalue (tmp);
 	if (val) {
 		/* Sigh.  Openvpn added 'topology' stuff in 2.1 that changes the meaning
 		 * of the ifconfig bits without actually telling you what they are
 		 * supposed to mean; basically relying on specific 'ifconfig' behavior.
 		 */
-		tmp = getenv ("ifconfig_remote");
 		if (tmp && !strncmp (tmp, "255.", 4)) {
 			guint32 addr;
 
