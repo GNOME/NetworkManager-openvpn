@@ -1,6 +1,6 @@
 SUBDIRS = conf
 
-INCLUDES = -I${top_srcdir}
+AM_CFLAGS = -I${top_srcdir}
 
 noinst_PROGRAMS = test-import-export
 

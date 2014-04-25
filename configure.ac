@@ -71,6 +71,7 @@ PKG_CHECK_MODULES(NM,
 	libnm-util >= 0.9.9
 	libnm-glib >= 0.9.9
 	libnm-glib-vpn >= 0.9.9)
+NM_CFLAGS="$NM_CFLAGS -DNM_VERSION_MAX_ALLOWED=NM_VERSION_0_9_10"
 AC_SUBST(NM_CFLAGS)
 AC_SUBST(NM_LIBS)
 
