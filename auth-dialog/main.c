@@ -213,6 +213,7 @@ std_ask_user (const char *vpn_name,
               char **out_new_certpass)
 {
 	NMAVpnPasswordDialog *dialog;
+	gboolean success = FALSE;
 
 	g_return_val_if_fail (vpn_name != NULL, FALSE);
 	g_return_val_if_fail (prompt != NULL, FALSE);
@@ -222,39 +223,28 @@ std_ask_user (const char *vpn_name,
 	dialog = NMA_VPN_PASSWORD_DIALOG (nma_vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
 
 	/* pre-fill dialog with existing passwords */
-	if (need_password && need_certpass) {
-		nma_vpn_password_dialog_set_show_password_secondary (dialog, TRUE);
-		nma_vpn_password_dialog_set_password_secondary_label (dialog, _("Certificate pass_word:") );
-
+	nma_vpn_password_dialog_set_show_password (dialog, need_password);
+	if (need_password)
 		nma_vpn_password_dialog_set_password (dialog, existing_password);
+
+	nma_vpn_password_dialog_set_show_password_secondary (dialog, need_certpass);
+	if (need_certpass) {
+		nma_vpn_password_dialog_set_password_secondary_label (dialog, _("Certificate pass_word:") );
 		nma_vpn_password_dialog_set_password_secondary (dialog, existing_certpass);
-	} else {
-		nma_vpn_password_dialog_set_show_password_secondary (dialog, FALSE);
-		if (need_password)
-			nma_vpn_password_dialog_set_password (dialog, existing_password);
-		else if (need_certpass) {
-			nma_vpn_password_dialog_set_password_label (dialog, _("Certificate password:"));
-			nma_vpn_password_dialog_set_password (dialog, existing_certpass);
-		}
 	}
 
 	gtk_widget_show (GTK_WIDGET (dialog));
-
-	if (!nma_vpn_password_dialog_run_and_block (dialog))
-		return FALSE;
-
-	if (need_password)
-		*out_new_password = g_strdup (nma_vpn_password_dialog_get_password (dialog));
-
-	if (need_certpass) {
+	if (nma_vpn_password_dialog_run_and_block (dialog)) {
 		if (need_password)
+			*out_new_password = g_strdup (nma_vpn_password_dialog_get_password (dialog));
+		if (need_certpass)
 			*out_new_certpass = g_strdup (nma_vpn_password_dialog_get_password_secondary (dialog));
-		else
-			*out_new_certpass = g_strdup (nma_vpn_password_dialog_get_password (dialog));
+
+		success = TRUE;
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
-	return TRUE;
+	return success;
 }
 
 static void
