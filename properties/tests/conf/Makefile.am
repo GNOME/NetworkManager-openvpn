@@ -12,5 +12,7 @@ EXTRA_DIST = \
 	httpauthfile \
 	proxy-socks.ovpn \
 	proxy-http-with-auth.ovpn \
-	keysize.ovpn
+	keysize.ovpn \
+	device.ovpn \
+	device-notype.ovpn
 

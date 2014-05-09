@@ -124,6 +124,8 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_TA,                   G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TA_DIR,               G_TYPE_INT, 0, 1, FALSE },
 	{ NM_OPENVPN_KEY_TAP_DEV,              G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_DEV,                  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_DEV_TYPE,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_REMOTE,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_CERT_TLS,      G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TUNNEL_MTU,           G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -955,11 +957,30 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	add_openvpn_arg (args, "--nobind");
 
-	/* Device, either tun or tap */
+	/* Device and device type, defaults to tun */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV);
+	tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE);
+	tmp3 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV);
 	add_openvpn_arg (args, "--dev");
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV);
-	dev_type_is_tap = !g_strcmp0 (tmp, "yes");
-	add_openvpn_arg (args, dev_type_is_tap ? "tap" : "tun");
+	if (tmp) {
+		add_openvpn_arg (args, tmp);
+		dev_type_is_tap = g_str_has_prefix (tmp, "tap");
+	} else if (tmp2) {
+		add_openvpn_arg (args, tmp2);
+	} else if (tmp3 && !strcmp (tmp3, "yes")) {
+		add_openvpn_arg (args, "tap");
+		dev_type_is_tap = TRUE;
+	} else {
+		add_openvpn_arg (args, "tun");
+		dev_type_is_tap = FALSE;
+	}
+
+	/* Add '--dev-type' if the type was explicitly set */
+	if (tmp2) {
+		add_openvpn_arg (args, "--dev-type");
+		add_openvpn_arg (args, tmp2);
+		dev_type_is_tap = (g_strcmp0 (tmp2, "tap") == 0);
+	}
 
 	/* Protocol, either tcp or udp */
 	add_openvpn_arg (args, "--proto");

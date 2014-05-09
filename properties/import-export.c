@@ -53,6 +53,7 @@
 #define CLIENT_TAG "client"
 #define COMP_TAG "comp-lzo"
 #define DEV_TAG "dev "
+#define DEV_TYPE_TAG "dev-type "
 #define FRAGMENT_TAG "fragment "
 #define IFCONFIG_TAG "ifconfig "
 #define KEY_TAG "key "
@@ -325,12 +326,21 @@ do_import (const char *path, char **lines, GError **error)
 		if (!strncmp (*line, DEV_TAG, strlen (DEV_TAG))) {
 			items = get_args (*line + strlen (DEV_TAG), &nitems);
 			if (nitems == 1) {
-				if (g_str_has_prefix (items[0], "tun")) {
-					/* ignore; default is tun */
-				} else if (g_str_has_prefix (items[0], "tap"))
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV, "yes");
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV, items[0]);
+			} else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+
+			g_strfreev (items);
+			continue;
+		}
+
+		if (!strncmp (*line, DEV_TYPE_TAG, strlen (DEV_TYPE_TAG))) {
+			items = get_args (*line + strlen (DEV_TYPE_TAG), &nitems);
+			if (nitems == 1) {
+				if (!strcmp (items[0], "tun") || !strcmp (items[0], "tap"))
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE, items[0]);
 				else
-					g_warning ("%s: unknown %s option '%s'", __func__, DEV_TAG, *line);
+					g_warning ("%s: unknown %s option '%s'", __func__, DEV_TYPE_TAG, *line);
 			} else
 				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
 
@@ -766,8 +776,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *remote_cert_tls = NULL;
 	const char *tls_auth = NULL;
 	const char *tls_auth_dir = NULL;
+	const char *device = NULL;
+	const char *device_type = NULL;
+	const char *device_default = "tun";
 	gboolean success = FALSE;
-	gboolean device_tun = TRUE;
 	gboolean proto_udp = TRUE;
 	gboolean use_lzo = FALSE;
 	gboolean reneg_exists = FALSE;
@@ -853,9 +865,18 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && !strcmp (value, "yes"))
 		proto_udp = FALSE;
 
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV);
+	if (value && strlen (value))
+		device = value;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE);
+	if (value && strlen (value))
+		device_type = value;
+
+	/* Read legacy 'tap-dev' property for backwards compatibility. */
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV);
 	if (value && !strcmp (value, "yes"))
-		device_tun = FALSE;
+		device_default = "tap";
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
 	if (value && !strcmp (value, "yes"))
@@ -959,7 +980,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && strlen (value))
 		fprintf (f, FRAGMENT_TAG " %d\n", (int) strtol (value, NULL, 10));
 
-	fprintf (f, "dev %s\n", device_tun ? "tun" : "tap");
+	fprintf (f, "dev %s\n", device ? device : (device_type ? device_type : device_default));
+	if (device_type)
+		fprintf (f, "dev-type %s\n", device_type);
 	fprintf (f, "proto %s\n", proto_udp ? "udp" : "tcp");
 
 	if (local_ip && remote_ip)

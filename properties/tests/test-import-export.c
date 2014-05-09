@@ -141,7 +141,7 @@ test_password_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Data items */
 	test_item ("password-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
-	test_item ("password-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("password-import-data", s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	test_item ("password-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
 	test_item ("password-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
 	test_item ("password-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "0");
@@ -271,7 +271,7 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Data items */
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
-	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
 	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
@@ -386,7 +386,7 @@ test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Data items */
 	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
-	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
 	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
 	test_item ("pkcs12-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
@@ -535,7 +535,7 @@ test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Data items */
 	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_STATIC_KEY);
-	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
 	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
 	test_item ("static-key-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
@@ -757,7 +757,7 @@ test_proxy_http_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Data items */
 	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
-	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
 	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
 	test_item ("proxy-http-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "0");
@@ -839,7 +839,7 @@ test_proxy_http_with_auth_import (NMVpnPluginUiInterface *plugin, const char *di
 
 	/* Data items */
 	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
-	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
 	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
 	test_item ("proxy-http-with-auth-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "0");
@@ -881,7 +881,7 @@ test_proxy_socks_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	/* Data items */
 	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
-	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_TAP_DEV, NULL);
+	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
 	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
 	test_item ("proxy-socks-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "0");
@@ -1005,6 +1005,75 @@ test_keysize_export (NMVpnPluginUiInterface *plugin, const char *dir, const char
 	g_free (path);
 }
 
+static void
+test_device_import (NMVpnPluginUiInterface *plugin,
+                    const char *detail,
+                    const char *dir,
+                    const char *file,
+                    const char *expected_dev,
+                    const char *expected_devtype)
+{
+	NMConnection *connection;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection (detail, plugin, dir, file);
+	ASSERT (connection != NULL, detail, "failed to import connection");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL, detail, "missing 'vpn' setting");
+
+	/* Data items */
+	test_item (detail, s_vpn, NM_OPENVPN_KEY_DEV, expected_dev);
+	test_item (detail, s_vpn, NM_OPENVPN_KEY_DEV_TYPE, expected_devtype);
+
+	g_object_unref (connection);
+}
+
+static void
+test_device_export (NMVpnPluginUiInterface *plugin,
+                    const char *detail,
+                    const char *dir,
+                    const char *tmpdir,
+                    const char *file,
+                    const char *exported_name)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+
+	connection = get_basic_connection (detail, plugin, dir, file);
+	ASSERT (connection != NULL, detail, "failed to import connection");
+
+	path = g_build_path ("/", tmpdir, exported_name, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL (detail, "export failed with missing error");
+		else
+			FAIL (detail, "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection (detail, plugin, tmpdir, exported_name);
+	(void) unlink (path);
+	ASSERT (reimported != NULL, detail, "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        detail, "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
@@ -1075,6 +1144,12 @@ int main (int argc, char **argv)
 
 	test_keysize_import (plugin, test_dir);
 	test_keysize_export (plugin, test_dir, argv[2]);
+
+	test_device_import (plugin, "device-import", test_dir, "device.ovpn", "company0", "tun");
+	test_device_export (plugin, "device-export", test_dir, argv[2], "device.ovpn", "device.ovpntest");
+
+	test_device_import (plugin, "device-import", test_dir, "device-notype.ovpn", "tap", NULL);
+	test_device_export (plugin, "device-export", test_dir, argv[2], "device-notype.ovpn", "device-notype.ovpntest");
 
 	g_object_unref (plugin);
 

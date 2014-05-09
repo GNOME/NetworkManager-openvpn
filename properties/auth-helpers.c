@@ -36,6 +36,7 @@
 #include <glib/gi18n-lib.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-8021x.h>
+#include <nm-utils.h>
 
 #include "auth-helpers.h"
 #include "nm-openvpn.h"
@@ -949,6 +950,8 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_TUNNEL_MTU,
 	NM_OPENVPN_KEY_FRAGMENT_SIZE,
 	NM_OPENVPN_KEY_TAP_DEV,
+	NM_OPENVPN_KEY_DEV,
+	NM_OPENVPN_KEY_DEV_TYPE,
 	NM_OPENVPN_KEY_PROTO_TCP,
 	NM_OPENVPN_KEY_PROXY_TYPE,
 	NM_OPENVPN_KEY_PROXY_SERVER,
@@ -1006,11 +1009,11 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 }
 
 static void
-checkbox_toggled_update_spin_cb (GtkWidget *check, gpointer user_data)
+checkbox_toggled_update_widget_cb (GtkWidget *check, gpointer user_data)
 {
-	GtkWidget *spin = (GtkWidget*) user_data;
+	GtkWidget *widget = (GtkWidget*) user_data;
 
-	gtk_widget_set_sensitive (spin, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+	gtk_widget_set_sensitive (widget, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
 }
 
 static const char *
@@ -1261,6 +1264,9 @@ tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 #define PROXY_TYPE_HTTP  1
 #define PROXY_TYPE_SOCKS 2
 
+#define DEVICE_TYPE_IDX_TUN     0
+#define DEVICE_TYPE_IDX_TAP     1
+
 static void
 proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 {
@@ -1320,6 +1326,86 @@ show_proxy_password_toggled_cb (GtkCheckButton *button, gpointer user_data)
 	gtk_entry_set_visibility (GTK_ENTRY (widget), visible);
 }
 
+static void
+device_name_filter_cb (GtkEntry *entry,
+                       const gchar *text,
+                       gint length,
+                       gint *position,
+                       void *user_data)
+{
+	int i, count = 0;
+	gchar *result = g_new (gchar, length + 1);
+	GtkEditable *editable = GTK_EDITABLE (entry);
+
+	for (i = 0; i < length; i++) {
+		if (text[i] == '/' || g_ascii_isspace (text[i]))
+			continue;
+		result[count++] = text[i];
+	}
+	result[count] = 0;
+
+	if (count > 0) {
+		g_signal_handlers_block_by_func (G_OBJECT (editable),
+		                                 G_CALLBACK (device_name_filter_cb),
+		                                 user_data);
+		gtk_editable_insert_text (editable, result, count, position);
+		g_signal_handlers_unblock_by_func (G_OBJECT (editable),
+		                                   G_CALLBACK (device_name_filter_cb),
+		                                   user_data);
+	}
+	g_signal_stop_emission_by_name (G_OBJECT (editable), "insert-text");
+
+	g_free (result);
+}
+
+static gboolean
+device_name_changed_cb (GtkEntry *entry,
+                        gpointer user_data)
+{
+	GtkEditable *editable = GTK_EDITABLE (entry);
+	GtkWidget *ok_button = user_data;
+	gboolean entry_sensitive;
+	char *entry_text;
+	GdkRGBA rgba;
+
+	entry_sensitive = gtk_widget_get_sensitive (GTK_WIDGET (entry));
+	entry_text = gtk_editable_get_chars (editable, 0, -1);
+
+	/* Change cell's background to red if the value is invalid */
+	if (entry_sensitive && entry_text[0] != '\0' && !nm_utils_iface_valid_name (entry_text)) {
+		gdk_rgba_parse (&rgba, "red");
+		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_NORMAL, &rgba);
+		gtk_widget_set_sensitive (ok_button, FALSE);
+	} else {
+		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_NORMAL, NULL);
+		gtk_widget_set_sensitive (ok_button, TRUE);
+	}
+
+	g_free (entry_text);
+	return FALSE;
+}
+
+static void
+dev_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	GtkWidget *combo, *entry, *ok_button;
+
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "dev_type_combo"));
+	entry = GTK_WIDGET (gtk_builder_get_object (builder, "dev_entry"));
+	ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "ok_button"));
+
+	/* Set values to default ones */
+	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check))) {
+		gtk_entry_set_text (GTK_ENTRY (entry), "");
+		gtk_combo_box_set_active (GTK_COMBO_BOX (combo), DEVICE_TYPE_IDX_TUN);
+	}
+
+	checkbox_toggled_update_widget_cb (check, combo);
+	checkbox_toggled_update_widget_cb (check, entry);
+	device_name_changed_cb (GTK_ENTRY (entry), ok_button);
+}
+
 #define TA_DIR_COL_NAME 0
 #define TA_DIR_COL_NUM 1
 
@@ -1329,8 +1415,9 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	GtkBuilder *builder;
 	GtkWidget *dialog = NULL;
 	char *ui_file = NULL;
-	GtkWidget *widget, *combo, *spin;
+	GtkWidget *widget, *combo, *spin, *entry, *ok_button;
 	const char *value, *value2;
+	const char *dev, *dev_type, *tap_dev;
 	GtkListStore *store;
 	GtkTreeIter iter;
 	guint32 active = PROXY_TYPE_NONE;
@@ -1361,9 +1448,11 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	                        builder, (GDestroyNotify) g_object_unref);
 	g_object_set_data (G_OBJECT (dialog), "connection-type", GINT_TO_POINTER (contype));
 
+	ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "ok_button"));
+
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_checkbutton"));
 	spin = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_RENEG_SECONDS);
 	if (value && strlen (value)) {
@@ -1461,7 +1550,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_checkbutton"));
 	spin = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PORT);
 	if (value && strlen (value)) {
@@ -1488,7 +1577,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_checkbutton"));
 	g_assert (widget);
 	spin = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUNNEL_MTU);
 	if (value && strlen (value)) {
@@ -1513,7 +1602,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_checkbutton"));
 	spin = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 	if (value && strlen (value)) {
@@ -1560,11 +1649,38 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TAP_DEV);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tap_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
+	/* Populate device-related widgets */
+	dev =      g_hash_table_lookup (hash, NM_OPENVPN_KEY_DEV);
+	dev_type = g_hash_table_lookup (hash, NM_OPENVPN_KEY_DEV_TYPE);
+	tap_dev =  g_hash_table_lookup (hash, NM_OPENVPN_KEY_TAP_DEV);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dev_checkbutton"));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), (dev && *dev) || dev_type || tap_dev);
+	dev_checkbox_toggled_cb (widget, builder);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (dev_checkbox_toggled_cb), builder);
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "dev_type_combo"));
+	active = DEVICE_TYPE_IDX_TUN;
+	if (   !g_strcmp0 (dev_type, "tap")
+	    || (!dev_type && dev && g_str_has_prefix (dev, "tap"))
+	    || (!dev_type && !g_strcmp0 (tap_dev, "yes")))
+		active = DEVICE_TYPE_IDX_TAP;
+
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter, 0, _("TUN"), -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter, 0, _("TAP"), -1);
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
+	g_object_unref (store);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), active);
+
+	entry = GTK_WIDGET (gtk_builder_get_object (builder, "dev_entry"));
+	gtk_entry_set_max_length (GTK_ENTRY (entry), 15);  /* interface name is max 15 chars */
+	gtk_entry_set_placeholder_text (GTK_ENTRY (entry), _("(automatic)"));
+	g_signal_connect (G_OBJECT (entry), "insert-text", G_CALLBACK (device_name_filter_cb), NULL);
+	g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (device_name_changed_cb), ok_button);
+	if (dev && dev[0] != '\0')
+		gtk_entry_set_text (GTK_ENTRY (entry), dev);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_RANDOM);
 	if (value && !strcmp (value, "yes")) {
@@ -1579,7 +1695,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_checkbutton"));
 	g_assert (widget);
 	spin = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_spin_cb), spin);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_KEYSIZE);
 	if (value && strlen (value)) {
@@ -1804,9 +1920,21 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_PROTO_TCP), g_strdup ("yes"));
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tap_checkbutton"));
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TAP_DEV), g_strdup ("yes"));
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dev_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int device_type;
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "dev_type_combo"));
+		device_type = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+		g_hash_table_insert (hash,
+		                     g_strdup (NM_OPENVPN_KEY_DEV_TYPE),
+		                     g_strdup (device_type == DEVICE_TYPE_IDX_TUN ? "tun" : "tap"));
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "dev_entry"));
+		value = gtk_entry_get_text (GTK_ENTRY (widget));
+		if (value && value[0] != '\0')
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_DEV), g_strdup (value));
+	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_random_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
