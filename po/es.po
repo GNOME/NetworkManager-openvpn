@@ -9,46 +9,46 @@
 # Jordi Jaen Pallares <jordi@suse.de>, 1999, 2000, 2001.
 # Pablo Iranzo Gómez <Pablo.Iranzo@uv.es>, 2000.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2013-09-26 22:09+0000\n"
-"PO-Revision-Date: 2013-09-30 11:59+0200\n"
+"POT-Creation-Date: 2014-06-17 10:05+0000\n"
+"PO-Revision-Date: 2014-06-17 19:12+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español <gnome-es-list@gnome.org>\n"
+"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Gtranslator 2.91.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../auth-dialog/main.c:175
 #, c-format
 msgid "Authenticate VPN %s"
 msgstr "Autenticar VPN %s"
 
-#: ../auth-dialog/main.c:183 ../properties/nm-openvpn-dialog.ui.h:100
+#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-dialog.ui.h:104
 msgid "Password:"
 msgstr "Contraseña:"
 
-#: ../auth-dialog/main.c:192 ../auth-dialog/main.c:240
+#: ../auth-dialog/main.c:189
 msgid "Certificate password:"
 msgstr "Contraseña del certificado:"
 
-#: ../auth-dialog/main.c:226
+#: ../auth-dialog/main.c:223
 msgid "Authenticate VPN"
 msgstr "Autenticación VPN"
 
-#: ../auth-dialog/main.c:231
+#: ../auth-dialog/main.c:232
 msgid "Certificate pass_word:"
 msgstr "_Contraseña del certificado:"
 
-#: ../auth-dialog/main.c:478
+#: ../auth-dialog/main.c:464
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Debe autenticarse para acceder a la red privada virtual «%s»."
@@ -61,106 +61,119 @@ msgstr "Gestor de conexiones VPN (OpenVPN)"
 msgid "Add, Remove, and Edit VPN Connections"
 msgstr "Añadir, quitar y editar conexiones VPN"
 
-#: ../properties/auth-helpers.c:148
+#: ../properties/auth-helpers.c:159
 msgid "Choose your personal certificate..."
 msgstr "Elija su certificado personal…"
 
-#: ../properties/auth-helpers.c:166
+#: ../properties/auth-helpers.c:177
 msgid "Choose your private key..."
 msgstr "Elija su clave privada…"
 
-#: ../properties/auth-helpers.c:238
+#: ../properties/auth-helpers.c:254
 msgid "Saved"
 msgstr "Guardada"
 
-#: ../properties/auth-helpers.c:246
+#: ../properties/auth-helpers.c:262
 msgid "Always Ask"
 msgstr "Preguntar siempre"
 
-#: ../properties/auth-helpers.c:251
+#: ../properties/auth-helpers.c:267
 msgid "Not Required"
 msgstr "No requerido"
 
-#: ../properties/auth-helpers.c:341
+#: ../properties/auth-helpers.c:357
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Elija un certificado de una autoridad certificadora…"
 
-#: ../properties/auth-helpers.c:385
+#: ../properties/auth-helpers.c:401
 msgid "Choose an OpenVPN static key..."
 msgstr "Elija una clave estática OpenVPN…"
 
-#: ../properties/auth-helpers.c:409 ../properties/auth-helpers.c:1140
-#: ../properties/auth-helpers.c:1636
+#: ../properties/auth-helpers.c:425 ../properties/auth-helpers.c:1158
+#: ../properties/auth-helpers.c:1767
 msgid "None"
 msgstr "Ninguno"
 
-#: ../properties/auth-helpers.c:865
+#: ../properties/auth-helpers.c:881
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "Certificados PEM o PKCD#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:866
+#: ../properties/auth-helpers.c:882
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Certificados PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:926
+#: ../properties/auth-helpers.c:942
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Claves estáticas OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1056 ../properties/auth-helpers.c:1132
+#: ../properties/auth-helpers.c:1074 ../properties/auth-helpers.c:1150
 msgid "Default"
 msgstr "Predeterminado"
 
-#: ../properties/auth-helpers.c:1142
+#: ../properties/auth-helpers.c:1160
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1144
+#: ../properties/auth-helpers.c:1162
 msgid "MD-5"
 msgstr "MD5"
 
-#: ../properties/auth-helpers.c:1146
+#: ../properties/auth-helpers.c:1164
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1148
+#: ../properties/auth-helpers.c:1166
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1150
+#: ../properties/auth-helpers.c:1168
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1152
+#: ../properties/auth-helpers.c:1170
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1154
+#: ../properties/auth-helpers.c:1172
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1156
+#: ../properties/auth-helpers.c:1174
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1207
+#: ../properties/auth-helpers.c:1225
 msgid "Server"
 msgstr "Servidor"
 
-#: ../properties/auth-helpers.c:1212
+#: ../properties/auth-helpers.c:1230
 msgid "Client"
 msgstr "Cliente"
 
-#: ../properties/auth-helpers.c:1379 ../properties/nm-openvpn-dialog.ui.h:2
+#: ../properties/auth-helpers.c:1483 ../properties/nm-openvpn-dialog.ui.h:2
 msgid "Not required"
 msgstr "No necesario"
 
-#: ../properties/auth-helpers.c:1381
+#: ../properties/auth-helpers.c:1485
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1383
+#: ../properties/auth-helpers.c:1487
 msgid "SOCKS"
 msgstr "SOCKS"
+
+#: ../properties/auth-helpers.c:1670
+msgid "TUN"
+msgstr "TUN"
+
+#: ../properties/auth-helpers.c:1672
+msgid "TAP"
+msgstr "TAP"
+
+#. interface name is max 15 chars
+#: ../properties/auth-helpers.c:1679
+msgid "(automatic)"
+msgstr "(automático)"
 
 #: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
@@ -244,26 +257,46 @@ msgstr ""
 "Usar TCP para comunicarse con el equipo remoto.\n"
 "opción: proto tcp-client | udp"
 
-# include/scanner/scanner_usb.ycp:47
-# include/scanner/scanner_usb.ycp:47
-# include/scanner/scanner_usb.ycp:47
 #: ../properties/nm-openvpn-dialog.ui.h:16
-msgid "Use a TA_P device"
-msgstr "Usar dispositivo TA_P"
+msgid "Set virtual _device type:"
+msgstr "Establecer tipo de _dispositivo virtual:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
-msgid ""
-"Use TAP virtual network device instead of TUN.\n"
-"config: dev tap | tun"
+msgid "Explicitly set virtual device type and name (TUN/TAP)."
 msgstr ""
-"Usar un dispositivo TAP virtual de red en lugar de TUN.\n"
-"opción: dev tap | tun"
+"Establecer el tipo y el nombre del dispositivo virtual explícitamente (TUN/"
+"TAP)."
 
-#: ../properties/nm-openvpn-dialog.ui.h:19
+#: ../properties/nm-openvpn-dialog.ui.h:18
+#| msgid ""
+#| "Use TAP virtual network device instead of TUN.\n"
+#| "config: dev tap | tun"
+msgid ""
+"Explicitly set virtual device type (TUN/TAP).\n"
+"config: dev-type tun | tap"
+msgstr ""
+"Establecer el tipo y del dispositivo virtual explícitamente (TUN/TAP).\n"
+"opción: dev-type tun | tap"
+
+#: ../properties/nm-openvpn-dialog.ui.h:20
+msgid " and _name:"
+msgstr " y _nombre:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:21
+msgid ""
+"Use custom name for TUN/TAP virtual device (instead of default \"tun\" or "
+"\"tap\").\n"
+"config: dev <name>"
+msgstr ""
+"Usar nombre personalizado para el dispositivo TUN/TAP virtual (en lugar de "
+"«tun» o «tap»).\n"
+"opción: dev <nombre>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:23
 msgid "Use custom tunnel Maximum Transmission _Unit (MTU):"
 msgstr "Usar unidad máxima de transmisión (MTU) del _túnel personalizada:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:20
+#: ../properties/nm-openvpn-dialog.ui.h:24
 msgid ""
 "Take the TUN device MTU to be the specified value and derive the link MTU "
 "from it.\n"
@@ -273,11 +306,11 @@ msgstr ""
 "obtener el MTU del enlace de este valor.\n"
 "opción: tun-mtu"
 
-#: ../properties/nm-openvpn-dialog.ui.h:22
+#: ../properties/nm-openvpn-dialog.ui.h:26
 msgid "Use custom UDP _fragment size:"
 msgstr "Usar tamaño de _fragmentación UDP personalizado:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:23
+#: ../properties/nm-openvpn-dialog.ui.h:27
 msgid ""
 "Enable internal datagram fragmentation with this maximum size.\n"
 "config: fragment"
@@ -285,11 +318,11 @@ msgstr ""
 "Activar la fragmentación interna de datos con este tamaño máximo.\n"
 "opción: fragment"
 
-#: ../properties/nm-openvpn-dialog.ui.h:25
+#: ../properties/nm-openvpn-dialog.ui.h:29
 msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
 msgstr "Restringir el tamaño del segmento máximo del túnel TCP (MSS)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:26
+#: ../properties/nm-openvpn-dialog.ui.h:30
 msgid ""
 "Restrict tunnel TCP MSS.\n"
 "config: mssfix"
@@ -297,11 +330,11 @@ msgstr ""
 "Restringir túnel TCP MSS.\n"
 "opción: mssfix"
 
-#: ../properties/nm-openvpn-dialog.ui.h:28
+#: ../properties/nm-openvpn-dialog.ui.h:32
 msgid "Rando_mize remote hosts"
 msgstr "Aleatori_zar los equipos remotos"
 
-#: ../properties/nm-openvpn-dialog.ui.h:29
+#: ../properties/nm-openvpn-dialog.ui.h:33
 msgid ""
 "Randomize the order of gateways list (remote) as a kind of basic load-"
 "balancing measure.\n"
@@ -311,11 +344,11 @@ msgstr ""
 "de medida de balanceo de carga básica.\n"
 "opción: remote-random"
 
-#: ../properties/nm-openvpn-dialog.ui.h:31
+#: ../properties/nm-openvpn-dialog.ui.h:35
 msgid "General"
 msgstr "General"
 
-#: ../properties/nm-openvpn-dialog.ui.h:32
+#: ../properties/nm-openvpn-dialog.ui.h:36
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
 "Cipher Block Chaining mode).\n"
@@ -325,11 +358,11 @@ msgstr ""
 "(Blowfish in Cipher Block Chaining mode).\n"
 "opción: cipher"
 
-#: ../properties/nm-openvpn-dialog.ui.h:34
+#: ../properties/nm-openvpn-dialog.ui.h:38
 msgid "Use custom _size of cipher key:"
 msgstr "Usar tamaño per_sonalizado para la clave de cifrado:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:35
+#: ../properties/nm-openvpn-dialog.ui.h:39
 msgid ""
 "Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
 "specific size.\n"
@@ -339,7 +372,7 @@ msgstr ""
 "se especifica, lo predeterminado es lo específico del cifrado.\n"
 "opción: keysize <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:37
+#: ../properties/nm-openvpn-dialog.ui.h:41
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
 "is SHA1.\n"
@@ -352,23 +385,23 @@ msgstr ""
 # clients/inst_custom_part.ycp:2337
 # clients/inst_custom_part.ycp:2336
 # clients/inst_custom_part.ycp:2350
-#: ../properties/nm-openvpn-dialog.ui.h:39
+#: ../properties/nm-openvpn-dialog.ui.h:43
 msgid "Ci_pher:"
 msgstr "Cifrado:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:40
+#: ../properties/nm-openvpn-dialog.ui.h:44
 msgid "_HMAC Authentication:"
 msgstr "Autenticación HMAC"
 
-#: ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/nm-openvpn-dialog.ui.h:45
 msgid "Security"
 msgstr "Seguridad"
 
-#: ../properties/nm-openvpn-dialog.ui.h:42
+#: ../properties/nm-openvpn-dialog.ui.h:46
 msgid "_Subject Match:"
 msgstr "Coincidencia de asunto:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:43
+#: ../properties/nm-openvpn-dialog.ui.h:47
 msgid ""
 "<i>Connect only to servers whose certificate matches the given subject.\n"
 "Example: /CN=myvpn.company.com</i>"
@@ -377,7 +410,7 @@ msgstr ""
 "proporcionado.\n"
 "Ejemplo: /CN=mivpn.empresa.com</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:45
+#: ../properties/nm-openvpn-dialog.ui.h:49
 msgid ""
 "Accept connections only from a host with X509 name or common name equal to "
 "the specified one.\n"
@@ -387,11 +420,11 @@ msgstr ""
 "al especificado.\n"
 "opción: tls-remote"
 
-#: ../properties/nm-openvpn-dialog.ui.h:47
+#: ../properties/nm-openvpn-dialog.ui.h:51
 msgid "_Verify peer (server) certificate usage signature"
 msgstr "_Verificar el uso de la firma del certificado del par (servidor)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:48
+#: ../properties/nm-openvpn-dialog.ui.h:52
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -399,11 +432,11 @@ msgstr ""
 "Requerir que el certificado del par esté firmado usando una clave explícita "
 "y una clave extendida basada en las reglas RFC3280 de TLS."
 
-#: ../properties/nm-openvpn-dialog.ui.h:49
+#: ../properties/nm-openvpn-dialog.ui.h:53
 msgid "_Remote peer certificate TLS type:"
 msgstr "Tipo de certificado TLS del par _remoto:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:50
+#: ../properties/nm-openvpn-dialog.ui.h:54
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -413,19 +446,19 @@ msgstr ""
 "y una clave extendida basada en las reglas RFC3280 de TLS.\n"
 "opción: remote-cert-tls client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:52
+#: ../properties/nm-openvpn-dialog.ui.h:56
 msgid "Use additional _TLS authentication"
 msgstr "Usar autenticación TLS adicional"
 
-#: ../properties/nm-openvpn-dialog.ui.h:53
+#: ../properties/nm-openvpn-dialog.ui.h:57
 msgid "Add an additional layer of HMAC authentication."
 msgstr "Añadir una capa adicional de autenticación HMAC."
 
-#: ../properties/nm-openvpn-dialog.ui.h:54
+#: ../properties/nm-openvpn-dialog.ui.h:58
 msgid "Key _Direction:"
 msgstr "Dirección de la clave:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:55
+#: ../properties/nm-openvpn-dialog.ui.h:59
 msgid ""
 "<i>If key direction is used, it must be the opposite of that used on the VPN "
 "peer.  For example, if the peer uses '1', this connection must use '0'.  If "
@@ -436,7 +469,7 @@ msgstr ""
 "está seguro de qué valor usar, contacte con el administrador de su sistema.</"
 "i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:56
+#: ../properties/nm-openvpn-dialog.ui.h:60
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks.\n"
@@ -446,7 +479,7 @@ msgstr ""
 "control para protegerse de ataques de DoS.\n"
 "opción: tls-auth <file> [direction]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:58
+#: ../properties/nm-openvpn-dialog.ui.h:62
 msgid ""
 "Direction parameter for static key mode.\n"
 "config: tls-auth <file> [direction]"
@@ -454,15 +487,15 @@ msgstr ""
 "Parámetro de dirección para el modo de clave estática. \n"
 "opción: tls-auth <file> [direction]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:60
+#: ../properties/nm-openvpn-dialog.ui.h:64
 msgid "Key _File:"
 msgstr "Archivo de clave:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:61
+#: ../properties/nm-openvpn-dialog.ui.h:65
 msgid "TLS Authentication"
 msgstr "Autenticación TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:62
+#: ../properties/nm-openvpn-dialog.ui.h:66
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -470,11 +503,11 @@ msgstr ""
 "Tipo de proxy: HTTP o Socks.\n"
 "opción: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:64
+#: ../properties/nm-openvpn-dialog.ui.h:68
 msgid "Proxy _Type:"
 msgstr "Tipo de proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:65
+#: ../properties/nm-openvpn-dialog.ui.h:69
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -482,11 +515,11 @@ msgstr ""
 "<i>Seleccionar esta opción si su organización requiere usar un servidor "
 "proxy para acceder a Internet.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:66
+#: ../properties/nm-openvpn-dialog.ui.h:70
 msgid "Server _Address:"
 msgstr "Dirección del servidor:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:67
+#: ../properties/nm-openvpn-dialog.ui.h:71
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -494,11 +527,11 @@ msgstr ""
 "Conectar a un equipo remoto a través de un proxy con esta dirección.\n"
 "opción: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:69
+#: ../properties/nm-openvpn-dialog.ui.h:73
 msgid "_Port:"
 msgstr "Puerto:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:70
+#: ../properties/nm-openvpn-dialog.ui.h:74
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -506,11 +539,11 @@ msgstr ""
 "Conectar a un equipo remoto a través de un proxy con este puerto.\n"
 "opción: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:72
+#: ../properties/nm-openvpn-dialog.ui.h:76
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Reintentar indefinidamente cuando haya errores"
 
-#: ../properties/nm-openvpn-dialog.ui.h:73
+#: ../properties/nm-openvpn-dialog.ui.h:77
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -519,40 +552,40 @@ msgstr ""
 "SIGUSR1.\n"
 "opción: http-proxy-retry or socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:75
+#: ../properties/nm-openvpn-dialog.ui.h:79
 msgid "Proxy _Username:"
 msgstr "Usuario del proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:76
+#: ../properties/nm-openvpn-dialog.ui.h:80
 msgid "Proxy Passwor_d:"
 msgstr "Contraseña del proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:77
+#: ../properties/nm-openvpn-dialog.ui.h:81
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Nombre de usuario del proxy HTTP/Socks pasado a OpenVPN cuando se solicita."
 
-#: ../properties/nm-openvpn-dialog.ui.h:78
+#: ../properties/nm-openvpn-dialog.ui.h:82
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr "Contraseña del proxy HTTP/Socks pasada a OpenVPN cuando se solicita."
 
-#: ../properties/nm-openvpn-dialog.ui.h:79
+#: ../properties/nm-openvpn-dialog.ui.h:83
 msgid "_Show password"
 msgstr "Mostrar contraseña"
 
-#: ../properties/nm-openvpn-dialog.ui.h:80
+#: ../properties/nm-openvpn-dialog.ui.h:84
 msgid "Proxies"
 msgstr "Proxies"
 
-#: ../properties/nm-openvpn-dialog.ui.h:81
+#: ../properties/nm-openvpn-dialog.ui.h:85
 msgid "<b>General</b>"
 msgstr "<b>General</b>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:82
+#: ../properties/nm-openvpn-dialog.ui.h:86
 msgid "_Gateway:"
 msgstr "_Pasarela:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:83
+#: ../properties/nm-openvpn-dialog.ui.h:87
 msgid ""
 "Remote host name or IP address. You can specify multiple items for "
 "redundancy (use commas to separate the entries).\n"
@@ -562,23 +595,23 @@ msgstr ""
 "por redundancia (use comas para separar las entradas).\n"
 "opción: remote"
 
-#: ../properties/nm-openvpn-dialog.ui.h:85
+#: ../properties/nm-openvpn-dialog.ui.h:89
 msgid "<b>Authentication</b>"
 msgstr "<b>Autenticación</b>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:86
+#: ../properties/nm-openvpn-dialog.ui.h:90
 msgid "_Show passwords"
 msgstr "Mostrar contraseñas"
 
-#: ../properties/nm-openvpn-dialog.ui.h:87
+#: ../properties/nm-openvpn-dialog.ui.h:91
 msgid "Password for private key"
 msgstr "Contraseña para la clave privada"
 
-#: ../properties/nm-openvpn-dialog.ui.h:88
+#: ../properties/nm-openvpn-dialog.ui.h:92
 msgid "Private Key Password:"
 msgstr "Contraseña de la clave privada:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:89
+#: ../properties/nm-openvpn-dialog.ui.h:93
 msgid ""
 "Local peer's private key in .pem format.\n"
 "config: key"
@@ -586,11 +619,11 @@ msgstr ""
 "Clave privada del par local, en formato .pem.\n"
 "opción: key"
 
-#: ../properties/nm-openvpn-dialog.ui.h:91
+#: ../properties/nm-openvpn-dialog.ui.h:95
 msgid "Private Key:"
 msgstr "Clave privada:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:92
+#: ../properties/nm-openvpn-dialog.ui.h:96
 msgid ""
 "Certificate authority (CA) file in .pem format.\n"
 "config: ca"
@@ -598,15 +631,15 @@ msgstr ""
 "Archivo de autoridad certificadora (CA) en formato .pem.\n"
 "opción: ca"
 
-#: ../properties/nm-openvpn-dialog.ui.h:94
+#: ../properties/nm-openvpn-dialog.ui.h:98
 msgid "CA Certificate:"
 msgstr "Certificado CA:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:95
+#: ../properties/nm-openvpn-dialog.ui.h:99
 msgid "User Certificate:"
 msgstr "Certificado de usuario:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:96
+#: ../properties/nm-openvpn-dialog.ui.h:100
 msgid ""
 "Local peer's signed certificate in .pem format (signed by CA of CA "
 "Certificate).\n"
@@ -616,7 +649,7 @@ msgstr ""
 "certificado de una CA).\n"
 "opción: cert"
 
-#: ../properties/nm-openvpn-dialog.ui.h:98
+#: ../properties/nm-openvpn-dialog.ui.h:102
 msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -624,11 +657,11 @@ msgstr ""
 "Contraseña pasada a OpenVPN cuando se solicita.\n"
 "opción: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:101
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid "User name:"
 msgstr "Nombre de usuario:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:106
 msgid ""
 "Username passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -636,7 +669,7 @@ msgstr ""
 "Nombre de usuario pasado a OpenVPN cuando se solicita.\n"
 "opción: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid ""
 "IP address of the local VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -644,15 +677,15 @@ msgstr ""
 "Dirección IP del cliente VPN.\n"
 "opción: ifconfig <l> <rn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid "Remote IP Address:"
 msgstr "Dirección IP remota:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:111
 msgid "Local IP Address:"
 msgstr "Dirección IP local:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid ""
 "IP address of the remote VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -660,15 +693,15 @@ msgstr ""
 "Dirección IP del servidor VPN.\n"
 "opción: ifconfig <l> <rn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:110
+#: ../properties/nm-openvpn-dialog.ui.h:114
 msgid "Key Direction:"
 msgstr "Dirección de la clave:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "Static Key:"
 msgstr "Clave estática:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
@@ -676,7 +709,7 @@ msgstr ""
 "Archivo precompartido para el modo de cifrado de clave estática.\n"
 "opción: static <file>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
 "config: static <file> [direction]"
@@ -684,133 +717,133 @@ msgstr ""
 "Dirección para el modo de cifrado de clave estática (no TLS).\n"
 "opción: static <file> [direction]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:116
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "Type:"
 msgstr "Tipo:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid "Select an authentication mode."
 msgstr "Seleccionar un modo de autenticación."
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:122
 msgid "Ad_vanced..."
 msgstr "A_vanzado…"
 
-#: ../src/nm-openvpn-service.c:199
+#: ../src/nm-openvpn-service.c:201
 #, c-format
 msgid "invalid address '%s'"
 msgstr "dirección «%s» no válida"
 
-#: ../src/nm-openvpn-service.c:211
+#: ../src/nm-openvpn-service.c:213
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
 msgstr "propiedad entera «%s» no válida o fuera de rango [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:222
+#: ../src/nm-openvpn-service.c:224
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
 msgstr "propiedad booleana «%s» no válida (no es «sí» o «no»)"
 
-#: ../src/nm-openvpn-service.c:229
+#: ../src/nm-openvpn-service.c:231
 #, c-format
 msgid "unhandled property '%s' type %s"
 msgstr "propiedad «%s» de tipo %s no controlada"
 
-#: ../src/nm-openvpn-service.c:240
+#: ../src/nm-openvpn-service.c:242
 #, c-format
 msgid "property '%s' invalid or not supported"
 msgstr "propiedad «%s» no válida o no soportada"
 
-#: ../src/nm-openvpn-service.c:257
+#: ../src/nm-openvpn-service.c:259
 msgid "No VPN configuration options."
 msgstr "No hay opciones de configuración de VPN."
 
-#: ../src/nm-openvpn-service.c:426
+#: ../src/nm-openvpn-service.c:428
 msgid "A username is required."
 msgstr "Se requiere un nombre de usuario."
 
-#: ../src/nm-openvpn-service.c:430
+#: ../src/nm-openvpn-service.c:432
 msgid "A password is required."
 msgstr "Se requiere una contraseña."
 
-#: ../src/nm-openvpn-service.c:433
+#: ../src/nm-openvpn-service.c:435
 msgid "A username and password are required."
 msgstr "Se requiere un nombre de usuario y una contraseña."
 
-#: ../src/nm-openvpn-service.c:453
+#: ../src/nm-openvpn-service.c:455
 msgid "A private key password is required."
 msgstr "Se requiere una contraseña de la clave privada."
 
-#: ../src/nm-openvpn-service.c:466
+#: ../src/nm-openvpn-service.c:468
 msgid "An HTTP Proxy username is required."
 msgstr "Se requiere un nombre de usuario para el proxy HTTP."
 
-#: ../src/nm-openvpn-service.c:470
+#: ../src/nm-openvpn-service.c:472
 msgid "An HTTP Proxy password is required."
 msgstr "Se requiere una contraseña para el proxy HTTP."
 
-#: ../src/nm-openvpn-service.c:473
+#: ../src/nm-openvpn-service.c:475
 msgid "An HTTP Proxy username and password are required."
 msgstr "Se requiere un nombre de usuario y una contraseña para el proxy HTTP."
 
-#: ../src/nm-openvpn-service.c:877
+#: ../src/nm-openvpn-service.c:881
 msgid "Could not find the openvpn binary."
 msgstr "No se pudo encontrar el ejecutable de openvpn."
 
-#: ../src/nm-openvpn-service.c:888
+#: ../src/nm-openvpn-service.c:892
 msgid "Invalid HMAC auth."
 msgstr "Autenticación HMAC no válida."
 
-#: ../src/nm-openvpn-service.c:899 ../src/nm-openvpn-service.c:1390
+#: ../src/nm-openvpn-service.c:903 ../src/nm-openvpn-service.c:1411
 msgid "Invalid connection type."
 msgstr "Tipo de conexión no válido."
 
-#: ../src/nm-openvpn-service.c:944
+#: ../src/nm-openvpn-service.c:948
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Tipo de proxy «%s» no válido."
 
-#: ../src/nm-openvpn-service.c:980
+#: ../src/nm-openvpn-service.c:1001
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Número de puerto no válido «%s»."
 
-#: ../src/nm-openvpn-service.c:1005
+#: ../src/nm-openvpn-service.c:1026
 #, c-format
 msgid "Invalid keysize '%s'."
 msgstr "Tamaño de clave «%s» no válido."
 
-#: ../src/nm-openvpn-service.c:1052
+#: ../src/nm-openvpn-service.c:1073
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Número de segundos de regenociación «%s» no válidos."
 
-#: ../src/nm-openvpn-service.c:1076
+#: ../src/nm-openvpn-service.c:1097
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Tamaño de MTU del TUN «%s» no válido."
 
-#: ../src/nm-openvpn-service.c:1091
+#: ../src/nm-openvpn-service.c:1112
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Tamaño de fragmento «%s» no válido."
 
-#: ../src/nm-openvpn-service.c:1159
+#: ../src/nm-openvpn-service.c:1180
 msgid "Missing required local IP address for static key mode."
 msgstr "Falta la dirección IP local para el modo de clave estática."
 
-#: ../src/nm-openvpn-service.c:1172
+#: ../src/nm-openvpn-service.c:1193
 msgid "Missing required remote IP address for static key mode."
 msgstr "Falta la dirección IP remota para el modo de clave estática."
 
-#: ../src/nm-openvpn-service.c:1197
+#: ../src/nm-openvpn-service.c:1218
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Tipo de conexión «%s» desconocido."
 
-#: ../src/nm-openvpn-service.c:1308 ../src/nm-openvpn-service.c:1381
-#: ../src/nm-openvpn-service.c:1415
+#: ../src/nm-openvpn-service.c:1329 ../src/nm-openvpn-service.c:1402
+#: ../src/nm-openvpn-service.c:1436
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -818,7 +851,7 @@ msgstr ""
 "No se pudo procesar la solicitud porque la configuración de la conexión VPN "
 "no es válida."
 
-#: ../src/nm-openvpn-service.c:1317
+#: ../src/nm-openvpn-service.c:1338
 msgid ""
 "Could not process the request because the openvpn connection type was "
 "invalid."
@@ -826,24 +859,30 @@ msgstr ""
 "No se pudo procesar la solicitud porque el tipo de la conexión openvpn no es "
 "válido."
 
-#: ../src/nm-openvpn-service.c:1429
+#: ../src/nm-openvpn-service.c:1450
 msgid "Unhandled pending authentication."
 msgstr "Autenticación pendiente no manejada."
 
-#: ../src/nm-openvpn-service.c:1570
+#: ../src/nm-openvpn-service.c:1591
 msgid "Don't quit when VPN connection terminates"
 msgstr "No salir cuando la conexión VPN termine"
 
-#: ../src/nm-openvpn-service.c:1571
+#: ../src/nm-openvpn-service.c:1592
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 "Activar el registro de depurado detallado (puede mostrar las contraseñas)"
 
-#: ../src/nm-openvpn-service.c:1594
+#: ../src/nm-openvpn-service.c:1615
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
 "nm-openvpn-service proporciona la integración de OpenVPN con NetworkManager."
+
+# include/scanner/scanner_usb.ycp:47
+# include/scanner/scanner_usb.ycp:47
+# include/scanner/scanner_usb.ycp:47
+#~ msgid "Use a TA_P device"
+#~ msgstr "Usar dispositivo TA_P"
 
 #~ msgid "_Password:"
 #~ msgstr "_Contraseña:"
