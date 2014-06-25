@@ -908,14 +908,48 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	add_openvpn_arg (args, openvpn_binary);
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
-	if (tmp && strlen (tmp)) {
-		char *tok;
-		while ((tok = strsep((char**)&tmp, " ,")) != NULL) {
-			if (strlen(tok)) {
+	if (tmp && *tmp) {
+		char *tok, *port, *proto;
+		char *tmp_dup = strdup (tmp);
+		while ((tok = strsep (&tmp_dup, " \t,")) != NULL) {
+			if (*tok) {
+				port = strchr (tok, ':');
+				proto = port ? strchr (port + 1, ':') : NULL;
+				if (port)
+					*port++ = '\0';
+				if (proto)
+					*proto++ = '\0';
+
 				add_openvpn_arg (args, "--remote");
 				add_openvpn_arg (args, tok);
+				if (port) {
+					if (!add_openvpn_arg_int (args, port)) {
+						g_set_error (error,
+						             NM_VPN_PLUGIN_ERROR,
+						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+						             _("Invalid port number '%s'."), port);
+						free_openvpn_args (args);
+						g_free (tmp_dup);
+						return FALSE;
+					}
+				} else
+					add_openvpn_arg (args, "1194"); /* use default IANA port */
+				if (proto) {
+					if (!strcmp (proto, "udp") || !strcmp (proto, "tcp"))
+						add_openvpn_arg (args, proto);
+					else {
+						g_set_error (error,
+						             NM_VPN_PLUGIN_ERROR,
+						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+						             _("Invalid proto '%s'."), proto);
+						free_openvpn_args (args);
+						g_free (tmp_dup);
+						return FALSE;
+					}
+				}
 			}
 		}
+		g_free (tmp_dup);
 	}
 
 	/* Remote random */

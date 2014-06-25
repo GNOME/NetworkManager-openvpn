@@ -127,6 +127,51 @@ openvpn_plugin_ui_error_get_type (void)
 	return etype;
 }
 
+/* Example: abc.com:1234:udp, ovpnserver.company.com:443, vpn.example.com::tcp */
+static gboolean
+check_gateway_entry (const char *str)
+{
+	char **list, **iter;
+	char *host, *port, *proto;
+	long int port_int;
+	gboolean success = FALSE;
+
+	if (!str || !*str)
+		return FALSE;
+
+	list = g_strsplit_set (str, " \t,", -1);
+	for (iter = list; iter && *iter; iter++) {
+		if (!**iter)
+			continue;
+		host = g_strstrip (*iter);
+		port = strchr (host, ':');
+		proto = port ? strchr (port + 1, ':') : NULL;
+		if (port)
+			*port++ = '\0';
+		if (proto)
+			*proto++ = '\0';
+
+		/* check hostname */
+		if (!host || !*host)
+			goto out;
+		/* check port */
+		if (port && *port) {
+			char *end;
+			errno = 0;
+			port_int = strtol (port, &end, 10);
+			if (errno != 0 || *end != '\0' || port_int < 1 || port_int > 65535)
+				goto out;
+		}
+		/* check proto */
+		if (proto && strcmp (proto, "udp") && strcmp (proto, "tcp"))
+			goto out;
+	}
+	success = TRUE;
+out:
+	g_strfreev (list);
+	return success;
+}
+
 static gboolean
 check_validity (OpenvpnPluginUiWidget *self, GError **error)
 {
@@ -136,10 +181,17 @@ check_validity (OpenvpnPluginUiWidget *self, GError **error)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	const char *contype = NULL;
+	GdkRGBA rgba;
+	gboolean gateway_valid;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
-	if (!str || !strlen (str)) {
+	gateway_valid = check_gateway_entry (str);
+	/* Change entry background colour while editing */
+	if (!gateway_valid)
+		gdk_rgba_parse (&rgba, "red3");
+	gtk_widget_override_background_color (widget, GTK_STATE_NORMAL, !gateway_valid ? &rgba : NULL);
+	if (!gateway_valid) {
 		g_set_error (error,
 		             OPENVPN_PLUGIN_UI_ERROR,
 		             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
