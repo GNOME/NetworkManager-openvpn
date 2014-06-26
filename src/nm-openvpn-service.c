@@ -981,6 +981,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 				         NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 				         _("Invalid proxy type '%s'."),
 				         tmp);
+			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
