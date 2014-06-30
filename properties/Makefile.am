@@ -18,7 +18,6 @@ libnm_openvpn_properties_la_CFLAGS =                    \
         $(GLIB_CFLAGS)                                  \
         $(GTK_CFLAGS)                                   \
         $(NM_CFLAGS)                                    \
-        $(GNOMEKEYRING_CFLAGS)                          \
         $(DISABLE_DEPRECATED)                           \
         -I$(top_srcdir)/                                \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
