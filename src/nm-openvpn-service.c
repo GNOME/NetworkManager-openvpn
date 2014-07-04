@@ -1623,7 +1623,8 @@ main (int argc, char *argv[])
 	if (debug)
 		g_message ("nm-openvpn-service (version " DIST_VERSION ") starting...");
 
-	if (system ("/sbin/modprobe tun") == -1)
+	if (   !g_file_test ("/sys/class/misc/tun", G_FILE_TEST_EXISTS)
+	    && (system ("/sbin/modprobe tun") == -1))
 		exit (EXIT_FAILURE);
 
 	plugin = nm_openvpn_plugin_new ();
