@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-09 23:24+0200\n"
-"PO-Revision-Date: 2014-05-09 23:25+0200\n"
+"POT-Creation-Date: 2014-07-11 14:22+0200\n"
+"PO-Revision-Date: 2014-07-11 14:23+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -182,19 +182,19 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Zgodny z serwerem OpenVPN."
 
-#: ../properties/nm-openvpn.c:317
+#: ../properties/nm-openvpn.c:369
 msgid "Certificates (TLS)"
 msgstr "Certyfikaty (TLS)"
 
-#: ../properties/nm-openvpn.c:328
+#: ../properties/nm-openvpn.c:380
 msgid "Password"
 msgstr "Hasło"
 
-#: ../properties/nm-openvpn.c:341
+#: ../properties/nm-openvpn.c:393
 msgid "Password with Certificates (TLS)"
 msgstr "Hasło z certyfikatami (TLS)"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn.c:405
 msgid "Static Key"
 msgstr "Klucz statyczny"
 
@@ -578,12 +578,14 @@ msgstr "_Brama:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:87
 msgid ""
-"Remote host name or IP address. You can specify multiple items for "
-"redundancy (use commas to separate the entries).\n"
+"Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
+"tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
+"delimiters).\n"
 "config: remote"
 msgstr ""
-"Nazwa lub adres IP zdalnego komputera. Można podać wiele elementów (wpisy "
-"należy oddzielać przecinkami).\n"
+"Zdalne bramy, z opcjonalnym portem i protokołem (np. ovpn.corp.com:1234:"
+"tcp). Można podać wiele komputerów jako zapasowe (które można oddzielać "
+"przecinkami lub spacjami).\n"
 "konfiguracja: remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:89
@@ -791,55 +793,60 @@ msgstr "Nie można odnaleźć pliku binarnego openvpn."
 msgid "Invalid HMAC auth."
 msgstr "Nieprawidłowe uwierzytelnienie HMAC."
 
-#: ../src/nm-openvpn-service.c:903 ../src/nm-openvpn-service.c:1411
+#: ../src/nm-openvpn-service.c:903 ../src/nm-openvpn-service.c:1446
 msgid "Invalid connection type."
 msgstr "Nieprawidłowy typ połączenia."
 
-#: ../src/nm-openvpn-service.c:948
-#, c-format
-msgid "Invalid proxy type '%s'."
-msgstr "Nieprawidłowy typ pośrednika \"%s\"."
-
-#: ../src/nm-openvpn-service.c:1001
+#: ../src/nm-openvpn-service.c:930 ../src/nm-openvpn-service.c:1036
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Nieprawidłowy numer portu \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1026
+#: ../src/nm-openvpn-service.c:944
+#, c-format
+msgid "Invalid proto '%s'."
+msgstr "Nieprawidłowy protokół \"%s\"."
+
+#: ../src/nm-openvpn-service.c:982
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Nieprawidłowy typ pośrednika \"%s\"."
+
+#: ../src/nm-openvpn-service.c:1061
 #, c-format
 msgid "Invalid keysize '%s'."
 msgstr "Nieprawidłowy rozmiar klucza \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1073
+#: ../src/nm-openvpn-service.c:1108
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Nieprawidłowe sekundy renegocjacji \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1097
+#: ../src/nm-openvpn-service.c:1132
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Nieprawidłowy rozmiar TUN MTU \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1112
+#: ../src/nm-openvpn-service.c:1147
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Nieprawidłowy rozmiar fragmentu \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1180
+#: ../src/nm-openvpn-service.c:1215
 msgid "Missing required local IP address for static key mode."
 msgstr "Brak wymaganego lokalnego adresu IP dla trybu klucza statycznego."
 
-#: ../src/nm-openvpn-service.c:1193
+#: ../src/nm-openvpn-service.c:1228
 msgid "Missing required remote IP address for static key mode."
 msgstr "Brak wymaganego zdalnego adresu IP dla trybu klucza statycznego."
 
-#: ../src/nm-openvpn-service.c:1218
+#: ../src/nm-openvpn-service.c:1253
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Nieznany typ połączenia \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1329 ../src/nm-openvpn-service.c:1402
-#: ../src/nm-openvpn-service.c:1436
+#: ../src/nm-openvpn-service.c:1364 ../src/nm-openvpn-service.c:1437
+#: ../src/nm-openvpn-service.c:1471
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -847,7 +854,7 @@ msgstr ""
 "Nie można przetworzyć żądania, ponieważ ustawienia połączenia VPN są "
 "nieprawidłowe."
 
-#: ../src/nm-openvpn-service.c:1338
+#: ../src/nm-openvpn-service.c:1373
 msgid ""
 "Could not process the request because the openvpn connection type was "
 "invalid."
@@ -855,19 +862,19 @@ msgstr ""
 "Nie można przetworzyć żądania, ponieważ typ połączenia OpenVPN jest "
 "nieprawidłowy."
 
-#: ../src/nm-openvpn-service.c:1450
+#: ../src/nm-openvpn-service.c:1485
 msgid "Unhandled pending authentication."
 msgstr "Nieobsłużone oczekujące uwierzytelnienie."
 
-#: ../src/nm-openvpn-service.c:1591
+#: ../src/nm-openvpn-service.c:1626
 msgid "Don't quit when VPN connection terminates"
 msgstr "Nie kończy działania, kiedy połączenie VPN jest kończone"
 
-#: ../src/nm-openvpn-service.c:1592
+#: ../src/nm-openvpn-service.c:1627
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Włącza więcej komunikatów debugowania (może wyjawić hasła)"
 
-#: ../src/nm-openvpn-service.c:1615
+#: ../src/nm-openvpn-service.c:1650
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
