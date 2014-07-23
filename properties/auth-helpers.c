@@ -84,11 +84,25 @@ setup_secret_widget (GtkBuilder *builder,
 	return widget;
 }
 
+typedef struct {
+	GtkWidget *widget1;
+	GtkWidget *widget2;
+} TlsChooserSignalData;
+
 static void
-tls_cert_changed_cb (GtkWidget *widget, GtkWidget *next_widget)
+tls_chooser_signal_data_destroy (gpointer data, GClosure *closure)
 {
-	GtkFileChooser *this, *next;
-	char *fname, *next_fname;
+	g_slice_free (TlsChooserSignalData, data);
+}
+
+static void
+tls_cert_changed_cb (GtkWidget *widget, gpointer data)
+{
+	GtkWidget *other_widgets[2] = { ((TlsChooserSignalData *) data)->widget1,
+	                                ((TlsChooserSignalData *) data)->widget2 };
+	GtkFileChooser *this, *others[2];
+	char *fname, *other_fnames[2];
+	int i;
 
 	/* If the just-changed file chooser is a PKCS#12 file, then all of the
 	 * TLS filechoosers have to be PKCS#12.  But if it just changed to something
@@ -100,36 +114,42 @@ tls_cert_changed_cb (GtkWidget *widget, GtkWidget *next_widget)
 	 */
 
 	this = GTK_FILE_CHOOSER (widget);
-	next = GTK_FILE_CHOOSER (next_widget);
+	others[0] = GTK_FILE_CHOOSER (other_widgets[0]);
+	others[1] = GTK_FILE_CHOOSER (other_widgets[1]);
 
 	fname = gtk_file_chooser_get_filename (this);
+	other_fnames[0] = gtk_file_chooser_get_filename (others[0]);
+	other_fnames[1] = gtk_file_chooser_get_filename (others[1]);
+
 	if (is_pkcs12 (fname)) {
 		/* Make sure all choosers have this PKCS#12 file */
-		next_fname = gtk_file_chooser_get_filename (next);
-		if (!next_fname || strcmp (fname, next_fname)) {
-			/* Next chooser was different, make it the same as the first */
-			gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (next_widget), BLOCK_HANDLER_ID));
-			g_signal_handler_block (G_OBJECT (next_widget), id);
-			gtk_file_chooser_set_filename (next, fname);
-			g_signal_handler_unblock (G_OBJECT (next_widget), id);
+		for (i = 0; i < 2; i++) {
+			if (!other_fnames[i] || strcmp (fname, other_fnames[i])) {
+				/* Next chooser was different, make it the same as the first */
+				gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (other_widgets[i]),
+				                                                 BLOCK_HANDLER_ID));
+				g_signal_handler_block (other_widgets[i], id);
+				gtk_file_chooser_set_filename (others[i], fname);
+				g_signal_handler_unblock (other_widgets[i], id);
+			}
 		}
-		g_free (fname);
-		g_free (next_fname);
-		return;
+	} else {
+		/* Just-chosen file isn't PKCS#12 or no file was chosen, so clear out other
+		 * file selectors that have PKCS#12 files in them.
+		 */
+		for (i = 0; i < 2; i++) {
+			if (is_pkcs12 (other_fnames[i])) {
+				gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (other_widgets[i]),
+				                                                 BLOCK_HANDLER_ID));
+				g_signal_handler_block (other_widgets[i], id);
+				gtk_file_chooser_unselect_all (others[i]);
+				g_signal_handler_unblock (other_widgets[i], id);
+			}
+		}
 	}
 	g_free (fname);
-
-	/* Just-chosen file isn't PKCS#12 or no file was chosen, so clear out other
-	 * file selectors that have PKCS#12 files in them.
-	 */
-	next_fname = gtk_file_chooser_get_filename (next);
-	if (is_pkcs12 (next_fname)) {
-		gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (next_widget), BLOCK_HANDLER_ID));
-		g_signal_handler_block (G_OBJECT (next_widget), id);
-		gtk_file_chooser_set_filename (next, NULL);
-		g_signal_handler_unblock (G_OBJECT (next_widget), id);
-	}
-	g_free (next_fname);
+	g_free (other_fnames[0]);
+	g_free (other_fnames[1]);
 }
 
 static void
@@ -145,6 +165,7 @@ tls_setup (GtkBuilder *builder,
 	const char *value;
 	char *tmp;
 	GtkFileFilter *filter;
+	TlsChooserSignalData *ca_chooser_data, *cert_data, *key_data;
 	gulong id1, id2, id3;
 
 	tmp = g_strdup_printf ("%s_user_cert_chooser", prefix);
@@ -183,10 +204,23 @@ tls_setup (GtkBuilder *builder,
 			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (key), value);
 	}
 
+	ca_chooser_data = g_slice_new0 (TlsChooserSignalData);
+	ca_chooser_data->widget1 = cert;
+	ca_chooser_data->widget2 = key;
+	cert_data = g_slice_new0 (TlsChooserSignalData);
+	cert_data->widget1 = ca_chooser;
+	cert_data->widget2 = key;
+	key_data = g_slice_new0 (TlsChooserSignalData);
+	key_data->widget1 = ca_chooser;
+	key_data->widget2 = cert;
+
 	/* Link choosers to the PKCS#12 changer callback */
-	id1 = g_signal_connect (ca_chooser, "selection-changed", G_CALLBACK (tls_cert_changed_cb), cert);
-	id2 = g_signal_connect (cert, "selection-changed", G_CALLBACK (tls_cert_changed_cb), key);
-	id3 = g_signal_connect (key, "selection-changed", G_CALLBACK (tls_cert_changed_cb), ca_chooser);
+	id1 = g_signal_connect_data (ca_chooser, "selection-changed", G_CALLBACK (tls_cert_changed_cb),
+	                             ca_chooser_data, tls_chooser_signal_data_destroy, 0);
+	id2 = g_signal_connect_data (cert, "selection-changed", G_CALLBACK (tls_cert_changed_cb),
+	                             cert_data, tls_chooser_signal_data_destroy, 0);
+	id3 = g_signal_connect_data (key, "selection-changed", G_CALLBACK (tls_cert_changed_cb),
+	                             key_data, tls_chooser_signal_data_destroy, 0);
 
 	/* Store handler id to be able to block the signal in tls_cert_changed_cb() */
 	g_object_set_data (G_OBJECT (ca_chooser), BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id1));
