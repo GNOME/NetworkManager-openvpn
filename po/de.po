@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2014-07-24 07:56+0000\n"
-"PO-Revision-Date: 2014-07-27 18:01+0100\n"
-"Last-Translator: Benjamin Steinwender <b@stbe.at>\n"
+"POT-Creation-Date: 2014-09-24 10:14+0000\n"
+"PO-Revision-Date: 2014-09-24 23:32+0100\n"
+"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../auth-dialog/main.c:175
@@ -414,13 +414,16 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:51
 msgid "_Verify peer (server) certificate usage signature"
-msgstr ""
+msgstr "Signatur über die Zertifikatsverwendung des Servers _prüfen"
 
 #: ../properties/nm-openvpn-dialog.ui.h:52
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
 msgstr ""
+"Verlangen, dass das Zertifikat der Gegenstelle mit einem ausdrücklichen "
+"Verwendungsschlüssel sowie erweitertem Verwendungsschlüssel entsprechend "
+"RFC3280 TLS-Regeln signiert ist."
 
 #: ../properties/nm-openvpn-dialog.ui.h:53
 msgid "_Remote peer certificate TLS type:"
@@ -432,6 +435,10 @@ msgid ""
 "extended key usage based on RFC3280 TLS rules.\n"
 "config: remote-cert-tls client|server"
 msgstr ""
+"Verlangen, dass das Zertifikat der Gegenstelle mit einem ausdrücklichen "
+"Verwendungsschlüssel sowie erweitertem Verwendungsschlüssel entsprechend "
+"RFC3280 TLS-Regeln signiert ist.\n"
+"config: remote-cert-tls client|server"
 
 #: ../properties/nm-openvpn-dialog.ui.h:56
 msgid "Use additional _TLS authentication"
@@ -852,7 +859,6 @@ msgstr ""
 "verarbeitet werden."
 
 #: ../src/nm-openvpn-service.c:1450
-#| msgid "Select an authentication mode."
 msgid "Unhandled pending authentication."
 msgstr "Nicht verarbeitete, wartende Legitimierung."
 
