@@ -40,6 +40,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -86,6 +87,7 @@ typedef struct {
 	guint connect_count;
 	NMOpenvpnPluginIOData *io_data;
 	gboolean interactive;
+	char *mgt_path;
 } NMOpenvpnPluginPrivate;
 
 typedef struct {
@@ -582,28 +584,27 @@ nm_openvpn_connect_timer_cb (gpointer data)
 {
 	NMOpenvpnPlugin *plugin = NM_OPENVPN_PLUGIN (data);
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-	struct sockaddr_in     serv_addr;
-	gboolean               connected = FALSE;
-	gint                   socket_fd = -1;
 	NMOpenvpnPluginIOData *io_data = priv->io_data;
+	struct sockaddr_un remote = { 0 };
+	int fd;
 
 	priv->connect_count++;
 
 	/* open socket and start listener */
-	socket_fd = socket (PF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (socket_fd < 0)
-		return FALSE;
+	fd = socket (AF_UNIX, SOCK_STREAM, 0);
+	if (fd < 0) {
+		g_warning ("Could not create management socket");
+		nm_vpn_plugin_failure (NM_VPN_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
+		nm_vpn_plugin_set_state (NM_VPN_PLUGIN (plugin), NM_VPN_SERVICE_STATE_STOPPED);
+		goto out;
+	}
 
-	serv_addr.sin_family = AF_INET;
-	if (inet_pton (AF_INET, "127.0.0.1", &(serv_addr.sin_addr)) <= 0)
-		g_warning ("%s: could not convert 127.0.0.1", __func__);
-	serv_addr.sin_port = htons (1194);
- 
-	connected = (connect (socket_fd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) == 0);
-	if (!connected) {
-		close (socket_fd);
+	remote.sun_family = AF_UNIX;
+	g_strlcpy (remote.sun_path, priv->mgt_path, sizeof (remote.sun_path));
+	if (connect (fd, (struct sockaddr *) &remote, sizeof (remote)) != 0) {
+		close (fd);
 		if (priv->connect_count <= 30)
-			return TRUE;
+			return G_SOURCE_CONTINUE;
 
 		priv->connect_timer = 0;
 
@@ -611,22 +612,17 @@ nm_openvpn_connect_timer_cb (gpointer data)
 		nm_vpn_plugin_failure (NM_VPN_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
 		nm_vpn_plugin_set_state (NM_VPN_PLUGIN (plugin), NM_VPN_SERVICE_STATE_STOPPED);
 	} else {
-		GIOChannel *openvpn_socket_channel;
-		guint openvpn_socket_channel_eventid;
-
-		openvpn_socket_channel = g_io_channel_unix_new (socket_fd);
-		openvpn_socket_channel_eventid = g_io_add_watch (openvpn_socket_channel,
-		                                                 G_IO_IN,
-		                                                 nm_openvpn_socket_data_cb,
-		                                                 plugin);
-
-		g_io_channel_set_encoding (openvpn_socket_channel, NULL, NULL);
-		io_data->socket_channel = openvpn_socket_channel;
-		io_data->socket_channel_eventid = openvpn_socket_channel_eventid;
+		io_data->socket_channel = g_io_channel_unix_new (fd);
+		g_io_channel_set_encoding (io_data->socket_channel, NULL, NULL);
+		io_data->socket_channel_eventid = g_io_add_watch (io_data->socket_channel,
+		                                                  G_IO_IN,
+		                                                  nm_openvpn_socket_data_cb,
+		                                                  plugin);
 	}
 
+out:
 	priv->connect_timer = 0;
-	return FALSE;
+	return G_SOURCE_REMOVE;
 }
 
 static void
@@ -861,6 +857,7 @@ static gboolean
 nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  NMSettingVPN *s_vpn,
                                  const char *default_username,
+                                 const char *uuid,
                                  GError **error)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
@@ -1178,9 +1175,16 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Management socket for localhost access to supply username and password */
 	add_openvpn_arg (args, "--management");
-	add_openvpn_arg (args, "127.0.0.1");
-	/* with have nobind, thus 1194 should be free, it is the IANA assigned port */
-	add_openvpn_arg (args, "1194");
+	g_warn_if_fail (priv->mgt_path == NULL);
+	g_free (priv->mgt_path);
+	priv->mgt_path = g_strdup_printf (LOCALSTATEDIR "/run/NetworkManager/nm-openvpn-%s", uuid);
+	add_openvpn_arg (args, priv->mgt_path);
+	add_openvpn_arg (args, "unix");
+	add_openvpn_arg (args, "--management-client-user");
+	add_openvpn_arg (args, "root");
+	add_openvpn_arg (args, "--management-client-group");
+	add_openvpn_arg (args, "root");
+
 	/* Query on the management socket for user/pass */
 	add_openvpn_arg (args, "--management-query-passwords");
 
@@ -1384,7 +1388,11 @@ _connect_common (NMVPNPlugin   *plugin,
 
 	/* Finally try to start OpenVPN */
 	user_name = nm_setting_vpn_get_user_name (s_vpn);
-	if (!nm_openvpn_start_openvpn_binary (NM_OPENVPN_PLUGIN (plugin), s_vpn, user_name, error))
+	if (!nm_openvpn_start_openvpn_binary (NM_OPENVPN_PLUGIN (plugin),
+	                                      s_vpn,
+	                                      user_name,
+	                                      nm_connection_get_uuid (connection),
+	                                      error))
 		return FALSE;
 
 	return TRUE;
