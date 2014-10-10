@@ -867,6 +867,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	GPid pid;
 	gboolean dev_type_is_tap;
 	char *stmp;
+	const char *defport, *proto_tcp;
 
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
@@ -904,6 +905,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	args = g_ptr_array_new ();
 	add_openvpn_arg (args, openvpn_binary);
 
+	defport = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
+	if (defport && !defport[0])
+		defport = NULL;
+
+	proto_tcp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
+	if (proto_tcp && !proto_tcp[0])
+		proto_tcp = NULL;
+
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 	if (tmp && *tmp) {
 		char *tok, *port, *proto;
@@ -929,8 +938,19 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						g_free (tmp_dup);
 						return FALSE;
 					}
+				} else if (defport) {
+					if (!add_openvpn_arg_int (args, defport)) {
+						g_set_error (error,
+						             NM_VPN_PLUGIN_ERROR,
+						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+						             _("Invalid port number '%s'."),
+						             defport);
+						free_openvpn_args (args);
+						return FALSE;
+					}
 				} else
-					add_openvpn_arg (args, "1194"); /* use default IANA port */
+					add_openvpn_arg (args, "1194"); /* default IANA port */
+
 				if (proto) {
 					if (!strcmp (proto, "udp") || !strcmp (proto, "tcp"))
 						add_openvpn_arg (args, proto);
@@ -943,7 +963,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						g_free (tmp_dup);
 						return FALSE;
 					}
-				}
+				} else if (proto_tcp && !strcmp (proto_tcp, "yes"))
+					add_openvpn_arg (args, "tcp");
+				else
+					add_openvpn_arg (args, "udp");
 			}
 		}
 		g_free (tmp_dup);
@@ -1012,32 +1035,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg (args, "--dev-type");
 		add_openvpn_arg (args, tmp2);
 		dev_type_is_tap = (g_strcmp0 (tmp2, "tap") == 0);
-	}
-
-	/* Protocol, either tcp or udp */
-	add_openvpn_arg (args, "--proto");
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
-	if (tmp && !strcmp (tmp, "yes"))
-		add_openvpn_arg (args, "tcp-client");
-	else
-		add_openvpn_arg (args, "udp");
-
-	/* Port */
-	add_openvpn_arg (args, "--port");
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
-	if (tmp && strlen (tmp)) {
-		if (!add_openvpn_arg_int (args, tmp)) {
-			g_set_error (error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid port number '%s'."),
-			             tmp);
-			free_openvpn_args (args);
-			return FALSE;
-		}
-	} else {
-		/* Default to IANA assigned port 1194 */
-		add_openvpn_arg (args, "1194");
 	}
 
 	/* Cipher */
