@@ -546,17 +546,30 @@ handle_management_socket (NMVPNPlugin *plugin,
 
 	auth = get_detail (str, ">PASSWORD:Verification Failed: '");
 	if (auth) {
-		if (!strcmp (auth, "Auth"))
+		gboolean fail = TRUE;
+
+		if (!strcmp (auth, "Auth")) {
 			g_warning ("Password verification failed");
-		else if (!strcmp (auth, "Private Key"))
+			if (priv->interactive) {
+				/* Clear existing password in interactive mode, openvpn
+				 * will request a new one after restarting.
+				 */
+				if (priv->io_data->password)
+					memset (priv->io_data->password, 0, strlen (priv->io_data->password));
+				g_clear_pointer (&priv->io_data->password, g_free);
+				fail = FALSE;
+			}
+		} else if (!strcmp (auth, "Private Key"))
 			g_warning ("Private key verification failed");
 		else
 			g_warning ("Unknown verification failed: %s", auth);
 
-		g_free (auth);
+		if (fail) {
+			*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
+			again = FALSE;
+		}
 
-		*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
-		again = FALSE;
+		g_free (auth);
 	}
 
 out:
@@ -1184,6 +1197,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Query on the management socket for user/pass */
 	add_openvpn_arg (args, "--management-query-passwords");
+	add_openvpn_arg (args, "--auth-retry");
+	add_openvpn_arg (args, "interact");
 
 	/* do not let openvpn setup routes or addresses, NM will handle it */
 	add_openvpn_arg (args, "--route-noexec");
