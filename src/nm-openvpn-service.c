@@ -1259,6 +1259,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	g_ptr_array_add (args, NULL);
 
+	if (debug) {
+		char *cmd = g_strjoinv (" ", (char **) args->pdata);
+
+		g_message ("EXEC: '%s'", cmd);
+		g_free (cmd);
+	}
+
 	if (!g_spawn_async (NULL, (char **) args->pdata, NULL,
 	                    G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, error)) {
 		free_openvpn_args (args);
