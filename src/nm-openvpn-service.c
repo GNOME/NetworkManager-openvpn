@@ -80,6 +80,7 @@ typedef struct {
 	char *pending_auth;
 	GIOChannel *socket_channel;
 	guint socket_channel_eventid;
+	gboolean did_connect;
 } NMOpenvpnPluginIOData;
 
 typedef struct {
@@ -512,6 +513,35 @@ handle_management_socket (NMVPNPlugin *plugin,
 	if (debug)
 		g_message ("VPN request '%s'", str);
 
+	if (g_str_has_prefix (str, ">STATE:")) {
+		const char *state;
+		char *end;
+
+		/* Management state messages look like this:
+		 * >STATE:1413563064,CONNECTED,SUCCESS,10.3.112.70,1.2.3.4
+		 */
+		state = strchr (str, ',');
+		if (state) {
+			state++;
+			end = strchr (state, ',');
+			if (end)
+				*end = '\0';
+
+			if (debug)
+				g_message ("VPN state now '%s'", state);
+
+			if (strcmp (state, "CONNECTED") == 0)
+				priv->io_data->did_connect = TRUE;
+			else if (strcmp (state, "RECONNECTING") == 0) {
+				if (priv->io_data->did_connect)
+					nm_vpn_plugin_set_state (plugin, NM_VPN_SERVICE_STATE_STARTING);
+			}
+		}
+
+		g_free (auth);
+		goto out;
+	}
+
 	auth = get_detail (str, ">PASSWORD:Need '");
 	if (auth) {
 		if (priv->io_data->pending_auth)
@@ -626,12 +656,19 @@ nm_openvpn_connect_timer_cb (gpointer data)
 		nm_vpn_plugin_failure (NM_VPN_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
 		nm_vpn_plugin_set_state (NM_VPN_PLUGIN (plugin), NM_VPN_SERVICE_STATE_STOPPED);
 	} else {
+#define STATE_ON "state on\n"
+
 		io_data->socket_channel = g_io_channel_unix_new (fd);
 		g_io_channel_set_encoding (io_data->socket_channel, NULL, NULL);
 		io_data->socket_channel_eventid = g_io_add_watch (io_data->socket_channel,
 		                                                  G_IO_IN,
 		                                                  nm_openvpn_socket_data_cb,
 		                                                  plugin);
+
+		/* Turn on state buffer logging */
+		/* Will always write everything in blocking channels (on success) */
+		g_io_channel_write_chars (io_data->socket_channel, STATE_ON, strlen (STATE_ON), NULL, NULL);
+		g_io_channel_flush (io_data->socket_channel, NULL);
 	}
 
 out:
@@ -1195,6 +1232,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	add_openvpn_arg (args, "root");
 	add_openvpn_arg (args, "--management-client-group");
 	add_openvpn_arg (args, "root");
+	add_openvpn_arg (args, "--ping-timer-rem");
 
 	/* Query on the management socket for user/pass */
 	add_openvpn_arg (args, "--management-query-passwords");

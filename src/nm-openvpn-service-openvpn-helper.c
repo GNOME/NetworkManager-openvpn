@@ -780,6 +780,11 @@ main (int argc, char *argv[])
 		}
 	}
 
+#ifdef NM_VPN_PLUGIN_CAN_PERSIST
+	/* OpenVPN can recover the connection when links change */
+	g_hash_table_insert (config, NM_VPN_PLUGIN_CAN_PERSIST, bool_to_gvalue (TRUE));
+#endif
+
 	if (g_hash_table_size (ip4config)) {
 		g_hash_table_insert (config, NM_VPN_PLUGIN_CONFIG_HAS_IP4,
 		                     bool_to_gvalue (TRUE));
