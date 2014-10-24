@@ -1659,12 +1659,6 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MSSFIX);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
-
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO);
 	if (value && !strcmp (value, "yes")) {
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_checkbutton"));
