@@ -40,6 +40,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -86,6 +87,7 @@ typedef struct {
 	guint connect_count;
 	NMOpenvpnPluginIOData *io_data;
 	gboolean interactive;
+	char *mgt_path;
 } NMOpenvpnPluginPrivate;
 
 typedef struct {
@@ -544,17 +546,30 @@ handle_management_socket (NMVPNPlugin *plugin,
 
 	auth = get_detail (str, ">PASSWORD:Verification Failed: '");
 	if (auth) {
-		if (!strcmp (auth, "Auth"))
+		gboolean fail = TRUE;
+
+		if (!strcmp (auth, "Auth")) {
 			g_warning ("Password verification failed");
-		else if (!strcmp (auth, "Private Key"))
+			if (priv->interactive) {
+				/* Clear existing password in interactive mode, openvpn
+				 * will request a new one after restarting.
+				 */
+				if (priv->io_data->password)
+					memset (priv->io_data->password, 0, strlen (priv->io_data->password));
+				g_clear_pointer (&priv->io_data->password, g_free);
+				fail = FALSE;
+			}
+		} else if (!strcmp (auth, "Private Key"))
 			g_warning ("Private key verification failed");
 		else
 			g_warning ("Unknown verification failed: %s", auth);
 
-		g_free (auth);
+		if (fail) {
+			*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
+			again = FALSE;
+		}
 
-		*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
-		again = FALSE;
+		g_free (auth);
 	}
 
 out:
@@ -582,28 +597,27 @@ nm_openvpn_connect_timer_cb (gpointer data)
 {
 	NMOpenvpnPlugin *plugin = NM_OPENVPN_PLUGIN (data);
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-	struct sockaddr_in     serv_addr;
-	gboolean               connected = FALSE;
-	gint                   socket_fd = -1;
 	NMOpenvpnPluginIOData *io_data = priv->io_data;
+	struct sockaddr_un remote = { 0 };
+	int fd;
 
 	priv->connect_count++;
 
 	/* open socket and start listener */
-	socket_fd = socket (PF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (socket_fd < 0)
-		return FALSE;
+	fd = socket (AF_UNIX, SOCK_STREAM, 0);
+	if (fd < 0) {
+		g_warning ("Could not create management socket");
+		nm_vpn_plugin_failure (NM_VPN_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
+		nm_vpn_plugin_set_state (NM_VPN_PLUGIN (plugin), NM_VPN_SERVICE_STATE_STOPPED);
+		goto out;
+	}
 
-	serv_addr.sin_family = AF_INET;
-	if (inet_pton (AF_INET, "127.0.0.1", &(serv_addr.sin_addr)) <= 0)
-		g_warning ("%s: could not convert 127.0.0.1", __func__);
-	serv_addr.sin_port = htons (1194);
- 
-	connected = (connect (socket_fd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) == 0);
-	if (!connected) {
-		close (socket_fd);
+	remote.sun_family = AF_UNIX;
+	g_strlcpy (remote.sun_path, priv->mgt_path, sizeof (remote.sun_path));
+	if (connect (fd, (struct sockaddr *) &remote, sizeof (remote)) != 0) {
+		close (fd);
 		if (priv->connect_count <= 30)
-			return TRUE;
+			return G_SOURCE_CONTINUE;
 
 		priv->connect_timer = 0;
 
@@ -611,22 +625,17 @@ nm_openvpn_connect_timer_cb (gpointer data)
 		nm_vpn_plugin_failure (NM_VPN_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
 		nm_vpn_plugin_set_state (NM_VPN_PLUGIN (plugin), NM_VPN_SERVICE_STATE_STOPPED);
 	} else {
-		GIOChannel *openvpn_socket_channel;
-		guint openvpn_socket_channel_eventid;
-
-		openvpn_socket_channel = g_io_channel_unix_new (socket_fd);
-		openvpn_socket_channel_eventid = g_io_add_watch (openvpn_socket_channel,
-		                                                 G_IO_IN,
-		                                                 nm_openvpn_socket_data_cb,
-		                                                 plugin);
-
-		g_io_channel_set_encoding (openvpn_socket_channel, NULL, NULL);
-		io_data->socket_channel = openvpn_socket_channel;
-		io_data->socket_channel_eventid = openvpn_socket_channel_eventid;
+		io_data->socket_channel = g_io_channel_unix_new (fd);
+		g_io_channel_set_encoding (io_data->socket_channel, NULL, NULL);
+		io_data->socket_channel_eventid = g_io_add_watch (io_data->socket_channel,
+		                                                  G_IO_IN,
+		                                                  nm_openvpn_socket_data_cb,
+		                                                  plugin);
 	}
 
+out:
 	priv->connect_timer = 0;
-	return FALSE;
+	return G_SOURCE_REMOVE;
 }
 
 static void
@@ -861,6 +870,7 @@ static gboolean
 nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  NMSettingVPN *s_vpn,
                                  const char *default_username,
+                                 const char *uuid,
                                  GError **error)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
@@ -870,6 +880,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	GPid pid;
 	gboolean dev_type_is_tap;
 	char *stmp;
+	const char *defport, *proto_tcp;
 
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
@@ -907,6 +918,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	args = g_ptr_array_new ();
 	add_openvpn_arg (args, openvpn_binary);
 
+	defport = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
+	if (defport && !defport[0])
+		defport = NULL;
+
+	proto_tcp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
+	if (proto_tcp && !proto_tcp[0])
+		proto_tcp = NULL;
+
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 	if (tmp && *tmp) {
 		char *tok, *port, *proto;
@@ -932,8 +951,19 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						g_free (tmp_dup);
 						return FALSE;
 					}
+				} else if (defport) {
+					if (!add_openvpn_arg_int (args, defport)) {
+						g_set_error (error,
+						             NM_VPN_PLUGIN_ERROR,
+						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+						             _("Invalid port number '%s'."),
+						             defport);
+						free_openvpn_args (args);
+						return FALSE;
+					}
 				} else
-					add_openvpn_arg (args, "1194"); /* use default IANA port */
+					add_openvpn_arg (args, "1194"); /* default IANA port */
+
 				if (proto) {
 					if (!strcmp (proto, "udp") || !strcmp (proto, "tcp"))
 						add_openvpn_arg (args, proto);
@@ -946,7 +976,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						g_free (tmp_dup);
 						return FALSE;
 					}
-				}
+				} else if (proto_tcp && !strcmp (proto_tcp, "yes"))
+					add_openvpn_arg (args, "tcp");
+				else
+					add_openvpn_arg (args, "udp");
 			}
 		}
 		g_free (tmp_dup);
@@ -1015,32 +1048,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg (args, "--dev-type");
 		add_openvpn_arg (args, tmp2);
 		dev_type_is_tap = (g_strcmp0 (tmp2, "tap") == 0);
-	}
-
-	/* Protocol, either tcp or udp */
-	add_openvpn_arg (args, "--proto");
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
-	if (tmp && !strcmp (tmp, "yes"))
-		add_openvpn_arg (args, "tcp-client");
-	else
-		add_openvpn_arg (args, "udp");
-
-	/* Port */
-	add_openvpn_arg (args, "--port");
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
-	if (tmp && strlen (tmp)) {
-		if (!add_openvpn_arg_int (args, tmp)) {
-			g_set_error (error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid port number '%s'."),
-			             tmp);
-			free_openvpn_args (args);
-			return FALSE;
-		}
-	} else {
-		/* Default to IANA assigned port 1194 */
-		add_openvpn_arg (args, "1194");
 	}
 
 	/* Cipher */
@@ -1178,11 +1185,20 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Management socket for localhost access to supply username and password */
 	add_openvpn_arg (args, "--management");
-	add_openvpn_arg (args, "127.0.0.1");
-	/* with have nobind, thus 1194 should be free, it is the IANA assigned port */
-	add_openvpn_arg (args, "1194");
+	g_warn_if_fail (priv->mgt_path == NULL);
+	g_free (priv->mgt_path);
+	priv->mgt_path = g_strdup_printf (LOCALSTATEDIR "/run/NetworkManager/nm-openvpn-%s", uuid);
+	add_openvpn_arg (args, priv->mgt_path);
+	add_openvpn_arg (args, "unix");
+	add_openvpn_arg (args, "--management-client-user");
+	add_openvpn_arg (args, "root");
+	add_openvpn_arg (args, "--management-client-group");
+	add_openvpn_arg (args, "root");
+
 	/* Query on the management socket for user/pass */
 	add_openvpn_arg (args, "--management-query-passwords");
+	add_openvpn_arg (args, "--auth-retry");
+	add_openvpn_arg (args, "interact");
 
 	/* do not let openvpn setup routes or addresses, NM will handle it */
 	add_openvpn_arg (args, "--route-noexec");
@@ -1257,6 +1273,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 
 	g_ptr_array_add (args, NULL);
+
+	if (debug) {
+		char *cmd = g_strjoinv (" ", (char **) args->pdata);
+
+		g_message ("EXEC: '%s'", cmd);
+		g_free (cmd);
+	}
 
 	if (!g_spawn_async (NULL, (char **) args->pdata, NULL,
 	                    G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, error)) {
@@ -1384,7 +1407,11 @@ _connect_common (NMVPNPlugin   *plugin,
 
 	/* Finally try to start OpenVPN */
 	user_name = nm_setting_vpn_get_user_name (s_vpn);
-	if (!nm_openvpn_start_openvpn_binary (NM_OPENVPN_PLUGIN (plugin), s_vpn, user_name, error))
+	if (!nm_openvpn_start_openvpn_binary (NM_OPENVPN_PLUGIN (plugin),
+	                                      s_vpn,
+	                                      user_name,
+	                                      nm_connection_get_uuid (connection),
+	                                      error))
 		return FALSE;
 
 	return TRUE;
