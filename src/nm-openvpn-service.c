@@ -55,6 +55,7 @@
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"
 #include "common/utils.h"
+#include "common/nm-glib-compat.h"
 
 #if !defined(DIST_VERSION)
 # define DIST_VERSION VERSION
