@@ -18,12 +18,9 @@ libnm_openvpn_properties_la_CFLAGS =                    \
         $(GLIB_CFLAGS)                                  \
         $(GTK_CFLAGS)                                   \
         $(NM_CFLAGS)                                    \
-        $(DISABLE_DEPRECATED)                           \
-        -I$(top_srcdir)/                                \
+        -I$(top_srcdir)/src                             \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
         -DUIDIR=\""$(uidir)"\"                          \
-        -DG_DISABLE_DEPRECATED                          \
-        -DGDK_DISABLE_DEPRECATED                        \
         -DLOCALEDIR=\"$(datadir)/locale\"               \
         -DVERSION=\"$(VERSION)\"
 

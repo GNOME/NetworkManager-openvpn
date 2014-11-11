@@ -28,7 +28,6 @@
 #include <nm-setting-ip4-config.h>
 #include <nm-setting-vpn.h>
 
-#define NM_VPN_API_SUBJECT_TO_CHANGE
 #include <nm-vpn-plugin-ui-interface.h>
 
 #include "nm-test-helpers.h"

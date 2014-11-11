@@ -6,13 +6,9 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 	$(NM_CFLAGS)		\
 	$(NMGTK_CFLAGS)		\
 	$(LIBSECRET_CFLAGS) \
-	-I$(top_srcdir)/
 	-DICONDIR=\""$(datadir)/pixmaps"\"	\
 	-DUIDIR=\""$(uidir)"\"		\
 	-DBINDIR=\""$(bindir)"\"		\
-	-DG_DISABLE_DEPRECATED			\
-	-DGDK_DISABLE_DEPRECATED		\
-	-DGNOME_DISABLE_DEPRECATED		\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
 	-DVERSION=\"$(VERSION)\"
 

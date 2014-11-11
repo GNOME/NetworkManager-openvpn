@@ -2,7 +2,6 @@ AM_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
 	$(DBUS_CFLAGS) \
 	$(NM_CFLAGS) \
-	-DG_DISABLE_DEPRECATED \
 	-DBINDIR=\"$(bindir)\" \
 	-DPREFIX=\""$(prefix)"\" \
 	-DSYSCONFDIR=\""$(sysconfdir)"\" \
@@ -12,8 +11,7 @@ AM_CPPFLAGS = \
 	-DLOCALSTATEDIR=\""$(localstatedir)"\" \
 	-DDATADIR=\"$(datadir)\" \
 	-DNM_OPENVPN_LOCALEDIR=\"$(datadir)/locale\" \
-	-DG_LOG_DOMAIN=\"nm-openvpn\" \
-	-I$(top_srcdir)
+	-DG_LOG_DOMAIN=\"nm-openvpn\"
 
 libexec_PROGRAMS = nm-openvpn-service nm-openvpn-service-openvpn-helper
 
