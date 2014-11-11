@@ -7,7 +7,8 @@ libnm_openvpn_common_la_CPPFLAGS = \
 
 libnm_openvpn_common_la_SOURCES= \
 	utils.c \
-	utils.h
+	utils.h \
+	nm-glib-compat.h
 
 libnm_openvpn_common_la_LIBADD = \
 	$(NM_LIBS)
