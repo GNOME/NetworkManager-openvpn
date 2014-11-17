@@ -1,0 +1,857 @@
+# Turkish translation for network-manager-openvpn.
+# Copyright (C) 2014 network-manager-openvpn's COPYRIGHT HOLDER
+# This file is distributed under the same license as the network-manager-openvpn package.
+# Necdet Yücel <necdetyucel@gmail.com>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: network-manager-openvpn nm-0-9-10\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2014-11-08 11:10+0000\n"
+"PO-Revision-Date: 2014-11-08 15:21+0000\n"
+"Last-Translator: Necdet Yücel <necdetyucel@gmail.com>\n"
+"Language-Team: Turkish <gnome-turk@gnome.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1415460092.000000\n"
+
+#: ../auth-dialog/main.c:175
+#, c-format
+msgid "Authenticate VPN %s"
+msgstr "%s VPN Kimlik Doğrulaması"
+
+#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-dialog.ui.h:104
+msgid "Password:"
+msgstr "Parola:"
+
+#: ../auth-dialog/main.c:189
+msgid "Certificate password:"
+msgstr "Sertifika parolası:"
+
+#: ../auth-dialog/main.c:223
+msgid "Authenticate VPN"
+msgstr "VPN Kimlik Doğrulaması"
+
+#: ../auth-dialog/main.c:232
+msgid "Certificate pass_word:"
+msgstr "Sertifika paro_lası:"
+
+#: ../auth-dialog/main.c:464
+#, c-format
+msgid "You need to authenticate to access the Virtual Private Network '%s'."
+msgstr ""
+"'%s' Sanal Özel Ağına erişmek için kimlik doğrulaması yapmanız gerekiyor."
+
+#: ../nm-openvpn.desktop.in.h:1
+msgid "VPN Connection Manager (OpenVPN)"
+msgstr "VPN Bağlantı Yöneticisi (OpenVPN)"
+
+#: ../nm-openvpn.desktop.in.h:2
+msgid "Add, Remove, and Edit VPN Connections"
+msgstr "VPN Bağlantılarını Ekle, Kaldır ve Düzenle"
+
+#: ../properties/auth-helpers.c:180
+msgid "Choose your personal certificate..."
+msgstr "Kişisel sertifikanızı seçin..."
+
+#: ../properties/auth-helpers.c:198
+msgid "Choose your private key..."
+msgstr "Özel anahtarınızı seçin..."
+
+#: ../properties/auth-helpers.c:288
+msgid "Saved"
+msgstr "Kaydedildi"
+
+#: ../properties/auth-helpers.c:296
+msgid "Always Ask"
+msgstr "Her Zaman Sor"
+
+#: ../properties/auth-helpers.c:301
+msgid "Not Required"
+msgstr "Gerekli Değil"
+
+#: ../properties/auth-helpers.c:391
+msgid "Choose a Certificate Authority certificate..."
+msgstr "Bir Sertifika Otoritesi sertifikası seçin..."
+
+#: ../properties/auth-helpers.c:435
+msgid "Choose an OpenVPN static key..."
+msgstr "Bir OpenVPN statik anahtarı seçin..."
+
+#: ../properties/auth-helpers.c:459 ../properties/auth-helpers.c:1192
+#: ../properties/auth-helpers.c:1801
+msgid "None"
+msgstr "Hiçbiri"
+
+#: ../properties/auth-helpers.c:915
+msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
+msgstr "PEM veya PKCS#12 sertifikaları (*.pem, *.crt, *.key, *.cer, *.p12)"
+
+#: ../properties/auth-helpers.c:916
+msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+msgstr "PEM sertifikaları (*.pem, *.crt, *.cer)"
+
+#: ../properties/auth-helpers.c:976
+msgid "OpenVPN Static Keys (*.key)"
+msgstr "OpenVPN Statik Anahtarları (*.key)"
+
+#: ../properties/auth-helpers.c:1108 ../properties/auth-helpers.c:1184
+msgid "Default"
+msgstr "Varsayılan"
+
+#: ../properties/auth-helpers.c:1194
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../properties/auth-helpers.c:1196
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/auth-helpers.c:1198
+msgid "SHA-1"
+msgstr "SHA-1"
+
+#: ../properties/auth-helpers.c:1200
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: ../properties/auth-helpers.c:1202
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: ../properties/auth-helpers.c:1204
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: ../properties/auth-helpers.c:1206
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: ../properties/auth-helpers.c:1208
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
+
+#: ../properties/auth-helpers.c:1259
+msgid "Server"
+msgstr "Sunucu"
+
+#: ../properties/auth-helpers.c:1264
+msgid "Client"
+msgstr "İstemci"
+
+#: ../properties/auth-helpers.c:1517 ../properties/nm-openvpn-dialog.ui.h:2
+msgid "Not required"
+msgstr "Gerekli değil"
+
+#: ../properties/auth-helpers.c:1519
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/auth-helpers.c:1521
+msgid "SOCKS"
+msgstr "SOCKS"
+
+#: ../properties/auth-helpers.c:1704
+msgid "TUN"
+msgstr "TUN"
+
+#: ../properties/auth-helpers.c:1706
+msgid "TAP"
+msgstr "TAP"
+
+#. interface name is max 15 chars
+#: ../properties/auth-helpers.c:1713
+msgid "(automatic)"
+msgstr "(otomatik)"
+
+#: ../properties/nm-openvpn.c:52
+msgid "OpenVPN"
+msgstr "OpenVPN"
+
+#: ../properties/nm-openvpn.c:53
+msgid "Compatible with the OpenVPN server."
+msgstr "OpenVPN sunucusu ile uyumlu."
+
+#: ../properties/nm-openvpn.c:317
+msgid "Certificates (TLS)"
+msgstr "Sertifikalar (TLS)"
+
+#: ../properties/nm-openvpn.c:328
+msgid "Password"
+msgstr "Parola"
+
+#: ../properties/nm-openvpn.c:341
+msgid "Password with Certificates (TLS)"
+msgstr "Sertifika ile Parola (TLS)"
+
+#: ../properties/nm-openvpn.c:353
+msgid "Static Key"
+msgstr "Statik Anahtar"
+
+#: ../properties/nm-openvpn-dialog.ui.h:1
+msgid " "
+msgstr " "
+
+#: ../properties/nm-openvpn-dialog.ui.h:3
+msgid "OpenVPN Advanced Options"
+msgstr "OpenVPN Gelişmiş Seçenekleri"
+
+#: ../properties/nm-openvpn-dialog.ui.h:4
+msgid "Use custom gateway p_ort:"
+msgstr "Özel ağ geçidi bağlantı n_oktası kullan:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:5
+msgid ""
+"TCP/UDP port number for local peer.\n"
+"config: port"
+msgstr ""
+"Yerel eş için TCP/UDP bağlantı noktası.\n"
+"yapılandırma: port"
+
+#: ../properties/nm-openvpn-dialog.ui.h:7
+msgid "Use custom _renegotiation interval:"
+msgstr "Özel tek_rar anlaşma aralığı kullan:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:8
+msgid ""
+"Renegotiate data channel key after the specified number of seconds.\n"
+"config: reneg-sec"
+msgstr ""
+"Belirtildiği kadar saniye sonra veri kanalı anahtarını yeniden dene.\n"
+"yapılandırma: reneg-sec"
+
+#: ../properties/nm-openvpn-dialog.ui.h:10
+msgid "Use L_ZO data compression"
+msgstr "L_ZO veri sıkıştırması kullan"
+
+#: ../properties/nm-openvpn-dialog.ui.h:11
+msgid ""
+"Use fast LZO compression.\n"
+"config: comp-lzo"
+msgstr ""
+"Hızlı LZO sıkıştırması kullan.\n"
+"yapıalndırma: comp-lzo"
+
+#: ../properties/nm-openvpn-dialog.ui.h:13
+msgid "Use a _TCP connection"
+msgstr "Bir _TCP bağlantısı kullan"
+
+#: ../properties/nm-openvpn-dialog.ui.h:14
+msgid ""
+"Use TCP for communicating with remote host.\n"
+"config: proto tcp-client | udp"
+msgstr ""
+"Uzak makine ile iletişimde TCP kullan.\n"
+"yapılandırma: proto tcp-client | udp"
+
+#: ../properties/nm-openvpn-dialog.ui.h:16
+msgid "Set virtual _device type:"
+msgstr "Sanal _makine türünü ayarla:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:17
+msgid "Explicitly set virtual device type and name (TUN/TAP)."
+msgstr "Sanal aygıt türünü ve adını (TNU/TAP) açıkça ayarlayın."
+
+#: ../properties/nm-openvpn-dialog.ui.h:18
+msgid ""
+"Explicitly set virtual device type (TUN/TAP).\n"
+"config: dev-type tun | tap"
+msgstr ""
+"Sanal aygıt türünü (TUN/TAP) açıkça ayarlayın.\n"
+"yapılandırma: dev-type tun | tap"
+
+#: ../properties/nm-openvpn-dialog.ui.h:20
+msgid " and _name:"
+msgstr " ve _adı:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:21
+msgid ""
+"Use custom name for TUN/TAP virtual device (instead of default \"tun\" or "
+"\"tap\").\n"
+"config: dev <name>"
+msgstr ""
+"Sanal TUN/TAP aygıtı için özel isim kullan (\"tun\" veya \"tap\" "
+"haricinde).\n"
+"yapılandırma: dev <isim>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:23
+msgid "Use custom tunnel Maximum Transmission _Unit (MTU):"
+msgstr "Özel tünel En Fazla Aktarım Birimi (MT_U) kullan:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:24
+msgid ""
+"Take the TUN device MTU to be the specified value and derive the link MTU "
+"from it.\n"
+"config: tun-mtu"
+msgstr ""
+"TUN aygıtının MTU değerini belirtilen değer olarak al ve bağlantı MTU "
+"değerini ondan türet.\n"
+"yapılandırma: tun-mtu"
+
+#: ../properties/nm-openvpn-dialog.ui.h:26
+msgid "Use custom UDP _fragment size:"
+msgstr "Özel UDP _parça boyutu kullan:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:27
+msgid ""
+"Enable internal datagram fragmentation with this maximum size.\n"
+"config: fragment"
+msgstr ""
+"Bu en fazla değer ile dahili datagram parçalanmasını etkinleştir.\n"
+"yapılandırma: fragment"
+
+#: ../properties/nm-openvpn-dialog.ui.h:29
+msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
+msgstr "Azami tünel TCP parça boyutunu (MS_S) kısıtla"
+
+#: ../properties/nm-openvpn-dialog.ui.h:30
+msgid ""
+"Restrict tunnel TCP MSS.\n"
+"config: mssfix"
+msgstr ""
+"Tünel TCP MSS değerini kısıtla.\n"
+"yapılandırma: mssfix"
+
+#: ../properties/nm-openvpn-dialog.ui.h:32
+msgid "Rando_mize remote hosts"
+msgstr "Uzak iste_mcileri rastgele seç"
+
+#: ../properties/nm-openvpn-dialog.ui.h:33
+msgid ""
+"Randomize the order of gateways list (remote) as a kind of basic load-"
+"balancing measure.\n"
+"config: remote-random"
+msgstr ""
+"Ağ geçitleri listesinin (uzak) sırasını temel bir yük dağıtımı ölçüsü olarak "
+"rastgele seç.\n"
+"yapılandırma: remote-random"
+
+#: ../properties/nm-openvpn-dialog.ui.h:35
+msgid "General"
+msgstr "Genel"
+
+#: ../properties/nm-openvpn-dialog.ui.h:36
+msgid ""
+"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
+"Cipher Block Chaining mode).\n"
+"config: cipher"
+msgstr ""
+"Paketleri bu şifreleme algoritmasıyla şifrele. Varsayılan BF-CBC "
+"algoritmasıdır.\n"
+"yapılandırma: cipher"
+
+#: ../properties/nm-openvpn-dialog.ui.h:38
+msgid "Use custom _size of cipher key:"
+msgstr "Özel _boyutlu şifreleme anahtarı kullan:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:39
+msgid ""
+"Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
+"specific size.\n"
+"config: keysize <n>"
+msgstr ""
+"Şifreleme anahtar boyutunu özel bir değer olarak ayarla. Belirtilmezse "
+"şifrelemeye özel varsayılan değer kullanılır.\n"
+"yapılandırma: keysize <n>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:41
+msgid ""
+"Authenticate packets with HMAC using message digest algorithm. The default "
+"is SHA1.\n"
+"config: auth"
+msgstr ""
+"HMAC ileti özeti algoritmasını kullanarak paketlerin kimlik doğrulaması yap."
+"Varsayılan SHA1'dir.\n"
+"yapılandırma: auth"
+
+#: ../properties/nm-openvpn-dialog.ui.h:43
+msgid "Ci_pher:"
+msgstr "Şi_freleme:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:44
+msgid "_HMAC Authentication:"
+msgstr "_HMAC Kimlik Doğrulaması:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:45
+msgid "Security"
+msgstr "Güvenlik"
+
+#: ../properties/nm-openvpn-dialog.ui.h:46
+msgid "_Subject Match:"
+msgstr "_Konu Eşleşmesi:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:47
+msgid ""
+"<i>Connect only to servers whose certificate matches the given subject.\n"
+"Example: /CN=myvpn.company.com</i>"
+msgstr ""
+"<i>Sadece belirtilen konuyla eşleşen sertifikaya sahip sunuculara bağlan.\n"
+"Örnek: /CN=vpnim.sirket.com</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:49
+msgid ""
+"Accept connections only from a host with X509 name or common name equal to "
+"the specified one.\n"
+"config: tls-remote"
+msgstr ""
+"Sadece X509 adı olan veya belirtilen birine eşit ortak adı olan bir "
+"bilgisayardan bağlantıları kabul et.\n"
+"yapılandırma: tls-remote"
+
+#: ../properties/nm-openvpn-dialog.ui.h:51
+msgid "_Verify peer (server) certificate usage signature"
+msgstr "_Karşı uç (sunucu) sertifikasını imza kullanarak doğrula"
+
+#: ../properties/nm-openvpn-dialog.ui.h:52
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules."
+msgstr ""
+"Diğer ucun sertifikasının kesin anahtar kullanımı ve RFC3280 TLS kurallarına "
+"dayanan genişletilmiş anahtar kullanımı ile imzalanmış olmasını gerektir."
+
+#: ../properties/nm-openvpn-dialog.ui.h:53
+msgid "_Remote peer certificate TLS type:"
+msgstr "_Uzak uç sertifika TLS türü:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:54
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules.\n"
+"config: remote-cert-tls client|server"
+msgstr ""
+"Diğer ucun sertifikasının kesin anahtar kullanımı ve RFC3280 TLS kurallarına "
+"dayanan genişletilmiş anahtar kullanımı ile imzalanmış olmasını gerektir.\n"
+"yapılandırma: remote-cert-tls client|server"
+
+#: ../properties/nm-openvpn-dialog.ui.h:56
+msgid "Use additional _TLS authentication"
+msgstr "Ek _TLS kimlik doğrulaması kullan"
+
+#: ../properties/nm-openvpn-dialog.ui.h:57
+msgid "Add an additional layer of HMAC authentication."
+msgstr "Ek HMAC kimlik doğrulaması katmanı ekle."
+
+#: ../properties/nm-openvpn-dialog.ui.h:58
+msgid "Key _Direction:"
+msgstr "Anahtar _Yönü:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:59
+msgid ""
+"<i>If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.</i>"
+msgstr ""
+"<i>Eğer anahtar yönü kullanılırsa, bu VPN ucunun kullandığının tersi "
+"olmalıdır.  Örneğin; eğer diğer uç '1' kullanıyorsa bu bağlantı '0' "
+"kullanmalıdır.  Hangi değeri kullanacağınızdan emin değilseniz sistem "
+"yöneticinize danışın.</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:60
+msgid ""
+"Add an additional layer of HMAC authentication on top of the TLS control "
+"channel to protect against DoS attacks.\n"
+"config: tls-auth <file> [direction]"
+msgstr ""
+"DoS saldırılarına karşı güvenlik sağlamak için TLS kontrol kanalının üzerine "
+"ek bir HMAC kimlik doğrulama katmanı ekler.\n"
+"yapıalndırma: tls-auth <dosya> [yön]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:62
+msgid ""
+"Direction parameter for static key mode.\n"
+"config: tls-auth <file> [direction]"
+msgstr ""
+"Statik anahtar kipi için parametre yönü.\n"
+"yapılandırma: tls-auth <dosya> [yön]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:64
+msgid "Key _File:"
+msgstr "Anahtar _Dosyası:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:65
+msgid "TLS Authentication"
+msgstr "TLS Kimlik Doğrulaması"
+
+#: ../properties/nm-openvpn-dialog.ui.h:66
+msgid ""
+"Proxy type: HTTP or Socks.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Vekil sunucu türü: HTTP veya Socks.\n"
+"yapılandırma: http-proxy veya socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:68
+msgid "Proxy _Type:"
+msgstr "Vekil Sunucu _Türü:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:69
+msgid ""
+"<i>Select this option if your organization requires the use of a proxy "
+"server to access the Internet.</i>"
+msgstr ""
+"<i>Eğer kurumunuz internet bağlantısı için bir vekil sunucu kullanmayı "
+"gerektiriyorsa bu seçeneği seçin.</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:70
+msgid "Server _Address:"
+msgstr "Sunucu _Adresi:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:71
+msgid ""
+"Connect to remote host through a proxy with this address.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Uzak makineye bu vekil sunucu adresiyle bağlan.\n"
+"yapılandırma: http-proxy veya socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:73
+msgid "_Port:"
+msgstr "_Bağlantı Noktası:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:74
+msgid ""
+"Connect to remote host through a proxy with this port.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Uzak makineye bu vekil sunucu bağlantı noktasıyla bağlan.\n"
+"yapılandırma: http-proxy veya socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:76
+msgid "_Retry indefinitely when errors occur"
+msgstr "_Hata oluştuğunda sonsuz kez dene"
+
+#: ../properties/nm-openvpn-dialog.ui.h:77
+msgid ""
+"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
+"config: http-proxy-retry or socks-proxy-retry"
+msgstr ""
+"Vekil sunucu hatalarında sürekli yeniden dene. SIGUSR1 sıfırlamasını taklit "
+"eder.\n"
+"yapılandırma: http-proxy-retry veya socks-proxy-retry"
+
+#: ../properties/nm-openvpn-dialog.ui.h:79
+msgid "Proxy _Username:"
+msgstr "Vekil _Sunucu Kullanıcı Adı:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:80
+msgid "Proxy Passwor_d:"
+msgstr "Vekil Sunucu _Parolası:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:81
+msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
+msgstr "HTTP/Socks vekil sunucu kullanıcı adı sorulduğunda OpenVPN'e geçildi."
+
+#: ../properties/nm-openvpn-dialog.ui.h:82
+msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
+msgstr "HTTP/Socks vekil sunucu parolası sorulduğunda OpenVPN'e geçildi."
+
+#: ../properties/nm-openvpn-dialog.ui.h:83
+msgid "_Show password"
+msgstr "_Parolayı göster"
+
+#: ../properties/nm-openvpn-dialog.ui.h:84
+msgid "Proxies"
+msgstr "Vekil sunucular"
+
+#: ../properties/nm-openvpn-dialog.ui.h:85
+msgid "<b>General</b>"
+msgstr "<b>Genel</b>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:86
+msgid "_Gateway:"
+msgstr "Ağ _Geçidi:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:87
+msgid ""
+"Remote host name or IP address. You can specify multiple items for "
+"redundancy (use commas to separate the entries).\n"
+"config: remote"
+msgstr ""
+"Uzak istemci adı veya IP adresi. Yedeklilik için birden fazla öge (girdileri "
+"virgülle ayırarak) belirtebilirsiniz.\n"
+"yapılandırma: remote"
+
+#: ../properties/nm-openvpn-dialog.ui.h:89
+msgid "<b>Authentication</b>"
+msgstr "<b>Kimlik Doğrulama</b>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:90
+msgid "_Show passwords"
+msgstr "_Parolaları göster"
+
+#: ../properties/nm-openvpn-dialog.ui.h:91
+msgid "Password for private key"
+msgstr "Özel anahtar için parola"
+
+#: ../properties/nm-openvpn-dialog.ui.h:92
+msgid "Private Key Password:"
+msgstr "Özel Anahtar Parolası:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:93
+msgid ""
+"Local peer's private key in .pem format.\n"
+"config: key"
+msgstr ""
+"Yerel ucun .pem biçiminde özel anahtarı.\n"
+"yapılandırma: key"
+
+#: ../properties/nm-openvpn-dialog.ui.h:95
+msgid "Private Key:"
+msgstr "Özal Anahtar:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:96
+msgid ""
+"Certificate authority (CA) file in .pem format.\n"
+"config: ca"
+msgstr ""
+".pem biçiminde sertifika yetkilisi (CA) dosyası.\n"
+"yapılandırma: ca"
+
+#: ../properties/nm-openvpn-dialog.ui.h:98
+msgid "CA Certificate:"
+msgstr "CA Sertifikası:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:99
+msgid "User Certificate:"
+msgstr "Kullanıcı Sertifikası:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:100
+msgid ""
+"Local peer's signed certificate in .pem format (signed by CA of CA "
+"Certificate).\n"
+"config: cert"
+msgstr ""
+"Yerel ucun .pem formatındaki imzalanmış sertifikası (CA sertifikasının CA'sı "
+"tarafından imzalanmış).\n"
+"yapılandırma: cert"
+
+#: ../properties/nm-openvpn-dialog.ui.h:102
+msgid ""
+"Password passed to OpenVPN when prompted for it.\n"
+"config: auth-user-pass"
+msgstr ""
+"Parola sorulduğunda OpenVPN'e geçildi.\n"
+"yapılandırma: auth-user-pass"
+
+#: ../properties/nm-openvpn-dialog.ui.h:105
+msgid "User name:"
+msgstr "Kullanıcı adı:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:106
+msgid ""
+"Username passed to OpenVPN when prompted for it.\n"
+"config: auth-user-pass"
+msgstr ""
+"Kullanıcı adı sorulduğunda OpenVPN'e geçildi.\n"
+"yapılandırma: auth-user-pass"
+
+#: ../properties/nm-openvpn-dialog.ui.h:108
+msgid ""
+"IP address of the local VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
+msgstr ""
+"Yerel VPN ucunun IP adresi.\n"
+"yapılandırma: ifconfig <l> <rn>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:110
+msgid "Remote IP Address:"
+msgstr "Uzak IP Adresi:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:111
+msgid "Local IP Address:"
+msgstr "Yerel IP Adresi:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:112
+msgid ""
+"IP address of the remote VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
+msgstr ""
+"Uzak VPN ucunun IP adresi:\n"
+"yapılandırma: ifconfig <l> <rn>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:114
+msgid "Key Direction:"
+msgstr "Anahtar Yönü:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:115
+msgid "Static Key:"
+msgstr "Statik Anahtar:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:116
+msgid ""
+"Pre-shared file for Static Key encryption mode (non-TLS).\n"
+"config: static <file>"
+msgstr ""
+"Statik Anahtar şifreleme kipi (non-TLS) için önceden paylaşılmış dosya.\n"
+"yapılandırma: static <dosya>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:118
+msgid ""
+"Direction for Static Key encryption mode (non-TLS).\n"
+"config: static <file> [direction]"
+msgstr ""
+"Statik Anahtar şifreleme kipi (non-TLS) için yön:\n"
+"yapılandırma: static <dosya> [yön]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:120
+msgid "Type:"
+msgstr "Tür:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:121
+msgid "Select an authentication mode."
+msgstr "Kimlik doğrulama yöntemini seçin."
+
+#: ../properties/nm-openvpn-dialog.ui.h:122
+msgid "Ad_vanced..."
+msgstr "Ge_lişmiş..."
+
+#: ../src/nm-openvpn-service.c:201
+#, c-format
+msgid "invalid address '%s'"
+msgstr "Geçersiz adres '%s'"
+
+#: ../src/nm-openvpn-service.c:213
+#, c-format
+msgid "invalid integer property '%s' or out of range [%d -> %d]"
+msgstr "'%s' geçersiz bir özellik veya sınırların dışında [%d -> %d]"
+
+#. Translators: keep "yes" and "no" untranslated!
+#: ../src/nm-openvpn-service.c:224
+#, c-format
+msgid "invalid boolean property '%s' (not yes or no)"
+msgstr "'%s' geçersiz bir mantıksal özellik (evet veya hayır değil)"
+
+#: ../src/nm-openvpn-service.c:231
+#, c-format
+msgid "unhandled property '%s' type %s"
+msgstr "tanınmayan özellik '%s' tür %s"
+
+#: ../src/nm-openvpn-service.c:242
+#, c-format
+msgid "property '%s' invalid or not supported"
+msgstr "'%s' özelliği geçersiz veya desteklenmiyor"
+
+#: ../src/nm-openvpn-service.c:259
+msgid "No VPN configuration options."
+msgstr "VPN yapılandırma seçeneği yok."
+
+#: ../src/nm-openvpn-service.c:428
+msgid "A username is required."
+msgstr "Bir kullanıcı adı gerekiyor."
+
+#: ../src/nm-openvpn-service.c:432
+msgid "A password is required."
+msgstr "Parola gerekiyor."
+
+#: ../src/nm-openvpn-service.c:435
+msgid "A username and password are required."
+msgstr "Kullanıcı adı ve parola gerekiyor."
+
+#: ../src/nm-openvpn-service.c:455
+msgid "A private key password is required."
+msgstr "Bir özel anahtar parolası gerekli."
+
+#: ../src/nm-openvpn-service.c:468
+msgid "An HTTP Proxy username is required."
+msgstr "Bir HTTP Vekil Sunucu kullanıcı adı gerekiyor."
+
+#: ../src/nm-openvpn-service.c:472
+msgid "An HTTP Proxy password is required."
+msgstr "Bir HTTP Vekil Sunucu kullanıcı parolası gerekiyor."
+
+#: ../src/nm-openvpn-service.c:475
+msgid "An HTTP Proxy username and password are required."
+msgstr "Bir HTTP Vekil Sunucu kullanıcı adı ve parolası gerekiyor."
+
+#: ../src/nm-openvpn-service.c:881
+msgid "Could not find the openvpn binary."
+msgstr "openvpn uygulaması bulunamıyor."
+
+#: ../src/nm-openvpn-service.c:892
+msgid "Invalid HMAC auth."
+msgstr "Geçersiz HMAC doğrulaması."
+
+#: ../src/nm-openvpn-service.c:903 ../src/nm-openvpn-service.c:1411
+msgid "Invalid connection type."
+msgstr "Geçersiz bağlantı türü."
+
+#: ../src/nm-openvpn-service.c:948
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Geçersiz vekil sunucu türü '%s'."
+
+#: ../src/nm-openvpn-service.c:1001
+#, c-format
+msgid "Invalid port number '%s'."
+msgstr "Geçersiz bağlantı noktası numarası: '%s'."
+
+#: ../src/nm-openvpn-service.c:1026
+#, c-format
+msgid "Invalid keysize '%s'."
+msgstr "Geçersiz anahtar boyutu '%s'."
+
+#: ../src/nm-openvpn-service.c:1073
+#, c-format
+msgid "Invalid reneg seconds '%s'."
+msgstr "Geçersiz reneg süresi '%s'."
+
+#: ../src/nm-openvpn-service.c:1097
+#, c-format
+msgid "Invalid TUN MTU size '%s'."
+msgstr "Geçersiz TUN MTU boyutu '%s'."
+
+#: ../src/nm-openvpn-service.c:1112
+#, c-format
+msgid "Invalid fragment size '%s'."
+msgstr "Geçersiz parça boyutu '%s'."
+
+#: ../src/nm-openvpn-service.c:1180
+msgid "Missing required local IP address for static key mode."
+msgstr "Statik anahtar kipi için gerekli yerel IP adresi eksik."
+
+#: ../src/nm-openvpn-service.c:1193
+msgid "Missing required remote IP address for static key mode."
+msgstr "Statik anahtar kipi için gerekli uzak IP adresi eksik."
+
+#: ../src/nm-openvpn-service.c:1218
+#, c-format
+msgid "Unknown connection type '%s'."
+msgstr "Bilinmeyen bağlantı türü '%s'."
+
+#: ../src/nm-openvpn-service.c:1329 ../src/nm-openvpn-service.c:1402
+#: ../src/nm-openvpn-service.c:1436
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr "VPN bağlantı ayarları geçersiz olduğundan istek işlenemedi."
+
+#: ../src/nm-openvpn-service.c:1338
+msgid ""
+"Could not process the request because the openvpn connection type was "
+"invalid."
+msgstr "Openvpn bağlantı türü geçersiz olduğundan istek işlenemedi."
+
+#: ../src/nm-openvpn-service.c:1450
+msgid "Unhandled pending authentication."
+msgstr "İşlenmemiş bekleyen kimlik doğrulaması."
+
+#: ../src/nm-openvpn-service.c:1591
+msgid "Don't quit when VPN connection terminates"
+msgstr "VPN bağlantısı sonlandığında çıkma"
+
+#: ../src/nm-openvpn-service.c:1592
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr ""
+"Ayrıntılı hata ayıklama günlüklemesini etkinleştir (parolaları görünür "
+"yapabilir)"
+
+#: ../src/nm-openvpn-service.c:1615
+msgid ""
+"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
+msgstr "nm-openvpn-service, NetworkManager'a tümleşik OpenVPN yeteneği sağlar."
