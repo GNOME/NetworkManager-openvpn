@@ -1029,7 +1029,7 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 
 	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	nm_setting_vpn_foreach_data_item (s_vpn, copy_values, hash);
 
 	/* HTTP Proxy password is special */

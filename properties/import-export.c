@@ -793,10 +793,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *proxy_username = NULL;
 	const char *proxy_password = NULL;
 
-	s_con = NM_SETTING_CONNECTION (nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION));
+	s_con = nm_connection_get_setting_connection (connection);
 	g_assert (s_con);
 
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 
 	f = fopen (path, "w");
 	if (!f) {

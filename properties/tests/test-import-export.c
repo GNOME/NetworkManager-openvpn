@@ -118,7 +118,7 @@ test_password_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "password-import", "failed to import connection");
 
 	/* Connection setting */
-	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	s_con = nm_connection_get_setting_connection (connection);
 	ASSERT (s_con != NULL,
 	        "password-import", "missing 'connection' setting");
 
@@ -129,12 +129,12 @@ test_password_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	        "password-import", "unexpected valid UUID");
 
 	/* IP4 setting */
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
+	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	ASSERT (s_ip4 == NULL,
 	        "password-import", "unexpected 'ip4-config' setting");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "password-import", "missing 'vpn' setting");
 
@@ -182,7 +182,7 @@ remove_secrets (NMConnection *connection)
 	NMSettingVPN *s_vpn;
 	GSList *keys = NULL, *iter;
 
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn)
 		return;
 
@@ -248,7 +248,7 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "tls-import", "failed to import connection");
 
 	/* Connection setting */
-	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	s_con = nm_connection_get_setting_connection (connection);
 	ASSERT (s_con != NULL,
 	        "tls-import", "missing 'connection' setting");
 
@@ -259,12 +259,12 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	        "tls-import", "unexpected valid UUID");
 
 	/* IP4 setting */
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
+	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	ASSERT (s_ip4 == NULL,
 	        "tls-import", "unexpected 'ip4-config' setting");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "tls-import", "missing 'vpn' setting");
 
@@ -363,7 +363,7 @@ test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "pkcs12-import", "failed to import connection");
 
 	/* Connection setting */
-	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	s_con = nm_connection_get_setting_connection (connection);
 	ASSERT (s_con != NULL,
 	        "pkcs12-import", "missing 'connection' setting");
 
@@ -374,12 +374,12 @@ test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	        "pkcs12-import", "unexpected valid UUID");
 
 	/* IP4 setting */
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
+	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	ASSERT (s_ip4 == NULL,
 	        "pkcs12-import", "unexpected 'ip4-config' setting");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "pkcs12-import", "missing 'vpn' setting");
 
@@ -476,7 +476,7 @@ test_non_utf8_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "non-utf8-import", "failed to import connection");
 
 	/* Connection setting */
-	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	s_con = nm_connection_get_setting_connection (connection);
 	ASSERT (s_con != NULL,
 	        "non-utf8-import", "missing 'connection' setting");
 
@@ -487,7 +487,7 @@ test_non_utf8_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	        "non-utf8-import", "unexpected valid UUID");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "non-utf8-import", "missing 'vpn' setting");
 
@@ -512,7 +512,7 @@ test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "static-key-import", "failed to import connection");
 
 	/* Connection setting */
-	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	s_con = nm_connection_get_setting_connection (connection);
 	ASSERT (s_con != NULL,
 	        "static-key-import", "missing 'connection' setting");
 
@@ -523,12 +523,12 @@ test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	        "static-key-import", "unexpected valid UUID");
 
 	/* IP4 setting */
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
+	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	ASSERT (s_ip4 == NULL,
 	        "static-key-import", "unexpected 'ip4-config' setting");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "static-key-import", "missing 'vpn' setting");
 
@@ -615,7 +615,7 @@ test_port_import (NMVpnPluginUiInterface *plugin,
 	ASSERT (connection != NULL, detail, "failed to import connection");
 
 	/* Connection setting */
-	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	s_con = nm_connection_get_setting_connection (connection);
 	ASSERT (s_con != NULL,
 	        detail, "missing 'connection' setting");
 
@@ -623,7 +623,7 @@ test_port_import (NMVpnPluginUiInterface *plugin,
 	        detail, "unexpected connection ID");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        detail, "missing 'vpn' setting");
 
@@ -688,7 +688,7 @@ test_tun_opts_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "tunopts-import", "failed to import connection");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "tunopts-import", "missing 'vpn' setting");
 
@@ -750,7 +750,7 @@ test_proxy_http_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "proxy-http-import", "failed to import connection");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "proxy-http-import", "missing 'vpn' setting");
 
@@ -832,7 +832,7 @@ test_proxy_http_with_auth_import (NMVpnPluginUiInterface *plugin, const char *di
 	ASSERT (connection != NULL, "proxy-http-with-auth-import", "failed to import connection");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "proxy-http-with-auth-import", "missing 'vpn' setting");
 
@@ -874,7 +874,7 @@ test_proxy_socks_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "proxy-socks-import", "failed to import connection");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "proxy-socks-import", "missing 'vpn' setting");
 
@@ -954,7 +954,7 @@ test_keysize_import (NMVpnPluginUiInterface *plugin, const char *dir)
 	ASSERT (connection != NULL, "keysize-import", "failed to import connection");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL,
 	        "keysize-import", "missing 'vpn' setting");
 
@@ -1019,7 +1019,7 @@ test_device_import (NMVpnPluginUiInterface *plugin,
 	ASSERT (connection != NULL, detail, "failed to import connection");
 
 	/* VPN setting */
-	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	s_vpn = nm_connection_get_setting_vpn (connection);
 	ASSERT (s_vpn != NULL, detail, "missing 'vpn' setting");
 
 	/* Data items */
