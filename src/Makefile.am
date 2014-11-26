@@ -17,7 +17,8 @@ libexec_PROGRAMS = nm-openvpn-service nm-openvpn-service-openvpn-helper
 
 nm_openvpn_service_SOURCES = \
 	nm-openvpn-service.c \
-	nm-openvpn-service.h
+	nm-openvpn-service.h \
+	nm-openvpn-service-defines.h
 
 nm_openvpn_service_LDADD = \
 	$(NM_LIBS) \

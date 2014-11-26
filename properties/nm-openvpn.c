@@ -42,7 +42,7 @@
 #include <nm-setting-connection.h>
 #include <nm-setting-ip4-config.h>
 
-#include "nm-openvpn-service.h"
+#include "nm-openvpn-service-defines.h"
 #include "nm-openvpn.h"
 #include "auth-helpers.h"
 #include "import-export.h"
