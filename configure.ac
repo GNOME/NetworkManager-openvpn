@@ -125,6 +125,7 @@ fi
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
+src/tests/Makefile
 common/Makefile
 auth-dialog/Makefile
 properties/Makefile

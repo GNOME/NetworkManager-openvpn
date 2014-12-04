@@ -1,3 +1,5 @@
+SUBDIRS= . tests
+
 AM_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
 	$(DBUS_CFLAGS) \
@@ -26,6 +28,8 @@ nm_openvpn_service_LDADD = \
         $(top_builddir)/common/libnm-openvpn-common.la
 
 nm_openvpn_service_openvpn_helper_SOURCES = \
+	helper-config.c \
+	helper-config.h \
 	nm-openvpn-service-openvpn-helper.c
 
 nm_openvpn_service_openvpn_helper_LDADD = \
