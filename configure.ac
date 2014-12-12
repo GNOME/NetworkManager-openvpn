@@ -1,6 +1,6 @@
 AC_PREREQ(2.52)
 
-AC_INIT(NetworkManager-openvpn, 0.9.9.0, dcbw@redhat.com, NetworkManager-openvpn)
+AC_INIT(NetworkManager-openvpn, 1.1.0, dcbw@redhat.com, NetworkManager-openvpn)
 AM_INIT_AUTOMAKE([1.9 subdir-objects tar-ustar no-dist-gzip dist-bzip2])
 AM_MAINTAINER_MODE
 
@@ -67,10 +67,10 @@ AC_SUBST(DBUS_CFLAGS)
 AC_SUBST(DBUS_LIBS)
 
 PKG_CHECK_MODULES(NM,
-	NetworkManager >= 0.9.9
-	libnm-util >= 0.9.9
-	libnm-glib >= 0.9.9
-	libnm-glib-vpn >= 0.9.9)
+	NetworkManager >= 0.9.10
+	libnm-util >= 0.9.10
+	libnm-glib >= 0.9.10
+	libnm-glib-vpn >= 0.9.10)
 NM_CFLAGS="$NM_CFLAGS -DNM_VERSION_MAX_ALLOWED=NM_VERSION_0_9_10"
 AC_SUBST(NM_CFLAGS)
 AC_SUBST(NM_LIBS)
@@ -81,7 +81,7 @@ if test x"$with_gnome" != xno; then
 	AC_SUBST(GTK_LIBS)
 	GTK_CFLAGS="$GTK_CFLAGS -DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_4"
 
-	PKG_CHECK_MODULES(NMGTK, libnm-gtk >= 0.9.9.0)
+	PKG_CHECK_MODULES(NMGTK, libnm-gtk >= 0.9.10)
 	AC_SUBST(NMGTK_CFLAGS)
 	AC_SUBST(NMGTK_LIBS)
 
