@@ -13,3 +13,4 @@ libnm_openvpn_common_la_SOURCES= \
 libnm_openvpn_common_la_LIBADD = \
 	$(NM_LIBS)
 
+EXTRA_DIST = nm-glib-compat.h
