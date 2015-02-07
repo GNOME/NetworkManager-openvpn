@@ -2,13 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2008, 2009, 2010, 2014.
+# Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2008, 2009, 2010, 2014, 2015.
+# Edurne Labaka <elabaka@uzei.com>, 2015.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: network-manager-openvpn master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-23 10:27+0200\n"
-"PO-Revision-Date: 2014-07-23 10:29+0200\n"
+"Project-Id-Version: network-manager-openvpn nm-1-0\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2015-02-07 18:01+0100\n"
+"PO-Revision-Date: 2015-02-07 18:01+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <librezale@librezale.org>\n"
 "Language: eu\n"
@@ -23,7 +26,7 @@ msgstr ""
 msgid "Authenticate VPN %s"
 msgstr "Autentifikatu %s VPN"
 
-#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-dialog.ui.h:104
+#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-dialog.ui.h:21
 msgid "Password:"
 msgstr "Pasahitza:"
 
@@ -54,117 +57,117 @@ msgstr "VPN konexioen kudeatzailea (OpenVPN)"
 msgid "Add, Remove, and Edit VPN Connections"
 msgstr "Gehitu, kendu eta editatu VPN konexioak"
 
-#: ../properties/auth-helpers.c:159
+#: ../properties/auth-helpers.c:180
 msgid "Choose your personal certificate..."
 msgstr "Aukeratu ziurtagiri pertsonala..."
 
-#: ../properties/auth-helpers.c:177
+#: ../properties/auth-helpers.c:198
 msgid "Choose your private key..."
 msgstr "Aukeratu gako pribatua..."
 
-#: ../properties/auth-helpers.c:254
+#: ../properties/auth-helpers.c:288
 msgid "Saved"
 msgstr "Gordeta"
 
-#: ../properties/auth-helpers.c:262
+#: ../properties/auth-helpers.c:296
 msgid "Always Ask"
 msgstr "Galdetu beti"
 
-#: ../properties/auth-helpers.c:267
+#: ../properties/auth-helpers.c:301
 msgid "Not Required"
 msgstr "Ez da beharrezkoa"
 
-#: ../properties/auth-helpers.c:357
+#: ../properties/auth-helpers.c:391
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Aukeratu Ziurtagiri-Emailearen ziurtagiria..."
 
-#: ../properties/auth-helpers.c:401
+#: ../properties/auth-helpers.c:435
 msgid "Choose an OpenVPN static key..."
 msgstr "Aukeratu OpenVPN gako estatikoa..."
 
-#: ../properties/auth-helpers.c:425 ../properties/auth-helpers.c:1158
-#: ../properties/auth-helpers.c:1767
+#: ../properties/auth-helpers.c:459 ../properties/auth-helpers.c:1192
+#: ../properties/auth-helpers.c:1795
 msgid "None"
 msgstr "Bat ere ez"
 
-#: ../properties/auth-helpers.c:881
+#: ../properties/auth-helpers.c:915
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM edo PKCS#12 ziurtagiriak (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:882
+#: ../properties/auth-helpers.c:916
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM ziurtagiriak (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:942
+#: ../properties/auth-helpers.c:976
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN gako estatikoak (*.key)"
 
-#: ../properties/auth-helpers.c:1074 ../properties/auth-helpers.c:1150
+#: ../properties/auth-helpers.c:1108 ../properties/auth-helpers.c:1184
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: ../properties/auth-helpers.c:1160
+#: ../properties/auth-helpers.c:1194
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1162
+#: ../properties/auth-helpers.c:1196
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1164
+#: ../properties/auth-helpers.c:1198
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1166
+#: ../properties/auth-helpers.c:1200
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1168
+#: ../properties/auth-helpers.c:1202
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1170
+#: ../properties/auth-helpers.c:1204
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1172
+#: ../properties/auth-helpers.c:1206
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1174
+#: ../properties/auth-helpers.c:1208
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1225
+#: ../properties/auth-helpers.c:1259
 msgid "Server"
 msgstr "Zerbitzaria"
 
-#: ../properties/auth-helpers.c:1230
+#: ../properties/auth-helpers.c:1264
 msgid "Client"
 msgstr "Bezeroa"
 
-#: ../properties/auth-helpers.c:1483 ../properties/nm-openvpn-dialog.ui.h:2
+#: ../properties/auth-helpers.c:1517 ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
 msgstr "Ez da beharrezkoa"
 
-#: ../properties/auth-helpers.c:1485
+#: ../properties/auth-helpers.c:1519
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1487
+#: ../properties/auth-helpers.c:1521
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/auth-helpers.c:1670
+#: ../properties/auth-helpers.c:1698
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/auth-helpers.c:1672
+#: ../properties/auth-helpers.c:1700
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1679
+#: ../properties/auth-helpers.c:1707
 msgid "(automatic)"
 msgstr "(automatikoa)"
 
@@ -196,382 +199,16 @@ msgstr "Gako estatikoa"
 msgid " "
 msgstr " "
 
-#: ../properties/nm-openvpn-dialog.ui.h:3
-msgid "OpenVPN Advanced Options"
-msgstr "OpenVPN-ren aukera aurreratuak"
-
-#: ../properties/nm-openvpn-dialog.ui.h:4
-msgid "Use custom gateway p_ort:"
-msgstr "Erabili atebidearen _ataka pertsonalizatua:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:5
-msgid ""
-"TCP/UDP port number for local peer.\n"
-"config: port"
-msgstr ""
-"TCP/UDP protokoloaren ataka lokaleko parekoarentzako.\n"
-"konfigurazioa: port"
-
-#: ../properties/nm-openvpn-dialog.ui.h:7
-msgid "Use custom _renegotiation interval:"
-msgstr "Erabili berriro negoziatzeko bitarte pertsonalizatua:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:8
-msgid ""
-"Renegotiate data channel key after the specified number of seconds.\n"
-"config: reneg-sec"
-msgstr ""
-"Negoziatu berriro datu-kanalaren gakoa zehaztutako segundoen ostean.\n"
-"konfigurazioa: reneg-sec"
-
-#: ../properties/nm-openvpn-dialog.ui.h:10
-msgid "Use L_ZO data compression"
-msgstr "Erabili _LZO datu-konpresioa"
-
-#: ../properties/nm-openvpn-dialog.ui.h:11
-msgid ""
-"Use fast LZO compression.\n"
-"config: comp-lzo"
-msgstr ""
-"Erabili LZO konpresio azkarra.\n"
-"konfigurazioa: comp-lzo"
-
-#: ../properties/nm-openvpn-dialog.ui.h:13
-msgid "Use a _TCP connection"
-msgstr "Erabili _TCP konexioa"
-
-#: ../properties/nm-openvpn-dialog.ui.h:14
-msgid ""
-"Use TCP for communicating with remote host.\n"
-"config: proto tcp-client | udp"
-msgstr ""
-"Erabili TCP urruneko ostalariarekin komunikatzeko.\n"
-"konfigurazioa: proto tcp-client | udp"
-
-#: ../properties/nm-openvpn-dialog.ui.h:16
-msgid "Set virtual _device type:"
-msgstr "Ezarri gailu _birtual mota:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:17
-msgid "Explicitly set virtual device type and name (TUN/TAP)."
-msgstr "Ezarri esplizitoki gailu birtualaren mota eta izena (TUN/TAP)."
-
-#: ../properties/nm-openvpn-dialog.ui.h:18
-msgid ""
-"Explicitly set virtual device type (TUN/TAP).\n"
-"config: dev-type tun | tap"
-msgstr ""
-"Ezarri esplizitoki gailu birtualaren mota eta izena (TUN/TAP).\n"
-"konfigurazioa: dev-type tun | tap"
-
-#: ../properties/nm-openvpn-dialog.ui.h:20
-msgid " and _name:"
-msgstr " eta _izena:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:21
-msgid ""
-"Use custom name for TUN/TAP virtual device (instead of default \"tun\" or "
-"\"tap\").\n"
-"config: dev <name>"
-msgstr ""
-"Erabili izen pertsonalizatua TUN/TAP gailu birtualean ('tun' edo 'tap' "
-"lehenetsien ordez).\n"
-"konfigurazioa: dev <izena>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:23
-msgid "Use custom tunnel Maximum Transmission _Unit (MTU):"
-msgstr ""
-"Erabili _tunelaren Gehienezko Transmisio Unitatea (MTU) pertsonalizatua:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:24
-msgid ""
-"Take the TUN device MTU to be the specified value and derive the link MTU "
-"from it.\n"
-"config: tun-mtu"
-msgstr ""
-"Hartu TUN gailuaren MTU-a zehaztutako balioa izateko, eta eratorri MTU "
-"esteka harengandik.\n"
-"konfigurazioa: tun-mtu"
-
-#: ../properties/nm-openvpn-dialog.ui.h:26
-msgid "Use custom UDP _fragment size:"
-msgstr "Erabili UDP _zatiaren tamaina pertsonalizatua:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:27
-msgid ""
-"Enable internal datagram fragmentation with this maximum size.\n"
-"config: fragment"
-msgstr ""
-"Gaitu barneko datagrama zatikatzea bere gehienezko tamainarekin.\n"
-"konfigurazioa: fragment"
-
-#: ../properties/nm-openvpn-dialog.ui.h:29
-msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
-msgstr "Murriztu TCP tunela gehienezko segmentu-tamainara (MSS)"
-
-#: ../properties/nm-openvpn-dialog.ui.h:30
-msgid ""
-"Restrict tunnel TCP MSS.\n"
-"config: mssfix"
-msgstr ""
-"Murriztu TCP MSS tunela.\n"
-"konfigurazioa: mssfix"
-
-#: ../properties/nm-openvpn-dialog.ui.h:32
-msgid "Rando_mize remote hosts"
-msgstr "Ausaz nahastu urruneko ostalariak"
-
-#: ../properties/nm-openvpn-dialog.ui.h:33
-msgid ""
-"Randomize the order of gateways list (remote) as a kind of basic load-"
-"balancing measure.\n"
-"config: remote-random"
-msgstr ""
-"Ausaz nahastu (urruneko) atebideen zerrendaren ordena oinarrizko kargen "
-"balantzea neurtzeko bailitzan\n"
-"konfigurazioa: remote-random"
-
-#: ../properties/nm-openvpn-dialog.ui.h:35
-msgid "General"
-msgstr "Orokorra"
-
-#: ../properties/nm-openvpn-dialog.ui.h:36
-msgid ""
-"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
-"Cipher Block Chaining mode).\n"
-"config: cipher"
-msgstr ""
-"Enkriptatu paketeak zifratzeko algoritmoarekin. Lehenetsia BF-CBC da "
-"(Blowfish modua Cipher Block Chaining-en).\n"
-"konfigurazioa: cipher"
-
-#: ../properties/nm-openvpn-dialog.ui.h:38
-msgid "Use custom _size of cipher key:"
-msgstr "Erabili zifratze-gakoaren _tamaina pertsonalizatua:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:39
-msgid ""
-"Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
-"specific size.\n"
-"config: keysize <n>"
-msgstr ""
-"Ezarri zifratze-gakoaren tamaina pertsonalizatuarekin. Ez bada zehazten "
-"zifratzearen zehaztasuneko tamaina lehenetsia erabiliko\n"
-"konfigurazioa: keysize <n>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:41
-msgid ""
-"Authenticate packets with HMAC using message digest algorithm. The default "
-"is SHA1.\n"
-"config: auth"
-msgstr ""
-"Autentifikatu paketeak HMAC-ekin mezuen laburpenaren algoritmoa erabiliz. "
-"Lehenetsia SHA1 da.\n"
-"konfigurazioa: auth"
-
-#: ../properties/nm-openvpn-dialog.ui.h:43
-msgid "Ci_pher:"
-msgstr "Zifratua:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:44
-msgid "_HMAC Authentication:"
-msgstr "HMAC autentifikazioa:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:45
-msgid "Security"
-msgstr "Segurtasuna"
-
-#: ../properties/nm-openvpn-dialog.ui.h:46
-msgid "_Subject Match:"
-msgstr "Gaiaren bat etortzea:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:47
-msgid ""
-"<i>Connect only to servers whose certificate matches the given subject.\n"
-"Example: /CN=myvpn.company.com</i>"
-msgstr ""
-"<i>Konektatu soilik emandako gaiarekin bat datozten ziurtagiriak dituzten "
-"zerbitzariekin.\n"
-"Adibidez: /CN=nirevpn.enpresa.com</i>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:49
-msgid ""
-"Accept connections only from a host with X509 name or common name equal to "
-"the specified one.\n"
-"config: tls-remote"
-msgstr ""
-"Onartu konexioak X509 izena duen, edo zehaztutako izen amankomunaren berdina "
-"duen ostalari batetik soilik.\n"
-"konfigurazioa: tls-remote"
-
-#: ../properties/nm-openvpn-dialog.ui.h:51
-msgid "_Verify peer (server) certificate usage signature"
-msgstr ""
-"_Egiaztatu parekoaren (zerbitzaria) ziurtagirian sinaduraren erabilpena"
-
-#: ../properties/nm-openvpn-dialog.ui.h:52
-msgid ""
-"Require that peer certificate was signed with an explicit key usage and "
-"extended key usage based on RFC3280 TLS rules."
-msgstr ""
-"Parekoaren ziurtagiria gako zehatz baten erabilerarekin sinatuta eta "
-"gakoaren erabilpena RFC3280 TLS arauetan oinarrituta egotea egotea eskatzen "
-"du."
-
-#: ../properties/nm-openvpn-dialog.ui.h:53
-msgid "_Remote peer certificate TLS type:"
-msgstr "_Urruneko parekoaren TLS ziurtagiri mota:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:54
-msgid ""
-"Require that peer certificate was signed with an explicit key usage and "
-"extended key usage based on RFC3280 TLS rules.\n"
-"config: remote-cert-tls client|server"
-msgstr ""
-"Parekoaren ziurtagiria gako zehatz baten erabilerarekin sinatuta eta "
-"gakoaren erabilpena RFC3280 TLS arauetan oinarrituta egotea egotea eskatzen "
-"du.\n"
-"konfigurazioa: remote-cert-tls client|server"
-
-#: ../properties/nm-openvpn-dialog.ui.h:56
-msgid "Use additional _TLS authentication"
-msgstr "Erabili TLS autentifikazio gehigarria"
-
-#: ../properties/nm-openvpn-dialog.ui.h:57
-msgid "Add an additional layer of HMAC authentication."
-msgstr "Gehitu HMAC autentifikazioaren geruza gehigarria."
-
-#: ../properties/nm-openvpn-dialog.ui.h:58
-msgid "Key _Direction:"
-msgstr "Gakoaren helbidea:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:59
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>Gakoaren helbidea erabiltzen bada, VPN parekoarenaren aurkakoa izan behar "
-"du. Esate baterako, parekoak '1' erabiltzen badu, konexio honek '0' erabili "
-"behar du. Zein balio erabili behar duzun ez badakizu, jar zaitez sistemako "
-"administratzailearekin harremanetan.</i>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:60
-msgid ""
-"Add an additional layer of HMAC authentication on top of the TLS control "
-"channel to protect against DoS attacks.\n"
-"config: tls-auth <file> [direction]"
-msgstr ""
-"Gehitu HMAC autentifikazioaren geruza gehigarria TLS kontrol-kanalaren "
-"gainean DoS erasoetatik babesteko.\n"
-"konfigurazioa: tls-auth <fitxategia> [helbidea]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:62
-msgid ""
-"Direction parameter for static key mode.\n"
-"config: tls-auth <file> [direction]"
-msgstr ""
-"Helbidearen parametroa gakoaren modu estatikoarentzako.\n"
-"konfigurazioa: tls-auth <fitxategia> [helbidea]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:64
-msgid "Key _File:"
-msgstr "Gakoaren fitxategia:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:65
-msgid "TLS Authentication"
-msgstr "TLS autentifikazioa"
-
-#: ../properties/nm-openvpn-dialog.ui.h:66
-msgid ""
-"Proxy type: HTTP or Socks.\n"
-"config: http-proxy or socks-proxy"
-msgstr ""
-"Proxy mota: HTTP edo Socks.\n"
-"konfigurazioa: http-proxy edo socks-proxy"
-
-#: ../properties/nm-openvpn-dialog.ui.h:68
-msgid "Proxy _Type:"
-msgstr "Proxy mota:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:69
-msgid ""
-"<i>Select this option if your organization requires the use of a proxy "
-"server to access the Internet.</i>"
-msgstr ""
-"<i>Hautatu aukera hau erakundeak proxy zerbitzari bat behar badu Internetera "
-"sarbidetzeko.</i>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:70
-msgid "Server _Address:"
-msgstr "Zerbitzariaren helbidea:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:71
-msgid ""
-"Connect to remote host through a proxy with this address.\n"
-"config: http-proxy or socks-proxy"
-msgstr ""
-"Konektatu urruneko ostalariarekin helbide hau duen proxy-aren bidez.\n"
-"konfigurazioa: http-proxy edo socks-proxy"
-
-#: ../properties/nm-openvpn-dialog.ui.h:73
-msgid "_Port:"
-msgstr "Ataka:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:74
-msgid ""
-"Connect to remote host through a proxy with this port.\n"
-"config: http-proxy or socks-proxy"
-msgstr ""
-"Konektatu urruneko ostalariarekin ataka hau duen proxy-aren bidez\n"
-"konfigurazioa: http-proxy edo socks-proxy"
-
-#: ../properties/nm-openvpn-dialog.ui.h:76
-msgid "_Retry indefinitely when errors occur"
-msgstr "_Saiatu behin et berriz errorea gertatzean"
-
-#: ../properties/nm-openvpn-dialog.ui.h:77
-msgid ""
-"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
-"config: http-proxy-retry or socks-proxy-retry"
-msgstr ""
-"Saiatu etengabe proxy-aren erroreen aurrean. Honek SIGUSR1 leheneratzea "
-"simulatzen du.\n"
-"konfigurazioa: http-proxy-retry edo socks-proxy-retry"
-
-#: ../properties/nm-openvpn-dialog.ui.h:79
-msgid "Proxy _Username:"
-msgstr "Proxy-aren erabiltzaile-izena:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:80
-msgid "Proxy Passwor_d:"
-msgstr "Proxy-aren pasahitza:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:81
-msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
-msgstr "OpenVPN-ri igorritako HTTP/Socks proxy-aren erabiltzaile-izena."
-
-#: ../properties/nm-openvpn-dialog.ui.h:82
-msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
-msgstr "OpenVPN-ri igorritako HTTP/Socks proxy-aren pasahitza."
-
-#: ../properties/nm-openvpn-dialog.ui.h:83
-msgid "_Show password"
-msgstr "_Erakutsi pasahitza"
-
-#: ../properties/nm-openvpn-dialog.ui.h:84
-msgid "Proxies"
-msgstr "Proxy-ak"
-
-#: ../properties/nm-openvpn-dialog.ui.h:85
+#: ../properties/nm-openvpn-dialog.ui.h:2
 msgid "<b>General</b>"
 msgstr "<b>Orokorra</b>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:86
+#: ../properties/nm-openvpn-dialog.ui.h:3
 msgid "_Gateway:"
 msgstr "_Atebidea:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:87
+#: ../properties/nm-openvpn-dialog.ui.h:4
+#, fuzzy
 msgid ""
 "Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
 "tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
@@ -584,23 +221,23 @@ msgstr ""
 "edo zuriuneak bereizteko).\n"
 "konfigurazioa: remote"
 
-#: ../properties/nm-openvpn-dialog.ui.h:89
+#: ../properties/nm-openvpn-dialog.ui.h:6
 msgid "<b>Authentication</b>"
 msgstr "<b>Autentifikazioa</b>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:90
+#: ../properties/nm-openvpn-dialog.ui.h:7
 msgid "_Show passwords"
 msgstr "Erakutsi pasahitzak"
 
-#: ../properties/nm-openvpn-dialog.ui.h:91
+#: ../properties/nm-openvpn-dialog.ui.h:8
 msgid "Password for private key"
 msgstr "Gako pribatuaren pasahitza"
 
-#: ../properties/nm-openvpn-dialog.ui.h:92
+#: ../properties/nm-openvpn-dialog.ui.h:9
 msgid "Private Key Password:"
 msgstr "Gako pribatuaren pasahitza:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:93
+#: ../properties/nm-openvpn-dialog.ui.h:10
 msgid ""
 "Local peer's private key in .pem format.\n"
 "config: key"
@@ -608,11 +245,11 @@ msgstr ""
 "Lokaleko parekoaren gako pribatua .pem formatuan.\n"
 "konfigurazioa: key"
 
-#: ../properties/nm-openvpn-dialog.ui.h:95
+#: ../properties/nm-openvpn-dialog.ui.h:12
 msgid "Private Key:"
 msgstr "Gako pribatua:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:96
+#: ../properties/nm-openvpn-dialog.ui.h:13
 msgid ""
 "Certificate authority (CA) file in .pem format.\n"
 "config: ca"
@@ -620,15 +257,15 @@ msgstr ""
 "Ziurtagiri-Emailearen (ZE) fitxategia .pem formatuan.\n"
 "konfigurazioa: ca"
 
-#: ../properties/nm-openvpn-dialog.ui.h:98
+#: ../properties/nm-openvpn-dialog.ui.h:15
 msgid "CA Certificate:"
 msgstr "ZE ziurtagiria:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:99
+#: ../properties/nm-openvpn-dialog.ui.h:16
 msgid "User Certificate:"
 msgstr "Erabiltzailearen ziurtagiria:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:100
+#: ../properties/nm-openvpn-dialog.ui.h:17
 msgid ""
 "Local peer's signed certificate in .pem format (signed by CA of CA "
 "Certificate).\n"
@@ -638,7 +275,7 @@ msgstr ""
 "sinatuta).\n"
 "konfigurazioa: cert"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:19
 msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -646,11 +283,11 @@ msgstr ""
 "OpenVPN-ri eskatutakoan igorritako pasahitza.\n"
 "konfigurazioa: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:105
+#: ../properties/nm-openvpn-dialog.ui.h:22
 msgid "User name:"
 msgstr "Erabiltzaile-izena:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:23
 msgid ""
 "Username passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -658,7 +295,7 @@ msgstr ""
 "OpenVPN-ri eskatutakoan igorritako erabiltzaile-izena.\n"
 "konfigurazioa: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:25
 msgid ""
 "IP address of the local VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -666,15 +303,15 @@ msgstr ""
 "Lokaleko VPN amaiera-puntuaren IP helbidea.\n"
 "konfigurazioa: ifconfig <l> <rn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:110
+#: ../properties/nm-openvpn-dialog.ui.h:27
 msgid "Remote IP Address:"
 msgstr "Urruneko IP helbidea:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:28
 msgid "Local IP Address:"
 msgstr "IP helbide lokala:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:29
 msgid ""
 "IP address of the remote VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -682,15 +319,15 @@ msgstr ""
 "Urruneko VPN amaiera-puntuaren IP helbidea.\n"
 "konfigurazioa: ifconfig <l> <rn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:31
 msgid "Key Direction:"
 msgstr "Gakoaren helbidea:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:32
 msgid "Static Key:"
 msgstr "Gako estatikoa:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:116
+#: ../properties/nm-openvpn-dialog.ui.h:33
 msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
@@ -698,7 +335,7 @@ msgstr ""
 "Gako estatikoaren moduaren (ez-TLS) aurre-partekatutako fitxategia.\n"
 "konfigurazioa: static <fitxategia>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:35
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
 "config: static <file> [direction]"
@@ -706,24 +343,390 @@ msgstr ""
 "Gako estatikoaren moduaren (ez-TLS) helbidea.\n"
 "konfigurazioa: static <fitxategia> [helbidea]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:37
+msgid ""
+"<i>If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.</i>"
+msgstr ""
+"<i>Gakoaren helbidea erabiltzen bada, VPN parekoarenaren aurkakoa izan behar "
+"du. Esate baterako, parekoak '1' erabiltzen badu, konexio honek '0' erabili "
+"behar du. Zein balio erabili behar duzun ez badakizu, jar zaitez sistemako "
+"administratzailearekin harremanetan.</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:38
 msgid "Type:"
 msgstr "Mota:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:39
 msgid "Select an authentication mode."
 msgstr "Hautatu autentifikazioaren modua."
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:40
 msgid "Ad_vanced..."
 msgstr "_Aurreratua..."
 
-#: ../src/nm-openvpn-service.c:201
+#: ../properties/nm-openvpn-dialog.ui.h:42
+msgid "OpenVPN Advanced Options"
+msgstr "OpenVPN-ren aukera aurreratuak"
+
+#: ../properties/nm-openvpn-dialog.ui.h:43
+msgid "Use custom gateway p_ort:"
+msgstr "Erabili atebidearen _ataka pertsonalizatua:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:44
+msgid ""
+"TCP/UDP port number for local peer.\n"
+"config: port"
+msgstr ""
+"TCP/UDP protokoloaren ataka lokaleko parekoarentzako.\n"
+"konfigurazioa: port"
+
+#: ../properties/nm-openvpn-dialog.ui.h:46
+msgid "Use custom _renegotiation interval:"
+msgstr "Erabili berriro negoziatzeko bitarte pertsonalizatua:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:47
+msgid ""
+"Renegotiate data channel key after the specified number of seconds.\n"
+"config: reneg-sec"
+msgstr ""
+"Negoziatu berriro datu-kanalaren gakoa zehaztutako segundoen ostean.\n"
+"konfigurazioa: reneg-sec"
+
+#: ../properties/nm-openvpn-dialog.ui.h:49
+msgid "Use L_ZO data compression"
+msgstr "Erabili _LZO datu-konpresioa"
+
+#: ../properties/nm-openvpn-dialog.ui.h:50
+msgid ""
+"Use fast LZO compression.\n"
+"config: comp-lzo"
+msgstr ""
+"Erabili LZO konpresio azkarra.\n"
+"konfigurazioa: comp-lzo"
+
+#: ../properties/nm-openvpn-dialog.ui.h:52
+msgid "Use a _TCP connection"
+msgstr "Erabili _TCP konexioa"
+
+#: ../properties/nm-openvpn-dialog.ui.h:53
+msgid ""
+"Use TCP for communicating with remote host.\n"
+"config: proto tcp-client | udp"
+msgstr ""
+"Erabili TCP urruneko ostalariarekin komunikatzeko.\n"
+"konfigurazioa: proto tcp-client | udp"
+
+#: ../properties/nm-openvpn-dialog.ui.h:55
+msgid "Set virtual _device type:"
+msgstr "Ezarri gailu _birtual mota:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:56
+msgid "Explicitly set virtual device type and name (TUN/TAP)."
+msgstr "Ezarri esplizituki gailu birtualaren mota eta izena (TUN/TAP)."
+
+#: ../properties/nm-openvpn-dialog.ui.h:57
+msgid ""
+"Explicitly set virtual device type (TUN/TAP).\n"
+"config: dev-type tun | tap"
+msgstr ""
+"Ezarri esplizituki gailu birtualaren mota eta izena (TUN/TAP).\n"
+"konfigurazioa: dev-type tun | tap"
+
+#: ../properties/nm-openvpn-dialog.ui.h:59
+msgid " and _name:"
+msgstr " eta _izena:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:60
+msgid ""
+"Use custom name for TUN/TAP virtual device (instead of default \"tun\" or "
+"\"tap\").\n"
+"config: dev <name>"
+msgstr ""
+"Erabili izen pertsonalizatua TUN/TAP gailu birtualean ('tun' edo 'tap' "
+"lehenetsien ordez).\n"
+"konfigurazioa: dev <izena>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:62
+msgid "Use custom tunnel Maximum Transmission _Unit (MTU):"
+msgstr ""
+"Erabili _tunelaren Gehienezko Transmisio Unitatea (MTU) pertsonalizatua:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:63
+msgid ""
+"Take the TUN device MTU to be the specified value and derive the link MTU "
+"from it.\n"
+"config: tun-mtu"
+msgstr ""
+"Hartu TUN gailuaren MTU-a zehaztutako balioa izateko, eta eratorri MTU "
+"esteka harengandik.\n"
+"konfigurazioa: tun-mtu"
+
+#: ../properties/nm-openvpn-dialog.ui.h:65
+msgid "Use custom UDP _fragment size:"
+msgstr "Erabili UDP _zatiaren tamaina pertsonalizatua:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:66
+msgid ""
+"Enable internal datagram fragmentation with this maximum size.\n"
+"config: fragment"
+msgstr ""
+"Gaitu barneko datagrama zatikatzea bere gehienezko tamainarekin.\n"
+"konfigurazioa: fragment"
+
+#: ../properties/nm-openvpn-dialog.ui.h:68
+msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
+msgstr "Murriztu TCP tunela gehienezko segmentu-tamainara (MSS)"
+
+#: ../properties/nm-openvpn-dialog.ui.h:69
+msgid ""
+"Restrict tunnel TCP MSS.\n"
+"config: mssfix"
+msgstr ""
+"Murriztu TCP MSS tunela.\n"
+"konfigurazioa: mssfix"
+
+#: ../properties/nm-openvpn-dialog.ui.h:71
+msgid "Rando_mize remote hosts"
+msgstr "Ausaz nahasi urruneko ostalariak"
+
+#: ../properties/nm-openvpn-dialog.ui.h:72
+msgid ""
+"Randomize the order of gateways list (remote) as a kind of basic load-"
+"balancing measure.\n"
+"config: remote-random"
+msgstr ""
+"Ausaz nahasi (urruneko) atebideen zerrendaren ordena oinarrizko kargen "
+"balantzea neurtzeko balitz bezala\n"
+"konfigurazioa: remote-random"
+
+#: ../properties/nm-openvpn-dialog.ui.h:74
+msgid "General"
+msgstr "Orokorra"
+
+#: ../properties/nm-openvpn-dialog.ui.h:75
+msgid ""
+"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
+"Cipher Block Chaining mode).\n"
+"config: cipher"
+msgstr ""
+"Enkriptatu paketeak zifratzeko algoritmoarekin. Lehenetsia BF-CBC da "
+"(Blowfish modua Cipher Block Chaining-en).\n"
+"konfigurazioa: cipher"
+
+#: ../properties/nm-openvpn-dialog.ui.h:77
+msgid "Use custom _size of cipher key:"
+msgstr "Erabili zifratze-gakoaren _tamaina pertsonalizatua:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:78
+msgid ""
+"Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
+"specific size.\n"
+"config: keysize <n>"
+msgstr ""
+"Ezarri zifratze-gakoaren tamaina pertsonalizatuarekin. Ez bada zehazten "
+"zifratzearen zehaztasuneko tamaina lehenetsia erabiliko\n"
+"konfigurazioa: keysize <n>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:80
+msgid ""
+"Authenticate packets with HMAC using message digest algorithm. The default "
+"is SHA1.\n"
+"config: auth"
+msgstr ""
+"Autentifikatu paketeak HMAC-ekin mezuen laburpenaren algoritmoa erabiliz. "
+"Lehenetsia SHA1 da.\n"
+"konfigurazioa: auth"
+
+#: ../properties/nm-openvpn-dialog.ui.h:82
+msgid "Ci_pher:"
+msgstr "Zifratua:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:83
+msgid "_HMAC Authentication:"
+msgstr "HMAC autentifikazioa:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:84
+msgid "Security"
+msgstr "Segurtasuna"
+
+#: ../properties/nm-openvpn-dialog.ui.h:85
+msgid "_Subject Match:"
+msgstr "Gaiaren bat etortzea:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:86
+msgid ""
+"<i>Connect only to servers whose certificate matches the given subject.\n"
+"Example: /CN=myvpn.company.com</i>"
+msgstr ""
+"<i>Konektatu soilik emandako gaiarekin bat datozen ziurtagiriak dituzten "
+"zerbitzariekin.\n"
+"Adibidez: /CN=nirevpn.enpresa.com</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:88
+msgid ""
+"Accept connections only from a host with X509 name or common name equal to "
+"the specified one.\n"
+"config: tls-remote"
+msgstr ""
+"Onartu konexioak X509 izena duen, edo zehaztutako izen amankomunaren berdina "
+"duen ostalari batetik soilik.\n"
+"konfigurazioa: tls-remote"
+
+#: ../properties/nm-openvpn-dialog.ui.h:90
+msgid "_Verify peer (server) certificate usage signature"
+msgstr "_Egiaztatu parekoaren (zerbitzaria) ziurtagirian sinaduraren erabilera"
+
+#: ../properties/nm-openvpn-dialog.ui.h:91
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules."
+msgstr ""
+"Parekoaren ziurtagiria gako zehatz baten erabilerarekin sinatuta eta "
+"gakoaren erabilera RFC3280 TLS arauetan oinarrituta egotea egotea eskatzen "
+"du."
+
+#: ../properties/nm-openvpn-dialog.ui.h:92
+msgid "_Remote peer certificate TLS type:"
+msgstr "_Urruneko parekoaren TLS ziurtagiri mota:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:93
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules.\n"
+"config: remote-cert-tls client|server"
+msgstr ""
+"Parekoaren ziurtagiria gako zehatz baten erabilerarekin sinatuta eta "
+"gakoaren erabilera RFC3280 TLS arauetan oinarrituta egotea egotea eskatzen "
+"du.\n"
+"konfigurazioa: remote-cert-tls client|server"
+
+#: ../properties/nm-openvpn-dialog.ui.h:95
+msgid "Use additional _TLS authentication"
+msgstr "Erabili TLS autentifikazio gehigarria"
+
+#: ../properties/nm-openvpn-dialog.ui.h:96
+msgid "Add an additional layer of HMAC authentication."
+msgstr "Gehitu HMAC autentifikazioaren geruza gehigarria."
+
+#: ../properties/nm-openvpn-dialog.ui.h:97
+msgid "Key _Direction:"
+msgstr "Gakoaren helbidea:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:98
+msgid ""
+"Add an additional layer of HMAC authentication on top of the TLS control "
+"channel to protect against DoS attacks.\n"
+"config: tls-auth <file> [direction]"
+msgstr ""
+"Gehitu HMAC autentifikazioaren geruza gehigarria TLS kontrol-kanalaren "
+"gainean DoS erasoetatik babesteko.\n"
+"konfigurazioa: tls-auth <fitxategia> [helbidea]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:100
+msgid ""
+"Direction parameter for static key mode.\n"
+"config: tls-auth <file> [direction]"
+msgstr ""
+"Helbidearen parametroa gakoaren modu estatikoarentzako.\n"
+"konfigurazioa: tls-auth <fitxategia> [helbidea]"
+
+#: ../properties/nm-openvpn-dialog.ui.h:102
+msgid "Key _File:"
+msgstr "Gakoaren fitxategia:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:103
+msgid "TLS Authentication"
+msgstr "TLS autentifikazioa"
+
+#: ../properties/nm-openvpn-dialog.ui.h:104
+msgid ""
+"Proxy type: HTTP or Socks.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Proxy mota: HTTP edo Socks.\n"
+"konfigurazioa: http-proxy edo socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:106
+msgid "Proxy _Type:"
+msgstr "Proxy mota:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:107
+msgid ""
+"<i>Select this option if your organization requires the use of a proxy "
+"server to access the Internet.</i>"
+msgstr ""
+"<i>Hautatu aukera hau erakundeak proxy zerbitzari bat behar badu Internetera "
+"sarbidetzeko.</i>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:108
+msgid "Server _Address:"
+msgstr "Zerbitzariaren helbidea:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:109
+msgid ""
+"Connect to remote host through a proxy with this address.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Konektatu urruneko ostalariarekin helbide hau duen proxy-aren bidez.\n"
+"konfigurazioa: http-proxy edo socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:111
+msgid "_Port:"
+msgstr "Ataka:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:112
+msgid ""
+"Connect to remote host through a proxy with this port.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Konektatu urruneko ostalariarekin ataka hau duen proxy-aren bidez\n"
+"konfigurazioa: http-proxy edo socks-proxy"
+
+#: ../properties/nm-openvpn-dialog.ui.h:114
+msgid "_Retry indefinitely when errors occur"
+msgstr "_Saiatu behin et berriz errorea gertatzean"
+
+#: ../properties/nm-openvpn-dialog.ui.h:115
+msgid ""
+"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
+"config: http-proxy-retry or socks-proxy-retry"
+msgstr ""
+"Saiatu etengabe proxy-aren erroreen aurrean. Honek SIGUSR1 leheneratzea "
+"simulatzen du.\n"
+"konfigurazioa: http-proxy-retry edo socks-proxy-retry"
+
+#: ../properties/nm-openvpn-dialog.ui.h:117
+msgid "Proxy _Username:"
+msgstr "Proxy-aren erabiltzaile-izena:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:118
+msgid "Proxy Passwor_d:"
+msgstr "Proxy-aren pasahitza:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:119
+msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
+msgstr "OpenVPN-ri igorritako HTTP/Socks proxy-aren erabiltzaile-izena."
+
+#: ../properties/nm-openvpn-dialog.ui.h:120
+msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
+msgstr "OpenVPN-ri igorritako HTTP/Socks proxy-aren pasahitza."
+
+#: ../properties/nm-openvpn-dialog.ui.h:121
+msgid "_Show password"
+msgstr "_Erakutsi pasahitza"
+
+#: ../properties/nm-openvpn-dialog.ui.h:122
+msgid "Proxies"
+msgstr "Proxy-ak"
+
+#: ../src/nm-openvpn-service.c:204
 #, c-format
 msgid "invalid address '%s'"
 msgstr "'%s' helbide baliogabea"
 
-#: ../src/nm-openvpn-service.c:213
+#: ../src/nm-openvpn-service.c:216
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
 msgstr ""
@@ -731,115 +734,115 @@ msgstr ""
 "kanpo"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:224
+#: ../src/nm-openvpn-service.c:227
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
 msgstr "baliogabeko '%s' propietatearen boolearra (ez bai/ez)"
 
-#: ../src/nm-openvpn-service.c:231
+#: ../src/nm-openvpn-service.c:234
 #, c-format
 msgid "unhandled property '%s' type %s"
 msgstr "kudeatu gabeko '%s' propietatearen '%s' mota"
 
-#: ../src/nm-openvpn-service.c:242
+#: ../src/nm-openvpn-service.c:245
 #, c-format
 msgid "property '%s' invalid or not supported"
 msgstr "'%s' propietatea baliogabea edo ez dago onartuta"
 
-#: ../src/nm-openvpn-service.c:259
+#: ../src/nm-openvpn-service.c:262
 msgid "No VPN configuration options."
 msgstr "Ez dago VPNaren konfigurazioaren aukerarik."
 
-#: ../src/nm-openvpn-service.c:428
+#: ../src/nm-openvpn-service.c:431
 msgid "A username is required."
 msgstr "Erabiltzaile-izena behar da."
 
-#: ../src/nm-openvpn-service.c:432
+#: ../src/nm-openvpn-service.c:435
 msgid "A password is required."
 msgstr "Pasahitza behar da."
 
-#: ../src/nm-openvpn-service.c:435
+#: ../src/nm-openvpn-service.c:438
 msgid "A username and password are required."
 msgstr "Erabiltzaile-izena eta pasahitza behar dira."
 
-#: ../src/nm-openvpn-service.c:455
+#: ../src/nm-openvpn-service.c:458
 msgid "A private key password is required."
 msgstr "Gako pribatuaren pasahitza behar da."
 
-#: ../src/nm-openvpn-service.c:468
+#: ../src/nm-openvpn-service.c:471
 msgid "An HTTP Proxy username is required."
 msgstr "HTTP proxy-aren erabiltzaile-izena behar da."
 
-#: ../src/nm-openvpn-service.c:472
+#: ../src/nm-openvpn-service.c:475
 msgid "An HTTP Proxy password is required."
 msgstr "HTTP proxy-aren pasahitza behar da."
 
-#: ../src/nm-openvpn-service.c:475
+#: ../src/nm-openvpn-service.c:478
 msgid "An HTTP Proxy username and password are required."
 msgstr "HTTP proxy-aren erabiltzaile-izena eta pasahitza behar dira."
 
-#: ../src/nm-openvpn-service.c:881
+#: ../src/nm-openvpn-service.c:893
 msgid "Could not find the openvpn binary."
 msgstr "Ezin izan da openvpn bitarra aurkitu."
 
-#: ../src/nm-openvpn-service.c:892
+#: ../src/nm-openvpn-service.c:904
 msgid "Invalid HMAC auth."
 msgstr "Baliogabeko HMAC autentifikazioa."
 
-#: ../src/nm-openvpn-service.c:903 ../src/nm-openvpn-service.c:1446
+#: ../src/nm-openvpn-service.c:915 ../src/nm-openvpn-service.c:1474
 msgid "Invalid connection type."
 msgstr "Baliogabeko konexio mota."
 
-#: ../src/nm-openvpn-service.c:930 ../src/nm-openvpn-service.c:1036
+#: ../src/nm-openvpn-service.c:950 ../src/nm-openvpn-service.c:960
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Baliogabeko '%s' ataka zenbakia."
 
-#: ../src/nm-openvpn-service.c:944
+#: ../src/nm-openvpn-service.c:975
 #, c-format
 msgid "Invalid proto '%s'."
 msgstr "Baliogabeko '%s' protokoloa."
 
-#: ../src/nm-openvpn-service.c:982
+#: ../src/nm-openvpn-service.c:1016
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Baliogabeko '%s' proxy mota."
 
-#: ../src/nm-openvpn-service.c:1061
+#: ../src/nm-openvpn-service.c:1069
 #, c-format
 msgid "Invalid keysize '%s'."
 msgstr "Baliogabeko '%s' gako-tamaina."
 
-#: ../src/nm-openvpn-service.c:1108
+#: ../src/nm-openvpn-service.c:1116
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Baliogabeko berriro negoziatzeko '%s' segundoak."
 
-#: ../src/nm-openvpn-service.c:1132
+#: ../src/nm-openvpn-service.c:1140
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Baliogabeko '%s' TUN MTU tamaina."
 
-#: ../src/nm-openvpn-service.c:1147
+#: ../src/nm-openvpn-service.c:1155
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Baliogabeko '%s' zati-tamaina."
 
-#: ../src/nm-openvpn-service.c:1215
+#: ../src/nm-openvpn-service.c:1232
 msgid "Missing required local IP address for static key mode."
 msgstr "Gako estatikoaren moduaren lokaleko IP helbidea falta da."
 
-#: ../src/nm-openvpn-service.c:1228
+#: ../src/nm-openvpn-service.c:1245
 msgid "Missing required remote IP address for static key mode."
 msgstr "Gako estatikoaren moduaren urruneko IP helbidea falta da."
 
-#: ../src/nm-openvpn-service.c:1253
+#: ../src/nm-openvpn-service.c:1270
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "'%s' konexio mota ezezaguna."
 
-#: ../src/nm-openvpn-service.c:1364 ../src/nm-openvpn-service.c:1437
-#: ../src/nm-openvpn-service.c:1471
+#: ../src/nm-openvpn-service.c:1388 ../src/nm-openvpn-service.c:1465
+#: ../src/nm-openvpn-service.c:1499
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -847,26 +850,26 @@ msgstr ""
 "Ezin izan da eskaera prozesatu VPN konexioaren ezarpenak baliogabekoak "
 "direlako."
 
-#: ../src/nm-openvpn-service.c:1373
+#: ../src/nm-openvpn-service.c:1397
 msgid ""
 "Could not process the request because the openvpn connection type was "
 "invalid."
 msgstr ""
 "Ezin izan da eskaera prozesatu openvpn konexioaren mota baliogabea delako."
 
-#: ../src/nm-openvpn-service.c:1485
+#: ../src/nm-openvpn-service.c:1513
 msgid "Unhandled pending authentication."
 msgstr "Autentifikatzea falta dena kudeatu gabe."
 
-#: ../src/nm-openvpn-service.c:1626
+#: ../src/nm-openvpn-service.c:1654
 msgid "Don't quit when VPN connection terminates"
 msgstr "Ez irten VPNaren konexioa amaitzean"
 
-#: ../src/nm-openvpn-service.c:1627
+#: ../src/nm-openvpn-service.c:1655
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Gaitu arazketaren erregistro xehea (pasahitzak erakuts ditzake)"
 
-#: ../src/nm-openvpn-service.c:1650
+#: ../src/nm-openvpn-service.c:1678
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
