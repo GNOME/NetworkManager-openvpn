@@ -5,9 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=Network"
-"Manager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2014-10-28 11:06+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-10 12:38+0100\n"
 "PO-Revision-Date: 2014-10-28 22:00+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
@@ -15,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
 
 #: ../auth-dialog/main.c:175
@@ -83,91 +82,107 @@ msgstr "Изаберите уверење издавача овлашћења...
 msgid "Choose an OpenVPN static key..."
 msgstr "Изаберите ОпенВПН статички кључ..."
 
-#: ../properties/auth-helpers.c:459 ../properties/auth-helpers.c:1192
-#: ../properties/auth-helpers.c:1795
+#: ../properties/auth-helpers.c:459 ../properties/auth-helpers.c:1193
+#: ../properties/auth-helpers.c:1796
 msgid "None"
 msgstr "Ништа"
 
-#: ../properties/auth-helpers.c:915
+#: ../properties/auth-helpers.c:916
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "ПЕМ или ПКЦС#12 уверења (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:916
+#: ../properties/auth-helpers.c:917
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "ПЕМ уверења (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:976
+#: ../properties/auth-helpers.c:977
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "ОпенВПН статички кључ (*.key)"
 
-#: ../properties/auth-helpers.c:1108 ../properties/auth-helpers.c:1184
+#: ../properties/auth-helpers.c:1109 ../properties/auth-helpers.c:1185
 msgid "Default"
 msgstr "Основно"
 
-#: ../properties/auth-helpers.c:1194
+#: ../properties/auth-helpers.c:1195
 msgid "RSA MD-4"
 msgstr "РСА-МД-4"
 
-#: ../properties/auth-helpers.c:1196
+#: ../properties/auth-helpers.c:1197
 msgid "MD-5"
 msgstr "МД-5"
 
-#: ../properties/auth-helpers.c:1198
+#: ../properties/auth-helpers.c:1199
 msgid "SHA-1"
 msgstr "СХА-1"
 
-#: ../properties/auth-helpers.c:1200
+#: ../properties/auth-helpers.c:1201
 msgid "SHA-224"
 msgstr "СХА‑224"
 
-#: ../properties/auth-helpers.c:1202
+#: ../properties/auth-helpers.c:1203
 msgid "SHA-256"
 msgstr "СХА‑256"
 
-#: ../properties/auth-helpers.c:1204
+#: ../properties/auth-helpers.c:1205
 msgid "SHA-384"
 msgstr "СХА‑384"
 
-#: ../properties/auth-helpers.c:1206
+#: ../properties/auth-helpers.c:1207
 msgid "SHA-512"
 msgstr "СХА‑512"
 
-#: ../properties/auth-helpers.c:1208
+#: ../properties/auth-helpers.c:1209
 msgid "RIPEMD-160"
 msgstr "РИПЕМД‑160"
 
-#: ../properties/auth-helpers.c:1259
+#: ../properties/auth-helpers.c:1260
 msgid "Server"
 msgstr "Сервер"
 
-#: ../properties/auth-helpers.c:1264
+#: ../properties/auth-helpers.c:1265
 msgid "Client"
 msgstr "Клијент"
 
-#: ../properties/auth-helpers.c:1517 ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/auth-helpers.c:1518 ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
 msgstr "Непотребно"
 
-#: ../properties/auth-helpers.c:1519
+#: ../properties/auth-helpers.c:1520
 msgid "HTTP"
 msgstr "ХТТП"
 
-#: ../properties/auth-helpers.c:1521
+#: ../properties/auth-helpers.c:1522
 msgid "SOCKS"
 msgstr "СОЦКС"
 
-#: ../properties/auth-helpers.c:1698
+#: ../properties/auth-helpers.c:1699
 msgid "TUN"
 msgstr "ТУН"
 
-#: ../properties/auth-helpers.c:1700
+#: ../properties/auth-helpers.c:1701
 msgid "TAP"
 msgstr "ТАП"
 
 #. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1707
+#: ../properties/auth-helpers.c:1708
 msgid "(automatic)"
 msgstr "(самостално)"
+
+#: ../properties/import-export.c:686
+msgid "The file to import wasn't a valid OpenVPN client configuration."
+msgstr ""
+
+#: ../properties/import-export.c:693
+msgid "The file to import wasn't a valid OpenVPN configure (no remote)."
+msgstr ""
+
+#: ../properties/import-export.c:803
+msgid "could not open file for writing"
+msgstr ""
+
+#: ../properties/import-export.c:811
+msgid "connection was incomplete (missing gateway)"
+msgstr ""
 
 #: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
@@ -193,6 +208,24 @@ msgstr "Лозинка са уверењима (ТЛС)"
 msgid "Static Key"
 msgstr "Статички кључ"
 
+#: ../properties/nm-openvpn.c:553
+#, fuzzy
+msgid "could not create openvpn object"
+msgstr "Не могу да пронађем опенвпн извршни."
+
+#: ../properties/nm-openvpn.c:579
+msgid "could not load UI widget"
+msgstr ""
+
+#: ../properties/nm-openvpn.c:670
+msgid "unknown OpenVPN file extension"
+msgstr ""
+
+#: ../properties/nm-openvpn.c:698
+#, fuzzy
+msgid "not a valid OpenVPN configuration file"
+msgstr "Нема опција ВПН подешавања."
+
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid " "
 msgstr " "
@@ -206,19 +239,15 @@ msgid "_Gateway:"
 msgstr "_Мрежни пролаз:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:4
-#| msgid ""
-#| "Remote host name or IP address. You can specify multiple items for "
-#| "redundancy (use commas to separate the entries).\n"
-#| "config: remote"
 msgid ""
 "Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
 "tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
 "delimiters).\n"
 "config: remote"
 msgstr ""
-"Удаљени мрежни пролаз(и), са изборним прикључником и протоколом (нпр. "
-"„ovpn.corp.com:1234:tcp“). Можете да наведете више ставки зарад изобиља ("
-"користите зарезе да раздвојите уносе).\n"
+"Удаљени мрежни пролаз(и), са изборним прикључником и протоколом (нпр. „ovpn."
+"corp.com:1234:tcp“). Можете да наведете више ставки зарад изобиља (користите "
+"зарезе да раздвојите уносе).\n"
 "подешавање: „remote“"
 
 #: ../properties/nm-openvpn-dialog.ui.h:6
@@ -427,9 +456,6 @@ msgid "Explicitly set virtual device type and name (TUN/TAP)."
 msgstr "Изричито подесите врсту виртуелног уређаја и назив (ТУН/ТАП)."
 
 #: ../properties/nm-openvpn-dialog.ui.h:57
-#| msgid ""
-#| "Use TAP virtual network device instead of TUN.\n"
-#| "config: dev tap | tun"
 msgid ""
 "Explicitly set virtual device type (TUN/TAP).\n"
 "config: dev-type tun | tap"
@@ -447,8 +473,8 @@ msgid ""
 "\"tap\").\n"
 "config: dev <name>"
 msgstr ""
-"Користите произвољан назив за ТУН/ТАП виртуелни уређај (уместо основног „tun“"
-" или „tap“).\n"
+"Користите произвољан назив за ТУН/ТАП виртуелни уређај (уместо основног "
+"„tun“ или „tap“).\n"
 "подешавање: dev „<назив>“"
 
 #: ../properties/nm-openvpn-dialog.ui.h:62
@@ -721,28 +747,28 @@ msgstr "_Прикажи лозинку"
 msgid "Proxies"
 msgstr "Посредници"
 
-#: ../src/nm-openvpn-service.c:203
+#: ../src/nm-openvpn-service.c:204
 #, c-format
 msgid "invalid address '%s'"
 msgstr "неисправна адреса „%s“"
 
-#: ../src/nm-openvpn-service.c:215
+#: ../src/nm-openvpn-service.c:216
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
 msgstr "неисправно својство целог броја „%s“ или је ван опсега [%d —> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:226
+#: ../src/nm-openvpn-service.c:227
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
 msgstr "неисправно логичко својство „%s“ (није „да“ или „не“)"
 
-#: ../src/nm-openvpn-service.c:233
+#: ../src/nm-openvpn-service.c:234
 #, c-format
 msgid "unhandled property '%s' type %s"
 msgstr "неруковано својство „%s“ врсте %s"
 
-#: ../src/nm-openvpn-service.c:244
+#: ../src/nm-openvpn-service.c:245
 #, c-format
 msgid "property '%s' invalid or not supported"
 msgstr "својство „%s“ је неисправно или није подржано"
@@ -779,94 +805,93 @@ msgstr "Потребна је лозинка ХТТП посредника."
 msgid "An HTTP Proxy username and password are required."
 msgstr "Потребни су корисничко име и лозинка ХТТП посредника."
 
-#: ../src/nm-openvpn-service.c:892
+#: ../src/nm-openvpn-service.c:891
 msgid "Could not find the openvpn binary."
 msgstr "Не могу да пронађем опенвпн извршни."
 
-#: ../src/nm-openvpn-service.c:903
+#: ../src/nm-openvpn-service.c:901
 msgid "Invalid HMAC auth."
 msgstr "Неисправно ХМАЦ потврђивање идентитета."
 
-#: ../src/nm-openvpn-service.c:914 ../src/nm-openvpn-service.c:1473
+#: ../src/nm-openvpn-service.c:911 ../src/nm-openvpn-service.c:1468
 msgid "Invalid connection type."
 msgstr "Неисправна врста везе."
 
-#: ../src/nm-openvpn-service.c:949 ../src/nm-openvpn-service.c:959
+#: ../src/nm-openvpn-service.c:946 ../src/nm-openvpn-service.c:956
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Неисправан број прикључника „%s“."
 
-#: ../src/nm-openvpn-service.c:974
+#: ../src/nm-openvpn-service.c:971
 #, c-format
-#| msgid "Invalid proxy type '%s'."
 msgid "Invalid proto '%s'."
 msgstr "Неисправан протокол „%s“."
 
-#: ../src/nm-openvpn-service.c:1015
+#: ../src/nm-openvpn-service.c:1012
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Неисправна врста посредника „%s“."
 
-#: ../src/nm-openvpn-service.c:1068
+#: ../src/nm-openvpn-service.c:1065
 #, c-format
 msgid "Invalid keysize '%s'."
 msgstr "Неисправна величина кључа „%s“."
 
-#: ../src/nm-openvpn-service.c:1115
+#: ../src/nm-openvpn-service.c:1112
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Неисправан број секунди поновног преговарања „%s“."
 
-#: ../src/nm-openvpn-service.c:1139
+#: ../src/nm-openvpn-service.c:1136
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Неисправна ТУН МТУ величина „%s“."
 
-#: ../src/nm-openvpn-service.c:1154
+#: ../src/nm-openvpn-service.c:1151
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Неисправна величина одломка „%s“."
 
-#: ../src/nm-openvpn-service.c:1231
+#: ../src/nm-openvpn-service.c:1227
 msgid "Missing required local IP address for static key mode."
 msgstr "Недостаје захтевана месна ИП адреса за режим статичког кључа."
 
-#: ../src/nm-openvpn-service.c:1244
+#: ../src/nm-openvpn-service.c:1239
 msgid "Missing required remote IP address for static key mode."
 msgstr "Недостаје захтевана удаљена ИП адреса за режим статичког кључа."
 
-#: ../src/nm-openvpn-service.c:1269
+#: ../src/nm-openvpn-service.c:1264
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Непозната врста везе „%s“."
 
-#: ../src/nm-openvpn-service.c:1387 ../src/nm-openvpn-service.c:1464
-#: ../src/nm-openvpn-service.c:1498
+#: ../src/nm-openvpn-service.c:1382 ../src/nm-openvpn-service.c:1459
+#: ../src/nm-openvpn-service.c:1493
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr "Не могу да обрадим захтев због неисправних подешавања ВПН везе."
 
-#: ../src/nm-openvpn-service.c:1396
+#: ../src/nm-openvpn-service.c:1391
 msgid ""
 "Could not process the request because the openvpn connection type was "
 "invalid."
 msgstr "Не могу да обрадим захтев због неисправне врсте везе опенвпн-а."
 
-#: ../src/nm-openvpn-service.c:1512
+#: ../src/nm-openvpn-service.c:1507
 msgid "Unhandled pending authentication."
 msgstr "Непознато потврђивање идентитета на чекању."
 
-#: ../src/nm-openvpn-service.c:1653
+#: ../src/nm-openvpn-service.c:1648
 msgid "Don't quit when VPN connection terminates"
 msgstr "Не прекида када се завршава ВПН веза"
 
-#: ../src/nm-openvpn-service.c:1654
+#: ../src/nm-openvpn-service.c:1649
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 "Укључује опширно записивање зарад исправљања грешака (може да изложи лозинке)"
 
-#: ../src/nm-openvpn-service.c:1677
+#: ../src/nm-openvpn-service.c:1672
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""

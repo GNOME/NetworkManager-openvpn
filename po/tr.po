@@ -6,9 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=Network"
-"Manager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2014-12-26 11:12+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-10 12:38+0100\n"
 "PO-Revision-Date: 2014-12-27 20:08+0000\n"
 "Last-Translator: Necdet Yücel <necdetyucel@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -44,7 +43,8 @@ msgstr "Sertifika paro_lası:"
 #: ../auth-dialog/main.c:464
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
-msgstr "'%s' Sanal Özel Ağına erişmek için kimlik kanıtlaması yapmanız gerekir."
+msgstr ""
+"'%s' Sanal Özel Ağına erişmek için kimlik kanıtlaması yapmanız gerekir."
 
 #: ../nm-openvpn.desktop.in.h:1
 msgid "VPN Connection Manager (OpenVPN)"
@@ -82,91 +82,107 @@ msgstr "Bir Sertifika Yetkilisi sertifikası seç..."
 msgid "Choose an OpenVPN static key..."
 msgstr "Bir OpenVPN statik anahtarı seçin..."
 
-#: ../properties/auth-helpers.c:459 ../properties/auth-helpers.c:1192
-#: ../properties/auth-helpers.c:1795
+#: ../properties/auth-helpers.c:459 ../properties/auth-helpers.c:1193
+#: ../properties/auth-helpers.c:1796
 msgid "None"
 msgstr "Hiçbiri"
 
-#: ../properties/auth-helpers.c:915
+#: ../properties/auth-helpers.c:916
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM veya PKCS#12 sertifikaları (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:916
+#: ../properties/auth-helpers.c:917
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM sertifikaları (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:976
+#: ../properties/auth-helpers.c:977
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN Statik Anahtarları (*.key)"
 
-#: ../properties/auth-helpers.c:1108 ../properties/auth-helpers.c:1184
+#: ../properties/auth-helpers.c:1109 ../properties/auth-helpers.c:1185
 msgid "Default"
 msgstr "Varsayılan"
 
-#: ../properties/auth-helpers.c:1194
+#: ../properties/auth-helpers.c:1195
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1196
+#: ../properties/auth-helpers.c:1197
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1198
+#: ../properties/auth-helpers.c:1199
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1200
+#: ../properties/auth-helpers.c:1201
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1202
+#: ../properties/auth-helpers.c:1203
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1204
+#: ../properties/auth-helpers.c:1205
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1206
+#: ../properties/auth-helpers.c:1207
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1208
+#: ../properties/auth-helpers.c:1209
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1259
+#: ../properties/auth-helpers.c:1260
 msgid "Server"
 msgstr "Sunucu"
 
-#: ../properties/auth-helpers.c:1264
+#: ../properties/auth-helpers.c:1265
 msgid "Client"
 msgstr "İstemci"
 
-#: ../properties/auth-helpers.c:1517 ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/auth-helpers.c:1518 ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
 msgstr "Gerekli değil"
 
-#: ../properties/auth-helpers.c:1519
+#: ../properties/auth-helpers.c:1520
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1521
+#: ../properties/auth-helpers.c:1522
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/auth-helpers.c:1698
+#: ../properties/auth-helpers.c:1699
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/auth-helpers.c:1700
+#: ../properties/auth-helpers.c:1701
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1707
+#: ../properties/auth-helpers.c:1708
 msgid "(automatic)"
 msgstr "(otomatik)"
+
+#: ../properties/import-export.c:686
+msgid "The file to import wasn't a valid OpenVPN client configuration."
+msgstr ""
+
+#: ../properties/import-export.c:693
+msgid "The file to import wasn't a valid OpenVPN configure (no remote)."
+msgstr ""
+
+#: ../properties/import-export.c:803
+msgid "could not open file for writing"
+msgstr ""
+
+#: ../properties/import-export.c:811
+msgid "connection was incomplete (missing gateway)"
+msgstr ""
 
 #: ../properties/nm-openvpn.c:52
 msgid "OpenVPN"
@@ -191,6 +207,24 @@ msgstr "Sertifika ile Parola (TLS)"
 #: ../properties/nm-openvpn.c:405
 msgid "Static Key"
 msgstr "Sabit Anahtar"
+
+#: ../properties/nm-openvpn.c:553
+#, fuzzy
+msgid "could not create openvpn object"
+msgstr "openvpn uygulaması bulunamıyor."
+
+#: ../properties/nm-openvpn.c:579
+msgid "could not load UI widget"
+msgstr ""
+
+#: ../properties/nm-openvpn.c:670
+msgid "unknown OpenVPN file extension"
+msgstr ""
+
+#: ../properties/nm-openvpn.c:698
+#, fuzzy
+msgid "not a valid OpenVPN configuration file"
+msgstr "VPN yapılandırma seçeneği bulunamadı."
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid " "
@@ -439,8 +473,8 @@ msgid ""
 "\"tap\").\n"
 "config: dev <name>"
 msgstr ""
-"Sanal TUN/TAP aygıtı için özel isim kullan (\"tun\" veya \"tap\" haricinde)."
-"\n"
+"Sanal TUN/TAP aygıtı için özel isim kullan (\"tun\" veya \"tap\" "
+"haricinde).\n"
 "yapılandırma: dev <isim>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:62
@@ -529,8 +563,8 @@ msgid ""
 "is SHA1.\n"
 "config: auth"
 msgstr ""
-"HMAC ileti özeti algoritmasını kullanarak paketlerin kimlik doğrulaması "
-"yap.Varsayılan SHA1'dir.\n"
+"HMAC ileti özeti algoritmasını kullanarak paketlerin kimlik doğrulaması yap."
+"Varsayılan SHA1'dir.\n"
 "yapılandırma: auth"
 
 #: ../properties/nm-openvpn-dialog.ui.h:82
@@ -737,126 +771,126 @@ msgstr "tanınmayan özellik '%s' tür %s"
 msgid "property '%s' invalid or not supported"
 msgstr "'%s' özelliği geçersiz veya desteklenmiyor"
 
-#: ../src/nm-openvpn-service.c:262
+#: ../src/nm-openvpn-service.c:261
 msgid "No VPN configuration options."
 msgstr "VPN yapılandırma seçeneği bulunamadı."
 
-#: ../src/nm-openvpn-service.c:431
+#: ../src/nm-openvpn-service.c:430
 msgid "A username is required."
 msgstr "Bir kullanıcı adı gerekiyor."
 
-#: ../src/nm-openvpn-service.c:435
+#: ../src/nm-openvpn-service.c:434
 msgid "A password is required."
 msgstr "Bir parola gerekiyor."
 
-#: ../src/nm-openvpn-service.c:438
+#: ../src/nm-openvpn-service.c:437
 msgid "A username and password are required."
 msgstr "Bir kullanıcı adı ve parola gerekiyor."
 
-#: ../src/nm-openvpn-service.c:458
+#: ../src/nm-openvpn-service.c:457
 msgid "A private key password is required."
 msgstr "Bir özel anahtar parolası gerekli."
 
-#: ../src/nm-openvpn-service.c:471
+#: ../src/nm-openvpn-service.c:470
 msgid "An HTTP Proxy username is required."
 msgstr "Bir HTTP Vekil Sunucu kullanıcı adı gerekiyor."
 
-#: ../src/nm-openvpn-service.c:475
+#: ../src/nm-openvpn-service.c:474
 msgid "An HTTP Proxy password is required."
 msgstr "Bir HTTP Vekil Sunucu kullanıcı parolası gerekiyor."
 
-#: ../src/nm-openvpn-service.c:478
+#: ../src/nm-openvpn-service.c:477
 msgid "An HTTP Proxy username and password are required."
 msgstr "Bir HTTP Vekil Sunucu kullanıcı adı ve parolası gerekiyor."
 
-#: ../src/nm-openvpn-service.c:893
+#: ../src/nm-openvpn-service.c:891
 msgid "Could not find the openvpn binary."
 msgstr "openvpn uygulaması bulunamıyor."
 
-#: ../src/nm-openvpn-service.c:904
+#: ../src/nm-openvpn-service.c:901
 msgid "Invalid HMAC auth."
 msgstr "Geçersiz HMAC doğrulaması."
 
-#: ../src/nm-openvpn-service.c:915 ../src/nm-openvpn-service.c:1474
+#: ../src/nm-openvpn-service.c:911 ../src/nm-openvpn-service.c:1468
 msgid "Invalid connection type."
 msgstr "Geçersiz bağlantı türü"
 
-#: ../src/nm-openvpn-service.c:950 ../src/nm-openvpn-service.c:960
+#: ../src/nm-openvpn-service.c:946 ../src/nm-openvpn-service.c:956
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Geçersiz bağlantı noktası '%s'."
 
-#: ../src/nm-openvpn-service.c:975
+#: ../src/nm-openvpn-service.c:971
 #, c-format
 msgid "Invalid proto '%s'."
 msgstr "Geçersiz proto '%s'."
 
-#: ../src/nm-openvpn-service.c:1016
+#: ../src/nm-openvpn-service.c:1012
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Geçersiz vekil sunucu türü '%s'."
 
-#: ../src/nm-openvpn-service.c:1069
+#: ../src/nm-openvpn-service.c:1065
 #, c-format
 msgid "Invalid keysize '%s'."
 msgstr "Geçersiz anahtar boyutu '%s'."
 
-#: ../src/nm-openvpn-service.c:1116
+#: ../src/nm-openvpn-service.c:1112
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Geçersiz reneg süresi '%s'."
 
-#: ../src/nm-openvpn-service.c:1140
+#: ../src/nm-openvpn-service.c:1136
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Geçersiz TUN MTU boyutu '%s'."
 
-#: ../src/nm-openvpn-service.c:1155
+#: ../src/nm-openvpn-service.c:1151
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Geçersiz parça boyutu '%s'."
 
-#: ../src/nm-openvpn-service.c:1232
+#: ../src/nm-openvpn-service.c:1227
 msgid "Missing required local IP address for static key mode."
 msgstr "Statik anahtar kipi için gerekli yerel IP adresi eksik."
 
-#: ../src/nm-openvpn-service.c:1245
+#: ../src/nm-openvpn-service.c:1239
 msgid "Missing required remote IP address for static key mode."
 msgstr "Statik anahtar kipi için gerekli uzak IP adresi eksik."
 
-#: ../src/nm-openvpn-service.c:1270
+#: ../src/nm-openvpn-service.c:1264
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Bilinmeyen bağlantı türü '%s'."
 
-#: ../src/nm-openvpn-service.c:1388 ../src/nm-openvpn-service.c:1465
-#: ../src/nm-openvpn-service.c:1499
+#: ../src/nm-openvpn-service.c:1382 ../src/nm-openvpn-service.c:1459
+#: ../src/nm-openvpn-service.c:1493
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr "VPN bağlantı ayarları geçersiz olduğundan istek işlenemedi."
 
-#: ../src/nm-openvpn-service.c:1397
+#: ../src/nm-openvpn-service.c:1391
 msgid ""
 "Could not process the request because the openvpn connection type was "
 "invalid."
 msgstr "Openvpn bağlantı türü geçersiz olduğundan istek işlenemedi."
 
-#: ../src/nm-openvpn-service.c:1513
+#: ../src/nm-openvpn-service.c:1507
 msgid "Unhandled pending authentication."
 msgstr "İşlenmemiş bekleyen kimlik doğrulaması."
 
-#: ../src/nm-openvpn-service.c:1654
+#: ../src/nm-openvpn-service.c:1648
 msgid "Don't quit when VPN connection terminates"
 msgstr "VPN bağlantısı sonlandığında çıkma"
 
-#: ../src/nm-openvpn-service.c:1655
+#: ../src/nm-openvpn-service.c:1649
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 "Ayrıntılı hata ayıklama günlüklemesini etkinleştir (parolaları görünür "
 "yapabilir)"
 
-#: ../src/nm-openvpn-service.c:1678
+#: ../src/nm-openvpn-service.c:1672
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr "nm-openvpn-service, NetworkManager'a tümleşik OpenVPN yeteneği sağlar."
