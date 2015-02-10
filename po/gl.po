@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-10 12:38+0100\n"
+"POT-Creation-Date: 2015-02-10 12:39+0100\n"
 "PO-Revision-Date: 2013-09-23 03:06+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -369,21 +369,17 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:35
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
-"Enderezo para o modo de cifrado de chave estática (non TLS).opción: static "
-"<file> [direction]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:37
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>Se se utiliza a dirección da chave, esta debe ser oposta á da utilizada "
+"Enderezo para o modo de cifrado de chave estática (non TLS).opción: "
+"Se se utiliza a dirección da chave, esta debe ser oposta á da utilizada "
 "no peer VPN. Por exemplo, se o peer usa '1', esta conexión debe utilizar "
 "'0'. Se non está seguro de que valor utilizar, contacte co seu administrador "
-"do sistema.</i>"
+"do sistema.\n"
+"static <file> [direction]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:38
 msgid "Type:"
@@ -655,20 +651,27 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:100
 msgid ""
 "Direction parameter for static key mode.\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
 "Parámetro de dirección para o modo de chave estática.\n"
+"Se se utiliza a dirección da chave, esta debe ser oposta á da utilizada "
+"no peer VPN. Por exemplo, se o peer usa '1', esta conexión debe utilizar "
+"'0'. Se non está seguro de que valor utilizar, contacte co seu administrador "
+"do sistema.\n"
 "opción: tls-auth <file> [direction]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "Key _File:"
 msgstr "Ficheiro de chave:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid "TLS Authentication"
 msgstr "Autenticación TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -676,11 +679,11 @@ msgstr ""
 "Tipo de proxy: HTTP ou Socks..\n"
 "opción: http-proxy ou socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Proxy _Type:"
 msgstr "Tipo de proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -688,11 +691,11 @@ msgstr ""
 "<i>Seleccione esta opción se a súa organización lle obriga a usar un "
 "servidor proxy para acceder a Internet.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid "Server _Address:"
 msgstr "Enderezo do servidor:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -700,11 +703,11 @@ msgstr ""
 "Conectar a un equipo remoto a través dun proxy con este enderezo.\n"
 "opción: http-proxy ou socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid "_Port:"
 msgstr "Porto:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -712,11 +715,11 @@ msgstr ""
 "Conectar a un equipo remoto a través dun proxy con este porto.\n"
 "opción: http-proxy ou socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Reintentar indefinidamente cando se produzan erros"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -725,28 +728,28 @@ msgstr ""
 "SIGUSR1.\n"
 "opción: http-proxy-retry ou socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Proxy _Username:"
 msgstr "Usuario do proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid "Proxy Passwor_d:"
 msgstr "Contrasinal do proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Nome de usuario do proxy HTTP/Socks pasado a OpenVPN cando se solicita."
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr "Contrasinal do proxy HTTP/Socks pasada a OpenVPN cando se solicita."
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:122
 msgid "_Show password"
 msgstr "Mostrar contrasinal"
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:123
 msgid "Proxies"
 msgstr "Proxies"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-10 12:38+0100\n"
+"POT-Creation-Date: 2015-02-10 12:39+0100\n"
 "PO-Revision-Date: 2013-09-29 21:05+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
@@ -369,21 +369,17 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:35
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
 "Statinio rakto šifravimo (ne TLS) veiksenos kryptis.\n"
-"konfig: static <failas> [kryptis]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:37
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>Jeigu naudojama rakto kryptis, ji turi būti priešinga naudojamai VPN "
+"Jeigu naudojama rakto kryptis, ji turi būti priešinga naudojamai VPN "
 "lygiarangyje. Pavyzdžiui, jeigu lygiarangyje naudojama „1“, šiam "
 "prisijungimui turi būti naudojama „0“. Jeigu nežinote, kokią reikšmę "
-"naudoti, susisiekite su savo sistemos administratoriumi.</i>"
+"naudoti, susisiekite su savo sistemos administratoriumi.\n"
+"konfig: static <failas> [kryptis]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:38
 msgid "Type:"
@@ -652,20 +648,27 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:100
 msgid ""
 "Direction parameter for static key mode.\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
 "Krypties parametras statinio rakto veiksenai.\n"
+"Jeigu naudojama rakto kryptis, ji turi būti priešinga naudojamai VPN "
+"lygiarangyje. Pavyzdžiui, jeigu lygiarangyje naudojama „1“, šiam "
+"prisijungimui turi būti naudojama „0“. Jeigu nežinote, kokią reikšmę "
+"naudoti, susisiekite su savo sistemos administratoriumi.\n"
 "konfig: tls-auth <failas> [kryptis]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "Key _File:"
 msgstr "Rakto failas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid "TLS Authentication"
 msgstr "TLS tapatybės nustatymas"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -673,11 +676,11 @@ msgstr ""
 "Tarpinio serverio tipas: HTTP arba Socks.\n"
 "konfig: http-proxy arba socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Proxy _Type:"
 msgstr "Tarpinio serverio tipas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -685,11 +688,11 @@ msgstr ""
 "<i>Pasirinkite šią parinktį, jei jūsų organizacija turi prieigą prie "
 "interneto per tarpinį serverį.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid "Server _Address:"
 msgstr "Serverio adresas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -697,11 +700,11 @@ msgstr ""
 "Jungtis prie nutolusio serverio per tarpinį serverį su šiuo adresu.\n"
 "konfig: http-proxy arba socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid "_Port:"
 msgstr "Prievadas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -709,11 +712,11 @@ msgstr ""
 "Jungtis prie nutolusio serverio per tarpinį serverį su šiuo prievadu.\n"
 "konfig: http-proxy arba socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Mėginti dar kartą neribotą laiką, kai įvyksta klaidų"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -722,31 +725,31 @@ msgstr ""
 "atstatymą.\n"
 "konfig: http-proxy arba socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Proxy _Username:"
 msgstr "Tarpinio serverio naudotojo vardas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid "Proxy Passwor_d:"
 msgstr "Tarpinio serverio slaptažodis:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "HTTP/Socks tarpinio serverio naudotojo vardas, perduodamas OpenVPN, kai jo "
 "prašoma."
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "HTTP/Socks tarpinio serverio slaptažodis, perduodamas OpenVPN, kai jo "
 "prašoma."
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:122
 msgid "_Show password"
 msgstr "Rodyti slaptažodį"
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:123
 msgid "Proxies"
 msgstr "Tarpiniai serveriai"
 

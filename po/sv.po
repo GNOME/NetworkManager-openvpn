@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-10 12:38+0100\n"
+"POT-Creation-Date: 2015-02-10 12:39+0100\n"
 "PO-Revision-Date: 2014-09-12 00:31+0100\n"
 "Last-Translator: Josef Andersson <josef.andersson@fripost.org>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -368,21 +368,17 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:35
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
 "Rikting för statisk nyckelkrypteringsläge (ej-TLS).\n"
-"config: static <fil> [direction]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:37
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>Om nyckelriktning används så måste den vara motsatsen till den som "
+"Om nyckelriktning används så måste den vara motsatsen till den som "
 "används på VPN-parten.  Till exempel om parten använder ”1” måste denna "
 "anslutning vara ”0”.  Om du är osäker vilket värde du ska använda kan du "
-"kontakta din systemadministratör.</i>"
+"kontakta din systemadministratör.\n"
+"config: static <fil> [direction]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:38
 msgid "Type:"
@@ -653,20 +649,27 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:100
 msgid ""
 "Direction parameter for static key mode.\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
 "Riktningsparameter för statiskt nyckelläge.\n"
+"Om nyckelriktning används så måste den vara motsatsen till den som "
+"används på VPN-parten.  Till exempel om parten använder ”1” måste denna "
+"anslutning vara ”0”.  Om du är osäker vilket värde du ska använda kan du "
+"kontakta din systemadministratör.\n"
 "config: tls-auth <fil> [direction]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "Key _File:"
 msgstr "Nyckelfil:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid "TLS Authentication"
 msgstr "TLS-autentisering"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -674,11 +677,11 @@ msgstr ""
 "Proxytyp: HTTP eller Socks.\n"
 "config: http-proxy eller socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Proxy _Type:"
 msgstr "Proxytyp:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -686,11 +689,11 @@ msgstr ""
 "<i>Välj detta alternativ om din organisation kräver att en proxyserver "
 "används för att komma åt Internet.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid "Server _Address:"
 msgstr "Serveradress:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -698,11 +701,11 @@ msgstr ""
 "Anslut till fjärrvärd genom en proxy med denna adress.\n"
 "config: http-proxy eller socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid "_Port:"
 msgstr "Port:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -710,11 +713,11 @@ msgstr ""
 "Anslut till fjärrvärd genom en proxy med denna port.\n"
 "config: http-proxy eller socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Försök oändligt antal gånger när fel uppstår"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -723,29 +726,29 @@ msgstr ""
 "återställning.\n"
 "config: http-proxy-retry eller socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Proxy _Username:"
 msgstr "Användarnamn för proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid "Proxy Passwor_d:"
 msgstr "Lösenord för proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Användarnamn för HTTP/Socks-proxy skickas till OpenVPN när det efterfrågas."
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "Lösenord för HTTP/Socks-proxy skickas till OpenVPN när det efterfrågas."
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:122
 msgid "_Show password"
 msgstr "Visa lösenord"
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:123
 msgid "Proxies"
 msgstr "Proxyservrar"
 

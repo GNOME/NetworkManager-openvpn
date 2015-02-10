@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-10 12:38+0100\n"
+"POT-Creation-Date: 2015-02-10 12:39+0100\n"
 "PO-Revision-Date: 2014-10-28 22:00+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
@@ -367,21 +367,17 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:35
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
 "Usmerenje za režim šifrovanja statičkog ključa (ne-TLS).\n"
-"podešavanje: „static <datoteka> [usmerenje]“"
-
-#: ../properties/nm-openvpn-dialog.ui.h:37
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>Ako koristite usmerenje ključa, mora biti suprotno od onog korišćenog na "
+"Ako koristite usmerenje ključa, mora biti suprotno od onog korišćenog na "
 "VPN parnjaku.  Na primer, ako parnjak koristi „1“, ova veza mora da koristi "
 "„0“.  Ako niste sigurni koju vrednost da koristite, posavejtujte se sa "
-"administratorom sistema.</i>"
+"administratorom sistema.\n"
+"podešavanje: „static <datoteka> [usmerenje]“"
 
 #: ../properties/nm-openvpn-dialog.ui.h:38
 msgid "Type:"
@@ -652,20 +648,27 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:100
 msgid ""
 "Direction parameter for static key mode.\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
 "Parametri usmerenja za režim statičkog ključa.\n"
+"Ako koristite usmerenje ključa, mora biti suprotno od onog korišćenog na "
+"VPN parnjaku.  Na primer, ako parnjak koristi „1“, ova veza mora da koristi "
+"„0“.  Ako niste sigurni koju vrednost da koristite, posavejtujte se sa "
+"administratorom sistema.\n"
 "podešavanje: „tls-auth <datoteka> [usmerenje]“"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "Key _File:"
 msgstr "_Datoteka ključa:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid "TLS Authentication"
 msgstr "TLS potvrđivanje identiteta"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -673,11 +676,11 @@ msgstr ""
 "Vrsta posrednika: HTTP ili Socks.\n"
 "podešavanje: „http-proxy“ ili „socks-proxy“"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Proxy _Type:"
 msgstr "Vrsta _posrednika:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -685,11 +688,11 @@ msgstr ""
 "<i>Izaberite ovu opciju ako vaše udruženje zahteva upotrebu posredničkog "
 "servera za pristupanje Internetu.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid "Server _Address:"
 msgstr "_Adresa servera:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -697,11 +700,11 @@ msgstr ""
 "Povežite se na udaljenog domaćina putem posrednika sa ovom adresom.\n"
 "podešavanje: „http-proxy“ ili „socks-proxy“"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid "_Port:"
 msgstr "_Priključnik:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -709,11 +712,11 @@ msgstr ""
 "Povežite se na udaljenog domaćina putem posrednika sa ovim priključnikom.\n"
 "podešavanje: „http-proxy“ ili „socks-proxy“"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Neprekidno pokušavaj kad dođe do grešaka"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -722,28 +725,28 @@ msgstr ""
 "postavljanje.\n"
 "podešavanje: „http-proxy-retry“ ili „socks-proxy-retry“"
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Proxy _Username:"
 msgstr "Korisničko _ime za posrednika:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid "Proxy Passwor_d:"
 msgstr "Lozinka _posrednika:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Korisničko ime HTTP/Socks posrednika prosleđeno OpenVPN-u kada je zatraženo."
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr "Lozinka HTTP/Socks posrednika prosleđena OpenVPN-u kada je zatraženo."
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:122
 msgid "_Show password"
 msgstr "_Prikaži lozinku"
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:123
 msgid "Proxies"
 msgstr "Posrednici"
 
