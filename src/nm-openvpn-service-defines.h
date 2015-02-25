@@ -90,4 +90,9 @@
 #define NM_OPENVPN_REM_CERT_TLS_CLIENT "client"
 #define NM_OPENVPN_REM_CERT_TLS_SERVER "server"
 
+/* User name and group to run nm-openvpn-service under */
+#define NM_OPENVPN_USER   "nm-openvpn"
+#define NM_OPENVPN_GROUP  "nm-openvpn"
+#define NM_OPENVPN_CHROOT LOCALSTATEDIR "/lib/openvpn/chroot"
+
 #endif /* NM_OPENVPN_SERVICE_DEFINES_H */
