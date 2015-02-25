@@ -47,6 +47,8 @@
 #include <ctype.h>
 #include <errno.h>
 #include <locale.h>
+#include <pwd.h>
+#include <grp.h>
 
 #include <NetworkManager.h>
 #include <NetworkManagerVPN.h>
@@ -875,6 +877,63 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 	io_data->proxy_password = tmp ? g_strdup (tmp) : NULL;
 }
 
+#define MAX_GROUPS 128
+static gboolean
+is_dir_writable (const char *dir, const char *user)
+{
+	struct stat sb;
+	struct passwd *pw;
+
+	if (stat (dir, &sb) == -1)
+		return FALSE;
+	pw = getpwnam (user);
+	if (!pw)
+		return FALSE;
+
+	if (pw->pw_uid == 0)
+		return TRUE;
+
+	if (sb.st_mode & S_IWOTH)
+		return TRUE;
+	else if (sb.st_mode & S_IWGRP) {
+		/* Group has write access. Is user in that group? */
+		int i, ngroups = MAX_GROUPS;
+		gid_t groups[MAX_GROUPS];
+
+		getgrouplist (user, pw->pw_gid, groups, &ngroups);
+		for (i = 0; i < ngroups && i < MAX_GROUPS; i++) {
+			if (groups[i] == sb.st_gid)
+				return TRUE;
+		}
+	} else if (sb.st_mode & S_IWUSR) {
+		/* The owner has write access. Does the user own the file? */
+		if (pw->pw_uid == sb.st_uid)
+			return TRUE;
+	}
+	return FALSE;
+}
+
+/* Check existence of 'tmp' directory inside @chdir
+ * and write access in @chdir and @chdir/tmp for @user.
+ */
+static gboolean
+check_chroot_dir_usability (const char *chdir, const char *user)
+{
+	char *tmp_dir;
+	gboolean b1, b2;
+
+	tmp_dir = g_strdup_printf ("%s/tmp", chdir);
+	if (!g_file_test (tmp_dir, G_FILE_TEST_IS_DIR)) {
+		g_free (tmp_dir);
+		return FALSE;
+	}
+
+	b1 = is_dir_writable (chdir, user);
+	b2 = is_dir_writable (tmp_dir, user);
+	g_free (tmp_dir);
+	return b1 && b2;
+}
+
 static gboolean
 nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  NMSettingVPN *s_vpn,
@@ -890,6 +949,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	gboolean dev_type_is_tap;
 	char *stmp;
 	const char *defport, *proto_tcp;
+	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
 
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
@@ -1291,6 +1351,54 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		             connection_type);
 		free_openvpn_args (args);
 		return FALSE;
+	}
+
+	/* Allow openvpn to be run as a specified user:group and drop privileges. */
+	nm_openvpn_user = getenv ("NM_OPENVPN_USER");
+	nm_openvpn_group = getenv ("NM_OPENVPN_GROUP");
+	nm_openvpn_chroot = getenv ("NM_OPENVPN_CHROOT");
+	if (!nm_openvpn_user)
+		nm_openvpn_user = NM_OPENVPN_USER;
+	if (!nm_openvpn_group)
+		nm_openvpn_group = NM_OPENVPN_GROUP;
+	if (!nm_openvpn_chroot)
+		nm_openvpn_chroot = NM_OPENVPN_CHROOT;
+
+	if (*nm_openvpn_user) {
+		if (getpwnam (nm_openvpn_user)) {
+			add_openvpn_arg (args, "--user");
+			add_openvpn_arg (args, nm_openvpn_user);
+		} else {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("User '%s' not found, check NM_OPENVPN_USER."),
+			             nm_openvpn_user);
+			free_openvpn_args (args);
+			return FALSE;
+		}
+	}
+	if (*nm_openvpn_group) {
+		if (getgrnam (nm_openvpn_group)) {
+			add_openvpn_arg (args, "--group");
+			add_openvpn_arg (args, nm_openvpn_group);
+		} else {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("Group '%s' not found, check NM_OPENVPN_GROUP."),
+			             nm_openvpn_group);
+			free_openvpn_args (args);
+			return FALSE;
+		}
+	}
+	if (*nm_openvpn_chroot) {
+		if (check_chroot_dir_usability (nm_openvpn_chroot, nm_openvpn_user)) {
+			add_openvpn_arg (args, "--chroot");
+			add_openvpn_arg (args, nm_openvpn_chroot);
+		} else
+			g_warning ("Directory '%s' not usable for chroot by '%s', openvpn will not be chrooted.",
+			           nm_openvpn_chroot, nm_openvpn_user);
 	}
 
 	g_ptr_array_add (args, NULL);
