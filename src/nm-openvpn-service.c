@@ -1036,6 +1036,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		dev_type_is_tap = g_str_has_prefix (tmp, "tap");
 	} else if (tmp2) {
 		add_openvpn_arg (args, tmp2);
+		dev_type_is_tap = FALSE; /* will be reset below (avoid maybe-uninitialized warning) */
 	} else if (tmp3 && !strcmp (tmp3, "yes")) {
 		add_openvpn_arg (args, "tap");
 		dev_type_is_tap = TRUE;
@@ -1048,7 +1049,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (tmp2) {
 		add_openvpn_arg (args, "--dev-type");
 		add_openvpn_arg (args, tmp2);
-		dev_type_is_tap = (g_strcmp0 (tmp2, "tap") == 0);
+		dev_type_is_tap = (strcmp (tmp2, "tap") == 0);
 	}
 
 	/* Cipher */
