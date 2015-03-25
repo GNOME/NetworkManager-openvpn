@@ -49,7 +49,7 @@
 
 #define OPENVPN_PLUGIN_NAME    _("OpenVPN")
 #define OPENVPN_PLUGIN_DESC    _("Compatible with the OpenVPN server.")
-#define OPENVPN_PLUGIN_SERVICE NM_DBUS_SERVICE_OPENVPN 
+#define OPENVPN_PLUGIN_SERVICE NM_DBUS_SERVICE_OPENVPN
 
 
 /************** plugin class **************/
@@ -57,16 +57,16 @@
 static void openvpn_plugin_ui_interface_init (NMVpnPluginUiInterface *iface_class);
 
 G_DEFINE_TYPE_EXTENDED (OpenvpnPluginUi, openvpn_plugin_ui, G_TYPE_OBJECT, 0,
-						G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_PLUGIN_UI_INTERFACE,
-											   openvpn_plugin_ui_interface_init))
+                        G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_PLUGIN_UI_INTERFACE,
+                                               openvpn_plugin_ui_interface_init))
 
 /************** UI widget class **************/
 
 static void openvpn_plugin_ui_widget_interface_init (NMVpnPluginUiWidgetInterface *iface_class);
 
 G_DEFINE_TYPE_EXTENDED (OpenvpnPluginUiWidget, openvpn_plugin_ui_widget, G_TYPE_OBJECT, 0,
-						G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_PLUGIN_UI_WIDGET_INTERFACE,
-											   openvpn_plugin_ui_widget_interface_init))
+                        G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_PLUGIN_UI_WIDGET_INTERFACE,
+                                               openvpn_plugin_ui_widget_interface_init))
 
 #define OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidgetPrivate))
 
@@ -774,16 +774,16 @@ openvpn_plugin_ui_class_init (OpenvpnPluginUiClass *req_class)
 	object_class->get_property = get_property;
 
 	g_object_class_override_property (object_class,
-									  NM_VPN_PLUGIN_UI_INTERFACE_PROP_NAME,
-									  NM_VPN_PLUGIN_UI_INTERFACE_NAME);
+	                                  NM_VPN_PLUGIN_UI_INTERFACE_PROP_NAME,
+	                                  NM_VPN_PLUGIN_UI_INTERFACE_NAME);
 
 	g_object_class_override_property (object_class,
-									  NM_VPN_PLUGIN_UI_INTERFACE_PROP_DESC,
-									  NM_VPN_PLUGIN_UI_INTERFACE_DESC);
+	                                  NM_VPN_PLUGIN_UI_INTERFACE_PROP_DESC,
+	                                  NM_VPN_PLUGIN_UI_INTERFACE_DESC);
 
 	g_object_class_override_property (object_class,
-									  NM_VPN_PLUGIN_UI_INTERFACE_PROP_SERVICE,
-									  NM_VPN_PLUGIN_UI_INTERFACE_SERVICE);
+	                                  NM_VPN_PLUGIN_UI_INTERFACE_PROP_SERVICE,
+	                                  NM_VPN_PLUGIN_UI_INTERFACE_SERVICE);
 }
 
 static void

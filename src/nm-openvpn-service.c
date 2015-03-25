@@ -64,7 +64,7 @@
 static gboolean debug = FALSE;
 static GMainLoop *loop = NULL;
 
-#define NM_OPENVPN_HELPER_PATH		LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
+#define NM_OPENVPN_HELPER_PATH LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
 
 G_DEFINE_TYPE (NMOpenvpnPlugin, nm_openvpn_plugin, NM_TYPE_VPN_PLUGIN)
 
@@ -83,7 +83,7 @@ typedef struct {
 } NMOpenvpnPluginIOData;
 
 typedef struct {
-	GPid	pid;
+	GPid pid;
 	guint connect_timer;
 	guint connect_count;
 	NMOpenvpnPluginIOData *io_data;
@@ -1670,7 +1670,8 @@ main (int argc, char *argv[])
 	g_option_context_add_main_entries (opt_ctx, options, NULL);
 
 	g_option_context_set_summary (opt_ctx,
-		_("nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."));
+	                              _("nm-openvpn-service provides integrated "
+	                                "OpenVPN capability to NetworkManager."));
 
 	g_option_context_parse (opt_ctx, &argc, &argv, NULL);
 	g_option_context_free (opt_ctx);

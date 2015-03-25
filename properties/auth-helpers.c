@@ -318,7 +318,7 @@ init_one_pw_combo (GtkBuilder *builder,
 
 static void
 pw_setup (GtkBuilder *builder,
-          GtkSizeGroup *group, 
+          GtkSizeGroup *group,
           NMSettingVPN *s_vpn,
           const char *prefix,
           ChangedCallback changed_cb,
@@ -2050,7 +2050,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 				gtk_tree_model_get (model, &iter, TA_DIR_COL_NUM, &direction, -1);
 				if (direction >= 0) {
 					g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TA_DIR),
-					                     g_strdup_printf ("%d", direction));					
+					                     g_strdup_printf ("%d", direction));
 				}
 			}
 		}
