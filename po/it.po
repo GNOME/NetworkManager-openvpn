@@ -1,16 +1,17 @@
 # Italian translation of network-manager-openvpn
-# Copyright (C) 2006, 2007, 2008, 2009, 2010, 2012, 2013 the network-manager-openvpnS COPYRIGHT HOLDER
+# Copyright (C) 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2015 the network-manager-openvpnS COPYRIGHT HOLDER
 # This file is distributed under the same license as the network-manager-openvpn package.
 # Francesco Marletta <francesco.marletta@tiscali.it>, 2006, 2007, 2008, 2009, 2010.
 # Luca Ferretti <elle.uca@libero.it>, 2010.
-# Milo Casagrande <milo@ubuntu.com>, 2012, 2013.
+# Milo Casagrande <milo@milo.name>, 2012, 2013, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-10 12:39+0100\n"
-"PO-Revision-Date: 2014-10-30 21:00+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2015-03-26 23:46+0000\n"
+"PO-Revision-Date: 2015-03-27 09:44+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.7.5\n"
 
 #: ../auth-dialog/main.c:175
 #, c-format
@@ -46,14 +47,6 @@ msgstr "Pass_word del certificato:"
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr ""
 "È necessario autenticarsi per accedere alla VPN (rete privata virtuale) «%s»."
-
-#: ../nm-openvpn.desktop.in.h:1
-msgid "VPN Connection Manager (OpenVPN)"
-msgstr "Gestore connessioni VPN (OpenVPN)"
-
-#: ../nm-openvpn.desktop.in.h:2
-msgid "Add, Remove, and Edit VPN Connections"
-msgstr "Aggiunge, rimuove e modifica connessioni VPN"
 
 #: ../properties/auth-helpers.c:180
 msgid "Choose your personal certificate..."
@@ -171,61 +164,61 @@ msgstr "(automatica)"
 
 #: ../properties/import-export.c:686
 msgid "The file to import wasn't a valid OpenVPN client configuration."
-msgstr ""
+msgstr "Il file da importare non era una configurazione client OpenVPN valida."
 
 #: ../properties/import-export.c:693
 msgid "The file to import wasn't a valid OpenVPN configure (no remote)."
 msgstr ""
+"Il file da importare non era una configurazione OpenVPN valida (nessun "
+"remoto)"
 
 #: ../properties/import-export.c:803
 msgid "could not open file for writing"
-msgstr ""
+msgstr "impossibile aprire il file per la scrittura"
 
 #: ../properties/import-export.c:811
 msgid "connection was incomplete (missing gateway)"
-msgstr ""
+msgstr "la connessione non era completa (gateway mancante)"
 
-#: ../properties/nm-openvpn.c:52
+#: ../properties/nm-openvpn.c:50
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:53
+#: ../properties/nm-openvpn.c:51
 msgid "Compatible with the OpenVPN server."
 msgstr "Compatibile con il server OpenVPN."
 
-#: ../properties/nm-openvpn.c:369
+#: ../properties/nm-openvpn.c:367
 msgid "Certificates (TLS)"
 msgstr "Certificati (TLS)"
 
-#: ../properties/nm-openvpn.c:380
+#: ../properties/nm-openvpn.c:378
 msgid "Password"
 msgstr "Password"
 
-#: ../properties/nm-openvpn.c:393
+#: ../properties/nm-openvpn.c:391
 msgid "Password with Certificates (TLS)"
 msgstr "Password con certificati (TLS)"
 
-#: ../properties/nm-openvpn.c:405
+#: ../properties/nm-openvpn.c:403
 msgid "Static Key"
 msgstr "Chiave statica"
 
-#: ../properties/nm-openvpn.c:553
-#, fuzzy
+#: ../properties/nm-openvpn.c:551
 msgid "could not create openvpn object"
-msgstr "Impossibile trovare il file binario di openvpn."
+msgstr "impossibile creare oggetto openvpn"
 
-#: ../properties/nm-openvpn.c:579
+#: ../properties/nm-openvpn.c:577
 msgid "could not load UI widget"
-msgstr ""
+msgstr "impossibile caricare elemento grafico"
 
-#: ../properties/nm-openvpn.c:670
+#: ../properties/nm-openvpn.c:668
 msgid "unknown OpenVPN file extension"
-msgstr ""
+msgstr "estensione file OpenVPN non conosciuta"
 
-#: ../properties/nm-openvpn.c:698
-#, fuzzy
+#: ../properties/nm-openvpn.c:696
 msgid "not a valid OpenVPN configuration file"
-msgstr "Nessuna opzione di configurazione VPN."
+msgstr "non è un file di configurazione OpenVPN valido"
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid " "
@@ -820,7 +813,7 @@ msgstr "Impossibile trovare il file binario di openvpn."
 msgid "Invalid HMAC auth."
 msgstr "Autorizzazione HMAC non valida."
 
-#: ../src/nm-openvpn-service.c:911 ../src/nm-openvpn-service.c:1468
+#: ../src/nm-openvpn-service.c:911 ../src/nm-openvpn-service.c:1469
 msgid "Invalid connection type."
 msgstr "Tipo di connessione non valido."
 
@@ -839,43 +832,43 @@ msgstr "Protocollo «%s» non valido."
 msgid "Invalid proxy type '%s'."
 msgstr "Tipo di proxy «%s» non valido."
 
-#: ../src/nm-openvpn-service.c:1065
+#: ../src/nm-openvpn-service.c:1066
 #, c-format
 msgid "Invalid keysize '%s'."
 msgstr "Dimensione della chiave «%s» non valida."
 
-#: ../src/nm-openvpn-service.c:1112
+#: ../src/nm-openvpn-service.c:1113
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Secondi di rinegoziazione «%s» non validi."
 
-#: ../src/nm-openvpn-service.c:1136
+#: ../src/nm-openvpn-service.c:1137
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Dimensione «%s» TUN MTU non valida."
 
-#: ../src/nm-openvpn-service.c:1151
+#: ../src/nm-openvpn-service.c:1152
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Dimensione «%s» del frammento non valida."
 
-#: ../src/nm-openvpn-service.c:1227
+#: ../src/nm-openvpn-service.c:1228
 msgid "Missing required local IP address for static key mode."
 msgstr ""
 "Manca l'indirizzo IP locale richiesto per la modalità a chiave statica."
 
-#: ../src/nm-openvpn-service.c:1239
+#: ../src/nm-openvpn-service.c:1240
 msgid "Missing required remote IP address for static key mode."
 msgstr ""
 "Manca l'indirizzo IP remoto richiesto per la modalità a chiave statica."
 
-#: ../src/nm-openvpn-service.c:1264
+#: ../src/nm-openvpn-service.c:1265
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Tipo di connessione «%s» sconosciuta."
 
-#: ../src/nm-openvpn-service.c:1382 ../src/nm-openvpn-service.c:1459
-#: ../src/nm-openvpn-service.c:1493
+#: ../src/nm-openvpn-service.c:1383 ../src/nm-openvpn-service.c:1460
+#: ../src/nm-openvpn-service.c:1494
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -883,7 +876,7 @@ msgstr ""
 "Impossibile elaborare la richiesta poiché le impostazioni della connessione "
 "VPN non sono corrette."
 
-#: ../src/nm-openvpn-service.c:1391
+#: ../src/nm-openvpn-service.c:1392
 msgid ""
 "Could not process the request because the openvpn connection type was "
 "invalid."
@@ -891,23 +884,20 @@ msgstr ""
 "Impossibile elaborare la richiesta poiché il tipo di connessione openvpn non "
 "è valido."
 
-#: ../src/nm-openvpn-service.c:1507
+#: ../src/nm-openvpn-service.c:1508
 msgid "Unhandled pending authentication."
 msgstr "Autenticazione non gestita."
 
-#: ../src/nm-openvpn-service.c:1648
+#: ../src/nm-openvpn-service.c:1649
 msgid "Don't quit when VPN connection terminates"
 msgstr "Non esce quando la connessione VPN termina"
 
-#: ../src/nm-openvpn-service.c:1649
+#: ../src/nm-openvpn-service.c:1650
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Abilita output prolisso per il debug (potrebbe visualizzare password)"
 
-#: ../src/nm-openvpn-service.c:1672
+#: ../src/nm-openvpn-service.c:1673
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
 "nm-openvpn-service fornisce funzionalità OpenVPN integrate in NetworkManager."
-
-#~ msgid "Use a TA_P device"
-#~ msgstr "Usare un device TA_P"
