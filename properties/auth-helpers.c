@@ -37,6 +37,7 @@
 #include <nm-setting-connection.h>
 #include <nm-setting-8021x.h>
 #include <nm-utils.h>
+#include <nm-ui-utils.h>
 
 #include "auth-helpers.h"
 #include "nm-openvpn.h"
@@ -233,6 +234,9 @@ tls_setup (GtkBuilder *builder,
 	g_free (tmp);
 	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (widget, "changed", G_CALLBACK (changed_cb), user_data);
+
+	nma_utils_setup_password_storage (widget, 0, (NMSetting *) s_vpn, NM_OPENVPN_KEY_CERTPASS,
+	                                  TRUE, FALSE);
 }
 
 static void
@@ -693,7 +697,7 @@ update_tls (GtkBuilder *builder, const char *prefix, NMSettingVPN *s_vpn)
 	if (str && strlen (str))
 		nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
 
-	pw_flags = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "flags"));
+	pw_flags = nma_utils_menu_to_secret_flags (widget);
 	nm_setting_set_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_CERTPASS, pw_flags, NULL);
 }
 
