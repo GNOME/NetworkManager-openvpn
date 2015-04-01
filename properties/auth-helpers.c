@@ -475,9 +475,6 @@ sk_init_auth_widget (GtkBuilder *builder,
 	g_object_unref (store);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active < 0 ? 0 : active);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_dir_help_label"));
-	gtk_size_group_add_widget (group, widget);
-
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_local_address_entry"));
 	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
