@@ -1280,8 +1280,6 @@ tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
 	use_auth = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_dir_help_label"));
-	gtk_widget_set_sensitive (widget, use_auth);
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_label"));
 	gtk_widget_set_sensitive (widget, use_auth);
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_label"));
