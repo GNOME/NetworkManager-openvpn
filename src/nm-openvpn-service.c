@@ -1075,6 +1075,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			free_openvpn_args (args);
 			return FALSE;
 		}
+	} else {
+		/* Either the server and client must agree on the renegotiation
+		 * interval, or it should be disabled on one side to prevent
+		 * too-frequent renegotiations, which make two-factor auth quite
+		 * painful.
+		 */
+		add_openvpn_arg (args, "--reneg-sec");
+		add_openvpn_arg (args, "0");
 	}
 
 	if (debug) {
