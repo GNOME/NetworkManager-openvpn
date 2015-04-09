@@ -58,7 +58,6 @@ setup_secret_widget (GtkBuilder *builder,
                      NMSettingVPN *s_vpn,
                      const char *secret_key)
 {
-	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	GtkWidget *widget;
 	GtkWidget *show_passwords;
 	const char *tmp;
@@ -73,9 +72,6 @@ setup_secret_widget (GtkBuilder *builder,
 		tmp = nm_setting_vpn_get_secret (s_vpn, secret_key);
 		if (tmp)
 			gtk_entry_set_text (GTK_ENTRY (widget), tmp);
-
-		nm_setting_get_secret_flags (NM_SETTING (s_vpn), secret_key, &pw_flags, NULL);
-		g_object_set_data (G_OBJECT (widget), "flags", GUINT_TO_POINTER (pw_flags));
 	}
 
 	return widget;
