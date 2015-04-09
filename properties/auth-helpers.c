@@ -1358,6 +1358,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	GtkListStore *store;
 	GtkTreeIter iter;
 	guint32 active = PROXY_TYPE_NONE;
+	guint32 pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	GError *error = NULL;
 
 	g_return_val_if_fail (hash != NULL, NULL);
@@ -1461,10 +1462,12 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 			tmp = strtol (value, NULL, 10);
 			if (errno != 0 || tmp < 0 || tmp > 65535)
 				tmp = 0;
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
-			g_object_set_data (G_OBJECT (widget), "flags", GUINT_TO_POINTER ((guint32) tmp));
+			pw_flags = (guint32) tmp;
 		}
 	}
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
+	nma_utils_setup_password_storage (widget, pw_flags, NULL, NULL,
+	                                  TRUE, FALSE);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROXY_TYPE);
 	if (value) {
@@ -1829,7 +1832,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 					                     g_strdup (value));
 				}
 
-				pw_flags = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "flags"));
+				pw_flags = nma_utils_menu_to_secret_flags (widget);
 				if (pw_flags != NM_SETTING_SECRET_FLAG_NONE) {
 					g_hash_table_insert (hash,
 					                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags"),
