@@ -921,7 +921,7 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 {
 	GHashTable *hash;
 	NMSettingVPN *s_vpn;
-	const char *secret;
+	const char *secret, *flags;
 
 	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
@@ -935,6 +935,11 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 		                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD),
 		                     g_strdup (secret));
 	}
+	flags = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags");
+	if (flags)
+		g_hash_table_insert (hash,
+		                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags"),
+		                     g_strdup (flags));
 
 	return hash;
 }
