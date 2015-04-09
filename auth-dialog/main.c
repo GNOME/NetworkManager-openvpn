@@ -102,7 +102,10 @@ typedef gboolean (*AskUserFunc) (const char *vpn_name,
                                  char **out_new_password,
                                  gboolean need_certpass,
                                  const char *existing_certpass,
-                                 char **out_new_certpass);
+                                 char **out_new_certpass,
+                                 gboolean need_proxypass,
+                                 const char *existing_proxypass,
+                                 char **out_new_proxypass);
 
 typedef void (*FinishFunc) (const char *vpn_name,
                             const char *prompt,
@@ -110,7 +113,9 @@ typedef void (*FinishFunc) (const char *vpn_name,
                             gboolean need_password,
                             const char *password,
                             gboolean need_certpass,
-                            const char *certpass);
+                            const char *certpass,
+                            gboolean need_proxypass,
+                            const char *proxypass);
 
 /*****************************************************************/
 /* External UI mode stuff */
@@ -162,7 +167,9 @@ eui_finish (const char *vpn_name,
             gboolean need_password,
             const char *existing_password,
             gboolean need_certpass,
-            const char *existing_certpass)
+            const char *existing_certpass,
+            gboolean need_proxypass,
+            const char *existing_proxypass)
 {
 	GKeyFile *keyfile;
 	char *title;
@@ -190,6 +197,13 @@ eui_finish (const char *vpn_name,
 	                        TRUE,
 	                        need_certpass && allow_interaction);
 
+	keyfile_add_entry_info (keyfile,
+	                        NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
+	                        existing_proxypass ? existing_proxypass : "",
+	                        _("HTTP proxy password:"),
+	                        TRUE,
+	                        need_proxypass && allow_interaction);
+
 	keyfile_print_stdout (keyfile);
 	g_key_file_unref (keyfile);
 }
@@ -210,7 +224,10 @@ std_ask_user (const char *vpn_name,
               char **out_new_password,
               gboolean need_certpass,
               const char *existing_certpass,
-              char **out_new_certpass)
+              char **out_new_certpass,
+              gboolean need_proxypass,
+              const char *existing_proxypass,
+              char **out_new_proxypass)
 {
 	NMAVpnPasswordDialog *dialog;
 	gboolean success = FALSE;
@@ -219,6 +236,7 @@ std_ask_user (const char *vpn_name,
 	g_return_val_if_fail (prompt != NULL, FALSE);
 	g_return_val_if_fail (out_new_password != NULL, FALSE);
 	g_return_val_if_fail (out_new_certpass != NULL, FALSE);
+	g_return_val_if_fail (out_new_proxypass != NULL, FALSE);
 
 	dialog = NMA_VPN_PASSWORD_DIALOG (nma_vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
 
@@ -233,12 +251,20 @@ std_ask_user (const char *vpn_name,
 		nma_vpn_password_dialog_set_password_secondary (dialog, existing_certpass);
 	}
 
+	nma_vpn_password_dialog_set_show_password_ternary (dialog, need_proxypass);
+	if (need_proxypass) {
+		nma_vpn_password_dialog_set_password_ternary_label (dialog, _("_HTTP proxy password:"));
+		nma_vpn_password_dialog_set_password_ternary (dialog, existing_proxypass);
+	}
+
 	gtk_widget_show (GTK_WIDGET (dialog));
 	if (nma_vpn_password_dialog_run_and_block (dialog)) {
 		if (need_password)
 			*out_new_password = g_strdup (nma_vpn_password_dialog_get_password (dialog));
 		if (need_certpass)
 			*out_new_certpass = g_strdup (nma_vpn_password_dialog_get_password_secondary (dialog));
+		if (need_proxypass)
+			*out_new_proxypass = g_strdup (nma_vpn_password_dialog_get_password_ternary (dialog));
 
 		success = TRUE;
 	}
@@ -279,13 +305,17 @@ std_finish (const char *vpn_name,
             gboolean need_password,
             const char *password,
             gboolean need_certpass,
-            const char *certpass)
+            const char *certpass,
+            gboolean need_proxypass,
+            const char *proxypass)
 {
 	/* Send the passwords back to our parent */
 	if (password)
 		printf ("%s\n%s\n", NM_OPENVPN_KEY_PASSWORD, password);
 	if (certpass)
 		printf ("%s\n%s\n", NM_OPENVPN_KEY_CERTPASS, certpass);
+	if (proxypass)
+		printf ("%s\n%s\n", NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, proxypass);
 	printf ("\n\n");
 
 	/* for good measure, flush stdout since Kansas is going Bye-Bye */
@@ -303,14 +333,18 @@ get_existing_passwords (GHashTable *vpn_data,
                         const char *vpn_uuid,
                         gboolean need_password,
                         gboolean need_certpass,
+                        gboolean need_proxypass,
                         char **out_password,
-                        char **out_certpass)
+                        char **out_certpass,
+                        char **out_proxypass)
 {
 	NMSettingSecretFlags pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	NMSettingSecretFlags cp_flags = NM_SETTING_SECRET_FLAG_NONE;
+	NMSettingSecretFlags proxy_flags = NM_SETTING_SECRET_FLAG_NONE;
 
 	g_return_if_fail (out_password != NULL);
 	g_return_if_fail (out_certpass != NULL);
+	g_return_if_fail (out_proxypass != NULL);
 
 	nm_vpn_plugin_utils_get_secret_flags (vpn_data, NM_OPENVPN_KEY_PASSWORD, &pw_flags);
 	if (need_password) {
@@ -329,6 +363,15 @@ get_existing_passwords (GHashTable *vpn_data,
 				*out_certpass = keyring_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_CERTPASS);
 		}
 	}
+
+	nm_vpn_plugin_utils_get_secret_flags (vpn_data, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, &proxy_flags);
+	if (need_proxypass) {
+		if (!(proxy_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
+			*out_proxypass = g_strdup (g_hash_table_lookup (existing_secrets, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD));
+			if (!*out_proxypass)
+				*out_proxypass = keyring_lookup_secret (vpn_uuid, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
+		}
+	}
 }
 
 #define VPN_MSG_TAG "x-vpn-message:"
@@ -337,10 +380,11 @@ static char *
 get_passwords_required (GHashTable *data,
                         char **hints,
                         gboolean *out_need_password,
-                        gboolean *out_need_certpass)
+                        gboolean *out_need_certpass,
+                        gboolean *out_need_proxypass)
 {
 	const char *ctype, *val;
-	NMSettingSecretFlags flags = NM_SETTING_SECRET_FLAG_NONE;
+	NMSettingSecretFlags flags;
 	char *prompt = NULL;
 	char **iter;
 
@@ -353,6 +397,8 @@ get_passwords_required (GHashTable *data,
 				*out_need_password = TRUE;
 			else if (strcmp (*iter, NM_OPENVPN_KEY_CERTPASS) == 0)
 				*out_need_certpass = TRUE;
+			else if (strcmp (*iter, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD) == 0)
+				*out_need_proxypass = TRUE;
 		}
 		return prompt;
 	}
@@ -362,6 +408,7 @@ get_passwords_required (GHashTable *data,
 
 	if (!strcmp (ctype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		/* Normal user password */
+		flags = NM_SETTING_SECRET_FLAG_NONE;
 		nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &flags);
 		if (   !strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 		    && !(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
@@ -372,9 +419,18 @@ get_passwords_required (GHashTable *data,
 		if (val)
 			*out_need_certpass = is_encrypted (val);
 	} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD)) {
+		flags = NM_SETTING_SECRET_FLAG_NONE;
 		nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &flags);
 		if (!(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
 			*out_need_password = TRUE;
+	}
+
+	val = g_hash_table_lookup (data, NM_OPENVPN_KEY_PROXY_SERVER);
+	if (val && val[0]) {
+		flags = NM_SETTING_SECRET_FLAG_NONE;
+		nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, &flags);
+		if (!(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
+			*out_need_proxypass = TRUE;
 	}
 
 	return NULL;
@@ -397,9 +453,9 @@ main (int argc, char *argv[])
 	gchar *vpn_uuid = NULL;
 	gchar *vpn_service = NULL;
 	GHashTable *data = NULL, *secrets = NULL;
-	gboolean need_password = FALSE, need_certpass = FALSE;
-	char *existing_password = NULL, *existing_certpass = NULL;
-	char *new_password = NULL, *new_certpass = NULL;
+	gboolean need_password = FALSE, need_certpass = FALSE, need_proxypass = FALSE;
+	char *existing_password = NULL, *existing_certpass = NULL, *existing_proxypass = NULL;
+	char *new_password = NULL, *new_certpass = NULL, *new_proxypass = NULL;
 	char **hints = NULL;
 	char *prompt = NULL;
 	gboolean external_ui_mode = FALSE, canceled = FALSE, ask_user = FALSE;
@@ -459,12 +515,12 @@ main (int argc, char *argv[])
 	/* Determine which passwords are actually required, either from hints or
 	 * from looking at the VPN configuration.
 	 */
-	prompt = get_passwords_required (data, hints, &need_password, &need_certpass);
+	prompt = get_passwords_required (data, hints, &need_password, &need_certpass, &need_proxypass);
 	if (!prompt)
 		prompt = g_strdup_printf (_("You need to authenticate to access the Virtual Private Network '%s'."), vpn_name);
 
 	/* Exit early if we don't need any passwords */
-	if (!need_password && !need_certpass)
+	if (!need_password && !need_certpass && !need_proxypass)
 		no_secrets_required_func ();
 	else {
 		get_existing_passwords (data,
@@ -472,11 +528,15 @@ main (int argc, char *argv[])
 		                        vpn_uuid,
 		                        need_password,
 		                        need_certpass,
+		                        need_proxypass,
 		                        &existing_password,
-		                        &existing_certpass);
+		                        &existing_certpass,
+		                        &existing_proxypass);
 		if (need_password && !existing_password)
 			ask_user = TRUE;
 		if (need_certpass && !existing_certpass)
+			ask_user = TRUE;
+		if (need_proxypass && !existing_proxypass)
 			ask_user = TRUE;
 
 		/* If interaction is allowed then ask the user, otherwise pass back
@@ -490,7 +550,10 @@ main (int argc, char *argv[])
 			                           &new_password,
 			                           need_certpass,
 			                           existing_certpass,
-			                           &new_certpass);
+			                           &new_certpass,
+			                           need_proxypass,
+			                           existing_proxypass,
+			                           &new_proxypass);
 		}
 
 		if (!canceled) {
@@ -500,13 +563,17 @@ main (int argc, char *argv[])
 			             need_password,
 			             new_password ? new_password : existing_password,
 			             need_certpass,
-			             new_certpass ? new_certpass : existing_certpass);
+			             new_certpass ? new_certpass : existing_certpass,
+			             need_proxypass,
+			             new_proxypass ? new_proxypass : existing_proxypass);
 		}
 
 		free_secret (existing_password);
 		free_secret (existing_certpass);
+		free_secret (existing_proxypass);
 		free_secret (new_password);
 		free_secret (new_certpass);
+		free_secret (new_proxypass);
 	}
 
 	if (data)
