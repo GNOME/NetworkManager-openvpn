@@ -1269,7 +1269,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Management socket for localhost access to supply username and password */
 	add_openvpn_arg (args, "--management");
 	g_warn_if_fail (priv->mgt_path == NULL);
-	g_free (priv->mgt_path);
 	priv->mgt_path = g_strdup_printf (LOCALSTATEDIR "/run/NetworkManager/nm-openvpn-%s", uuid);
 	add_openvpn_arg (args, priv->mgt_path);
 	add_openvpn_arg (args, "unix");
@@ -1681,6 +1680,9 @@ real_disconnect (NMVPNPlugin *plugin,
 		g_message ("Terminated openvpn daemon with PID %d.", priv->pid);
 		priv->pid = 0;
 	}
+
+	g_free (priv->mgt_path);
+	priv->mgt_path = NULL;
 
 	return TRUE;
 }
