@@ -213,6 +213,23 @@ parse_port (const char *str, const char *line)
 }
 
 static gboolean
+parse_protocol (const char *str, const char *line, gboolean *is_tcp)
+{
+	if (!g_strcmp0 (str, "udp")) {
+		if (is_tcp)
+			*is_tcp = FALSE;
+		return TRUE;
+	} else if (!g_strcmp0 (str, "tcp")) {
+		if (is_tcp)
+			*is_tcp = TRUE;
+		return TRUE;
+	} else {
+		g_warning ("%s: invalid protocol in option '%s'", __func__, line);
+		return FALSE;
+	}
+}
+
+static gboolean
 parse_http_proxy_auth (const char *path,
                        const char *file,
                        char **out_user,
@@ -510,22 +527,37 @@ do_import (const char *path, char **lines, GError **error)
 		if (!strncmp (*line, REMOTE_TAG, strlen (REMOTE_TAG))) {
 			items = get_args (*line + strlen (REMOTE_TAG), &nitems);
 			if (nitems >= 1 && nitems <= 3) {
-				const char *prev = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
-				char *new_remote = g_strdup_printf ("%s%s%s", prev ? prev : "", prev ? ", " : "", items[0]);
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, new_remote);
-				g_free (new_remote);
-				have_remote = TRUE;
+				gboolean ok = TRUE;
+				tmp = NULL;
 
 				if (nitems >= 2) {
 					tmp = parse_port (items[1], *line);
-					if (tmp) {
-						nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PORT, tmp);
-						g_free (tmp);
+					ok = tmp != NULL;
+					if (ok && nitems == 3)
+						ok = parse_protocol (items[2], *line, NULL);
+				}
+				if (ok) {
+					const char *prev;
+					GString *new_remote = g_string_sized_new (64);
 
-						if (nitems == 3) {
-							 /* TODO */
-						}
+					have_remote = TRUE;
+					prev = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
+					if (prev) {
+						g_string_assign (new_remote, prev);
+						g_string_append (new_remote, ", ");
 					}
+					g_string_append (new_remote, items[0]);
+					if (nitems >= 2) {
+						g_string_append_c (new_remote, ':');
+						g_string_append (new_remote, tmp);
+					}
+					if (nitems == 3) {
+						g_string_append_c (new_remote, ':');
+						g_string_append (new_remote, items[2]);
+					}
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, new_remote->str);
+					g_string_free (new_remote, TRUE);
+					g_free (tmp);
 				}
 			} else
 				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
@@ -536,10 +568,6 @@ do_import (const char *path, char **lines, GError **error)
 
 		if (   !strncmp (*line, PORT_TAG, strlen (PORT_TAG))
 		    || !strncmp (*line, RPORT_TAG, strlen (RPORT_TAG))) {
-			/* Port specified in 'remote' always takes precedence */
-			if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT))
-				continue;
-
 			if (!strncmp (*line, PORT_TAG, strlen (PORT_TAG)))
 				items = get_args (*line + strlen (PORT_TAG), &nitems);
 			else if (!strncmp (*line, RPORT_TAG, strlen (RPORT_TAG)))
@@ -916,14 +944,30 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	fprintf (f, "client\n");
 
+	/* 'remote' */
 	gw_list = g_strsplit_set (gateways, " ,", 0);
 	for (gw_iter = gw_list; gw_iter && *gw_iter; gw_iter++) {
+		char *tmp_host, *tmp_port,*tmp_proto;
 		if (**gw_iter == '\0')
 			continue;
-		fprintf (f, "remote %s%s%s\n",
+		tmp_host = g_strstrip (*gw_iter);
+		tmp_port = strchr (tmp_host, ':');
+		tmp_proto = tmp_port ? strchr (tmp_port + 1, ':') : NULL;
+		if (tmp_port)
+			*tmp_port++ = '\0';
+		if (tmp_proto)
+			*tmp_proto++ = '\0';
+		if (tmp_port && !*tmp_port)
+			tmp_port = NULL;
+		if (tmp_proto && !*tmp_proto)
+			tmp_proto = NULL;
+
+		fprintf (f, "remote %s%s%s%s%s\n",
 		         *gw_iter,
-		         port ? " " : "",
-		         port ? port : "");
+		         tmp_port ? " " : tmp_proto ? " " : "",
+		         tmp_port ? tmp_port : tmp_proto ? !strcmp (tmp_proto, "udp") ? "1194" : "443": "",
+		         tmp_proto ? " " : "",
+		         tmp_proto ? tmp_proto : "");
 	}
 	g_strfreev (gw_list);
 
@@ -984,6 +1028,8 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (device_type)
 		fprintf (f, "dev-type %s\n", device_type);
 	fprintf (f, "proto %s\n", proto_udp ? "udp" : "tcp");
+	if (port)
+		fprintf (f, "port %s\n", port);
 
 	if (local_ip && remote_ip)
 		fprintf (f, "ifconfig %s %s\n", local_ip, remote_ip);

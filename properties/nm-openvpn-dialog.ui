@@ -1145,7 +1145,7 @@ config: static &lt;file&gt; [direction]</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">TCP/UDP port number for local peer.
+                        <property name="tooltip_text" translatable="yes">TCP/UDP port number for peer. (Default value when there is no port for gateway).
 config: port</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0.5</property>
@@ -1161,7 +1161,7 @@ config: port</property>
                       <object class="GtkSpinButton" id="port_spinbutton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">TCP/UDP port number for local peer.
+                        <property name="tooltip_text" translatable="yes">TCP/UDP port number for peer. (Default value when there is no port for gateway).
 config: port</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="climb_rate">1</property>
@@ -1254,6 +1254,7 @@ config: comp-lzo</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">Use TCP for communicating with remote host.
+(This is a default setting only used when no protocol is specified for the gateway.)
 config: proto tcp-client | udp</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
