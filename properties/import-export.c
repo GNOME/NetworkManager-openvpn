@@ -66,6 +66,7 @@
 #define SOCKS_PROXY_TAG "socks-proxy "
 #define SOCKS_PROXY_RETRY_TAG "socks-proxy-retry"
 #define REMOTE_TAG "remote "
+#define REMOTE_RANDOM_TAG "remote-random"
 #define RENEG_SEC_TAG "reneg-sec "
 #define RPORT_TAG "rport "
 #define SECRET_TAG "secret "
@@ -566,6 +567,11 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 
+		if (!strncmp (*line, REMOTE_RANDOM_TAG, strlen (REMOTE_RANDOM_TAG))) {
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM, "yes");
+			continue;
+		}
+
 		if (   !strncmp (*line, PORT_TAG, strlen (PORT_TAG))
 		    || !strncmp (*line, RPORT_TAG, strlen (RPORT_TAG))) {
 			if (!strncmp (*line, PORT_TAG, strlen (PORT_TAG)))
@@ -814,6 +820,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	guint32 reneg = 0;
 	gboolean keysize_exists = FALSE;
 	guint32 keysize = 0;
+	gboolean randomize_hosts = FALSE;
 	const char *proxy_type = NULL;
 	const char *proxy_server = NULL;
 	const char *proxy_port = NULL;
@@ -940,6 +947,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && strlen (value))
 		remote_cert_tls = value;
 
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM);
+	if (value && !strcmp (value, "yes"))
+		randomize_hosts = TRUE;
+
 	/* Advanced values end */
 
 	fprintf (f, "client\n");
@@ -970,6 +981,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		         tmp_proto ? tmp_proto : "");
 	}
 	g_strfreev (gw_list);
+
+	if (randomize_hosts)
+		fprintf (f, "remote-random\n");
 
 	/* Handle PKCS#12 (all certs are the same file) */
 	if (   cacert && user_cert && private_key
