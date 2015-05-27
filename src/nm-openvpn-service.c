@@ -732,6 +732,14 @@ validate_connection_type (const char *ctype)
 	return NULL;
 }
 
+static gboolean
+connection_type_is_tls_mode (const char *connection_type)
+{
+	return strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS) == 0
+	    || strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD) == 0
+	    || strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS) == 0;
+}
+
 static const char *
 nm_find_openvpn (void)
 {
@@ -1104,7 +1112,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Reneg seconds */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
-	if (tmp && strlen (tmp)) {
+	if (!connection_type_is_tls_mode (connection_type)) {
+		/* Ignore --reneg-sec option if we are not in TLS mode (as enabled
+		 * by --client below). openvpn will error out otherwise, see bgo#749050. */
+	} else if (tmp && strlen (tmp)) {
 		add_openvpn_arg (args, "--reneg-sec");
 		if (!add_openvpn_arg_int (args, tmp)) {
 			g_set_error (error,
