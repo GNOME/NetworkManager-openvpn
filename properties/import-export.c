@@ -58,6 +58,7 @@
 #define FRAGMENT_TAG "fragment "
 #define IFCONFIG_TAG "ifconfig "
 #define KEY_TAG "key "
+#define KEEPALIVE_TAG "keepalive "
 #define MSSFIX_TAG "mssfix"
 #define PING_TAG "ping "
 #define PING_EXIT_TAG "ping-exit "
@@ -700,6 +701,33 @@ do_import (const char *path, char **lines, GError **error)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER, items[0]);
 			else
 				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+
+			g_strfreev (items);
+			continue;
+		}
+
+		if (!strncmp (*line, KEEPALIVE_TAG, strlen (KEEPALIVE_TAG))) {
+			int ping_secs;
+			int ping_restart_secs;
+
+			items = get_args (*line + strlen (KEEPALIVE_TAG), &nitems);
+			if (nitems == 2) {
+				ping_secs = parse_seconds (items[0], *line);
+				ping_restart_secs = parse_seconds (items[1], *line);
+
+				if (ping_secs >= 0 && ping_restart_secs >= 0) {
+					tmp = g_strdup_printf ("%d", ping_secs);
+					tmp2 = g_strdup_printf ("%d", ping_restart_secs);
+
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PING, tmp);
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART, tmp2);
+
+					g_free (tmp);
+					g_free (tmp2);
+				} else
+					g_warning ("%s: invalid arguments in option '%s', must be two integers", __func__, *line);
+			} else
+				g_warning ("%s: invalid number of arguments in option '%s', must be two integers", __func__, *line);
 
 			g_strfreev (items);
 			continue;
