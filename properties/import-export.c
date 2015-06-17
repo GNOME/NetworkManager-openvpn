@@ -59,6 +59,9 @@
 #define IFCONFIG_TAG "ifconfig "
 #define KEY_TAG "key "
 #define MSSFIX_TAG "mssfix"
+#define PING_TAG "ping "
+#define PING_EXIT_TAG "ping-exit "
+#define PING_RESTART_TAG "ping-restart "
 #define PKCS12_TAG "pkcs12 "
 #define PORT_TAG "port "
 #define PROTO_TAG "proto "
@@ -214,6 +217,21 @@ parse_port (const char *str, const char *line)
 	return NULL;
 }
 
+/* returns -1 in case of error */
+static int
+parse_seconds (const char *str, const char *line)
+{
+	glong secs;
+
+	errno = 0;
+	secs = strtol (str, NULL, 10);
+	if ((errno == 0) && (secs >= 0) && (secs <= G_MAXINT))
+		return (int) secs;
+
+	g_warning ("%s: invalid number of seconds in option '%s' - must be in [0, %d]", __func__, line, G_MAXINT);
+	return -1;
+}
+
 static gboolean
 parse_protocol (const char *str, const char *line, gboolean *is_tcp)
 {
@@ -281,6 +299,38 @@ parse_http_proxy_auth (const char *path,
 	g_free (abspath);
 
 	return *out_user && *out_pass;
+}
+
+static gboolean
+handle_num_seconds_item (const char *line,
+                         const char *tag,
+                         const char *key,
+                         NMSettingVPN *s_vpn)
+{
+	char **items = NULL;
+	int nitems;
+
+	if (!strncmp (line, tag, strlen (tag))) {
+		int seconds;
+
+		items = get_args (line + strlen (tag), &nitems);
+		if (nitems == 1) {
+			seconds = parse_seconds (items[0], line);
+			if (seconds >= 0) {
+				char *tmp;
+
+				tmp = g_strdup_printf ("%d", seconds);
+				nm_setting_vpn_add_data_item (s_vpn, key, tmp);
+				g_free (tmp);
+			}
+		} else
+			g_warning ("%s: invalid number of arguments in option '%s', must be one integer", __func__, line);
+
+		g_strfreev (items);
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 NMConnection *
@@ -600,6 +650,15 @@ do_import (const char *path, char **lines, GError **error)
 			continue;
 		}
 
+		if (handle_num_seconds_item (*line, PING_TAG, NM_OPENVPN_KEY_PING, s_vpn))
+			continue;
+
+		if (handle_num_seconds_item (*line, PING_EXIT_TAG, NM_OPENVPN_KEY_PING_EXIT, s_vpn))
+			continue;
+
+		if (handle_num_seconds_item (*line, PING_RESTART_TAG, NM_OPENVPN_KEY_PING_RESTART, s_vpn))
+			continue;
+
 		if ( handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL) &&
 		     handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CERT, s_vpn, default_path, NULL) &&
 		     handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
@@ -810,6 +869,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *static_key = NULL;
 	const char *static_key_direction = NULL;
 	const char *port = NULL;
+	const char *ping = NULL;
+	const char *ping_exit = NULL;
+	const char *ping_restart = NULL;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
 	const char *tls_remote = NULL;
@@ -896,6 +958,18 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
 	if (value && strlen (value))
 		port = value;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING);
+	if (value && strlen (value))
+		ping = value;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_EXIT);
+	if (value && strlen (value))
+		ping_exit = value;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART);
+	if (value && strlen (value))
+		ping_restart = value;
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
 	if (value && strlen (value)) {
@@ -1058,6 +1132,15 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	fprintf (f, "proto %s\n", proto_udp ? "udp" : "tcp");
 	if (port)
 		fprintf (f, "port %s\n", port);
+
+	if (ping)
+		fprintf (f, "ping %s\n", ping);
+
+	if (ping_exit)
+		fprintf (f, "ping-exit %s\n", ping_exit);
+
+	if (ping_restart)
+		fprintf (f, "ping-restart %s\n", ping_restart);
 
 	if (local_ip && remote_ip)
 		fprintf (f, "ifconfig %s %s\n", local_ip, remote_ip);
