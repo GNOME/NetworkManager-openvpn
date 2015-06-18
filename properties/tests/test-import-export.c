@@ -1178,6 +1178,9 @@ int main (int argc, char **argv)
 	test_port_export (plugin, "ping-with-exit-export", test_dir, argv[2], "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
 	test_port_export (plugin, "ping-with-restart-export", test_dir, argv[2], "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
 
+	test_ping_import (plugin, "keepalive", test_dir, "keepalive.ovpn", "10", NULL, "30");
+	test_port_export (plugin, "keepalive", test_dir, argv[2], "keepalive.ovpn", "keepalive.ovpntest");
+
 	test_proxy_http_import (plugin, test_dir);
 	test_proxy_http_export (plugin, test_dir, argv[2]);
 
