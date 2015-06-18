@@ -639,6 +639,38 @@ test_port_import (NMVpnPluginUiInterface *plugin,
 }
 
 static void
+test_ping_import (NMVpnPluginUiInterface *plugin,
+                  const char *detail,
+                  const char *dir,
+                  const char *file,
+                  const char *expected_ping,
+                  const char *expected_ping_exit,
+                  const char *expected_ping_restart)
+{
+	NMConnection *connection;
+	NMSettingConnection *s_con;
+	NMSettingVPN *s_vpn;
+
+	connection = get_basic_connection (detail, plugin, dir, file);
+	g_assert (connection);
+
+	/* Connection setting */
+	s_con = nm_connection_get_setting_connection (connection);
+	g_assert (s_con);
+
+	/* VPN setting */
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	g_assert (s_vpn);
+
+	/* Data items */
+	test_item (detail, s_vpn, NM_OPENVPN_KEY_PING, expected_ping);
+	test_item (detail, s_vpn, NM_OPENVPN_KEY_PING_EXIT, expected_ping_exit);
+	test_item (detail, s_vpn, NM_OPENVPN_KEY_PING_RESTART, expected_ping_restart);
+
+	g_object_unref (connection);
+}
+
+static void
 test_port_export (NMVpnPluginUiInterface *plugin,
                   const char *detail,
                   const char *dir,
@@ -1139,6 +1171,12 @@ int main (int argc, char **argv)
 
 	test_tun_opts_import (plugin, test_dir);
 	test_tun_opts_export (plugin, test_dir, argv[2]);
+
+	test_ping_import (plugin, "ping-with-exit-import", test_dir, "ping-with-exit.ovpn", "10", "120", NULL);
+	test_ping_import (plugin, "ping-with-restart-import", test_dir, "ping-with-restart.ovpn", "10", NULL, "30");
+
+	test_port_export (plugin, "ping-with-exit-export", test_dir, argv[2], "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
+	test_port_export (plugin, "ping-with-restart-export", test_dir, argv[2], "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
 
 	test_proxy_http_import (plugin, test_dir);
 	test_proxy_http_export (plugin, test_dir, argv[2]);
