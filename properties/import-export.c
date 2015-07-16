@@ -36,11 +36,11 @@
 #include <glib/gi18n-lib.h>
 
 #ifdef NM_OPENVPN_OLD
+#define NM_VPN_LIBNM_COMPAT
 #include <nm-setting-vpn.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-ip4-config.h>
 
-#define NMSettingVpn NMSettingVPN
 #define nm_simple_connection_new nm_connection_new
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR

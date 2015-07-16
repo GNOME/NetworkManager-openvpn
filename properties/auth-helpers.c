@@ -36,12 +36,11 @@
 #include <glib/gi18n-lib.h>
 
 #ifdef NM_OPENVPN_OLD
+#define NM_VPN_LIBNM_COMPAT
 #include <nm-setting-connection.h>
 #include <nm-setting-8021x.h>
 #include <nm-utils.h>
 #include <nm-ui-utils.h>
-
-#define NMSettingVpn NMSettingVPN
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
 #define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY

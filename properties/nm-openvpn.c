@@ -38,31 +38,11 @@
 #include <gtk/gtk.h>
 
 #ifdef NM_OPENVPN_OLD
+#define NM_VPN_LIBNM_COMPAT
 #include <nm-vpn-plugin-ui-interface.h>
 #include <nm-setting-vpn.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-ip4-config.h>
-
-// FIXME: Check what danw's NM_VPN_LIBNM_COMPAT does
-#define NMVpnEditorPluginInterface NMVpnPluginUiInterface
-#define NM_TYPE_VPN_EDITOR_PLUGIN NM_TYPE_VPN_PLUGIN_UI_INTERFACE
-#define NMVpnEditorInterface NMVpnPluginUiWidgetInterface
-#define NM_TYPE_VPN_EDITOR NM_TYPE_VPN_PLUGIN_UI_WIDGET_INTERFACE
-#define NMSettingVpn NMSettingVPN
-#define NMVpnEditor NMVpnPluginUiWidgetInterface
-#define NMVpnEditorPlugin NMVpnPluginUiInterface
-#define NM_VPN_EDITOR_PLUGIN_CAPABILITY_IMPORT NM_VPN_PLUGIN_UI_CAPABILITY_IMPORT
-#define NM_VPN_EDITOR_PLUGIN_CAPABILITY_EXPORT NM_VPN_PLUGIN_UI_CAPABILITY_EXPORT
-#define NM_VPN_EDITOR_PLUGIN_CAPABILITY_IPV6 NM_VPN_PLUGIN_UI_CAPABILITY_IPV6
-#define PROP_DESC NM_VPN_PLUGIN_UI_INTERFACE_PROP_DESC
-#define PROP_NAME NM_VPN_PLUGIN_UI_INTERFACE_PROP_NAME
-#define PROP_SERVICE NM_VPN_PLUGIN_UI_INTERFACE_PROP_SERVICE
-#define NM_VPN_EDITOR_PLUGIN_NAME NM_VPN_PLUGIN_UI_INTERFACE_NAME
-#define NM_VPN_EDITOR_PLUGIN_DESCRIPTION NM_VPN_PLUGIN_UI_INTERFACE_DESC
-#define NM_VPN_EDITOR_PLUGIN_SERVICE NM_VPN_PLUGIN_UI_INTERFACE_SERVICE
-#define get_editor ui_factory
-#define get_suggested_filename get_suggested_name
-#define nm_vpn_editor_plugin_factory nm_vpn_plugin_ui_factory
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
 #define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
@@ -91,14 +71,12 @@
 
 /************** plugin class **************/
 
-#ifndef NM_OPENVPN_OLD
 enum {
 	PROP_0,
 	PROP_NAME,
 	PROP_DESC,
 	PROP_SERVICE
 };
-#endif
 
 static void openvpn_editor_plugin_interface_init (NMVpnEditorPluginInterface *iface_class);
 
