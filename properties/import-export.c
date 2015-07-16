@@ -35,13 +35,22 @@
 
 #include <glib/gi18n-lib.h>
 
+#ifdef NM_OPENVPN_OLD
 #include <nm-setting-vpn.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-ip4-config.h>
 
+#define NMSettingVpn NMSettingVPN
+#define nm_simple_connection_new nm_connection_new
+#endif
+
+#ifdef NM_OPENVPN_NEW
+#include <NetworkManager.h>
+#endif
+
 #include "import-export.h"
 #include "nm-openvpn.h"
-#include "../src/nm-openvpn-service.h"
+#include "../src/nm-openvpn-service-defines.h"
 #include "../common/utils.h"
 
 #define AUTH_TAG "auth "
@@ -129,7 +138,7 @@ static gboolean
 handle_path_item (const char *line,
                   const char *tag,
                   const char *key,
-                  NMSettingVPN *s_vpn,
+                  NMSettingVpn *s_vpn,
                   const char *path,
                   char **leftover)
 {
@@ -178,7 +187,7 @@ get_args (const char *line, int *nitems)
 }
 
 static void
-handle_direction (const char *tag, const char *key, char *leftover, NMSettingVPN *s_vpn)
+handle_direction (const char *tag, const char *key, char *leftover, NMSettingVpn *s_vpn)
 {
 	glong direction;
 
@@ -288,7 +297,7 @@ do_import (const char *path, char **lines, GError **error)
 {
 	NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 	char *last_dot;
 	char **line;
 	gboolean have_client = FALSE, have_remote = FALSE;
@@ -299,7 +308,7 @@ do_import (const char *path, char **lines, GError **error)
 	gboolean http_proxy = FALSE, socks_proxy = FALSE, proxy_set = FALSE;
 	int nitems;
 
-	connection = nm_connection_new ();
+	connection = nm_simple_connection_new ();
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
 	nm_connection_add_setting (connection, NM_SETTING (s_con));
 
@@ -797,7 +806,7 @@ gboolean
 do_export (const char *path, NMConnection *connection, GError **error)
 {
 	NMSettingConnection *s_con;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 	FILE *f;
 	const char *value;
 	const char *gateways = NULL;

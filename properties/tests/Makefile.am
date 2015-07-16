@@ -18,7 +18,7 @@ test_import_export_LDADD = \
 	$(GTK_LIBS) \
 	$(NM_LIBS) \
 	$(NMGTK_LIBS) \
-	$(top_builddir)/properties/libnm-openvpn-properties.la
+	$(top_builddir)/properties/libnm-openvpn-properties-old.la
 
 if WITH_TESTS
 

@@ -23,7 +23,14 @@
 #define _IMPORT_EXPORT_H_
 
 #include <glib.h>
+
+#ifdef NM_OPENVPN_OLD
 #include <nm-connection.h>
+#endif
+
+#ifdef NM_OPENVPN_NEW
+#include <NetworkManager.h>
+#endif
 
 NMConnection *do_import (const char *path, char **lines, GError **error);
 

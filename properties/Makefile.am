@@ -26,9 +26,9 @@ libnm_openvpn_properties_new_la_CFLAGS =                \
         -DNM_OPENVPN_NEW                                \
         $(GLIB_CFLAGS)                                  \
         $(GTK_CFLAGS)                                   \
-        $(NM_CFLAGS)                                    \
-        $(NMGTK_CFLAGS)                                 \
         -I$(top_srcdir)/src                             \
+        $(LIBNM_CFLAGS)                                 \
+        $(LIBNMA_CFLAGS)                                \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
         -DUIDIR=\""$(uidir)"\"                          \
         -DLOCALEDIR=\"$(datadir)/locale\"               \
