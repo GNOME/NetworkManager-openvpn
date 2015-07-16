@@ -1,68 +1,61 @@
 SUBDIRS = . tests
 
 plugindir = $(libdir)/NetworkManager
-plugin_LTLIBRARIES = libnm-openvpn-properties-new.la libnm-openvpn-properties-old.la
+plugin_LTLIBRARIES = libnm-openvpn-properties.la libnm-openvpn-properties-old.la
 
-libnm_openvpn_properties_new_la_SOURCES = \
-	nm-openvpn.c \
-	nm-openvpn.h \
-	auth-helpers.c \
-	auth-helpers.h \
-	import-export.c \
-	import-export.h
+libnm_openvpn_properties_la_SOURCES =                   \
+        nm-openvpn.c                                    \
+        nm-openvpn.h                                    \
+        auth-helpers.c                                  \
+        auth-helpers.h                                  \
+        import-export.c                                 \
+        import-export.h
 
-libnm_openvpn_properties_old_la_SOURCES = \
-	nm-openvpn.c \
-	nm-openvpn.h \
-	auth-helpers.c \
-	auth-helpers.h \
-	import-export.c \
-	import-export.h
+libnm_openvpn_properties_old_la_SOURCES =               \
+        $(libnm_openvpn_properties_la_SOURCES)
 
 uidir = $(datadir)/gnome-vpn-properties/openvpn
 ui_DATA = nm-openvpn-dialog.ui
 
-libnm_openvpn_properties_new_la_CFLAGS =                \
-        -DNM_OPENVPN_NEW                                \
+common_CFLAGS =                                         \
         $(GLIB_CFLAGS)                                  \
         $(GTK_CFLAGS)                                   \
         -I$(top_srcdir)/src                             \
-        $(LIBNM_CFLAGS)                                 \
-        $(LIBNMA_CFLAGS)                                \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
         -DUIDIR=\""$(uidir)"\"                          \
         -DLOCALEDIR=\"$(datadir)/locale\"               \
         -DVERSION=\"$(VERSION)\"
+
+libnm_openvpn_properties_la_CFLAGS =                    \
+        $(common_CFLAGS)                                \
+        $(LIBNM_CFLAGS)                                 \
+        $(LIBNMA_CFLAGS)
 
 libnm_openvpn_properties_old_la_CFLAGS =                \
         -DNM_OPENVPN_OLD                                \
-        $(GLIB_CFLAGS)                                  \
-        $(GTK_CFLAGS)                                   \
+        $(common_CFLAGS)                                \
         $(NM_CFLAGS)                                    \
-        $(NMGTK_CFLAGS)                                 \
-        -I$(top_srcdir)/src                             \
-        -DICONDIR=\""$(datadir)/pixmaps"\"              \
-        -DUIDIR=\""$(uidir)"\"                          \
-        -DLOCALEDIR=\"$(datadir)/locale\"               \
-        -DVERSION=\"$(VERSION)\"
+        $(NMGTK_CFLAGS)
 
-libnm_openvpn_properties_new_la_LIBADD = \
-        $(GTK_LIBS) \
-        $(NM_LIBS) \
-        $(NMGTK_LIBS) \
+common_LIBADD =                                         \
+        $(GTK_LIBS)                                     \
         $(top_builddir)/common/libnm-openvpn-common.la
 
-libnm_openvpn_properties_old_la_LIBADD = \
-        $(GTK_LIBS) \
-        $(NM_LIBS) \
-        $(NMGTK_LIBS) \
-        $(top_builddir)/common/libnm-openvpn-common.la
+libnm_openvpn_properties_la_LIBADD =                    \
+        $(common_LIBADD)                                \
+        $(LIBNM_LIBS)                                   \
+        $(LIBNMA_LIBS)
 
-libnm_openvpn_properties_new_la_LDFLAGS =   \
+libnm_openvpn_properties_old_la_LIBADD =                \
+        $(common_LIBADD)                                \
+        $(NM_LIBS)                                      \
+        $(NMGTK_LIBS)
+
+libnm_openvpn_properties_la_LDFLAGS =                   \
         -avoid-version
 
-libnm_openvpn_properties_old_la_LDFLAGS =   \
-        -avoid-version
+libnm_openvpn_properties_old_la_LDFLAGS =               \
+        $(libnm_openvpn_properties_la_LDFLAGS)
 
 CLEANFILES = *.bak *~
 

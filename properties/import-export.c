@@ -45,9 +45,7 @@
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
-#endif
-
-#ifdef NM_OPENVPN_NEW
+#else /* !NM_OPENVPN_OLD */
 #include <NetworkManager.h>
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR

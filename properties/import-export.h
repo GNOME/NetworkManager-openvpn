@@ -26,9 +26,7 @@
 
 #ifdef NM_OPENVPN_OLD
 #include <nm-connection.h>
-#endif
-
-#ifdef NM_OPENVPN_NEW
+#else /* !NM_OPENVPN_OLD */
 #include <NetworkManager.h>
 #endif
 

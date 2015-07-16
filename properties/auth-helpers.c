@@ -45,9 +45,9 @@
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
 #define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
-#endif
 
-#ifdef NM_OPENVPN_NEW
+#else /* !NM_OPENVPN_OLD */
+
 #include <NetworkManager.h>
 #include <nma-ui-utils.h>
 
