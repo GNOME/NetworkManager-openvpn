@@ -43,15 +43,15 @@
 
 #define nm_simple_connection_new nm_connection_new
 
-#define OPENVPN_PLUGIN_UI_ERROR                     NM_SETTING_VPN_ERROR
-#define OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
+#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
 
 #else /* !NM_OPENVPN_OLD */
 
 #include <NetworkManager.h>
 
-#define OPENVPN_PLUGIN_UI_ERROR                     NM_CONNECTION_ERROR
-#define OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
+#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
 #endif
 
 #include "import-export.h"
@@ -823,15 +823,15 @@ do_import (const char *path, char **lines, GError **error)
 
 	if (!have_client && !have_sk) {
 		g_set_error_literal (error,
-		                     OPENVPN_PLUGIN_UI_ERROR,
-		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("The file to import wasn't a valid OpenVPN client configuration."));
 		g_object_unref (connection);
 		connection = NULL;
 	} else if (!have_remote) {
 		g_set_error_literal (error,
-		                     OPENVPN_PLUGIN_UI_ERROR,
-		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("The file to import wasn't a valid OpenVPN configure (no remote)."));
 		g_object_unref (connection);
 		connection = NULL;
