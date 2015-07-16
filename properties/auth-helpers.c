@@ -43,16 +43,16 @@
 
 #define NMSettingVpn NMSettingVPN
 
-#define OPENVPN_PLUGIN_UI_ERROR                     NM_SETTING_VPN_ERROR
-#define OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
+#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
+#define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
 #endif
 
 #ifdef NM_OPENVPN_NEW
 #include <NetworkManager.h>
 #include <nma-ui-utils.h>
 
-#define OPENVPN_PLUGIN_UI_ERROR                     NM_CONNECTION_ERROR
-#define OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
+#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
+#define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
 #endif
 
 #include "auth-helpers.h"
@@ -454,8 +454,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_CA);
 		return FALSE;
 	}
@@ -465,8 +465,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_CERT);
 		return FALSE;
 	}
@@ -477,8 +477,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_KEY);
 		return FALSE;
 	}
@@ -494,8 +494,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 
 		if (!gtk_entry_get_text_length (GTK_ENTRY (widget))) {
 			g_set_error (error,
-			             OPENVPN_PLUGIN_UI_ERROR,
-			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_CERTPASS);
 			return FALSE;
 		}
@@ -521,16 +521,16 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
-			             OPENVPN_PLUGIN_UI_ERROR,
-			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_USERNAME);
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		if (!validate_file_chooser (builder, "pw_ca_cert_chooser")) {
 			g_set_error (error,
-			             OPENVPN_PLUGIN_UI_ERROR,
-			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_CA);
 			return FALSE;
 		}
@@ -538,16 +538,16 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
-			             OPENVPN_PLUGIN_UI_ERROR,
-			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_USERNAME);
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		if (!validate_file_chooser (builder, "sk_key_chooser")) {
 			g_set_error (error,
-			             OPENVPN_PLUGIN_UI_ERROR,
-			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_STATIC_KEY);
 			return FALSE;
 		}
@@ -556,8 +556,8 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
-			             OPENVPN_PLUGIN_UI_ERROR,
-			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_LOCAL_IP);
 			return FALSE;
 		}
@@ -566,8 +566,8 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
-			             OPENVPN_PLUGIN_UI_ERROR,
-			             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_REMOTE_IP);
 			return FALSE;
 		}
