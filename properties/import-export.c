@@ -42,10 +42,16 @@
 
 #define NMSettingVpn NMSettingVPN
 #define nm_simple_connection_new nm_connection_new
+
+#define OPENVPN_PLUGIN_UI_ERROR                     NM_SETTING_VPN_ERROR
+#define OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
 #endif
 
 #ifdef NM_OPENVPN_NEW
 #include <NetworkManager.h>
+
+#define OPENVPN_PLUGIN_UI_ERROR                     NM_CONNECTION_ERROR
+#define OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
 #endif
 
 #include "import-export.h"

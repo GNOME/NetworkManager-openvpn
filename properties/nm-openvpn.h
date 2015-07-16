@@ -25,23 +25,6 @@
 
 #include <glib-object.h>
 
-typedef enum
-{
-	OPENVPN_PLUGIN_UI_ERROR_UNKNOWN = 0,
-	OPENVPN_PLUGIN_UI_ERROR_INVALID_CONNECTION,
-	OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
-	OPENVPN_PLUGIN_UI_ERROR_MISSING_PROPERTY,
-	OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE,
-	OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN
-} OpenvpnPluginUiError;
-
-#define OPENVPN_TYPE_PLUGIN_UI_ERROR (openvpn_plugin_ui_error_get_type ()) 
-GType openvpn_plugin_ui_error_get_type (void);
-
-#define OPENVPN_PLUGIN_UI_ERROR (openvpn_plugin_ui_error_quark ())
-GQuark openvpn_plugin_ui_error_quark (void);
-
-
 #define OPENVPN_TYPE_PLUGIN_UI            (openvpn_plugin_ui_get_type ())
 #define OPENVPN_PLUGIN_UI(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_PLUGIN_UI, OpenvpnPluginUi))
 #define OPENVPN_PLUGIN_UI_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_PLUGIN_UI, OpenvpnPluginUiClass))

@@ -42,11 +42,17 @@
 #include <nm-ui-utils.h>
 
 #define NMSettingVpn NMSettingVPN
+
+#define OPENVPN_PLUGIN_UI_ERROR                     NM_SETTING_VPN_ERROR
+#define OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
 #endif
 
 #ifdef NM_OPENVPN_NEW
 #include <NetworkManager.h>
 #include <nma-ui-utils.h>
+
+#define OPENVPN_PLUGIN_UI_ERROR                     NM_CONNECTION_ERROR
+#define OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
 #endif
 
 #include "auth-helpers.h"

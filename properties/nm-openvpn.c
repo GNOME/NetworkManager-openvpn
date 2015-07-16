@@ -63,10 +63,22 @@
 #define get_editor ui_factory
 #define get_suggested_filename get_suggested_name
 #define nm_vpn_editor_plugin_factory nm_vpn_plugin_ui_factory
+
+#define OPENVPN_PLUGIN_UI_ERROR                     NM_SETTING_VPN_ERROR
+#define OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
+#define OPENVPN_PLUGIN_UI_ERROR_MISSING_PROPERTY    NM_SETTING_VPN_ERROR_MISSING_PROPERTY
+#define OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
+#define OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE   NM_SETTING_VPN_ERROR_UNKNOWN
 #endif
 
 #ifdef NM_OPENVPN_NEW
 #include <NetworkManager.h>
+
+#define OPENVPN_PLUGIN_UI_ERROR                     NM_CONNECTION_ERROR
+#define OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
+#define OPENVPN_PLUGIN_UI_ERROR_MISSING_PROPERTY    NM_CONNECTION_ERROR_MISSING_PROPERTY
+#define OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
+#define OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE   NM_CONNECTION_ERROR_FAILED
 #endif
 
 #include "../src/nm-openvpn-service-defines.h"
@@ -120,46 +132,6 @@ typedef struct {
 #define COL_AUTH_NAME 0
 #define COL_AUTH_PAGE 1
 #define COL_AUTH_TYPE 2
-
-GQuark
-openvpn_plugin_ui_error_quark (void)
-{
-	static GQuark error_quark = 0;
-
-	if (G_UNLIKELY (error_quark == 0))
-		error_quark = g_quark_from_static_string ("openvpn-plugin-ui-error-quark");
-
-	return error_quark;
-}
-
-/* This should really be standard. */
-#define ENUM_ENTRY(NAME, DESC) { NAME, "" #NAME "", DESC }
-
-GType
-openvpn_plugin_ui_error_get_type (void)
-{
-	static GType etype = 0;
-
-	if (etype == 0) {
-		static const GEnumValue values[] = {
-			/* Unknown error. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_UNKNOWN, "UnknownError"),
-			/* The connection was missing invalid. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_INVALID_CONNECTION, "InvalidConnection"),
-			/* The specified property was invalid. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY, "InvalidProperty"),
-			/* The specified property was missing and is required. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_MISSING_PROPERTY, "MissingProperty"),
-			/* The file to import could not be read. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE, "FileNotReadable"),
-			/* The file to import could was not an OpenVPN client file. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN, "FileNotOpenVPN"),
-			{ 0, 0, 0 }
-		};
-		etype = g_enum_register_static ("OpenvpnPluginUiError", values);
-	}
-	return etype;
-}
 
 /* Example: abc.com:1234:udp, ovpnserver.company.com:443, vpn.example.com::tcp */
 static gboolean
