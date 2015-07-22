@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2015-05-28 11:07+0000\n"
-"PO-Revision-Date: 2015-05-28 13:31+0100\n"
+"POT-Creation-Date: 2015-07-21 23:08+0000\n"
+"PO-Revision-Date: 2015-07-18 17:30+0100\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -24,143 +24,139 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-Bookmarks: 35,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
-#: ../auth-dialog/main.c:175
+#: ../auth-dialog/main.c:182
 #, c-format
 msgid "Authenticate VPN %s"
 msgstr "Ověřit VPN %s"
 
-#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-dialog.ui.h:21
+#: ../auth-dialog/main.c:189 ../properties/nm-openvpn-dialog.ui.h:21
 msgid "Password:"
 msgstr "Heslo:"
 
-#: ../auth-dialog/main.c:189
+#: ../auth-dialog/main.c:196
 msgid "Certificate password:"
 msgstr "Heslo certifikátu:"
 
-#: ../auth-dialog/main.c:223
+#: ../auth-dialog/main.c:203
+msgid "HTTP proxy password:"
+msgstr "Heslo proxy pro HTTP:"
+
+#: ../auth-dialog/main.c:241
 msgid "Authenticate VPN"
 msgstr "Ověřování VPN"
 
-#: ../auth-dialog/main.c:232
+#: ../auth-dialog/main.c:250
 msgid "Certificate pass_word:"
 msgstr "Heslo _certifikátu:"
 
-#: ../auth-dialog/main.c:464
+#: ../auth-dialog/main.c:256
+msgid "_HTTP proxy password:"
+msgstr "Heslo proxy pro _HTTP:"
+
+#: ../auth-dialog/main.c:520
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Pro přístup do VPN „%s“ se musíte autentizovat."
 
-#: ../properties/auth-helpers.c:180
+#: ../properties/auth-helpers.c:173
 msgid "Choose your personal certificate..."
 msgstr "Zvolit svůj osobní certifikát…"
 
-#: ../properties/auth-helpers.c:198
+#: ../properties/auth-helpers.c:191
 msgid "Choose your private key..."
 msgstr "Zvolit svůj osobní klíč…"
 
-#: ../properties/auth-helpers.c:288
-msgid "Saved"
-msgstr "Uloženo"
-
-#: ../properties/auth-helpers.c:296
-msgid "Always Ask"
-msgstr "Vždy se dotázat"
-
-#: ../properties/auth-helpers.c:301
-msgid "Not Required"
-msgstr "Není vyžadováno"
-
-#: ../properties/auth-helpers.c:391
+#: ../properties/auth-helpers.c:307
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Zvolit certifikát certifikační autority…"
 
-#: ../properties/auth-helpers.c:435
+#: ../properties/auth-helpers.c:351
 msgid "Choose an OpenVPN static key..."
 msgstr "Zvolit statický klíč OpenVPN…"
 
-#: ../properties/auth-helpers.c:459 ../properties/auth-helpers.c:1191
-#: ../properties/auth-helpers.c:1798
+#: ../properties/auth-helpers.c:375 ../properties/auth-helpers.c:1094
+#: ../properties/auth-helpers.c:1704
 msgid "None"
 msgstr "Žádný"
 
-#: ../properties/auth-helpers.c:913
+#: ../properties/auth-helpers.c:811
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "Certifikáty PEM nebo PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:914
+#: ../properties/auth-helpers.c:812
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Certifikáty PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:974
+#: ../properties/auth-helpers.c:872
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statické klíče OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1107 ../properties/auth-helpers.c:1183
+#: ../properties/auth-helpers.c:1010 ../properties/auth-helpers.c:1086
 msgid "Default"
 msgstr "Výchozí"
 
-#: ../properties/auth-helpers.c:1193
+#: ../properties/auth-helpers.c:1096
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1195
+#: ../properties/auth-helpers.c:1098
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1197
+#: ../properties/auth-helpers.c:1100
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1199
+#: ../properties/auth-helpers.c:1102
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1201
+#: ../properties/auth-helpers.c:1104
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1203
+#: ../properties/auth-helpers.c:1106
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1205
+#: ../properties/auth-helpers.c:1108
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1207
+#: ../properties/auth-helpers.c:1110
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1258
+#: ../properties/auth-helpers.c:1161
 msgid "Server"
 msgstr "Server"
 
-#: ../properties/auth-helpers.c:1263
+#: ../properties/auth-helpers.c:1166
 msgid "Client"
 msgstr "Klient"
 
-#: ../properties/auth-helpers.c:1514 ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/auth-helpers.c:1418 ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
 msgstr "Není vyžadováno"
 
-#: ../properties/auth-helpers.c:1516
+#: ../properties/auth-helpers.c:1420
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1518
+#: ../properties/auth-helpers.c:1422
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/auth-helpers.c:1701
+#: ../properties/auth-helpers.c:1607
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/auth-helpers.c:1703
+#: ../properties/auth-helpers.c:1609
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1710
+#: ../properties/auth-helpers.c:1616
 msgid "(automatic)"
 msgstr "(automaticky)"
 
@@ -543,8 +539,8 @@ msgid ""
 "config: float"
 msgstr ""
 "Povolit vzdálenému uzlu změnit svoji IP adresu a/nebo číslo portu; např. "
-"DHCP (toto je výchozí chování pokud je použit parametr --remote). Pokud "
-"je spolu s --remote zadáno --float, dovolí úvodní připojení relace OpenVPN k "
+"DHCP (toto je výchozí chování pokud je použit parametr --remote). Pokud je "
+"spolu s --remote zadáno --float, dovolí úvodní připojení relace OpenVPN k "
 "uzlu na známé adrese. Pokud ale pakety přijdou z nové adresy a projdou všemi "
 "autentizačními testy, nová adresa převezme kontrolu nad spojením. To je "
 "užitečné pokud se připojujete k uzlu, který má přiřazenu danamickou adresu. "
@@ -928,3 +924,12 @@ msgid ""
 msgstr ""
 "nm-openvpn-service umožňuje NetworkManageru poskytovat služby pro "
 "připojování k OpenVPN."
+
+#~ msgid "Saved"
+#~ msgstr "Uloženo"
+
+#~ msgid "Always Ask"
+#~ msgstr "Vždy se dotázat"
+
+#~ msgid "Not Required"
+#~ msgstr "Není vyžadováno"
