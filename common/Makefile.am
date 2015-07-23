@@ -1,4 +1,7 @@
-noinst_LTLIBRARIES=libnm-vpn-plugin-openvpn-common.la libnm-openvpn-common.la
+noinst_LTLIBRARIES=libnm-vpn-plugin-openvpn-common.la
+if WITH_LIBNM_GLIB
+noinst_LTLIBRARIES += libnm-openvpn-common.la
+endif
 
 libnm_vpn_plugin_openvpn_common_la_CPPFLAGS = \
 	$(LIBNM_CFLAGS) \

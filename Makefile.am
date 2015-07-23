@@ -13,9 +13,14 @@ nmvpnservicedir = $(sysconfdir)/NetworkManager/VPN
 nmvpnservice_DATA = nm-openvpn-service.name
 
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
+if WITH_LIBNM_GLIB
+	cp $< $@
+else
+	sed -e 's/^properties=[@]PLUGINDIR[@].*/#\0/' $< >$@
+endif
 	sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
 	    -e 's|[@]PLUGINDIR[@]|$(libdir)/NetworkManager|g' \
-	    $< >$@
+	    -i $@
 
 DISTCHECK_CONFIGURE_FLAGS = \
 	--with-tests=yes \
