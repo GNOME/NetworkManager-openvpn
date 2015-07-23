@@ -1,7 +1,10 @@
 SUBDIRS = . tests
 
 plugindir = $(libdir)/NetworkManager
-plugin_LTLIBRARIES = libnm-openvpn-properties.la libnm-openvpn-properties-old.la
+plugin_LTLIBRARIES = libnm-openvpn-properties.la
+if WITH_LIBNM_GLIB
+plugin_LTLIBRARIES += libnm-openvpn-properties-old.la
+endif
 
 libnm_openvpn_properties_la_SOURCES =                   \
         nm-openvpn.c                                    \
