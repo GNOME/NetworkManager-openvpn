@@ -321,7 +321,7 @@ static gboolean
 handle_num_seconds_item (const char *line,
                          const char *tag,
                          const char *key,
-                         NMSettingVPN *s_vpn)
+                         NMSettingVpn *s_vpn)
 {
 	char **items = NULL;
 	int nitems;
