@@ -62,11 +62,11 @@ GLIB_CFLAGS="$GLIB_CFLAGS -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_32"
 
 PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.74)
 
-	NetworkManager >= 0.9.10
-	libnm-util >= 0.9.10
-	libnm-glib >= 0.9.10
-	libnm-glib-vpn >= 0.9.10)
 PKG_CHECK_MODULES(LIBNM_GLIB,
+	NetworkManager >= 1.1.0
+	libnm-util >= 1.1.0
+	libnm-glib >= 1.1.0
+	libnm-glib-vpn >= 1.1.0)
 LIBNM_GLIB_CFLAGS="$LIBNM_GLIB_CFLAGS -DNM_VERSION_MIN_REQUIRED=NM_VERSION_1_1_0"
 LIBNM_GLIB_CFLAGS="$LIBNM_GLIB_CFLAGS -DNM_VERSION_MAX_ALLOWED=NM_VERSION_1_1_0"
 
