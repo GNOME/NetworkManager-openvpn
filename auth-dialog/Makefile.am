@@ -20,6 +20,6 @@ nm_openvpn_auth_dialog_LDADD = \
 	$(NM_LIBS) \
 	$(NMGTK_LIBS) \
 	$(LIBSECRET_LIBS) \
-	$(top_builddir)/common/libnm-openvpn-common.la
+	$(top_builddir)/common/libnm-openvpn-common-old.la
 
 CLEANFILES = *~
