@@ -28,8 +28,8 @@ common_CFLAGS =                                         \
 
 libnm_vpn_plugin_openvpn_la_CFLAGS =                    \
         $(common_CFLAGS)                                \
-        $(LIBNM_GLIB_CFLAGS)                            \
-        $(LIBNM_GTK_CFLAGS)
+        $(LIBNM_CFLAGS)                                 \
+        $(LIBNMA_CFLAGS)
 
 libnm_openvpn_properties_la_CFLAGS =                \
         -DNM_OPENVPN_OLD                                \
@@ -39,8 +39,8 @@ libnm_openvpn_properties_la_CFLAGS =                \
 
 libnm_vpn_plugin_openvpn_la_LIBADD =                    \
         $(GTK_LIBS)                                     \
-        $(LIBNM_GLIB_LIBS)                              \
-        $(LIBNM_GTK_LIBS)                               \
+        $(LIBNM_LIBS)                                   \
+        $(LIBNMA_LIBS)                                  \
         $(top_builddir)/common/libnm-vpn-plugin-openvpn-common.la
 
 libnm_openvpn_properties_la_LIBADD =                \

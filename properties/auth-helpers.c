@@ -34,14 +34,23 @@
 #include <errno.h>
 
 #include <glib/gi18n-lib.h>
+
+#ifdef NM_OPENVPN_OLD
+#define NM_VPN_LIBNM_COMPAT
 #include <nm-setting-connection.h>
 #include <nm-setting-8021x.h>
 #include <nm-utils.h>
 #include <nm-ui-utils.h>
 
+#else /* !NM_OPENVPN_OLD */
+
+#include <NetworkManager.h>
+#include <nma-ui-utils.h>
+#endif
+
 #include "auth-helpers.h"
 #include "nm-openvpn.h"
-#include "../src/nm-openvpn-service.h"
+#include "../src/nm-openvpn-service-defines.h"
 #include "../common/utils.h"
 
 #define BLOCK_HANDLER_ID "block-handler-id"
@@ -55,7 +64,7 @@ show_password (GtkToggleButton *togglebutton, GtkEntry *password_entry)
 static GtkWidget *
 setup_secret_widget (GtkBuilder *builder,
                      const char *widget_name,
-                     NMSettingVPN *s_vpn,
+                     NMSettingVpn *s_vpn,
                      const char *secret_key)
 {
 	GtkWidget *widget;
@@ -148,7 +157,7 @@ tls_cert_changed_cb (GtkWidget *widget, gpointer data)
 static void
 tls_setup (GtkBuilder *builder,
            GtkSizeGroup *group,
-           NMSettingVPN *s_vpn,
+           NMSettingVpn *s_vpn,
            const char *prefix,
            GtkWidget *ca_chooser,
            ChangedCallback changed_cb,
@@ -234,7 +243,7 @@ tls_setup (GtkBuilder *builder,
 static void
 pw_setup (GtkBuilder *builder,
           GtkSizeGroup *group,
-          NMSettingVPN *s_vpn,
+          NMSettingVpn *s_vpn,
           const char *prefix,
           ChangedCallback changed_cb,
           gpointer user_data)
@@ -269,7 +278,7 @@ pw_setup (GtkBuilder *builder,
 void
 tls_pw_init_auth_widget (GtkBuilder *builder,
                          GtkSizeGroup *group,
-                         NMSettingVPN *s_vpn,
+                         NMSettingVpn *s_vpn,
                          const char *contype,
                          const char *prefix,
                          ChangedCallback changed_cb,
@@ -326,7 +335,7 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 void
 sk_init_auth_widget (GtkBuilder *builder,
                      GtkSizeGroup *group,
-                     NMSettingVPN *s_vpn,
+                     NMSettingVpn *s_vpn,
                      ChangedCallback changed_cb,
                      gpointer user_data)
 {
@@ -566,7 +575,7 @@ update_from_filechooser (GtkBuilder *builder,
                          const char *key,
                          const char *prefix,
                          const char *widget_name,
-                         NMSettingVPN *s_vpn)
+                         NMSettingVpn *s_vpn)
 {
 	GtkWidget *widget;
 	char *tmp, *filename;
@@ -588,7 +597,7 @@ update_from_filechooser (GtkBuilder *builder,
 }
 
 static void
-update_tls (GtkBuilder *builder, const char *prefix, NMSettingVPN *s_vpn)
+update_tls (GtkBuilder *builder, const char *prefix, NMSettingVpn *s_vpn)
 {
 	GtkWidget *widget;
 	NMSettingSecretFlags pw_flags;
@@ -614,7 +623,7 @@ update_tls (GtkBuilder *builder, const char *prefix, NMSettingVPN *s_vpn)
 }
 
 static void
-update_pw (GtkBuilder *builder, const char *prefix, NMSettingVPN *s_vpn)
+update_pw (GtkBuilder *builder, const char *prefix, NMSettingVpn *s_vpn)
 {
 	GtkWidget *widget;
 	NMSettingSecretFlags pw_flags;
@@ -651,7 +660,7 @@ update_pw (GtkBuilder *builder, const char *prefix, NMSettingVPN *s_vpn)
 gboolean
 auth_widget_update_connection (GtkBuilder *builder,
                                const char *contype,
-                               NMSettingVPN *s_vpn)
+                               NMSettingVpn *s_vpn)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -920,7 +929,7 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
                                           GError **error)
 {
 	GHashTable *hash;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 	const char *secret, *flags;
 
 	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
