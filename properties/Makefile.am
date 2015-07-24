@@ -20,8 +20,6 @@ ui_DATA = nm-openvpn-dialog.ui
 common_CFLAGS =                                         \
         $(GLIB_CFLAGS)                                  \
         $(GTK_CFLAGS)                                   \
-        $(NM_CFLAGS)                                    \
-        $(NMGTK_CFLAGS)                                 \
         -I$(top_srcdir)/src                             \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
         -DUIDIR=\""$(uidir)"\"                          \
@@ -30,25 +28,25 @@ common_CFLAGS =                                         \
 
 libnm_openvpn_properties_la_CFLAGS =                    \
         $(common_CFLAGS)                                \
-        $(NM_CFLAGS)                                    \
-        $(NMGTK_CFLAGS)
+        $(LIBNM_GLIB_CFLAGS)                            \
+        $(LIBNM_GTK_CFLAGS)
 
 libnm_openvpn_properties_old_la_CFLAGS =                \
         -DNM_OPENVPN_OLD                                \
         $(common_CFLAGS)                                \
-        $(NM_CFLAGS)                                    \
-        $(NMGTK_CFLAGS)
+        $(LIBNM_GLIB_CFLAGS)                            \
+        $(LIBNM_GTK_CFLAGS)
 
 libnm_openvpn_properties_la_LIBADD =                    \
         $(GTK_LIBS)                                     \
-        $(NM_LIBS)                                      \
-        $(NMGTK_LIBS)                                   \
+        $(LIBNM_GLIB_LIBS)                              \
+        $(LIBNM_GTK_LIBS)                               \
         $(top_builddir)/common/libnm-openvpn-common.la
 
 libnm_openvpn_properties_old_la_LIBADD =                \
         $(GTK_LIBS)                                     \
-        $(NM_LIBS)                                      \
-        $(NMGTK_LIBS)                                   \
+        $(LIBNM_GLIB_LIBS)                              \
+        $(LIBNM_GTK_LIBS)                               \
         $(top_builddir)/common/libnm-openvpn-common-old.la
 
 libnm_openvpn_properties_la_LDFLAGS =                   \
