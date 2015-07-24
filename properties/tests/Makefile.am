@@ -10,15 +10,15 @@ test_import_export_SOURCES = \
 test_import_export_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
 	$(GTK_CFLAGS) \
-	$(LIBNM_GLIB_CFLAGS) \
-	$(LIBNM_GTK_CFLAGS)
+	$(LIBNM_CFLAGS) \
+	$(LIBNMA_CFLAGS)
 
 test_import_export_LDADD = \
 	$(GTHREAD_LIBS) \
 	$(GTK_LIBS) \
-	$(LIBNM_GLIB_LIBS) \
-	$(LIBNM_GTK_LIBS) \
-	$(top_builddir)/properties/libnm-openvpn-properties-old.la
+	$(LIBNM_LIBS) \
+	$(LIBNMA_LIBS) \
+	$(top_builddir)/properties/libnm-openvpn-properties.la
 
 if WITH_TESTS
 
