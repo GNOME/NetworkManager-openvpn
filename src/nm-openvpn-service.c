@@ -1626,13 +1626,19 @@ NMOpenvpnPlugin *
 nm_openvpn_plugin_new (void)
 {
 	NMOpenvpnPlugin *plugin;
+	GError *error = NULL;
 
-	plugin =  (NMOpenvpnPlugin *) g_object_new (NM_TYPE_OPENVPN_PLUGIN,
-	                                            NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME,
-	                                            NM_DBUS_SERVICE_OPENVPN,
-	                                            NULL);
-	if (plugin)
+	plugin =  (NMOpenvpnPlugin *) g_initable_new (NM_TYPE_OPENVPN_PLUGIN, NULL, &error,
+	                                              NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME,
+	                                              NM_DBUS_SERVICE_OPENVPN,
+	                                              NULL);
+
+	if (plugin) {
 		g_signal_connect (G_OBJECT (plugin), "state-changed", G_CALLBACK (plugin_state_changed), NULL);
+	} else {
+		g_warning ("Failed to initialize a plugin instance: %s", error->message);
+		g_error_free (error);
+	}
 
 	return plugin;
 }
