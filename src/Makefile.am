@@ -22,7 +22,7 @@ nm_openvpn_service_SOURCES = \
 
 nm_openvpn_service_LDADD = \
 	$(LIBNM_LIBS) \
-        $(top_builddir)/common/libnm-openvpn-common.la
+        $(top_builddir)/common/libnm-vpn-plugin-openvpn-common.la
 
 nm_openvpn_service_openvpn_helper_SOURCES = \
 	nm-openvpn-service-openvpn-helper.c
