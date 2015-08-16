@@ -39,9 +39,6 @@
 #include <ctype.h>
 #include <netdb.h>
 
-#include <dbus/dbus.h>
-#include <dbus/dbus-glib-lowlevel.h>
-#include <dbus/dbus-glib.h>
 #include <NetworkManager.h>
 
 #include "nm-openvpn-service.h"
@@ -49,72 +46,49 @@
 
 extern char **environ;
 
-/* These are here because nm-dbus-glib-types.h isn't exported */
-#define DBUS_TYPE_G_ARRAY_OF_UINT          (dbus_g_type_get_collection ("GArray", G_TYPE_UINT))
-#define DBUS_TYPE_G_ARRAY_OF_ARRAY_OF_UINT (dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_ARRAY_OF_UINT))
-#define DBUS_TYPE_G_PTR_ARRAY_OF_STRING    (dbus_g_type_get_collection ("GPtrArray", G_TYPE_STRING))
-#define DBUS_TYPE_G_MAP_OF_VARIANT         (dbus_g_type_get_map ("GHashTable", G_TYPE_STRING, G_TYPE_VALUE))
-#define DBUS_TYPE_G_IP6_ROUTE              (dbus_g_type_get_struct ("GValueArray", DBUS_TYPE_G_UCHAR_ARRAY, G_TYPE_UINT, DBUS_TYPE_G_UCHAR_ARRAY, G_TYPE_UINT, G_TYPE_INVALID))
-#define DBUS_TYPE_G_ARRAY_OF_IP6_ROUTE     (dbus_g_type_get_collection ("GPtrArray", DBUS_TYPE_G_IP6_ROUTE))
-
 static gboolean helper_debug = FALSE;
 
 static void
-helper_failed (DBusGConnection *connection, const char *reason)
+helper_failed (GDBusProxy *proxy, const char *reason)
 {
-	DBusGProxy *proxy;
 	GError *err = NULL;
 
 	g_warning ("nm-openvpn-service-openvpn-helper did not receive a valid %s from openvpn", reason);
 
-	proxy = dbus_g_proxy_new_for_name (connection,
-								NM_DBUS_SERVICE_OPENVPN,
-								NM_VPN_DBUS_PLUGIN_PATH,
-								NM_VPN_DBUS_PLUGIN_INTERFACE);
-
-	dbus_g_proxy_call (proxy, "SetFailure", &err,
-				    G_TYPE_STRING, reason,
-				    G_TYPE_INVALID,
-				    G_TYPE_INVALID);
-
-	if (err) {
+	if (!g_dbus_proxy_call_sync (proxy, "SetFailure",
+	                             g_variant_new ("(s)", reason),
+	                             G_DBUS_CALL_FLAGS_NONE, -1,
+	                             NULL,
+	                             &err)) {
 		g_warning ("Could not send failure information: %s", err->message);
 		g_error_free (err);
 	}
-
-	g_object_unref (proxy);
 
 	exit (1);
 }
 
 static void
-send_config (DBusGConnection *connection, GHashTable *config,
-             GHashTable *ip4config, GHashTable *ip6config)
+send_config (GDBusProxy *proxy, GVariant *config,
+             GVariant *ip4config, GVariant *ip6config)
 {
-	DBusGProxy *proxy;
 	GError *err = NULL;
 
-	proxy = dbus_g_proxy_new_for_name (connection,
-	                                   NM_DBUS_SERVICE_OPENVPN,
-	                                   NM_VPN_DBUS_PLUGIN_PATH,
-	                                   NM_VPN_DBUS_PLUGIN_INTERFACE);
-
-	if (!dbus_g_proxy_call (proxy, "SetConfig", &err,
-	                        DBUS_TYPE_G_MAP_OF_VARIANT,
-	                        config,
-	                        G_TYPE_INVALID,
-	                        G_TYPE_INVALID) && err) {
+	if (!g_dbus_proxy_call_sync (proxy, "SetConfig",
+	                             g_variant_new ("(*)", config),
+	                             G_DBUS_CALL_FLAGS_NONE, -1,
+	                             NULL,
+	                             &err)) {
 		g_warning ("Could not send configuration information: %s", err->message);
 		g_error_free (err);
 		err = NULL;
 	}
 
 	if (ip4config) {
-		if (!dbus_g_proxy_call (proxy, "SetIp4Config", &err,
-		                        DBUS_TYPE_G_MAP_OF_VARIANT,
-		                        ip4config,
-		                        G_TYPE_INVALID,
-		                        G_TYPE_INVALID) && err) {
+	        if (!g_dbus_proxy_call_sync (proxy, "SetIp4Config",
+	                                     g_variant_new ("(*)", ip4config),
+	                                     G_DBUS_CALL_FLAGS_NONE, -1,
+	                                     NULL,
+		                             &err)) {
 			g_warning ("Could not send IPv4 configuration information: %s", err->message);
 			g_error_free (err);
 			err = NULL;
@@ -122,18 +96,16 @@ send_config (DBusGConnection *connection, GHashTable *config,
 	}
 
 	if (ip6config) {
-		if (!dbus_g_proxy_call (proxy, "SetIp6Config", &err,
-		                        DBUS_TYPE_G_MAP_OF_VARIANT,
-		                        ip6config,
-		                        G_TYPE_INVALID,
-		                        G_TYPE_INVALID) && err) {
+	        if (!g_dbus_proxy_call_sync (proxy, "SetIp6Config",
+	                                     g_variant_new ("(*)", ip6config),
+	                                     G_DBUS_CALL_FLAGS_NONE, -1,
+	                                     NULL,
+		                             &err)) {
 			g_warning ("Could not send IPv6 configuration information: %s", err->message);
 			g_error_free (err);
 			err = NULL;
 		}
 	}
-
-	g_object_unref (proxy);
 }
 
 static GVariant *
@@ -351,7 +323,7 @@ get_ip6_routes (void)
 		g_ptr_array_add (routes, route);
 	}
 
-	if (i > 1)
+	if (routes->len)
 		value = nm_utils_ip6_routes_to_variant (routes);
 	g_ptr_array_unref (routes);
 
@@ -451,7 +423,7 @@ trusted_remote_to_gvariant (void)
 int
 main (int argc, char *argv[])
 {
-	DBusGConnection *connection;
+	GDBusProxy *proxy;
 	GVariantBuilder builder, ip4builder, ip6builder;
 	GVariant *ip4config, *ip6config;
 	char *tmp;
@@ -518,9 +490,16 @@ main (int argc, char *argv[])
 
 	is_restart = argc >= 7 && !g_strcmp0 (argv[6], "restart");
 
-	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &err);
-	if (!connection) {
-		g_warning ("Could not get the system bus: %s", err->message);
+	proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
+	                                       G_DBUS_PROXY_FLAGS_NONE,
+	                                       NULL,
+	                                       NM_DBUS_SERVICE_OPENVPN,
+	                                       NM_VPN_DBUS_PLUGIN_PATH,
+	                                       NM_VPN_DBUS_PLUGIN_INTERFACE,
+	                                       NULL, &err);
+	if (!proxy) {
+		g_warning ("Could not create a D-Bus proxy: %s", err->message);
+		g_error_free (err);
 		exit (1);
 	}
 
@@ -533,7 +512,7 @@ main (int argc, char *argv[])
 	if (val)
 		g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CONFIG_EXT_GATEWAY, val);
 	else
-		helper_failed (connection, "VPN Gateway");
+		helper_failed (proxy, "VPN Gateway");
 
 	/* Internal VPN subnet gateway */
 	tmp = getenv ("route_vpn_gateway");
@@ -552,7 +531,7 @@ main (int argc, char *argv[])
 	if (val)
 		g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CONFIG_TUNDEV, val);
 	else
-		helper_failed (connection, "Tunnel Device");
+		helper_failed (proxy, "Tunnel Device");
 
 	if (tapdev == -1)
 		tapdev = strncmp (tmp, "tap", 3) == 0;
@@ -566,7 +545,7 @@ main (int argc, char *argv[])
 		if (val)
 			g_variant_builder_add (&ip4builder, "{sv}", NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS, val);
 		else
-			helper_failed (connection, "IP4 Address");
+			helper_failed (proxy, "IP4 Address");
 	}
 
 	/* PTP address; for vpnc PTP address == internal IP4 address */
@@ -622,7 +601,7 @@ main (int argc, char *argv[])
 		if (val)
 			g_variant_builder_add (&ip6builder, "{sv}", NM_VPN_PLUGIN_IP6_CONFIG_ADDRESS, val);
 		else
-			helper_failed (connection, "IP6 Address");
+			helper_failed (proxy, "IP6 Address");
 	}
 
 	/* IPv6 remote address */
@@ -632,7 +611,7 @@ main (int argc, char *argv[])
 		if (val)
 			g_variant_builder_add (&ip6builder, "{sv}", NM_VPN_PLUGIN_IP6_CONFIG_PTP, val);
 		else
-			helper_failed (connection, "IP6 PTP Address");
+			helper_failed (proxy, "IP6 PTP Address");
 	}
 
 	/* IPv6 netbits */
@@ -737,7 +716,9 @@ main (int argc, char *argv[])
 	}
 
 	/* Send the config info to nm-openvpn-service */
-	send_config (connection, g_variant_builder_end (&builder), ip4config, ip6config);
+	send_config (proxy, g_variant_builder_end (&builder), ip4config, ip6config);
+
+	g_object_unref (proxy);
 
 	return 0;
 }

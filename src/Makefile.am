@@ -1,6 +1,5 @@
 AM_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
-	$(DBUS_CFLAGS) \
 	$(LIBNM_CFLAGS) \
 	-DBINDIR=\"$(bindir)\" \
 	-DPREFIX=\""$(prefix)"\" \
@@ -28,7 +27,6 @@ nm_openvpn_service_openvpn_helper_SOURCES = \
 	nm-openvpn-service-openvpn-helper.c
 
 nm_openvpn_service_openvpn_helper_LDADD = \
-	$(DBUS_LIBS) \
 	$(LIBNM_LIBS)
 
 CLEANFILES = *~
