@@ -1093,6 +1093,49 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (tmp && !strcmp (tmp, "yes"))
 		add_openvpn_arg (args, "--float");
 
+	/* ping, ping-exit, ping-restart */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING);
+	if (tmp) {
+		add_openvpn_arg (args, "--ping");
+		if (!add_openvpn_arg_int (args, tmp)) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("Invalid ping duration '%s'."),
+			             tmp);
+			free_openvpn_args (args);
+			return FALSE;
+		}
+	}
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_EXIT);
+	if (tmp) {
+		add_openvpn_arg (args, "--ping-exit");
+		if (!add_openvpn_arg_int (args, tmp)) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("Invalid ping-exit duration '%s'."),
+			             tmp);
+			free_openvpn_args (args);
+			return FALSE;
+		}
+	}
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART);
+	if (tmp) {
+		add_openvpn_arg (args, "--ping-restart");
+		if (!add_openvpn_arg_int (args, tmp)) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("Invalid ping-restart duration '%s'."),
+			             tmp);
+			free_openvpn_args (args);
+			return FALSE;
+		}
+	}
+
 	add_openvpn_arg (args, "--nobind");
 
 	/* Device and device type, defaults to tun */

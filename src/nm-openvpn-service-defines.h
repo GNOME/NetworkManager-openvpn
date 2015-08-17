@@ -39,6 +39,9 @@
 #define NM_OPENVPN_KEY_KEY "key"
 #define NM_OPENVPN_KEY_LOCAL_IP "local-ip" /* ??? */
 #define NM_OPENVPN_KEY_MSSFIX "mssfix"
+#define NM_OPENVPN_KEY_PING "ping"
+#define NM_OPENVPN_KEY_PING_EXIT "ping-exit"
+#define NM_OPENVPN_KEY_PING_RESTART "ping-restart"
 #define NM_OPENVPN_KEY_PORT "port"
 #define NM_OPENVPN_KEY_PROTO_TCP "proto-tcp"
 #define NM_OPENVPN_KEY_PROXY_TYPE "proxy-type"
