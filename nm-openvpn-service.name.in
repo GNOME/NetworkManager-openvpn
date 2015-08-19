@@ -2,6 +2,7 @@
 name=openvpn
 service=org.freedesktop.NetworkManager.openvpn
 program=@LIBEXECDIR@/nm-openvpn-service
+supports-multiple-connections=true
 
 [libnm]
 plugin=@PLUGINDIR@/libnm-vpn-plugin-openvpn.so

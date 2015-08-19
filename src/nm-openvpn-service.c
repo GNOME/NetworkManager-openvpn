@@ -941,6 +941,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	char *stmp;
 	const char *defport, *proto_tcp;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
+	gchar *bus_name;
 
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
@@ -1289,8 +1290,9 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Up script, called when connection has been established or has been restarted */
 	add_openvpn_arg (args, "--up");
-	stmp = g_strdup_printf ("%s%s %s --", NM_OPENVPN_HELPER_PATH, debug ? " --helper-debug" : "",
-	                        dev_type_is_tap ? "--tap" : "--tun");
+	g_object_get (plugin, NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME, &bus_name, NULL);
+	stmp = g_strdup_printf ("%s%s --bus-name %s %s --", NM_OPENVPN_HELPER_PATH, debug ? " --helper-debug" : "",
+	                        bus_name, dev_type_is_tap ? "--tap" : "--tun");
 	add_openvpn_arg (args, stmp);
 	g_free (stmp);
 	add_openvpn_arg (args, "--up-restart");
@@ -1765,14 +1767,13 @@ plugin_state_changed (NMOpenvpnPlugin *plugin,
 }
 
 NMOpenvpnPlugin *
-nm_openvpn_plugin_new (void)
+nm_openvpn_plugin_new (const char *bus_name)
 {
 	NMOpenvpnPlugin *plugin;
 	GError *error = NULL;
 
 	plugin =  (NMOpenvpnPlugin *) g_initable_new (NM_TYPE_OPENVPN_PLUGIN, NULL, &error,
-	                                              NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME,
-	                                              NM_DBUS_SERVICE_OPENVPN,
+	                                              NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME, bus_name,
 	                                              NULL);
 
 	if (plugin) {
@@ -1818,10 +1819,12 @@ main (int argc, char *argv[])
 	NMOpenvpnPlugin *plugin;
 	gboolean persist = FALSE;
 	GOptionContext *opt_ctx = NULL;
+	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
 
 	GOptionEntry options[] = {
 		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don't quit when VPN connection terminates"), NULL },
 		{ "debug", 0, 0, G_OPTION_ARG_NONE, &debug, N_("Enable verbose debug logging (may expose passwords)"), NULL },
+		{ "bus-name", 0, 0, G_OPTION_ARG_STRING, &bus_name, N_("DBus name to use for this instance"), NULL },
 		{NULL}
 	};
 
@@ -1860,7 +1863,7 @@ main (int argc, char *argv[])
 	    && (system ("/sbin/modprobe tun") == -1))
 		exit (EXIT_FAILURE);
 
-	plugin = nm_openvpn_plugin_new ();
+	plugin = nm_openvpn_plugin_new (bus_name);
 	if (!plugin)
 		exit (EXIT_FAILURE);
 
