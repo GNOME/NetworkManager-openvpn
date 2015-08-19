@@ -440,6 +440,7 @@ main (int argc, char *argv[])
 	int shift = 0;
 	gboolean is_restart;
 	gboolean has_ip4_prefix = FALSE;
+	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
@@ -456,7 +457,17 @@ main (int argc, char *argv[])
 			tapdev = 0;
 		else if (!strcmp (argv[i], "--tap"))
 			tapdev = 1;
-		else
+		else if (!strcmp (argv[i], "--bus-name")) {
+			if (++i == argc) {
+				g_warning ("Missing bus name argument");
+				exit (1);
+			}
+			if (!g_dbus_is_name (argv[i])) {
+				g_warning ("Invalid bus name");
+				exit (1);
+			}
+			bus_name = argv[i];
+		} else
 			break;
 	}
 	shift = i - 1;
@@ -494,7 +505,7 @@ main (int argc, char *argv[])
 	proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
 	                                       G_DBUS_PROXY_FLAGS_NONE,
 	                                       NULL,
-	                                       NM_DBUS_SERVICE_OPENVPN,
+	                                       bus_name,
 	                                       NM_VPN_DBUS_PLUGIN_PATH,
 	                                       NM_VPN_DBUS_PLUGIN_INTERFACE,
 	                                       NULL, &err);
