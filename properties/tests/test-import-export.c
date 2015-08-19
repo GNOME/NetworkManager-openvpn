@@ -23,20 +23,15 @@
 #include <arpa/inet.h>
 #include <locale.h>
 
-#include <nm-utils.h>
-#include <nm-setting-connection.h>
-#include <nm-setting-ip4-config.h>
-#include <nm-setting-vpn.h>
-
-#include <nm-vpn-plugin-ui-interface.h>
+#include <NetworkManager.h>
 
 #include "nm-test-helpers.h"
 #include "properties/nm-openvpn.h"
-#include "src/nm-openvpn-service.h"
+#include "src/nm-openvpn-service-defines.h"
 
 static NMConnection *
 get_basic_connection (const char *detail,
-                      NMVpnPluginUiInterface *plugin,
+                      NMVpnEditorPlugin *plugin,
                       const char *dir,
                       const char *filename)
 {
@@ -48,7 +43,7 @@ get_basic_connection (const char *detail,
 	ASSERT (pcf != NULL,
 	        "basic", "failed to create pcf path");
 
-	connection = nm_vpn_plugin_ui_interface_import (plugin, pcf, &error);
+	connection = nm_vpn_editor_plugin_import (plugin, pcf, &error);
 	if (error)
 		FAIL ("basic", "error importing %s: %s", pcf, error->message);
 	ASSERT (connection != NULL,
@@ -60,7 +55,7 @@ get_basic_connection (const char *detail,
 
 static void
 test_item (const char *test,
-           NMSettingVPN *s_vpn,
+           NMSettingVpn *s_vpn,
            const char *item,
            const char *expected)
 {
@@ -83,7 +78,7 @@ test_item (const char *test,
 
 static void
 test_secret (const char *test,
-             NMSettingVPN *s_vpn,
+             NMSettingVpn *s_vpn,
              const char *item,
              const char *expected)
 {
@@ -105,12 +100,12 @@ test_secret (const char *test,
 }
 
 static void
-test_password_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_password_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
-	NMSettingVPN *s_vpn;
+	NMSettingIPConfig *s_ip4;
+	NMSettingVpn *s_vpn;
 	const char *expected_id = "password";
 	char *expected_cacert;
 
@@ -180,7 +175,7 @@ save_one_key (const char *key, const char *value, gpointer user_data)
 static void
 remove_secrets (NMConnection *connection)
 {
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 	GSList *keys = NULL, *iter;
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
@@ -197,7 +192,7 @@ remove_secrets (NMConnection *connection)
 
 #define PASSWORD_EXPORTED_NAME "password.ovpntest"
 static void
-test_password_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+test_password_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -209,7 +204,7 @@ test_password_export (NMVpnPluginUiInterface *plugin, const char *dir, const cha
 	ASSERT (connection != NULL, "password-export", "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, PASSWORD_EXPORTED_NAME, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL ("password-export", "export failed with missing error");
@@ -236,12 +231,12 @@ test_password_export (NMVpnPluginUiInterface *plugin, const char *dir, const cha
 }
 
 static void
-test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_tls_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
-	NMSettingVPN *s_vpn;
+	NMSettingIPConfig *s_ip4;
+	NMSettingVpn *s_vpn;
 	const char *expected_id = "tls";
 	char *expected_path;
 
@@ -313,7 +308,7 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define TLS_EXPORTED_NAME "tls.ovpntest"
 static void
-test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+test_tls_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -325,7 +320,7 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tm
 	ASSERT (connection != NULL, "tls-export", "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, TLS_EXPORTED_NAME, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL ("tls-export", "export failed with missing error");
@@ -352,12 +347,12 @@ test_tls_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tm
 }
 
 static void
-test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_pkcs12_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
-	NMSettingVPN *s_vpn;
+	NMSettingIPConfig *s_ip4;
+	NMSettingVpn *s_vpn;
 	const char *expected_id = "pkcs12";
 	char *expected_path;
 
@@ -422,7 +417,7 @@ test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define PKCS12_EXPORTED_NAME "pkcs12.ovpntest"
 static void
-test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+test_pkcs12_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -434,7 +429,7 @@ test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir, const char 
 	ASSERT (connection != NULL, "pkcs12-export", "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, PKCS12_EXPORTED_NAME, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL ("pkcs12-export", "export failed with missing error");
@@ -461,11 +456,11 @@ test_pkcs12_export (NMVpnPluginUiInterface *plugin, const char *dir, const char 
 }
 
 static void
-test_non_utf8_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_non_utf8_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 	const char *expected_cacert = "Attätaenko.pem";
 	char *expected_path;
 	const char *charset = NULL;
@@ -502,12 +497,12 @@ test_non_utf8_import (NMVpnPluginUiInterface *plugin, const char *dir)
 }
 
 static void
-test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_static_key_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
-	NMSettingVPN *s_vpn;
+	NMSettingIPConfig *s_ip4;
+	NMSettingVpn *s_vpn;
 	const char *expected_id = "static";
 	char *expected_path;
 
@@ -565,7 +560,7 @@ test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define STATIC_KEY_EXPORTED_NAME "static.ovpntest"
 static void
-test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+test_static_key_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -577,7 +572,7 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir, const c
 	ASSERT (connection != NULL, "static-key-export", "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, STATIC_KEY_EXPORTED_NAME, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL ("static-key-export", "export failed with missing error");
@@ -604,7 +599,7 @@ test_static_key_export (NMVpnPluginUiInterface *plugin, const char *dir, const c
 }
 
 static void
-test_port_import (NMVpnPluginUiInterface *plugin,
+test_port_import (NMVpnEditorPlugin *plugin,
                   const char *detail,
                   const char *dir,
                   const char *file,
@@ -613,7 +608,7 @@ test_port_import (NMVpnPluginUiInterface *plugin,
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (detail, plugin, dir, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -639,7 +634,7 @@ test_port_import (NMVpnPluginUiInterface *plugin,
 }
 
 static void
-test_ping_import (NMVpnPluginUiInterface *plugin,
+test_ping_import (NMVpnEditorPlugin *plugin,
                   const char *detail,
                   const char *dir,
                   const char *file,
@@ -649,7 +644,7 @@ test_ping_import (NMVpnPluginUiInterface *plugin,
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (detail, plugin, dir, file);
 	g_assert (connection);
@@ -671,7 +666,7 @@ test_ping_import (NMVpnPluginUiInterface *plugin,
 }
 
 static void
-test_port_export (NMVpnPluginUiInterface *plugin,
+test_port_export (NMVpnEditorPlugin *plugin,
                   const char *detail,
                   const char *dir,
                   const char *tmpdir,
@@ -688,7 +683,7 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 	ASSERT (connection != NULL, detail, "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, exported_name, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL (detail, "export failed with missing error");
@@ -715,10 +710,10 @@ test_port_export (NMVpnPluginUiInterface *plugin,
 }
 
 static void
-test_tun_opts_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_tun_opts_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection ("tunopts-import", plugin, dir, "tun-opts.conf");
 	ASSERT (connection != NULL, "tunopts-import", "failed to import connection");
@@ -738,7 +733,7 @@ test_tun_opts_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define TUNOPTS_EXPORTED_NAME "tun-opts.ovpntest"
 static void
-test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+test_tun_opts_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -750,7 +745,7 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir, const cha
 	ASSERT (connection != NULL, "tunopts-export", "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, TUNOPTS_EXPORTED_NAME, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL ("tunopts-export", "export failed with missing error");
@@ -777,10 +772,10 @@ test_tun_opts_export (NMVpnPluginUiInterface *plugin, const char *dir, const cha
 }
 
 static void
-test_proxy_http_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_proxy_http_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection ("proxy-http-import", plugin, dir, "proxy-http.ovpn");
 	ASSERT (connection != NULL, "proxy-http-import", "failed to import connection");
@@ -821,7 +816,7 @@ test_proxy_http_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define PROXY_HTTP_EXPORTED_NAME "proxy-http.ovpntest"
 static void
-test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+test_proxy_http_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -833,7 +828,7 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir, const c
 	ASSERT (connection != NULL, "proxy-http-export", "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, PROXY_HTTP_EXPORTED_NAME, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL ("proxy-http-export", "export failed with missing error");
@@ -860,10 +855,10 @@ test_proxy_http_export (NMVpnPluginUiInterface *plugin, const char *dir, const c
 }
 
 static void
-test_proxy_http_with_auth_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_proxy_http_with_auth_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection ("proxy-http-with-auth-import", plugin, dir, "proxy-http-with-auth.ovpn");
 	ASSERT (connection != NULL, "proxy-http-with-auth-import", "failed to import connection");
@@ -903,10 +898,10 @@ test_proxy_http_with_auth_import (NMVpnPluginUiInterface *plugin, const char *di
 }
 
 static void
-test_proxy_socks_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_proxy_socks_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection ("proxy-socks-import", plugin, dir, "proxy-socks.ovpn");
 	ASSERT (connection != NULL, "proxy-socks-import", "failed to import connection");
@@ -945,7 +940,7 @@ test_proxy_socks_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define PROXY_SOCKS_EXPORTED_NAME "proxy-socks.ovpntest"
 static void
-test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+test_proxy_socks_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -957,7 +952,7 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir, const 
 	ASSERT (connection != NULL, "proxy-socks-export", "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, PROXY_SOCKS_EXPORTED_NAME, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL ("proxy-socks-export", "export failed with missing error");
@@ -984,10 +979,10 @@ test_proxy_socks_export (NMVpnPluginUiInterface *plugin, const char *dir, const 
 }
 
 static void
-test_keysize_import (NMVpnPluginUiInterface *plugin, const char *dir)
+test_keysize_import (NMVpnEditorPlugin *plugin, const char *dir)
 {
 	NMConnection *connection;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection ("keysize-import", plugin, dir, "keysize.ovpn");
 	ASSERT (connection != NULL, "keysize-import", "failed to import connection");
@@ -1005,7 +1000,7 @@ test_keysize_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 #define KEYSIZE_EXPORTED_NAME "keysize.ovpntest"
 static void
-test_keysize_export (NMVpnPluginUiInterface *plugin, const char *dir, const char *tmpdir)
+test_keysize_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
 {
 	NMConnection *connection;
 	NMConnection *reimported;
@@ -1017,7 +1012,7 @@ test_keysize_export (NMVpnPluginUiInterface *plugin, const char *dir, const char
 	ASSERT (connection != NULL, "keysize-export", "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, KEYSIZE_EXPORTED_NAME, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL ("keysize-export", "export failed with missing error");
@@ -1044,7 +1039,7 @@ test_keysize_export (NMVpnPluginUiInterface *plugin, const char *dir, const char
 }
 
 static void
-test_device_import (NMVpnPluginUiInterface *plugin,
+test_device_import (NMVpnEditorPlugin *plugin,
                     const char *detail,
                     const char *dir,
                     const char *file,
@@ -1052,7 +1047,7 @@ test_device_import (NMVpnPluginUiInterface *plugin,
                     const char *expected_devtype)
 {
 	NMConnection *connection;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (detail, plugin, dir, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -1069,7 +1064,7 @@ test_device_import (NMVpnPluginUiInterface *plugin,
 }
 
 static void
-test_device_export (NMVpnPluginUiInterface *plugin,
+test_device_export (NMVpnEditorPlugin *plugin,
                     const char *detail,
                     const char *dir,
                     const char *tmpdir,
@@ -1086,7 +1081,7 @@ test_device_export (NMVpnPluginUiInterface *plugin,
 	ASSERT (connection != NULL, detail, "failed to import connection");
 
 	path = g_build_path ("/", tmpdir, exported_name, NULL);
-	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	if (!success) {
 		if (!error)
 			FAIL (detail, "export failed with missing error");
@@ -1116,7 +1111,7 @@ int main (int argc, char **argv)
 {
 	GError *error = NULL;
 	char *basename;
-	NMVpnPluginUiInterface *plugin = NULL;
+	NMVpnEditorPlugin *plugin = NULL;
 	char *tmp, *tmp2, *test_dir;
 
 	if (argc != 3)
@@ -1126,10 +1121,7 @@ int main (int argc, char **argv)
 	g_type_init ();
 #endif
 
-	if (!nm_utils_init (&error))
-		FAIL ("nm-utils-init", "failed to initialize libnm-util: %s", error->message);
-
-	plugin = nm_vpn_plugin_ui_factory (&error);
+	plugin = nm_vpn_editor_plugin_factory (&error);
 	if (error)
 		FAIL ("plugin-init", "failed to initialize UI plugin: %s", error->message);
 	ASSERT (plugin != NULL,

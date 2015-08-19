@@ -37,38 +37,66 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#ifdef NM_OPENVPN_OLD
+#define NM_VPN_LIBNM_COMPAT
 #include <nm-vpn-plugin-ui-interface.h>
 #include <nm-setting-vpn.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-ip4-config.h>
 
-#include "nm-openvpn-service-defines.h"
+#define OPENVPN_PLUGIN_NAME    _("OpenVPN")
+#define OPENVPN_PLUGIN_DESC    _("Compatible with the OpenVPN server.")
+
+#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
+#define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
+#define OPENVPN_EDITOR_PLUGIN_ERROR_MISSING_PROPERTY    NM_SETTING_VPN_ERROR_MISSING_PROPERTY
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_SETTING_VPN_ERROR_UNKNOWN
+
+#else /* !NM_OPENVPN_OLD */
+
+#include <NetworkManager.h>
+
+#define OPENVPN_PLUGIN_NAME    _("openvpn")
+#define OPENVPN_PLUGIN_DESC    _("OpenVPN")
+
+#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
+#define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
+#define OPENVPN_EDITOR_PLUGIN_ERROR_MISSING_PROPERTY    NM_CONNECTION_ERROR_MISSING_PROPERTY
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_CONNECTION_ERROR_FAILED
+#endif
+
+#include "../src/nm-openvpn-service-defines.h"
 #include "nm-openvpn.h"
 #include "auth-helpers.h"
 #include "import-export.h"
 
-#define OPENVPN_PLUGIN_NAME    _("OpenVPN")
-#define OPENVPN_PLUGIN_DESC    _("Compatible with the OpenVPN server.")
-#define OPENVPN_PLUGIN_SERVICE NM_DBUS_SERVICE_OPENVPN
-
 
 /************** plugin class **************/
 
-static void openvpn_plugin_ui_interface_init (NMVpnPluginUiInterface *iface_class);
+enum {
+	PROP_0,
+	PROP_NAME,
+	PROP_DESC,
+	PROP_SERVICE
+};
 
-G_DEFINE_TYPE_EXTENDED (OpenvpnPluginUi, openvpn_plugin_ui, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_PLUGIN_UI_INTERFACE,
-                                               openvpn_plugin_ui_interface_init))
+static void openvpn_editor_plugin_interface_init (NMVpnEditorPluginInterface *iface_class);
+
+G_DEFINE_TYPE_EXTENDED (OpenvpnEditorPlugin, openvpn_editor_plugin, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_EDITOR_PLUGIN,
+                                               openvpn_editor_plugin_interface_init))
 
 /************** UI widget class **************/
 
-static void openvpn_plugin_ui_widget_interface_init (NMVpnPluginUiWidgetInterface *iface_class);
+static void openvpn_editor_plugin_widget_interface_init (NMVpnEditorInterface *iface_class);
 
-G_DEFINE_TYPE_EXTENDED (OpenvpnPluginUiWidget, openvpn_plugin_ui_widget, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_PLUGIN_UI_WIDGET_INTERFACE,
-                                               openvpn_plugin_ui_widget_interface_init))
+G_DEFINE_TYPE_EXTENDED (OpenvpnEditor, openvpn_editor_plugin_widget, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_EDITOR,
+                                               openvpn_editor_plugin_widget_interface_init))
 
-#define OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidgetPrivate))
+#define OPENVPN_EDITOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), OPENVPN_TYPE_EDITOR, OpenvpnEditorPrivate))
 
 typedef struct {
 	GtkBuilder *builder;
@@ -78,52 +106,12 @@ typedef struct {
 	gboolean window_added;
 	GHashTable *advanced;
 	gboolean new_connection;
-} OpenvpnPluginUiWidgetPrivate;
+} OpenvpnEditorPrivate;
 
 
 #define COL_AUTH_NAME 0
 #define COL_AUTH_PAGE 1
 #define COL_AUTH_TYPE 2
-
-GQuark
-openvpn_plugin_ui_error_quark (void)
-{
-	static GQuark error_quark = 0;
-
-	if (G_UNLIKELY (error_quark == 0))
-		error_quark = g_quark_from_static_string ("openvpn-plugin-ui-error-quark");
-
-	return error_quark;
-}
-
-/* This should really be standard. */
-#define ENUM_ENTRY(NAME, DESC) { NAME, "" #NAME "", DESC }
-
-GType
-openvpn_plugin_ui_error_get_type (void)
-{
-	static GType etype = 0;
-
-	if (etype == 0) {
-		static const GEnumValue values[] = {
-			/* Unknown error. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_UNKNOWN, "UnknownError"),
-			/* The connection was missing invalid. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_INVALID_CONNECTION, "InvalidConnection"),
-			/* The specified property was invalid. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY, "InvalidProperty"),
-			/* The specified property was missing and is required. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_MISSING_PROPERTY, "MissingProperty"),
-			/* The file to import could not be read. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE, "FileNotReadable"),
-			/* The file to import could was not an OpenVPN client file. */
-			ENUM_ENTRY (OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN, "FileNotOpenVPN"),
-			{ 0, 0, 0 }
-		};
-		etype = g_enum_register_static ("OpenvpnPluginUiError", values);
-	}
-	return etype;
-}
 
 /* Example: abc.com:1234:udp, ovpnserver.company.com:443, vpn.example.com::tcp */
 static gboolean
@@ -171,9 +159,9 @@ out:
 }
 
 static gboolean
-check_validity (OpenvpnPluginUiWidget *self, GError **error)
+check_validity (OpenvpnEditor *self, GError **error)
 {
-	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (self);
+	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 	GtkWidget *widget;
 	const char *str;
 	GtkTreeModel *model;
@@ -191,8 +179,8 @@ check_validity (OpenvpnPluginUiWidget *self, GError **error)
 	gtk_widget_override_background_color (widget, GTK_STATE_NORMAL, !gateway_valid ? &rgba : NULL);
 	if (!gateway_valid) {
 		g_set_error (error,
-		             OPENVPN_PLUGIN_UI_ERROR,
-		             OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_REMOTE);
 		return FALSE;
 	}
@@ -212,14 +200,14 @@ check_validity (OpenvpnPluginUiWidget *self, GError **error)
 static void
 stuff_changed_cb (GtkWidget *widget, gpointer user_data)
 {
-	g_signal_emit_by_name (OPENVPN_PLUGIN_UI_WIDGET (user_data), "changed");
+	g_signal_emit_by_name (OPENVPN_EDITOR (user_data), "changed");
 }
 
 static void
 auth_combo_changed_cb (GtkWidget *combo, gpointer user_data)
 {
-	OpenvpnPluginUiWidget *self = OPENVPN_PLUGIN_UI_WIDGET (user_data);
-	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (self);
+	OpenvpnEditor *self = OPENVPN_EDITOR (user_data);
+	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 	GtkWidget *auth_notebook;
 	GtkWidget *show_passwords;
 	GtkTreeModel *model;
@@ -256,8 +244,8 @@ advanced_dialog_close_cb (GtkWidget *dialog, gpointer user_data)
 static void
 advanced_dialog_response_cb (GtkWidget *dialog, gint response, gpointer user_data)
 {
-	OpenvpnPluginUiWidget *self = OPENVPN_PLUGIN_UI_WIDGET (user_data);
-	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (self);
+	OpenvpnEditor *self = OPENVPN_EDITOR (user_data);
+	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 	GError *error = NULL;
 
 	if (response != GTK_RESPONSE_OK) {
@@ -280,8 +268,8 @@ advanced_dialog_response_cb (GtkWidget *dialog, gint response, gpointer user_dat
 static void
 advanced_button_clicked_cb (GtkWidget *button, gpointer user_data)
 {
-	OpenvpnPluginUiWidget *self = OPENVPN_PLUGIN_UI_WIDGET (user_data);
-	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (self);
+	OpenvpnEditor *self = OPENVPN_EDITOR (user_data);
+	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 	GtkWidget *dialog, *toplevel, *widget;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -315,10 +303,10 @@ advanced_button_clicked_cb (GtkWidget *button, gpointer user_data)
 }
 
 static gboolean
-init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **error)
+init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **error)
 {
-	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (self);
-	NMSettingVPN *s_vpn;
+	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
+	NMSettingVpn *s_vpn;
 	GtkWidget *widget;
 	GtkListStore *store;
 	GtkTreeIter iter;
@@ -419,10 +407,10 @@ init_plugin_ui (OpenvpnPluginUiWidget *self, NMConnection *connection, GError **
 }
 
 static GObject *
-get_widget (NMVpnPluginUiWidgetInterface *iface)
+get_widget (NMVpnEditor *iface)
 {
-	OpenvpnPluginUiWidget *self = OPENVPN_PLUGIN_UI_WIDGET (iface);
-	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (self);
+	OpenvpnEditor *self = OPENVPN_EDITOR (iface);
+	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 
 	return G_OBJECT (priv->widget);
 }
@@ -430,7 +418,7 @@ get_widget (NMVpnPluginUiWidgetInterface *iface)
 static void
 hash_copy_advanced (gpointer key, gpointer data, gpointer user_data)
 {
-	NMSettingVPN *s_vpn = NM_SETTING_VPN (user_data);
+	NMSettingVpn *s_vpn = NM_SETTING_VPN (user_data);
 	const char *value = (const char *) data;
 
 	g_return_if_fail (value && strlen (value));
@@ -462,13 +450,13 @@ get_auth_type (GtkBuilder *builder)
 }
 
 static gboolean
-update_connection (NMVpnPluginUiWidgetInterface *iface,
+update_connection (NMVpnEditor *iface,
                    NMConnection *connection,
                    GError **error)
 {
-	OpenvpnPluginUiWidget *self = OPENVPN_PLUGIN_UI_WIDGET (iface);
-	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (self);
-	NMSettingVPN *s_vpn;
+	OpenvpnEditor *self = OPENVPN_EDITOR (iface);
+	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
+	NMSettingVpn *s_vpn;
 	GtkWidget *widget;
 	char *str, *auth_type;
 	gboolean valid = FALSE;
@@ -534,25 +522,25 @@ is_new_func (const char *key, const char *value, gpointer user_data)
 	*is_new = FALSE;
 }
 
-static NMVpnPluginUiWidgetInterface *
-nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
+static NMVpnEditor *
+nm_vpn_editor_interface_new (NMConnection *connection, GError **error)
 {
-	NMVpnPluginUiWidgetInterface *object;
-	OpenvpnPluginUiWidgetPrivate *priv;
+	NMVpnEditor *object;
+	OpenvpnEditorPrivate *priv;
 	char *ui_file;
 	gboolean new = TRUE;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 
 	if (error)
 		g_return_val_if_fail (*error == NULL, NULL);
 
-	object = NM_VPN_PLUGIN_UI_WIDGET_INTERFACE (g_object_new (OPENVPN_TYPE_PLUGIN_UI_WIDGET, NULL));
+	object = g_object_new (OPENVPN_TYPE_EDITOR, NULL);
 	if (!object) {
-		g_set_error_literal (error, OPENVPN_PLUGIN_UI_ERROR, 0, _("could not create openvpn object"));
+		g_set_error_literal (error, OPENVPN_EDITOR_PLUGIN_ERROR, 0, _("could not create openvpn object"));
 		return NULL;
 	}
 
-	priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (object);
+	priv = OPENVPN_EDITOR_GET_PRIVATE (object);
 
 	ui_file = g_strdup_printf ("%s/%s", UIDIR, "nm-openvpn-dialog.ui");
 	priv->builder = gtk_builder_new ();
@@ -563,7 +551,7 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 		g_warning ("Couldn't load builder file: %s",
 		           error && *error ? (*error)->message : "(unknown)");
 		g_clear_error (error);
-		g_set_error (error, OPENVPN_PLUGIN_UI_ERROR, 0,
+		g_set_error (error, OPENVPN_EDITOR_PLUGIN_ERROR, 0,
 		             "could not load required resources from %s", ui_file);
 		g_free (ui_file);
 		g_object_unref (object);
@@ -574,7 +562,7 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 
 	priv->widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "openvpn-vbox"));
 	if (!priv->widget) {
-		g_set_error_literal (error, OPENVPN_PLUGIN_UI_ERROR, 0, _("could not load UI widget"));
+		g_set_error_literal (error, OPENVPN_EDITOR_PLUGIN_ERROR, 0, _("could not load UI widget"));
 		g_object_unref (object);
 		return NULL;
 	}
@@ -587,7 +575,7 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 		nm_setting_vpn_foreach_data_item (s_vpn, is_new_func, &new);
 	priv->new_connection = new;
 
-	if (!init_plugin_ui (OPENVPN_PLUGIN_UI_WIDGET (object), connection, error)) {
+	if (!init_editor_plugin (OPENVPN_EDITOR (object), connection, error)) {
 		g_object_unref (object);
 		return NULL;
 	}
@@ -604,8 +592,8 @@ nm_vpn_plugin_ui_widget_interface_new (NMConnection *connection, GError **error)
 static void
 dispose (GObject *object)
 {
-	OpenvpnPluginUiWidget *plugin = OPENVPN_PLUGIN_UI_WIDGET (object);
-	OpenvpnPluginUiWidgetPrivate *priv = OPENVPN_PLUGIN_UI_WIDGET_GET_PRIVATE (plugin);
+	OpenvpnEditor *plugin = OPENVPN_EDITOR (object);
+	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (plugin);
 
 	if (priv->group)
 		g_object_unref (priv->group);
@@ -622,26 +610,26 @@ dispose (GObject *object)
 	if (priv->advanced)
 		g_hash_table_destroy (priv->advanced);
 
-	G_OBJECT_CLASS (openvpn_plugin_ui_widget_parent_class)->dispose (object);
+	G_OBJECT_CLASS (openvpn_editor_plugin_widget_parent_class)->dispose (object);
 }
 
 static void
-openvpn_plugin_ui_widget_class_init (OpenvpnPluginUiWidgetClass *req_class)
+openvpn_editor_plugin_widget_class_init (OpenvpnEditorClass *req_class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (req_class);
 
-	g_type_class_add_private (req_class, sizeof (OpenvpnPluginUiWidgetPrivate));
+	g_type_class_add_private (req_class, sizeof (OpenvpnEditorPrivate));
 
 	object_class->dispose = dispose;
 }
 
 static void
-openvpn_plugin_ui_widget_init (OpenvpnPluginUiWidget *plugin)
+openvpn_editor_plugin_widget_init (OpenvpnEditor *plugin)
 {
 }
 
 static void
-openvpn_plugin_ui_widget_interface_init (NMVpnPluginUiWidgetInterface *iface_class)
+openvpn_editor_plugin_widget_interface_init (NMVpnEditorInterface *iface_class)
 {
 	/* interface implementation */
 	iface_class->get_widget = get_widget;
@@ -649,7 +637,7 @@ openvpn_plugin_ui_widget_interface_init (NMVpnPluginUiWidgetInterface *iface_cla
 }
 
 static NMConnection *
-import (NMVpnPluginUiInterface *iface, const char *path, GError **error)
+import (NMVpnEditorPlugin *iface, const char *path, GError **error)
 {
 	NMConnection *connection = NULL;
 	char *contents = NULL;
@@ -663,8 +651,8 @@ import (NMVpnPluginUiInterface *iface, const char *path, GError **error)
 	             && !g_str_has_suffix (ext, ".cnf")
 	             && !g_str_has_suffix (ext, ".ovpntest"))) {   /* Special extension for testcases */
 		g_set_error_literal (error,
-		                     OPENVPN_PLUGIN_UI_ERROR,
-		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("unknown OpenVPN file extension"));
 		goto out;
 	}
@@ -691,8 +679,8 @@ import (NMVpnPluginUiInterface *iface, const char *path, GError **error)
 	lines = g_strsplit_set (contents, "\r\n", 0);
 	if (g_strv_length (lines) <= 1) {
 		g_set_error_literal (error,
-		                     OPENVPN_PLUGIN_UI_ERROR,
-		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE,
 		                     _("not a valid OpenVPN configuration file"));
 		goto out;
 	}
@@ -707,7 +695,7 @@ out:
 }
 
 static gboolean
-export (NMVpnPluginUiInterface *iface,
+export (NMVpnEditorPlugin *iface,
         const char *path,
         NMConnection *connection,
         GError **error)
@@ -716,7 +704,7 @@ export (NMVpnPluginUiInterface *iface,
 }
 
 static char *
-get_suggested_name (NMVpnPluginUiInterface *iface, NMConnection *connection)
+get_suggested_filename (NMVpnEditorPlugin *iface, NMConnection *connection)
 {
 	NMSettingConnection *s_con;
 	const char *id;
@@ -733,17 +721,17 @@ get_suggested_name (NMVpnPluginUiInterface *iface, NMConnection *connection)
 }
 
 static guint32
-get_capabilities (NMVpnPluginUiInterface *iface)
+get_capabilities (NMVpnEditorPlugin *iface)
 {
-	return (NM_VPN_PLUGIN_UI_CAPABILITY_IMPORT |
-	        NM_VPN_PLUGIN_UI_CAPABILITY_EXPORT |
-	        NM_VPN_PLUGIN_UI_CAPABILITY_IPV6);
+	return (NM_VPN_EDITOR_PLUGIN_CAPABILITY_IMPORT |
+	        NM_VPN_EDITOR_PLUGIN_CAPABILITY_EXPORT |
+	        NM_VPN_EDITOR_PLUGIN_CAPABILITY_IPV6);
 }
 
-static NMVpnPluginUiWidgetInterface *
-ui_factory (NMVpnPluginUiInterface *iface, NMConnection *connection, GError **error)
+static NMVpnEditor *
+get_editor (NMVpnEditorPlugin *iface, NMConnection *connection, GError **error)
 {
-	return nm_vpn_plugin_ui_widget_interface_new (connection, error);
+	return nm_vpn_editor_interface_new (connection, error);
 }
 
 static void
@@ -751,14 +739,14 @@ get_property (GObject *object, guint prop_id,
 			  GValue *value, GParamSpec *pspec)
 {
 	switch (prop_id) {
-	case NM_VPN_PLUGIN_UI_INTERFACE_PROP_NAME:
+	case PROP_NAME:
 		g_value_set_string (value, OPENVPN_PLUGIN_NAME);
 		break;
-	case NM_VPN_PLUGIN_UI_INTERFACE_PROP_DESC:
+	case PROP_DESC:
 		g_value_set_string (value, OPENVPN_PLUGIN_DESC);
 		break;
-	case NM_VPN_PLUGIN_UI_INTERFACE_PROP_SERVICE:
-		g_value_set_string (value, OPENVPN_PLUGIN_SERVICE);
+	case PROP_SERVICE:
+		g_value_set_string (value, NM_DBUS_SERVICE_OPENVPN);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -767,44 +755,44 @@ get_property (GObject *object, guint prop_id,
 }
 
 static void
-openvpn_plugin_ui_class_init (OpenvpnPluginUiClass *req_class)
+openvpn_editor_plugin_class_init (OpenvpnEditorPluginClass *req_class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (req_class);
 
 	object_class->get_property = get_property;
 
 	g_object_class_override_property (object_class,
-	                                  NM_VPN_PLUGIN_UI_INTERFACE_PROP_NAME,
-	                                  NM_VPN_PLUGIN_UI_INTERFACE_NAME);
+	                                  PROP_NAME,
+	                                  NM_VPN_EDITOR_PLUGIN_NAME);
 
 	g_object_class_override_property (object_class,
-	                                  NM_VPN_PLUGIN_UI_INTERFACE_PROP_DESC,
-	                                  NM_VPN_PLUGIN_UI_INTERFACE_DESC);
+	                                  PROP_DESC,
+	                                  NM_VPN_EDITOR_PLUGIN_DESCRIPTION);
 
 	g_object_class_override_property (object_class,
-	                                  NM_VPN_PLUGIN_UI_INTERFACE_PROP_SERVICE,
-	                                  NM_VPN_PLUGIN_UI_INTERFACE_SERVICE);
+	                                  PROP_SERVICE,
+	                                  NM_VPN_EDITOR_PLUGIN_SERVICE);
 }
 
 static void
-openvpn_plugin_ui_init (OpenvpnPluginUi *plugin)
+openvpn_editor_plugin_init (OpenvpnEditorPlugin *plugin)
 {
 }
 
 static void
-openvpn_plugin_ui_interface_init (NMVpnPluginUiInterface *iface_class)
+openvpn_editor_plugin_interface_init (NMVpnEditorPluginInterface *iface_class)
 {
 	/* interface implementation */
-	iface_class->ui_factory = ui_factory;
+	iface_class->get_editor = get_editor;
 	iface_class->get_capabilities = get_capabilities;
 	iface_class->import_from_file = import;
 	iface_class->export_to_file = export;
-	iface_class->get_suggested_name = get_suggested_name;
+	iface_class->get_suggested_filename = get_suggested_filename;
 }
 
 
-G_MODULE_EXPORT NMVpnPluginUiInterface *
-nm_vpn_plugin_ui_factory (GError **error)
+G_MODULE_EXPORT NMVpnEditorPlugin *
+nm_vpn_editor_plugin_factory (GError **error)
 {
 	if (error)
 		g_return_val_if_fail (*error == NULL, NULL);
@@ -812,6 +800,6 @@ nm_vpn_plugin_ui_factory (GError **error)
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 
-	return NM_VPN_PLUGIN_UI_INTERFACE (g_object_new (OPENVPN_TYPE_PLUGIN_UI, NULL));
+	return g_object_new (OPENVPN_TYPE_EDITOR_PLUGIN, NULL);
 }
 

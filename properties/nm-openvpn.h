@@ -25,63 +25,46 @@
 
 #include <glib-object.h>
 
-typedef enum
-{
-	OPENVPN_PLUGIN_UI_ERROR_UNKNOWN = 0,
-	OPENVPN_PLUGIN_UI_ERROR_INVALID_CONNECTION,
-	OPENVPN_PLUGIN_UI_ERROR_INVALID_PROPERTY,
-	OPENVPN_PLUGIN_UI_ERROR_MISSING_PROPERTY,
-	OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE,
-	OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN
-} OpenvpnPluginUiError;
+#define OPENVPN_TYPE_EDITOR_PLUGIN                (openvpn_editor_plugin_get_type ())
+#define OPENVPN_EDITOR_PLUGIN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_EDITOR_PLUGIN, OpenvpnEditorPlugin))
+#define OPENVPN_EDITOR_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_EDITOR_PLUGIN, OpenvpnEditorPluginClass))
+#define OPENVPN_IS_EDITOR_PLUGIN(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OPENVPN_TYPE_EDITOR_PLUGIN))
+#define OPENVPN_IS_EDITOR_PLUGIN_CLASS(klass)     (G_TYPE_CHECK_CLASS_TYPE ((klass), OPENVPN_TYPE_EDITOR_PLUGIN))
+#define OPENVPN_EDITOR_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), OPENVPN_TYPE_EDITOR_PLUGIN, OpenvpnEditorPluginClass))
 
-#define OPENVPN_TYPE_PLUGIN_UI_ERROR (openvpn_plugin_ui_error_get_type ()) 
-GType openvpn_plugin_ui_error_get_type (void);
+typedef struct _OpenvpnEditorPlugin OpenvpnEditorPlugin;
+typedef struct _OpenvpnEditorPluginClass OpenvpnEditorPluginClass;
 
-#define OPENVPN_PLUGIN_UI_ERROR (openvpn_plugin_ui_error_quark ())
-GQuark openvpn_plugin_ui_error_quark (void);
-
-
-#define OPENVPN_TYPE_PLUGIN_UI            (openvpn_plugin_ui_get_type ())
-#define OPENVPN_PLUGIN_UI(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_PLUGIN_UI, OpenvpnPluginUi))
-#define OPENVPN_PLUGIN_UI_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_PLUGIN_UI, OpenvpnPluginUiClass))
-#define OPENVPN_IS_PLUGIN_UI(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OPENVPN_TYPE_PLUGIN_UI))
-#define OPENVPN_IS_PLUGIN_UI_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), OPENVPN_TYPE_PLUGIN_UI))
-#define OPENVPN_PLUGIN_UI_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), OPENVPN_TYPE_PLUGIN_UI, OpenvpnPluginUiClass))
-
-typedef struct _OpenvpnPluginUi OpenvpnPluginUi;
-typedef struct _OpenvpnPluginUiClass OpenvpnPluginUiClass;
-
-struct _OpenvpnPluginUi {
+struct _OpenvpnEditorPlugin {
 	GObject parent;
 };
 
-struct _OpenvpnPluginUiClass {
+struct _OpenvpnEditorPluginClass {
 	GObjectClass parent;
 };
 
-GType openvpn_plugin_ui_get_type (void);
+GType openvpn_editor_plugin_get_type (void);
 
 
-#define OPENVPN_TYPE_PLUGIN_UI_WIDGET            (openvpn_plugin_ui_widget_get_type ())
-#define OPENVPN_PLUGIN_UI_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidget))
-#define OPENVPN_PLUGIN_UI_WIDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidgetClass))
-#define OPENVPN_IS_PLUGIN_UI_WIDGET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OPENVPN_TYPE_PLUGIN_UI_WIDGET))
-#define OPENVPN_IS_PLUGIN_UI_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), OPENVPN_TYPE_PLUGIN_UI_WIDGET))
-#define OPENVPN_PLUGIN_UI_WIDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), OPENVPN_TYPE_PLUGIN_UI_WIDGET, OpenvpnPluginUiWidgetClass))
+#define OPENVPN_TYPE_EDITOR            (openvpn_editor_plugin_widget_get_type ())
+#define OPENVPN_EDITOR(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_EDITOR, OpenvpnEditor))
+#define OPENVPN_EDITOR_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_EDITOR, OpenvpnEditorClass))
+#define OPENVPN_IS_EDITOR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OPENVPN_TYPE_EDITOR))
+#define OPENVPN_IS_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), OPENVPN_TYPE_EDITOR))
+#define OPENVPN_EDITOR_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), OPENVPN_TYPE_EDITOR, OpenvpnEditorClass))
 
-typedef struct _OpenvpnPluginUiWidget OpenvpnPluginUiWidget;
-typedef struct _OpenvpnPluginUiWidgetClass OpenvpnPluginUiWidgetClass;
+typedef struct _OpenvpnEditor OpenvpnEditor;
+typedef struct _OpenvpnEditorClass OpenvpnEditorClass;
 
-struct _OpenvpnPluginUiWidget {
+struct _OpenvpnEditor {
 	GObject parent;
 };
 
-struct _OpenvpnPluginUiWidgetClass {
+struct _OpenvpnEditorClass {
 	GObjectClass parent;
 };
 
-GType openvpn_plugin_ui_widget_get_type (void);
+GType openvpn_editor_plugin_widget_get_type (void);
 
 #endif	/* _NM_OPENVPN_H_ */
 

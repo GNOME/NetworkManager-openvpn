@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
-	$(DBUS_CFLAGS) \
-	$(NM_CFLAGS) \
+	$(LIBNM_CFLAGS) \
 	-DBINDIR=\"$(bindir)\" \
 	-DPREFIX=\""$(prefix)"\" \
 	-DSYSCONFDIR=\""$(sysconfdir)"\" \
@@ -21,14 +20,13 @@ nm_openvpn_service_SOURCES = \
 	nm-openvpn-service-defines.h
 
 nm_openvpn_service_LDADD = \
-	$(NM_LIBS) \
-        $(top_builddir)/common/libnm-openvpn-common.la
+	$(LIBNM_LIBS) \
+        $(top_builddir)/common/libnm-vpn-plugin-openvpn-common.la
 
 nm_openvpn_service_openvpn_helper_SOURCES = \
 	nm-openvpn-service-openvpn-helper.c
 
 nm_openvpn_service_openvpn_helper_LDADD = \
-	$(DBUS_LIBS) \
-	$(NM_LIBS)
+	$(LIBNM_LIBS)
 
 CLEANFILES = *~

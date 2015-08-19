@@ -35,13 +35,28 @@
 
 #include <glib/gi18n-lib.h>
 
+#ifdef NM_OPENVPN_OLD
+#define NM_VPN_LIBNM_COMPAT
 #include <nm-setting-vpn.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-ip4-config.h>
 
+#define nm_simple_connection_new nm_connection_new
+
+#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
+
+#else /* !NM_OPENVPN_OLD */
+
+#include <NetworkManager.h>
+
+#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
+#endif
+
 #include "import-export.h"
 #include "nm-openvpn.h"
-#include "../src/nm-openvpn-service.h"
+#include "../src/nm-openvpn-service-defines.h"
 #include "../common/utils.h"
 
 #define AUTH_TAG "auth "
@@ -133,7 +148,7 @@ static gboolean
 handle_path_item (const char *line,
                   const char *tag,
                   const char *key,
-                  NMSettingVPN *s_vpn,
+                  NMSettingVpn *s_vpn,
                   const char *path,
                   char **leftover)
 {
@@ -182,7 +197,7 @@ get_args (const char *line, int *nitems)
 }
 
 static void
-handle_direction (const char *tag, const char *key, char *leftover, NMSettingVPN *s_vpn)
+handle_direction (const char *tag, const char *key, char *leftover, NMSettingVpn *s_vpn)
 {
 	glong direction;
 
@@ -306,7 +321,7 @@ static gboolean
 handle_num_seconds_item (const char *line,
                          const char *tag,
                          const char *key,
-                         NMSettingVPN *s_vpn)
+                         NMSettingVpn *s_vpn)
 {
 	char **items = NULL;
 	int nitems;
@@ -339,7 +354,7 @@ do_import (const char *path, char **lines, GError **error)
 {
 	NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 	char *last_dot;
 	char **line;
 	gboolean have_client = FALSE, have_remote = FALSE;
@@ -350,7 +365,7 @@ do_import (const char *path, char **lines, GError **error)
 	gboolean http_proxy = FALSE, socks_proxy = FALSE, proxy_set = FALSE;
 	int nitems;
 
-	connection = nm_connection_new ();
+	connection = nm_simple_connection_new ();
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
 	nm_connection_add_setting (connection, NM_SETTING (s_con));
 
@@ -808,15 +823,15 @@ do_import (const char *path, char **lines, GError **error)
 
 	if (!have_client && !have_sk) {
 		g_set_error_literal (error,
-		                     OPENVPN_PLUGIN_UI_ERROR,
-		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("The file to import wasn't a valid OpenVPN client configuration."));
 		g_object_unref (connection);
 		connection = NULL;
 	} else if (!have_remote) {
 		g_set_error_literal (error,
-		                     OPENVPN_PLUGIN_UI_ERROR,
-		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_OPENVPN,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("The file to import wasn't a valid OpenVPN configure (no remote)."));
 		g_object_unref (connection);
 		connection = NULL;
@@ -884,7 +899,7 @@ gboolean
 do_export (const char *path, NMConnection *connection, GError **error)
 {
 	NMSettingConnection *s_con;
-	NMSettingVPN *s_vpn;
+	NMSettingVpn *s_vpn;
 	FILE *f;
 	const char *value;
 	const char *gateways = NULL;

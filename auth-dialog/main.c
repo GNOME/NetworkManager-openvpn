@@ -34,13 +34,13 @@
 
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
-#include <nm-setting-vpn.h>
-#include <nm-setting-connection.h>
-#include <nm-vpn-plugin-utils.h>
-#include <nm-vpn-password-dialog.h>
+
+#include <NetworkManager.h>
+#include <nm-vpn-service-plugin.h>
+#include <nma-vpn-password-dialog.h>
 
 #include "../common/utils.h"
-#include "../src/nm-openvpn-service.h"
+#include "../src/nm-openvpn-service-defines.h"
 
 #define KEYRING_UUID_TAG "connection-uuid"
 #define KEYRING_SN_TAG "setting-name"
@@ -346,7 +346,7 @@ get_existing_passwords (GHashTable *vpn_data,
 	g_return_if_fail (out_certpass != NULL);
 	g_return_if_fail (out_proxypass != NULL);
 
-	nm_vpn_plugin_utils_get_secret_flags (vpn_data, NM_OPENVPN_KEY_PASSWORD, &pw_flags);
+	nm_vpn_service_plugin_get_secret_flags (vpn_data, NM_OPENVPN_KEY_PASSWORD, &pw_flags);
 	if (need_password) {
 		if (!(pw_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
 			*out_password = g_strdup (g_hash_table_lookup (existing_secrets, NM_OPENVPN_KEY_PASSWORD));
@@ -355,7 +355,7 @@ get_existing_passwords (GHashTable *vpn_data,
 		}
 	}
 
-	nm_vpn_plugin_utils_get_secret_flags (vpn_data, NM_OPENVPN_KEY_CERTPASS, &cp_flags);
+	nm_vpn_service_plugin_get_secret_flags (vpn_data, NM_OPENVPN_KEY_CERTPASS, &cp_flags);
 	if (need_certpass) {
 		if (!(cp_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
 			*out_certpass = g_strdup (g_hash_table_lookup (existing_secrets, NM_OPENVPN_KEY_CERTPASS));
@@ -364,7 +364,7 @@ get_existing_passwords (GHashTable *vpn_data,
 		}
 	}
 
-	nm_vpn_plugin_utils_get_secret_flags (vpn_data, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, &proxy_flags);
+	nm_vpn_service_plugin_get_secret_flags (vpn_data, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, &proxy_flags);
 	if (need_proxypass) {
 		if (!(proxy_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED)) {
 			*out_proxypass = g_strdup (g_hash_table_lookup (existing_secrets, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD));
@@ -409,7 +409,7 @@ get_passwords_required (GHashTable *data,
 	if (!strcmp (ctype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		/* Normal user password */
 		flags = NM_SETTING_SECRET_FLAG_NONE;
-		nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &flags);
+		nm_vpn_service_plugin_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &flags);
 		if (   !strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 		    && !(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
 			*out_need_password = TRUE;
@@ -420,7 +420,7 @@ get_passwords_required (GHashTable *data,
 			*out_need_certpass = is_encrypted (val);
 	} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		flags = NM_SETTING_SECRET_FLAG_NONE;
-		nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &flags);
+		nm_vpn_service_plugin_get_secret_flags (data, NM_OPENVPN_KEY_PASSWORD, &flags);
 		if (!(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
 			*out_need_password = TRUE;
 	}
@@ -428,7 +428,7 @@ get_passwords_required (GHashTable *data,
 	val = g_hash_table_lookup (data, NM_OPENVPN_KEY_PROXY_SERVER);
 	if (val && val[0]) {
 		flags = NM_SETTING_SECRET_FLAG_NONE;
-		nm_vpn_plugin_utils_get_secret_flags (data, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, &flags);
+		nm_vpn_service_plugin_get_secret_flags (data, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, &flags);
 		if (!(flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED))
 			*out_need_proxypass = TRUE;
 	}
@@ -497,7 +497,7 @@ main (int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	if (!nm_vpn_plugin_utils_read_vpn_details (0, &data, &secrets)) {
+	if (!nm_vpn_service_plugin_read_vpn_details (0, &data, &secrets)) {
 		fprintf (stderr, "Failed to read '%s' (%s) data and secrets from stdin.\n",
 		         vpn_name, vpn_uuid);
 		return 1;

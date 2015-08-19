@@ -2,9 +2,9 @@ libexec_PROGRAMS = nm-openvpn-auth-dialog
 
 nm_openvpn_auth_dialog_CPPFLAGS =			\
 	$(GLIB_CFLAGS)			\
-	$(GTK_CFLAGS)				\
-	$(NM_CFLAGS)		\
-	$(NMGTK_CFLAGS)		\
+	$(GTK_CFLAGS)			\
+	$(LIBNM_CFLAGS)			\
+	$(LIBNMA_CFLAGS)		\
 	$(LIBSECRET_CFLAGS) \
 	-DICONDIR=\""$(datadir)/pixmaps"\"	\
 	-DUIDIR=\""$(uidir)"\"		\
@@ -17,9 +17,9 @@ nm_openvpn_auth_dialog_SOURCES = \
 
 nm_openvpn_auth_dialog_LDADD = \
 	$(GTK_LIBS) \
-	$(NM_LIBS) \
-	$(NMGTK_LIBS) \
+	$(LIBNM_LIBS) \
+	$(LIBNMA_LIBS) \
 	$(LIBSECRET_LIBS) \
-	$(top_builddir)/common/libnm-openvpn-common.la
+	$(top_builddir)/common/libnm-vpn-plugin-openvpn-common.la
 
 CLEANFILES = *~
