@@ -470,7 +470,7 @@ do_import (const char *path, char **lines, GError **error)
 
 	s_vpn = NM_SETTING_VPN (nm_setting_vpn_new ());
 
-	g_object_set (s_vpn, NM_SETTING_VPN_SERVICE_TYPE, NM_DBUS_SERVICE_OPENVPN, NULL);
+	g_object_set (s_vpn, NM_SETTING_VPN_SERVICE_TYPE, NM_VPN_SERVICE_TYPE_OPENVPN, NULL);
 
 	/* Get the default path for ca, cert, key file, these files maybe
 	 * in same path with the configuration file */
