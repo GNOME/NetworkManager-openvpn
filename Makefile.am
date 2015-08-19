@@ -9,7 +9,7 @@ endif
 dbusservicedir = $(sysconfdir)/dbus-1/system.d
 dbusservice_DATA = nm-openvpn-service.conf
 
-nmvpnservicedir = $(sysconfdir)/NetworkManager/VPN
+nmvpnservicedir = $(NM_VPN_SERVICE_DIR)
 nmvpnservice_DATA = nm-openvpn-service.name
 
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
