@@ -913,6 +913,9 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_TLS_REMOTE,
 	NM_OPENVPN_KEY_REMOTE_RANDOM,
 	NM_OPENVPN_KEY_REMOTE_CERT_TLS,
+	NM_OPENVPN_KEY_PING,
+	NM_OPENVPN_KEY_PING_EXIT,
+	NM_OPENVPN_KEY_PING_RESTART,
 	NULL
 };
 
@@ -1216,6 +1219,9 @@ tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 #define DEVICE_TYPE_IDX_TUN     0
 #define DEVICE_TYPE_IDX_TAP     1
 
+#define PING_EXIT    0
+#define PING_RESTART 1
+
 static void
 proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 {
@@ -1353,6 +1359,19 @@ dev_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
 	checkbox_toggled_update_widget_cb (check, combo);
 	checkbox_toggled_update_widget_cb (check, entry);
 	device_name_changed_cb (GTK_ENTRY (entry), ok_button);
+}
+
+static void
+ping_exit_restart_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	GtkWidget *combo, *spin;
+
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_combo"));
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
+
+	checkbox_toggled_update_widget_cb (check, combo);
+	checkbox_toggled_update_widget_cb (check, spin);
 }
 
 #define TA_DIR_COL_NAME 0
@@ -1742,6 +1761,74 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2);
 	}
 
+	/* ping */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "ping_spinbutton"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING);
+	if (value && *value) {
+		long int tmp;
+
+		errno = 0;
+		tmp = strtol (value, NULL, 10);
+		if (errno == 0 && tmp > 0 && tmp < 65536) {
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_spinbutton"));
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
+			gtk_widget_set_sensitive (widget, TRUE);
+		}
+	} else {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_spinbutton"));
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 30.0);
+		gtk_widget_set_sensitive (widget, FALSE);
+	}
+
+	/* ping-exit / ping-restart */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_checkbutton"));
+	ping_exit_restart_checkbox_toggled_cb (widget, builder);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (ping_exit_restart_checkbox_toggled_cb), builder);
+
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_combo"));
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING_EXIT);
+	if (value && *value)
+		active = PING_EXIT;
+	else {
+		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING_RESTART);
+		active = PING_RESTART;
+	}
+
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter, 0, _("ping-exit"), -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter, 0, _("ping-restart"), -1);
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
+	g_object_unref (store);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), active);
+
+	if (value && *value) {
+		long int tmp;
+
+		errno = 0;
+		tmp = strtol (value, NULL, 10);
+		if (errno == 0 && tmp > 0 && tmp < 65536) {
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
+			gtk_widget_set_sensitive (widget, TRUE);
+		}
+	} else {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 30.0);
+		gtk_widget_set_sensitive (widget, FALSE);
+	}
+
 out:
 	g_free (ui_file);
 	return dialog;
@@ -1981,6 +2068,35 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 				}
 			}
 		}
+	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int ping_val;
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_spinbutton"));
+		ping_val = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+
+		g_hash_table_insert (hash,
+		                     g_strdup (NM_OPENVPN_KEY_PING),
+		                     g_strdup_printf ("%d", ping_val));
+	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int ping_exit_type, ping_val;
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_combo"));
+		ping_exit_type = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
+		ping_val = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+
+		g_hash_table_insert (hash,
+		                     ping_exit_type == PING_EXIT ?
+		                       g_strdup (NM_OPENVPN_KEY_PING_EXIT) :
+		                       g_strdup (NM_OPENVPN_KEY_PING_RESTART),
+		                     g_strdup_printf ("%d", ping_val));
 	}
 
 	return hash;
