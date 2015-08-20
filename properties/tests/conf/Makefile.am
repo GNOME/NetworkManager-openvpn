@@ -14,5 +14,7 @@ EXTRA_DIST = \
 	proxy-http-with-auth.ovpn \
 	keysize.ovpn \
 	device.ovpn \
-	device-notype.ovpn
-
+	device-notype.ovpn \
+	keepalive.ovpn \
+	ping-with-exit.ovpn \
+	ping-with-restart.ovpn
