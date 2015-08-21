@@ -1820,6 +1820,7 @@ main (int argc, char *argv[])
 	gboolean persist = FALSE;
 	GOptionContext *opt_ctx = NULL;
 	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
+	GError *error = NULL;
 
 	GOptionEntry options[] = {
 		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don't quit when VPN connection terminates"), NULL },
@@ -1850,7 +1851,12 @@ main (int argc, char *argv[])
 	                              _("nm-openvpn-service provides integrated "
 	                                "OpenVPN capability to NetworkManager."));
 
-	g_option_context_parse (opt_ctx, &argc, &argv, NULL);
+	if (!g_option_context_parse (opt_ctx, &argc, &argv, &error)) {
+		g_warning ("Error parsing the command line options: %s", error->message);
+		g_option_context_free (opt_ctx);
+		g_clear_error (&error);
+		exit (1);
+	}
 	g_option_context_free (opt_ctx);
 
 	if (getenv ("OPENVPN_DEBUG"))
