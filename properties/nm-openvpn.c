@@ -44,9 +44,6 @@
 #include <nm-setting-connection.h>
 #include <nm-setting-ip4-config.h>
 
-#define OPENVPN_PLUGIN_NAME    _("OpenVPN")
-#define OPENVPN_PLUGIN_DESC    _("Compatible with the OpenVPN server.")
-
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
 #define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
 #define OPENVPN_EDITOR_PLUGIN_ERROR_MISSING_PROPERTY    NM_SETTING_VPN_ERROR_MISSING_PROPERTY
@@ -56,9 +53,6 @@
 #else /* !NM_OPENVPN_OLD */
 
 #include <NetworkManager.h>
-
-#define OPENVPN_PLUGIN_NAME    _("openvpn")
-#define OPENVPN_PLUGIN_DESC    _("OpenVPN")
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
 #define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
@@ -72,6 +66,8 @@
 #include "auth-helpers.h"
 #include "import-export.h"
 
+#define OPENVPN_PLUGIN_NAME    _("OpenVPN")
+#define OPENVPN_PLUGIN_DESC    _("Compatible with the OpenVPN server.")
 
 /************** plugin class **************/
 
