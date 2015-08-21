@@ -1533,6 +1533,39 @@ check_need_secrets (NMSettingVpn *s_vpn, gboolean *need_secrets)
 }
 
 static gboolean
+ensure_killed (gpointer data)
+{
+	int pid = GPOINTER_TO_INT (data);
+
+	if (kill (pid, 0) == 0)
+		kill (pid, SIGKILL);
+
+	return FALSE;
+}
+
+static gboolean
+real_disconnect (NMVpnServicePlugin	 *plugin,
+			  GError		**err)
+{
+	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
+
+	if (priv->pid) {
+		if (kill (priv->pid, SIGTERM) == 0)
+			g_timeout_add (2000, ensure_killed, GINT_TO_POINTER (priv->pid));
+		else
+			kill (priv->pid, SIGKILL);
+
+		g_message ("Terminated openvpn daemon with PID %d.", priv->pid);
+		priv->pid = 0;
+	}
+
+	g_free (priv->mgt_path);
+	priv->mgt_path = NULL;
+
+	return TRUE;
+}
+
+static gboolean
 _connect_common (NMVpnServicePlugin   *plugin,
                  NMConnection  *connection,
                  GVariant      *details,
@@ -1684,39 +1717,6 @@ real_new_secrets (NMVpnServicePlugin *plugin,
 	}
 	if (hints)
 		g_free (hints);  /* elements are 'const' */
-	return TRUE;
-}
-
-static gboolean
-ensure_killed (gpointer data)
-{
-	int pid = GPOINTER_TO_INT (data);
-
-	if (kill (pid, 0) == 0)
-		kill (pid, SIGKILL);
-
-	return FALSE;
-}
-
-static gboolean
-real_disconnect (NMVpnServicePlugin	 *plugin,
-			  GError		**err)
-{
-	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-
-	if (priv->pid) {
-		if (kill (priv->pid, SIGTERM) == 0)
-			g_timeout_add (2000, ensure_killed, GINT_TO_POINTER (priv->pid));
-		else
-			kill (priv->pid, SIGKILL);
-
-		g_message ("Terminated openvpn daemon with PID %d.", priv->pid);
-		priv->pid = 0;
-	}
-
-	g_free (priv->mgt_path);
-	priv->mgt_path = NULL;
-
 	return TRUE;
 }
 
