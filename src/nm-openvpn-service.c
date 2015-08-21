@@ -1575,6 +1575,11 @@ _connect_common (NMVpnServicePlugin   *plugin,
 	const char *connection_type;
 	const char *user_name;
 
+	if (!real_disconnect (plugin, error)) {
+		g_warning ("Could not clean up previous daemon run: %s", (*error)->message);
+		g_clear_error (error);
+	}
+
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
 		g_set_error_literal (error,
