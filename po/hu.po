@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2015-07-17 11:13+0000\n"
-"PO-Revision-Date: 2015-07-17 16:35+0200\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"POT-Creation-Date: 2015-09-01 23:15+0000\n"
+"PO-Revision-Date: 2015-09-02 13:51+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../auth-dialog/main.c:182
@@ -36,7 +36,6 @@ msgid "Certificate password:"
 msgstr "Tanúsítvány jelszava:"
 
 #: ../auth-dialog/main.c:203
-#| msgid "Proxy Passwor_d:"
 msgid "HTTP proxy password:"
 msgstr "HTTP proxy jelszó:"
 
@@ -49,7 +48,6 @@ msgid "Certificate pass_word:"
 msgstr "Tanúsítvány _jelszava:"
 
 #: ../auth-dialog/main.c:256
-#| msgid "Proxy Passwor_d:"
 msgid "_HTTP proxy password:"
 msgstr "_HTTP proxy jelszó:"
 
@@ -58,162 +56,170 @@ msgstr "_HTTP proxy jelszó:"
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Azonosítania kell magát a(z) „%s” virtuális magánhálózat eléréséhez."
 
-#: ../properties/auth-helpers.c:173
+#: ../properties/auth-helpers.c:188
 msgid "Choose your personal certificate..."
 msgstr "Válassza ki a személyes tanúsítványát…"
 
-#: ../properties/auth-helpers.c:191
+#: ../properties/auth-helpers.c:206
 msgid "Choose your private key..."
 msgstr "Válassza ki a személyes kulcsát…"
 
-#: ../properties/auth-helpers.c:307
+#: ../properties/auth-helpers.c:322
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Válasszon hitelesítésszolgáltatói tanúsítványt…"
 
-#: ../properties/auth-helpers.c:351
+#: ../properties/auth-helpers.c:366
 msgid "Choose an OpenVPN static key..."
 msgstr "Válassza ki az OpenVPN statikus kulcsát…"
 
-#: ../properties/auth-helpers.c:375 ../properties/auth-helpers.c:1094
-#: ../properties/auth-helpers.c:1704
+#: ../properties/auth-helpers.c:390 ../properties/auth-helpers.c:1112
+#: ../properties/auth-helpers.c:1738
 msgid "None"
 msgstr "Nincs"
 
-#: ../properties/auth-helpers.c:811
+#: ../properties/auth-helpers.c:826
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "PEM vagy PKCS#12 tanúsítványok (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:812
+#: ../properties/auth-helpers.c:827
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "PEM tanúsítványok (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:872
+#: ../properties/auth-helpers.c:887
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN statikus kulcsok (*.key)"
 
-#: ../properties/auth-helpers.c:1010 ../properties/auth-helpers.c:1086
+#: ../properties/auth-helpers.c:1028 ../properties/auth-helpers.c:1104
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: ../properties/auth-helpers.c:1096
+#: ../properties/auth-helpers.c:1114
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1098
+#: ../properties/auth-helpers.c:1116
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1100
+#: ../properties/auth-helpers.c:1118
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1102
+#: ../properties/auth-helpers.c:1120
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1104
+#: ../properties/auth-helpers.c:1122
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1106
+#: ../properties/auth-helpers.c:1124
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1108
+#: ../properties/auth-helpers.c:1126
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1110
+#: ../properties/auth-helpers.c:1128
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1161
+#: ../properties/auth-helpers.c:1179
 msgid "Server"
 msgstr "Kiszolgáló"
 
-#: ../properties/auth-helpers.c:1166
+#: ../properties/auth-helpers.c:1184
 msgid "Client"
 msgstr "Kliens"
 
-#: ../properties/auth-helpers.c:1418 ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/auth-helpers.c:1452 ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
 msgstr "Nem szükséges"
 
-#: ../properties/auth-helpers.c:1420
+#: ../properties/auth-helpers.c:1454
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1422
+#: ../properties/auth-helpers.c:1456
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/auth-helpers.c:1607
+#: ../properties/auth-helpers.c:1641
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/auth-helpers.c:1609
+#: ../properties/auth-helpers.c:1643
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1616
+#: ../properties/auth-helpers.c:1650
 msgid "(automatic)"
 msgstr "(automatikus)"
 
-#: ../properties/import-export.c:726
+#: ../properties/auth-helpers.c:1805
+msgid "ping-exit"
+msgstr "ping-exit"
+
+#: ../properties/auth-helpers.c:1807
+msgid "ping-restart"
+msgstr "ping-restart"
+
+#: ../properties/import-export.c:828
 msgid "The file to import wasn't a valid OpenVPN client configuration."
 msgstr "Az importálandó fájl nem volt érvényes OpenVPN kliensbeállítás."
 
-#: ../properties/import-export.c:733
+#: ../properties/import-export.c:835
 msgid "The file to import wasn't a valid OpenVPN configure (no remote)."
 msgstr ""
 "Az importálandó fájl nem volt érvényes OpenVPN beállítás (nincs távoli)."
 
-#: ../properties/import-export.c:845
+#: ../properties/import-export.c:950
 msgid "could not open file for writing"
 msgstr "a fájl nem nyitható meg írásra"
 
-#: ../properties/import-export.c:853
+#: ../properties/import-export.c:958
 msgid "connection was incomplete (missing gateway)"
 msgstr "a kapcsolat nem volt teljes (hiányzó átjáró)"
 
-#: ../properties/nm-openvpn.c:50
+#: ../properties/nm-openvpn.c:69
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:51
+#: ../properties/nm-openvpn.c:70
 msgid "Compatible with the OpenVPN server."
 msgstr "Kompatibilis az OpenVPN kiszolgálóval."
 
-#: ../properties/nm-openvpn.c:367
+#: ../properties/nm-openvpn.c:351
 msgid "Certificates (TLS)"
 msgstr "Tanúsítványok (TLS)"
 
-#: ../properties/nm-openvpn.c:378
+#: ../properties/nm-openvpn.c:362
 msgid "Password"
 msgstr "Jelszó"
 
-#: ../properties/nm-openvpn.c:391
+#: ../properties/nm-openvpn.c:375
 msgid "Password with Certificates (TLS)"
 msgstr "Jelszó tanúsítványokkal (TLS)"
 
-#: ../properties/nm-openvpn.c:403
+#: ../properties/nm-openvpn.c:387
 msgid "Static Key"
 msgstr "Statikus kulcs"
 
-#: ../properties/nm-openvpn.c:551
+#: ../properties/nm-openvpn.c:535
 msgid "could not create openvpn object"
 msgstr "nem sikerült létrehozni az openvpn objektumot"
 
-#: ../properties/nm-openvpn.c:577
+#: ../properties/nm-openvpn.c:561
 msgid "could not load UI widget"
 msgstr "nem sikerült betölteni az UI felületi elemet"
 
-#: ../properties/nm-openvpn.c:668
+#: ../properties/nm-openvpn.c:652
 msgid "unknown OpenVPN file extension"
 msgstr "ismeretlen OpenVPN fájlkiterjesztés"
 
-#: ../properties/nm-openvpn.c:696
+#: ../properties/nm-openvpn.c:680
 msgid "not a valid OpenVPN configuration file"
 msgstr "nem érvényes OpenVPN beállítófájl"
 
@@ -557,10 +563,38 @@ msgstr ""
 "config: float"
 
 #: ../properties/nm-openvpn-dialog.ui.h:81
+msgid "Specify pin_g interval:"
+msgstr "Adja meg a pin_g időközét:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:82
+msgid ""
+"Ping remote over the TCP/UDP control channel if no packets have been sent "
+"for at least n seconds.\n"
+"config: ping <n>"
+msgstr ""
+"Távoli pingelése a TCP/UDP vezérlőcsatornán, ha legalább n másodpercig nem "
+"került csomag küldésre.\n"
+"beállítás: ping <n>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:84
+msgid "Specify _exit or restart ping:"
+msgstr "Ping _leállítása vagy újraindítása:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:85
+msgid ""
+"Exit or restart after n seconds pass without reception of a ping or other "
+"packet from remote.\n"
+"config: ping-exit | ping-restart <n>"
+msgstr ""
+"Leállítás vagy újraindítás, ha eltelt n másodperc ping vagy más csomag "
+"fogadása óta a távoli féltől.\n"
+"beállítás: ping-exit | ping-restart <n>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:87
 msgid "General"
 msgstr "Általános"
 
-#: ../properties/nm-openvpn-dialog.ui.h:82
+#: ../properties/nm-openvpn-dialog.ui.h:88
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
 "Cipher Block Chaining mode).\n"
@@ -570,11 +604,11 @@ msgstr ""
 "(Blowfish Cipher Block Chaining módban).\n"
 "config: cipher"
 
-#: ../properties/nm-openvpn-dialog.ui.h:84
+#: ../properties/nm-openvpn-dialog.ui.h:90
 msgid "Use custom _size of cipher key:"
 msgstr "Egyéni _méretű titkosítókulcs használata:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:85
+#: ../properties/nm-openvpn-dialog.ui.h:91
 msgid ""
 "Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
 "specific size.\n"
@@ -584,7 +618,7 @@ msgstr ""
 "titkosítóra jellemző méretre áll be.\n"
 "config: keysize <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:87
+#: ../properties/nm-openvpn-dialog.ui.h:93
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
 "is SHA1.\n"
@@ -594,23 +628,23 @@ msgstr ""
 "használatával. Az alapértelmezés az SHA1.\n"
 "config: auth"
 
-#: ../properties/nm-openvpn-dialog.ui.h:89
+#: ../properties/nm-openvpn-dialog.ui.h:95
 msgid "Ci_pher:"
 msgstr "_Rejtjelzés:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:90
+#: ../properties/nm-openvpn-dialog.ui.h:96
 msgid "_HMAC Authentication:"
 msgstr "_HMAC hitelesítés:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:91
+#: ../properties/nm-openvpn-dialog.ui.h:97
 msgid "Security"
 msgstr "Biztonság"
 
-#: ../properties/nm-openvpn-dialog.ui.h:92
+#: ../properties/nm-openvpn-dialog.ui.h:98
 msgid "_Subject Match:"
 msgstr "_Alany egyezik:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:93
+#: ../properties/nm-openvpn-dialog.ui.h:99
 msgid ""
 "<i>Connect only to servers whose certificate matches the given subject.\n"
 "Example: /CN=myvpn.company.com</i>"
@@ -619,7 +653,7 @@ msgstr ""
 "megadott alanynak.\n"
 "Például: /CN=myvpn.cég.hu</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:95
+#: ../properties/nm-openvpn-dialog.ui.h:101
 msgid ""
 "Accept connections only from a host with X509 name or common name equal to "
 "the specified one.\n"
@@ -629,11 +663,11 @@ msgstr ""
 "névvel.\n"
 "config: tls-remote"
 
-#: ../properties/nm-openvpn-dialog.ui.h:97
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "_Verify peer (server) certificate usage signature"
 msgstr "_Partner (kiszolgáló) tanúsítványhasználati aláírásának ellenőrzése"
 
-#: ../properties/nm-openvpn-dialog.ui.h:98
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -641,11 +675,11 @@ msgstr ""
 "A partnertanúsítvány explicit kulcshasználattal és az RFC3280 TLS szabályai "
 "alapján bővített kulcshasználattal való aláírásának megkövetelése."
 
-#: ../properties/nm-openvpn-dialog.ui.h:99
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid "_Remote peer certificate TLS type:"
 msgstr "_Távoli partner tanúsítványának TLS típusa:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:100
+#: ../properties/nm-openvpn-dialog.ui.h:106
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -655,19 +689,19 @@ msgstr ""
 "alapján bővített kulcshasználattal való aláírásának megkövetelése.\n"
 "config: remote-cert-tls client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid "Use additional _TLS authentication"
 msgstr "Kiegészítő T_LS hitelesítés használata"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid "Add an additional layer of HMAC authentication."
 msgstr "Újabb HMAC hitelesítési réteg hozzáadása."
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid "Key _Direction:"
 msgstr "_Kulcsirány:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:105
+#: ../properties/nm-openvpn-dialog.ui.h:111
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks.\n"
@@ -677,7 +711,7 @@ msgstr ""
 "támadások elleni védekezéshez.\n"
 "config: tls-auth <fájl> [irány]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -692,15 +726,15 @@ msgstr ""
 "rendszergazdát.\n"
 "config: tls-auth <fájl> [irány]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:110
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid "Key _File:"
 msgstr "Kulcs_fájl:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:117
 msgid "TLS Authentication"
 msgstr "TLS hitelesítés"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -708,11 +742,11 @@ msgstr ""
 "Proxy típusa: HTTP vagy Socks.\n"
 "config: http-proxy vagy socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "Proxy _Type:"
 msgstr "Proxy _típus:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -720,11 +754,11 @@ msgstr ""
 "<i>Válassza ezt a lehetőséget, ha a szervezet proxy kiszolgáló használatát "
 "követeli meg az internet eléréséhez.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:116
+#: ../properties/nm-openvpn-dialog.ui.h:122
 msgid "Server _Address:"
 msgstr "_Kiszolgáló címe:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:123
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -732,11 +766,11 @@ msgstr ""
 "Csatlakozás a távoli géphez ezen a proxy címen keresztül.\n"
 "config: http-proxy vagy socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:125
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:126
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -744,11 +778,11 @@ msgstr ""
 "Csatlakozás a távoli géphez ezen a proxy porton keresztül.\n"
 "config: http-proxy vagy socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:128
 msgid "_Retry indefinitely when errors occur"
 msgstr "Hiba esetén _végtelen számú újrapróbálkozás"
 
-#: ../properties/nm-openvpn-dialog.ui.h:123
+#: ../properties/nm-openvpn-dialog.ui.h:129
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -756,151 +790,179 @@ msgstr ""
 "Proxy hiba esetén végtelen számú újrapróbálkozás. SIGUSR1 jelzést szimulál.\n"
 "config: http-proxy-retry vagy socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:125
+#: ../properties/nm-openvpn-dialog.ui.h:131
 msgid "Proxy _Username:"
 msgstr "Proxy _felhasználói név:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:126
+#: ../properties/nm-openvpn-dialog.ui.h:132
 msgid "Proxy Passwor_d:"
 msgstr "_Proxy jelszó:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:127
+#: ../properties/nm-openvpn-dialog.ui.h:133
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr "Kérés esetén az OpenVPN-nek átadott HTTP/Socks proxy felhasználónév."
 
-#: ../properties/nm-openvpn-dialog.ui.h:128
+#: ../properties/nm-openvpn-dialog.ui.h:134
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr "Kérés esetén az OpenVPN-nek átadott HTTP/Socks proxy jelszó."
 
-#: ../properties/nm-openvpn-dialog.ui.h:129
+#: ../properties/nm-openvpn-dialog.ui.h:135
 msgid "_Show password"
 msgstr "_Jelszó megjelenítése"
 
-#: ../properties/nm-openvpn-dialog.ui.h:130
+#: ../properties/nm-openvpn-dialog.ui.h:136
 msgid "Proxies"
 msgstr "Proxyk"
 
-#: ../src/nm-openvpn-service.c:205
+#: ../src/nm-openvpn-service.c:204
 #, c-format
 msgid "invalid address '%s'"
 msgstr "érvénytelen cím: „%s”"
 
-#: ../src/nm-openvpn-service.c:217
+#: ../src/nm-openvpn-service.c:216
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
 msgstr ""
 "érvénytelen, vagy a(z) %2$d…%3$d tartományon kívüli egész érték: „%1$s”"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:228
+#: ../src/nm-openvpn-service.c:227
 #, c-format
 msgid "invalid boolean property '%s' (not yes or no)"
 msgstr "érvénytelen logikai érték: „%s” (érvényes értékek: yes, no)"
 
-#: ../src/nm-openvpn-service.c:235
+#: ../src/nm-openvpn-service.c:234
 #, c-format
 msgid "unhandled property '%s' type %s"
 msgstr "kezeletlen %2$s típusú érték: „%1$s”"
 
-#: ../src/nm-openvpn-service.c:246
+#: ../src/nm-openvpn-service.c:245
 #, c-format
 msgid "property '%s' invalid or not supported"
 msgstr "érvénytelen vagy nem támogatott érték: „%s”"
 
-#: ../src/nm-openvpn-service.c:262
+#: ../src/nm-openvpn-service.c:261
 msgid "No VPN configuration options."
 msgstr "Nincsenek VPN-beállítások."
 
-#: ../src/nm-openvpn-service.c:431
+#: ../src/nm-openvpn-service.c:430
 msgid "A username is required."
 msgstr "Felhasználónév szükséges."
 
-#: ../src/nm-openvpn-service.c:435
+#: ../src/nm-openvpn-service.c:434
 msgid "A password is required."
 msgstr "Jelszó szükséges."
 
-#: ../src/nm-openvpn-service.c:438
+#: ../src/nm-openvpn-service.c:437
 msgid "A username and password are required."
 msgstr "Felhasználónév és jelszó szükséges."
 
-#: ../src/nm-openvpn-service.c:458
+#: ../src/nm-openvpn-service.c:457
 msgid "A private key password is required."
 msgstr "Személyes kulcs jelszava szükséges."
 
-#: ../src/nm-openvpn-service.c:471
+#: ../src/nm-openvpn-service.c:470
 msgid "An HTTP Proxy username is required."
 msgstr "HTTP proxy felhasználónév szükséges."
 
-#: ../src/nm-openvpn-service.c:475
+#: ../src/nm-openvpn-service.c:474
 msgid "An HTTP Proxy password is required."
 msgstr "HTTP proxy jelszó szükséges."
 
-#: ../src/nm-openvpn-service.c:478
+#: ../src/nm-openvpn-service.c:477
 msgid "An HTTP Proxy username and password are required."
 msgstr "HTTP proxy felhasználónév és jelszó szükséges."
 
-#: ../src/nm-openvpn-service.c:900
+#: ../src/nm-openvpn-service.c:957
 msgid "Could not find the openvpn binary."
 msgstr "Nem található az openvpn program."
 
-#: ../src/nm-openvpn-service.c:910
+#: ../src/nm-openvpn-service.c:967
 msgid "Invalid HMAC auth."
 msgstr "Érvénytelen HMAC azonosítás."
 
-#: ../src/nm-openvpn-service.c:920 ../src/nm-openvpn-service.c:1492
+#: ../src/nm-openvpn-service.c:977 ../src/nm-openvpn-service.c:1640
 msgid "Invalid connection type."
 msgstr "Érvénytelen kapcsolattípus."
 
-#: ../src/nm-openvpn-service.c:955 ../src/nm-openvpn-service.c:965
+#: ../src/nm-openvpn-service.c:1012 ../src/nm-openvpn-service.c:1022
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Érvénytelen portszám: „%s”."
 
-#: ../src/nm-openvpn-service.c:980
+#: ../src/nm-openvpn-service.c:1037
 #, c-format
 msgid "Invalid proto '%s'."
 msgstr "Érvénytelen prototípus: „%s”."
 
-#: ../src/nm-openvpn-service.c:1021
+#: ../src/nm-openvpn-service.c:1078
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Érvénytelen proxytípus: „%s”."
 
-#: ../src/nm-openvpn-service.c:1079
+#: ../src/nm-openvpn-service.c:1101
+#, c-format
+#| msgid "Invalid proto '%s'."
+msgid "Invalid ping duration '%s'."
+msgstr "Érvénytelen ping hossz: „%s”."
+
+#: ../src/nm-openvpn-service.c:1115
+#, c-format
+#| msgid "Invalid proto '%s'."
+msgid "Invalid ping-exit duration '%s'."
+msgstr "Érvénytelen ping-exit hossz: „%s”."
+
+#: ../src/nm-openvpn-service.c:1129
+#, c-format
+#| msgid "Invalid port number '%s'."
+msgid "Invalid ping-restart duration '%s'."
+msgstr "Érvénytelen ping-restart hossz: „%s”."
+
+#: ../src/nm-openvpn-service.c:1179
 #, c-format
 msgid "Invalid keysize '%s'."
 msgstr "Érvénytelen kulcsméret: „%s”."
 
-#: ../src/nm-openvpn-service.c:1129
+#: ../src/nm-openvpn-service.c:1229
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Érvénytelen reneg seconds érték: „%s”."
 
-#: ../src/nm-openvpn-service.c:1161
+#: ../src/nm-openvpn-service.c:1261
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Érvénytelen TUN MTU érték: „%s”."
 
-#: ../src/nm-openvpn-service.c:1176
+#: ../src/nm-openvpn-service.c:1276
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Érvénytelen töredékméret: „%s”."
 
-#: ../src/nm-openvpn-service.c:1251
+#: ../src/nm-openvpn-service.c:1351
 msgid "Missing required local IP address for static key mode."
 msgstr "Hiányzó helyi IP-cím a statikus kulcsos módhoz."
 
-#: ../src/nm-openvpn-service.c:1263
+#: ../src/nm-openvpn-service.c:1363
 msgid "Missing required remote IP address for static key mode."
 msgstr "Hiányzó távoli IP-cím a statikus kulcsos módhoz."
 
-#: ../src/nm-openvpn-service.c:1288
+#: ../src/nm-openvpn-service.c:1388
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Ismeretlen kapcsolattípus: „%s”."
 
-#: ../src/nm-openvpn-service.c:1406 ../src/nm-openvpn-service.c:1483
-#: ../src/nm-openvpn-service.c:1517
+#: ../src/nm-openvpn-service.c:1413
+#, c-format
+msgid "User '%s' not found, check NM_OPENVPN_USER."
+msgstr "„%s” felhasználó nem található, ellenőrizze az NM_OPENVPN_USER-t."
+
+#: ../src/nm-openvpn-service.c:1427
+#, c-format
+msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
+msgstr "„%s” csoport nem található, ellenőrizze az NM_OPENVPN_GROUP-ot."
+
+#: ../src/nm-openvpn-service.c:1554 ../src/nm-openvpn-service.c:1631
+#: ../src/nm-openvpn-service.c:1665
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -908,7 +970,7 @@ msgstr ""
 "A kérés feldolgozása sikertelen, mivel a VPN-kapcsolat beállításai "
 "érvénytelenek."
 
-#: ../src/nm-openvpn-service.c:1415
+#: ../src/nm-openvpn-service.c:1563
 msgid ""
 "Could not process the request because the openvpn connection type was "
 "invalid."
@@ -916,21 +978,21 @@ msgstr ""
 "A kérés feldolgozása sikertelen, mivel az OpenVPN-kapcsolat típusa "
 "érvénytelen."
 
-#: ../src/nm-openvpn-service.c:1531
+#: ../src/nm-openvpn-service.c:1679
 msgid "Unhandled pending authentication."
 msgstr "Nem kezelt függő hitelesítés."
 
-#: ../src/nm-openvpn-service.c:1675
+#: ../src/nm-openvpn-service.c:1829
 msgid "Don't quit when VPN connection terminates"
 msgstr "Ne lépjen ki, ha a VPN kapcsolat megszakad"
 
-#: ../src/nm-openvpn-service.c:1676
+#: ../src/nm-openvpn-service.c:1830
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 "Részletes hibakeresési naplózás engedélyezése (jelszavak is  a naplóba "
 "kerülhetnek)"
 
-#: ../src/nm-openvpn-service.c:1699
+#: ../src/nm-openvpn-service.c:1853
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
