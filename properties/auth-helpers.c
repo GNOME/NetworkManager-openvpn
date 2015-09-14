@@ -1011,6 +1011,15 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 	                    TLS_CIPHER_COL_NAME, _("Default"),
 	                    TLS_CIPHER_COL_DEFAULT, TRUE, -1);
 
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    TLS_CIPHER_COL_NAME, "none",
+	                    TLS_CIPHER_COL_DEFAULT, FALSE, -1);
+	if (g_strcmp0 (user_cipher, "none") == 0) {
+		gtk_combo_box_set_active_iter (box, &iter);
+		user_added = TRUE;
+	}
+
 	items = g_strsplit (tmp, "\n", 0);
 	g_free (tmp);
 
@@ -1027,12 +1036,15 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 		if (space)
 			*space = '\0';
 
+		if (strcmp (*item, "none") == 0)
+			continue;
+
 		if (strlen (*item)) {
 			gtk_list_store_append (store, &iter);
 			gtk_list_store_set (store, &iter,
 			                    TLS_CIPHER_COL_NAME, *item,
 			                    TLS_CIPHER_COL_DEFAULT, FALSE, -1);
-			if (user_cipher && !strcmp (*item, user_cipher)) {
+			if (!user_added && user_cipher && !strcmp (*item, user_cipher)) {
 				gtk_combo_box_set_active_iter (box, &iter);
 				user_added = TRUE;
 			}
