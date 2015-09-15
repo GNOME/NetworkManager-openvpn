@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 21:25+0200\n"
+"POT-Creation-Date: 2015-09-15 06:28+0200\n"
 "PO-Revision-Date: 2015-08-17 21:27+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -84,8 +84,8 @@ msgstr "Wybierz certyfikat CA..."
 msgid "Choose an OpenVPN static key..."
 msgstr "Wybierz klucz statyczny OpenVPN..."
 
-#: ../properties/auth-helpers.c:375 ../properties/auth-helpers.c:1095
-#: ../properties/auth-helpers.c:1701
+#: ../properties/auth-helpers.c:375 ../properties/auth-helpers.c:1107
+#: ../properties/auth-helpers.c:1713
 msgid "None"
 msgstr "Brak"
 
@@ -101,72 +101,72 @@ msgstr "Certyfikaty PEM (*.pem, *.crt, *.key, *.cer)"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Klucze statyczne OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1011 ../properties/auth-helpers.c:1087
+#: ../properties/auth-helpers.c:1011 ../properties/auth-helpers.c:1099
 msgid "Default"
 msgstr "Domyślny"
 
-#: ../properties/auth-helpers.c:1097
+#: ../properties/auth-helpers.c:1109
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1099
+#: ../properties/auth-helpers.c:1111
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1101
+#: ../properties/auth-helpers.c:1113
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1103
+#: ../properties/auth-helpers.c:1115
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1105
+#: ../properties/auth-helpers.c:1117
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1107
+#: ../properties/auth-helpers.c:1119
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1109
+#: ../properties/auth-helpers.c:1121
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1111
+#: ../properties/auth-helpers.c:1123
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1162
+#: ../properties/auth-helpers.c:1174
 msgid "Server"
 msgstr "Serwer"
 
-#: ../properties/auth-helpers.c:1167
+#: ../properties/auth-helpers.c:1179
 msgid "Client"
 msgstr "Klient"
 
-#: ../properties/auth-helpers.c:1421 ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/auth-helpers.c:1433 ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
 msgstr "Niewymagane"
 
-#: ../properties/auth-helpers.c:1423
+#: ../properties/auth-helpers.c:1435
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1425
+#: ../properties/auth-helpers.c:1437
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/auth-helpers.c:1604
+#: ../properties/auth-helpers.c:1616
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/auth-helpers.c:1606
+#: ../properties/auth-helpers.c:1618
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1613
+#: ../properties/auth-helpers.c:1625
 msgid "(automatic)"
 msgstr "(automatycznie)"
 
@@ -336,21 +336,17 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:35
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
 "Kierunek dla trybu szyfrowania klucza statycznego (nie TLS).\n"
-"konfiguracja: static <plik> [kierunek]"
-
-#: ../properties/nm-openvpn-dialog.ui.h:37
-msgid ""
-"<i>If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
-"you are unsure what value to use, contact your system administrator.</i>"
-msgstr ""
-"<i>Jeśli zostanie użyty kierunek klucza, to musi być przeciwny kierunkowi "
+"Jeśli zostanie użyty kierunek klucza, to musi być przeciwny kierunkowi "
 "użytemu na serwerze VPN. Przykładowo, jeśli serwer używa \"1\", te "
 "połączenie musi użyć \"0\". W wypadku braku pewności jakiej wartości użyć, "
-"proszę skontaktować się z administratorem systemu.</i>"
+"proszę skontaktować się z administratorem systemu.\n"
+"konfiguracja: static <plik> [kierunek]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:38
 msgid "Type:"
@@ -625,20 +621,27 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:100
 msgid ""
 "Direction parameter for static key mode.\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
 "Parametr kierunku dla trybu klucza statycznego.\n"
+"Jeśli zostanie użyty kierunek klucza, to musi być przeciwny kierunkowi "
+"użytemu na serwerze VPN. Przykładowo, jeśli serwer używa \"1\", te "
+"połączenie musi użyć \"0\". W wypadku braku pewności jakiej wartości użyć, "
+"proszę skontaktować się z administratorem systemu.\n"
 "konfiguracja: tls-auth <plik> [kierunek]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "Key _File:"
 msgstr "_Plik klucza:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid "TLS Authentication"
 msgstr "Uwierzytelnianie TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -646,11 +649,11 @@ msgstr ""
 "Typ pośrednika: HTTP lub SOCKS.\n"
 "konfiguracja: http-proxy lub socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Proxy _Type:"
 msgstr "_Typ pośrednika:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -658,11 +661,11 @@ msgstr ""
 "<i>Należy wybrać tę opcję, jeśli organizacja wymaga użycia serwera "
 "pośrednika do dostępu do Internetu.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid "Server _Address:"
 msgstr "_Adres serwera:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -670,11 +673,11 @@ msgstr ""
 "Łączy ze zdalnym komputerem przez pośrednika za pomocą tego adresu.\n"
 "konfiguracja: http-proxy lub socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -682,11 +685,11 @@ msgstr ""
 "Łączy ze zdalnym komputerem przez pośrednika za pomocą tego portu.\n"
 "konfiguracja: http-proxy lub socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Powtarzanie w nieskończoność, kiedy wystąpi błąd"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -695,27 +698,27 @@ msgstr ""
 "przywrócenie SIGUSR1.\n"
 "konfiguracja: http-proxy-retry lub socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Proxy _Username:"
 msgstr "Nazwa _użytkownika pośrednika:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid "Proxy Passwor_d:"
 msgstr "_Hasło pośrednika:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr "Nazwa użytkownika pośrednika HTTP/SOCKS przekazywana do OpenVPN."
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr "Hasło pośrednika HTTP/SOCKS przekazywane do OpenVPN."
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:122
 msgid "_Show password"
 msgstr "_Wyświetlanie hasła"
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:123
 msgid "Proxies"
 msgstr "Pośredniki"
 
