@@ -585,7 +585,6 @@ nm_openvpn_socket_data_cb (GIOChannel *source, GIOCondition condition, gpointer 
 
 	if (!handle_management_socket (plugin, source, condition, &failure)) {
 		nm_vpn_service_plugin_failure (plugin, failure);
-		nm_vpn_service_plugin_set_state (plugin, NM_VPN_SERVICE_STATE_STOPPED);
 		return FALSE;
 	}
 
@@ -608,7 +607,6 @@ nm_openvpn_connect_timer_cb (gpointer data)
 	if (fd < 0) {
 		g_warning ("Could not create management socket");
 		nm_vpn_service_plugin_failure (NM_VPN_SERVICE_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
-		nm_vpn_service_plugin_set_state (NM_VPN_SERVICE_PLUGIN (plugin), NM_VPN_SERVICE_STATE_STOPPED);
 		goto out;
 	}
 
@@ -623,7 +621,6 @@ nm_openvpn_connect_timer_cb (gpointer data)
 
 		g_warning ("Could not open management socket");
 		nm_vpn_service_plugin_failure (NM_VPN_SERVICE_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
-		nm_vpn_service_plugin_set_state (NM_VPN_SERVICE_PLUGIN (plugin), NM_VPN_SERVICE_STATE_STOPPED);
 	} else {
 		io_data->socket_channel = g_io_channel_unix_new (fd);
 		g_io_channel_set_encoding (io_data->socket_channel, NULL, NULL);
@@ -673,14 +670,8 @@ openvpn_watch_cb (GPid pid, gint status, gpointer user_data)
 	priv->pid = 0;
 
 	/* OpenVPN doesn't supply useful exit codes :( */
-	switch (error) {
-	case 0:
+	if (error == 0)
 		good_exit = TRUE;
-		break;
-	default:
-		failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
-		break;
-	}
 
 	/* Try to get the last bits of data from openvpn */
 	if (priv->io_data && priv->io_data->socket_channel) {
@@ -695,10 +686,10 @@ openvpn_watch_cb (GPid pid, gint status, gpointer user_data)
 		}
 	}
 
-	if (!good_exit)
+	if (good_exit)
+		nm_vpn_service_plugin_disconnect (plugin, NULL);
+	else
 		nm_vpn_service_plugin_failure (plugin, failure);
-
-	nm_vpn_service_plugin_set_state (plugin, NM_VPN_SERVICE_STATE_STOPPED);
 }
 
 static gboolean
