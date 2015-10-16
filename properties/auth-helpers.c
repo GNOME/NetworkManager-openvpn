@@ -446,7 +446,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	char *tmp;
 	gboolean valid, encrypted = FALSE;
 	GtkWidget *widget;
-	char *str;
+	NMSettingSecretFlags pw_flags;
+	gboolean secrets_required = TRUE;
 
 	tmp = g_strdup_printf ("%s_ca_cert_chooser", prefix);
 	valid = validate_file_chooser (builder, tmp);
@@ -483,14 +484,19 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	}
 
 	/* Encrypted certificates require a password */
-	str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-	encrypted = is_encrypted (str);
-	g_free (str);
-	if (encrypted) {
-		tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
-		g_free (tmp);
+	tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+	encrypted = is_encrypted (tmp);
+	g_free (tmp);
 
+	tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
+	g_free (tmp);
+	pw_flags = nma_utils_menu_to_secret_flags (widget);
+	if (   pw_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED
+	    || pw_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED)
+		secrets_required = FALSE;
+
+	if (encrypted && secrets_required) {
 		if (!gtk_entry_get_text_length (GTK_ENTRY (widget))) {
 			g_set_error (error,
 			             OPENVPN_EDITOR_PLUGIN_ERROR,
