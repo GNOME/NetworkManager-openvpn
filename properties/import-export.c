@@ -62,7 +62,11 @@
 #define AUTH_TAG "auth "
 #define AUTH_USER_PASS_TAG "auth-user-pass"
 #define CA_TAG "ca "
+#define CA_BLOB_START_TAG "<ca>"
+#define CA_BLOB_END_TAG "</ca>"
 #define CERT_TAG "cert "
+#define CERT_BLOB_START_TAG "<cert>"
+#define CERT_BLOB_END_TAG "</cert>"
 #define CIPHER_TAG "cipher "
 #define KEYSIZE_TAG "keysize "
 #define CLIENT_TAG "client"
@@ -73,6 +77,8 @@
 #define FRAGMENT_TAG "fragment "
 #define IFCONFIG_TAG "ifconfig "
 #define KEY_TAG "key "
+#define KEY_BLOB_START_TAG "<key>"
+#define KEY_BLOB_END_TAG "</key>"
 #define KEEPALIVE_TAG "keepalive "
 #define MSSFIX_TAG "mssfix"
 #define PING_TAG "ping "
@@ -175,6 +181,99 @@ handle_path_item (const char *line,
 	g_free (file);
 	g_free (full_path);
 	return TRUE;
+}
+
+#define CERT_BEGIN  "-----BEGIN CERTIFICATE-----"
+#define CERT_END    "-----END CERTIFICATE-----"
+#define PRIV_KEY_BEGIN  "-----BEGIN PRIVATE KEY-----"
+#define PRIV_KEY_END    "-----END PRIVATE KEY-----"
+
+static gboolean
+handle_blob_item (const char ***line,
+                  const char *key,
+                  NMSettingVpn *s_vpn,
+                  const char *name,
+                  GError **error)
+{
+	gboolean success = FALSE;
+	const char *blob_mark_start, *blob_mark_end;
+	const char *start_tag, *end_tag;
+	char *filename = NULL;
+	char *dirname = NULL;
+	char *path = NULL;
+	GString *in_file = NULL;
+	const char **p;
+
+	if (!strcmp (key, NM_OPENVPN_KEY_CA)) {
+		start_tag = CA_BLOB_START_TAG;
+		end_tag = CA_BLOB_END_TAG;
+		blob_mark_start = CERT_BEGIN;
+		blob_mark_end = CERT_END;
+	} else if (!strcmp (key, NM_OPENVPN_KEY_CERT)) {
+		start_tag = CERT_BLOB_START_TAG;
+		end_tag = CERT_BLOB_END_TAG;
+		blob_mark_start = CERT_BEGIN;
+		blob_mark_end = CERT_END;
+	} else if (!strcmp (key, NM_OPENVPN_KEY_KEY)) {
+		start_tag = KEY_BLOB_START_TAG;
+		end_tag = KEY_BLOB_END_TAG;
+		blob_mark_start = PRIV_KEY_BEGIN;
+		blob_mark_end = PRIV_KEY_END;
+	} else
+		g_return_val_if_reached (FALSE);
+
+	p = *line;
+	if (strncmp (*p, start_tag, strlen (start_tag)))
+		goto finish;
+	p++;
+	if (strcmp (*p, blob_mark_start))
+		goto finish;
+	p++;
+
+	in_file = g_string_new (NULL);
+
+	while (*p && strcmp (*p, blob_mark_end)) {
+		g_string_append (in_file, *p);
+		g_string_append_c (in_file, '\n');
+		p++;
+	}
+	if (!*p || strncmp (*(p+1), end_tag, strlen (end_tag)))
+		goto finish;
+	p++;
+
+	/* Construct file name to write the data in */
+	filename = g_strdup_printf ("%s-%s.pem", name, key);
+	dirname = g_build_filename (g_get_home_dir (), ".cert", NULL);
+	path = g_build_filename (dirname, filename, NULL);
+
+	/* Check that dirname exists and is a directory, otherwise create it */
+	if (!g_file_test (dirname, G_FILE_TEST_IS_DIR)) {
+		if (!g_file_test (dirname, G_FILE_TEST_EXISTS)) {
+			if (mkdir (dirname, 0755) < 0)
+				goto finish;  /* dirname could not be created */
+		} else
+			goto finish;  /* dirname is not a directory */
+	}
+
+	/* Write the new file */
+	g_string_prepend_c (in_file, '\n');
+	g_string_prepend (in_file, blob_mark_start);
+	g_string_append_printf (in_file, "%s", blob_mark_end);
+	success = g_file_set_contents (path, in_file->str, -1, error);
+	if (!success)
+		goto finish;
+
+	nm_setting_vpn_add_data_item (s_vpn, key, path);
+
+finish:
+	line = &p;
+	g_free (filename);
+	g_free (dirname);
+	g_free (path);
+	if (in_file)
+		g_string_free (in_file, TRUE);
+	return success;
+
 }
 
 static char **
@@ -390,7 +489,6 @@ do_import (const char *path, char **lines, GError **error)
 	if (last_dot)
 		*last_dot = '\0';
 	g_object_set (s_con, NM_SETTING_CONNECTION_ID, basename, NULL);
-	g_free (basename);
 
 	for (line = lines; *line; line++) {
 		char *comment, **items = NULL, *leftover = NULL;
@@ -689,6 +787,15 @@ do_import (const char *path, char **lines, GError **error)
 		if (handle_path_item (*line, KEY_TAG, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
 			continue;
 
+		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_CA, s_vpn, basename, NULL))
+			continue;
+
+		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_CERT, s_vpn, basename, NULL))
+			continue;
+
+		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_KEY, s_vpn, basename, NULL))
+			continue;
+
 		if (handle_path_item (*line, SECRET_TAG, NM_OPENVPN_KEY_STATIC_KEY,
 		                      s_vpn, default_path, &leftover)) {
 			handle_direction ("secret",
@@ -886,6 +993,7 @@ do_import (const char *path, char **lines, GError **error)
 	}
 
 	g_free (default_path);
+	g_free (basename);
 
 	if (connection)
 		nm_connection_add_setting (connection, NM_SETTING (s_vpn));
