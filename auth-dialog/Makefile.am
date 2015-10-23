@@ -9,8 +9,7 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 	-DICONDIR=\""$(datadir)/pixmaps"\"	\
 	-DUIDIR=\""$(uidir)"\"		\
 	-DBINDIR=\""$(bindir)"\"		\
-	-DGNOMELOCALEDIR=\"$(datadir)/locale\"	\
-	-DVERSION=\"$(VERSION)\"
+	-DGNOMELOCALEDIR=\"$(datadir)/locale\"
 
 nm_openvpn_auth_dialog_SOURCES = \
 	main.c

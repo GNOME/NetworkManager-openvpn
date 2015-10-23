@@ -4,7 +4,6 @@ AM_CPPFLAGS = \
 	-DBINDIR=\"$(bindir)\" \
 	-DPREFIX=\""$(prefix)"\" \
 	-DSYSCONFDIR=\""$(sysconfdir)"\" \
-	-DVERSION="\"$(VERSION)\"" \
 	-DLIBDIR=\""$(libdir)"\" \
 	-DLIBEXECDIR=\""$(libexecdir)"\" \
 	-DLOCALSTATEDIR=\""$(localstatedir)"\" \
