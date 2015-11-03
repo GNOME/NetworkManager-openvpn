@@ -23,6 +23,8 @@
 #ifndef NM_OPENVPN_SERVICE_DEFINES_H
 #define NM_OPENVPN_SERVICE_DEFINES_H
 
+#define NM_VPN_SERVICE_TYPE_OPENVPN "org.freedesktop.NetworkManager.openvpn"
+
 #define NM_DBUS_SERVICE_OPENVPN    "org.freedesktop.NetworkManager.openvpn"
 #define NM_DBUS_INTERFACE_OPENVPN  "org.freedesktop.NetworkManager.openvpn"
 #define NM_DBUS_PATH_OPENVPN       "/org/freedesktop/NetworkManager/openvpn"

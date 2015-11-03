@@ -941,6 +941,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	char *stmp;
 	const char *defport, *proto_tcp;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
+	gchar *bus_name;
 
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
@@ -1289,8 +1290,9 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* Up script, called when connection has been established or has been restarted */
 	add_openvpn_arg (args, "--up");
-	stmp = g_strdup_printf ("%s%s %s --", NM_OPENVPN_HELPER_PATH, debug ? " --helper-debug" : "",
-	                        dev_type_is_tap ? "--tap" : "--tun");
+	g_object_get (plugin, NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME, &bus_name, NULL);
+	stmp = g_strdup_printf ("%s%s --bus-name %s %s --", NM_OPENVPN_HELPER_PATH, debug ? " --helper-debug" : "",
+	                        bus_name, dev_type_is_tap ? "--tap" : "--tun");
 	add_openvpn_arg (args, stmp);
 	g_free (stmp);
 	add_openvpn_arg (args, "--up-restart");
@@ -1531,6 +1533,39 @@ check_need_secrets (NMSettingVpn *s_vpn, gboolean *need_secrets)
 }
 
 static gboolean
+ensure_killed (gpointer data)
+{
+	int pid = GPOINTER_TO_INT (data);
+
+	if (kill (pid, 0) == 0)
+		kill (pid, SIGKILL);
+
+	return FALSE;
+}
+
+static gboolean
+real_disconnect (NMVpnServicePlugin	 *plugin,
+			  GError		**err)
+{
+	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
+
+	if (priv->pid) {
+		if (kill (priv->pid, SIGTERM) == 0)
+			g_timeout_add (2000, ensure_killed, GINT_TO_POINTER (priv->pid));
+		else
+			kill (priv->pid, SIGKILL);
+
+		g_message ("Terminated openvpn daemon with PID %d.", priv->pid);
+		priv->pid = 0;
+	}
+
+	g_free (priv->mgt_path);
+	priv->mgt_path = NULL;
+
+	return TRUE;
+}
+
+static gboolean
 _connect_common (NMVpnServicePlugin   *plugin,
                  NMConnection  *connection,
                  GVariant      *details,
@@ -1539,6 +1574,11 @@ _connect_common (NMVpnServicePlugin   *plugin,
 	NMSettingVpn *s_vpn;
 	const char *connection_type;
 	const char *user_name;
+
+	if (!real_disconnect (plugin, error)) {
+		g_warning ("Could not clean up previous daemon run: %s", (*error)->message);
+		g_clear_error (error);
+	}
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -1685,39 +1725,6 @@ real_new_secrets (NMVpnServicePlugin *plugin,
 	return TRUE;
 }
 
-static gboolean
-ensure_killed (gpointer data)
-{
-	int pid = GPOINTER_TO_INT (data);
-
-	if (kill (pid, 0) == 0)
-		kill (pid, SIGKILL);
-
-	return FALSE;
-}
-
-static gboolean
-real_disconnect (NMVpnServicePlugin	 *plugin,
-			  GError		**err)
-{
-	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-
-	if (priv->pid) {
-		if (kill (priv->pid, SIGTERM) == 0)
-			g_timeout_add (2000, ensure_killed, GINT_TO_POINTER (priv->pid));
-		else
-			kill (priv->pid, SIGKILL);
-
-		g_message ("Terminated openvpn daemon with PID %d.", priv->pid);
-		priv->pid = 0;
-	}
-
-	g_free (priv->mgt_path);
-	priv->mgt_path = NULL;
-
-	return TRUE;
-}
-
 static void
 nm_openvpn_plugin_init (NMOpenvpnPlugin *plugin)
 {
@@ -1765,14 +1772,13 @@ plugin_state_changed (NMOpenvpnPlugin *plugin,
 }
 
 NMOpenvpnPlugin *
-nm_openvpn_plugin_new (void)
+nm_openvpn_plugin_new (const char *bus_name)
 {
 	NMOpenvpnPlugin *plugin;
 	GError *error = NULL;
 
 	plugin =  (NMOpenvpnPlugin *) g_initable_new (NM_TYPE_OPENVPN_PLUGIN, NULL, &error,
-	                                              NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME,
-	                                              NM_DBUS_SERVICE_OPENVPN,
+	                                              NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME, bus_name,
 	                                              NULL);
 
 	if (plugin) {
@@ -1818,10 +1824,13 @@ main (int argc, char *argv[])
 	NMOpenvpnPlugin *plugin;
 	gboolean persist = FALSE;
 	GOptionContext *opt_ctx = NULL;
+	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
+	GError *error = NULL;
 
 	GOptionEntry options[] = {
 		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don't quit when VPN connection terminates"), NULL },
 		{ "debug", 0, 0, G_OPTION_ARG_NONE, &debug, N_("Enable verbose debug logging (may expose passwords)"), NULL },
+		{ "bus-name", 0, 0, G_OPTION_ARG_STRING, &bus_name, N_("DBus name to use for this instance"), NULL },
 		{NULL}
 	};
 
@@ -1847,7 +1856,12 @@ main (int argc, char *argv[])
 	                              _("nm-openvpn-service provides integrated "
 	                                "OpenVPN capability to NetworkManager."));
 
-	g_option_context_parse (opt_ctx, &argc, &argv, NULL);
+	if (!g_option_context_parse (opt_ctx, &argc, &argv, &error)) {
+		g_warning ("Error parsing the command line options: %s", error->message);
+		g_option_context_free (opt_ctx);
+		g_clear_error (&error);
+		exit (1);
+	}
 	g_option_context_free (opt_ctx);
 
 	if (getenv ("OPENVPN_DEBUG"))
@@ -1860,7 +1874,7 @@ main (int argc, char *argv[])
 	    && (system ("/sbin/modprobe tun") == -1))
 		exit (EXIT_FAILURE);
 
-	plugin = nm_openvpn_plugin_new ();
+	plugin = nm_openvpn_plugin_new (bus_name);
 	if (!plugin)
 		exit (EXIT_FAILURE);
 

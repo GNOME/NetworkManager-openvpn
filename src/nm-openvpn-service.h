@@ -46,6 +46,6 @@ typedef struct {
 
 GType nm_openvpn_plugin_get_type (void);
 
-NMOpenvpnPlugin *nm_openvpn_plugin_new (void);
+NMOpenvpnPlugin *nm_openvpn_plugin_new (const char *bus_name);
 
 #endif /* NM_OPENVPN_SERVICE_H */
