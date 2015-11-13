@@ -310,12 +310,12 @@ get_ip6_routes (void)
 			g_strfreev (dest_prefix);
 			continue;
 		}
-		g_strfreev (dest_prefix);
 
 		snprintf (buf, BUFLEN, "route_ipv6_gateway_%d", i);
 		tmp = getenv (buf);
 
 		route = nm_ip_route_new (AF_INET6, dest_prefix[0], prefix, tmp, -1, &error);
+		g_strfreev (dest_prefix);
 		if (!route) {
 			g_warning ("Ignoring a route: %s", error->message);
 			g_error_free (error);
