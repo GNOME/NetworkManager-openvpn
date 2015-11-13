@@ -676,7 +676,8 @@ main (int argc, char *argv[])
 		g_value_set_uint (val, nm_utils_ip4_netmask_to_prefix (temp_addr.s_addr));
 		g_hash_table_insert (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 	} else if (!tapdev) {
-		if (!g_hash_table_lookup (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX)) {
+		if (   g_hash_table_lookup (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS)
+		    && !g_hash_table_lookup (ip4config, NM_VPN_PLUGIN_IP4_CONFIG_PREFIX)) {
 			val = g_slice_new0 (GValue);
 			g_value_init (val, G_TYPE_UINT);
 			g_value_set_uint (val, 32);
