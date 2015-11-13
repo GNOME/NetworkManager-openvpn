@@ -440,6 +440,7 @@ main (int argc, char *argv[])
 	int shift = 0;
 	gboolean is_restart;
 	gboolean has_ip4_prefix = FALSE;
+	gboolean has_ip4_address = FALSE;
 	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
@@ -554,9 +555,10 @@ main (int argc, char *argv[])
 		tmp = argv[4];
 	if (tmp && strlen (tmp)) {
 		val = addr4_to_gvariant (tmp);
-		if (val)
+		if (val) {
+			has_ip4_address = TRUE;
 			g_variant_builder_add (&ip4builder, "{sv}", NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS, val);
-		else
+		} else
 			helper_failed (proxy, "IP4 Address");
 	}
 
@@ -595,7 +597,7 @@ main (int argc, char *argv[])
 		val = g_variant_new_uint32 (nm_utils_ip4_netmask_to_prefix (temp_addr.s_addr));
 		g_variant_builder_add (&ip4builder, "{sv}", NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 	} else if (!tapdev) {
-		if (!has_ip4_prefix) {
+		if (has_ip4_address && !has_ip4_prefix) {
 			val = g_variant_new_uint32 (32);
 			g_variant_builder_add (&ip4builder, "{sv}", NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 		}
