@@ -729,6 +729,9 @@ main (int argc, char *argv[])
 		ip6config = NULL;
 	}
 
+	if (!ip4config && !ip6config)
+		helper_failed (proxy, "IPv4 or IPv6 configuration");
+
 	/* Send the config info to nm-openvpn-service */
 	send_config (proxy, g_variant_builder_end (&builder), ip4config, ip6config);
 
