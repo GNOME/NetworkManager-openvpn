@@ -17,4 +17,5 @@ EXTRA_DIST = \
 	device-notype.ovpn \
 	keepalive.ovpn \
 	ping-with-exit.ovpn \
-	ping-with-restart.ovpn
+	ping-with-restart.ovpn \
+	route.ovpn
