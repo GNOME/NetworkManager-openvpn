@@ -38,6 +38,7 @@
 #include <nm-setting-vpn.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-ip4-config.h>
+#include <nm-utils.h>
 
 #include "import-export.h"
 #include "nm-openvpn.h"
@@ -80,6 +81,7 @@
 #define TLS_REMOTE_TAG "tls-remote "
 #define REMOTE_CERT_TLS_TAG "remote-cert-tls "
 #define TUNMTU_TAG "tun-mtu "
+#define ROUTE_TAG "route "
 
 
 static char *
@@ -363,11 +365,26 @@ parse_http_proxy_auth (const char *path,
 	return *out_user && *out_pass;
 }
 
+static gboolean
+parse_ip (const char *str, const char *line, guint32 *out_ip)
+{
+	struct in_addr ip;
+
+	if (inet_pton (AF_INET, str, &ip) <= 0) {
+		g_warning ("%s: invalid IP '%s' in option '%s'", __func__, str, line);
+		return FALSE;
+	}
+	if (out_ip)
+		*out_ip = ip.s_addr;
+	return TRUE;
+}
+
 NMConnection *
 do_import (const char *path, char **lines, GError **error)
 {
 	NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
+	NMSettingIP4Config *s_ip4;
 	NMSettingVPN *s_vpn;
 	char *last_dot;
 	char **line;
@@ -382,6 +399,9 @@ do_import (const char *path, char **lines, GError **error)
 	connection = nm_connection_new ();
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
 	nm_connection_add_setting (connection, NM_SETTING (s_con));
+	s_ip4 = NM_SETTING_IP4_CONFIG (nm_setting_ip4_config_new ());
+	nm_connection_add_setting (connection, NM_SETTING (s_ip4));
+	g_object_set (s_ip4, NM_SETTING_IP4_CONFIG_METHOD, NM_SETTING_IP4_CONFIG_METHOD_AUTO, NULL);
 
 	s_vpn = NM_SETTING_VPN (nm_setting_vpn_new ());
 
@@ -784,6 +804,56 @@ do_import (const char *path, char **lines, GError **error)
 			g_strfreev (items);
 			continue;
 		}
+
+		if (!strncmp (*line, ROUTE_TAG, strlen (ROUTE_TAG))) {
+			items = get_args (*line + strlen (ROUTE_TAG), &nitems);
+			if (nitems >= 1 && nitems <= 4) {
+				guint32 dest, next_hop, prefix, metric;
+				NMIP4Route *route;
+
+				if (!parse_ip (items[0], *line, &dest))
+					goto route_fail;
+
+				/* init default values */
+				next_hop = 0;
+				prefix = 32;
+				metric = 0;
+				if (nitems >= 2) {
+					if (!parse_ip (items[1], *line, &prefix))
+						goto route_fail;
+					prefix = nm_utils_ip4_netmask_to_prefix (prefix);
+					if (nitems >= 3) {
+						if (!parse_ip (items[2], *line, &next_hop))
+							goto route_fail;
+						if (nitems == 4) {
+							long num;
+							errno = 0;
+							num = strtol (items[3], NULL, 10);
+							if ((errno == 0) && (num >= 0) && (num <= 65535))
+								metric = (guint32) num;
+							else {
+								g_warning ("%s: invalid metric '%s' in option '%s'",
+								           __func__, items[3], *line);
+								goto route_fail;
+							}
+						}
+					}
+				}
+
+				route = nm_ip4_route_new ();
+				nm_ip4_route_set_dest (route, dest);
+				nm_ip4_route_set_prefix (route, prefix);
+				nm_ip4_route_set_next_hop (route, next_hop);
+				nm_ip4_route_set_metric (route, metric);
+				nm_setting_ip4_config_add_route (s_ip4, route);
+				nm_ip4_route_unref (route);
+			} else
+				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+
+route_fail:
+			g_strfreev (items);
+			continue;
+		}
 	}
 
 	if (!have_client && !have_sk) {
@@ -865,6 +935,7 @@ gboolean
 do_export (const char *path, NMConnection *connection, GError **error)
 {
 	NMSettingConnection *s_con;
+	NMSettingIP4Config *s_ip4;
 	NMSettingVPN *s_vpn;
 	FILE *f;
 	const char *value;
@@ -900,6 +971,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *proxy_retry = NULL;
 	const char *proxy_username = NULL;
 	const char *proxy_password = NULL;
+	int i;
 
 	s_con = NM_SETTING_CONNECTION (nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION));
 	g_assert (s_con);
@@ -1164,6 +1236,34 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			if (proxy_retry && !strcmp (proxy_retry, "yes"))
 				fprintf (f, "socks-proxy-retry\n");
 		}
+	}
+
+	/* Static routes */
+	s_ip4 = nm_connection_get_setting_ip4_config (connection);
+	for (i = 0; s_ip4 && i < nm_setting_ip4_config_get_num_routes (s_ip4); i++) {
+		char dest_str[INET_ADDRSTRLEN];
+		char netmask_str[INET_ADDRSTRLEN];
+		char next_hop_str[INET_ADDRSTRLEN];
+		guint32 dest, netmask, next_hop;
+		NMIP4Route *route = nm_setting_ip4_config_get_route (s_ip4, i);
+
+		dest = nm_ip4_route_get_dest (route);
+		memset (dest_str, '\0', sizeof (dest_str));
+		inet_ntop (AF_INET, (const void *) &dest, dest_str, sizeof (dest_str));
+
+		memset (netmask_str, '\0', sizeof (netmask_str));
+		netmask = nm_utils_ip4_prefix_to_netmask (nm_ip4_route_get_prefix (route));
+		inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
+
+		next_hop = nm_ip4_route_get_next_hop (route);
+		memset (next_hop_str, '\0', sizeof (next_hop_str));
+		inet_ntop (AF_INET, (const void *) &next_hop, next_hop_str, sizeof (next_hop_str));
+
+		fprintf (f, "route %s %s %s %u\n",
+		         dest_str,
+		         netmask_str,
+		         next_hop_str,
+		         nm_ip4_route_get_metric (route));
 	}
 
 	/* Add hard-coded stuff */

@@ -110,7 +110,6 @@ test_password_import (NMVpnPluginUiInterface *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
 	NMSettingVPN *s_vpn;
 	const char *expected_id = "password";
 	char *expected_cacert;
@@ -128,11 +127,6 @@ test_password_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	ASSERT (nm_setting_connection_get_uuid (s_con) == NULL,
 	        "password-import", "unexpected valid UUID");
-
-	/* IP4 setting */
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
-	ASSERT (s_ip4 == NULL,
-	        "password-import", "unexpected 'ip4-config' setting");
 
 	/* VPN setting */
 	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
@@ -240,7 +234,6 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
 	NMSettingVPN *s_vpn;
 	const char *expected_id = "tls";
 	char *expected_path;
@@ -258,11 +251,6 @@ test_tls_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	ASSERT (nm_setting_connection_get_uuid (s_con) == NULL,
 	        "tls-import", "unexpected valid UUID");
-
-	/* IP4 setting */
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
-	ASSERT (s_ip4 == NULL,
-	        "tls-import", "unexpected 'ip4-config' setting");
 
 	/* VPN setting */
 	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
@@ -355,7 +343,6 @@ test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
 	NMSettingVPN *s_vpn;
 	const char *expected_id = "pkcs12";
 	char *expected_path;
@@ -373,11 +360,6 @@ test_pkcs12_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	ASSERT (nm_setting_connection_get_uuid (s_con) == NULL,
 	        "pkcs12-import", "unexpected valid UUID");
-
-	/* IP4 setting */
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
-	ASSERT (s_ip4 == NULL,
-	        "pkcs12-import", "unexpected 'ip4-config' setting");
 
 	/* VPN setting */
 	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
@@ -504,7 +486,6 @@ test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
 {
 	NMConnection *connection;
 	NMSettingConnection *s_con;
-	NMSettingIP4Config *s_ip4;
 	NMSettingVPN *s_vpn;
 	const char *expected_id = "static";
 	char *expected_path;
@@ -522,11 +503,6 @@ test_static_key_import (NMVpnPluginUiInterface *plugin, const char *dir)
 
 	ASSERT (nm_setting_connection_get_uuid (s_con) == NULL,
 	        "static-key-import", "unexpected valid UUID");
-
-	/* IP4 setting */
-	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
-	ASSERT (s_ip4 == NULL,
-	        "static-key-import", "unexpected 'ip4-config' setting");
 
 	/* VPN setting */
 	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
@@ -1074,6 +1050,131 @@ test_device_export (NMVpnPluginUiInterface *plugin,
 	g_free (path);
 }
 
+static void
+test_route_import (NMVpnPluginUiInterface *plugin,
+                   const char *detail,
+                   const char *dir)
+{
+	NMConnection *connection;
+	NMSettingConnection *s_con;
+	NMSettingIP4Config *s_ip4;
+	NMSettingVPN *s_vpn;
+	int num_routes;
+	NMIP4Route *route;
+	guint32 expected_dest1 =   0x00030201;
+	guint32 expected_prefix1 = 0x00000018;
+	guint32 expected_nh1 =     0xFE030201;
+	guint32 expected_metric1 = 0x00000063;
+	guint32 expected_dest2 =   0x08070605;
+	guint32 expected_prefix2 = 0x0000001E;
+	guint32 expected_nh2 =     0x00000000;
+	guint32 expected_metric2 = 0x00000000;
+	guint32 expected_dest3 =   0x0000A8C0;
+	guint32 expected_prefix3 = 0x00000010;
+	guint32 expected_nh3 =     0x012CA8C0;
+	guint32 expected_metric3 = 0x00000000;
+
+	connection = get_basic_connection (detail, plugin, dir, "route.ovpn");
+	ASSERT (connection != NULL, detail, "failed to import connection");
+
+	/* Connection setting */
+	s_con = (NMSettingConnection *) nm_connection_get_setting (connection, NM_TYPE_SETTING_CONNECTION);
+	ASSERT (s_con != NULL,
+	        detail, "missing 'connection' setting");
+
+	/* VPN setting */
+	s_vpn = (NMSettingVPN *) nm_connection_get_setting (connection, NM_TYPE_SETTING_VPN);
+	ASSERT (s_vpn != NULL,
+	        detail, "missing 'vpn' setting");
+
+	/* Data items */
+	test_item (detail, s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
+
+	/* IP4 setting */
+	s_ip4 = (NMSettingIP4Config *) nm_connection_get_setting (connection, NM_TYPE_SETTING_IP4_CONFIG);
+	ASSERT (s_ip4 != NULL,
+	        detail, "missing 'ip4-config' setting");
+	num_routes = nm_setting_ip4_config_get_num_routes (s_ip4);
+	ASSERT (num_routes == 3, detail, "incorrect number of static routes");
+	/* route 1 */
+	route = nm_setting_ip4_config_get_route (s_ip4, 0);
+	ASSERT (nm_ip4_route_get_dest (route) == expected_dest1,
+	        detail, "unexpected dest of 1. route");
+	ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix1,
+	        detail, "unexpected prefix of 1. route");
+	ASSERT (nm_ip4_route_get_next_hop (route) == expected_nh1,
+	        detail, "unexpected next_hop of 1. route");
+	ASSERT (nm_ip4_route_get_metric (route) == expected_metric1,
+	        detail, "unexpected metric of 1. route");
+
+	/* route 2 */
+	route = nm_setting_ip4_config_get_route (s_ip4, 1);
+	ASSERT (nm_ip4_route_get_dest (route) == expected_dest2,
+	        detail, "unexpected dest of 2. route");
+	ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix2,
+	        detail, "unexpected prefix of 2. route");
+	ASSERT (nm_ip4_route_get_next_hop (route) == expected_nh2,
+	        detail, "unexpected next_hop of 2. route");
+	ASSERT (nm_ip4_route_get_metric (route) == expected_metric2,
+	        detail, "unexpected metric of 2. route");
+
+	/* route 3 */
+	route = nm_setting_ip4_config_get_route (s_ip4, 2);
+	ASSERT (nm_ip4_route_get_dest (route) == expected_dest3,
+	        detail, "unexpected dest of 3. route");
+	ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix3,
+	        detail, "unexpected prefix of 3. route");
+	ASSERT (nm_ip4_route_get_next_hop (route) == expected_nh3,
+	        detail, "unexpected next_hop of 3. route");
+	ASSERT (nm_ip4_route_get_metric (route) == expected_metric3,
+	        detail, "unexpected metric of 3. route");
+
+	g_object_unref (connection);
+}
+
+#define ROUTE_EXPORTED_NAME "route.ovpntest"
+static void
+test_route_export (NMVpnPluginUiInterface *plugin,
+                   const char *detail,
+                   const char *dir,
+                   const char *tmpdir)
+{
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+
+	connection = get_basic_connection (detail, plugin, dir, "route.ovpn");
+	ASSERT (connection != NULL, detail, "failed to import connection");
+
+	path = g_build_path ("/", tmpdir, ROUTE_EXPORTED_NAME, NULL);
+	success = nm_vpn_plugin_ui_interface_export (plugin, path, connection, &error);
+	if (!success) {
+		if (!error)
+			FAIL (detail, "export failed with missing error");
+		else
+			FAIL (detail, "export failed: %s", error->message);
+	}
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection (detail, plugin, tmpdir, ROUTE_EXPORTED_NAME);
+	(void) unlink (path);
+	ASSERT (reimported != NULL, detail, "failed to re-import connection");
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+
+	ASSERT (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT) == TRUE,
+	        detail, "original and reimported connection differ");
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
@@ -1150,6 +1251,9 @@ int main (int argc, char **argv)
 
 	test_device_import (plugin, "device-import", test_dir, "device-notype.ovpn", "tap", NULL);
 	test_device_export (plugin, "device-export", test_dir, argv[2], "device-notype.ovpn", "device-notype.ovpntest");
+
+	test_route_import (plugin, "route-import", test_dir);
+	test_route_export (plugin, "route-export", test_dir, argv[2]);
 
 	g_object_unref (plugin);
 
