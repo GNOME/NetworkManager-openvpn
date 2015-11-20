@@ -1,6 +1,9 @@
 AC_PREREQ(2.52)
 
-AC_INIT(NetworkManager-openvpn, 1.1.0, dcbw@redhat.com, NetworkManager-openvpn)
+AC_INIT(NetworkManager-openvpn,
+        1.1.0,
+        https://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager,
+        NetworkManager-openvpn)
 AM_INIT_AUTOMAKE([1.9 subdir-objects tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE
 
