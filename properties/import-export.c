@@ -1055,7 +1055,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	f = fopen (path, "w");
 	if (!f) {
-		g_set_error_literal (error, 0, 0, _("could not open file for writing"));
+		g_set_error_literal (error,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     _("could not open file for writing"));
 		return FALSE;
 	}
 
@@ -1063,7 +1066,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && strlen (value))
 		gateways = value;
 	else {
-		g_set_error_literal (error, 0, 0, _("connection was incomplete (missing gateway)"));
+		g_set_error_literal (error,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     _("connection was incomplete (missing gateway)"));
 		goto done;
 	}
 
