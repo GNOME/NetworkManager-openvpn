@@ -1034,8 +1034,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 					add_openvpn_arg (args, "1194"); /* default IANA port */
 
 				if (proto) {
-					if (!strcmp (proto, "udp") || !strcmp (proto, "tcp"))
-						add_openvpn_arg (args, proto);
+					if (!strcmp (proto, "udp"))
+							add_openvpn_arg (args, proto);
+					else if (!strcmp (proto, "tcp"))
+							add_openvpn_arg (args, "tcp-client");
 					else {
 						g_set_error (error,
 						             NM_VPN_PLUGIN_ERROR,
@@ -1046,7 +1048,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						return FALSE;
 					}
 				} else if (proto_tcp && !strcmp (proto_tcp, "yes"))
-					add_openvpn_arg (args, "tcp");
+					add_openvpn_arg (args, "tcp-client");
 				else
 					add_openvpn_arg (args, "udp");
 			}
