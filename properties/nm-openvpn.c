@@ -48,7 +48,6 @@
 #define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
 #define OPENVPN_EDITOR_PLUGIN_ERROR_MISSING_PROPERTY    NM_SETTING_VPN_ERROR_MISSING_PROPERTY
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
-#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_SETTING_VPN_ERROR_UNKNOWN
 
 #else /* !NM_OPENVPN_OLD */
 
@@ -58,7 +57,6 @@
 #define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
 #define OPENVPN_EDITOR_PLUGIN_ERROR_MISSING_PROPERTY    NM_CONNECTION_ERROR_MISSING_PROPERTY
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
-#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_CONNECTION_ERROR_FAILED
 #endif
 
 #include "../src/nm-openvpn-service-defines.h"
@@ -637,7 +635,6 @@ import (NMVpnEditorPlugin *iface, const char *path, GError **error)
 {
 	NMConnection *connection = NULL;
 	char *contents = NULL;
-	char **lines = NULL;
 	char *ext;
 
 	ext = strrchr (path, '.');
@@ -656,36 +653,9 @@ import (NMVpnEditorPlugin *iface, const char *path, GError **error)
 	if (!g_file_get_contents (path, &contents, NULL, error))
 		return NULL;
 
-	if (!g_utf8_validate (contents, -1, NULL)) {
-		char *tmp;
-		GError *conv_error = NULL;
-
-		tmp = g_locale_to_utf8 (contents, -1, NULL, NULL, &conv_error);
-		if (conv_error) {
-			/* ignore the error, we tried at least. */
-			g_error_free (conv_error);
-			g_free (tmp);
-		} else {
-			g_assert (tmp);
-			g_free (contents);
-			contents = tmp;  /* update contents with the UTF-8 safe text */
-		}
-	}
-
-	lines = g_strsplit_set (contents, "\r\n", 0);
-	if (g_strv_length (lines) <= 1) {
-		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE,
-		                     _("not a valid OpenVPN configuration file"));
-		goto out;
-	}
-
-	connection = do_import (path, lines, error);
+	connection = do_import (path, contents, error);
 
 out:
-	if (lines)
-		g_strfreev (lines);
 	g_free (contents);
 	return connection;
 }
