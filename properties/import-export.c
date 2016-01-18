@@ -188,6 +188,15 @@ handle_blob_item (const char ***line,
 	GString *in_file = NULL;
 	const char **p;
 
+#define NEXT_LINE \
+	G_STMT_START { \
+		do { \
+			p++; \
+			if (!*p) \
+				goto finish; \
+		} while (!*p[0]); \
+	} G_STMT_END
+
 	if (!strcmp (key, NM_OPENVPN_KEY_CA)) {
 		start_tag = CA_BLOB_START_TAG;
 		end_tag = CA_BLOB_END_TAG;
@@ -211,7 +220,7 @@ handle_blob_item (const char ***line,
 	p = *line;
 	if (strncmp (*p, start_tag, strlen (start_tag)))
 		goto finish;
-	p++;
+	NEXT_LINE;
 
 	if (blob_mark_start2 && !strcmp (*p, blob_mark_start2)) {
 		blob_mark_start = blob_mark_start2;
@@ -219,18 +228,18 @@ handle_blob_item (const char ***line,
 	} else if (strcmp (*p, blob_mark_start))
 		goto finish;
 
-	p++;
-
+	NEXT_LINE;
 	in_file = g_string_new (NULL);
 
 	while (*p && strcmp (*p, blob_mark_end)) {
 		g_string_append (in_file, *p);
 		g_string_append_c (in_file, '\n');
-		p++;
+		NEXT_LINE;
 	}
-	if (!*p || strncmp (*(p+1), end_tag, strlen (end_tag)))
+
+	NEXT_LINE;
+	if (strncmp (*p, end_tag, strlen (end_tag)))
 		goto finish;
-	p++;
 
 	/* Construct file name to write the data in */
 	filename = g_strdup_printf ("%s-%s.pem", name, key);
