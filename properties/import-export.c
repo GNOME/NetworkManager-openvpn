@@ -193,6 +193,8 @@ handle_path_item (const char *line,
 #define CERT_END    "-----END CERTIFICATE-----"
 #define PRIV_KEY_BEGIN  "-----BEGIN PRIVATE KEY-----"
 #define PRIV_KEY_END    "-----END PRIVATE KEY-----"
+#define RSA_PRIV_KEY_BEGIN  "-----BEGIN RSA PRIVATE KEY-----"
+#define RSA_PRIV_KEY_END    "-----END RSA PRIVATE KEY-----"
 
 static gboolean
 handle_blob_item (const char ***line,
@@ -203,6 +205,7 @@ handle_blob_item (const char ***line,
 {
 	gboolean success = FALSE;
 	const char *blob_mark_start, *blob_mark_end;
+	const char *blob_mark_start2 = NULL, *blob_mark_end2 = NULL;
 	const char *start_tag, *end_tag;
 	char *filename = NULL;
 	char *dirname = NULL;
@@ -225,6 +228,8 @@ handle_blob_item (const char ***line,
 		end_tag = KEY_BLOB_END_TAG;
 		blob_mark_start = PRIV_KEY_BEGIN;
 		blob_mark_end = PRIV_KEY_END;
+		blob_mark_start2 = RSA_PRIV_KEY_BEGIN;
+		blob_mark_end2 = RSA_PRIV_KEY_END;
 	} else
 		g_return_val_if_reached (FALSE);
 
@@ -232,8 +237,13 @@ handle_blob_item (const char ***line,
 	if (strncmp (*p, start_tag, strlen (start_tag)))
 		goto finish;
 	p++;
-	if (strcmp (*p, blob_mark_start))
+
+	if (blob_mark_start2 && !strcmp (*p, blob_mark_start2)) {
+		blob_mark_start = blob_mark_start2;
+		blob_mark_end = blob_mark_end2;
+	} else if (strcmp (*p, blob_mark_start))
 		goto finish;
+
 	p++;
 
 	in_file = g_string_new (NULL);
