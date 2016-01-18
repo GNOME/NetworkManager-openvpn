@@ -390,19 +390,20 @@ parse_ip (const char *str, const char *line, guint32 *out_ip)
 }
 
 NMConnection *
-do_import (const char *path, char **lines, GError **error)
+do_import (const char *path, const char *contents, GError **error)
 {
 	NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingIP4Config *s_ip4;
 	NMSettingVPN *s_vpn;
 	char *last_dot;
-	char **line;
+	char **line, **lines = NULL;
 	gboolean have_client = FALSE, have_remote = FALSE;
 	gboolean have_pass = FALSE, have_sk = FALSE;
 	const char *ctype = NULL;
 	char *basename;
 	char *default_path, *tmp, *tmp2;
+	char *new_contents = NULL;
 	gboolean http_proxy = FALSE, socks_proxy = FALSE, proxy_set = FALSE;
 	int nitems;
 
@@ -434,6 +435,31 @@ do_import (const char *path, char **lines, GError **error)
 	if (last_dot)
 		*last_dot = '\0';
 	g_object_set (s_con, NM_SETTING_CONNECTION_ID, basename, NULL);
+
+	if (!g_utf8_validate (contents, -1, NULL)) {
+		GError *conv_error = NULL;
+
+		new_contents = g_locale_to_utf8 (contents, -1, NULL, NULL, &conv_error);
+		if (conv_error) {
+			/* ignore the error, we tried at least. */
+			g_error_free (conv_error);
+			g_free (new_contents);
+		} else {
+			g_assert (new_contents);
+			contents = new_contents;  /* update contents with the UTF-8 safe text */
+		}
+	}
+
+	lines = g_strsplit_set (contents, "\r\n", 0);
+	if (g_strv_length (lines) <= 1) {
+		g_set_error_literal (error,
+		                     OPENVPN_PLUGIN_UI_ERROR,
+		                     OPENVPN_PLUGIN_UI_ERROR_FILE_NOT_READABLE,
+		                     _("not a valid OpenVPN configuration file"));
+		g_object_unref (connection);
+		connection = NULL;
+		goto out;
+	}
 
 	for (line = lines; *line; line++) {
 		char *comment, **items = NULL, *leftover = NULL;
@@ -930,6 +956,7 @@ route_fail:
 		}
 	}
 
+out:
 	g_free (default_path);
 	g_free (basename);
 
@@ -937,6 +964,10 @@ route_fail:
 		nm_connection_add_setting (connection, NM_SETTING (s_vpn));
 	else if (s_vpn)
 		g_object_unref (s_vpn);
+
+	g_free (new_contents);
+	if (lines)
+		g_strfreev (lines);
 
 	return connection;
 }
