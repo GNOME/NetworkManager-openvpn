@@ -50,6 +50,7 @@
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_SETTING_VPN_ERROR_UNKNOWN
 
 #else /* !NM_OPENVPN_OLD */
 
@@ -57,6 +58,8 @@
 
 #define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
+#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_CONNECTION_ERROR_FAILED
+
 #endif
 
 #include "import-export.h"
@@ -193,6 +196,8 @@ handle_path_item (const char *line,
 #define CERT_END    "-----END CERTIFICATE-----"
 #define PRIV_KEY_BEGIN  "-----BEGIN PRIVATE KEY-----"
 #define PRIV_KEY_END    "-----END PRIVATE KEY-----"
+#define RSA_PRIV_KEY_BEGIN  "-----BEGIN RSA PRIVATE KEY-----"
+#define RSA_PRIV_KEY_END    "-----END RSA PRIVATE KEY-----"
 
 static gboolean
 handle_blob_item (const char ***line,
@@ -203,12 +208,22 @@ handle_blob_item (const char ***line,
 {
 	gboolean success = FALSE;
 	const char *blob_mark_start, *blob_mark_end;
+	const char *blob_mark_start2 = NULL, *blob_mark_end2 = NULL;
 	const char *start_tag, *end_tag;
 	char *filename = NULL;
 	char *dirname = NULL;
 	char *path = NULL;
 	GString *in_file = NULL;
 	const char **p;
+
+#define NEXT_LINE \
+	G_STMT_START { \
+		do { \
+			p++; \
+			if (!*p) \
+				goto finish; \
+		} while (!*p[0]); \
+	} G_STMT_END
 
 	if (!strcmp (key, NM_OPENVPN_KEY_CA)) {
 		start_tag = CA_BLOB_START_TAG;
@@ -225,27 +240,34 @@ handle_blob_item (const char ***line,
 		end_tag = KEY_BLOB_END_TAG;
 		blob_mark_start = PRIV_KEY_BEGIN;
 		blob_mark_end = PRIV_KEY_END;
+		blob_mark_start2 = RSA_PRIV_KEY_BEGIN;
+		blob_mark_end2 = RSA_PRIV_KEY_END;
 	} else
 		g_return_val_if_reached (FALSE);
 
 	p = *line;
 	if (strncmp (*p, start_tag, strlen (start_tag)))
 		goto finish;
-	p++;
-	if (strcmp (*p, blob_mark_start))
-		goto finish;
-	p++;
+	NEXT_LINE;
 
+	if (blob_mark_start2 && !strcmp (*p, blob_mark_start2)) {
+		blob_mark_start = blob_mark_start2;
+		blob_mark_end = blob_mark_end2;
+	} else if (strcmp (*p, blob_mark_start))
+		goto finish;
+
+	NEXT_LINE;
 	in_file = g_string_new (NULL);
 
 	while (*p && strcmp (*p, blob_mark_end)) {
 		g_string_append (in_file, *p);
 		g_string_append_c (in_file, '\n');
-		p++;
+		NEXT_LINE;
 	}
-	if (!*p || strncmp (*(p+1), end_tag, strlen (end_tag)))
+
+	NEXT_LINE;
+	if (strncmp (*p, end_tag, strlen (end_tag)))
 		goto finish;
-	p++;
 
 	/* Construct file name to write the data in */
 	filename = g_strdup_printf ("%s-%s.pem", name, key);
@@ -469,19 +491,20 @@ parse_ip (const char *str, const char *line, guint32 *out_ip)
 }
 
 NMConnection *
-do_import (const char *path, char **lines, GError **error)
+do_import (const char *path, const char *contents, GError **error)
 {
 	NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
 	char *last_dot;
-	char **line;
+	char **line, **lines = NULL;
 	gboolean have_client = FALSE, have_remote = FALSE;
 	gboolean have_pass = FALSE, have_sk = FALSE;
 	const char *ctype = NULL;
 	char *basename;
 	char *default_path, *tmp, *tmp2;
+	char *new_contents = NULL;
 	gboolean http_proxy = FALSE, socks_proxy = FALSE, proxy_set = FALSE;
 	int nitems;
 
@@ -513,6 +536,31 @@ do_import (const char *path, char **lines, GError **error)
 	if (last_dot)
 		*last_dot = '\0';
 	g_object_set (s_con, NM_SETTING_CONNECTION_ID, basename, NULL);
+
+	if (!g_utf8_validate (contents, -1, NULL)) {
+		GError *conv_error = NULL;
+
+		new_contents = g_locale_to_utf8 (contents, -1, NULL, NULL, &conv_error);
+		if (conv_error) {
+			/* ignore the error, we tried at least. */
+			g_error_free (conv_error);
+			g_free (new_contents);
+		} else {
+			g_assert (new_contents);
+			contents = new_contents;  /* update contents with the UTF-8 safe text */
+		}
+	}
+
+	lines = g_strsplit_set (contents, "\r\n", 0);
+	if (g_strv_length (lines) <= 1) {
+		g_set_error_literal (error,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE,
+		                     _("not a valid OpenVPN configuration file"));
+		g_object_unref (connection);
+		connection = NULL;
+		goto out;
+	}
 
 	for (line = lines; *line; line++) {
 		char *comment, **items = NULL, *leftover = NULL;
@@ -1115,6 +1163,7 @@ route_fail:
 		}
 	}
 
+out:
 	g_free (default_path);
 	g_free (basename);
 
@@ -1122,6 +1171,10 @@ route_fail:
 		nm_connection_add_setting (connection, NM_SETTING (s_vpn));
 	else if (s_vpn)
 		g_object_unref (s_vpn);
+
+	g_free (new_contents);
+	if (lines)
+		g_strfreev (lines);
 
 	return connection;
 }
