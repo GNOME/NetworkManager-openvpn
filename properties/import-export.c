@@ -1589,7 +1589,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		         nm_ip_route_get_dest (route),
 		         netmask_str,
 		         nm_ip_route_get_next_hop (route) ? nm_ip_route_get_next_hop (route) : "0.0.0.0",
-		         nm_ip_route_get_metric (route));
+		         (long) nm_ip_route_get_metric (route));
 	}
 #endif
 
