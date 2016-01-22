@@ -294,6 +294,94 @@ test_tls_import (NMVpnEditorPlugin *plugin, const char *dir)
 	g_object_unref (connection);
 }
 
+static void
+test_file_contents (const char *id,
+                    const char *dir,
+                    NMSettingVpn *s_vpn,
+                    char *item) {
+	const char *path;
+	char *path2;
+	char *contents;
+	char *expected_contents;
+	gsize length;
+	gsize expected_length;
+	char *test;
+
+	test = g_strdup_printf("%s-%s", id, item);
+
+	path = nm_setting_vpn_get_data_item(s_vpn, item);
+	ASSERT(g_file_get_contents(path, &contents, &length, NULL), test,
+		"failed to open file");
+	path2 = g_strdup_printf ("%s/%s-%s.pem", dir, id, item);
+	ASSERT(g_file_get_contents(path2, &expected_contents, &expected_length, NULL),
+		test, "failed to load test data?!");
+	g_free (path2);
+
+	ASSERT(length == expected_length && !memcmp(contents, expected_contents, length),
+		test, "file contents were not the same");
+	g_free (contents);
+	g_free (expected_contents);
+  g_free (test);
+}
+
+static void
+test_tls_inline_import (NMVpnEditorPlugin *plugin, const char *dir)
+{
+	NMConnection *connection;
+	NMSettingConnection *s_con;
+	NMSettingVpn *s_vpn;
+	const char *expected_id = "tls-inline";
+
+	connection = get_basic_connection ("tls-import", plugin, dir, "tls-inline.ovpn");
+	ASSERT (connection != NULL, "tls-import", "failed to import connection");
+
+	/* Connection setting */
+	s_con = nm_connection_get_setting_connection (connection);
+	ASSERT (s_con != NULL,
+	        "tls-import", "missing 'connection' setting");
+
+	ASSERT (strcmp (nm_setting_connection_get_id (s_con), expected_id) == 0,
+	        "tls-import", "unexpected connection ID");
+
+	ASSERT (nm_setting_connection_get_uuid (s_con) == NULL,
+	        "tls-import", "unexpected valid UUID");
+
+	/* VPN setting */
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	ASSERT (s_vpn != NULL,
+	        "tls-import", "missing 'vpn' setting");
+
+	/* Data items */
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_DEV, "tun");
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE, "173.8.149.245:1194");
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_PORT, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, "/CN=myvpn.company.com");
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, "server");
+
+	test_file_contents (expected_id, dir, s_vpn, NM_OPENVPN_KEY_CA);
+	test_file_contents (expected_id, dir, s_vpn, NM_OPENVPN_KEY_CERT);
+	test_file_contents (expected_id, dir, s_vpn, NM_OPENVPN_KEY_KEY);
+	test_file_contents (expected_id, dir, s_vpn, NM_OPENVPN_KEY_TA);
+	test_item ("tls-import-data", s_vpn, NM_OPENVPN_KEY_TA_DIR, "1");
+
+	test_secret ("tls-import-secrets", s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
+	test_secret ("tls-import-secrets", s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
+
+	g_object_unref (connection);
+}
+
+
 #define TLS_EXPORTED_NAME "tls.ovpntest"
 static void
 test_tls_export (NMVpnEditorPlugin *plugin, const char *dir, const char *tmpdir)
@@ -1244,6 +1332,7 @@ int main (int argc, char **argv)
 	test_password_export (plugin, test_dir, argv[2]);
 
 	test_tls_import (plugin, test_dir);
+	test_tls_inline_import (plugin, test_dir);
 	test_tls_export (plugin, test_dir, argv[2]);
 
 	test_pkcs12_import (plugin, test_dir);
