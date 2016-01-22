@@ -1209,8 +1209,7 @@ out:
 		g_object_unref (s_vpn);
 
 	g_free (new_contents);
-	if (lines)
-		g_strfreev (lines);
+	g_strfreev (lines);
 
 	return connection;
 }
