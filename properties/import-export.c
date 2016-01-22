@@ -222,7 +222,7 @@ handle_blob_item (const char ***line,
 			p++; \
 			if (!*p) \
 				goto finish; \
-		} while (!*p[0]); \
+		} while (*p[0] == '\0' || *p[0] == '#' || *p[0] == ';'); \
 	} G_STMT_END
 
 	if (!strcmp (key, NM_OPENVPN_KEY_CA)) {
