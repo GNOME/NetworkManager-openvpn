@@ -266,7 +266,7 @@ handle_blob_item (const char ***line,
 	nm_setting_vpn_add_data_item (s_vpn, key, path);
 
 finish:
-	line = &p;
+	*line = p;
 	g_free (filename);
 	g_free (dirname);
 	g_free (path);
