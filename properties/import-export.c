@@ -116,6 +116,36 @@
 #define ROUTE_TAG "route "
 
 
+/**
+ * args_is_option:
+ * @line: the entire line from the config file
+ * @tag: the option tag to match against. Optionally
+ *   terminated by white space.
+ *
+ * Returns: %TRUE if @line starts with @tag.
+ * */
+static gboolean
+args_is_option (const char *line, const char *tag)
+{
+	gsize len;
+
+	g_return_val_if_fail (line, FALSE);
+	g_return_val_if_fail (tag, FALSE);
+	g_return_val_if_fail (tag[0], FALSE);
+
+	len = strlen (tag);
+
+	/* allow the tag to be terminated by whitespace */
+	if (g_ascii_isspace (tag[len - 1]))
+		len--;
+
+	if (strncmp (line, tag, len) != 0)
+		return FALSE;
+	if (line[len] == '\0' || g_ascii_isspace (line[len]))
+		return TRUE;
+	return FALSE;
+}
+
 static char *
 unquote (const char *line, char **leftover)
 {
@@ -173,7 +203,7 @@ handle_path_item (const char *line,
 {
 	char *file, *full_path = NULL;
 
-	if (strncmp (line, tag, strlen (tag)))
+	if (!args_is_option (line, tag))
 		return FALSE;
 
 	file = unquote (line + strlen (tag), leftover);
@@ -469,7 +499,7 @@ handle_num_seconds_item (const char *line,
 	int nitems;
 	int seconds;
 
-	if (strncmp (line, tag, strlen (tag)))
+	if (!args_is_option (line, tag))
 		return FALSE;
 
 	items = get_args (line + strlen (tag), &nitems);
@@ -594,18 +624,18 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (!strlen (*line))
 			continue;
 
-		if (   !strncmp (*line, CLIENT_TAG, strlen (CLIENT_TAG))
-		    || !strncmp (*line, TLS_CLIENT_TAG, strlen (TLS_CLIENT_TAG))) {
+		if (   args_is_option (*line, CLIENT_TAG)
+		    || args_is_option (*line, TLS_CLIENT_TAG)) {
 			have_client = TRUE;
 			continue;
 		}
 
-		if (!strncmp(*line, KEY_DIRECTION_TAG, strlen (KEY_DIRECTION_TAG))) {
+		if (args_is_option (*line, KEY_DIRECTION_TAG)) {
 			last_seen_key_direction = *line + strlen (KEY_DIRECTION_TAG);
 			continue;
 		}
 
-		if (!strncmp (*line, DEV_TAG, strlen (DEV_TAG))) {
+		if (args_is_option (*line, DEV_TAG)) {
 			items = get_args (*line + strlen (DEV_TAG), &nitems);
 			if (nitems == 1) {
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV, items[0]);
@@ -616,7 +646,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, DEV_TYPE_TAG, strlen (DEV_TYPE_TAG))) {
+		if (args_is_option (*line, DEV_TYPE_TAG)) {
 			items = get_args (*line + strlen (DEV_TYPE_TAG), &nitems);
 			if (nitems == 1) {
 				if (!strcmp (items[0], "tun") || !strcmp (items[0], "tap"))
@@ -630,7 +660,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, PROTO_TAG, strlen (PROTO_TAG))) {
+		if (args_is_option (*line, PROTO_TAG)) {
 			items = get_args (*line + strlen (PROTO_TAG), &nitems);
 			if (nitems == 1) {
 				/* Valid parameters are "udp", "tcp-client" and "tcp-server".
@@ -652,12 +682,12 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, MSSFIX_TAG, strlen (MSSFIX_TAG))) {
+		if (args_is_option (*line, MSSFIX_TAG)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
 			continue;
 		}
 
-		if (!strncmp (*line, TUNMTU_TAG, strlen (TUNMTU_TAG))) {
+		if (args_is_option (*line, TUNMTU_TAG)) {
 			items = get_args (*line + strlen (TUNMTU_TAG), &nitems);
 			if (nitems == 1) {
 				glong secs;
@@ -677,7 +707,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, FRAGMENT_TAG, strlen (FRAGMENT_TAG))) {
+		if (args_is_option (*line, FRAGMENT_TAG)) {
 			items = get_args (*line + strlen (FRAGMENT_TAG), &nitems);
 
 			if (nitems == 1) {
@@ -698,17 +728,17 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, COMP_TAG, strlen (COMP_TAG))) {
+		if (args_is_option (*line, COMP_TAG)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
 			continue;
 		}
 
-		if (!strncmp (*line, FLOAT_TAG, strlen (FLOAT_TAG))) {
+		if (args_is_option (*line, FLOAT_TAG)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
 			continue;
 		}
 
-		if (!strncmp (*line, RENEG_SEC_TAG, strlen (RENEG_SEC_TAG))) {
+		if (args_is_option (*line, RENEG_SEC_TAG)) {
 			items = get_args (*line + strlen (RENEG_SEC_TAG), &nitems);
 
 			if (nitems == 1) {
@@ -727,14 +757,14 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (   !strncmp (*line, HTTP_PROXY_RETRY_TAG, strlen (HTTP_PROXY_RETRY_TAG))
-		    || !strncmp (*line, SOCKS_PROXY_RETRY_TAG, strlen (SOCKS_PROXY_RETRY_TAG))) {
+		if (   args_is_option (*line, HTTP_PROXY_RETRY_TAG)
+		    || args_is_option (*line, SOCKS_PROXY_RETRY_TAG)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY, "yes");
 			continue;
 		}
 
-		http_proxy = g_str_has_prefix (*line, HTTP_PROXY_TAG);
-		socks_proxy = g_str_has_prefix (*line, SOCKS_PROXY_TAG);
+		http_proxy = args_is_option (*line, HTTP_PROXY_TAG);
+		socks_proxy = args_is_option (*line, SOCKS_PROXY_TAG);
 		if ((http_proxy || socks_proxy) && !proxy_set) {
 			gboolean success = FALSE;
 			const char *proxy_type = NULL;
@@ -794,7 +824,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, REMOTE_TAG, strlen (REMOTE_TAG))) {
+		if (args_is_option (*line, REMOTE_TAG)) {
 			items = get_args (*line + strlen (REMOTE_TAG), &nitems);
 			if (nitems >= 1 && nitems <= 3) {
 				gboolean ok = TRUE;
@@ -836,16 +866,16 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, REMOTE_RANDOM_TAG, strlen (REMOTE_RANDOM_TAG))) {
+		if (args_is_option (*line, REMOTE_RANDOM_TAG)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM, "yes");
 			continue;
 		}
 
-		if (   !strncmp (*line, PORT_TAG, strlen (PORT_TAG))
-		    || !strncmp (*line, RPORT_TAG, strlen (RPORT_TAG))) {
-			if (!strncmp (*line, PORT_TAG, strlen (PORT_TAG)))
+		if (   args_is_option (*line, PORT_TAG)
+		    || args_is_option (*line, RPORT_TAG)) {
+			if (args_is_option (*line, PORT_TAG))
 				items = get_args (*line + strlen (PORT_TAG), &nitems);
-			else if (!strncmp (*line, RPORT_TAG, strlen (RPORT_TAG)))
+			else if (args_is_option (*line, RPORT_TAG))
 				items = get_args (*line + strlen (RPORT_TAG), &nitems);
 			else
 				g_assert_not_reached ();
@@ -924,7 +954,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, CIPHER_TAG, strlen (CIPHER_TAG))) {
+		if (args_is_option (*line, CIPHER_TAG)) {
 			items = get_args (*line + strlen (CIPHER_TAG), &nitems);
 			if (nitems == 1)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER, items[0]);
@@ -935,7 +965,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, KEEPALIVE_TAG, strlen (KEEPALIVE_TAG))) {
+		if (args_is_option (*line, KEEPALIVE_TAG)) {
 			int ping_secs;
 			int ping_restart_secs;
 
@@ -962,7 +992,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, KEYSIZE_TAG, strlen (KEYSIZE_TAG))) {
+		if (args_is_option (*line, KEYSIZE_TAG)) {
 			items = get_args (*line + strlen (KEYSIZE_TAG), &nitems);
 			if (nitems == 1) {
 				glong key_size;
@@ -981,7 +1011,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, TLS_REMOTE_TAG, strlen (TLS_REMOTE_TAG))) {
+		if (args_is_option (*line, TLS_REMOTE_TAG)) {
 			char *unquoted = unquote (*line + strlen (TLS_REMOTE_TAG), NULL);
 
 			if (unquoted) {
@@ -993,7 +1023,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, REMOTE_CERT_TLS_TAG, strlen (REMOTE_CERT_TLS_TAG))) {
+		if (args_is_option (*line, REMOTE_CERT_TLS_TAG)) {
 			items = get_args (*line + strlen (REMOTE_CERT_TLS_TAG), &nitems);
 			if (nitems == 1) {
 				if (   !strcmp (items[0], NM_OPENVPN_REM_CERT_TLS_CLIENT)
@@ -1007,7 +1037,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, IFCONFIG_TAG, strlen (IFCONFIG_TAG))) {
+		if (args_is_option (*line, IFCONFIG_TAG)) {
 			items = get_args (*line + strlen (IFCONFIG_TAG), &nitems);
 			if (nitems == 2) {
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, items[0]);
@@ -1019,12 +1049,12 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (!strncmp (*line, AUTH_USER_PASS_TAG, strlen (AUTH_USER_PASS_TAG))) {
+		if (args_is_option (*line, AUTH_USER_PASS_TAG)) {
 			have_pass = TRUE;
 			continue;
 		}
 
-		if (!strncmp (*line, AUTH_TAG, strlen (AUTH_TAG))) {
+		if (args_is_option (*line, AUTH_TAG)) {
 			items = get_args (*line + strlen (AUTH_TAG), &nitems);
 			if (nitems == 1)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH, items[0]);
@@ -1035,7 +1065,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		}
 
 #ifdef NM_OPENVPN_OLD
-		if (!strncmp (*line, ROUTE_TAG, strlen (ROUTE_TAG))) {
+		if (args_is_option (*line, ROUTE_TAG)) {
 			items = get_args (*line + strlen (ROUTE_TAG), &nitems);
 			if (nitems >= 1 && nitems <= 4) {
 				guint32 dest, next_hop, prefix, metric;
@@ -1085,7 +1115,7 @@ route_fail:
 			continue;
 		}
 #else
-		if (!strncmp (*line, ROUTE_TAG, strlen (ROUTE_TAG))) {
+		if (args_is_option (*line, ROUTE_TAG)) {
 			items = get_args (*line + strlen (ROUTE_TAG), &nitems);
 			if (nitems >= 1 && nitems <= 4) {
 				guint32 prefix = 32;
