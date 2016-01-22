@@ -505,7 +505,7 @@ parse_ip (const char *str, const char *line, guint32 *out_ip)
 }
 
 NMConnection *
-do_import (const char *path, const char *contents, GError **error)
+do_import (const char *path, const char *contents, gsize contents_len, GError **error)
 {
 	NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
@@ -552,10 +552,11 @@ do_import (const char *path, const char *contents, GError **error)
 		*last_dot = '\0';
 	g_object_set (s_con, NM_SETTING_CONNECTION_ID, basename, NULL);
 
-	if (!g_utf8_validate (contents, -1, NULL)) {
+	if (!g_utf8_validate (contents, contents_len, NULL)) {
 		GError *conv_error = NULL;
+		gsize bytes_written;
 
-		new_contents = g_locale_to_utf8 (contents, -1, NULL, NULL, &conv_error);
+		new_contents = g_locale_to_utf8 (contents, contents_len, NULL, &bytes_written, &conv_error);
 		if (conv_error) {
 			/* ignore the error, we tried at least. */
 			g_error_free (conv_error);
@@ -563,6 +564,7 @@ do_import (const char *path, const char *contents, GError **error)
 		} else {
 			g_assert (new_contents);
 			contents = new_contents;  /* update contents with the UTF-8 safe text */
+			contents_len = bytes_written + 1;
 		}
 	}
 

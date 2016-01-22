@@ -636,6 +636,7 @@ import (NMVpnEditorPlugin *iface, const char *path, GError **error)
 	NMConnection *connection = NULL;
 	char *contents = NULL;
 	char *ext;
+	gsize contents_len;
 
 	ext = strrchr (path, '.');
 
@@ -650,10 +651,10 @@ import (NMVpnEditorPlugin *iface, const char *path, GError **error)
 		goto out;
 	}
 
-	if (!g_file_get_contents (path, &contents, NULL, error))
+	if (!g_file_get_contents (path, &contents, &contents_len, error))
 		return NULL;
 
-	connection = do_import (path, contents, error);
+	connection = do_import (path, contents, contents_len, error);
 
 out:
 	g_free (contents);
