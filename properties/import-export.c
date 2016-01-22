@@ -1225,6 +1225,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *proxy_username = NULL;
 	const char *proxy_password = NULL;
 	int i;
+	guint num;
 
 	s_con = nm_connection_get_setting_connection (connection);
 	g_assert (s_con);
@@ -1544,54 +1545,56 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		}
 	}
 
+	s_ip4 = nm_connection_get_setting_ip4_config (connection);
+	if (s_ip4) {
 #ifdef NM_OPENVPN_OLD
-	/* Route handling is different in libnm-util and libnm */
-	/* Static routes */
-	s_ip4 = nm_connection_get_setting_ip4_config (connection);
-	for (i = 0; s_ip4 && i < nm_setting_ip4_config_get_num_routes (s_ip4); i++) {
-		char dest_str[INET_ADDRSTRLEN];
-		char netmask_str[INET_ADDRSTRLEN];
-		char next_hop_str[INET_ADDRSTRLEN];
-		guint32 dest, netmask, next_hop;
-		NMIP4Route *route = nm_setting_ip4_config_get_route (s_ip4, i);
-
-		dest = nm_ip4_route_get_dest (route);
-		memset (dest_str, '\0', sizeof (dest_str));
-		inet_ntop (AF_INET, (const void *) &dest, dest_str, sizeof (dest_str));
-
-		memset (netmask_str, '\0', sizeof (netmask_str));
-		netmask = nm_utils_ip4_prefix_to_netmask (nm_ip4_route_get_prefix (route));
-		inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
-
-		next_hop = nm_ip4_route_get_next_hop (route);
-		memset (next_hop_str, '\0', sizeof (next_hop_str));
-		inet_ntop (AF_INET, (const void *) &next_hop, next_hop_str, sizeof (next_hop_str));
-
-		fprintf (f, "route %s %s %s %u\n",
-		         dest_str,
-		         netmask_str,
-		         next_hop_str,
-		         nm_ip4_route_get_metric (route));
-	}
+		num = nm_setting_ip4_config_get_num_routes (s_ip4);
 #else
-	/* Static routes */
-	s_ip4 = nm_connection_get_setting_ip4_config (connection);
-	for (i = 0; s_ip4 && i < nm_setting_ip_config_get_num_routes (s_ip4); i++) {
-		char netmask_str[INET_ADDRSTRLEN];
-		guint32 netmask;
-		NMIPRoute *route = nm_setting_ip_config_get_route (s_ip4, i);
-
-		memset (netmask_str, '\0', sizeof (netmask_str));
-		netmask = nm_utils_ip4_prefix_to_netmask (nm_ip_route_get_prefix (route));
-		inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
-
-		fprintf (f, "route %s %s %s %ld\n",
-		         nm_ip_route_get_dest (route),
-		         netmask_str,
-		         nm_ip_route_get_next_hop (route) ? nm_ip_route_get_next_hop (route) : "0.0.0.0",
-		         (long) nm_ip_route_get_metric (route));
-	}
+		num = nm_setting_ip_config_get_num_routes (s_ip4);
 #endif
+		for (i = 0; i < num; i++) {
+			char netmask_str[INET_ADDRSTRLEN] = { 0 };
+			const char *next_hop_str, *dest_str;
+			in_addr_t netmask;
+			guint prefix;
+			guint64 metric;
+
+#ifdef NM_OPENVPN_OLD
+			char next_hop_str_buf[INET_ADDRSTRLEN] = { 0 };
+			char dest_str_buf[INET_ADDRSTRLEN] = { 0 };
+			in_addr_t dest, next_hop;
+			NMIP4Route *route = nm_setting_ip4_config_get_route (s_ip4, i);
+
+			dest = nm_ip4_route_get_dest (route);
+			inet_ntop (AF_INET, (const void *) &dest, dest_str_buf, sizeof (dest_str_buf));
+			dest_str = dest_str_buf;
+
+			next_hop = nm_ip4_route_get_next_hop (route);
+			inet_ntop (AF_INET, (const void *) &next_hop, next_hop_str_buf, sizeof (next_hop_str_buf));
+			next_hop_str = next_hop_str_buf;
+
+			prefix = nm_ip4_route_get_prefix (route);
+			metric = nm_ip4_route_get_metric (route);
+#else
+			NMIPRoute *route = nm_setting_ip_config_get_route (s_ip4, i);
+
+			dest_str = nm_ip_route_get_dest (route);
+			next_hop_str = nm_ip_route_get_next_hop (route) ? : "0.0.0.0",
+			prefix = nm_ip_route_get_prefix (route);
+			metric = nm_ip_route_get_metric (route);
+			if (metric == -1)
+				metric = 50;
+#endif
+			netmask = nm_utils_ip4_prefix_to_netmask (prefix);
+			inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
+
+			fprintf (f, "route %s %s %s %ld\n",
+			         dest_str,
+			         netmask_str,
+			         next_hop_str,
+			         (long) metric);
+		}
+	}
 
 	/* Add hard-coded stuff */
 	fprintf (f,
