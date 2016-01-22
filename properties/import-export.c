@@ -466,28 +466,26 @@ handle_num_seconds_item (const char *line,
 {
 	char **items = NULL;
 	int nitems;
+	int seconds;
 
-	if (!strncmp (line, tag, strlen (tag))) {
-		int seconds;
+	if (strncmp (line, tag, strlen (tag)))
+		return FALSE;
 
-		items = get_args (line + strlen (tag), &nitems);
-		if (nitems == 1) {
-			seconds = parse_seconds (items[0], line);
-			if (seconds >= 0) {
-				char *tmp;
+	items = get_args (line + strlen (tag), &nitems);
+	if (nitems == 1) {
+		seconds = parse_seconds (items[0], line);
+		if (seconds >= 0) {
+			char *tmp;
 
-				tmp = g_strdup_printf ("%d", seconds);
-				nm_setting_vpn_add_data_item (s_vpn, key, tmp);
-				g_free (tmp);
-			}
-		} else
-			g_warning ("%s: invalid number of arguments in option '%s', must be one integer", __func__, line);
+			tmp = g_strdup_printf ("%d", seconds);
+			nm_setting_vpn_add_data_item (s_vpn, key, tmp);
+			g_free (tmp);
+		}
+	} else
+		g_warning ("%s: invalid number of arguments in option '%s', must be one integer", __func__, line);
 
-		g_strfreev (items);
-		return TRUE;
-	}
-
-	return FALSE;
+	g_strfreev (items);
+	return TRUE;
 }
 
 static gboolean
