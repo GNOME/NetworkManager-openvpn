@@ -568,6 +568,12 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		}
 	}
 
+	if (strncmp (contents, "\xEF\xBB\xBF", 3) == 0) {
+		/* skip over UTF-8 BOM */
+		contents += 3;
+		contents_len -= 3;
+	}
+
 	lines = g_strsplit_set (contents, "\r\n", 0);
 	if (g_strv_length (lines) <= 1) {
 		g_set_error_literal (error,
