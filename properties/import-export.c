@@ -767,10 +767,10 @@ do_import (const char *path, const char *contents, GError **error)
 			continue;
 
 		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_TA, s_vpn, basename, NULL)) {
-			handle_direction("tls-auth",
-			                 NM_OPENVPN_KEY_TA_DIR,
-			                 last_seen_key_direction,
-			                 s_vpn);
+			handle_direction ("tls-auth",
+			                  NM_OPENVPN_KEY_TA_DIR,
+			                  last_seen_key_direction,
+			                  s_vpn);
 			continue;
 		}
 
