@@ -30,7 +30,7 @@
 #include <NetworkManager.h>
 #endif
 
-NMConnection *do_import (const char *path, const char *contents, GError **error);
+NMConnection *do_import (const char *path, const char *contents, gsize contents_len, GError **error);
 
 gboolean do_export (const char *path, NMConnection *connection, GError **error);
 
