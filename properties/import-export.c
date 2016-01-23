@@ -593,8 +593,10 @@ do_import (const char *path, const char *contents, GError **error)
 			continue;
 		}
 
-		if (!strncmp(*line, KEY_DIRECTION_TAG, strlen (KEY_DIRECTION_TAG)))
+		if (!strncmp(*line, KEY_DIRECTION_TAG, strlen (KEY_DIRECTION_TAG))) {
 			last_seen_key_direction = *line + strlen (KEY_DIRECTION_TAG);
+			continue;
+		}
 
 		if (!strncmp (*line, DEV_TAG, strlen (DEV_TAG))) {
 			items = get_args (*line + strlen (DEV_TAG), &nitems);
