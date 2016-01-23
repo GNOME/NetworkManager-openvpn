@@ -105,6 +105,9 @@
 #define RPORT_TAG "rport "
 #define SECRET_TAG "secret "
 #define TLS_AUTH_TAG "tls-auth "
+#define TLS_AUTH_BLOB_START_TAG "<tls-auth>"
+#define TLS_AUTH_BLOB_END_TAG "</tls-auth>"
+#define KEY_DIRECTION_TAG "key-direction "
 #define TLS_CLIENT_TAG "tls-client"
 #define TLS_REMOTE_TAG "tls-remote "
 #define REMOTE_CERT_TLS_TAG "remote-cert-tls "
@@ -192,12 +195,17 @@ handle_path_item (const char *line,
 	return TRUE;
 }
 
+static void
+handle_direction (const char *tag, const char *key, char *leftover, NMSettingVpn *s_vpn);
+
 #define CERT_BEGIN  "-----BEGIN CERTIFICATE-----"
 #define CERT_END    "-----END CERTIFICATE-----"
 #define PRIV_KEY_BEGIN  "-----BEGIN PRIVATE KEY-----"
 #define PRIV_KEY_END    "-----END PRIVATE KEY-----"
 #define RSA_PRIV_KEY_BEGIN  "-----BEGIN RSA PRIVATE KEY-----"
 #define RSA_PRIV_KEY_END    "-----END RSA PRIVATE KEY-----"
+#define STATIC_KEY_BEGIN    "-----BEGIN OpenVPN Static key V1-----"
+#define STATIC_KEY_END    "-----END OpenVPN Static key V1-----"
 
 static gboolean
 handle_blob_item (const char ***line,
@@ -222,7 +230,7 @@ handle_blob_item (const char ***line,
 			p++; \
 			if (!*p) \
 				goto finish; \
-		} while (!*p[0]); \
+		} while (*p[0] == '\0' || *p[0] == '#' || *p[0] == ';'); \
 	} G_STMT_END
 
 	if (!strcmp (key, NM_OPENVPN_KEY_CA)) {
@@ -235,6 +243,11 @@ handle_blob_item (const char ***line,
 		end_tag = CERT_BLOB_END_TAG;
 		blob_mark_start = CERT_BEGIN;
 		blob_mark_end = CERT_END;
+	} else if (!strcmp (key, NM_OPENVPN_KEY_TA)) {
+		start_tag = TLS_AUTH_BLOB_START_TAG;
+		end_tag = TLS_AUTH_BLOB_END_TAG;
+		blob_mark_start = STATIC_KEY_BEGIN;
+		blob_mark_end = STATIC_KEY_END;
 	} else if (!strcmp (key, NM_OPENVPN_KEY_KEY)) {
 		start_tag = KEY_BLOB_START_TAG;
 		end_tag = KEY_BLOB_END_TAG;
@@ -244,10 +257,10 @@ handle_blob_item (const char ***line,
 		blob_mark_end2 = RSA_PRIV_KEY_END;
 	} else
 		g_return_val_if_reached (FALSE);
-
 	p = *line;
 	if (strncmp (*p, start_tag, strlen (start_tag)))
 		goto finish;
+
 	NEXT_LINE;
 
 	if (blob_mark_start2 && !strcmp (*p, blob_mark_start2)) {
@@ -286,7 +299,7 @@ handle_blob_item (const char ***line,
 	/* Write the new file */
 	g_string_prepend_c (in_file, '\n');
 	g_string_prepend (in_file, blob_mark_start);
-	g_string_append_printf (in_file, "%s", blob_mark_end);
+	g_string_append_printf (in_file, "%s\n", blob_mark_end);
 	success = g_file_set_contents (path, in_file->str, -1, error);
 	if (!success)
 		goto finish;
@@ -294,12 +307,13 @@ handle_blob_item (const char ***line,
 	nm_setting_vpn_add_data_item (s_vpn, key, path);
 
 finish:
-	line = &p;
+	*line = p;
 	g_free (filename);
 	g_free (dirname);
 	g_free (path);
 	if (in_file)
 		g_string_free (in_file, TRUE);
+
 	return success;
 
 }
@@ -507,6 +521,7 @@ do_import (const char *path, const char *contents, GError **error)
 	char *new_contents = NULL;
 	gboolean http_proxy = FALSE, socks_proxy = FALSE, proxy_set = FALSE;
 	int nitems;
+	char *last_seen_key_direction = NULL;
 
 	connection = nm_simple_connection_new ();
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
@@ -577,6 +592,9 @@ do_import (const char *path, const char *contents, GError **error)
 			have_client = TRUE;
 			continue;
 		}
+
+		if (!strncmp(*line, KEY_DIRECTION_TAG, strlen (KEY_DIRECTION_TAG)))
+			last_seen_key_direction = *line + strlen (KEY_DIRECTION_TAG);
 
 		if (!strncmp (*line, DEV_TAG, strlen (DEV_TAG))) {
 			items = get_args (*line + strlen (DEV_TAG), &nitems);
@@ -867,6 +885,14 @@ do_import (const char *path, const char *contents, GError **error)
 
 		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_KEY, s_vpn, basename, NULL))
 			continue;
+
+		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_TA, s_vpn, basename, NULL)) {
+			handle_direction("tls-auth",
+			                 NM_OPENVPN_KEY_TA_DIR,
+			                 last_seen_key_direction,
+			                 s_vpn);
+			continue;
+		}
 
 		if (handle_path_item (*line, SECRET_TAG, NM_OPENVPN_KEY_STATIC_KEY,
 		                      s_vpn, default_path, &leftover)) {
