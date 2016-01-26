@@ -66,7 +66,7 @@
 static gboolean debug = FALSE;
 static GMainLoop *loop = NULL;
 
-#define NM_OPENVPN_HELPER_PATH		LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
+#define NM_OPENVPN_HELPER_PATH LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
 
 G_DEFINE_TYPE (NMOpenvpnPlugin, nm_openvpn_plugin, NM_TYPE_VPN_PLUGIN)
 
@@ -85,7 +85,7 @@ typedef struct {
 } NMOpenvpnPluginIOData;
 
 typedef struct {
-	GPid	pid;
+	GPid pid;
 	guint connect_timer;
 	guint connect_count;
 	NMOpenvpnPluginIOData *io_data;
@@ -961,18 +961,18 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		             _("Could not find the openvpn binary."));
 		return FALSE;
 	}
-  
- 	auth = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
- 	if (auth) {
- 		if (!validate_auth(auth)) {
- 			g_set_error (error,
- 			             NM_VPN_PLUGIN_ERROR,
- 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
- 			             "%s",
- 			             _("Invalid HMAC auth."));
- 			return FALSE;
- 		}
- 	}
+
+	auth = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
+	if (auth) {
+		if (!validate_auth(auth)) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             "%s",
+			             _("Invalid HMAC auth."));
+			return FALSE;
+		}
+	}
 
 	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
 	if (!validate_connection_type (connection_type)) {
@@ -1667,8 +1667,8 @@ ensure_killed (gpointer data)
 }
 
 static gboolean
-real_disconnect (NMVPNPlugin	 *plugin,
-			  GError		**err)
+real_disconnect (NMVPNPlugin *plugin,
+                 GError **err)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 
