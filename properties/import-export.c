@@ -218,8 +218,6 @@ handle_blob_item (const char ***line,
                   GError **error)
 {
 	gboolean success = FALSE;
-	const char *blob_mark_start, *blob_mark_end;
-	const char *blob_mark_start2 = NULL, *blob_mark_end2 = NULL;
 	const char *start_tag, *end_tag;
 	char *filename = NULL;
 	char *dirname = NULL;
@@ -239,25 +237,15 @@ handle_blob_item (const char ***line,
 	if (!strcmp (key, NM_OPENVPN_KEY_CA)) {
 		start_tag = CA_BLOB_START_TAG;
 		end_tag = CA_BLOB_END_TAG;
-		blob_mark_start = CERT_BEGIN;
-		blob_mark_end = CERT_END;
 	} else if (!strcmp (key, NM_OPENVPN_KEY_CERT)) {
 		start_tag = CERT_BLOB_START_TAG;
 		end_tag = CERT_BLOB_END_TAG;
-		blob_mark_start = CERT_BEGIN;
-		blob_mark_end = CERT_END;
 	} else if (!strcmp (key, NM_OPENVPN_KEY_TA)) {
 		start_tag = TLS_AUTH_BLOB_START_TAG;
 		end_tag = TLS_AUTH_BLOB_END_TAG;
-		blob_mark_start = STATIC_KEY_BEGIN;
-		blob_mark_end = STATIC_KEY_END;
 	} else if (!strcmp (key, NM_OPENVPN_KEY_KEY)) {
 		start_tag = KEY_BLOB_START_TAG;
 		end_tag = KEY_BLOB_END_TAG;
-		blob_mark_start = PRIV_KEY_BEGIN;
-		blob_mark_end = PRIV_KEY_END;
-		blob_mark_start2 = RSA_PRIV_KEY_BEGIN;
-		blob_mark_end2 = RSA_PRIV_KEY_END;
 	} else
 		g_return_val_if_reached (FALSE);
 	p = *line;
@@ -266,24 +254,13 @@ handle_blob_item (const char ***line,
 
 	NEXT_LINE;
 
-	if (blob_mark_start2 && !strcmp (*p, blob_mark_start2)) {
-		blob_mark_start = blob_mark_start2;
-		blob_mark_end = blob_mark_end2;
-	} else if (strcmp (*p, blob_mark_start))
-		goto finish;
-
-	NEXT_LINE;
 	in_file = g_string_new (NULL);
 
-	while (*p && strcmp (*p, blob_mark_end)) {
+	while (*p && strcmp (*p, end_tag)) {
 		g_string_append (in_file, *p);
 		g_string_append_c (in_file, '\n');
 		NEXT_LINE;
 	}
-
-	NEXT_LINE;
-	if (strncmp (*p, end_tag, strlen (end_tag)))
-		goto finish;
 
 	/* Construct file name to write the data in */
 	filename = g_strdup_printf ("%s-%s.pem", name, key);
@@ -300,15 +277,11 @@ handle_blob_item (const char ***line,
 	}
 
 	/* Write the new file */
-	g_string_prepend_c (in_file, '\n');
-	g_string_prepend (in_file, blob_mark_start);
-	g_string_append_printf (in_file, "%s\n", blob_mark_end);
 	success = g_file_set_contents (path, in_file->str, -1, error);
 	if (!success)
 		goto finish;
 
 	nm_setting_vpn_add_data_item (s_vpn, key, path);
-
 finish:
 	*line = p;
 	g_free (filename);
