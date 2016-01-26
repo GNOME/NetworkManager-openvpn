@@ -667,7 +667,7 @@ openvpn_watch_cb (GPid pid, gint status, gpointer user_data)
 		g_warning ("openvpn died with signal %d", WTERMSIG (status));
 	else
 		g_warning ("openvpn died from an unknown cause");
-  
+
 	/* Reap child if needed. */
 	waitpid (priv->pid, NULL, WNOHANG);
 	priv->pid = 0;
@@ -1546,8 +1546,8 @@ ensure_killed (gpointer data)
 }
 
 static gboolean
-real_disconnect (NMVpnServicePlugin	 *plugin,
-			  GError		**err)
+real_disconnect (NMVpnServicePlugin *plugin,
+                 GError **err)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 
