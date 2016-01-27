@@ -30,8 +30,7 @@ EXTRA_DIST = nm-openvpn-service.name.in \
              $(dbusservice_DATA)  \
              intltool-extract.in  \
              intltool-merge.in    \
-             intltool-update.in \
-             nm-test-helpers.h
+             intltool-update.in
 
 CLEANFILES = $(nmvpnservice_DATA) *~
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update

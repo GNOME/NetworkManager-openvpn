@@ -27,9 +27,10 @@
 
 #include "nm-default.h"
 
-#include "nm-test-helpers.h"
 #include "nm-openvpn.h"
 #include "nm-openvpn-service-defines.h"
+
+#include "nm-test-utils.h"
 
 static NMConnection *
 get_basic_connection (const char *detail,

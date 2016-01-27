@@ -31,5 +31,6 @@ EXTRA_DIST = \
      nm-dbus-compat.h \
      nm-default.h \
      nm-glib.h \
-     nm-macros-internal.h
+     nm-macros-internal.h \
+     nm-test-utils.h
 
