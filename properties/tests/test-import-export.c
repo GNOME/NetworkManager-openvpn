@@ -23,6 +23,8 @@
 #include <arpa/inet.h>
 #include <locale.h>
 
+#include "nm-default.h"
+
 #include <NetworkManager.h>
 
 #include "nm-test-helpers.h"

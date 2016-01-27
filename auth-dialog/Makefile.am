@@ -6,6 +6,7 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 	$(LIBNM_CFLAGS)			\
 	$(LIBNMA_CFLAGS)		\
 	$(LIBSECRET_CFLAGS) \
+	-I$(top_srcdir)/shared \
 	-DICONDIR=\""$(datadir)/pixmaps"\"	\
 	-DUIDIR=\""$(uidir)"\"		\
 	-DBINDIR=\""$(bindir)"\"		\

@@ -23,7 +23,9 @@ ui_DATA = nm-openvpn-dialog.ui
 common_CFLAGS =                                         \
         $(GLIB_CFLAGS)                                  \
         $(GTK_CFLAGS)                                   \
+        -I$(top_srcdir)/shared                          \
         -I$(top_srcdir)/src                             \
+        -DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB \
         -DICONDIR=\""$(datadir)/pixmaps"\"              \
         -DUIDIR=\""$(uidir)"\"                          \
         -DLOCALEDIR=\"$(datadir)/locale\"
@@ -34,7 +36,7 @@ libnm_vpn_plugin_openvpn_la_CFLAGS =                    \
         $(LIBNMA_CFLAGS)
 
 libnm_openvpn_properties_la_CFLAGS =                \
-        -DNM_OPENVPN_OLD                                \
+        -DNM_OPENVPN_OLD \
         $(common_CFLAGS)                                \
         $(LIBNM_GLIB_CFLAGS)                            \
         $(LIBNM_GTK_CFLAGS)

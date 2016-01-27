@@ -1,6 +1,8 @@
 SUBDIRS = conf
 
-AM_CFLAGS = -I${top_srcdir}
+AM_CFLAGS = \
+    -I${top_srcdir}/shared \
+    -I${top_srcdir}
 
 noinst_PROGRAMS = test-import-export
 

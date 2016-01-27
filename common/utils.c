@@ -20,6 +20,9 @@
  */
 
 #include <string.h>
+
+#include "nm-default.h"
+
 #ifdef NM_OPENVPN_OLD
 #include <nm-setting-8021x.h>
 #else

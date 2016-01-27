@@ -29,11 +29,12 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
+
+#include "nm-default.h"
 
 #include <NetworkManager.h>
 #include <nm-vpn-service-plugin.h>

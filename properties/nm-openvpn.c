@@ -33,9 +33,10 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <glib/gi18n-lib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+
+#include "nm-default.h"
 
 #ifdef NM_OPENVPN_OLD
 #define NM_VPN_LIBNM_COMPAT

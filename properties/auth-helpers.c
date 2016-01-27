@@ -33,7 +33,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include <glib/gi18n-lib.h>
+#include "nm-default.h"
 
 #ifdef NM_OPENVPN_OLD
 #define NM_VPN_LIBNM_COMPAT
