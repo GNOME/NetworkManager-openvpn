@@ -22,9 +22,7 @@
  *               2005 Tim Niemueller [www.niemueller.de]
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "config.h"
 
 #include <errno.h>
 #include <string.h>

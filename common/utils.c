@@ -19,6 +19,8 @@
  * (C) Copyright 2010 Red Hat, Inc.
  */
 
+#include "config.h"
+
 #include <string.h>
 
 #include "nm-default.h"
