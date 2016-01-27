@@ -34,32 +34,6 @@
 
 #include "nm-default.h"
 
-#ifdef NM_OPENVPN_OLD
-#define NM_VPN_LIBNM_COMPAT
-#include <nm-setting-vpn.h>
-#include <nm-setting-connection.h>
-#include <nm-setting-ip4-config.h>
-#include <nm-utils.h>
-
-#define nm_simple_connection_new nm_connection_new
-#define NM_SETTING_IP_CONFIG NM_SETTING_IP4_CONFIG
-#define NM_SETTING_IP_CONFIG_METHOD NM_SETTING_IP4_CONFIG_METHOD
-#define NMSettingIPConfig NMSettingIP4Config
-
-#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
-#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
-#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_SETTING_VPN_ERROR_UNKNOWN
-
-#else /* !NM_OPENVPN_OLD */
-
-#include <NetworkManager.h>
-
-#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
-#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
-#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_CONNECTION_ERROR_FAILED
-
-#endif
-
 #include "import-export.h"
 #include "nm-openvpn.h"
 #include "../src/nm-openvpn-service-defines.h"

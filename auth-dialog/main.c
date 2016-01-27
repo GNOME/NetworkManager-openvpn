@@ -34,7 +34,6 @@
 
 #include "nm-default.h"
 
-#include <NetworkManager.h>
 #include <nm-vpn-service-plugin.h>
 #include <nma-vpn-password-dialog.h>
 

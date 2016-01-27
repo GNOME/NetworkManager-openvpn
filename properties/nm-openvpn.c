@@ -36,28 +36,6 @@
 
 #include "nm-default.h"
 
-#ifdef NM_OPENVPN_OLD
-#define NM_VPN_LIBNM_COMPAT
-#include <nm-vpn-plugin-ui-interface.h>
-#include <nm-setting-vpn.h>
-#include <nm-setting-connection.h>
-#include <nm-setting-ip4-config.h>
-
-#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
-#define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
-#define OPENVPN_EDITOR_PLUGIN_ERROR_MISSING_PROPERTY    NM_SETTING_VPN_ERROR_MISSING_PROPERTY
-#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_SETTING_VPN_ERROR_UNKNOWN
-
-#else /* !NM_OPENVPN_OLD */
-
-#include <NetworkManager.h>
-
-#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
-#define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
-#define OPENVPN_EDITOR_PLUGIN_ERROR_MISSING_PROPERTY    NM_CONNECTION_ERROR_MISSING_PROPERTY
-#define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN    NM_CONNECTION_ERROR_FAILED
-#endif
-
 #include "../src/nm-openvpn-service-defines.h"
 #include "nm-openvpn.h"
 #include "auth-helpers.h"

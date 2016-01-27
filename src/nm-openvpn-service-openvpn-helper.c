@@ -41,8 +41,6 @@
 
 #include "nm-default.h"
 
-#include <NetworkManager.h>
-
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"
 

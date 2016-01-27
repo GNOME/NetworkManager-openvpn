@@ -27,8 +27,6 @@
 
 #include "nm-default.h"
 
-#include <NetworkManager.h>
-
 #include "nm-test-helpers.h"
 #include "properties/nm-openvpn.h"
 #include "src/nm-openvpn-service-defines.h"
