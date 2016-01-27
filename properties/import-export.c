@@ -36,8 +36,8 @@
 
 #include "import-export.h"
 #include "nm-openvpn.h"
-#include "../src/nm-openvpn-service-defines.h"
-#include "../common/utils.h"
+#include "nm-openvpn-service-defines.h"
+#include "utils.h"
 
 #define CA_BLOB_START_TAG "<ca>"
 #define CA_BLOB_END_TAG "</ca>"

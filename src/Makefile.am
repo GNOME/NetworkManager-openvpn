@@ -1,6 +1,7 @@
 AM_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
 	$(LIBNM_CFLAGS) \
+	-I$(top_srcdir)/common \
 	-I$(top_srcdir)/shared \
 	-DBINDIR=\"$(bindir)\" \
 	-DPREFIX=\""$(prefix)"\" \
@@ -17,7 +18,7 @@ libexec_PROGRAMS = nm-openvpn-service nm-openvpn-service-openvpn-helper
 nm_openvpn_service_SOURCES = \
 	nm-openvpn-service.c \
 	nm-openvpn-service.h \
-	nm-openvpn-service-defines.h
+	$(top_srcdir)/shared/nm-openvpn-service-defines.h
 
 nm_openvpn_service_LDADD = \
 	$(LIBNM_LIBS) \

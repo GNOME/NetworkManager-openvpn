@@ -37,8 +37,8 @@
 #include <nm-vpn-service-plugin.h>
 #include <nma-vpn-password-dialog.h>
 
-#include "../common/utils.h"
-#include "../src/nm-openvpn-service-defines.h"
+#include "utils.h"
+#include "nm-openvpn-service-defines.h"
 
 #define KEYRING_UUID_TAG "connection-uuid"
 #define KEYRING_SN_TAG "setting-name"

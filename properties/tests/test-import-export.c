@@ -28,8 +28,8 @@
 #include "nm-default.h"
 
 #include "nm-test-helpers.h"
-#include "properties/nm-openvpn.h"
-#include "src/nm-openvpn-service-defines.h"
+#include "nm-openvpn.h"
+#include "nm-openvpn-service-defines.h"
 
 static NMConnection *
 get_basic_connection (const char *detail,

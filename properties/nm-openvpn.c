@@ -36,7 +36,7 @@
 
 #include "nm-default.h"
 
-#include "../src/nm-openvpn-service-defines.h"
+#include "nm-openvpn-service-defines.h"
 #include "nm-openvpn.h"
 #include "auth-helpers.h"
 #include "import-export.h"

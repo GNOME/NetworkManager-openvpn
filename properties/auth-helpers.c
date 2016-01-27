@@ -35,8 +35,8 @@
 
 #include "auth-helpers.h"
 #include "nm-openvpn.h"
-#include "../src/nm-openvpn-service-defines.h"
-#include "../common/utils.h"
+#include "nm-openvpn-service-defines.h"
+#include "utils.h"
 
 #define BLOCK_HANDLER_ID "block-handler-id"
 

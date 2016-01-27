@@ -5,14 +5,12 @@ endif
 
 libnm_vpn_plugin_openvpn_common_la_CPPFLAGS = \
 	$(LIBNM_CFLAGS) \
-    -I$(top_srcdir)/shared/ \
-    -I$(top_srcdir)/src/
+    -I$(top_srcdir)/shared
 
 libnm_openvpn_common_la_CPPFLAGS = \
 	-DNM_OPENVPN_OLD \
 	$(LIBNM_GLIB_CFLAGS) \
-    -I$(top_srcdir)/shared/ \
-    -I$(top_srcdir)/src/
+    -I$(top_srcdir)/shared
 
 libnm_vpn_plugin_openvpn_common_la_SOURCES= \
 	utils.c \
