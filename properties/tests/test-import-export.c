@@ -35,6 +35,16 @@
 #define TEST_SRCDIR_CONF     TEST_SRCDIR"/conf"
 #define TEST_BUILDDIR_CONF   TEST_BUILDDIR"/conf"
 
+inline static in_addr_t
+_addr_from_string (const char *saddr)
+{
+	in_addr_t a;
+
+	g_assert (saddr);
+	g_assert (inet_pton (AF_INET, saddr, &a) == 1);
+	return a;
+}
+
 static NMConnection *
 get_basic_connection (const char *detail,
                       NMVpnEditorPlugin *plugin,
@@ -1187,7 +1197,6 @@ test_route_import (NMVpnEditorPlugin *plugin,
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
 	int num_routes;
-	NMIPRoute *route;
 	const char *expected_dest1 = "1.2.3.0";
 	guint32 expected_prefix1   = 24;
 	const char *expected_nh1   = "1.2.3.254";
@@ -1218,41 +1227,82 @@ test_route_import (NMVpnEditorPlugin *plugin,
 	/* IP4 setting */
 	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	ASSERT (s_ip4 != NULL, detail, "missing 'ip4-config' setting");
-	num_routes = nm_setting_ip_config_get_num_routes (s_ip4);
-	ASSERT (num_routes == 3, detail, "incorrect number of static routes");
-	/* route 1 */
-	route = nm_setting_ip_config_get_route (s_ip4, 0);
-	ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest1) == 0,
-	        detail, "unexpected dest of 1. route");
-	ASSERT (nm_ip_route_get_prefix (route) == expected_prefix1,
-	        detail, "unexpected prefix of 1. route");
-	ASSERT (g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh1) == 0,
-	        detail, "unexpected next_hop of 1. route");
-	ASSERT (nm_ip_route_get_metric (route) == expected_metric1,
-	        detail, "unexpected metric of 1. route");
+#ifdef NM_OPENVPN_OLD
+	{
+		NMIP4Route *route;
 
-	/* route 2 */
-	route = nm_setting_ip_config_get_route (s_ip4, 1);
-	ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest2) == 0,
-	        detail, "unexpected dest of 2. route");
-	ASSERT (nm_ip_route_get_prefix (route) == expected_prefix2,
-	        detail, "unexpected prefix of 2. route");
-	ASSERT (   nm_ip_route_get_next_hop (route) == NULL
-	        || g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh2) == 0,
-	        detail, "unexpected next_hop of 2. route");
-	ASSERT (nm_ip_route_get_metric (route) == expected_metric2,
-	        detail, "unexpected metric of 2. route");
+		num_routes = nm_setting_ip4_config_get_num_routes (s_ip4);
+		ASSERT (num_routes == 3, detail, "incorrect number of static routes");
 
-	/* route 3 */
-	route = nm_setting_ip_config_get_route (s_ip4, 2);
-	ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest3) == 0,
-	        detail, "unexpected dest of 3. route");
-	ASSERT (nm_ip_route_get_prefix (route) == expected_prefix3,
-	        detail, "unexpected prefix of 3. route");
-	ASSERT (g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh3) == 0,
-	        detail, "unexpected next_hop of 3. route");
-	ASSERT (nm_ip_route_get_metric (route) == expected_metric3,
-	        detail, "unexpected metric of 3. route");
+		/* route 1 */
+		route = nm_setting_ip4_config_get_route (s_ip4, 0);
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest1));
+		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix1,
+		        detail, "unexpected prefix of 1. route");
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh1));
+		ASSERT (nm_ip4_route_get_metric (route) == expected_metric1,
+		        detail, "unexpected metric of 1. route");
+
+		/* route 2 */
+		route = nm_setting_ip4_config_get_route (s_ip4, 1);
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest2));
+		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix2,
+		        detail, "unexpected prefix of 2. route");
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh2));
+		ASSERT (nm_ip4_route_get_metric (route) == expected_metric2,
+		        detail, "unexpected metric of 2. route");
+
+		/* route 3 */
+		route = nm_setting_ip4_config_get_route (s_ip4, 2);
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest3));
+		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix3,
+		        detail, "unexpected prefix of 3. route");
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh3));
+		ASSERT (nm_ip4_route_get_metric (route) == expected_metric3,
+		        detail, "unexpected metric of 3. route");
+	}
+#else
+	{
+		NMIPRoute *route;
+
+		num_routes = nm_setting_ip_config_get_num_routes (s_ip4);
+		ASSERT (num_routes == 3, detail, "incorrect number of static routes");
+
+		/* route 1 */
+		route = nm_setting_ip_config_get_route (s_ip4, 0);
+		ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest1) == 0,
+		        detail, "unexpected dest of 1. route");
+		ASSERT (nm_ip_route_get_prefix (route) == expected_prefix1,
+		        detail, "unexpected prefix of 1. route");
+		ASSERT (g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh1) == 0,
+		        detail, "unexpected next_hop of 1. route");
+		ASSERT (nm_ip_route_get_metric (route) == expected_metric1,
+		        detail, "unexpected metric of 1. route");
+
+		/* route 2 */
+		route = nm_setting_ip_config_get_route (s_ip4, 1);
+		ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest2) == 0,
+		        detail, "unexpected dest of 2. route");
+		ASSERT (nm_ip_route_get_prefix (route) == expected_prefix2,
+		        detail, "unexpected prefix of 2. route");
+		ASSERT (   nm_ip_route_get_next_hop (route) == NULL
+		        || g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh2) == 0,
+		        detail, "unexpected next_hop of 2. route");
+		ASSERT (nm_ip_route_get_metric (route) == expected_metric2,
+		        detail, "unexpected metric of 2. route");
+
+		/* route 3 */
+		route = nm_setting_ip_config_get_route (s_ip4, 2);
+		ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest3) == 0,
+		        detail, "unexpected dest of 3. route");
+		ASSERT (nm_ip_route_get_prefix (route) == expected_prefix3,
+		        detail, "unexpected prefix of 3. route");
+		ASSERT (g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh3) == 0,
+		        detail, "unexpected next_hop of 3. route");
+		ASSERT (nm_ip_route_get_metric (route) == expected_metric3,
+		        detail, "unexpected metric of 3. route");
+	}
+#endif
 
 	g_object_unref (connection);
 }
