@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
 	$(LIBNM_CFLAGS) \
-	-I$(top_srcdir)/common \
 	-I$(top_srcdir)/shared \
 	-DBINDIR=\"$(bindir)\" \
 	-DPREFIX=\""$(prefix)"\" \
@@ -22,7 +21,7 @@ nm_openvpn_service_SOURCES = \
 
 nm_openvpn_service_LDADD = \
 	$(LIBNM_LIBS) \
-        $(top_builddir)/common/libnm-vpn-plugin-openvpn-common.la
+        $(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
 
 nm_openvpn_service_openvpn_helper_SOURCES = \
 	nm-openvpn-service-openvpn-helper.c

@@ -3,7 +3,6 @@ SUBDIRS = conf
 AM_CFLAGS = \
     -I${top_srcdir}/shared \
     -I${top_srcdir} \
-    -I${top_srcdir}/common \
     -I${top_srcdir}/properties
 
 noinst_PROGRAMS = test-import-export
