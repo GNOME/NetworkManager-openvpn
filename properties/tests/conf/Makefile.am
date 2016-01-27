@@ -18,4 +18,9 @@ EXTRA_DIST = \
 	keepalive.ovpn \
 	ping-with-exit.ovpn \
 	ping-with-restart.ovpn \
-	route.ovpn
+	route.ovpn \
+	tls-inline.ovpn \
+	tls-inline-ca.pem \
+	tls-inline-cert.pem \
+	tls-inline-key.pem \
+	tls-inline-ta.pem
