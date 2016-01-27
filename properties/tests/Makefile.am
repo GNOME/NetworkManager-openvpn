@@ -2,9 +2,12 @@ SUBDIRS = conf
 
 AM_CFLAGS = \
     -I${top_srcdir}/shared \
-    -I${top_srcdir}/properties
+    -I${top_srcdir}/properties \
+    -DTEST_SRCDIR="\"$(abs_srcdir)\"" \
+    -DTEST_BUILDDIR="\"$(abs_builddir)\""
 
-noinst_PROGRAMS = test-import-export
+noinst_PROGRAMS = \
+	test-import-export
 
 test_import_export_SOURCES = \
 	test-import-export.c
@@ -22,10 +25,6 @@ test_import_export_LDADD = \
 	$(LIBNMA_LIBS) \
 	$(top_builddir)/properties/libnm-vpn-plugin-openvpn.la
 
-if WITH_TESTS
-
-check-local: test-import-export
-	$(abs_builddir)/test-import-export $(abs_srcdir)/conf $(abs_builddir)/conf
-
-endif
+TESTS = \
+	test-import-export
 

@@ -32,6 +32,9 @@
 
 #include "nm-test-utils.h"
 
+#define TEST_SRCDIR_CONF     TEST_SRCDIR"/conf"
+#define TEST_BUILDDIR_CONF   TEST_BUILDDIR"/conf"
+
 static NMConnection *
 get_basic_connection (const char *detail,
                       NMVpnEditorPlugin *plugin,
@@ -1302,10 +1305,6 @@ int main (int argc, char **argv)
 	GError *error = NULL;
 	char *basename;
 	NMVpnEditorPlugin *plugin = NULL;
-	char *tmp, *tmp2, *test_dir;
-
-	if (argc != 3)
-		FAIL ("args", "usage: %s <conf path> <tmp dir>", argv[0]);
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
@@ -1317,72 +1316,59 @@ int main (int argc, char **argv)
 	ASSERT (plugin != NULL,
 	        "plugin-init", "failed to initialize UI plugin");
 
-	/* Strip off trailing '/' from tests directory if present */
-	tmp = argv[1];
-	if (tmp[strlen (tmp) - 1] == '/')
-		tmp[strlen (tmp) - 1] = '\0';
-
-	if (g_path_is_absolute (tmp))
-		test_dir = g_strdup (tmp);
-	else {
-		tmp2 = g_get_current_dir ();
-		test_dir = g_build_filename (tmp2, tmp, NULL);
-		g_free (tmp2);
-	}
-
 	/* The tests */
-	test_password_import (plugin, test_dir);
-	test_password_export (plugin, test_dir, argv[2]);
+	test_password_import (plugin, TEST_SRCDIR_CONF);
+	test_password_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_tls_import (plugin, test_dir);
-	test_tls_inline_import (plugin, test_dir);
-	test_tls_export (plugin, test_dir, argv[2]);
+	test_tls_import (plugin, TEST_SRCDIR_CONF);
+	test_tls_inline_import (plugin, TEST_SRCDIR_CONF);
+	test_tls_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_pkcs12_import (plugin, test_dir);
-	test_pkcs12_export (plugin, test_dir, argv[2]);
+	test_pkcs12_import (plugin, TEST_SRCDIR_CONF);
+	test_pkcs12_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_non_utf8_import (plugin, test_dir);
+	test_non_utf8_import (plugin, TEST_SRCDIR_CONF);
 
-	test_static_key_import (plugin, test_dir);
-	test_static_key_export (plugin, test_dir, argv[2]);
+	test_static_key_import (plugin, TEST_SRCDIR_CONF);
+	test_static_key_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_port_import (plugin, "port-import", test_dir, "port.ovpn", "port", "2345");
-	test_port_export (plugin, "port-export", test_dir, argv[2], "port.ovpn", "port.ovpntest");
+	test_port_import (plugin, "port-import", TEST_SRCDIR_CONF, "port.ovpn", "port", "2345");
+	test_port_export (plugin, "port-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "port.ovpn", "port.ovpntest");
 
-	test_port_import (plugin, "rport-import", test_dir, "rport.ovpn", "rport", "6789");
-	test_port_export (plugin, "rport-export", test_dir, argv[2], "rport.ovpn", "rport.ovpntest");
+	test_port_import (plugin, "rport-import", TEST_SRCDIR_CONF, "rport.ovpn", "rport", "6789");
+	test_port_export (plugin, "rport-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "rport.ovpn", "rport.ovpntest");
 
-	test_tun_opts_import (plugin, test_dir);
-	test_tun_opts_export (plugin, test_dir, argv[2]);
+	test_tun_opts_import (plugin, TEST_SRCDIR_CONF);
+	test_tun_opts_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_ping_import (plugin, "ping-with-exit-import", test_dir, "ping-with-exit.ovpn", "10", "120", NULL);
-	test_ping_import (plugin, "ping-with-restart-import", test_dir, "ping-with-restart.ovpn", "10", NULL, "30");
+	test_ping_import (plugin, "ping-with-exit-import", TEST_SRCDIR_CONF, "ping-with-exit.ovpn", "10", "120", NULL);
+	test_ping_import (plugin, "ping-with-restart-import", TEST_SRCDIR_CONF, "ping-with-restart.ovpn", "10", NULL, "30");
 
-	test_port_export (plugin, "ping-with-exit-export", test_dir, argv[2], "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
-	test_port_export (plugin, "ping-with-restart-export", test_dir, argv[2], "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
+	test_port_export (plugin, "ping-with-exit-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
+	test_port_export (plugin, "ping-with-restart-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
 
-	test_ping_import (plugin, "keepalive", test_dir, "keepalive.ovpn", "10", NULL, "30");
-	test_port_export (plugin, "keepalive", test_dir, argv[2], "keepalive.ovpn", "keepalive.ovpntest");
+	test_ping_import (plugin, "keepalive", TEST_SRCDIR_CONF, "keepalive.ovpn", "10", NULL, "30");
+	test_port_export (plugin, "keepalive", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "keepalive.ovpn", "keepalive.ovpntest");
 
-	test_proxy_http_import (plugin, test_dir);
-	test_proxy_http_export (plugin, test_dir, argv[2]);
+	test_proxy_http_import (plugin, TEST_SRCDIR_CONF);
+	test_proxy_http_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_proxy_http_with_auth_import (plugin, test_dir);
+	test_proxy_http_with_auth_import (plugin, TEST_SRCDIR_CONF);
 
-	test_proxy_socks_import (plugin, test_dir);
-	test_proxy_socks_export (plugin, test_dir, argv[2]);
+	test_proxy_socks_import (plugin, TEST_SRCDIR_CONF);
+	test_proxy_socks_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_keysize_import (plugin, test_dir);
-	test_keysize_export (plugin, test_dir, argv[2]);
+	test_keysize_import (plugin, TEST_SRCDIR_CONF);
+	test_keysize_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_device_import (plugin, "device-import", test_dir, "device.ovpn", "company0", "tun");
-	test_device_export (plugin, "device-export", test_dir, argv[2], "device.ovpn", "device.ovpntest");
+	test_device_import (plugin, "device-import", TEST_SRCDIR_CONF, "device.ovpn", "company0", "tun");
+	test_device_export (plugin, "device-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "device.ovpn", "device.ovpntest");
 
-	test_device_import (plugin, "device-import", test_dir, "device-notype.ovpn", "tap", NULL);
-	test_device_export (plugin, "device-export", test_dir, argv[2], "device-notype.ovpn", "device-notype.ovpntest");
+	test_device_import (plugin, "device-import", TEST_SRCDIR_CONF, "device-notype.ovpn", "tap", NULL);
+	test_device_export (plugin, "device-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "device-notype.ovpn", "device-notype.ovpntest");
 
-	test_route_import (plugin, "route-import", test_dir);
-	test_route_export (plugin, "route-export", test_dir, argv[2]);
+	test_route_import (plugin, "route-import", TEST_SRCDIR_CONF);
+	test_route_export (plugin, "route-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
 	g_object_unref (plugin);
 
