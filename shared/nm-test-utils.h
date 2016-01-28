@@ -26,26 +26,17 @@
 #include <unistd.h>
 #include <stdarg.h>
 
-static void
-FAIL(const char *test_name, const char *fmt, ...)
-{
-	va_list args;
-	char buf[500];
-
-	snprintf (buf, 500, "FAIL: (%s) %s\n", test_name, fmt);
-
-	va_start (args, fmt);
-	vfprintf (stderr, buf, args);
-	va_end (args);
-	_exit (1);
-}
+#define FAIL(test_name, fmt, ...) \
+    G_STMT_START { \
+        g_error ("%s:%d: FAIL[%s]: " fmt, __FILE__, __LINE__, test_name, ## __VA_ARGS__); \
+    } G_STMT_END
 
 #define ASSERT(x, test_name, fmt, ...) \
-{ \
-	if (!(x)) { \
-		FAIL (test_name, fmt, ## __VA_ARGS__); \
-	} \
-}
+    G_STMT_START { \
+        if (!(x)) { \
+            FAIL (test_name, fmt, ## __VA_ARGS__); \
+        } \
+    } G_STMT_END
 
 #endif /* NM_TEST_HELPERS_H */
 
