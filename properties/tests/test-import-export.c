@@ -332,13 +332,16 @@ test_file_contents (const char *id,
 	path2 = g_strdup_printf ("%s/%s-%s.pem", dir, id, item);
 	ASSERT(g_file_get_contents(path2, &expected_contents, &expected_length, NULL),
 		test, "failed to load test data?!");
-	g_free (path2);
 
-	ASSERT(length == expected_length && !memcmp(contents, expected_contents, length),
-		test, "file contents were not the same");
+	if (length != expected_length || memcmp(contents, expected_contents, length)) {
+		g_message ("a>>>[%s]%s<<<a", path2, expected_contents);
+		g_message ("b>>>[%s]%s<<<b", path, contents);
+		FAIL (test, "file contents were not the same");
+	}
 	g_free (contents);
 	g_free (expected_contents);
-  g_free (test);
+	g_free (path2);
+	g_free (test);
 }
 
 static void
@@ -1201,15 +1204,15 @@ test_route_import (NMVpnEditorPlugin *plugin,
 	const char *expected_dest1 = "1.2.3.0";
 	guint32 expected_prefix1   = 24;
 	const char *expected_nh1   = "1.2.3.254";
-	guint32 expected_metric1   = 99;
+	gint64 expected_metric1    = 99;
 	const char *expected_dest2 = "5.6.7.8";
 	guint32 expected_prefix2   = 30;
 	const char *expected_nh2   = "0.0.0.0";
-	guint32 expected_metric2   = 0;
+	gint64 expected_metric2    = -1;
 	const char *expected_dest3 = "192.168.0.0";
 	guint32 expected_prefix3   = 16;
 	const char *expected_nh3   = "192.168.44.1";
-	guint32 expected_metric3   = 0;
+	gint64 expected_metric3    = -1;
 
 	connection = get_basic_connection (detail, plugin, dir, "route.ovpn");
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -1232,6 +1235,8 @@ test_route_import (NMVpnEditorPlugin *plugin,
 	{
 		NMIP4Route *route;
 
+#define METR(metr) ((metr) == -1 ? 0 : ((guint32) (metr)))
+
 		num_routes = nm_setting_ip4_config_get_num_routes (s_ip4);
 		ASSERT (num_routes == 3, detail, "incorrect number of static routes");
 
@@ -1241,7 +1246,7 @@ test_route_import (NMVpnEditorPlugin *plugin,
 		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix1,
 		        detail, "unexpected prefix of 1. route");
 		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh1));
-		ASSERT (nm_ip4_route_get_metric (route) == expected_metric1,
+		ASSERT (nm_ip4_route_get_metric (route) == METR (expected_metric1),
 		        detail, "unexpected metric of 1. route");
 
 		/* route 2 */
@@ -1250,7 +1255,7 @@ test_route_import (NMVpnEditorPlugin *plugin,
 		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix2,
 		        detail, "unexpected prefix of 2. route");
 		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh2));
-		ASSERT (nm_ip4_route_get_metric (route) == expected_metric2,
+		ASSERT (nm_ip4_route_get_metric (route) == METR (expected_metric2),
 		        detail, "unexpected metric of 2. route");
 
 		/* route 3 */
@@ -1259,7 +1264,7 @@ test_route_import (NMVpnEditorPlugin *plugin,
 		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix3,
 		        detail, "unexpected prefix of 3. route");
 		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh3));
-		ASSERT (nm_ip4_route_get_metric (route) == expected_metric3,
+		ASSERT (nm_ip4_route_get_metric (route) == METR (expected_metric3),
 		        detail, "unexpected metric of 3. route");
 	}
 #else
