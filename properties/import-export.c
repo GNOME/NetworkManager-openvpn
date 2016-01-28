@@ -1524,8 +1524,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			         static_key,
 			         static_key_direction ? " " : "",
 			         static_key_direction ? static_key_direction : "");
-		} else
-			g_warning ("%s: invalid openvpn static key configuration (missing static key)", __func__);
+		}
 	}
 
 	if (reneg_exists)
