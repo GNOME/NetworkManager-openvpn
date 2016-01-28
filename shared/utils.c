@@ -19,12 +19,11 @@
  * (C) Copyright 2010 Red Hat, Inc.
  */
 
+#include "config.h"
+
 #include <string.h>
-#ifdef NM_OPENVPN_OLD
-#include <nm-setting-8021x.h>
-#else
-#include <NetworkManager.h>
-#endif
+
+#include "nm-default.h"
 #include "utils.h"
 
 gboolean

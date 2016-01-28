@@ -23,10 +23,10 @@
  * (C) Copyright 2005 Tim Niemueller
  *
  * $Id: nm-openvpn-service-openvpn-helper.c 4170 2008-10-11 14:44:45Z dcbw $
- * 
  */
 
-#include <glib.h>
+#include "config.h"
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -39,7 +39,7 @@
 #include <ctype.h>
 #include <netdb.h>
 
-#include <NetworkManager.h>
+#include "nm-default.h"
 
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"

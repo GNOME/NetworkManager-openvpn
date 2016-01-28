@@ -22,25 +22,23 @@
  *               2005 Tim Niemueller [www.niemueller.de]
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "config.h"
 
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
-#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
 
-#include <NetworkManager.h>
+#include "nm-default.h"
+
 #include <nm-vpn-service-plugin.h>
 #include <nma-vpn-password-dialog.h>
 
-#include "../common/utils.h"
-#include "../src/nm-openvpn-service-defines.h"
+#include "utils.h"
+#include "nm-openvpn-service-defines.h"
 
 #define KEYRING_UUID_TAG "connection-uuid"
 #define KEYRING_SN_TAG "setting-name"

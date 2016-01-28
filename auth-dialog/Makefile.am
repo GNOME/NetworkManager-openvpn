@@ -6,6 +6,7 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 	$(LIBNM_CFLAGS)			\
 	$(LIBNMA_CFLAGS)		\
 	$(LIBSECRET_CFLAGS) \
+	-I$(top_srcdir)/shared \
 	-DICONDIR=\""$(datadir)/pixmaps"\"	\
 	-DUIDIR=\""$(uidir)"\"		\
 	-DBINDIR=\""$(bindir)"\"		\
@@ -19,6 +20,6 @@ nm_openvpn_auth_dialog_LDADD = \
 	$(LIBNM_LIBS) \
 	$(LIBNMA_LIBS) \
 	$(LIBSECRET_LIBS) \
-	$(top_builddir)/common/libnm-vpn-plugin-openvpn-common.la
+	$(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
 
 CLEANFILES = *~

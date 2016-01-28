@@ -18,16 +18,32 @@
  *
  */
 
+#include "config.h"
+
 #include <string.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <locale.h>
 
-#include <NetworkManager.h>
+#include "nm-default.h"
 
-#include "nm-test-helpers.h"
-#include "properties/nm-openvpn.h"
-#include "src/nm-openvpn-service-defines.h"
+#include "nm-openvpn.h"
+#include "nm-openvpn-service-defines.h"
+
+#include "nm-test-utils.h"
+
+#define TEST_SRCDIR_CONF     TEST_SRCDIR"/conf"
+#define TEST_BUILDDIR_CONF   TEST_BUILDDIR"/conf"
+
+inline static in_addr_t
+_addr_from_string (const char *saddr)
+{
+	in_addr_t a;
+
+	g_assert (saddr);
+	g_assert (inet_pton (AF_INET, saddr, &a) == 1);
+	return a;
+}
 
 static NMConnection *
 get_basic_connection (const char *detail,
@@ -1181,7 +1197,6 @@ test_route_import (NMVpnEditorPlugin *plugin,
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
 	int num_routes;
-	NMIPRoute *route;
 	const char *expected_dest1 = "1.2.3.0";
 	guint32 expected_prefix1   = 24;
 	const char *expected_nh1   = "1.2.3.254";
@@ -1212,41 +1227,82 @@ test_route_import (NMVpnEditorPlugin *plugin,
 	/* IP4 setting */
 	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	ASSERT (s_ip4 != NULL, detail, "missing 'ip4-config' setting");
-	num_routes = nm_setting_ip_config_get_num_routes (s_ip4);
-	ASSERT (num_routes == 3, detail, "incorrect number of static routes");
-	/* route 1 */
-	route = nm_setting_ip_config_get_route (s_ip4, 0);
-	ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest1) == 0,
-	        detail, "unexpected dest of 1. route");
-	ASSERT (nm_ip_route_get_prefix (route) == expected_prefix1,
-	        detail, "unexpected prefix of 1. route");
-	ASSERT (g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh1) == 0,
-	        detail, "unexpected next_hop of 1. route");
-	ASSERT (nm_ip_route_get_metric (route) == expected_metric1,
-	        detail, "unexpected metric of 1. route");
+#ifdef NM_OPENVPN_OLD
+	{
+		NMIP4Route *route;
 
-	/* route 2 */
-	route = nm_setting_ip_config_get_route (s_ip4, 1);
-	ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest2) == 0,
-	        detail, "unexpected dest of 2. route");
-	ASSERT (nm_ip_route_get_prefix (route) == expected_prefix2,
-	        detail, "unexpected prefix of 2. route");
-	ASSERT (   nm_ip_route_get_next_hop (route) == NULL
-	        || g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh2) == 0,
-	        detail, "unexpected next_hop of 2. route");
-	ASSERT (nm_ip_route_get_metric (route) == expected_metric2,
-	        detail, "unexpected metric of 2. route");
+		num_routes = nm_setting_ip4_config_get_num_routes (s_ip4);
+		ASSERT (num_routes == 3, detail, "incorrect number of static routes");
 
-	/* route 3 */
-	route = nm_setting_ip_config_get_route (s_ip4, 2);
-	ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest3) == 0,
-	        detail, "unexpected dest of 3. route");
-	ASSERT (nm_ip_route_get_prefix (route) == expected_prefix3,
-	        detail, "unexpected prefix of 3. route");
-	ASSERT (g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh3) == 0,
-	        detail, "unexpected next_hop of 3. route");
-	ASSERT (nm_ip_route_get_metric (route) == expected_metric3,
-	        detail, "unexpected metric of 3. route");
+		/* route 1 */
+		route = nm_setting_ip4_config_get_route (s_ip4, 0);
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest1));
+		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix1,
+		        detail, "unexpected prefix of 1. route");
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh1));
+		ASSERT (nm_ip4_route_get_metric (route) == expected_metric1,
+		        detail, "unexpected metric of 1. route");
+
+		/* route 2 */
+		route = nm_setting_ip4_config_get_route (s_ip4, 1);
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest2));
+		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix2,
+		        detail, "unexpected prefix of 2. route");
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh2));
+		ASSERT (nm_ip4_route_get_metric (route) == expected_metric2,
+		        detail, "unexpected metric of 2. route");
+
+		/* route 3 */
+		route = nm_setting_ip4_config_get_route (s_ip4, 2);
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest3));
+		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix3,
+		        detail, "unexpected prefix of 3. route");
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh3));
+		ASSERT (nm_ip4_route_get_metric (route) == expected_metric3,
+		        detail, "unexpected metric of 3. route");
+	}
+#else
+	{
+		NMIPRoute *route;
+
+		num_routes = nm_setting_ip_config_get_num_routes (s_ip4);
+		ASSERT (num_routes == 3, detail, "incorrect number of static routes");
+
+		/* route 1 */
+		route = nm_setting_ip_config_get_route (s_ip4, 0);
+		ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest1) == 0,
+		        detail, "unexpected dest of 1. route");
+		ASSERT (nm_ip_route_get_prefix (route) == expected_prefix1,
+		        detail, "unexpected prefix of 1. route");
+		ASSERT (g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh1) == 0,
+		        detail, "unexpected next_hop of 1. route");
+		ASSERT (nm_ip_route_get_metric (route) == expected_metric1,
+		        detail, "unexpected metric of 1. route");
+
+		/* route 2 */
+		route = nm_setting_ip_config_get_route (s_ip4, 1);
+		ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest2) == 0,
+		        detail, "unexpected dest of 2. route");
+		ASSERT (nm_ip_route_get_prefix (route) == expected_prefix2,
+		        detail, "unexpected prefix of 2. route");
+		ASSERT (   nm_ip_route_get_next_hop (route) == NULL
+		        || g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh2) == 0,
+		        detail, "unexpected next_hop of 2. route");
+		ASSERT (nm_ip_route_get_metric (route) == expected_metric2,
+		        detail, "unexpected metric of 2. route");
+
+		/* route 3 */
+		route = nm_setting_ip_config_get_route (s_ip4, 2);
+		ASSERT (g_strcmp0 (nm_ip_route_get_dest (route), expected_dest3) == 0,
+		        detail, "unexpected dest of 3. route");
+		ASSERT (nm_ip_route_get_prefix (route) == expected_prefix3,
+		        detail, "unexpected prefix of 3. route");
+		ASSERT (g_strcmp0 (nm_ip_route_get_next_hop (route), expected_nh3) == 0,
+		        detail, "unexpected next_hop of 3. route");
+		ASSERT (nm_ip_route_get_metric (route) == expected_metric3,
+		        detail, "unexpected metric of 3. route");
+	}
+#endif
 
 	g_object_unref (connection);
 }
@@ -1299,10 +1355,6 @@ int main (int argc, char **argv)
 	GError *error = NULL;
 	char *basename;
 	NMVpnEditorPlugin *plugin = NULL;
-	char *tmp, *tmp2, *test_dir;
-
-	if (argc != 3)
-		FAIL ("args", "usage: %s <conf path> <tmp dir>", argv[0]);
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
@@ -1314,72 +1366,59 @@ int main (int argc, char **argv)
 	ASSERT (plugin != NULL,
 	        "plugin-init", "failed to initialize UI plugin");
 
-	/* Strip off trailing '/' from tests directory if present */
-	tmp = argv[1];
-	if (tmp[strlen (tmp) - 1] == '/')
-		tmp[strlen (tmp) - 1] = '\0';
-
-	if (g_path_is_absolute (tmp))
-		test_dir = g_strdup (tmp);
-	else {
-		tmp2 = g_get_current_dir ();
-		test_dir = g_build_filename (tmp2, tmp, NULL);
-		g_free (tmp2);
-	}
-
 	/* The tests */
-	test_password_import (plugin, test_dir);
-	test_password_export (plugin, test_dir, argv[2]);
+	test_password_import (plugin, TEST_SRCDIR_CONF);
+	test_password_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_tls_import (plugin, test_dir);
-	test_tls_inline_import (plugin, test_dir);
-	test_tls_export (plugin, test_dir, argv[2]);
+	test_tls_import (plugin, TEST_SRCDIR_CONF);
+	test_tls_inline_import (plugin, TEST_SRCDIR_CONF);
+	test_tls_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_pkcs12_import (plugin, test_dir);
-	test_pkcs12_export (plugin, test_dir, argv[2]);
+	test_pkcs12_import (plugin, TEST_SRCDIR_CONF);
+	test_pkcs12_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_non_utf8_import (plugin, test_dir);
+	test_non_utf8_import (plugin, TEST_SRCDIR_CONF);
 
-	test_static_key_import (plugin, test_dir);
-	test_static_key_export (plugin, test_dir, argv[2]);
+	test_static_key_import (plugin, TEST_SRCDIR_CONF);
+	test_static_key_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_port_import (plugin, "port-import", test_dir, "port.ovpn", "port", "2345");
-	test_port_export (plugin, "port-export", test_dir, argv[2], "port.ovpn", "port.ovpntest");
+	test_port_import (plugin, "port-import", TEST_SRCDIR_CONF, "port.ovpn", "port", "2345");
+	test_port_export (plugin, "port-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "port.ovpn", "port.ovpntest");
 
-	test_port_import (plugin, "rport-import", test_dir, "rport.ovpn", "rport", "6789");
-	test_port_export (plugin, "rport-export", test_dir, argv[2], "rport.ovpn", "rport.ovpntest");
+	test_port_import (plugin, "rport-import", TEST_SRCDIR_CONF, "rport.ovpn", "rport", "6789");
+	test_port_export (plugin, "rport-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "rport.ovpn", "rport.ovpntest");
 
-	test_tun_opts_import (plugin, test_dir);
-	test_tun_opts_export (plugin, test_dir, argv[2]);
+	test_tun_opts_import (plugin, TEST_SRCDIR_CONF);
+	test_tun_opts_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_ping_import (plugin, "ping-with-exit-import", test_dir, "ping-with-exit.ovpn", "10", "120", NULL);
-	test_ping_import (plugin, "ping-with-restart-import", test_dir, "ping-with-restart.ovpn", "10", NULL, "30");
+	test_ping_import (plugin, "ping-with-exit-import", TEST_SRCDIR_CONF, "ping-with-exit.ovpn", "10", "120", NULL);
+	test_ping_import (plugin, "ping-with-restart-import", TEST_SRCDIR_CONF, "ping-with-restart.ovpn", "10", NULL, "30");
 
-	test_port_export (plugin, "ping-with-exit-export", test_dir, argv[2], "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
-	test_port_export (plugin, "ping-with-restart-export", test_dir, argv[2], "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
+	test_port_export (plugin, "ping-with-exit-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
+	test_port_export (plugin, "ping-with-restart-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
 
-	test_ping_import (plugin, "keepalive", test_dir, "keepalive.ovpn", "10", NULL, "30");
-	test_port_export (plugin, "keepalive", test_dir, argv[2], "keepalive.ovpn", "keepalive.ovpntest");
+	test_ping_import (plugin, "keepalive", TEST_SRCDIR_CONF, "keepalive.ovpn", "10", NULL, "30");
+	test_port_export (plugin, "keepalive", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "keepalive.ovpn", "keepalive.ovpntest");
 
-	test_proxy_http_import (plugin, test_dir);
-	test_proxy_http_export (plugin, test_dir, argv[2]);
+	test_proxy_http_import (plugin, TEST_SRCDIR_CONF);
+	test_proxy_http_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_proxy_http_with_auth_import (plugin, test_dir);
+	test_proxy_http_with_auth_import (plugin, TEST_SRCDIR_CONF);
 
-	test_proxy_socks_import (plugin, test_dir);
-	test_proxy_socks_export (plugin, test_dir, argv[2]);
+	test_proxy_socks_import (plugin, TEST_SRCDIR_CONF);
+	test_proxy_socks_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_keysize_import (plugin, test_dir);
-	test_keysize_export (plugin, test_dir, argv[2]);
+	test_keysize_import (plugin, TEST_SRCDIR_CONF);
+	test_keysize_export (plugin, TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
-	test_device_import (plugin, "device-import", test_dir, "device.ovpn", "company0", "tun");
-	test_device_export (plugin, "device-export", test_dir, argv[2], "device.ovpn", "device.ovpntest");
+	test_device_import (plugin, "device-import", TEST_SRCDIR_CONF, "device.ovpn", "company0", "tun");
+	test_device_export (plugin, "device-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "device.ovpn", "device.ovpntest");
 
-	test_device_import (plugin, "device-import", test_dir, "device-notype.ovpn", "tap", NULL);
-	test_device_export (plugin, "device-export", test_dir, argv[2], "device-notype.ovpn", "device-notype.ovpntest");
+	test_device_import (plugin, "device-import", TEST_SRCDIR_CONF, "device-notype.ovpn", "tap", NULL);
+	test_device_export (plugin, "device-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF, "device-notype.ovpn", "device-notype.ovpntest");
 
-	test_route_import (plugin, "route-import", test_dir);
-	test_route_export (plugin, "route-export", test_dir, argv[2]);
+	test_route_import (plugin, "route-import", TEST_SRCDIR_CONF);
+	test_route_export (plugin, "route-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
 	g_object_unref (plugin);
 

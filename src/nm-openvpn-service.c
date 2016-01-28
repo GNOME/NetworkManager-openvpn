@@ -22,12 +22,8 @@
  *
  */
 
+#include "config.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -47,14 +43,13 @@
 #include <pwd.h>
 #include <grp.h>
 
-#include <NetworkManager.h>
+#include "nm-default.h"
+
 #include <nm-vpn-service-plugin.h>
-#include <nm-setting-vpn.h>
 
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"
-#include "../common/utils.h"
-#include "../common/nm-glib-compat.h"
+#include "utils.h"
 
 #if !defined(DIST_VERSION)
 # define DIST_VERSION VERSION

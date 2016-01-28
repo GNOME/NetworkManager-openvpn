@@ -21,9 +21,7 @@
  *
  **************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "config.h"
 
 #include <string.h>
 #include <sys/types.h>
@@ -33,31 +31,12 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include <glib/gi18n-lib.h>
-
-#ifdef NM_OPENVPN_OLD
-#define NM_VPN_LIBNM_COMPAT
-#include <nm-setting-connection.h>
-#include <nm-setting-8021x.h>
-#include <nm-utils.h>
-#include <nm-ui-utils.h>
-
-#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
-#define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
-
-#else /* !NM_OPENVPN_OLD */
-
-#include <NetworkManager.h>
-#include <nma-ui-utils.h>
-
-#define OPENVPN_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
-#define OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_CONNECTION_ERROR_INVALID_PROPERTY
-#endif
+#include "nm-default.h"
 
 #include "auth-helpers.h"
 #include "nm-openvpn.h"
-#include "../src/nm-openvpn-service-defines.h"
-#include "../common/utils.h"
+#include "nm-openvpn-service-defines.h"
+#include "utils.h"
 
 #define BLOCK_HANDLER_ID "block-handler-id"
 
