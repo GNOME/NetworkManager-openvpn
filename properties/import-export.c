@@ -38,6 +38,7 @@
 #include "nm-openvpn.h"
 #include "nm-openvpn-service-defines.h"
 #include "utils.h"
+#include "nm-macros-internal.h"
 
 #define CA_BLOB_START_TAG "<ca>"
 #define CA_BLOB_END_TAG "</ca>"
@@ -116,6 +117,173 @@ args_is_option (const char *line, const char *tag)
 	if (line[len] == '\0' || g_ascii_isspace (line[len]))
 		return TRUE;
 	return FALSE;
+}
+
+static char
+_ch_step_1 (const char **str, gsize *len)
+{
+	char ch;
+	g_assert (str);
+	g_assert (len && *len > 0);
+
+	ch = (*str)[0];
+
+	(*str)++;
+	(*len)--;
+	return ch;
+}
+
+static void
+_ch_skip_over_leading_whitespace (const char **str, gsize *len)
+{
+	while (*len > 0 && g_ascii_isspace ((*str)[0]))
+		_ch_step_1 (str, len);
+}
+
+static void
+_strbuf_append_c (char **buf, gsize *len, char ch)
+{
+	nm_assert (buf);
+	nm_assert (len);
+
+	g_return_if_fail (*len > 0);
+
+	(*buf)[0] = ch;
+	(*len)--;
+	*buf = &(*buf)[1];
+}
+
+static gboolean
+args_parse_line (const char *line,
+                 gsize line_len,
+                 const char ***out_p,
+                 char **out_error)
+{
+	gs_unref_array GArray *index = NULL;
+	gs_free char *str_buf_orig = NULL;
+	char *str_buf;
+	gsize str_buf_len;
+	gsize i;
+	const char *line_start = line;
+	char **data;
+	char *pdata;
+
+	/* reimplement openvpn's parse_line(). */
+
+	g_return_val_if_fail (line, FALSE);
+	g_return_val_if_fail (out_p && !*out_p, FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
+
+	*out_p = NULL;
+
+	/* we expect no newline during the first line_len chars. */
+	for (i = 0; i < line_len; i++) {
+		if (NM_IN_SET (line[i], '\0', '\n'))
+			g_return_val_if_reached (FALSE);
+	}
+
+	/* if the line ends with '\r', drop that right way (covers \r\n). */
+	if (line_len > 0 && line[line_len - 1] == '\r')
+		line_len--;
+
+	/* skip over leading space. */
+	_ch_skip_over_leading_whitespace (&line, &line_len);
+
+	if (line_len == 0)
+		return TRUE;
+
+	if (NM_IN_SET (line[0], ';', '#')) {
+		/* comment. Note that als openvpn allows for leading spaces
+		 * *before* the comment starts */
+		return TRUE;
+	}
+
+	/* the maximum required buffer is @line_len+1 characters. We don't produce
+	 * *more* characters then given in the input (plus trailing '\0'). */
+	str_buf_len = line_len + 1;
+	str_buf_orig = g_malloc (str_buf_len);
+	str_buf = str_buf_orig;
+
+	index = g_array_new (FALSE, FALSE, sizeof (gsize));
+
+	do {
+		char quote, ch0;
+		gssize word_start = line - line_start;
+		gsize index_i;
+
+		index_i = str_buf - str_buf_orig;
+		g_array_append_val (index, index_i);
+
+		do {
+			switch ((ch0 = _ch_step_1 (&line, &line_len))) {
+			case '"':
+			case '\'':
+				quote = ch0;
+
+				while (line_len > 0 && line[0] != quote) {
+					if (quote == '"' && line[0] == '\\') {
+						_ch_step_1 (&line, &line_len);
+						if (line_len <= 0)
+							break;
+					}
+					_strbuf_append_c (&str_buf, &str_buf_len, _ch_step_1 (&line, &line_len));
+				}
+
+				if (line_len <= 0) {
+					*out_error = g_strdup_printf (_("unterminated %s at position %lld"),
+					                              quote == '"' ? _("double quote") : _("single quote"),
+					                              (long long) word_start);
+					return FALSE;
+				}
+
+				_ch_step_1 (&line, &line_len);
+				break;
+			case '\\':
+				if (line_len <= 0) {
+					*out_error = g_strdup_printf (_("trailing escaping backslash at position %lld"),
+					                              (long long) word_start);
+					return FALSE;
+				}
+				_strbuf_append_c (&str_buf, &str_buf_len, _ch_step_1 (&line, &line_len));
+				break;
+			default:
+				if (g_ascii_isspace (ch0))
+					goto word_completed;
+				_strbuf_append_c (&str_buf, &str_buf_len, ch0);
+				break;
+			}
+		} while (line_len > 0);
+word_completed:
+
+		/* the current word is complete.*/
+		_strbuf_append_c (&str_buf, &str_buf_len, '\0');
+		_ch_skip_over_leading_whitespace (&line, &line_len);
+	} while (line_len > 0);
+
+	str_buf_len = str_buf - str_buf_orig;
+
+	/* pack the result in a strv array */
+	data = g_malloc ((sizeof (const char *) * (index->len + 1)) + str_buf_len);
+
+	pdata = (char *) &data[index->len + 1];
+	memcpy (pdata, str_buf_orig, str_buf_len);
+
+	for (i = 0; i < index->len; i++)
+		data[i] = &pdata[g_array_index (index, gsize, i)];
+	data[i] = NULL;
+
+	*out_p = (const char **) data;
+
+	return TRUE;
+}
+
+gboolean
+_nmovpn_test_args_parse_line (const char *line,
+                              gsize line_len,
+                              const char ***out_p,
+                              char **out_error)
+{
+	return args_parse_line (line, line_len, out_p, out_error);
 }
 
 static char *

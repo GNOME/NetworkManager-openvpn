@@ -29,6 +29,7 @@
 
 #include "nm-openvpn.h"
 #include "nm-openvpn-service-defines.h"
+#include "import-export.h"
 
 #include "nm-test-utils.h"
 
@@ -1350,6 +1351,94 @@ test_route_export (NMVpnEditorPlugin *plugin,
 	g_free (path);
 }
 
+/*****************************************************************************/
+
+static void
+do_test_args_parse_impl (const char *line,
+                         gboolean expects_success,
+                         ...)
+{
+	va_list ap;
+	guint i;
+	const char *s;
+	const char *expected_str[100] = { NULL };
+	gboolean again = TRUE;
+	gs_free char *line_again = NULL;
+	gsize len;
+
+	va_start (ap, expects_success);
+	i = 0;
+	do {
+		s = va_arg (ap, const char *);
+		g_assert (i < G_N_ELEMENTS (expected_str));
+		expected_str[i++] = s;
+	} while (s);
+	va_end (ap);
+
+	len = strlen (line);
+
+do_again:
+	{
+		gs_free const char **p = NULL;
+		gs_free char *line_error = NULL;
+
+		if (!_nmovpn_test_args_parse_line (line, len, &p, &line_error)) {
+			g_assert (!expects_success);
+			g_assert (line_error && line_error[0]);
+			g_assert (!p);
+		} else {
+			g_assert (expects_success);
+			g_assert (!line_error);
+
+			if (expected_str[0] == NULL) {
+				g_assert (!p);
+			} else {
+				g_assert (p);
+				for (i = 0; TRUE; i++) {
+					g_assert_cmpstr (p[i], ==, expected_str[i]);
+					if (expected_str[i] == NULL)
+						break;
+					if (i > 0)
+						g_assert (p[i] == &((p[i - 1])[strlen (p[i - 1]) + 1]));
+				}
+				g_assert (p[0] == (const char *) (&p[i + 1]));
+			}
+		}
+	}
+
+	if (again) {
+		/* append some gibberish. Ensure it's ignored. */
+		line = line_again = g_strconcat (line, "X", NULL);
+		again = FALSE;
+		goto do_again;
+	}
+}
+#define do_test_args_parse_line(...) do_test_args_parse_impl (__VA_ARGS__, NULL)
+
+static void
+test_args_parse_line (void)
+{
+	do_test_args_parse_line ("", TRUE);
+	do_test_args_parse_line ("  ", TRUE);
+	do_test_args_parse_line (" \t", TRUE);
+	do_test_args_parse_line (" \r", TRUE);
+	do_test_args_parse_line ("a", TRUE, "a");
+	do_test_args_parse_line (" ba ", TRUE, "ba");
+	do_test_args_parse_line (" b  a ", TRUE, "b", "a");
+	do_test_args_parse_line (" b \\ \\a ", TRUE, "b", " a");
+	do_test_args_parse_line ("\\ b \\ \\a ", TRUE, " b", " a");
+	do_test_args_parse_line ("'\\ b \\ \\a '", TRUE, "\\ b \\ \\a ");
+	do_test_args_parse_line ("\"\\ b \\ \\a \"a'b'", TRUE, " b  a ab");
+	do_test_args_parse_line ("\"\\ b \\ \\a \"a\\ 'b'", TRUE, " b  a a b");
+	do_test_args_parse_line ("\"\\ b \\ \\a \"a\\ 'b'   sd\\ \t", TRUE, " b  a a b", "sd ");
+
+	do_test_args_parse_line ("\"adfdaf  adf  ", FALSE);
+	do_test_args_parse_line ("\"adfdaf  adf  \\\"", FALSE);
+	do_test_args_parse_line ("\"\\ b \\ \\a \"a\\ 'b'   sd\\", FALSE);
+}
+
+/*****************************************************************************/
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
@@ -1419,6 +1508,8 @@ int main (int argc, char **argv)
 
 	test_route_import (plugin, "route-import", TEST_SRCDIR_CONF);
 	test_route_export (plugin, "route-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
+
+	test_args_parse_line ();
 
 	g_object_unref (plugin);
 
