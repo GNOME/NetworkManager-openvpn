@@ -201,15 +201,6 @@ handle_path_item (const char *line,
 static void
 handle_direction (const char *tag, const char *key, char *leftover, NMSettingVpn *s_vpn);
 
-#define CERT_BEGIN  "-----BEGIN CERTIFICATE-----"
-#define CERT_END    "-----END CERTIFICATE-----"
-#define PRIV_KEY_BEGIN  "-----BEGIN PRIVATE KEY-----"
-#define PRIV_KEY_END    "-----END PRIVATE KEY-----"
-#define RSA_PRIV_KEY_BEGIN  "-----BEGIN RSA PRIVATE KEY-----"
-#define RSA_PRIV_KEY_END    "-----END RSA PRIVATE KEY-----"
-#define STATIC_KEY_BEGIN    "-----BEGIN OpenVPN Static key V1-----"
-#define STATIC_KEY_END    "-----END OpenVPN Static key V1-----"
-
 static gboolean
 handle_blob_item (const char ***line,
                   const char *key,
