@@ -88,6 +88,8 @@
 #define TAG_TUN_MTU                     "tun-mtu"
 
 
+const char *_nmovpn_test_temp_path = NULL;
+
 static void
 __attribute__((__format__ (__printf__, 3, 4)))
 setting_vpn_add_data_item_v (NMSettingVpn *setting,
@@ -1102,7 +1104,6 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			gsize end_token_len;
 			gsize my_contents_cur_line = contents_cur_line;
 			gs_free char *f_filename = NULL;
-			gs_free char *f_dirname = NULL;
 			gs_free char *f_path = NULL;
 			const char *key;
 			gboolean can_have_direction = FALSE;
@@ -1155,19 +1156,26 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 
 			/* Construct file name to write the data in */
 			f_filename = g_strdup_printf ("%s-%s.pem", basename, token);
-			f_dirname = g_build_filename (g_get_home_dir (), ".cert", NULL);
-			f_path = g_build_filename (f_dirname, f_filename, NULL);
 
-			/* Check that dirname exists and is a directory, otherwise create it */
-			if (!g_file_test (f_dirname, G_FILE_TEST_IS_DIR)) {
-				if (!g_file_test (f_dirname, G_FILE_TEST_EXISTS)) {
-					if (mkdir (f_dirname, 0755) < 0) {
-						line_error = g_strdup_printf (_("cannot create .cert directory for %s blob"), token);
+			if (_nmovpn_test_temp_path) {
+				f_path = g_build_filename (_nmovpn_test_temp_path, f_filename, NULL);
+			} else {
+				gs_free char *f_dirname = NULL;
+
+				f_dirname = g_build_filename (g_get_home_dir (), ".cert", NULL);
+				f_path = g_build_filename (f_dirname, f_filename, NULL);
+
+				/* Check that dirname exists and is a directory, otherwise create it */
+				if (!g_file_test (f_dirname, G_FILE_TEST_IS_DIR)) {
+					if (!g_file_test (f_dirname, G_FILE_TEST_EXISTS)) {
+						if (mkdir (f_dirname, 0755) < 0) {
+							line_error = g_strdup_printf (_("cannot create .cert directory for %s blob"), token);
+							goto handle_line_error;
+						}
+					} else {
+						line_error = g_strdup_printf (_(".cert directory is not usable for %s blob"), token);
 						goto handle_line_error;
 					}
-				} else {
-					line_error = g_strdup_printf (_(".cert directory is not usable for %s blob"), token);
-					goto handle_line_error;
 				}
 			}
 

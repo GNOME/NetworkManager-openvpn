@@ -398,6 +398,8 @@ test_tls_inline_import (NMVpnEditorPlugin *plugin, const char *dir)
 	test_secret ("tls-import-secrets", s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
 	test_secret ("tls-import-secrets", s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
 
+	g_assert (unlink (TEST_BUILDDIR_CONF"/tls-inline-tls-auth.pem") == 0);
+
 	g_object_unref (connection);
 }
 
@@ -1453,6 +1455,8 @@ int main (int argc, char **argv)
 #if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
 #endif
+
+	_nmovpn_test_temp_path = TEST_BUILDDIR_CONF;
 
 	plugin = nm_vpn_editor_plugin_factory (&error);
 	if (error)

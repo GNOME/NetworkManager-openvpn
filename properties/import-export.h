@@ -30,6 +30,8 @@
 #include <NetworkManager.h>
 #endif
 
+extern const char *_nmovpn_test_temp_path;
+
 gboolean _nmovpn_test_args_parse_line (const char *line,
                                        gsize line_len,
                                        const char ***out_p,
