@@ -124,6 +124,12 @@ setting_vpn_add_data_item_v (NMSettingVpn *setting,
 }
 
 static gboolean
+_streq0 (const char *s1, const char *s2)
+{
+	return g_strcmp0 (s1, s2) == 0;
+}
+
+static gboolean
 _streq (const char *s1, const char *s2)
 {
 	g_return_val_if_fail (s1, FALSE);
@@ -555,6 +561,113 @@ parse_http_proxy_auth (const char *default_path,
 	return TRUE;
 }
 
+/*****************************************************************************/
+
+typedef struct {
+	char *token;
+	char *path;
+	gsize token_start_line;
+	GString *blob_data;
+	const char *key;
+} InlineBlobData;
+
+static void
+inline_blob_data_free (InlineBlobData *data)
+{
+	g_return_if_fail (data);
+
+	g_free (data->token);
+	g_free (data->path);
+	g_string_free (data->blob_data, TRUE);
+	g_slice_free (InlineBlobData, data);
+}
+
+static char *
+inline_blob_construct_path (const char *basename, const char *token)
+{
+	gs_free char *f_filename = NULL;
+
+	g_return_val_if_fail (basename, NULL);
+	g_return_val_if_fail (token && token[0], NULL);
+
+	/* Construct file name to write the data in */
+	f_filename = g_strdup_printf ("%s-%s.pem", basename, token);
+
+	if (_nmovpn_test_temp_path)
+		return g_build_filename (_nmovpn_test_temp_path, f_filename, NULL);
+
+	return g_build_filename (g_get_home_dir (), ".cert", f_filename, NULL);
+}
+
+static gboolean
+inline_blob_mkdir_parents (const InlineBlobData *data, const char *filepath, char **out_error)
+{
+	gs_free char *dirname = NULL;
+
+	g_return_val_if_fail (filepath && filepath[0], FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
+
+	dirname = g_path_get_dirname (filepath);
+	if (_str_in_set (dirname, "/", "."))
+		return TRUE;
+
+	if (g_file_test (dirname, G_FILE_TEST_IS_DIR))
+		return TRUE;
+
+	if (g_file_test (dirname, G_FILE_TEST_EXISTS)) {
+		*out_error = g_strdup_printf (_("'%s' is not a directory"), dirname);
+		return FALSE;
+	}
+
+	if (!inline_blob_mkdir_parents (data, dirname, out_error))
+		return FALSE;
+
+	if (mkdir (dirname, 0755) < 0) {
+		*out_error = g_strdup_printf (_("cannot create '%s' directory"), dirname);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+static gboolean
+inline_blob_write_out (const InlineBlobData *data, GError **error)
+{
+	if (!_nmovpn_test_temp_path) {
+		gs_free char *err_msg = NULL;
+
+		/* in test mode we don't create the certificate directory. */
+		if (!inline_blob_mkdir_parents (data, data->path, &err_msg)) {
+			g_set_error (error,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_FAILED,
+			             _("cannot write <%s> blob from line %ld to file (%s)"),
+			             data->token,
+			             (long) data->token_start_line,
+			             err_msg);
+			return FALSE;
+		}
+	}
+
+	/* The file is written with the default umask. Whether that is safe enough
+	 * to protect (potentally) private data or allows the openvpn service to
+	 * access the file later on is left as exercise for the user. */
+	if (!g_file_set_contents (data->path, data->blob_data->str, data->blob_data->len, NULL)) {
+		g_set_error (error,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_FAILED,
+		             _("cannot write <%s> blob from line %ld to file '%s'"),
+		             data->token,
+		             (long) data->token_start_line,
+		             data->path);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/*****************************************************************************/
+
 NMConnection *
 do_import (const char *path, const char *contents, gsize contents_len, GError **error)
 {
@@ -575,6 +688,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	gs_free char *new_contents = NULL;
 	const char *last_seen_key_direction = NULL;
 	gboolean have_certs, have_ca;
+	GSList *inline_blobs = NULL, *sl_iter;
 
 	g_return_val_if_fail (!error || !*error, NULL);
 
@@ -1103,11 +1217,11 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			gs_free char *end_token = NULL;
 			gsize end_token_len;
 			gsize my_contents_cur_line = contents_cur_line;
-			gs_free char *f_filename = NULL;
-			gs_free char *f_path = NULL;
+			char *f_path;
 			const char *key;
 			gboolean can_have_direction = FALSE;
 			GString *blob_data;
+			InlineBlobData *inline_blob_data;
 
 			if (_streq (token, INLINE_BLOB_CA))
 				key = NM_OPENVPN_KEY_CA;
@@ -1152,40 +1266,30 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				g_string_free (blob_data, TRUE);
 				goto handle_line_error;
 			}
-			contents_cur_line = my_contents_cur_line;
 
-			/* Construct file name to write the data in */
-			f_filename = g_strdup_printf ("%s-%s.pem", basename, token);
+			/* the latest cert wins... */
+			for (sl_iter = inline_blobs; sl_iter; sl_iter = sl_iter->next) {
+				InlineBlobData *d = sl_iter->data;
 
-			if (_nmovpn_test_temp_path) {
-				f_path = g_build_filename (_nmovpn_test_temp_path, f_filename, NULL);
-			} else {
-				gs_free char *f_dirname = NULL;
-
-				f_dirname = g_build_filename (g_get_home_dir (), ".cert", NULL);
-				f_path = g_build_filename (f_dirname, f_filename, NULL);
-
-				/* Check that dirname exists and is a directory, otherwise create it */
-				if (!g_file_test (f_dirname, G_FILE_TEST_IS_DIR)) {
-					if (!g_file_test (f_dirname, G_FILE_TEST_EXISTS)) {
-						if (mkdir (f_dirname, 0755) < 0) {
-							line_error = g_strdup_printf (_("cannot create .cert directory for %s blob"), token);
-							goto handle_line_error;
-						}
-					} else {
-						line_error = g_strdup_printf (_(".cert directory is not usable for %s blob"), token);
-						goto handle_line_error;
-					}
+				if (_streq (d->token, token)) {
+					inline_blobs = g_slist_delete_link (inline_blobs, sl_iter);
+					inline_blob_data_free (d);
+					break;
 				}
 			}
 
-			/* Write the new file */
-			if (!g_file_set_contents (f_path, blob_data->str, blob_data->len, error)) {
-				line_error = g_strdup_printf (_("error writing %s blob to file"), token);
-				goto handle_line_error;
-			}
+			f_path = inline_blob_construct_path (basename, token);
 
-			g_string_free (blob_data, TRUE);
+			inline_blob_data = g_slice_new (InlineBlobData);
+			inline_blob_data->blob_data = blob_data;
+			inline_blob_data->token_start_line = contents_cur_line;
+			inline_blob_data->path = f_path;
+			inline_blob_data->token = token;
+			inline_blob_data->key = key;
+			token = NULL;
+
+			inline_blobs = g_slist_prepend (inline_blobs, inline_blob_data);
+			contents_cur_line = my_contents_cur_line;
 
 			nm_setting_vpn_add_data_item (s_vpn, key, f_path);
 			if (   can_have_direction
@@ -1273,11 +1377,24 @@ handle_line_error:
 		}
 	}
 
+	inline_blobs = g_slist_reverse (inline_blobs);
+	for (sl_iter = inline_blobs; sl_iter; sl_iter = sl_iter->next) {
+		const InlineBlobData *data = sl_iter->data;
+
+		/* Check whether the setting was not overwritten by a later entry in the config-file. */
+		if (!_streq0 (nm_setting_vpn_get_data_item (s_vpn, data->key), data->path))
+			continue;
+		if (!inline_blob_write_out (sl_iter->data, error))
+			goto out_error;
+	}
+	g_slist_free_full (inline_blobs, (GDestroyNotify) inline_blob_data_free);
+
 	connection_free = NULL;
 	g_return_val_if_fail (!error || !*error, connection);
 	return connection;
 
 out_error:
+	g_slist_free_full (inline_blobs, (GDestroyNotify) inline_blob_data_free);
 	g_return_val_if_fail (!error || *error, NULL);
 	return NULL;
 }
