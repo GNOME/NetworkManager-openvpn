@@ -596,7 +596,7 @@ inline_blob_construct_path (const char *basename, const char *token)
 	if (_nmovpn_test_temp_path)
 		return g_build_filename (_nmovpn_test_temp_path, f_filename, NULL);
 
-	return g_build_filename (g_get_home_dir (), ".cert", f_filename, NULL);
+	return g_build_filename (g_get_home_dir (), ".cert/nm-openvpn", f_filename, NULL);
 }
 
 static gboolean
