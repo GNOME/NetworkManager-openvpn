@@ -59,6 +59,10 @@
 static gboolean debug = FALSE;
 static GMainLoop *loop = NULL;
 
+static struct {
+	GSList *pids_pending_list;
+} gl/*obal*/;
+
 #define NM_OPENVPN_HELPER_PATH LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
 
 G_DEFINE_TYPE (NMOpenvpnPlugin, nm_openvpn_plugin, NM_TYPE_VPN_SERVICE_PLUGIN)
@@ -93,6 +97,13 @@ typedef struct {
 	gint int_max;
 	gboolean address;
 } ValidProperty;
+
+typedef struct {
+	GPid pid;
+	guint watch_id;
+	guint kill_id;
+	NMOpenvpnPlugin *plugin;
+} PidsPendingData;
 
 static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_AUTH,                 G_TYPE_STRING, 0, 0, FALSE },
@@ -146,6 +157,130 @@ static ValidProperty valid_secrets[] = {
 	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,  G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
+
+/*****************************************************************************/
+
+static void
+pids_pending_data_free (PidsPendingData *pid_data)
+{
+	nm_clear_g_source (&pid_data->watch_id);
+	nm_clear_g_source (&pid_data->kill_id);
+	if (pid_data->plugin)
+		g_object_remove_weak_pointer ((GObject *) pid_data->plugin, (gpointer *) &pid_data->plugin);
+	g_slice_free (PidsPendingData, pid_data);
+}
+
+static PidsPendingData *
+pids_pending_get (GPid pid)
+{
+	GSList *iter;
+
+	for (iter = gl.pids_pending_list; iter; iter = iter->next) {
+		if (((PidsPendingData *) iter->data)->pid == pid)
+			return iter->data;
+	}
+	g_return_val_if_reached (NULL);
+}
+
+static void openvpn_child_terminated (NMOpenvpnPlugin *plugin, GPid pid, gint status);
+
+static void
+pids_pending_child_watch_cb (GPid pid, gint status, gpointer user_data)
+{
+	PidsPendingData *pid_data = user_data;
+	NMOpenvpnPlugin *plugin;
+
+	if (WIFEXITED (status)) {
+		int exit_status;
+
+		exit_status = WEXITSTATUS (status);
+		if (exit_status != 0)
+			g_warning ("openvpn[%ld] exited with error code %d", (long) pid, exit_status);
+		else
+			g_message ("openvpn[%ld] exited with success", (long) pid);
+	}
+	else if (WIFSTOPPED (status))
+		g_warning ("openvpn[%ld] stopped unexpectedly with signal %d", (long) pid, WSTOPSIG (status));
+	else if (WIFSIGNALED (status))
+		g_warning ("openvpn[%ld] died with signal %d", (long) pid, WTERMSIG (status));
+	else
+		g_warning ("openvpn[%ld] died from an unnatural cause", (long) pid);
+
+	g_return_if_fail (pid_data);
+	g_return_if_fail (pid_data->pid == pid);
+	g_return_if_fail (g_slist_find (gl.pids_pending_list, pid_data));
+
+	plugin = pid_data->plugin;
+
+	pid_data->watch_id = 0;
+	gl.pids_pending_list = g_slist_remove (gl.pids_pending_list , pid_data);
+	pids_pending_data_free (pid_data);
+
+	if (plugin)
+		openvpn_child_terminated (plugin, pid, status);
+}
+
+static void
+pids_pending_add (GPid pid, NMOpenvpnPlugin *plugin)
+{
+	PidsPendingData *pid_data;
+
+	g_return_if_fail (NM_IS_OPENVPN_PLUGIN (plugin));
+	g_return_if_fail (pid > 0);
+
+	g_message ("openvpn[%ld] started", (long) pid);
+
+	pid_data = g_slice_new (PidsPendingData);
+	pid_data->pid = pid;
+	pid_data->kill_id = 0;
+	pid_data->watch_id = g_child_watch_add (pid, pids_pending_child_watch_cb, pid_data);
+	pid_data->plugin = plugin;
+	g_object_add_weak_pointer ((GObject *) plugin, (gpointer *) &pid_data->plugin);
+
+	gl.pids_pending_list = g_slist_prepend (gl.pids_pending_list, pid_data);
+}
+
+static gboolean
+pids_pending_ensure_killed (gpointer user_data)
+{
+	PidsPendingData *pid_data = user_data;
+
+	g_return_val_if_fail (pid_data && pid_data == pids_pending_get (pid_data->pid), FALSE);
+
+	g_message ("openvpn[%ld]: send SIGKILL", (long) pid_data->pid);
+
+	pid_data->kill_id = 0;
+	kill (pid_data->pid, SIGKILL);
+	return FALSE;
+}
+
+static void
+pids_pending_send_sigterm (GPid pid)
+{
+	PidsPendingData *pid_data;
+
+	pid_data = pids_pending_get (pid);
+	g_return_if_fail (pid_data);
+
+	g_message ("openvpn[%ld]: send SIGTERM", (long) pid);
+
+	kill (pid, SIGTERM);
+	pid_data->kill_id = g_timeout_add (2000, pids_pending_ensure_killed, pid_data);
+}
+
+static void
+pids_pending_wait_for_processes (GMainLoop *main_loop)
+{
+	if (gl.pids_pending_list) {
+		g_message ("wait for %u openvpn processes to terminate...", g_slist_length (gl.pids_pending_list));
+
+		do {
+			g_main_context_iteration (g_main_loop_get_context (main_loop), TRUE);
+		} while (gl.pids_pending_list);
+	}
+}
+
+/*****************************************************************************/
 
 static gboolean
 validate_address (const char *address)
@@ -483,7 +618,7 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 }
 
 static gboolean
-handle_management_socket (NMVpnServicePlugin *plugin,
+handle_management_socket (NMOpenvpnPlugin *plugin,
                           GIOChannel *source,
                           GIOCondition condition,
                           NMVpnPluginFailure *out_failure)
@@ -525,7 +660,7 @@ handle_management_socket (NMVpnServicePlugin *plugin,
 						g_message ("Requesting new secrets: '%s' (%s)", message, joined);
 						g_free (joined);
 					}
-					nm_vpn_service_plugin_secrets_required (plugin, message, (const char **) hints);
+					nm_vpn_service_plugin_secrets_required ((NMVpnServicePlugin *) plugin, message, (const char **) hints);
 				} else {
 					/* Interactive not allowed, can't ask for more secrets */
 					g_warning ("More secrets required but cannot ask interactively");
@@ -579,11 +714,11 @@ out:
 static gboolean
 nm_openvpn_socket_data_cb (GIOChannel *source, GIOCondition condition, gpointer user_data)
 {
-	NMVpnServicePlugin *plugin = NM_VPN_SERVICE_PLUGIN (user_data);
+	NMOpenvpnPlugin *plugin = NM_OPENVPN_PLUGIN (user_data);
 	NMVpnPluginFailure failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
 
 	if (!handle_management_socket (plugin, source, condition, &failure)) {
-		nm_vpn_service_plugin_failure (plugin, failure);
+		nm_vpn_service_plugin_failure ((NMVpnServicePlugin *) plugin, failure);
 		return FALSE;
 	}
 
@@ -644,34 +779,26 @@ nm_openvpn_schedule_connect_timer (NMOpenvpnPlugin *plugin)
 }
 
 static void
-openvpn_watch_cb (GPid pid, gint status, gpointer user_data)
+openvpn_child_terminated (NMOpenvpnPlugin *plugin, GPid pid, gint status)
 {
-	NMVpnServicePlugin *plugin = NM_VPN_SERVICE_PLUGIN (user_data);
-	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
+	NMOpenvpnPluginPrivate *priv;
 	NMVpnPluginFailure failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
-	guint error = 0;
 	gboolean good_exit = FALSE;
 
-	if (WIFEXITED (status)) {
-		error = WEXITSTATUS (status);
-		if (error != 0)
-			g_warning ("openvpn[%ld] exited with error code %d", (long) pid, error);
-		else
-			g_message ("openvpn[%ld] exited with success", (long) pid);
-    }
-	else if (WIFSTOPPED (status))
-		g_warning ("openvpn[%ld] stopped unexpectedly with signal %d", (long) pid, WSTOPSIG (status));
-	else if (WIFSIGNALED (status))
-		g_warning ("openvpn[%ld] died with signal %d", (long) pid, WTERMSIG (status));
-	else
-		g_warning ("openvpn[%ld] died from an unknown cause", (long) pid);
+	g_return_if_fail (NM_IS_OPENVPN_PLUGIN (plugin));
 
+	priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 	/* Reap child if needed. */
-	waitpid (priv->pid, NULL, WNOHANG);
+	if (priv->pid != pid) {
+		/* the dead child is not the currently active process. Nothing to do, we just
+		 * reaped the PID. */
+		return;
+	}
+
 	priv->pid = 0;
 
 	/* OpenVPN doesn't supply useful exit codes :( */
-	if (error == 0)
+	if (WIFEXITED (status) && WEXITSTATUS (status) == 0)
 		good_exit = TRUE;
 
 	/* Try to get the last bits of data from openvpn */
@@ -688,9 +815,9 @@ openvpn_watch_cb (GPid pid, gint status, gpointer user_data)
 	}
 
 	if (good_exit)
-		nm_vpn_service_plugin_disconnect (plugin, NULL);
+		nm_vpn_service_plugin_disconnect ((NMVpnServicePlugin *) plugin, NULL);
 	else
-		nm_vpn_service_plugin_failure (plugin, failure);
+		nm_vpn_service_plugin_failure ((NMVpnServicePlugin *) plugin, failure);
 }
 
 static gboolean
@@ -933,7 +1060,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 	const char *openvpn_binary, *auth, *connection_type, *tmp, *tmp2, *tmp3, *tmp4;
 	GPtrArray *args;
-	GSource *openvpn_watch;
 	GPid pid;
 	gboolean dev_type_is_tap;
 	char *stmp;
@@ -1451,13 +1577,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 	free_openvpn_args (args);
 
-	g_message ("openvpn started with pid %d", pid);
+	pids_pending_add (pid, plugin);
 
+	g_warn_if_fail (!priv->pid);
 	priv->pid = pid;
-	openvpn_watch = g_child_watch_source_new (pid);
-	g_source_set_callback (openvpn_watch, (GSourceFunc) openvpn_watch_cb, plugin, NULL);
-	g_source_attach (openvpn_watch, NULL);
-	g_source_unref (openvpn_watch);
 
 	/* Listen to the management socket for a few connection types:
 	   PASSWORD: Will require username and password
@@ -1533,34 +1656,17 @@ check_need_secrets (NMSettingVpn *s_vpn, gboolean *need_secrets)
 }
 
 static gboolean
-ensure_killed (gpointer data)
-{
-	int pid = GPOINTER_TO_INT (data);
-
-	if (kill (pid, 0) == 0)
-		kill (pid, SIGKILL);
-
-	return FALSE;
-}
-
-static gboolean
 real_disconnect (NMVpnServicePlugin *plugin,
                  GError **err)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 
-	if (priv->pid) {
-		if (kill (priv->pid, SIGTERM) == 0)
-			g_timeout_add (2000, ensure_killed, GINT_TO_POINTER (priv->pid));
-		else
-			kill (priv->pid, SIGKILL);
+	g_clear_pointer (&priv->mgt_path, g_free);
 
-		g_message ("Terminated openvpn daemon with PID %d.", priv->pid);
+	if (priv->pid) {
+		pids_pending_send_sigterm (priv->pid);
 		priv->pid = 0;
 	}
-
-	g_free (priv->mgt_path);
-	priv->mgt_path = NULL;
 
 	return TRUE;
 }
@@ -1737,6 +1843,11 @@ dispose (GObject *object)
 
 	nm_clear_g_source (&priv->connect_timer);
 
+	if (priv->pid) {
+		pids_pending_send_sigterm (priv->pid);
+		priv->pid = 0;
+	}
+
 	G_OBJECT_CLASS (nm_openvpn_plugin_parent_class)->dispose (object);
 }
 
@@ -1894,9 +2005,11 @@ main (int argc, char *argv[])
 
 	setup_signals ();
 	g_main_loop_run (loop);
+	g_object_unref (plugin);
+
+	pids_pending_wait_for_processes (loop);
 
 	g_main_loop_unref (loop);
-	g_object_unref (plugin);
 
 	exit (EXIT_SUCCESS);
 }
