@@ -654,14 +654,16 @@ openvpn_watch_cb (GPid pid, gint status, gpointer user_data)
 	if (WIFEXITED (status)) {
 		error = WEXITSTATUS (status);
 		if (error != 0)
-			g_warning ("openvpn exited with error code %d", error);
+			g_warning ("openvpn[%ld] exited with error code %d", (long) pid, error);
+		else
+			g_message ("openvpn[%ld] exited with success", (long) pid);
     }
 	else if (WIFSTOPPED (status))
-		g_warning ("openvpn stopped unexpectedly with signal %d", WSTOPSIG (status));
+		g_warning ("openvpn[%ld] stopped unexpectedly with signal %d", (long) pid, WSTOPSIG (status));
 	else if (WIFSIGNALED (status))
-		g_warning ("openvpn died with signal %d", WTERMSIG (status));
+		g_warning ("openvpn[%ld] died with signal %d", (long) pid, WTERMSIG (status));
 	else
-		g_warning ("openvpn died from an unknown cause");
+		g_warning ("openvpn[%ld] died from an unknown cause", (long) pid);
 
 	/* Reap child if needed. */
 	waitpid (priv->pid, NULL, WNOHANG);
