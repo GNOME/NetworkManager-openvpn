@@ -44,6 +44,7 @@
 #define INLINE_BLOB_CA                  "ca"
 #define INLINE_BLOB_CERT                "cert"
 #define INLINE_BLOB_KEY                 "key"
+#define INLINE_BLOB_PKCS12              "pkcs12"
 #define INLINE_BLOB_SECRET              "secret"
 #define INLINE_BLOB_TLS_AUTH            "tls-auth"
 
@@ -1236,6 +1237,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				key = NM_OPENVPN_KEY_CERT;
 			else if (_streq (token, INLINE_BLOB_KEY))
 				key = NM_OPENVPN_KEY_KEY;
+			else if (_streq (token, INLINE_BLOB_PKCS12))
+				key = NULL;
 			else if (_streq (token, INLINE_BLOB_TLS_AUTH)) {
 				key = NM_OPENVPN_KEY_TA;
 				can_have_direction = TRUE;
@@ -1301,7 +1304,14 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			inline_blobs = g_slist_prepend (inline_blobs, inline_blob_data);
 			contents_cur_line = my_contents_cur_line;
 
-			nm_setting_vpn_add_data_item (s_vpn, key, f_path);
+			if (key)
+				nm_setting_vpn_add_data_item (s_vpn, key, f_path);
+			else {
+				nm_assert (_streq (token, INLINE_BLOB_PKCS12));
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, f_path);
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, f_path);
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, f_path);
+			}
 			if (   can_have_direction
 			    && last_seen_key_direction)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, last_seen_key_direction);
@@ -1392,8 +1402,15 @@ handle_line_error:
 		const InlineBlobData *data = sl_iter->data;
 
 		/* Check whether the setting was not overwritten by a later entry in the config-file. */
-		if (!_streq0 (nm_setting_vpn_get_data_item (s_vpn, data->key), data->path))
-			continue;
+		if (_streq (data->token, INLINE_BLOB_PKCS12)) {
+			if (   !_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA), data->path)
+			    && !_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT), data->path)
+			    && !_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY), data->path))
+				continue;
+		} else {
+			if (!_streq0 (nm_setting_vpn_get_data_item (s_vpn, data->key), data->path))
+				continue;
+		}
 		if (!inline_blob_write_out (sl_iter->data, error))
 			goto out_error;
 	}
