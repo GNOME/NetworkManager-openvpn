@@ -49,44 +49,44 @@
 #define TLS_AUTH_BLOB_START_TAG "<tls-auth>"
 #define TLS_AUTH_BLOB_END_TAG "</tls-auth>"
 
-#define AUTH_TAG "auth "
-#define AUTH_USER_PASS_TAG "auth-user-pass"
-#define CA_TAG "ca "
-#define CERT_TAG "cert "
-#define CIPHER_TAG "cipher "
-#define KEYSIZE_TAG "keysize "
-#define CLIENT_TAG "client"
-#define COMP_TAG "comp-lzo"
-#define FLOAT_TAG "float"
-#define DEV_TAG "dev "
-#define DEV_TYPE_TAG "dev-type "
-#define FRAGMENT_TAG "fragment "
-#define IFCONFIG_TAG "ifconfig "
-#define KEY_TAG "key "
-#define KEEPALIVE_TAG "keepalive "
-#define MSSFIX_TAG "mssfix"
-#define PING_TAG "ping "
-#define PING_EXIT_TAG "ping-exit "
-#define PING_RESTART_TAG "ping-restart "
-#define PKCS12_TAG "pkcs12 "
-#define PORT_TAG "port "
-#define PROTO_TAG "proto "
-#define HTTP_PROXY_TAG "http-proxy "
-#define HTTP_PROXY_RETRY_TAG "http-proxy-retry"
-#define SOCKS_PROXY_TAG "socks-proxy "
-#define SOCKS_PROXY_RETRY_TAG "socks-proxy-retry"
-#define REMOTE_TAG "remote "
-#define REMOTE_RANDOM_TAG "remote-random"
-#define RENEG_SEC_TAG "reneg-sec "
-#define RPORT_TAG "rport "
-#define SECRET_TAG "secret "
-#define TLS_AUTH_TAG "tls-auth "
-#define KEY_DIRECTION_TAG "key-direction "
-#define TLS_CLIENT_TAG "tls-client"
-#define TLS_REMOTE_TAG "tls-remote "
-#define REMOTE_CERT_TLS_TAG "remote-cert-tls "
-#define TUNMTU_TAG "tun-mtu "
-#define ROUTE_TAG "route "
+#define TAG_AUTH                        "auth "
+#define TAG_AUTH_USER_PASS              "auth-user-pass"
+#define TAG_CA                          "ca "
+#define TAG_CERT                        "cert "
+#define TAG_CIPHER                      "cipher "
+#define TAG_KEYSIZE                     "keysize "
+#define TAG_CLIENT                      "client"
+#define TAG_COMP_LZO                    "comp-lzo"
+#define TAG_FLOAT                       "float"
+#define TAG_DEV                         "dev "
+#define TAG_DEV_TYPE                    "dev-type "
+#define TAG_FRAGMENT                    "fragment "
+#define TAG_IFCONFIG                    "ifconfig "
+#define TAG_KEY                         "key "
+#define TAG_KEEPALIVE                   "keepalive "
+#define TAG_MSSFIX                      "mssfix"
+#define TAG_PING                        "ping "
+#define TAG_PING_EXIT                   "ping-exit "
+#define TAG_PING_RESTART                "ping-restart "
+#define TAG_PKCS12                      "pkcs12 "
+#define TAG_PORT                        "port "
+#define TAG_PROTO                       "proto "
+#define TAG_HTTP_PROXY                  "http-proxy "
+#define TAG_HTTP_PROXY_RETRY            "http-proxy-retry"
+#define TAG_SOCKS_PROXY                 "socks-proxy "
+#define TAG_SOCKS_PROXY_RETRY           "socks-proxy-retry"
+#define TAG_REMOTE                      "remote "
+#define TAG_REMOTE_RANDOM               "remote-random"
+#define TAG_RENEG_SEC                   "reneg-sec "
+#define TAG_RPORT                       "rport "
+#define TAG_SECRET                      "secret "
+#define TAG_TLS_AUTH                    "tls-auth "
+#define TAG_KEY_DIRECTION               "key-direction "
+#define TAG_TLS_CLIENT                  "tls-client"
+#define TAG_TLS_REMOTE                  "tls-remote "
+#define TAG_REMOTE_CERT_TLS             "remote-cert-tls "
+#define TAG_TUN_MTU                     "tun-mtu "
+#define TAG_ROUTE                       "route "
 
 
 /**
@@ -728,19 +728,19 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (!strlen (*line))
 			continue;
 
-		if (   args_is_option (*line, CLIENT_TAG)
-		    || args_is_option (*line, TLS_CLIENT_TAG)) {
+		if (   args_is_option (*line, TAG_CLIENT)
+		    || args_is_option (*line, TAG_TLS_CLIENT)) {
 			have_client = TRUE;
 			continue;
 		}
 
-		if (args_is_option (*line, KEY_DIRECTION_TAG)) {
-			last_seen_key_direction = *line + strlen (KEY_DIRECTION_TAG);
+		if (args_is_option (*line, TAG_KEY_DIRECTION)) {
+			last_seen_key_direction = *line + strlen (TAG_KEY_DIRECTION);
 			continue;
 		}
 
-		if (args_is_option (*line, DEV_TAG)) {
-			items = get_args (*line + strlen (DEV_TAG), &nitems);
+		if (args_is_option (*line, TAG_DEV)) {
+			items = get_args (*line + strlen (TAG_DEV), &nitems);
 			if (nitems == 1) {
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV, items[0]);
 			} else
@@ -750,13 +750,13 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, DEV_TYPE_TAG)) {
-			items = get_args (*line + strlen (DEV_TYPE_TAG), &nitems);
+		if (args_is_option (*line, TAG_DEV_TYPE)) {
+			items = get_args (*line + strlen (TAG_DEV_TYPE), &nitems);
 			if (nitems == 1) {
 				if (!strcmp (items[0], "tun") || !strcmp (items[0], "tap"))
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE, items[0]);
 				else
-					g_warning ("%s: unknown %s option '%s'", __func__, DEV_TYPE_TAG, *line);
+					g_warning ("%s: unknown %s option '%s'", __func__, TAG_DEV_TYPE, *line);
 			} else
 				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
 
@@ -764,8 +764,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, PROTO_TAG)) {
-			items = get_args (*line + strlen (PROTO_TAG), &nitems);
+		if (args_is_option (*line, TAG_PROTO)) {
+			items = get_args (*line + strlen (TAG_PROTO), &nitems);
 			if (nitems == 1) {
 				/* Valid parameters are "udp", "tcp-client" and "tcp-server".
 				 * 'tcp' isn't technically valid, but it used to be accepted so
@@ -778,7 +778,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				           || !strcmp (items[0], "tcp")) {
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
 				} else
-					g_warning ("%s: unknown %s option '%s'", __func__, PROTO_TAG, *line);
+					g_warning ("%s: unknown %s option '%s'", __func__, TAG_PROTO, *line);
 			} else
 				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
 
@@ -786,13 +786,13 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, MSSFIX_TAG)) {
+		if (args_is_option (*line, TAG_MSSFIX)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
 			continue;
 		}
 
-		if (args_is_option (*line, TUNMTU_TAG)) {
-			items = get_args (*line + strlen (TUNMTU_TAG), &nitems);
+		if (args_is_option (*line, TAG_TUN_MTU)) {
+			items = get_args (*line + strlen (TAG_TUN_MTU), &nitems);
 			if (nitems == 1) {
 				glong secs;
 
@@ -811,8 +811,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, FRAGMENT_TAG)) {
-			items = get_args (*line + strlen (FRAGMENT_TAG), &nitems);
+		if (args_is_option (*line, TAG_FRAGMENT)) {
+			items = get_args (*line + strlen (TAG_FRAGMENT), &nitems);
 
 			if (nitems == 1) {
 				glong secs;
@@ -832,18 +832,18 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, COMP_TAG)) {
+		if (args_is_option (*line, TAG_COMP_LZO)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
 			continue;
 		}
 
-		if (args_is_option (*line, FLOAT_TAG)) {
+		if (args_is_option (*line, TAG_FLOAT)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
 			continue;
 		}
 
-		if (args_is_option (*line, RENEG_SEC_TAG)) {
-			items = get_args (*line + strlen (RENEG_SEC_TAG), &nitems);
+		if (args_is_option (*line, TAG_RENEG_SEC)) {
+			items = get_args (*line + strlen (TAG_RENEG_SEC), &nitems);
 
 			if (nitems == 1) {
 				glong secs;
@@ -861,23 +861,23 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (   args_is_option (*line, HTTP_PROXY_RETRY_TAG)
-		    || args_is_option (*line, SOCKS_PROXY_RETRY_TAG)) {
+		if (   args_is_option (*line, TAG_HTTP_PROXY_RETRY)
+		    || args_is_option (*line, TAG_SOCKS_PROXY_RETRY)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY, "yes");
 			continue;
 		}
 
-		http_proxy = args_is_option (*line, HTTP_PROXY_TAG);
-		socks_proxy = args_is_option (*line, SOCKS_PROXY_TAG);
+		http_proxy = args_is_option (*line, TAG_HTTP_PROXY);
+		socks_proxy = args_is_option (*line, TAG_SOCKS_PROXY);
 		if ((http_proxy || socks_proxy) && !proxy_set) {
 			gboolean success = FALSE;
 			const char *proxy_type = NULL;
 
 			if (http_proxy) {
-				items = get_args (*line + strlen (HTTP_PROXY_TAG), &nitems);
+				items = get_args (*line + strlen (TAG_HTTP_PROXY), &nitems);
 				proxy_type = "http";
 			} else if (socks_proxy) {
-				items = get_args (*line + strlen (SOCKS_PROXY_TAG), &nitems);
+				items = get_args (*line + strlen (TAG_SOCKS_PROXY), &nitems);
 				proxy_type = "socks";
 			}
 
@@ -928,8 +928,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, REMOTE_TAG)) {
-			items = get_args (*line + strlen (REMOTE_TAG), &nitems);
+		if (args_is_option (*line, TAG_REMOTE)) {
+			items = get_args (*line + strlen (TAG_REMOTE), &nitems);
 			if (nitems >= 1 && nitems <= 3) {
 				gboolean ok = TRUE;
 				tmp = NULL;
@@ -970,17 +970,17 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, REMOTE_RANDOM_TAG)) {
+		if (args_is_option (*line, TAG_REMOTE_RANDOM)) {
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM, "yes");
 			continue;
 		}
 
-		if (   args_is_option (*line, PORT_TAG)
-		    || args_is_option (*line, RPORT_TAG)) {
-			if (args_is_option (*line, PORT_TAG))
-				items = get_args (*line + strlen (PORT_TAG), &nitems);
-			else if (args_is_option (*line, RPORT_TAG))
-				items = get_args (*line + strlen (RPORT_TAG), &nitems);
+		if (   args_is_option (*line, TAG_PORT)
+		    || args_is_option (*line, TAG_RPORT)) {
+			if (args_is_option (*line, TAG_PORT))
+				items = get_args (*line + strlen (TAG_PORT), &nitems);
+			else if (args_is_option (*line, TAG_RPORT))
+				items = get_args (*line + strlen (TAG_RPORT), &nitems);
 			else
 				g_assert_not_reached ();
 
@@ -997,27 +997,27 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (handle_num_seconds_item (*line, PING_TAG, NM_OPENVPN_KEY_PING, s_vpn))
+		if (handle_num_seconds_item (*line, TAG_PING, NM_OPENVPN_KEY_PING, s_vpn))
 			continue;
 
-		if (handle_num_seconds_item (*line, PING_EXIT_TAG, NM_OPENVPN_KEY_PING_EXIT, s_vpn))
+		if (handle_num_seconds_item (*line, TAG_PING_EXIT, NM_OPENVPN_KEY_PING_EXIT, s_vpn))
 			continue;
 
-		if (handle_num_seconds_item (*line, PING_RESTART_TAG, NM_OPENVPN_KEY_PING_RESTART, s_vpn))
+		if (handle_num_seconds_item (*line, TAG_PING_RESTART, NM_OPENVPN_KEY_PING_RESTART, s_vpn))
 			continue;
 
-		if ( handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL) &&
-		     handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CERT, s_vpn, default_path, NULL) &&
-		     handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
+		if ( handle_path_item (*line, TAG_PKCS12, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL) &&
+		     handle_path_item (*line, TAG_PKCS12, NM_OPENVPN_KEY_CERT, s_vpn, default_path, NULL) &&
+		     handle_path_item (*line, TAG_PKCS12, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
 			continue;
 
-		if (handle_path_item (*line, CA_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL))
+		if (handle_path_item (*line, TAG_CA, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL))
 			continue;
 
-		if (handle_path_item (*line, CERT_TAG, NM_OPENVPN_KEY_CERT, s_vpn, default_path, NULL))
+		if (handle_path_item (*line, TAG_CERT, NM_OPENVPN_KEY_CERT, s_vpn, default_path, NULL))
 			continue;
 
-		if (handle_path_item (*line, KEY_TAG, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
+		if (handle_path_item (*line, TAG_KEY, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
 			continue;
 
 		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_CA, s_vpn, basename, NULL))
@@ -1037,7 +1037,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (handle_path_item (*line, SECRET_TAG, NM_OPENVPN_KEY_STATIC_KEY,
+		if (handle_path_item (*line, TAG_SECRET, NM_OPENVPN_KEY_STATIC_KEY,
 		                      s_vpn, default_path, &leftover)) {
 			handle_direction ("secret",
 			                  NM_OPENVPN_KEY_STATIC_KEY_DIRECTION,
@@ -1048,7 +1048,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (handle_path_item (*line, TLS_AUTH_TAG, NM_OPENVPN_KEY_TA,
+		if (handle_path_item (*line, TAG_TLS_AUTH, NM_OPENVPN_KEY_TA,
 		                      s_vpn, default_path, &leftover)) {
 			handle_direction ("tls-auth",
 			                  NM_OPENVPN_KEY_TA_DIR,
@@ -1058,8 +1058,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, CIPHER_TAG)) {
-			items = get_args (*line + strlen (CIPHER_TAG), &nitems);
+		if (args_is_option (*line, TAG_CIPHER)) {
+			items = get_args (*line + strlen (TAG_CIPHER), &nitems);
 			if (nitems == 1)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER, items[0]);
 			else
@@ -1069,11 +1069,11 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, KEEPALIVE_TAG)) {
+		if (args_is_option (*line, TAG_KEEPALIVE)) {
 			int ping_secs;
 			int ping_restart_secs;
 
-			items = get_args (*line + strlen (KEEPALIVE_TAG), &nitems);
+			items = get_args (*line + strlen (TAG_KEEPALIVE), &nitems);
 			if (nitems == 2) {
 				ping_secs = parse_seconds (items[0], *line);
 				ping_restart_secs = parse_seconds (items[1], *line);
@@ -1096,8 +1096,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, KEYSIZE_TAG)) {
-			items = get_args (*line + strlen (KEYSIZE_TAG), &nitems);
+		if (args_is_option (*line, TAG_KEYSIZE)) {
+			items = get_args (*line + strlen (TAG_KEYSIZE), &nitems);
 			if (nitems == 1) {
 				glong key_size;
 
@@ -1115,34 +1115,34 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, TLS_REMOTE_TAG)) {
-			char *unquoted = unquote (*line + strlen (TLS_REMOTE_TAG), NULL);
+		if (args_is_option (*line, TAG_TLS_REMOTE)) {
+			char *unquoted = unquote (*line + strlen (TAG_TLS_REMOTE), NULL);
 
 			if (unquoted) {
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, unquoted);
 				g_free (unquoted);
 			} else
-				g_warning ("%s: unknown %s option '%s'", __func__, TLS_REMOTE_TAG, *line);
+				g_warning ("%s: unknown %s option '%s'", __func__, TAG_TLS_REMOTE, *line);
 
 			continue;
 		}
 
-		if (args_is_option (*line, REMOTE_CERT_TLS_TAG)) {
-			items = get_args (*line + strlen (REMOTE_CERT_TLS_TAG), &nitems);
+		if (args_is_option (*line, TAG_REMOTE_CERT_TLS)) {
+			items = get_args (*line + strlen (TAG_REMOTE_CERT_TLS), &nitems);
 			if (nitems == 1) {
 				if (   !strcmp (items[0], NM_OPENVPN_REM_CERT_TLS_CLIENT)
 				    || !strcmp (items[0], NM_OPENVPN_REM_CERT_TLS_SERVER)) {
 					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, items[0]);
 				} else
-					g_warning ("%s: unknown %s option '%s'", __func__, REMOTE_CERT_TLS_TAG, *line);
+					g_warning ("%s: unknown %s option '%s'", __func__, TAG_REMOTE_CERT_TLS, *line);
 			}
 
 			g_strfreev (items);
 			continue;
 		}
 
-		if (args_is_option (*line, IFCONFIG_TAG)) {
-			items = get_args (*line + strlen (IFCONFIG_TAG), &nitems);
+		if (args_is_option (*line, TAG_IFCONFIG)) {
+			items = get_args (*line + strlen (TAG_IFCONFIG), &nitems);
 			if (nitems == 2) {
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, items[0]);
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, items[1]);
@@ -1153,13 +1153,13 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (args_is_option (*line, AUTH_USER_PASS_TAG)) {
+		if (args_is_option (*line, TAG_AUTH_USER_PASS)) {
 			have_pass = TRUE;
 			continue;
 		}
 
-		if (args_is_option (*line, AUTH_TAG)) {
-			items = get_args (*line + strlen (AUTH_TAG), &nitems);
+		if (args_is_option (*line, TAG_AUTH)) {
+			items = get_args (*line + strlen (TAG_AUTH), &nitems);
 			if (nitems == 1)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH, items[0]);
 			else
@@ -1169,8 +1169,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		}
 
 #ifdef NM_OPENVPN_OLD
-		if (args_is_option (*line, ROUTE_TAG)) {
-			items = get_args (*line + strlen (ROUTE_TAG), &nitems);
+		if (args_is_option (*line, TAG_ROUTE)) {
+			items = get_args (*line + strlen (TAG_ROUTE), &nitems);
 			if (nitems >= 1 && nitems <= 4) {
 				guint32 dest, next_hop, prefix, metric;
 				NMIP4Route *route;
@@ -1219,8 +1219,8 @@ route_fail:
 			continue;
 		}
 #else
-		if (args_is_option (*line, ROUTE_TAG)) {
-			items = get_args (*line + strlen (ROUTE_TAG), &nitems);
+		if (args_is_option (*line, TAG_ROUTE)) {
+			items = get_args (*line + strlen (TAG_ROUTE), &nitems);
 			if (nitems >= 1 && nitems <= 4) {
 				guint32 prefix = 32;
 				guint32 metric = 0;
@@ -1619,16 +1619,16 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
 	if (value && strlen (value)) {
 		if (!strcmp (value, "yes"))
-			fprintf (f, MSSFIX_TAG "\n");
+			fprintf (f, TAG_MSSFIX "\n");
 	}
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
 	if (value && strlen (value))
-		fprintf (f, TUNMTU_TAG " %d\n", (int) strtol (value, NULL, 10));
+		fprintf (f, TAG_TUN_MTU " %d\n", (int) strtol (value, NULL, 10));
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 	if (value && strlen (value))
-		fprintf (f, FRAGMENT_TAG " %d\n", (int) strtol (value, NULL, 10));
+		fprintf (f, TAG_FRAGMENT " %d\n", (int) strtol (value, NULL, 10));
 
 	fprintf (f, "dev %s\n", device ? device : (device_type ? device_type : device_default));
 	if (device_type)
