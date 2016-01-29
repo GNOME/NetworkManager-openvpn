@@ -44,6 +44,7 @@
 #define INLINE_BLOB_CA                  "ca"
 #define INLINE_BLOB_CERT                "cert"
 #define INLINE_BLOB_KEY                 "key"
+#define INLINE_BLOB_SECRET              "secret"
 #define INLINE_BLOB_TLS_AUTH            "tls-auth"
 
 #define TAG_AUTH                        "auth"
@@ -1237,6 +1238,9 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				key = NM_OPENVPN_KEY_KEY;
 			else if (_streq (token, INLINE_BLOB_TLS_AUTH)) {
 				key = NM_OPENVPN_KEY_TA;
+				can_have_direction = TRUE;
+			} else if (_streq (token, INLINE_BLOB_SECRET)) {
+				key = NM_OPENVPN_KEY_STATIC_KEY;
 				can_have_direction = TRUE;
 			} else {
 				line_error = g_strdup_printf (_("unsupported blob/xml element"));
