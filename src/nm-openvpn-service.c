@@ -42,6 +42,7 @@
 #include <locale.h>
 #include <pwd.h>
 #include <grp.h>
+#include "glib-unix.h"
 
 #include "nm-default.h"
 
@@ -57,7 +58,6 @@
 #endif
 
 static gboolean debug = FALSE;
-static GMainLoop *loop = NULL;
 
 static struct {
 	GSList *pids_pending_list;
@@ -1911,25 +1911,11 @@ nm_openvpn_plugin_new (const char *bus_name)
 	return plugin;
 }
 
-static void
-signal_handler (int signo)
+static gboolean
+signal_handler (gpointer user_data)
 {
-	if (signo == SIGINT || signo == SIGTERM)
-		g_main_loop_quit (loop);
-}
-
-static void
-setup_signals (void)
-{
-	struct sigaction action;
-	sigset_t mask;
-
-	sigemptyset (&mask);
-	action.sa_handler = signal_handler;
-	action.sa_mask = mask;
-	action.sa_flags = 0;
-	sigaction (SIGTERM,  &action, NULL);
-	sigaction (SIGINT,  &action, NULL);
+	g_main_loop_quit (user_data);
+	return G_SOURCE_REMOVE;
 }
 
 static void
@@ -1946,6 +1932,7 @@ main (int argc, char *argv[])
 	GOptionContext *opt_ctx = NULL;
 	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
 	GError *error = NULL;
+	GMainLoop *loop;
 
 	GOptionEntry options[] = {
 		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don't quit when VPN connection terminates"), NULL },
@@ -2003,7 +1990,10 @@ main (int argc, char *argv[])
 	if (!persist)
 		g_signal_connect (plugin, "quit", G_CALLBACK (quit_mainloop), loop);
 
-	setup_signals ();
+	signal (SIGPIPE, SIG_IGN);
+	g_unix_signal_add (SIGTERM, signal_handler, loop);
+	g_unix_signal_add (SIGINT, signal_handler, loop);
+
 	g_main_loop_run (loop);
 	g_object_unref (plugin);
 
