@@ -656,7 +656,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 			if (message) {
 				if (priv->interactive) {
 					if (debug) {
-						char *joined = hints ? g_strjoinv (",", (char **) hints) : "none";
+						char *joined = hints ? g_strjoinv (",", (char **) hints) : g_strdup ("none");
 						g_message ("Requesting new secrets: '%s' (%s)", message, joined);
 						g_free (joined);
 					}
