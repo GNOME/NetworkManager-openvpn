@@ -50,6 +50,7 @@
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"
 #include "utils.h"
+#include "nm-macros-internal.h"
 
 #if !defined(DIST_VERSION)
 # define DIST_VERSION VERSION
@@ -1730,12 +1731,24 @@ nm_openvpn_plugin_init (NMOpenvpnPlugin *plugin)
 }
 
 static void
+dispose (GObject *object)
+{
+	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (object);
+
+	nm_clear_g_source (&priv->connect_timer);
+
+	G_OBJECT_CLASS (nm_openvpn_plugin_parent_class)->dispose (object);
+}
+
+static void
 nm_openvpn_plugin_class_init (NMOpenvpnPluginClass *plugin_class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (plugin_class);
 	NMVpnServicePluginClass *parent_class = NM_VPN_SERVICE_PLUGIN_CLASS (plugin_class);
 
 	g_type_class_add_private (object_class, sizeof (NMOpenvpnPluginPrivate));
+
+	object_class->dispose = dispose;
 
 	/* virtual methods */
 	parent_class->connect      = real_connect;
@@ -1759,10 +1772,7 @@ plugin_state_changed (NMOpenvpnPlugin *plugin,
 	case NM_VPN_SERVICE_STATE_STOPPING:
 	case NM_VPN_SERVICE_STATE_STOPPED:
 		/* Cleanup on failure */
-		if (priv->connect_timer) {
-			g_source_remove (priv->connect_timer);
-			priv->connect_timer = 0;
-		}
+		nm_clear_g_source (&priv->connect_timer);
 		nm_openvpn_disconnect_management_socket (plugin);
 		break;
 	default:
