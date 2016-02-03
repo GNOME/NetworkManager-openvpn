@@ -36,6 +36,22 @@
 #define TEST_SRCDIR_CONF     TEST_SRCDIR"/conf"
 #define TEST_BUILDDIR_CONF   TEST_BUILDDIR"/conf"
 
+/*****************************************************************************/
+
+static NMVpnEditorPlugin *
+_create_plugin (void)
+{
+	NMVpnEditorPlugin *plugin;
+	GError *error = NULL;
+
+	plugin = nm_vpn_editor_plugin_factory (&error);
+	g_assert_no_error (error);
+	g_assert (OPENVPN_IS_EDITOR_PLUGIN (plugin));
+	return plugin;
+}
+
+/*****************************************************************************/
+
 inline static in_addr_t
 _addr_from_string (const char *saddr)
 {
@@ -1450,19 +1466,14 @@ NMTST_DEFINE ();
 
 int main (int argc, char **argv)
 {
-	GError *error = NULL;
 	char *basename;
-	NMVpnEditorPlugin *plugin = NULL;
+	gs_unref_object NMVpnEditorPlugin *plugin = NULL;
 
 	_nmovpn_test_temp_path = TEST_BUILDDIR_CONF;
 
 	nmtst_init (&argc, &argv, TRUE);
 
-	plugin = nm_vpn_editor_plugin_factory (&error);
-	if (error)
-		FAIL ("plugin-init", "failed to initialize UI plugin: %s", error->message);
-	ASSERT (plugin != NULL,
-	        "plugin-init", "failed to initialize UI plugin");
+	plugin = _create_plugin ();
 
 	/* The tests */
 	test_password_import (plugin, TEST_SRCDIR_CONF);
@@ -1519,8 +1530,6 @@ int main (int argc, char **argv)
 	test_route_export (plugin, "route-export", TEST_SRCDIR_CONF, TEST_BUILDDIR_CONF);
 
 	test_args_parse_line ();
-
-	g_object_unref (plugin);
 
 	basename = g_path_get_basename (argv[0]);
 	fprintf (stdout, "%s: SUCCESS\n", basename);
