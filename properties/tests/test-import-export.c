@@ -725,15 +725,15 @@ test_static_key_export (void)
 }
 
 static void
-test_port_import (const char *detail,
-                  const char *file,
-                  const char *expected_id,
-                  const char *expected_port)
+test_port_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
 	NMConnection *connection;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
+	const char *detail, *file, *expected_id, *expected_port;
+
+	nmtst_test_data_unpack_detail (test_data, &detail, &file, &expected_id, &expected_port);
 
 	connection = get_basic_connection (detail, plugin, SRCDIR, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -759,16 +759,15 @@ test_port_import (const char *detail,
 }
 
 static void
-test_ping_import (const char *detail,
-                  const char *file,
-                  const char *expected_ping,
-                  const char *expected_ping_exit,
-                  const char *expected_ping_restart)
+test_ping_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
 	NMConnection *connection;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
+	const char *detail, *file, *expected_ping, *expected_ping_exit, *expected_ping_restart;
+
+	nmtst_test_data_unpack_detail (test_data, &detail, &file, &expected_ping, &expected_ping_exit, &expected_ping_restart);
 
 	connection = get_basic_connection (detail, plugin, SRCDIR, file);
 	g_assert (connection);
@@ -790,9 +789,7 @@ test_ping_import (const char *detail,
 }
 
 static void
-test_port_export (const char *detail,
-                  const char *file,
-                  const char *exported_name)
+test_port_export (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
 	NMConnection *connection;
@@ -800,6 +797,9 @@ test_port_export (const char *detail,
 	char *path;
 	gboolean success;
 	GError *error = NULL;
+	const char *detail, *file, *exported_name;
+
+	nmtst_test_data_unpack_detail (test_data, &detail, &file, &exported_name);
 
 	connection = get_basic_connection (detail, plugin, SRCDIR, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -1170,14 +1170,14 @@ test_keysize_export (void)
 }
 
 static void
-test_device_import (const char *detail,
-                    const char *file,
-                    const char *expected_dev,
-                    const char *expected_devtype)
+test_device_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
 	NMConnection *connection;
 	NMSettingVpn *s_vpn;
+	const char *detail, *file, *expected_dev, *expected_devtype;
+
+	nmtst_test_data_unpack_detail (test_data, &detail, &file, &expected_dev, &expected_devtype);
 
 	connection = get_basic_connection (detail, plugin, SRCDIR, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -1194,9 +1194,7 @@ test_device_import (const char *detail,
 }
 
 static void
-test_device_export (const char *detail,
-                    const char *file,
-                    const char *exported_name)
+test_device_export (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
 	NMConnection *connection;
@@ -1204,6 +1202,9 @@ test_device_export (const char *detail,
 	char *path;
 	gboolean success;
 	GError *error = NULL;
+	const char *detail, *file, *exported_name;
+
+	nmtst_test_data_unpack_detail (test_data, &detail, &file, &exported_name);
 
 	connection = get_basic_connection (detail, plugin, SRCDIR, file);
 	ASSERT (connection != NULL, detail, "failed to import connection");
@@ -1495,61 +1496,64 @@ int main (int argc, char **argv)
 
 	nmtst_init (&argc, &argv, TRUE);
 
-	test_password_import ();
-	test_password_export ();
+#define _add_test_func_simple(func)       g_test_add_func ("/ovpn/properties/" #func, func)
+#define _add_test_func(detail, func, ...) nmtst_add_test_func ("/ovpn/properties/" detail, detail, func, ##__VA_ARGS__)
 
-	test_tls_import ();
-	test_tls_inline_import ();
-	test_tls_export ();
+	_add_test_func_simple (test_password_import);
+	_add_test_func_simple (test_password_export);
 
-	test_pkcs12_import ();
-	test_pkcs12_export ();
+	_add_test_func_simple (test_tls_import);
+	_add_test_func_simple (test_tls_inline_import);
+	_add_test_func_simple (test_tls_export);
 
-	test_non_utf8_import ();
+	_add_test_func_simple (test_pkcs12_import);
+	_add_test_func_simple (test_pkcs12_export);
 
-	test_static_key_import ();
-	test_static_key_export ();
+	_add_test_func_simple (test_non_utf8_import);
 
-	test_port_import ("port-import", "port.ovpn", "port", "2345");
-	test_port_export ("port-export", "port.ovpn", "port.ovpntest");
+	_add_test_func_simple (test_static_key_import);
+	_add_test_func_simple (test_static_key_export);
 
-	test_port_import ("rport-import", "rport.ovpn", "rport", "6789");
-	test_port_export ("rport-export", "rport.ovpn", "rport.ovpntest");
+	_add_test_func ("port-import", test_port_import, "port.ovpn", "port", "2345");
+	_add_test_func ("port-export", test_port_export, "port.ovpn", "port.ovpntest");
 
-	test_tun_opts_import ();
-	test_tun_opts_export ();
+	_add_test_func ("rport-import", test_port_import, "rport.ovpn", "rport", "6789");
+	_add_test_func ("rport-export", test_port_export, "rport.ovpn", "rport.ovpntest");
 
-	test_ping_import ("ping-with-exit-import", "ping-with-exit.ovpn", "10", "120", NULL);
-	test_ping_import ("ping-with-restart-import", "ping-with-restart.ovpn", "10", NULL, "30");
+	_add_test_func_simple (test_tun_opts_import);
+	_add_test_func_simple (test_tun_opts_export);
 
-	test_port_export ("ping-with-exit-export", "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
-	test_port_export ("ping-with-restart-export", "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
+	_add_test_func ("ping-with-exit-import", test_ping_import, "ping-with-exit.ovpn", "10", "120", NULL);
+	_add_test_func ("ping-with-restart-import", test_ping_import, "ping-with-restart.ovpn", "10", NULL, "30");
 
-	test_ping_import ("keepalive", "keepalive.ovpn", "10", NULL, "30");
-	test_port_export ("keepalive", "keepalive.ovpn", "keepalive.ovpntest");
+	_add_test_func ("ping-with-exit-export", test_port_export, "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
+	_add_test_func ("ping-with-restart-export", test_port_export, "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
 
-	test_proxy_http_import ();
-	test_proxy_http_export ();
+	_add_test_func ("keepalive-import", test_ping_import, "keepalive.ovpn", "10", NULL, "30");
+	_add_test_func ("keepalive-export", test_port_export, "keepalive.ovpn", "keepalive.ovpntest");
 
-	test_proxy_http_with_auth_import ();
+	_add_test_func_simple (test_proxy_http_import);
+	_add_test_func_simple (test_proxy_http_export);
 
-	test_proxy_socks_import ();
-	test_proxy_socks_export ();
+	_add_test_func_simple (test_proxy_http_with_auth_import);
 
-	test_keysize_import ();
-	test_keysize_export ();
+	_add_test_func_simple (test_proxy_socks_import);
+	_add_test_func_simple (test_proxy_socks_export);
 
-	test_device_import ("device-import-default", "device.ovpn", "company0", "tun");
-	test_device_export ("device-export-default", "device.ovpn", "device.ovpntest");
+	_add_test_func_simple (test_keysize_import);
+	_add_test_func_simple (test_keysize_export);
 
-	test_device_import ("device-import-notype", "device-notype.ovpn", "tap", NULL);
-	test_device_export ("device-export-notype", "device-notype.ovpn", "device-notype.ovpntest");
+	_add_test_func ("device-import-default", test_device_import, "device.ovpn", "company0", "tun");
+	_add_test_func ("device-export-default", test_device_export, "device.ovpn", "device.ovpntest");
 
-	test_route_import ();
-	test_route_export ();
+	_add_test_func ("device-import-notype", test_device_import, "device-notype.ovpn", "tap", NULL);
+	_add_test_func ("device-export-notype", test_device_export, "device-notype.ovpn", "device-notype.ovpntest");
 
-	test_args_parse_line ();
+	_add_test_func_simple (test_route_import);
+	_add_test_func_simple (test_route_export);
 
-	return 0;
+	_add_test_func_simple (test_args_parse_line);
+
+	return g_test_run ();
 }
 
