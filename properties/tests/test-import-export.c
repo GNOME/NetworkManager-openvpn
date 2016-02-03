@@ -1446,17 +1446,17 @@ test_args_parse_line (void)
 
 /*****************************************************************************/
 
+NMTST_DEFINE ();
+
 int main (int argc, char **argv)
 {
 	GError *error = NULL;
 	char *basename;
 	NMVpnEditorPlugin *plugin = NULL;
 
-#if !GLIB_CHECK_VERSION (2, 35, 0)
-	g_type_init ();
-#endif
-
 	_nmovpn_test_temp_path = TEST_BUILDDIR_CONF;
+
+	nmtst_init (&argc, &argv, TRUE);
 
 	plugin = nm_vpn_editor_plugin_factory (&error);
 	if (error)
