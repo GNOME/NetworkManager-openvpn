@@ -633,6 +633,8 @@ inline_blob_mkdir_parents (const InlineBlobData *data, const char *filepath, cha
 static gboolean
 inline_blob_write_out (const InlineBlobData *data, GError **error)
 {
+	mode_t saved_umask;
+
 	if (!_nmovpn_test_temp_path) {
 		gs_free char *err_msg = NULL;
 
@@ -649,6 +651,8 @@ inline_blob_write_out (const InlineBlobData *data, GError **error)
 		}
 	}
 
+	saved_umask = umask (S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+
 	/* The file is written with the default umask. Whether that is safe enough
 	 * to protect (potentally) private data or allows the openvpn service to
 	 * access the file later on is left as exercise for the user. */
@@ -660,9 +664,11 @@ inline_blob_write_out (const InlineBlobData *data, GError **error)
 		             data->token,
 		             (long) data->token_start_line,
 		             data->path);
+		umask (saved_umask);
 		return FALSE;
 	}
 
+	umask (saved_umask);
 	return TRUE;
 }
 
