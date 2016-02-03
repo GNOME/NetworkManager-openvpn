@@ -1466,7 +1466,6 @@ NMTST_DEFINE ();
 
 int main (int argc, char **argv)
 {
-	char *basename;
 	gs_unref_object NMVpnEditorPlugin *plugin = NULL;
 
 	_nmovpn_test_temp_path = TEST_BUILDDIR_CONF;
@@ -1531,9 +1530,6 @@ int main (int argc, char **argv)
 
 	test_args_parse_line ();
 
-	basename = g_path_get_basename (argv[0]);
-	fprintf (stdout, "%s: SUCCESS\n", basename);
-	g_free (basename);
 	return 0;
 }
 
