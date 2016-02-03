@@ -52,16 +52,6 @@ _create_plugin (void)
 
 /*****************************************************************************/
 
-inline static in_addr_t
-_addr_from_string (const char *saddr)
-{
-	in_addr_t a;
-
-	g_assert (saddr);
-	g_assert (inet_pton (AF_INET, saddr, &a) == 1);
-	return a;
-}
-
 static NMConnection *
 get_basic_connection (const char *detail,
                       NMVpnEditorPlugin *plugin,
@@ -1260,28 +1250,28 @@ test_route_import (NMVpnEditorPlugin *plugin,
 
 		/* route 1 */
 		route = nm_setting_ip4_config_get_route (s_ip4, 0);
-		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest1));
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest1));
 		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix1,
 		        detail, "unexpected prefix of 1. route");
-		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh1));
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh1));
 		ASSERT (nm_ip4_route_get_metric (route) == METR (expected_metric1),
 		        detail, "unexpected metric of 1. route");
 
 		/* route 2 */
 		route = nm_setting_ip4_config_get_route (s_ip4, 1);
-		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest2));
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest2));
 		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix2,
 		        detail, "unexpected prefix of 2. route");
-		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh2));
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh2));
 		ASSERT (nm_ip4_route_get_metric (route) == METR (expected_metric2),
 		        detail, "unexpected metric of 2. route");
 
 		/* route 3 */
 		route = nm_setting_ip4_config_get_route (s_ip4, 2);
-		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, _addr_from_string (expected_dest3));
+		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest3));
 		ASSERT (nm_ip4_route_get_prefix (route) == expected_prefix3,
 		        detail, "unexpected prefix of 3. route");
-		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, _addr_from_string (expected_nh3));
+		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh3));
 		ASSERT (nm_ip4_route_get_metric (route) == METR (expected_metric3),
 		        detail, "unexpected metric of 3. route");
 	}
