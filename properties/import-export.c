@@ -38,377 +38,512 @@
 #include "nm-openvpn.h"
 #include "nm-openvpn-service-defines.h"
 #include "utils.h"
-
-#define CA_BLOB_START_TAG "<ca>"
-#define CA_BLOB_END_TAG "</ca>"
-#define CERT_BLOB_START_TAG "<cert>"
-#define CERT_BLOB_END_TAG "</cert>"
-#define KEY_BLOB_START_TAG "<key>"
-#define KEY_BLOB_END_TAG "</key>"
-#define TLS_AUTH_BLOB_START_TAG "<tls-auth>"
-#define TLS_AUTH_BLOB_END_TAG "</tls-auth>"
-
-#define AUTH_TAG "auth "
-#define AUTH_USER_PASS_TAG "auth-user-pass"
-#define CA_TAG "ca "
-#define CERT_TAG "cert "
-#define CIPHER_TAG "cipher "
-#define KEYSIZE_TAG "keysize "
-#define CLIENT_TAG "client"
-#define COMP_TAG "comp-lzo"
-#define FLOAT_TAG "float"
-#define DEV_TAG "dev "
-#define DEV_TYPE_TAG "dev-type "
-#define FRAGMENT_TAG "fragment "
-#define IFCONFIG_TAG "ifconfig "
-#define KEY_TAG "key "
-#define KEEPALIVE_TAG "keepalive "
-#define MSSFIX_TAG "mssfix"
-#define PING_TAG "ping "
-#define PING_EXIT_TAG "ping-exit "
-#define PING_RESTART_TAG "ping-restart "
-#define PKCS12_TAG "pkcs12 "
-#define PORT_TAG "port "
-#define PROTO_TAG "proto "
-#define HTTP_PROXY_TAG "http-proxy "
-#define HTTP_PROXY_RETRY_TAG "http-proxy-retry"
-#define SOCKS_PROXY_TAG "socks-proxy "
-#define SOCKS_PROXY_RETRY_TAG "socks-proxy-retry"
-#define REMOTE_TAG "remote "
-#define REMOTE_RANDOM_TAG "remote-random"
-#define RENEG_SEC_TAG "reneg-sec "
-#define RPORT_TAG "rport "
-#define SECRET_TAG "secret "
-#define TLS_AUTH_TAG "tls-auth "
-#define KEY_DIRECTION_TAG "key-direction "
-#define TLS_CLIENT_TAG "tls-client"
-#define TLS_REMOTE_TAG "tls-remote "
-#define REMOTE_CERT_TLS_TAG "remote-cert-tls "
-#define TUNMTU_TAG "tun-mtu "
-#define ROUTE_TAG "route "
+#include "nm-macros-internal.h"
 
 
-/**
- * args_is_option:
- * @line: the entire line from the config file
- * @tag: the option tag to match against. Optionally
- *   terminated by white space.
- *
- * Returns: %TRUE if @line starts with @tag.
- * */
-static gboolean
-args_is_option (const char *line, const char *tag)
+#define INLINE_BLOB_CA                  "ca"
+#define INLINE_BLOB_CERT                "cert"
+#define INLINE_BLOB_KEY                 "key"
+#define INLINE_BLOB_PKCS12              "pkcs12"
+#define INLINE_BLOB_SECRET              "secret"
+#define INLINE_BLOB_TLS_AUTH            "tls-auth"
+
+#define TAG_AUTH                        "auth"
+#define TAG_AUTH_USER_PASS              "auth-user-pass"
+#define TAG_CA                          "ca"
+#define TAG_CERT                        "cert"
+#define TAG_CIPHER                      "cipher"
+#define TAG_CLIENT                      "client"
+#define TAG_COMP_LZO                    "comp-lzo"
+#define TAG_DEV                         "dev"
+#define TAG_DEV_TYPE                    "dev-type"
+#define TAG_FLOAT                       "float"
+#define TAG_FRAGMENT                    "fragment"
+#define TAG_HTTP_PROXY                  "http-proxy"
+#define TAG_HTTP_PROXY_RETRY            "http-proxy-retry"
+#define TAG_IFCONFIG                    "ifconfig"
+#define TAG_KEEPALIVE                   "keepalive"
+#define TAG_KEY_DIRECTION               "key-direction"
+#define TAG_KEY                         "key"
+#define TAG_KEYSIZE                     "keysize"
+#define TAG_MSSFIX                      "mssfix"
+#define TAG_NOBIND                      "nobind"
+#define TAG_PING_EXIT                   "ping-exit"
+#define TAG_PING                        "ping"
+#define TAG_PING_RESTART                "ping-restart"
+#define TAG_PKCS12                      "pkcs12"
+#define TAG_PORT                        "port"
+#define TAG_PROTO                       "proto"
+#define TAG_REMOTE_CERT_TLS             "remote-cert-tls"
+#define TAG_REMOTE_RANDOM               "remote-random"
+#define TAG_REMOTE                      "remote"
+#define TAG_RENEG_SEC                   "reneg-sec"
+#define TAG_ROUTE                       "route"
+#define TAG_RPORT                       "rport"
+#define TAG_SECRET                      "secret"
+#define TAG_SOCKS_PROXY_RETRY           "socks-proxy-retry"
+#define TAG_SOCKS_PROXY                 "socks-proxy"
+#define TAG_TLS_AUTH                    "tls-auth"
+#define TAG_TLS_CLIENT                  "tls-client"
+#define TAG_TLS_REMOTE                  "tls-remote"
+#define TAG_TOPOLOGY                    "topology"
+#define TAG_TUN_MTU                     "tun-mtu"
+
+
+const char *_nmovpn_test_temp_path = NULL;
+
+static void
+__attribute__((__format__ (__printf__, 3, 4)))
+setting_vpn_add_data_item_v (NMSettingVpn *setting,
+                             const char *key,
+                             const char *format,
+                             ...)
 {
-	gsize len;
+	char buf[256];
+	char *s;
+	int l;
+	va_list ap, ap2;
 
-	g_return_val_if_fail (line, FALSE);
-	g_return_val_if_fail (tag, FALSE);
-	g_return_val_if_fail (tag[0], FALSE);
+	g_return_if_fail (NM_IS_SETTING_VPN (setting));
 
-	len = strlen (tag);
+	/* let's first try with a stack allocated buffer,
+	 * it's large enough for most cases. */
+	va_start (ap, format);
+	va_copy (ap2, ap);
+	l = g_vsnprintf (buf, sizeof (buf), format, ap2);
+	va_end (ap2);
 
-	/* allow the tag to be terminated by whitespace */
-	if (g_ascii_isspace (tag[len - 1]))
-		len--;
+	if (l < sizeof (buf) - 1) {
+		va_end (ap);
+		nm_setting_vpn_add_data_item (setting, key, buf);
+		return;
+	}
 
-	if (strncmp (line, tag, len) != 0)
-		return FALSE;
-	if (line[len] == '\0' || g_ascii_isspace (line[len]))
-		return TRUE;
-	return FALSE;
+	s = g_strdup_vprintf (format, ap);
+	va_end (ap);
+	nm_setting_vpn_add_data_item (setting, key, s);
+	g_free (s);
 }
 
-static char *
-unquote (const char *line, char **leftover)
+static gboolean
+_streq0 (const char *s1, const char *s2)
 {
-	char *tmp, *item, *unquoted = NULL, *p;
-	gboolean quoted = FALSE;
-
-	if (leftover)
-		g_return_val_if_fail (*leftover == NULL, FALSE);
-
-	tmp = g_strdup (line);
-	item = g_strstrip (tmp);
-	if (!strlen (item)) {
-		g_free (tmp);
-		return NULL;
-	}
-
-	/* Simple unquote */
-	if ((item[0] == '"') || (item[0] == '\'')) {
-		quoted = TRUE;
-		item++;
-	}
-
-	/* Unquote stuff using openvpn unquoting rules */
-	unquoted = g_malloc0 (strlen (item) + 1);
-	for (p = unquoted; *item; item++, p++) {
-		if (quoted && ((*item == '"') || (*item == '\'')))
-			break;
-		else if (!quoted && isspace (*item))
-			break;
-
-		if (*item == '\\' && *(item+1) == '\\')
-			*p = *(++item);
-		else if (*item == '\\' && *(item+1) == '"')
-			*p = *(++item);
-		else if (*item == '\\' && *(item+1) == ' ')
-			*p = *(++item);
-		else
-			*p = *item;
-	}
-	if (leftover && *item)
-		*leftover = g_strdup (item + 1);
-
-	g_free (tmp);
-	return unquoted;
+	return g_strcmp0 (s1, s2) == 0;
 }
 
+static gboolean
+_streq (const char *s1, const char *s2)
+{
+	g_return_val_if_fail (s1, FALSE);
+	g_return_val_if_fail (s2, FALSE);
+
+	return strcmp (s1, s2) == 0;
+}
 
 static gboolean
-handle_path_item (const char *line,
-                  const char *tag,
-                  const char *key,
-                  NMSettingVpn *s_vpn,
-                  const char *path,
-                  char **leftover)
+_str_in_set_impl (const char *option, ...)
 {
-	char *file, *full_path = NULL;
+	va_list ap;
+	const char *tag;
+	gboolean found = FALSE;
 
-	if (!args_is_option (line, tag))
-		return FALSE;
+	g_return_val_if_fail (option, FALSE);
 
-	file = unquote (line + strlen (tag), leftover);
-	if (!file) {
-		if (leftover) {
-			g_free (*leftover);
-			leftover = NULL;
+	va_start (ap, option);
+	tag = va_arg (ap, const char *);
+	if (!tag)
+		g_return_val_if_reached (FALSE);
+	do {
+		if (strcmp (option, tag) == 0) {
+			found = TRUE;
+			break;
+		}
+	} while ((tag = va_arg (ap, const char *)));
+	va_end (ap);
+
+	return found;
+}
+#define _str_in_set(option, ...) _str_in_set_impl (option, __VA_ARGS__, NULL)
+
+static gboolean
+args_params_check_nargs_minmax (const char **params, guint nargs_min, guint nargs_max, char **out_error)
+{
+	guint nargs;
+
+	g_return_val_if_fail (params, FALSE);
+	g_return_val_if_fail (params[0], FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
+
+	nargs = g_strv_length ((char **) params) - 1;
+
+	if (nargs < nargs_min || nargs > nargs_max) {
+		if (nargs_min == nargs_max) {
+			*out_error = g_strdup_printf (_("option %s expects %s argument%s"),
+			                              params[0],
+			                              nargs_min == 0
+			                                  ? "no"
+			                                  : (nargs_min == 1
+			                                         ? "exactly one"
+			                                         : nm_sprintf_bufa (100, "%u", nargs_min)),
+			                              nargs_min == 1 ? "" : "s");
+		} else {
+			*out_error = g_strdup_printf (_("option %s expects between %u and %u arguments"),
+			                              params[0],
+			                              nargs_min,
+			                              nargs_max);
 		}
 		return FALSE;
 	}
-
-	/* If file isn't an absolute file name, add the default path */
-	if (!g_path_is_absolute (file))
-		full_path = g_build_filename (path, file, NULL);
-
-	nm_setting_vpn_add_data_item (s_vpn, key, full_path ? full_path : file);
-
-	g_free (file);
-	g_free (full_path);
 	return TRUE;
 }
 
-static void
-handle_direction (const char *tag, const char *key, char *leftover, NMSettingVpn *s_vpn);
+static gboolean
+args_params_check_nargs_n (const char **params, guint nargs, char **out_error)
+{
+	return args_params_check_nargs_minmax (params, nargs, nargs, out_error);
+}
 
 static gboolean
-handle_blob_item (const char ***line,
-                  const char *key,
-                  NMSettingVpn *s_vpn,
-                  const char *name,
-                  GError **error)
+args_params_parse_int64 (const char **params,
+                         guint n_param,
+                         gint64 min,
+                         gint64 max,
+                         gint64 *out,
+                         char **out_error)
 {
-	gboolean success = FALSE;
-	const char *start_tag, *end_tag;
-	char *filename = NULL;
-	char *dirname = NULL;
-	char *path = NULL;
-	GString *in_file = NULL;
-	const char **p;
+	gint64 v;
 
-#define NEXT_LINE \
-	G_STMT_START { \
-		do { \
-			p++; \
-			if (!*p) \
-				goto finish; \
-		} while (*p[0] == '\0' || *p[0] == '#' || *p[0] == ';'); \
-	} G_STMT_END
+	g_return_val_if_fail (params, FALSE);
+	g_return_val_if_fail (params[0], FALSE);
+	g_return_val_if_fail (n_param > 0, FALSE);
+	g_return_val_if_fail (n_param < g_strv_length ((char **) params), FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
 
-	if (!strcmp (key, NM_OPENVPN_KEY_CA)) {
-		start_tag = CA_BLOB_START_TAG;
-		end_tag = CA_BLOB_END_TAG;
-	} else if (!strcmp (key, NM_OPENVPN_KEY_CERT)) {
-		start_tag = CERT_BLOB_START_TAG;
-		end_tag = CERT_BLOB_END_TAG;
-	} else if (!strcmp (key, NM_OPENVPN_KEY_TA)) {
-		start_tag = TLS_AUTH_BLOB_START_TAG;
-		end_tag = TLS_AUTH_BLOB_END_TAG;
-	} else if (!strcmp (key, NM_OPENVPN_KEY_KEY)) {
-		start_tag = KEY_BLOB_START_TAG;
-		end_tag = KEY_BLOB_END_TAG;
-	} else
-		g_return_val_if_reached (FALSE);
-	p = *line;
-	if (strncmp (*p, start_tag, strlen (start_tag)))
-		goto finish;
-
-	NEXT_LINE;
-
-	in_file = g_string_new (NULL);
-
-	while (*p && strcmp (*p, end_tag)) {
-		g_string_append (in_file, *p);
-		g_string_append_c (in_file, '\n');
-		NEXT_LINE;
+	v = _nm_utils_ascii_str_to_int64 (params[n_param], 10, min, max, -1);
+	if (errno) {
+		*out_error = g_strdup_printf (_("invalid %uth argument to '%s' where number expected"),
+		                              n_param,
+		                              params[0]);
+		return FALSE;
 	}
-
-	/* Construct file name to write the data in */
-	filename = g_strdup_printf ("%s-%s.pem", name, key);
-	dirname = g_build_filename (g_get_home_dir (), ".cert", NULL);
-	path = g_build_filename (dirname, filename, NULL);
-
-	/* Check that dirname exists and is a directory, otherwise create it */
-	if (!g_file_test (dirname, G_FILE_TEST_IS_DIR)) {
-		if (!g_file_test (dirname, G_FILE_TEST_EXISTS)) {
-			if (mkdir (dirname, 0755) < 0)
-				goto finish;  /* dirname could not be created */
-		} else
-			goto finish;  /* dirname is not a directory */
-	}
-
-	/* Write the new file */
-	success = g_file_set_contents (path, in_file->str, -1, error);
-	if (!success)
-		goto finish;
-
-	nm_setting_vpn_add_data_item (s_vpn, key, path);
-finish:
-	*line = p;
-	g_free (filename);
-	g_free (dirname);
-	g_free (path);
-	if (in_file)
-		g_string_free (in_file, TRUE);
-
-	return success;
-
+	*out = v;
+	return TRUE;
 }
 
-static char **
-get_args (const char *line, int *nitems)
+static gboolean
+args_params_parse_port (const char **params, guint n_param, gint64 *out, char **out_error)
 {
-	char **split, **sanitized, **tmp, **tmp2;
-
-	split = g_strsplit_set (line, " \t", 0);
-	sanitized = g_malloc0 (sizeof (char *) * (g_strv_length (split) + 1));
-
-	for (tmp = split, tmp2 = sanitized; *tmp; tmp++) {
-		if (strlen (*tmp))
-			*tmp2++ = g_strdup (*tmp);
-	}
-
-	g_strfreev (split);
-	*nitems = g_strv_length (sanitized);
-
-	return sanitized;
+	return args_params_parse_int64 (params, n_param, 1, 65535, out, out_error);
 }
 
-static void
-handle_direction (const char *tag, const char *key, char *leftover, NMSettingVpn *s_vpn)
+static gboolean
+args_params_parse_ip4 (const char **params,
+                       guint n_param,
+                       in_addr_t *out,
+                       char **out_error)
 {
-	glong direction;
+	in_addr_t a;
 
-	if (!leftover)
-		return;
+	g_return_val_if_fail (params, FALSE);
+	g_return_val_if_fail (params[0], FALSE);
+	g_return_val_if_fail (n_param > 0, FALSE);
+	g_return_val_if_fail (n_param < g_strv_length ((char **) params), FALSE);
+	g_return_val_if_fail (out, FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
 
-	leftover = g_strstrip (leftover);
-	if (!strlen (leftover))
-		return;
+	if (inet_pton (AF_INET, params[n_param], &a) != 1) {
+		*out_error = g_strdup_printf (_("invalid %uth argument to '%s' where IPv4 address expected"),
+		                              n_param,
+		                              params[0]);
+		return FALSE;
+	}
+	*out = a;
+	return TRUE;
+}
 
-	errno = 0;
-	direction = strtol (leftover, NULL, 10);
-	if (errno == 0) {
-		if (direction == 0)
-			nm_setting_vpn_add_data_item (s_vpn, key, "0");
-		else if (direction == 1)
-			nm_setting_vpn_add_data_item (s_vpn, key, "1");
-	} else
-		g_warning ("%s: unknown %s direction '%s'", __func__, tag, leftover);
+static gboolean
+args_params_parse_key_direction (const char **params,
+                                 guint n_param,
+                                 const char **out_key_direction,
+                                 char **out_error)
+{
+	g_return_val_if_fail (params, FALSE);
+	g_return_val_if_fail (params[0], FALSE);
+	g_return_val_if_fail (n_param > 0, FALSE);
+	g_return_val_if_fail (n_param < g_strv_length ((char **) params), FALSE);
+	g_return_val_if_fail (out_key_direction, FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
+
+	/* params will be freed in the next loop iteration. "internalize" the values. */
+	if (_streq (params[n_param], "0"))
+		*out_key_direction = "0";
+	else if (_streq (params[n_param], "1"))
+		*out_key_direction = "1";
+	else {
+		*out_error = g_strdup_printf (_("invalid %uth key-direction argument to '%s'"), n_param, params[0]);
+		return FALSE;
+	}
+	return TRUE;
 }
 
 static char *
-parse_port (const char *str, const char *line)
+args_params_error_message_invalid_arg (const char **params, guint n_param)
 {
-	glong port;
+	g_return_val_if_fail (params, NULL);
+	g_return_val_if_fail (params[0], NULL);
+	g_return_val_if_fail (n_param > 0, FALSE);
+	g_return_val_if_fail (n_param < g_strv_length ((char **) params), FALSE);
 
-	errno = 0;
-	port = strtol (str, NULL, 10);
-	if ((errno == 0) && (port > 0) && (port < 65536))
-		return g_strdup_printf ("%d", (gint) port);
-
-	g_warning ("%s: invalid remote port in option '%s'", __func__, line);
-	return NULL;
+	return g_strdup_printf (_("invalid %uth argument to '%s'"), n_param, params[0]);
 }
 
-/* returns -1 in case of error */
-static int
-parse_seconds (const char *str, const char *line)
+static char
+_ch_step_1 (const char **str, gsize *len)
 {
-	glong secs;
+	char ch;
+	g_assert (str);
+	g_assert (len && *len > 0);
 
-	errno = 0;
-	secs = strtol (str, NULL, 10);
-	if ((errno == 0) && (secs >= 0) && (secs <= G_MAXINT))
-		return (int) secs;
+	ch = (*str)[0];
 
-	g_warning ("%s: invalid number of seconds in option '%s' - must be in [0, %d]", __func__, line, G_MAXINT);
-	return -1;
+	(*str)++;
+	(*len)--;
+	return ch;
+}
+
+static void
+_ch_skip_over_leading_whitespace (const char **str, gsize *len)
+{
+	while (*len > 0 && g_ascii_isspace ((*str)[0]))
+		_ch_step_1 (str, len);
+}
+
+static void
+_strbuf_append_c (char **buf, gsize *len, char ch)
+{
+	nm_assert (buf);
+	nm_assert (len);
+
+	g_return_if_fail (*len > 0);
+
+	(*buf)[0] = ch;
+	(*len)--;
+	*buf = &(*buf)[1];
 }
 
 static gboolean
-parse_protocol (const char *str, const char *line, gboolean *is_tcp)
+args_parse_line (const char *line,
+                 gsize line_len,
+                 const char ***out_p,
+                 char **out_error)
 {
-	if (!g_strcmp0 (str, "udp")) {
-		if (is_tcp)
-			*is_tcp = FALSE;
-		return TRUE;
-	} else if (!g_strcmp0 (str, "tcp")) {
-		if (is_tcp)
-			*is_tcp = TRUE;
-		return TRUE;
-	} else {
-		g_warning ("%s: invalid protocol in option '%s'", __func__, line);
-		return FALSE;
+	gs_unref_array GArray *index = NULL;
+	gs_free char *str_buf_orig = NULL;
+	char *str_buf;
+	gsize str_buf_len;
+	gsize i;
+	const char *line_start = line;
+	char **data;
+	char *pdata;
+
+	/* reimplement openvpn's parse_line(). */
+
+	g_return_val_if_fail (line, FALSE);
+	g_return_val_if_fail (out_p && !*out_p, FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
+
+	*out_p = NULL;
+
+	/* we expect no newline during the first line_len chars. */
+	for (i = 0; i < line_len; i++) {
+		if (NM_IN_SET (line[i], '\0', '\n'))
+			g_return_val_if_reached (FALSE);
 	}
+
+	/* if the line ends with '\r', drop that right way (covers \r\n). */
+	if (line_len > 0 && line[line_len - 1] == '\r')
+		line_len--;
+
+	/* skip over leading space. */
+	_ch_skip_over_leading_whitespace (&line, &line_len);
+
+	if (line_len == 0)
+		return TRUE;
+
+	if (NM_IN_SET (line[0], ';', '#')) {
+		/* comment. Note that als openvpn allows for leading spaces
+		 * *before* the comment starts */
+		return TRUE;
+	}
+
+	/* the maximum required buffer is @line_len+1 characters. We don't produce
+	 * *more* characters then given in the input (plus trailing '\0'). */
+	str_buf_len = line_len + 1;
+	str_buf_orig = g_malloc (str_buf_len);
+	str_buf = str_buf_orig;
+
+	index = g_array_new (FALSE, FALSE, sizeof (gsize));
+
+	do {
+		char quote, ch0;
+		gssize word_start = line - line_start;
+		gsize index_i;
+
+		index_i = str_buf - str_buf_orig;
+		g_array_append_val (index, index_i);
+
+		do {
+			switch ((ch0 = _ch_step_1 (&line, &line_len))) {
+			case '"':
+			case '\'':
+				quote = ch0;
+
+				while (line_len > 0 && line[0] != quote) {
+					if (quote == '"' && line[0] == '\\') {
+						_ch_step_1 (&line, &line_len);
+						if (line_len <= 0)
+							break;
+					}
+					_strbuf_append_c (&str_buf, &str_buf_len, _ch_step_1 (&line, &line_len));
+				}
+
+				if (line_len <= 0) {
+					*out_error = g_strdup_printf (_("unterminated %s at position %lld"),
+					                              quote == '"' ? _("double quote") : _("single quote"),
+					                              (long long) word_start);
+					return FALSE;
+				}
+
+				_ch_step_1 (&line, &line_len);
+				break;
+			case '\\':
+				if (line_len <= 0) {
+					*out_error = g_strdup_printf (_("trailing escaping backslash at position %lld"),
+					                              (long long) word_start);
+					return FALSE;
+				}
+				_strbuf_append_c (&str_buf, &str_buf_len, _ch_step_1 (&line, &line_len));
+				break;
+			default:
+				if (g_ascii_isspace (ch0))
+					goto word_completed;
+				_strbuf_append_c (&str_buf, &str_buf_len, ch0);
+				break;
+			}
+		} while (line_len > 0);
+word_completed:
+
+		/* the current word is complete.*/
+		_strbuf_append_c (&str_buf, &str_buf_len, '\0');
+		_ch_skip_over_leading_whitespace (&line, &line_len);
+	} while (line_len > 0);
+
+	str_buf_len = str_buf - str_buf_orig;
+
+	/* pack the result in a strv array */
+	data = g_malloc ((sizeof (const char *) * (index->len + 1)) + str_buf_len);
+
+	pdata = (char *) &data[index->len + 1];
+	memcpy (pdata, str_buf_orig, str_buf_len);
+
+	for (i = 0; i < index->len; i++)
+		data[i] = &pdata[g_array_index (index, gsize, i)];
+	data[i] = NULL;
+
+	*out_p = (const char **) data;
+
+	return TRUE;
+}
+
+gboolean
+_nmovpn_test_args_parse_line (const char *line,
+                              gsize line_len,
+                              const char ***out_p,
+                              char **out_error)
+{
+	return args_parse_line (line, line_len, out_p, out_error);
 }
 
 static gboolean
-parse_http_proxy_auth (const char *path,
+args_next_line (const char **content,
+                gsize *content_len,
+                const char **cur_line,
+                gsize *cur_line_len,
+                const char **cur_line_delimiter)
+{
+	const char *s;
+	gsize l, offset;
+
+	g_return_val_if_fail (content, FALSE);
+	g_return_val_if_fail (content_len, FALSE);
+	g_return_val_if_fail (cur_line, FALSE);
+	g_return_val_if_fail (cur_line_len, FALSE);
+	g_return_val_if_fail (cur_line_delimiter, FALSE);
+
+	l = *content_len;
+
+	if (l <= 0)
+		return FALSE;
+
+	*cur_line = s = *content;
+
+	while (l > 0 && !NM_IN_SET (s[0], '\0', '\n'))
+		_ch_step_1 (&s, &l);
+
+	offset = s - *content;
+	*cur_line_len = offset;
+
+	/* cur_line_delimiter will point to a (static) string
+	 * containing the dropped character.
+	 * Or NULL if we reached the end of content. */
+	if (l > 0) {
+		if (s[0] == '\0')
+			*cur_line_delimiter = "\0";
+		else
+			*cur_line_delimiter = "\n";
+		offset++;
+	} else
+		*cur_line_delimiter = NULL;
+
+	*content_len -= offset;
+	*content += offset;
+
+	return TRUE;
+}
+
+static gboolean
+parse_http_proxy_auth (const char *default_path,
                        const char *file,
                        char **out_user,
-                       char **out_pass)
+                       char **out_pass,
+                       char **out_error)
 {
-	char *contents = NULL, *abspath = NULL, *tmp;
-	GError *error = NULL;
+	gs_free char *file_free = NULL;
+	gs_free char *contents = NULL;
 	char **lines, **iter;
 
-	g_return_val_if_fail (out_user != NULL, FALSE);
-	g_return_val_if_fail (out_pass != NULL, FALSE);
+	g_return_val_if_fail (out_user && !*out_user, FALSE);
+	g_return_val_if_fail (out_pass && !*out_pass, FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
 
-	if (!file || !strcmp (file, "stdin") || !strcmp (file, "auto") || !strcmp (file, "'auto'"))
+	if (!file ||
+	    _str_in_set (file, "stdin", "auto"))
 		return TRUE;
 
 	if (!g_path_is_absolute (file)) {
-		tmp = g_path_get_dirname (path);
-		abspath = g_build_path ("/", tmp, file, NULL);
-		g_free (tmp);
-	} else
-		abspath = g_strdup (file);
+		file_free = g_build_path ("/", default_path, file, NULL);
+		file = file_free;
+	}
 
 	/* Grab user/pass from authfile */
-	if (!g_file_get_contents (abspath, &contents, NULL, &error)) {
-		g_warning ("%s: unable to read HTTP proxy authfile '%s': (%d) %s",
-		           __func__, abspath, error ? error->code : -1,
-		           error && error->message ? error->message : "(unknown)");
-		g_clear_error (&error);
-		g_free (abspath);
+	if (!g_file_get_contents (file, &contents, NULL, NULL)) {
+		*out_error = g_strdup_printf (_("unable to read HTTP proxy auth file"));
 		return FALSE;
 	}
 
 	lines = g_strsplit_set (contents, "\n\r", 0);
 	for (iter = lines; iter && *iter; iter++) {
-		if (!strlen (*iter))
+		if ((*iter)[0] == '\0')
 			continue;
 		if (!*out_user)
 			*out_user = g_strdup (g_strstrip (*iter));
@@ -417,87 +552,164 @@ parse_http_proxy_auth (const char *path,
 			break;
 		}
 	}
-	if (lines)
-		g_strfreev (lines);
-	g_free (contents);
-	g_free (abspath);
+	g_strfreev (lines);
 
-	return *out_user && *out_pass;
-}
-
-static gboolean
-handle_num_seconds_item (const char *line,
-                         const char *tag,
-                         const char *key,
-                         NMSettingVpn *s_vpn)
-{
-	char **items = NULL;
-	int nitems;
-	int seconds;
-
-	if (!args_is_option (line, tag))
-		return FALSE;
-
-	items = get_args (line + strlen (tag), &nitems);
-	if (nitems == 1) {
-		seconds = parse_seconds (items[0], line);
-		if (seconds >= 0) {
-			char *tmp;
-
-			tmp = g_strdup_printf ("%d", seconds);
-			nm_setting_vpn_add_data_item (s_vpn, key, tmp);
-			g_free (tmp);
-		}
-	} else
-		g_warning ("%s: invalid number of arguments in option '%s', must be one integer", __func__, line);
-
-	g_strfreev (items);
-	return TRUE;
-}
-
-static gboolean
-parse_ip (const char *str, const char *line, guint32 *out_ip)
-{
-	struct in_addr ip;
-
-	if (inet_pton (AF_INET, str, &ip) <= 0) {
-		g_warning ("%s: invalid IP '%s' in option '%s'", __func__, str, line);
+	if (!*out_user || !*out_pass) {
+		*out_error = g_strdup_printf (_("cannot read user/password from HTTP proxy auth file"));
+		g_clear_pointer (out_user, g_free);
+		g_clear_pointer (out_pass, g_free);
 		return FALSE;
 	}
-	if (out_ip)
-		*out_ip = ip.s_addr;
 	return TRUE;
 }
+
+/*****************************************************************************/
+
+typedef struct {
+	char *token;
+	char *path;
+	gsize token_start_line;
+	GString *blob_data;
+	const char *key;
+} InlineBlobData;
+
+static void
+inline_blob_data_free (InlineBlobData *data)
+{
+	g_return_if_fail (data);
+
+	g_free (data->token);
+	g_free (data->path);
+	g_string_free (data->blob_data, TRUE);
+	g_slice_free (InlineBlobData, data);
+}
+
+static char *
+inline_blob_construct_path (const char *basename, const char *token)
+{
+	gs_free char *f_filename = NULL;
+
+	g_return_val_if_fail (basename, NULL);
+	g_return_val_if_fail (token && token[0], NULL);
+
+	/* Construct file name to write the data in */
+	f_filename = g_strdup_printf ("%s-%s.pem", basename, token);
+
+	if (_nmovpn_test_temp_path)
+		return g_build_filename (_nmovpn_test_temp_path, f_filename, NULL);
+
+	return g_build_filename (g_get_home_dir (), ".cert/nm-openvpn", f_filename, NULL);
+}
+
+static gboolean
+inline_blob_mkdir_parents (const InlineBlobData *data, const char *filepath, char **out_error)
+{
+	gs_free char *dirname = NULL;
+
+	g_return_val_if_fail (filepath && filepath[0], FALSE);
+	g_return_val_if_fail (out_error && !*out_error, FALSE);
+
+	dirname = g_path_get_dirname (filepath);
+	if (_str_in_set (dirname, "/", "."))
+		return TRUE;
+
+	if (g_file_test (dirname, G_FILE_TEST_IS_DIR))
+		return TRUE;
+
+	if (g_file_test (dirname, G_FILE_TEST_EXISTS)) {
+		*out_error = g_strdup_printf (_("'%s' is not a directory"), dirname);
+		return FALSE;
+	}
+
+	if (!inline_blob_mkdir_parents (data, dirname, out_error))
+		return FALSE;
+
+	if (mkdir (dirname, 0755) < 0) {
+		*out_error = g_strdup_printf (_("cannot create '%s' directory"), dirname);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+static gboolean
+inline_blob_write_out (const InlineBlobData *data, GError **error)
+{
+	mode_t saved_umask;
+
+	if (!_nmovpn_test_temp_path) {
+		gs_free char *err_msg = NULL;
+
+		/* in test mode we don't create the certificate directory. */
+		if (!inline_blob_mkdir_parents (data, data->path, &err_msg)) {
+			g_set_error (error,
+			             OPENVPN_EDITOR_PLUGIN_ERROR,
+			             OPENVPN_EDITOR_PLUGIN_ERROR_FAILED,
+			             _("cannot write <%s> blob from line %ld to file (%s)"),
+			             data->token,
+			             (long) data->token_start_line,
+			             err_msg);
+			return FALSE;
+		}
+	}
+
+	saved_umask = umask (S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+
+	/* The file is written with the default umask. Whether that is safe enough
+	 * to protect (potentally) private data or allows the openvpn service to
+	 * access the file later on is left as exercise for the user. */
+	if (!g_file_set_contents (data->path, data->blob_data->str, data->blob_data->len, NULL)) {
+		g_set_error (error,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_FAILED,
+		             _("cannot write <%s> blob from line %ld to file '%s'"),
+		             data->token,
+		             (long) data->token_start_line,
+		             data->path);
+		umask (saved_umask);
+		return FALSE;
+	}
+
+	umask (saved_umask);
+	return TRUE;
+}
+
+/*****************************************************************************/
 
 NMConnection *
 do_import (const char *path, const char *contents, gsize contents_len, GError **error)
 {
-	NMConnection *connection = NULL;
+	gs_unref_object NMConnection *connection_free = NULL;
+	NMConnection *connection;
 	NMSettingConnection *s_con;
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
-	char *last_dot;
-	char **line, **lines = NULL;
+	const char *cur_line, *cur_line_delimiter;
+	gsize cur_line_len;
+	gsize contents_cur_line;
 	gboolean have_client = FALSE, have_remote = FALSE;
 	gboolean have_pass = FALSE, have_sk = FALSE;
 	const char *ctype = NULL;
-	char *basename;
-	char *default_path, *tmp, *tmp2;
-	char *new_contents = NULL;
-	gboolean http_proxy = FALSE, socks_proxy = FALSE, proxy_set = FALSE;
-	int nitems;
-	char *last_seen_key_direction = NULL;
+	gs_free char *basename = NULL;
+	gs_free char *default_path = NULL;
+	char *tmp, *tmp2;
+	gs_free char *new_contents = NULL;
+	const char *last_seen_key_direction = NULL;
+	gboolean have_certs, have_ca;
+	GSList *inline_blobs = NULL, *sl_iter;
+
+	g_return_val_if_fail (!error || !*error, NULL);
 
 	connection = nm_simple_connection_new ();
+	connection_free = connection;
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
 	nm_connection_add_setting (connection, NM_SETTING (s_con));
 	s_ip4 = NM_SETTING_IP_CONFIG (nm_setting_ip4_config_new ());
 	nm_connection_add_setting (connection, NM_SETTING (s_ip4));
 	g_object_set (s_ip4, NM_SETTING_IP_CONFIG_METHOD, NM_SETTING_IP4_CONFIG_METHOD_AUTO, NULL);
-
 	s_vpn = NM_SETTING_VPN (nm_setting_vpn_new ());
-
 	g_object_set (s_vpn, NM_SETTING_VPN_SERVICE_TYPE, NM_VPN_SERVICE_TYPE_OPENVPN, NULL);
+	nm_connection_add_setting (connection, NM_SETTING (s_vpn));
 
 	/* Get the default path for ca, cert, key file, these files maybe
 	 * in same path with the configuration file */
@@ -512,9 +724,9 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	}
 
 	basename = g_path_get_basename (path);
-	last_dot = strrchr (basename, '.');
-	if (last_dot)
-		*last_dot = '\0';
+	tmp = strrchr (basename, '.');
+	if (tmp)
+		*tmp = '\0';
 	g_object_set (s_con, NM_SETTING_CONNECTION_ID, basename, NULL);
 
 	if (!g_utf8_validate (contents, contents_len, NULL)) {
@@ -539,644 +751,679 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		contents_len -= 3;
 	}
 
-	lines = g_strsplit_set (contents, "\r\n", 0);
-	if (g_strv_length (lines) <= 1) {
-		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE,
-		                     _("not a valid OpenVPN configuration file"));
-		g_object_unref (connection);
-		connection = NULL;
-		goto out;
-	}
+	contents_cur_line = 0;
+	while (args_next_line (&contents,
+	                       &contents_len,
+	                       &cur_line,
+	                       &cur_line_len,
+	                       &cur_line_delimiter)) {
+		gs_free const char **params = NULL;
+		char *line_error = NULL;
+		gint64 v_int64;
 
-	for (line = lines; *line; line++) {
-		char *comment, **items = NULL, *leftover = NULL;
+		contents_cur_line++;
 
-		if ((comment = strchr (*line, '#')))
-			*comment = '\0';
-		if ((comment = strchr (*line, ';')))
-			*comment = '\0';
-		if (!strlen (*line))
+		if (!args_parse_line (cur_line, cur_line_len, &params, &line_error))
+			goto handle_line_error;
+
+		if (!params) {
+			/* empty line of comments. */
 			continue;
+		}
 
-		if (   args_is_option (*line, CLIENT_TAG)
-		    || args_is_option (*line, TLS_CLIENT_TAG)) {
+		g_assert (params[0]);
+
+		/* allow for a leading double-dash and skip over it (bypass_doubledash). */
+		if (g_str_has_prefix (params[0], "--"))
+			params[0] = &params[0][2];
+
+		if (_str_in_set (params[0], TAG_CLIENT, TAG_TLS_CLIENT)) {
+			if (!args_params_check_nargs_n (params, 0, &line_error))
+				goto handle_line_error;
 			have_client = TRUE;
 			continue;
 		}
 
-		if (args_is_option (*line, KEY_DIRECTION_TAG)) {
-			last_seen_key_direction = *line + strlen (KEY_DIRECTION_TAG);
+		if (_str_in_set (params[0], TAG_KEY_DIRECTION)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_key_direction (params, 1, &last_seen_key_direction, &line_error))
+				goto handle_line_error;
 			continue;
 		}
 
-		if (args_is_option (*line, DEV_TAG)) {
-			items = get_args (*line + strlen (DEV_TAG), &nitems);
-			if (nitems == 1) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV, items[0]);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-
-			g_strfreev (items);
+		if (_str_in_set (params[0], TAG_DEV)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (params[1][0] == '\0') {
+				line_error = args_params_error_message_invalid_arg (params, 1);
+				goto handle_line_error;
+			}
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV, params[1]);
 			continue;
 		}
 
-		if (args_is_option (*line, DEV_TYPE_TAG)) {
-			items = get_args (*line + strlen (DEV_TYPE_TAG), &nitems);
-			if (nitems == 1) {
-				if (!strcmp (items[0], "tun") || !strcmp (items[0], "tap"))
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE, items[0]);
-				else
-					g_warning ("%s: unknown %s option '%s'", __func__, DEV_TYPE_TAG, *line);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-
-			g_strfreev (items);
+		if (_str_in_set (params[0], TAG_DEV_TYPE)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!_str_in_set (params[1], "tun", "tap")) {
+				line_error = args_params_error_message_invalid_arg (params, 1);
+				goto handle_line_error;
+			}
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE, params[1]);
 			continue;
 		}
 
-		if (args_is_option (*line, PROTO_TAG)) {
-			items = get_args (*line + strlen (PROTO_TAG), &nitems);
-			if (nitems == 1) {
-				/* Valid parameters are "udp", "tcp-client" and "tcp-server".
-				 * 'tcp' isn't technically valid, but it used to be accepted so
-				 * we'll handle it here anyway.
-				 */
-				if (!strcmp (items[0], "udp")) {
-					/* ignore; udp is default */
-				} else if (   !strcmp (items[0], "tcp-client")
-				           || !strcmp (items[0], "tcp-server")
-				           || !strcmp (items[0], "tcp")) {
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
-				} else
-					g_warning ("%s: unknown %s option '%s'", __func__, PROTO_TAG, *line);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-
-			g_strfreev (items);
+		if (_str_in_set (params[0], TAG_PROTO)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			/* Valid parameters are "udp", "tcp-client" and "tcp-server".
+			 * 'tcp' isn't technically valid, but it used to be accepted so
+			 * we'll handle it here anyway.
+			 */
+			if (_streq (params[1], "udp")) {
+				/* ignore; udp is default */
+			} else if (_str_in_set (params[1], "tcp-client", "tcp-server", "tcp"))
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+			else {
+				line_error = args_params_error_message_invalid_arg (params, 1);
+				goto handle_line_error;
+			}
 			continue;
 		}
 
-		if (args_is_option (*line, MSSFIX_TAG)) {
+		if (_str_in_set (params[0], TAG_MSSFIX)) {
+			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
+				goto handle_line_error;
+			/* TODO: handle the mssfix argument. */
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
 			continue;
 		}
 
-		if (args_is_option (*line, TUNMTU_TAG)) {
-			items = get_args (*line + strlen (TUNMTU_TAG), &nitems);
-			if (nitems == 1) {
-				glong secs;
-
-				errno = 0;
-				secs = strtol (items[0], NULL, 10);
-				if ((errno == 0) && (secs >= 0) && (secs < 0xffff)) {
-					tmp = g_strdup_printf ("%d", (guint32) secs);
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU, tmp);
-					g_free (tmp);
-				} else
-					g_warning ("%s: invalid size in option '%s'", __func__, *line);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-
-			g_strfreev (items);
+		if (_str_in_set (params[0], TAG_TUN_MTU)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU, "%u", (unsigned) v_int64);
 			continue;
 		}
 
-		if (args_is_option (*line, FRAGMENT_TAG)) {
-			items = get_args (*line + strlen (FRAGMENT_TAG), &nitems);
-
-			if (nitems == 1) {
-				glong secs;
-
-				errno = 0;
-				secs = strtol (items[0], NULL, 10);
-				if ((errno == 0) && (secs >= 0) && (secs < 0xffff)) {
-					tmp = g_strdup_printf ("%d", (guint32) secs);
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, tmp);
-					g_free (tmp);
-				} else
-					g_warning ("%s: invalid size in option '%s'", __func__, *line);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-
-			g_strfreev (items);
+		if (_str_in_set (params[0], TAG_FRAGMENT)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, "%u", (unsigned) v_int64);
 			continue;
 		}
 
-		if (args_is_option (*line, COMP_TAG)) {
+		if (_str_in_set (params[0], TAG_COMP_LZO)) {
+			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
+				goto handle_line_error;
+			if (params[1]) {
+				if (_streq (params[1], "no"))
+					continue;
+				if (!_streq (params[1], "yes")) {
+					line_error = g_strdup_printf (_("unsupported comp-lzo argument"));
+					goto handle_line_error;
+				}
+			}
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
 			continue;
 		}
 
-		if (args_is_option (*line, FLOAT_TAG)) {
+		if (_str_in_set (params[0], TAG_FLOAT)) {
+			if (!args_params_check_nargs_n (params, 0, &line_error))
+				goto handle_line_error;
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
 			continue;
 		}
 
-		if (args_is_option (*line, RENEG_SEC_TAG)) {
-			items = get_args (*line + strlen (RENEG_SEC_TAG), &nitems);
-
-			if (nitems == 1) {
-				glong secs;
-
-				errno = 0;
-				secs = strtol (items[0], NULL, 10);
-				if ((errno == 0) && (secs >= 0) && (secs <= 604800)) {
-					tmp = g_strdup_printf ("%d", (guint32) secs);
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, tmp);
-					g_free (tmp);
-				} else
-					g_warning ("%s: invalid time length in option '%s'", __func__, *line);
-			}
-			g_strfreev (items);
+		if (_str_in_set (params[0], TAG_RENEG_SEC)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "%u", (unsigned) v_int64);
 			continue;
 		}
 
-		if (   args_is_option (*line, HTTP_PROXY_RETRY_TAG)
-		    || args_is_option (*line, SOCKS_PROXY_RETRY_TAG)) {
+		if (_str_in_set (params[0], TAG_HTTP_PROXY_RETRY, TAG_SOCKS_PROXY_RETRY)) {
+			if (!args_params_check_nargs_n (params, 0, &line_error))
+				goto handle_line_error;
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY, "yes");
 			continue;
 		}
 
-		http_proxy = args_is_option (*line, HTTP_PROXY_TAG);
-		socks_proxy = args_is_option (*line, SOCKS_PROXY_TAG);
-		if ((http_proxy || socks_proxy) && !proxy_set) {
-			gboolean success = FALSE;
+		if (_str_in_set (params[0], TAG_HTTP_PROXY, TAG_SOCKS_PROXY)) {
 			const char *proxy_type = NULL;
+			gs_free char *s_port = NULL;
+			gs_free char *user = NULL;
+			gs_free char *pass = NULL;
 
-			if (http_proxy) {
-				items = get_args (*line + strlen (HTTP_PROXY_TAG), &nitems);
+			if (_str_in_set (params[0], TAG_HTTP_PROXY)) {
 				proxy_type = "http";
-			} else if (socks_proxy) {
-				items = get_args (*line + strlen (SOCKS_PROXY_TAG), &nitems);
+				if (!args_params_check_nargs_minmax (params, 2, 4, &line_error))
+					goto handle_line_error;
+			} else {
 				proxy_type = "socks";
+				if (!args_params_check_nargs_minmax (params, 1, 3, &line_error))
+					goto handle_line_error;
 			}
 
-			if (nitems >= 2) {
-				glong port;
-				char *s_port = NULL;
-				char *user = NULL, *pass = NULL;
-
-				success = TRUE;
-				if (http_proxy && nitems >= 3)
-					success = parse_http_proxy_auth (path, items[2], &user, &pass);
-
-				if (success) {
-					success = FALSE;
-					errno = 0;
-					port = strtol (items[1], NULL, 10);
-					if ((errno == 0) && (port > 0) && (port < 65536)) {
-						s_port = g_strdup_printf ("%d", (guint32) port);
-						success = TRUE;
-					}
-				}
-
-				if (success && proxy_type) {
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, proxy_type);
-
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, items[0]);
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, s_port);
-					if (user)
-						nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, user);
-					if (pass) {
-						nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, pass);
-						nm_setting_set_secret_flags (NM_SETTING (s_vpn),
-						                             NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
-						                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
-						                             NULL);
-					}
-					proxy_set = TRUE;
-				}
-				g_free (s_port);
-				g_free (user);
-				g_free (pass);
+			if (params[1][0] == '\0') {
+				line_error = g_strdup_printf (_("empty %s service argument"), proxy_type);
+				goto handle_line_error;
 			}
 
-			if (!success)
-				g_warning ("%s: invalid proxy option '%s'", __func__, *line);
+			if (params[2]) {
+				if (!args_params_parse_port (params, 2, &v_int64, &line_error))
+					goto handle_line_error;
+				s_port = g_strdup_printf ("%u", (unsigned) v_int64);
 
-			g_strfreev (items);
+				if (params[3]) {
+					if (!parse_http_proxy_auth (default_path, params[3], &user, &pass, &line_error))
+						goto handle_line_error;
+				}
+			}
+
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, proxy_type);
+
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, params[1]);
+			if (s_port)
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, s_port);
+			if (user)
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, user);
+			if (pass) {
+				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, pass);
+				nm_setting_set_secret_flags (NM_SETTING (s_vpn),
+				                             NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
+				                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+				                             NULL);
+			}
 			continue;
 		}
 
-		if (args_is_option (*line, REMOTE_TAG)) {
-			items = get_args (*line + strlen (REMOTE_TAG), &nitems);
-			if (nitems >= 1 && nitems <= 3) {
-				gboolean ok = TRUE;
-				tmp = NULL;
+		if (_str_in_set (params[0], TAG_REMOTE)) {
+			const char *prev;
+			GString *new_remote;
+			int port = -1;
 
-				if (nitems >= 2) {
-					tmp = parse_port (items[1], *line);
-					ok = tmp != NULL;
-					if (ok && nitems == 3)
-						ok = parse_protocol (items[2], *line, NULL);
+			if (!args_params_check_nargs_minmax (params, 1, 3, &line_error))
+				goto handle_line_error;
+
+			if (!params[1][0]) {
+				line_error = g_strdup_printf (_("missing remote argument"));
+				goto handle_line_error;
+			}
+			if (strchr (params[1], ' ')) {
+				line_error = g_strdup_printf (_("remote cannot contain space"));
+				goto handle_line_error;
+			}
+			if (strchr (params[1], ',')) {
+				line_error = g_strdup_printf (_("remote cannot contain comma"));
+				goto handle_line_error;
+			}
+
+			if (params[2]) {
+				if (!args_params_parse_port (params, 2, &v_int64, &line_error))
+					goto handle_line_error;
+				port = v_int64;
+
+				if (params[3]) {
+					if (!_str_in_set (params[3], "udp", "tcp")) {
+						line_error = g_strdup_printf (_("remote expects protocol either udp or remote"));
+						goto handle_line_error;
+					}
 				}
-				if (ok) {
-					const char *prev;
-					GString *new_remote = g_string_sized_new (64);
+			}
 
-					have_remote = TRUE;
-					prev = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
-					if (prev) {
-						g_string_assign (new_remote, prev);
-						g_string_append (new_remote, ", ");
-					}
-					g_string_append (new_remote, items[0]);
-					if (nitems >= 2) {
-						g_string_append_c (new_remote, ':');
-						g_string_append (new_remote, tmp);
-					}
-					if (nitems == 3) {
-						g_string_append_c (new_remote, ':');
-						g_string_append (new_remote, items[2]);
-					}
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, new_remote->str);
-					g_string_free (new_remote, TRUE);
-					g_free (tmp);
+			new_remote = g_string_sized_new (64);
+
+			prev = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
+			if (prev) {
+				g_string_assign (new_remote, prev);
+				g_string_append (new_remote, ", ");
+			}
+			g_string_append (new_remote, params[1]);
+			if (params[2]) {
+				g_string_append_printf (new_remote, ":%d", port);
+				if (params[3]) {
+					g_string_append_c (new_remote, ':');
+					g_string_append (new_remote, params[3]);
 				}
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+			}
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, new_remote->str);
+			g_string_free (new_remote, TRUE);
 
-			g_strfreev (items);
+			have_remote = TRUE;
 			continue;
 		}
 
-		if (args_is_option (*line, REMOTE_RANDOM_TAG)) {
+		if (_str_in_set (params[0], TAG_REMOTE_RANDOM)) {
+			if (!args_params_check_nargs_n (params, 0, &line_error))
+				goto handle_line_error;
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM, "yes");
 			continue;
 		}
 
-		if (   args_is_option (*line, PORT_TAG)
-		    || args_is_option (*line, RPORT_TAG)) {
-			if (args_is_option (*line, PORT_TAG))
-				items = get_args (*line + strlen (PORT_TAG), &nitems);
-			else if (args_is_option (*line, RPORT_TAG))
-				items = get_args (*line + strlen (RPORT_TAG), &nitems);
-			else
-				g_assert_not_reached ();
-
-			if (nitems == 1) {
-				tmp = parse_port (items[0], *line);
-				if (tmp) {
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PORT, tmp);
-					g_free (tmp);
-				}
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-
-			g_strfreev (items);
+		if (_str_in_set (params[0], TAG_PORT, TAG_RPORT)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_port (params, 1, &v_int64, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_PORT, "%u", (unsigned) v_int64);
 			continue;
 		}
 
-		if (handle_num_seconds_item (*line, PING_TAG, NM_OPENVPN_KEY_PING, s_vpn))
-			continue;
+		if (_str_in_set (params[0], TAG_PING, TAG_PING_EXIT, TAG_PING_RESTART)) {
+			const char *key = NULL;
 
-		if (handle_num_seconds_item (*line, PING_EXIT_TAG, NM_OPENVPN_KEY_PING_EXIT, s_vpn))
-			continue;
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 1, 0, G_MAXINT, &v_int64, &line_error))
+				goto handle_line_error;
 
-		if (handle_num_seconds_item (*line, PING_RESTART_TAG, NM_OPENVPN_KEY_PING_RESTART, s_vpn))
-			continue;
+			if (_str_in_set (params[0], TAG_PING))
+				key = NM_OPENVPN_KEY_PING;
+			else if (_str_in_set (params[0], TAG_PING_EXIT))
+				key = NM_OPENVPN_KEY_PING_EXIT;
+			else if (_str_in_set (params[0], TAG_PING_RESTART))
+				key = NM_OPENVPN_KEY_PING_RESTART;
 
-		if ( handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL) &&
-		     handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_CERT, s_vpn, default_path, NULL) &&
-		     handle_path_item (*line, PKCS12_TAG, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
-			continue;
-
-		if (handle_path_item (*line, CA_TAG, NM_OPENVPN_KEY_CA, s_vpn, default_path, NULL))
-			continue;
-
-		if (handle_path_item (*line, CERT_TAG, NM_OPENVPN_KEY_CERT, s_vpn, default_path, NULL))
-			continue;
-
-		if (handle_path_item (*line, KEY_TAG, NM_OPENVPN_KEY_KEY, s_vpn, default_path, NULL))
-			continue;
-
-		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_CA, s_vpn, basename, NULL))
-			continue;
-
-		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_CERT, s_vpn, basename, NULL))
-			continue;
-
-		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_KEY, s_vpn, basename, NULL))
-			continue;
-
-		if (handle_blob_item ((const char ***)&line, NM_OPENVPN_KEY_TA, s_vpn, basename, NULL)) {
-			handle_direction ("tls-auth",
-			                  NM_OPENVPN_KEY_TA_DIR,
-			                  last_seen_key_direction,
-			                  s_vpn);
+			setting_vpn_add_data_item_v (s_vpn, key, "%u", (unsigned) v_int64);
 			continue;
 		}
 
-		if (handle_path_item (*line, SECRET_TAG, NM_OPENVPN_KEY_STATIC_KEY,
-		                      s_vpn, default_path, &leftover)) {
-			handle_direction ("secret",
-			                  NM_OPENVPN_KEY_STATIC_KEY_DIRECTION,
-			                  leftover,
-			                  s_vpn);
-			g_free (leftover);
-			have_sk = TRUE;
-			continue;
-		}
+		if (_str_in_set (params[0],
+		                 TAG_PKCS12,
+		                 TAG_CA,
+		                 TAG_CERT,
+		                 TAG_KEY,
+		                 TAG_SECRET,
+		                 TAG_TLS_AUTH)) {
+			const char *file;
+			gs_free char *file_free = NULL;
+			gboolean can_have_direction;
+			const char *s_direction = NULL;
 
-		if (handle_path_item (*line, TLS_AUTH_TAG, NM_OPENVPN_KEY_TA,
-		                      s_vpn, default_path, &leftover)) {
-			handle_direction ("tls-auth",
-			                  NM_OPENVPN_KEY_TA_DIR,
-			                  leftover,
-			                  s_vpn);
-			g_free (leftover);
-			continue;
-		}
+			can_have_direction = _str_in_set (params[0],
+			                                  TAG_SECRET,
+			                                  TAG_TLS_AUTH);
 
-		if (args_is_option (*line, CIPHER_TAG)) {
-			items = get_args (*line + strlen (CIPHER_TAG), &nitems);
-			if (nitems == 1)
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER, items[0]);
-			else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+			if (!args_params_check_nargs_minmax (params, 1, can_have_direction ? 2 : 1, &line_error))
+				goto handle_line_error;
+			file = params[1];
 
-			g_strfreev (items);
-			continue;
-		}
-
-		if (args_is_option (*line, KEEPALIVE_TAG)) {
-			int ping_secs;
-			int ping_restart_secs;
-
-			items = get_args (*line + strlen (KEEPALIVE_TAG), &nitems);
-			if (nitems == 2) {
-				ping_secs = parse_seconds (items[0], *line);
-				ping_restart_secs = parse_seconds (items[1], *line);
-
-				if (ping_secs >= 0 && ping_restart_secs >= 0) {
-					tmp = g_strdup_printf ("%d", ping_secs);
-					tmp2 = g_strdup_printf ("%d", ping_restart_secs);
-
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PING, tmp);
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART, tmp2);
-
-					g_free (tmp);
-					g_free (tmp2);
-				} else
-					g_warning ("%s: invalid arguments in option '%s', must be two integers", __func__, *line);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s', must be two integers", __func__, *line);
-
-			g_strfreev (items);
-			continue;
-		}
-
-		if (args_is_option (*line, KEYSIZE_TAG)) {
-			items = get_args (*line + strlen (KEYSIZE_TAG), &nitems);
-			if (nitems == 1) {
-				glong key_size;
-
-				errno = 0;
-				key_size = strtol (items[0], NULL, 10);
-				if ((errno == 0) && (key_size > 0) && (key_size <= 65535)) {
-					tmp = g_strdup_printf ("%d", (guint32) key_size);
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE, tmp);
-					g_free (tmp);
-				} else
-					g_warning ("%s: invalid key size in option '%s'", __func__, *line);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-			g_strfreev (items);
-			continue;
-		}
-
-		if (args_is_option (*line, TLS_REMOTE_TAG)) {
-			char *unquoted = unquote (*line + strlen (TLS_REMOTE_TAG), NULL);
-
-			if (unquoted) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, unquoted);
-				g_free (unquoted);
-			} else
-				g_warning ("%s: unknown %s option '%s'", __func__, TLS_REMOTE_TAG, *line);
-
-			continue;
-		}
-
-		if (args_is_option (*line, REMOTE_CERT_TLS_TAG)) {
-			items = get_args (*line + strlen (REMOTE_CERT_TLS_TAG), &nitems);
-			if (nitems == 1) {
-				if (   !strcmp (items[0], NM_OPENVPN_REM_CERT_TLS_CLIENT)
-				    || !strcmp (items[0], NM_OPENVPN_REM_CERT_TLS_SERVER)) {
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, items[0]);
-				} else
-					g_warning ("%s: unknown %s option '%s'", __func__, REMOTE_CERT_TLS_TAG, *line);
+			if (file[0] == '\0') {
+				line_error = g_strdup_printf (_("missing certificate file name"));
+				goto handle_line_error;
 			}
 
-			g_strfreev (items);
-			continue;
-		}
+			if (params[2]) {
+				if (!args_params_parse_key_direction (params, 2, &s_direction, &line_error))
+					goto handle_line_error;
+				last_seen_key_direction = s_direction;
+			}
 
-		if (args_is_option (*line, IFCONFIG_TAG)) {
-			items = get_args (*line + strlen (IFCONFIG_TAG), &nitems);
-			if (nitems == 2) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, items[0]);
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, items[1]);
+			if (!g_path_is_absolute (file))
+				file = file_free = g_build_filename (default_path, file, NULL);
+
+			if (_str_in_set (params[0], TAG_PKCS12)) {
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, file);
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, file);
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, file);
+			} else if (_str_in_set (params[0], TAG_CA))
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, file);
+			else if (_str_in_set (params[0], TAG_CERT))
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, file);
+			else if (_str_in_set (params[0], TAG_KEY))
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, file);
+			else if (_str_in_set (params[0], TAG_SECRET)) {
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, file);
+				if (s_direction)
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, s_direction);
+				have_sk = TRUE;
+			} else if (_str_in_set (params[0], TAG_TLS_AUTH)) {
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA, file);
+				if (s_direction)
+					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, s_direction);
 			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-
-			g_strfreev (items);
+				g_assert_not_reached ();
 			continue;
 		}
 
-		if (args_is_option (*line, AUTH_USER_PASS_TAG)) {
+		if (_str_in_set (params[0], TAG_CIPHER)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER, params[1]);
+			continue;
+		}
+
+		if (_str_in_set (params[0], TAG_KEEPALIVE)) {
+			gint64 v2;
+
+			if (!args_params_check_nargs_n (params, 2, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 1, 0, G_MAXINT, &v_int64, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 2, 0, G_MAXINT, &v2, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_PING, "%u", (unsigned) v_int64);
+			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_PING_RESTART, "%u", (unsigned) v2);
+			continue;
+		}
+
+		if (_str_in_set (params[0], TAG_KEYSIZE)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 1, 1, 65535, &v_int64, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_KEYSIZE, "%u", (unsigned) v_int64);
+			continue;
+		}
+
+		if (_str_in_set (params[0], TAG_TLS_REMOTE)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (params[1][0] == '\0') {
+				line_error = g_strdup_printf (_("empty tls-remote argument"));
+				goto handle_line_error;
+			}
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, params[1]);
+			continue;
+		}
+
+		if (_str_in_set (params[0], TAG_REMOTE_CERT_TLS)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!_str_in_set (params[1], NM_OPENVPN_REM_CERT_TLS_CLIENT, NM_OPENVPN_REM_CERT_TLS_SERVER)) {
+				line_error = g_strdup_printf (_("invalid option"));
+				goto handle_line_error;
+			}
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, params[1]);
+			continue;
+		}
+
+		if (_str_in_set (params[0], TAG_IFCONFIG)) {
+			if (!args_params_check_nargs_n (params, 2, &line_error))
+				goto handle_line_error;
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, params[1]);
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, params[2]);
+			continue;
+		}
+
+		if (_str_in_set (params[0], TAG_AUTH_USER_PASS)) {
+			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
+				goto handle_line_error;
 			have_pass = TRUE;
 			continue;
 		}
 
-		if (args_is_option (*line, AUTH_TAG)) {
-			items = get_args (*line + strlen (AUTH_TAG), &nitems);
-			if (nitems == 1)
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH, items[0]);
-			else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-			g_strfreev (items);
+		if (_str_in_set (params[0], TAG_AUTH)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH, params[1]);
 			continue;
 		}
 
+		if (_str_in_set (params[0], TAG_ROUTE)) {
+			in_addr_t network;
+			in_addr_t gateway = 0;
+			guint32 prefix = 32;
+			gint64 metric = -1;
+
+			if (!args_params_check_nargs_minmax (params, 1, 4, &line_error))
+				goto handle_line_error;
+
+			if (!args_params_parse_ip4 (params, 1, &network, &line_error))
+				goto handle_line_error;
+
+			if (params[2]) {
+				in_addr_t netmask;
+
+				if (!args_params_parse_ip4 (params, 2, &netmask, &line_error))
+					goto handle_line_error;
+				prefix = nm_utils_ip4_netmask_to_prefix (netmask);
+
+				if (params[3]) {
+					if (!args_params_parse_ip4 (params, 3, &gateway, &line_error))
+						goto handle_line_error;
+					if (params[4]) {
+						if (!args_params_parse_int64 (params, 4, 0, G_MAXUINT32, &v_int64, &line_error))
+							goto handle_line_error;
+						metric = (guint32) v_int64;
+					}
+				}
+			}
+
+			{
 #ifdef NM_OPENVPN_OLD
-		if (args_is_option (*line, ROUTE_TAG)) {
-			items = get_args (*line + strlen (ROUTE_TAG), &nitems);
-			if (nitems >= 1 && nitems <= 4) {
-				guint32 dest, next_hop, prefix, metric;
 				NMIP4Route *route;
 
-				if (!parse_ip (items[0], *line, &dest))
-					goto route_fail;
-
-				/* init default values */
-				next_hop = 0;
-				prefix = 32;
-				metric = 0;
-				if (nitems >= 2) {
-					if (!parse_ip (items[1], *line, &prefix))
-						goto route_fail;
-					prefix = nm_utils_ip4_netmask_to_prefix (prefix);
-					if (nitems >= 3) {
-						if (!parse_ip (items[2], *line, &next_hop))
-							goto route_fail;
-						if (nitems == 4) {
-							long num;
-							errno = 0;
-							num = strtol (items[3], NULL, 10);
-							if ((errno == 0) && (num >= 0) && (num <= 65535))
-								metric = (guint32) num;
-							else {
-								g_warning ("%s: invalid metric '%s' in option '%s'",
-								           __func__, items[3], *line);
-								goto route_fail;
-							}
-						}
-					}
-				}
-
 				route = nm_ip4_route_new ();
-				nm_ip4_route_set_dest (route, dest);
+				nm_ip4_route_set_dest (route, network);
 				nm_ip4_route_set_prefix (route, prefix);
-				nm_ip4_route_set_next_hop (route, next_hop);
-				nm_ip4_route_set_metric (route, metric);
+				nm_ip4_route_set_next_hop (route, gateway);
+				if (metric >= 0)
+					nm_ip4_route_set_metric (route, metric);
 				nm_setting_ip4_config_add_route (s_ip4, route);
 				nm_ip4_route_unref (route);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
-
-route_fail:
-			g_strfreev (items);
-			continue;
-		}
 #else
-		if (args_is_option (*line, ROUTE_TAG)) {
-			items = get_args (*line + strlen (ROUTE_TAG), &nitems);
-			if (nitems >= 1 && nitems <= 4) {
-				guint32 prefix = 32;
-				guint32 metric = 0;
-				const char *dest = items[0];
-				const char *next_hop = "0.0.0.0";
 				NMIPRoute *route;
 
-				if (!parse_ip (items[0], *line, NULL))
-					goto route_fail;
-
-				if (nitems >= 2) {
-					if (!parse_ip (items[1], *line, &prefix))
-						goto route_fail;
-					prefix = nm_utils_ip4_netmask_to_prefix (prefix);
-					if (nitems >= 3) {
-						if (!parse_ip (items[2], *line, NULL))
-							goto route_fail;
-						next_hop = items[2];
-						if (nitems == 4) {
-							long num;
-							errno = 0;
-							num = strtol (items[3], NULL, 10);
-							if ((errno == 0) && (num >= 0) && (num <= 65535))
-								metric = (guint32) num;
-							else {
-								g_warning ("%s: invalid metric '%s' in option '%s'",
-								           __func__, items[3], *line);
-								goto route_fail;
-							}
-						}
-					}
-				}
-
-				route = nm_ip_route_new (AF_INET, dest, prefix, next_hop, metric, NULL);
+				route = nm_ip_route_new_binary (AF_INET, &network, prefix, params[3] ? &gateway : NULL, metric, NULL);
 				nm_setting_ip_config_add_route (s_ip4, route);
 				nm_ip_route_unref (route);
-			} else
-				g_warning ("%s: invalid number of arguments in option '%s'", __func__, *line);
+#endif
+			}
+		}
 
-route_fail:
-			g_strfreev (items);
+		if (params[0][0] == '<' && params[0][strlen (params[0]) - 1] == '>') {
+			gs_free char *token = g_strndup (&params[0][1], strlen (params[0]) - 2);
+			gs_free char *end_token = NULL;
+			gsize end_token_len;
+			gsize my_contents_cur_line = contents_cur_line;
+			char *f_path;
+			const char *key;
+			gboolean can_have_direction = FALSE;
+			GString *blob_data;
+			InlineBlobData *inline_blob_data;
+
+			if (_streq (token, INLINE_BLOB_CA))
+				key = NM_OPENVPN_KEY_CA;
+			else if (_streq (token, INLINE_BLOB_CERT))
+				key = NM_OPENVPN_KEY_CERT;
+			else if (_streq (token, INLINE_BLOB_KEY))
+				key = NM_OPENVPN_KEY_KEY;
+			else if (_streq (token, INLINE_BLOB_PKCS12))
+				key = NULL;
+			else if (_streq (token, INLINE_BLOB_TLS_AUTH)) {
+				key = NM_OPENVPN_KEY_TA;
+				can_have_direction = TRUE;
+			} else if (_streq (token, INLINE_BLOB_SECRET)) {
+				key = NM_OPENVPN_KEY_STATIC_KEY;
+				can_have_direction = TRUE;
+			} else {
+				line_error = g_strdup_printf (_("unsupported blob/xml element"));
+				goto handle_line_error;
+			}
+
+			end_token = g_strdup_printf ("</%s>", token);
+			end_token_len = strlen (end_token);
+
+			blob_data = g_string_new (NULL);
+
+			while (args_next_line (&contents,
+			                       &contents_len,
+			                       &cur_line,
+			                       &cur_line_len,
+			                       &cur_line_delimiter)) {
+				my_contents_cur_line++;
+
+				/* skip over trailing space like openvpn does. */
+				_ch_skip_over_leading_whitespace (&cur_line, &cur_line_len);
+
+				if (!strncmp (cur_line, end_token, end_token_len)) {
+					end_token_len = 0;
+					break;
+				}
+
+				g_string_append_len (blob_data, cur_line, cur_line_len);
+				if (cur_line_delimiter)
+					g_string_append_c (blob_data, cur_line_delimiter[0]);
+			}
+			if (end_token_len) {
+				line_error = g_strdup_printf (_("unterminated blob element <%s>"), token);
+				g_string_free (blob_data, TRUE);
+				goto handle_line_error;
+			}
+
+			/* the latest cert wins... */
+			for (sl_iter = inline_blobs; sl_iter; sl_iter = sl_iter->next) {
+				InlineBlobData *d = sl_iter->data;
+
+				if (_streq (d->token, token)) {
+					inline_blobs = g_slist_delete_link (inline_blobs, sl_iter);
+					inline_blob_data_free (d);
+					break;
+				}
+			}
+
+			f_path = inline_blob_construct_path (basename, token);
+
+			inline_blob_data = g_slice_new (InlineBlobData);
+			inline_blob_data->blob_data = blob_data;
+			inline_blob_data->token_start_line = contents_cur_line;
+			inline_blob_data->path = f_path;
+			inline_blob_data->token = token;
+			inline_blob_data->key = key;
+			token = NULL;
+
+			inline_blobs = g_slist_prepend (inline_blobs, inline_blob_data);
+			contents_cur_line = my_contents_cur_line;
+
+			if (key)
+				nm_setting_vpn_add_data_item (s_vpn, key, f_path);
+			else {
+				nm_assert (_streq (token, INLINE_BLOB_PKCS12));
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, f_path);
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, f_path);
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, f_path);
+			}
+			if (   can_have_direction
+			    && last_seen_key_direction)
+				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, last_seen_key_direction);
 			continue;
 		}
-#endif
 
+		/* TODO: currently we ignore any unknown options and skip over them. */
+		continue;
+
+handle_line_error:
+		g_set_error (error,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_FILE_INVALID,
+		             _("configuration error: %s (line %ld)"),
+		             line_error ? : _("unknown or unsupported option"),
+		             (long) contents_cur_line);
+		g_free (line_error);
+		goto out_error;
 	}
 
 	if (!have_client && !have_sk) {
 		g_set_error_literal (error,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
-		                     _("The file to import wasn't a valid OpenVPN client configuration."));
-		g_object_unref (connection);
-		connection = NULL;
-	} else if (!have_remote) {
+		                     _("The file to import wasn't a valid OpenVPN client configuration"));
+		goto out_error;
+	}
+
+	if (!have_remote) {
 		g_set_error_literal (error,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
-		                     _("The file to import wasn't a valid OpenVPN configure (no remote)."));
-		g_object_unref (connection);
-		connection = NULL;
-	} else {
-		gboolean have_certs = FALSE, have_ca = FALSE;
+		                     _("The file to import wasn't a valid OpenVPN configure (no remote)"));
+		goto out_error;
+	}
 
-		if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA))
-			have_ca = TRUE;
+	have_certs = FALSE;
+	have_ca = FALSE;
 
-		if (   have_ca
-		    && nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT)
-		    && nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY))
-			have_certs = TRUE;
+	if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA))
+		have_ca = TRUE;
 
-		/* Determine connection type */
-		if (have_pass) {
-			if (have_certs)
-				ctype = NM_OPENVPN_CONTYPE_PASSWORD_TLS;
-			else if (have_ca)
-				ctype = NM_OPENVPN_CONTYPE_PASSWORD;
-		} else if (have_certs) {
-			ctype = NM_OPENVPN_CONTYPE_TLS;
-		} else if (have_sk)
-			ctype = NM_OPENVPN_CONTYPE_STATIC_KEY;
+	if (   have_ca
+	    && nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT)
+	    && nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY))
+		have_certs = TRUE;
 
-		if (!ctype)
-			ctype = NM_OPENVPN_CONTYPE_TLS;
+	/* Determine connection type */
+	if (have_pass) {
+		if (have_certs)
+			ctype = NM_OPENVPN_CONTYPE_PASSWORD_TLS;
+		else if (have_ca)
+			ctype = NM_OPENVPN_CONTYPE_PASSWORD;
+	} else if (have_certs) {
+		ctype = NM_OPENVPN_CONTYPE_TLS;
+	} else if (have_sk)
+		ctype = NM_OPENVPN_CONTYPE_STATIC_KEY;
 
-		nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, ctype);
+	if (!ctype)
+		ctype = NM_OPENVPN_CONTYPE_TLS;
 
-		/* Default secret flags to be agent-owned */
-		if (have_pass) {
+	nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, ctype);
+
+	/* Default secret flags to be agent-owned */
+	if (have_pass) {
+		nm_setting_set_secret_flags (NM_SETTING (s_vpn),
+		                             NM_OPENVPN_KEY_PASSWORD,
+		                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
+		                             NULL);
+	}
+	if (have_certs) {
+		const char *key_path;
+
+		key_path = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+		if (key_path && is_encrypted (key_path)) {
+			/* If there should be a private key password, default it to
+			 * being agent-owned.
+			 */
 			nm_setting_set_secret_flags (NM_SETTING (s_vpn),
-			                             NM_OPENVPN_KEY_PASSWORD,
+			                             NM_OPENVPN_KEY_CERTPASS,
 			                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
 			                             NULL);
 		}
-		if (have_certs) {
-			const char *key_path;
-
-			key_path = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-			if (key_path && is_encrypted (key_path)) {
-				/* If there should be a private key password, default it to
-				 * being agent-owned.
-				 */
-				nm_setting_set_secret_flags (NM_SETTING (s_vpn),
-				                             NM_OPENVPN_KEY_CERTPASS,
-				                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
-				                             NULL);
-			}
-		}
 	}
 
-out:
-	g_free (default_path);
-	g_free (basename);
+	inline_blobs = g_slist_reverse (inline_blobs);
+	for (sl_iter = inline_blobs; sl_iter; sl_iter = sl_iter->next) {
+		const InlineBlobData *data = sl_iter->data;
 
-	if (connection)
-		nm_connection_add_setting (connection, NM_SETTING (s_vpn));
-	else if (s_vpn)
-		g_object_unref (s_vpn);
+		/* Check whether the setting was not overwritten by a later entry in the config-file. */
+		if (_streq (data->token, INLINE_BLOB_PKCS12)) {
+			if (   !_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA), data->path)
+			    && !_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT), data->path)
+			    && !_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY), data->path))
+				continue;
+		} else {
+			if (!_streq0 (nm_setting_vpn_get_data_item (s_vpn, data->key), data->path))
+				continue;
+		}
+		if (!inline_blob_write_out (sl_iter->data, error))
+			goto out_error;
+	}
+	g_slist_free_full (inline_blobs, (GDestroyNotify) inline_blob_data_free);
 
-	g_free (new_contents);
-	g_strfreev (lines);
-
+	connection_free = NULL;
+	g_return_val_if_fail (!error || !*error, connection);
 	return connection;
+
+out_error:
+	g_slist_free_full (inline_blobs, (GDestroyNotify) inline_blob_data_free);
+	g_return_val_if_fail (!error || *error, NULL);
+	return NULL;
 }
 
 gboolean
@@ -1429,8 +1676,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			         static_key,
 			         static_key_direction ? " " : "",
 			         static_key_direction ? static_key_direction : "");
-		} else
-			g_warning ("%s: invalid openvpn static key configuration (missing static key)", __func__);
+		}
 	}
 
 	if (reneg_exists)
@@ -1451,16 +1697,16 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
 	if (value && strlen (value)) {
 		if (!strcmp (value, "yes"))
-			fprintf (f, MSSFIX_TAG "\n");
+			fprintf (f, TAG_MSSFIX "\n");
 	}
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
 	if (value && strlen (value))
-		fprintf (f, TUNMTU_TAG " %d\n", (int) strtol (value, NULL, 10));
+		fprintf (f, TAG_TUN_MTU " %d\n", (int) strtol (value, NULL, 10));
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 	if (value && strlen (value))
-		fprintf (f, FRAGMENT_TAG " %d\n", (int) strtol (value, NULL, 10));
+		fprintf (f, TAG_FRAGMENT " %d\n", (int) strtol (value, NULL, 10));
 
 	fprintf (f, "dev %s\n", device ? device : (device_type ? device_type : device_default));
 	if (device_type)
@@ -1558,6 +1804,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			in_addr_t netmask;
 			guint prefix;
 			guint64 metric;
+			char metric_buf[50];
 
 #ifdef NM_OPENVPN_OLD
 			char next_hop_str_buf[INET_ADDRSTRLEN] = { 0 };
@@ -1582,17 +1829,15 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			next_hop_str = nm_ip_route_get_next_hop (route) ? : "0.0.0.0",
 			prefix = nm_ip_route_get_prefix (route);
 			metric = nm_ip_route_get_metric (route);
-			if (metric == -1)
-				metric = 50;
 #endif
 			netmask = nm_utils_ip4_prefix_to_netmask (prefix);
 			inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
 
-			fprintf (f, "route %s %s %s %ld\n",
+			fprintf (f, "route %s %s %s%s\n",
 			         dest_str,
 			         netmask_str,
 			         next_hop_str,
-			         (long) metric);
+			         metric == -1 ? "" : nm_sprintf_buf (metric_buf, " %u", (unsigned) metric));
 		}
 	}
 

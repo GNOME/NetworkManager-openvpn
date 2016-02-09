@@ -116,6 +116,19 @@ if ! test x"$ac_distver" = x""; then
   AC_DEFINE_UNQUOTED(DIST_VERSION, "$ac_distver", [Define the distribution version string])
 fi
 
+AC_ARG_WITH(more-asserts,
+            AS_HELP_STRING([--with-more-asserts=level], [Enable more assertions for debugging (default: 0)]),
+            [more_asserts=${with_more_asserts}],
+            [more_asserts=no])
+if test "${more_asserts}" = "no"; then
+    more_asserts=0
+else
+    if test "${more_asserts}" = "yes"; then
+        more_asserts=100
+    fi
+fi
+AC_DEFINE_UNQUOTED(NM_MORE_ASSERTS, $more_asserts, [Define if more asserts are enabled])
+
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
