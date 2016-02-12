@@ -897,6 +897,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_RENEG_SECONDS,
 	NM_OPENVPN_KEY_TLS_REMOTE,
 	NM_OPENVPN_KEY_REMOTE_RANDOM,
+	NM_OPENVPN_KEY_TUN_IPV6,
 	NM_OPENVPN_KEY_REMOTE_CERT_TLS,
 	NM_OPENVPN_KEY_PING,
 	NM_OPENVPN_KEY_PING_EXIT,
@@ -1656,6 +1657,12 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
 
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUN_IPV6);
+	if (value && !strcmp (value, "yes")) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tun_ipv6_checkbutton"));
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+	}
+
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
 	populate_cipher_combo (GTK_COMBO_BOX (widget), value);
@@ -1979,6 +1986,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_random_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_REMOTE_RANDOM), g_strdup ("yes"));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tun_ipv6_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TUN_IPV6), g_strdup ("yes"));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));

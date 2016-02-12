@@ -88,6 +88,7 @@
 #define TAG_TLS_REMOTE                  "tls-remote"
 #define TAG_TOPOLOGY                    "topology"
 #define TAG_TUN_MTU                     "tun-mtu"
+#define TAG_TUN_IPV6                    "tun-ipv6"
 
 
 const char *_nmovpn_test_temp_path = NULL;
@@ -1008,6 +1009,13 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (_str_in_set (params[0], TAG_TUN_IPV6)) {
+			if (!args_params_check_nargs_n (params, 0, &line_error))
+				goto handle_line_error;
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6, "yes");
+			continue;
+		}
+
 		if (_str_in_set (params[0], TAG_PORT, TAG_RPORT)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
@@ -1465,6 +1473,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	gboolean keysize_exists = FALSE;
 	guint32 keysize = 0;
 	gboolean randomize_hosts = FALSE;
+	gboolean tun_ipv6 = FALSE;
 	const char *proxy_type = NULL;
 	const char *proxy_server = NULL;
 	const char *proxy_port = NULL;
@@ -1619,6 +1628,10 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (value && !strcmp (value, "yes"))
 		randomize_hosts = TRUE;
 
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6);
+	if (value && !strcmp (value, "yes"))
+		tun_ipv6 = TRUE;
+
 	/* Advanced values end */
 
 	fprintf (f, "client\n");
@@ -1652,6 +1665,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	if (randomize_hosts)
 		fprintf (f, "remote-random\n");
+
+	if (tun_ipv6)
+		fprintf (f, "tun-ipv6\n");
 
 	/* Handle PKCS#12 (all certs are the same file) */
 	if (   cacert && user_cert && private_key

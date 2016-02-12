@@ -138,6 +138,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_TAP_DEV,              G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_DEV,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_DEV_TYPE,             G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TUN_IPV6,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_REMOTE,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_CERT_TLS,      G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TUNNEL_MTU,           G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -1191,6 +1192,11 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM);
 	if (tmp && !strcmp (tmp, "yes"))
 		add_openvpn_arg (args, "--remote-random");
+
+	/* tun-ipv6 */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6);
+	if (tmp && !strcmp (tmp, "yes"))
+		add_openvpn_arg (args, "--tun-ipv6");
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE);
 	tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER);
