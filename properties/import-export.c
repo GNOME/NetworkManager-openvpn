@@ -138,21 +138,14 @@ args_params_check_nargs_minmax (const char **params, guint nargs_min, guint narg
 	nargs = g_strv_length ((char **) params) - 1;
 
 	if (nargs < nargs_min || nargs > nargs_max) {
-		if (nargs_min == nargs_max) {
-			*out_error = g_strdup_printf (_("option %s expects %s argument%s"),
-			                              params[0],
-			                              nargs_min == 0
-			                                  ? "no"
-			                                  : (nargs_min == 1
-			                                         ? "exactly one"
-			                                         : nm_sprintf_bufa (100, "%u", nargs_min)),
-			                              nargs_min == 1 ? "" : "s");
-		} else {
-			*out_error = g_strdup_printf (_("option %s expects between %u and %u arguments"),
-			                              params[0],
-			                              nargs_min,
-			                              nargs_max);
-		}
+		if (nargs_min != nargs_max)
+			*out_error = g_strdup_printf (_("option %s expects between %u and %u arguments"), params[0], nargs_min, nargs_max);
+		else if (nargs_min == 0)
+			*out_error = g_strdup_printf (_("option %s expects no arguments"), params[0]);
+		else if (nargs_min == 1)
+			*out_error = g_strdup_printf (_("option %s expects exactly one argument"), params[0]);
+		else
+			*out_error = g_strdup_printf (_("option %s expects exactly %u arguments"), params[0], nargs_min);
 		return FALSE;
 	}
 	return TRUE;
