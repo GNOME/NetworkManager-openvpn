@@ -353,6 +353,9 @@ test_tls_inline_import (void)
 	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
 	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
 
+	g_assert (unlink (TMPDIR"/tls-inline-ca.pem") == 0);
+	g_assert (unlink (TMPDIR"/tls-inline-cert.pem") == 0);
+	g_assert (unlink (TMPDIR"/tls-inline-key.pem") == 0);
 	g_assert (unlink (TMPDIR"/tls-inline-tls-auth.pem") == 0);
 
 	g_object_unref (connection);
