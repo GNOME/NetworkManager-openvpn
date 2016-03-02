@@ -758,7 +758,6 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	gs_free char *basename = NULL;
 	gs_free char *default_path = NULL;
 	char *tmp, *tmp2;
-	gs_free char *new_contents = NULL;
 	const char *last_seen_key_direction = NULL;
 	gboolean have_certs, have_ca;
 	GSList *inline_blobs = NULL, *sl_iter;
@@ -793,22 +792,6 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	if (tmp)
 		*tmp = '\0';
 	g_object_set (s_con, NM_SETTING_CONNECTION_ID, basename, NULL);
-
-	if (!g_utf8_validate (contents, contents_len, NULL)) {
-		GError *conv_error = NULL;
-		gsize bytes_written;
-
-		new_contents = g_locale_to_utf8 (contents, contents_len, NULL, &bytes_written, &conv_error);
-		if (conv_error) {
-			/* ignore the error, we tried at least. */
-			g_error_free (conv_error);
-			g_free (new_contents);
-		} else {
-			g_assert (new_contents);
-			contents = new_contents;  /* update contents with the UTF-8 safe text */
-			contents_len = bytes_written + 1;
-		}
-	}
 
 	if (strncmp (contents, "\xEF\xBB\xBF", 3) == 0) {
 		/* skip over UTF-8 BOM */

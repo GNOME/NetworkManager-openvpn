@@ -496,7 +496,6 @@ test_non_utf8_import (void)
 	NMConnection *connection;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
-	const char *expected_cacert = "Attätaenko.pem";
 	char *expected_path;
 	const char *charset = NULL;
 
@@ -517,7 +516,7 @@ test_non_utf8_import (void)
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	g_assert (s_vpn);
 
-	expected_path = g_strdup_printf ("%s/%s", SRCDIR, expected_cacert);
+	expected_path = g_strdup_printf ("%s/%s", SRCDIR, "Att\\344taenko.pem");
 	_check_item (s_vpn, NM_OPENVPN_KEY_CA, expected_path);
 	g_free (expected_path);
 
