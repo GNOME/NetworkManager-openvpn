@@ -24,6 +24,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <locale.h>
+#include <sys/stat.h>
 
 #include "nm-default.h"
 
@@ -33,11 +34,8 @@
 
 #include "nm-test-utils.h"
 
-#define TEST_SRCDIR_CONF     TEST_SRCDIR"/conf"
-#define TEST_BUILDDIR_CONF   TEST_BUILDDIR"/conf"
-
-#define SRCDIR TEST_SRCDIR_CONF
-#define TMPDIR TEST_BUILDDIR_CONF
+#define SRCDIR TEST_SRCDIR"/conf"
+#define TMPDIR TEST_BUILDDIR"/conf-tmp"
 
 /*****************************************************************************/
 
@@ -1308,9 +1306,17 @@ NMTST_DEFINE ();
 
 int main (int argc, char **argv)
 {
+	int errsv, result;
+
 	_nmovpn_test_temp_path = TMPDIR;
 
 	nmtst_init (&argc, &argv, TRUE);
+
+	if (mkdir (TMPDIR, 0755) != 0) {
+		errsv = errno;
+		if (errsv != EEXIST)
+			g_error ("failed creating \"%s\": %s", TMPDIR, g_strerror (errsv));
+	}
 
 #define _add_test_func_simple(func)       g_test_add_func ("/ovpn/properties/" #func, func)
 #define _add_test_func(detail, func, ...) nmtst_add_test_func ("/ovpn/properties/" detail, func, ##__VA_ARGS__)
@@ -1370,6 +1376,15 @@ int main (int argc, char **argv)
 
 	_add_test_func_simple (test_args_parse_line);
 
-	return g_test_run ();
+	result = g_test_run ();
+	if (result != EXIT_SUCCESS)
+		return result;
+
+	if (rmdir (TMPDIR) != 0) {
+		errsv = errno;
+		g_error ("failed deleting %s: %s", TMPDIR, g_strerror (errsv));
+	}
+
+	return EXIT_SUCCESS;
 }
 
