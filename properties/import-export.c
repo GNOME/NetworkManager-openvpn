@@ -93,6 +93,14 @@
 
 const char *_nmovpn_test_temp_path = NULL;
 
+static gboolean
+_is_utf8 (const char *str)
+{
+	g_return_val_if_fail (str, FALSE);
+
+	return g_utf8_validate (str, -1, NULL);
+}
+
 static void
 __attribute__((__format__ (__printf__, 3, 4)))
 setting_vpn_add_data_item_v (NMSettingVpn *setting,
@@ -133,6 +141,19 @@ setting_vpn_add_data_item_int64 (NMSettingVpn *setting,
                                  gint64 value)
 {
 	setting_vpn_add_data_item_v (setting, key, "%"G_GINT64_FORMAT, value);
+}
+
+static void
+setting_vpn_add_data_item (NMSettingVpn *setting,
+                           const char *key,
+                           const char *value)
+{
+	g_return_if_fail (NM_IS_SETTING_VPN (setting));
+	g_return_if_fail (key && key[0]);
+	g_return_if_fail (value && value[0]);
+	g_return_if_fail (_is_utf8 (value));
+
+	nm_setting_vpn_add_data_item (setting, key, value);
 }
 
 static gboolean
@@ -762,7 +783,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				line_error = args_params_error_message_invalid_arg (params, 1);
 				goto handle_line_error;
 			}
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV, params[1]);
 			continue;
 		}
 
@@ -773,7 +794,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				line_error = args_params_error_message_invalid_arg (params, 1);
 				goto handle_line_error;
 			}
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE, params[1]);
 			continue;
 		}
 
@@ -787,7 +808,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			if (nm_streq (params[1], "udp")) {
 				/* ignore; udp is default */
 			} else if (NM_IN_STRSET (params[1], "tcp-client", "tcp-server", "tcp"))
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
 			else {
 				line_error = args_params_error_message_invalid_arg (params, 1);
 				goto handle_line_error;
@@ -799,7 +820,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
 				goto handle_line_error;
 			/* TODO: handle the mssfix argument. */
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
 			continue;
 		}
 
@@ -832,14 +853,14 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 					goto handle_line_error;
 				}
 			}
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
 			continue;
 		}
 
 		if (NM_IN_STRSET (params[0], TAG_FLOAT)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
 			continue;
 		}
 
@@ -855,7 +876,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], TAG_HTTP_PROXY_RETRY, TAG_SOCKS_PROXY_RETRY)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY, "yes");
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY, "yes");
 			continue;
 		}
 
@@ -890,13 +911,13 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				}
 			}
 
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, proxy_type);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, proxy_type);
 
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, params[1]);
 			if (port > 0)
 				setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, port);
 			if (user)
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, user);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, user);
 			if (pass) {
 				nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, pass);
 				nm_setting_set_secret_flags (NM_SETTING (s_vpn),
@@ -956,7 +977,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 					g_string_append (new_remote, params[3]);
 				}
 			}
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, new_remote->str);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, new_remote->str);
 			g_string_free (new_remote, TRUE);
 
 			have_remote = TRUE;
@@ -966,14 +987,14 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], TAG_REMOTE_RANDOM)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM, "yes");
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM, "yes");
 			continue;
 		}
 
 		if (NM_IN_STRSET (params[0], TAG_TUN_IPV6)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6, "yes");
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6, "yes");
 			continue;
 		}
 
@@ -1040,24 +1061,24 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				file = file_free = g_build_filename (default_path, file, NULL);
 
 			if (NM_IN_STRSET (params[0], TAG_PKCS12)) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, file);
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, file);
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, file);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, file);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, file);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, file);
 			} else if (NM_IN_STRSET (params[0], TAG_CA))
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, file);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, file);
 			else if (NM_IN_STRSET (params[0], TAG_CERT))
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, file);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, file);
 			else if (NM_IN_STRSET (params[0], TAG_KEY))
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, file);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, file);
 			else if (NM_IN_STRSET (params[0], TAG_SECRET)) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, file);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, file);
 				if (s_direction)
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, s_direction);
+					setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, s_direction);
 				have_sk = TRUE;
 			} else if (NM_IN_STRSET (params[0], TAG_TLS_AUTH)) {
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA, file);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA, file);
 				if (s_direction)
-					nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, s_direction);
+					setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, s_direction);
 			} else
 				g_assert_not_reached ();
 			continue;
@@ -1066,7 +1087,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], TAG_CIPHER)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER, params[1]);
 			continue;
 		}
 
@@ -1100,7 +1121,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				line_error = g_strdup_printf (_("empty tls-remote argument"));
 				goto handle_line_error;
 			}
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, params[1]);
 			continue;
 		}
 
@@ -1111,15 +1132,15 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				line_error = g_strdup_printf (_("invalid option"));
 				goto handle_line_error;
 			}
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, params[1]);
 			continue;
 		}
 
 		if (NM_IN_STRSET (params[0], TAG_IFCONFIG)) {
 			if (!args_params_check_nargs_n (params, 2, &line_error))
 				goto handle_line_error;
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, params[1]);
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, params[2]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, params[2]);
 			continue;
 		}
 
@@ -1133,7 +1154,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], TAG_AUTH)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
-			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH, params[1]);
 			continue;
 		}
 
@@ -1274,16 +1295,16 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			contents_cur_line = my_contents_cur_line;
 
 			if (key)
-				nm_setting_vpn_add_data_item (s_vpn, key, f_path);
+				setting_vpn_add_data_item (s_vpn, key, f_path);
 			else {
 				nm_assert (nm_streq (token, INLINE_BLOB_PKCS12));
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, f_path);
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, f_path);
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, f_path);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CA, f_path);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CERT, f_path);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_KEY, f_path);
 			}
 			if (   can_have_direction
 			    && last_seen_key_direction)
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, last_seen_key_direction);
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, last_seen_key_direction);
 			continue;
 		}
 
@@ -1342,7 +1363,7 @@ handle_line_error:
 	if (!ctype)
 		ctype = NM_OPENVPN_CONTYPE_TLS;
 
-	nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, ctype);
+	setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, ctype);
 
 	/* Default secret flags to be agent-owned */
 	if (have_pass) {
