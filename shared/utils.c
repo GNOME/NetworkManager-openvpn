@@ -170,3 +170,113 @@ _nm_utils_ascii_str_to_int64 (const char *str, guint base, gint64 min, gint64 ma
 
 /*****************************************************************************/
 
+/**
+ * nmv_utils_str_utf8safe_escape:
+ * @str: NUL terminated input string, possibly in utf-8 encoding
+ *
+ * Does something similar like g_strescape(), where the operation
+ * can be reverted by g_strcompress(). However, the UTF-8 characters
+ * are not escaped at all (except the escape character '\\'). It only
+ * escapes non-UTF-8 characters. This way it is possible to transfer
+ * the string as UTF-8 via D-Bus.
+ * Also, it can be directly displayed to the user and will show as
+ * UTF-8, with exception of the escape character and characters in
+ * different encodings.
+ *
+ * Returns: the escaped input string in UTF-8 encoding. The returned
+ *   value should be freed with g_free().
+ *   The escaping can be reverted by g_strcompress().
+ **/
+char *
+nmv_utils_str_utf8safe_escape (const char *str)
+{
+	char *s = NULL;
+
+	nmv_utils_str_utf8safe_escape_c (str, &s);
+	return s ? : g_strdup (str);
+}
+
+/**
+ * nmv_utils_str_utf8safe_escape_c:
+ * @str: NUL terminated input string, possibly in utf-8 encoding
+ * @str_free: (out): return the pointer location of the string
+ *   if a copying was necessary.
+ *
+ * Like nmv_utils_str_utf8safe_escape(), except that the string
+ * is only copied if it is actually necessary. In that case,
+ * @str_free will contain the allocated string which must be
+ * freed with g_free().
+ * Otherwise, @str_free is %NULL and the input string is returned.
+ *
+ * Returns: the escaped input string. If no escaping is necessary,
+ *   it returns @str. Otherwise, an allocated string @str_free is
+ *   returned.
+ *   The escaping can be reverted by g_strcompress().
+ **/
+const char *
+nmv_utils_str_utf8safe_escape_c (const char *str, char **str_free)
+{
+	const char *p = NULL;
+	guchar ch;
+	GString *s;
+
+	g_return_val_if_fail (str_free, NULL);
+
+	*str_free = NULL;
+	if (!str || !str[0])
+		return str;
+
+	if (g_utf8_validate (str, -1, &p)) {
+		if (!strchr (str, '\\'))
+			return str;
+	}
+
+	s = g_string_sized_new (30);
+
+	do {
+		for (; str < p; str++) {
+			if (str[0] == '\\')
+				g_string_append (s, "\\\\");
+			else
+				g_string_append_c (s, str[0]);
+		}
+
+		ch = p[0];
+		if (ch == '\0')
+			break;
+		g_string_append_c (s, '\\');
+		g_string_append_c (s, '0' + ((ch >> 6) & 07));
+		g_string_append_c (s, '0' + ((ch >> 3) & 07));
+		g_string_append_c (s, '0' + ( ch       & 07));
+
+		str = &p[1];
+		g_utf8_validate (str, -1, &p);
+	} while (TRUE);
+
+	*str_free = g_string_free (s, FALSE);
+	return *str_free;
+}
+
+char *
+nmv_utils_str_utf8safe_unescape (const char *str)
+{
+	if (!str)
+		return NULL;
+	return g_strcompress (str);
+}
+
+const char *
+nmv_utils_str_utf8safe_unescape_c (const char *str, char **str_free)
+{
+	g_return_val_if_fail (str_free, NULL);
+
+	if (!str || !strchr (str, '\\')) {
+		*str_free = NULL;
+		return str;
+	}
+	*str_free = g_strcompress (str);
+	return *str_free;
+}
+
+/*****************************************************************************/
+
