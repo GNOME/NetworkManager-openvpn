@@ -106,6 +106,7 @@ setting_vpn_add_data_item_v (NMSettingVpn *setting,
 	va_list ap, ap2;
 
 	g_return_if_fail (NM_IS_SETTING_VPN (setting));
+	g_return_if_fail (key && key[0]);
 
 	/* let's first try with a stack allocated buffer,
 	 * it's large enough for most cases. */
@@ -124,6 +125,14 @@ setting_vpn_add_data_item_v (NMSettingVpn *setting,
 	va_end (ap);
 	nm_setting_vpn_add_data_item (setting, key, s);
 	g_free (s);
+}
+
+static void
+setting_vpn_add_data_item_int64 (NMSettingVpn *setting,
+                                 const char *key,
+                                 gint64 value)
+{
+	setting_vpn_add_data_item_v (setting, key, "%"G_GINT64_FORMAT, value);
 }
 
 static gboolean
@@ -799,7 +808,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
 				goto handle_line_error;
-			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU, "%u", (unsigned) v_int64);
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU, v_int64);
 			continue;
 		}
 
@@ -808,7 +817,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
 				goto handle_line_error;
-			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, "%u", (unsigned) v_int64);
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, v_int64);
 			continue;
 		}
 
@@ -839,7 +848,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
 				goto handle_line_error;
-			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "%u", (unsigned) v_int64);
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, v_int64);
 			continue;
 		}
 
@@ -852,7 +861,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 
 		if (NM_IN_STRSET (params[0], TAG_HTTP_PROXY, TAG_SOCKS_PROXY)) {
 			const char *proxy_type = NULL;
-			gs_free char *s_port = NULL;
+			gint64 port = 0;
 			gs_free char *user = NULL;
 			gs_free char *pass = NULL;
 
@@ -872,9 +881,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			}
 
 			if (params[2]) {
-				if (!args_params_parse_port (params, 2, &v_int64, &line_error))
+				if (!args_params_parse_port (params, 2, &port, &line_error))
 					goto handle_line_error;
-				s_port = g_strdup_printf ("%u", (unsigned) v_int64);
 
 				if (params[3]) {
 					if (!parse_http_proxy_auth (default_path, params[3], &user, &pass, &line_error))
@@ -885,8 +893,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, proxy_type);
 
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, params[1]);
-			if (s_port)
-				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, s_port);
+			if (port > 0)
+				setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, port);
 			if (user)
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, user);
 			if (pass) {
@@ -974,7 +982,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				goto handle_line_error;
 			if (!args_params_parse_port (params, 1, &v_int64, &line_error))
 				goto handle_line_error;
-			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_PORT, "%u", (unsigned) v_int64);
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_PORT, v_int64);
 			continue;
 		}
 
@@ -993,7 +1001,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			else if (NM_IN_STRSET (params[0], TAG_PING_RESTART))
 				key = NM_OPENVPN_KEY_PING_RESTART;
 
-			setting_vpn_add_data_item_v (s_vpn, key, "%u", (unsigned) v_int64);
+			setting_vpn_add_data_item_int64 (s_vpn, key, v_int64);
 			continue;
 		}
 
@@ -1071,8 +1079,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 2, 0, G_MAXINT, &v2, &line_error))
 				goto handle_line_error;
-			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_PING, "%u", (unsigned) v_int64);
-			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_PING_RESTART, "%u", (unsigned) v2);
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_PING, v_int64);
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_PING_RESTART, v2);
 			continue;
 		}
 
@@ -1081,7 +1089,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 1, 1, 65535, &v_int64, &line_error))
 				goto handle_line_error;
-			setting_vpn_add_data_item_v (s_vpn, NM_OPENVPN_KEY_KEYSIZE, "%u", (unsigned) v_int64);
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_KEYSIZE, v_int64);
 			continue;
 		}
 
