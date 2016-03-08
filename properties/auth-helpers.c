@@ -1386,7 +1386,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	const char *dev, *dev_type, *tap_dev;
 	GtkListStore *store;
 	GtkTreeIter iter;
-	guint32 active = PROXY_TYPE_NONE;
+	guint32 active;
 	guint32 pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	GError *error = NULL;
 
@@ -1499,13 +1499,12 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	                                  TRUE, FALSE);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROXY_TYPE);
+	active = PROXY_TYPE_NONE;
 	if (value) {
 		if (!strcmp (value, "http"))
 			active = PROXY_TYPE_HTTP;
 		else if (!strcmp (value, "socks"))
 			active = PROXY_TYPE_SOCKS;
-		else
-			active = PROXY_TYPE_NONE;
 	}
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
@@ -1719,7 +1718,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		int direction = -1;
 
-		active = -1;
+		active = 0;
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
 		if (value && strlen (value))
@@ -1753,7 +1752,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 		gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 		g_object_unref (store);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active < 0 ? 0 : active);
+		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active);
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
 		if (value && strlen (value)) {
