@@ -109,7 +109,7 @@ check_gateway_entry (const char *str)
 			*proto++ = '\0';
 
 		/* check hostname */
-		if (!host || !*host)
+		if (!*host)
 			goto out;
 		/* check port */
 		if (port && *port) {
