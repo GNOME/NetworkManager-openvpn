@@ -31,6 +31,7 @@
 #include "nm-openvpn.h"
 #include "nm-openvpn-service-defines.h"
 #include "import-export.h"
+#include "utils.h"
 
 #include "nm-test-utils.h"
 
@@ -495,7 +496,6 @@ test_non_utf8_import (void)
 	NMConnection *connection;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
-	const char *expected_cacert = "Attätaenko.pem";
 	char *expected_path;
 	const char *charset = NULL;
 
@@ -516,7 +516,7 @@ test_non_utf8_import (void)
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	g_assert (s_vpn);
 
-	expected_path = g_strdup_printf ("%s/%s", SRCDIR, expected_cacert);
+	expected_path = g_strdup_printf ("%s/%s", SRCDIR, "Att\\344taenko.pem");
 	_check_item (s_vpn, NM_OPENVPN_KEY_CA, expected_path);
 	g_free (expected_path);
 
@@ -1302,6 +1302,81 @@ test_args_parse_line (void)
 
 /*****************************************************************************/
 
+static void
+do_test_utils_str_utf8safe (const char *str, const char *expected)
+{
+	const char *str_safe, *s;
+	gs_free char *str2 = NULL;
+	gs_free char *str3 = NULL;
+
+	str_safe = nmv_utils_str_utf8safe_escape_c (str, &str2);
+
+	str3 = nmv_utils_str_utf8safe_escape (str);
+	g_assert_cmpstr (str3, ==, str_safe);
+	g_assert ((!str && !str3) || (str != str3));
+	g_clear_pointer (&str3, g_free);
+
+	if (expected == NULL) {
+		g_assert (str_safe == str);
+		g_assert (!str2);
+		if (str) {
+			g_assert (!strchr (str, '\\'));
+			g_assert (g_utf8_validate (str, -1, NULL));
+		}
+
+		g_assert (str == nmv_utils_str_utf8safe_unescape_c (str_safe, &str3));
+		g_assert (!str3);
+
+		str3 = nmv_utils_str_utf8safe_unescape (str_safe);
+		if (str) {
+			g_assert (str3 != str);
+			g_assert_cmpstr (str3, ==, str);
+		} else
+			g_assert (!str3);
+		g_clear_pointer (&str3, g_free);
+		return;
+	}
+
+	g_assert (str);
+	g_assert (str_safe != str);
+	g_assert (str_safe == str2);
+	g_assert (strchr (str, '\\') || !g_utf8_validate (str, -1, NULL));
+	g_assert (g_utf8_validate (str_safe, -1, NULL));
+
+	str3 = g_strcompress (str_safe);
+	g_assert_cmpstr (str, ==, str3);
+	g_clear_pointer (&str3, g_free);
+
+	str3 = nmv_utils_str_utf8safe_unescape (str_safe);
+	g_assert (str3 != str);
+	g_assert_cmpstr (str3, ==, str);
+	g_clear_pointer (&str3, g_free);
+
+	s = nmv_utils_str_utf8safe_unescape_c (str_safe, &str3);
+	g_assert (str3 != str);
+	g_assert (s == str3);
+	g_assert_cmpstr (str3, ==, str);
+	g_clear_pointer (&str3, g_free);
+
+	g_assert_cmpstr (str_safe, ==, expected);
+}
+
+static void
+test_utils_str_utf8safe (void)
+{
+	do_test_utils_str_utf8safe (NULL, NULL);
+	do_test_utils_str_utf8safe ("", NULL);
+	do_test_utils_str_utf8safe ("a", NULL);
+	do_test_utils_str_utf8safe ("ab", NULL);
+	do_test_utils_str_utf8safe ("abäb", NULL);
+	do_test_utils_str_utf8safe ("㈞abä㈞b", NULL);
+	do_test_utils_str_utf8safe ("Äab\\äb", "Äab\\\\äb");
+	do_test_utils_str_utf8safe ("ÄÄab\\äb", "ÄÄab\\\\äb");
+	do_test_utils_str_utf8safe ("Ä\304ab\\äb", "Ä\\304ab\\\\äb");
+}
+
+/*****************************************************************************/
+
 NMTST_DEFINE ();
 
 int main (int argc, char **argv)
@@ -1375,6 +1450,8 @@ int main (int argc, char **argv)
 	_add_test_func_simple (test_route_export);
 
 	_add_test_func_simple (test_args_parse_line);
+
+	_add_test_func_simple (test_utils_str_utf8safe);
 
 	result = g_test_run ();
 	if (result != EXIT_SUCCESS)

@@ -30,5 +30,10 @@ gboolean is_encrypted (const char *filename);
 
 gint64 _nm_utils_ascii_str_to_int64 (const char *str, guint base, gint64 min, gint64 max, gint64 fallback);
 
+char *      nmv_utils_str_utf8safe_escape     (const char *str);
+const char *nmv_utils_str_utf8safe_escape_c   (const char *str, char **out_clone);
+char *      nmv_utils_str_utf8safe_unescape   (const char *str);
+const char *nmv_utils_str_utf8safe_unescape_c (const char *str, char **str_free);
+
 #endif  /* UTILS_H */
 
