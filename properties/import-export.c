@@ -239,7 +239,10 @@ args_params_check_arg_nonempty (const char **params,
 	g_return_val_if_fail (out_error && !*out_error, FALSE);
 
 	if (params[n_param][0] == '\0') {
-		*out_error = g_strdup_printf (_("argument%s%s of \"%s\" can not be empty"), argument_name ? " " : "", argument_name ?: "", params[0]);
+		if (argument_name)
+			*out_error = g_strdup_printf (_("argument %s of \"%s\" can not be empty"), argument_name, params[0]);
+		else
+			*out_error = g_strdup_printf (_("argument of \"%s\" can not be empty"), params[0]);
 		return FALSE;
 	}
 	return TRUE;
@@ -254,7 +257,10 @@ args_params_check_arg_utf8 (const char **params,
 	if (!args_params_check_arg_nonempty (params, n_param, argument_name, out_error))
 		return FALSE;
 	if (!_is_utf8 (params[n_param])) {
-		*out_error = g_strdup_printf (_("argument%s%s of \"%s\" must be UTF-8 encoded"), argument_name ? " " : "", argument_name ?: "", params[0]);
+		if (argument_name)
+			*out_error = g_strdup_printf (_("argument %s of \"%s\" must be UTF-8 encoded"), argument_name, params[0]);
+		else
+			*out_error = g_strdup_printf (_("argument of \"%s\" must be UTF-8 encoded"), params[0]);
 		return FALSE;
 	}
 	return TRUE;
