@@ -140,6 +140,7 @@ check_validity (OpenvpnEditor *self, GError **error)
 	const char *contype = NULL;
 	GdkRGBA rgba;
 	gboolean gateway_valid;
+	gboolean success;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
@@ -158,9 +159,9 @@ check_validity (OpenvpnEditor *self, GError **error)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_combo"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
-	g_assert (model);
-	g_assert (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter));
-
+	g_return_val_if_fail (model, FALSE);
+	success = gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter);
+	g_return_val_if_fail (success == TRUE, FALSE);
 	gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &contype, -1);
 	if (!auth_widget_check_validity (priv->builder, contype, error))
 		return FALSE;
@@ -245,14 +246,16 @@ advanced_button_clicked_cb (GtkWidget *button, gpointer user_data)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	const char *contype = NULL;
+	gboolean success;
 
 	toplevel = gtk_widget_get_toplevel (priv->widget);
 	g_return_if_fail (gtk_widget_is_toplevel (toplevel));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_combo"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
-	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter))
-		gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &contype, -1);
+	success = gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter);
+	g_return_if_fail (success == TRUE);
+	gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &contype, -1);
 
 	dialog = advanced_dialog_new (priv->advanced, contype);
 	if (!dialog) {
