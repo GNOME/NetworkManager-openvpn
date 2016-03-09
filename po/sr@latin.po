@@ -2,22 +2,25 @@
 # Courtesy of Prevod.org team (http://prevod.org/) -- 2013—2016.
 # Copyright (C) 2013 network-manager-openvpn's COPYRIGHT HOLDER
 # This file is distributed under the same license as the network-manager-openvpn package.
+#
+# Translators: 
 # Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2013—2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=Network"
 "Manager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2016-03-06 02:01+0000\n"
-"PO-Revision-Date: 2016-03-06 11:33+0200\n"
+"POT-Creation-Date: 2016-03-08 14:05+0000\n"
+"PO-Revision-Date: 2016-03-09 09:12+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
-"Language-Team: Serbian <gnom@prevod.org>\n"
+"Language-Team: Serbian <(nothing)>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
 "n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Project-Style: gnome\n"
 
 #: ../auth-dialog/main.c:180
 #, c-format
@@ -72,7 +75,7 @@ msgid "Choose an OpenVPN static key..."
 msgstr "Izaberite OpenVPN statički ključ..."
 
 #: ../properties/auth-helpers.c:369 ../properties/auth-helpers.c:1110
-#: ../properties/auth-helpers.c:1742
+#: ../properties/auth-helpers.c:1741
 msgid "None"
 msgstr "Ništa"
 
@@ -144,196 +147,201 @@ msgstr "HTTP"
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/auth-helpers.c:1639
+#: ../properties/auth-helpers.c:1638
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/auth-helpers.c:1641
+#: ../properties/auth-helpers.c:1640
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1648
+#: ../properties/auth-helpers.c:1647
 msgid "(automatic)"
 msgstr "(samostalno)"
 
-#: ../properties/auth-helpers.c:1809
+#: ../properties/auth-helpers.c:1808
 msgid "ping-exit"
 msgstr "izlaz pinga"
 
-#: ../properties/auth-helpers.c:1811
+#: ../properties/auth-helpers.c:1810
 msgid "ping-restart"
 msgstr "ponovno pokretanje pinga"
 
-#: ../properties/import-export.c:142
+#: ../properties/import-export.c:212
 #, c-format
 msgid "option %s expects between %u and %u arguments"
 msgstr "opcija „%s“ očekuje između %u i %u argumenta"
 
-#: ../properties/import-export.c:144
+#: ../properties/import-export.c:214
 #, c-format
-#| msgid "option %s expects %s argument%s"
 msgid "option %s expects no arguments"
 msgstr "opcija „%s“ ne očekuje argumente"
 
-#: ../properties/import-export.c:146
+#: ../properties/import-export.c:216
 #, c-format
-#| msgid "option %s expects %s argument%s"
 msgid "option %s expects exactly one argument"
 msgstr "opcija „%s“ očekuje tačno jedan argument"
 
-#: ../properties/import-export.c:148
+#: ../properties/import-export.c:218
 #, c-format
-#| msgid "option %s expects %s argument%s"
 msgid "option %s expects exactly %u arguments"
 msgstr "opcija „%s“ očekuje tačno %u argumenta"
 
-#: ../properties/import-export.c:178
+#: ../properties/import-export.c:243
+#, c-format
+msgid "argument %s of \"%s\" can not be empty"
+msgstr "argument „%s“ za „%s“ ne može biti prazan"
+
+#: ../properties/import-export.c:245
+#, c-format
+msgid "argument of \"%s\" can not be empty"
+msgstr "argument za „%s“ ne može biti prazan"
+
+#: ../properties/import-export.c:261
+#, c-format
+msgid "argument %s of \"%s\" must be UTF-8 encoded"
+msgstr "argument „%s“ za „%s“ mora biti u UTF-8 kodiranju"
+
+#: ../properties/import-export.c:263
+#, c-format
+msgid "argument of \"%s\" must be UTF-8 encoded"
+msgstr "argument za „%s“ mora biti u UTF-8 kodiranju"
+
+#: ../properties/import-export.c:287
 #, c-format
 msgid "invalid %uth argument to '%s' where number expected"
 msgstr "neispravan %u. argument za „%s“ gde je očekivan broj"
 
-#: ../properties/import-export.c:209
+#: ../properties/import-export.c:318
 #, c-format
 msgid "invalid %uth argument to '%s' where IPv4 address expected"
 msgstr "neispravan %u. argument za „%s“ gde je očekivana IPv4 adresa"
 
-#: ../properties/import-export.c:237
+#: ../properties/import-export.c:346
 #, c-format
 msgid "invalid %uth key-direction argument to '%s'"
 msgstr "neispravan %u. argument pravca ključa za „%s“"
 
-#: ../properties/import-export.c:251
+#: ../properties/import-export.c:360
 #, c-format
 msgid "invalid %uth argument to '%s'"
 msgstr "neispravan %u. argument za „%s“"
 
-#: ../properties/import-export.c:365
+#: ../properties/import-export.c:474
 #, c-format
 msgid "unterminated %s at position %lld"
 msgstr "neokončano „%s“ na %lld. položaju"
 
-#: ../properties/import-export.c:366
+#: ../properties/import-export.c:475
 msgid "double quote"
 msgstr "dvostruki navodnici"
 
-#: ../properties/import-export.c:366
+#: ../properties/import-export.c:475
 msgid "single quote"
 msgstr "Polunavodnik"
 
-#: ../properties/import-export.c:375
+#: ../properties/import-export.c:484
 #, c-format
 msgid "trailing escaping backslash at position %lld"
 msgstr "prateća kontra kosa crta kraja reda na %lld. položaju"
 
-#: ../properties/import-export.c:494
+#: ../properties/import-export.c:603
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr "ne mogu da pročitam datoteku ovlašćenja HTTP posrednika"
 
-#: ../properties/import-export.c:512
+#: ../properties/import-export.c:621
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr ""
 "ne mogu da pročitam korisnika/lozinku iz datoteke ovlašćenja HTTP posrednika"
 
-#: ../properties/import-export.c:574
+#: ../properties/import-export.c:629
+#, c-format
+#| msgid "cannot read user/password from HTTP proxy auth file"
+msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
+msgstr ""
+"korisnik/lozinka iz datoteke ovlašćenja HTTP posrednika mora biti u UTF-8 "
+"kodiranju"
+
+#: ../properties/import-export.c:691
 #, c-format
 msgid "'%s' is not a directory"
 msgstr "„%s“ nije direktorijum"
 
-#: ../properties/import-export.c:582
+#: ../properties/import-export.c:699
 #, c-format
 msgid "cannot create '%s' directory"
 msgstr "Ne mogu da napravim „%s“ direktorijum"
 
-#: ../properties/import-export.c:602
+#: ../properties/import-export.c:719
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr "ne mogu da zapišem <%s> blob iz %ld. reda u datoteku (%s)"
 
-#: ../properties/import-export.c:619
+#: ../properties/import-export.c:736
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file '%s'"
 msgstr "ne mogu da zapišem <%s> blob iz %ld. reda u datoteku „%s“"
 
-#: ../properties/import-export.c:822
+#: ../properties/import-export.c:920
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "nepodržan argument „comp-lzo“"
 
-#: ../properties/import-export.c:870
-#, c-format
-msgid "empty %s service argument"
-msgstr "prazan argument „%s“ usluge"
-
-#: ../properties/import-export.c:911
-#, c-format
-msgid "missing remote argument"
-msgstr "nedostaje udaljeni argument"
-
-#: ../properties/import-export.c:915
+#: ../properties/import-export.c:1008
 #, c-format
 msgid "remote cannot contain space"
 msgstr "udaljeni ne može da sadrži razmak"
 
-#: ../properties/import-export.c:919
+#: ../properties/import-export.c:1012
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "udaljeni ne može da sadrži zarez"
 
-#: ../properties/import-export.c:930
+#: ../properties/import-export.c:1023
 #, c-format
 msgid "remote expects protocol either udp or remote"
 msgstr "udaljeni očekuje ili protokol „udp“ ili „remote“"
 
-#: ../properties/import-export.c:1021
-#, c-format
-msgid "missing certificate file name"
-msgstr "nedostaje naziv datoteke uverenja"
-
-#: ../properties/import-export.c:1092
-#, c-format
-msgid "empty tls-remote argument"
-msgstr "prazan argument tls-udaljenog"
-
-#: ../properties/import-export.c:1103
+#: ../properties/import-export.c:1194
 #, c-format
 msgid "invalid option"
 msgstr "neispravna opcija"
 
-#: ../properties/import-export.c:1210
+#: ../properties/import-export.c:1307
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "nepodržani element blob/iksml"
 
-#: ../properties/import-export.c:1239
+#: ../properties/import-export.c:1336
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "neokončani element bloba <%s>"
 
-#: ../properties/import-export.c:1289
+#: ../properties/import-export.c:1386
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "greška podešavanja: %s (%ld. red)"
 
-#: ../properties/import-export.c:1290
+#: ../properties/import-export.c:1387
 msgid "unknown or unsupported option"
 msgstr "nepoznata ili nepodržana opcija"
 
-#: ../properties/import-export.c:1300
+#: ../properties/import-export.c:1397
 msgid "The file to import wasn't a valid OpenVPN client configuration"
 msgstr "Datoteka za uvoz nije ispravno podešavanje OpenVPN klijenta"
 
-#: ../properties/import-export.c:1308
+#: ../properties/import-export.c:1405
 msgid "The file to import wasn't a valid OpenVPN configure (no remote)"
 msgstr "Datoteka za uvoz nije ispravno OpenVPN podešavanje (nema udaljenog)"
 
-#: ../properties/import-export.c:1449
+#: ../properties/import-export.c:1547
 msgid "could not open file for writing"
 msgstr "ne mogu da otvorim datoteku za pisanje"
 
-#: ../properties/import-export.c:1460
+#: ../properties/import-export.c:1558
 msgid "connection was incomplete (missing gateway)"
 msgstr "veza beše nepotpuna (nedostaje mrežni prolaz)"
 
@@ -345,31 +353,31 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Saglasno sa OpenVPN serverom."
 
-#: ../properties/nm-openvpn.c:326
+#: ../properties/nm-openvpn.c:329
 msgid "Certificates (TLS)"
 msgstr "Uverenja (TLS)"
 
-#: ../properties/nm-openvpn.c:337
+#: ../properties/nm-openvpn.c:340
 msgid "Password"
 msgstr "Lozinka"
 
-#: ../properties/nm-openvpn.c:350
+#: ../properties/nm-openvpn.c:353
 msgid "Password with Certificates (TLS)"
 msgstr "Lozinka sa uverenjima (TLS)"
 
-#: ../properties/nm-openvpn.c:362
+#: ../properties/nm-openvpn.c:365
 msgid "Static Key"
 msgstr "Statički ključ"
 
-#: ../properties/nm-openvpn.c:510
+#: ../properties/nm-openvpn.c:513
 msgid "could not create openvpn object"
 msgstr "ne mogu da napravim openvpn objekat"
 
-#: ../properties/nm-openvpn.c:536
+#: ../properties/nm-openvpn.c:539
 msgid "could not load UI widget"
 msgstr "ne mogu da učitam element KS-a"
 
-#: ../properties/nm-openvpn.c:627
+#: ../properties/nm-openvpn.c:630
 msgid "unknown OpenVPN file extension"
 msgstr "nepoznato proširenje OpenVPN datoteke"
 
@@ -1034,126 +1042,138 @@ msgstr "Potrebna je lozinka HTTP posrednika."
 msgid "An HTTP Proxy username and password are required."
 msgstr "Potrebni su korisničko ime i lozinka HTTP posrednika."
 
-#: ../src/nm-openvpn-service.c:1095
+#: ../src/nm-openvpn-service.c:1113
 msgid "Could not find the openvpn binary."
 msgstr "Ne mogu da pronađem openvpn izvršni."
 
-#: ../src/nm-openvpn-service.c:1105
+#: ../src/nm-openvpn-service.c:1123
 msgid "Invalid HMAC auth."
 msgstr "Neispravno HMAC potvrđivanje identiteta."
 
-#: ../src/nm-openvpn-service.c:1115 ../src/nm-openvpn-service.c:1803
+#: ../src/nm-openvpn-service.c:1133 ../src/nm-openvpn-service.c:1826
 msgid "Invalid connection type."
 msgstr "Neispravna vrsta veze."
 
-#: ../src/nm-openvpn-service.c:1150 ../src/nm-openvpn-service.c:1160
+#: ../src/nm-openvpn-service.c:1168 ../src/nm-openvpn-service.c:1178
 #, c-format
 msgid "Invalid port number '%s'."
 msgstr "Neispravan broj priključnika „%s“."
 
-#: ../src/nm-openvpn-service.c:1177
+#: ../src/nm-openvpn-service.c:1195
 #, c-format
 msgid "Invalid proto '%s'."
 msgstr "Neispravan protokol „%s“."
 
-#: ../src/nm-openvpn-service.c:1223
+#: ../src/nm-openvpn-service.c:1241
 #, c-format
 msgid "Invalid proxy type '%s'."
 msgstr "Neispravna vrsta posrednika „%s“."
 
-#: ../src/nm-openvpn-service.c:1246
+#: ../src/nm-openvpn-service.c:1264
 #, c-format
 msgid "Invalid ping duration '%s'."
 msgstr "Neispravno trajanje pinga „%s“."
 
-#: ../src/nm-openvpn-service.c:1260
+#: ../src/nm-openvpn-service.c:1278
 #, c-format
 msgid "Invalid ping-exit duration '%s'."
 msgstr "Neispravno trajanje izlaska pinga „%s“."
 
-#: ../src/nm-openvpn-service.c:1274
+#: ../src/nm-openvpn-service.c:1292
 #, c-format
 msgid "Invalid ping-restart duration '%s'."
 msgstr "Neispravno trajanje ponovnog pokretanja pinga „%s“."
 
-#: ../src/nm-openvpn-service.c:1324
+#: ../src/nm-openvpn-service.c:1344
 #, c-format
 msgid "Invalid keysize '%s'."
 msgstr "Neispravna veličina ključa „%s“."
 
-#: ../src/nm-openvpn-service.c:1374
+#: ../src/nm-openvpn-service.c:1394
 #, c-format
 msgid "Invalid reneg seconds '%s'."
 msgstr "Neispravan broj sekundi ponovnog pregovaranja „%s“."
 
-#: ../src/nm-openvpn-service.c:1406
+#: ../src/nm-openvpn-service.c:1426
 #, c-format
 msgid "Invalid TUN MTU size '%s'."
 msgstr "Neispravna TUN MTU veličina „%s“."
 
-#: ../src/nm-openvpn-service.c:1421
+#: ../src/nm-openvpn-service.c:1441
 #, c-format
 msgid "Invalid fragment size '%s'."
 msgstr "Neispravna veličina odlomka „%s“."
 
-#: ../src/nm-openvpn-service.c:1497
+#: ../src/nm-openvpn-service.c:1517
 msgid "Missing required local IP address for static key mode."
 msgstr "Nedostaje zahtevana mesna IP adresa za režim statičkog ključa."
 
-#: ../src/nm-openvpn-service.c:1509
+#: ../src/nm-openvpn-service.c:1529
 msgid "Missing required remote IP address for static key mode."
 msgstr "Nedostaje zahtevana udaljena IP adresa za režim statičkog ključa."
 
-#: ../src/nm-openvpn-service.c:1534
+#: ../src/nm-openvpn-service.c:1554
 #, c-format
 msgid "Unknown connection type '%s'."
 msgstr "Nepoznata vrsta veze „%s“."
 
-#: ../src/nm-openvpn-service.c:1559
+#: ../src/nm-openvpn-service.c:1579
 #, c-format
 msgid "User '%s' not found, check NM_OPENVPN_USER."
 msgstr "Nisam našao korisnika „%s“, proverite „NM_OPENVPN_USER“."
 
-#: ../src/nm-openvpn-service.c:1573
+#: ../src/nm-openvpn-service.c:1593
 #, c-format
 msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
 msgstr "Nisam našao grupu „%s“, proverite „NM_OPENVPN_GROUP“."
 
-#: ../src/nm-openvpn-service.c:1717 ../src/nm-openvpn-service.c:1794
-#: ../src/nm-openvpn-service.c:1828
+#: ../src/nm-openvpn-service.c:1740 ../src/nm-openvpn-service.c:1817
+#: ../src/nm-openvpn-service.c:1851
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr "Ne mogu da obradim zahtev zbog neispravnih podešavanja VPN veze."
 
-#: ../src/nm-openvpn-service.c:1726
+#: ../src/nm-openvpn-service.c:1749
 msgid ""
 "Could not process the request because the openvpn connection type was "
 "invalid."
 msgstr "Ne mogu da obradim zahtev zbog neispravne vrste veze openvpn-a."
 
-#: ../src/nm-openvpn-service.c:1841
+#: ../src/nm-openvpn-service.c:1864
 msgid "Unhandled pending authentication."
 msgstr "Nepoznato potvrđivanje identiteta na čekanju."
 
-#: ../src/nm-openvpn-service.c:1959
+#: ../src/nm-openvpn-service.c:1982
 msgid "Don't quit when VPN connection terminates"
 msgstr "Ne prekida kada se završava VPN veza"
 
-#: ../src/nm-openvpn-service.c:1960
+#: ../src/nm-openvpn-service.c:1983
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 "Uključuje opširno zapisivanje zarad ispravljanja grešaka (može da izloži lozinke)"
 
-#: ../src/nm-openvpn-service.c:1961
+#: ../src/nm-openvpn-service.c:1984
 msgid "D-Bus name to use for this instance"
 msgstr "Naziv D-sabirnice koji će se koristiti za ovaj primerak"
 
-#: ../src/nm-openvpn-service.c:1987
+#: ../src/nm-openvpn-service.c:2010
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
 "nm-openvpn-usluga obezbeđuje Upravniku mreže objedinjenu OpenVPN mogućnost."
+
+#~ msgid "empty %s service argument"
+#~ msgstr "prazan argument „%s“ usluge"
+
+#~ msgid "missing remote argument"
+#~ msgstr "nedostaje udaljeni argument"
+
+#~ msgid "missing certificate file name"
+#~ msgstr "nedostaje naziv datoteke uverenja"
+
+#~ msgid "empty tls-remote argument"
+#~ msgstr "prazan argument tls-udaljenog"
 
 #~ msgid "not a valid OpenVPN configuration file"
 #~ msgstr "nije ispravna datoteka OpenVPN podešavanja"
