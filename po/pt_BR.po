@@ -9,22 +9,22 @@
 # Og Maciel <ogmaciel@gnome.org>, 2009.
 # Antonio Fernandes C. Neto <fernandesn@gnome.org>, 2010, 2011.
 # Enrico Nicoletto <liverig@gmail.com>, 2013.
-# Rafael Fontenelle <rffontenelle@gmail.com>, 2012, 2013, 2014, 2015, 2016.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2012, 2013, 2014, 2015, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-OpenVPN\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2016-03-08 14:05+0000\n"
-"PO-Revision-Date: 2016-03-08 11:27-0300\n"
-"Last-Translator: Rafael Fontenelle <rffontenelle@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=Networ"
+"kManager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2016-03-18 02:03+0000\n"
+"PO-Revision-Date: 2016-03-18 04:31-0200\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
 #: ../auth-dialog/main.c:180
@@ -171,196 +171,184 @@ msgstr "ping-exit"
 msgid "ping-restart"
 msgstr "ping-restart"
 
-# %s é opção; %u são números
 #: ../properties/import-export.c:212
 #, c-format
-msgid "option %s expects between %u and %u arguments"
-msgstr "a opção %s espera entre %u e %u argumentos"
+msgid "option %s expects between %u and %u argument"
+msgid_plural "option %s expects between %u and %u arguments"
+msgstr[0] "a opção %s espera entre %u e %u argumento"
+msgstr[1] "a opção %s espera entre %u e %u argumentos"
 
-# %s nome da opção;
-#: ../properties/import-export.c:214
+#: ../properties/import-export.c:217
 #, c-format
 msgid "option %s expects no arguments"
 msgstr "a opção %s espera nenhum argumento"
 
-# %s nome da opção;
-#: ../properties/import-export.c:216
+#: ../properties/import-export.c:219
 #, c-format
 msgid "option %s expects exactly one argument"
-msgstr "a opção %s espera exatamente um argumento"
+msgid_plural "option %s expects exactly %u arguments"
+msgstr[0] "a opção %s espera exatamente um argumento"
+msgstr[1] "a opção %s espera exatamente %u argumentos"
 
-# %s nome da opção; %u número de argumentos
-#: ../properties/import-export.c:218
-#, c-format
-msgid "option %s expects exactly %u arguments"
-msgstr "a opção %s espera %u argumentos"
-
-# %s em números: 1 será espaço em branco, se o 2 não for vazio; do contrario, 1 e 2 estarão vazios;   3 é parâmetro
-#: ../properties/import-export.c:243
+#: ../properties/import-export.c:248
 #, c-format
 msgid "argument %s of \"%s\" can not be empty"
 msgstr "argumento %s de \"%s\" não pode estar vazio"
 
-# %s em números: 1 será espaço em branco, se o 2 não for vazio; do contrario, 1 e 2 estarão vazios;   3 é parâmetro
-#: ../properties/import-export.c:245
+#: ../properties/import-export.c:250
 #, c-format
 msgid "argument of \"%s\" can not be empty"
 msgstr "argumento de \"%s\" não pode estar vazio"
 
-# %s em números: 1 será espaço em branco, se o 2 não for vazio; do contrario, 1 e 2 estarão vazios;   3 é parâmetro
-#: ../properties/import-export.c:261
+#: ../properties/import-export.c:266
 #, c-format
 msgid "argument %s of \"%s\" must be UTF-8 encoded"
 msgstr "argumento %s de \"%s\" deve estar codificado em UTF-8"
 
-# %s em números: 1 será espaço em branco, se o 2 não for vazio; do contrario, 1 e 2 estarão vazios;   3 é parâmetro
-#: ../properties/import-export.c:263
+#: ../properties/import-export.c:268
 #, c-format
 msgid "argument of \"%s\" must be UTF-8 encoded"
 msgstr "argumento de \"%s\" deve estar codificado em UTF-8"
 
-# %u é um número, sendo p. ex. 10th (en) = 10º (pt); %s é opção.
-#: ../properties/import-export.c:287
+#: ../properties/import-export.c:292
 #, c-format
 msgid "invalid %uth argument to '%s' where number expected"
 msgstr "%uº argumento de \"%s\" inválido, no qual se esperava um número"
 
-# %u é um número, sendo p. ex. 10th (en) = 10º (pt); %s é opção.
-#: ../properties/import-export.c:318
+#: ../properties/import-export.c:323
 #, c-format
 msgid "invalid %uth argument to '%s' where IPv4 address expected"
 msgstr "%uº argumento de \"%s\" inválido, no qual se esperava um endereço IPv4"
 
-# %u é um número, sendo p. ex. 10th (en) = 10º (pt); %s é opção.
-#: ../properties/import-export.c:346
+#: ../properties/import-export.c:351
 #, c-format
 msgid "invalid %uth key-direction argument to '%s'"
 msgstr "argumento de direção chave %uº inválido para \"%s\""
 
-#: ../properties/import-export.c:360
+#: ../properties/import-export.c:365
 #, c-format
 msgid "invalid %uth argument to '%s'"
 msgstr "%uº argumento de \"%s\" inválido"
 
 # %s é substituído pela tradução de "double quote" ou "single quote".
-#: ../properties/import-export.c:474
+#: ../properties/import-export.c:479
 #, c-format
 msgid "unterminated %s at position %lld"
 msgstr "%s não terminadas na posição %lld"
 
-#: ../properties/import-export.c:475
+#: ../properties/import-export.c:480
 msgid "double quote"
 msgstr "aspas duplas"
 
-#: ../properties/import-export.c:475
+#: ../properties/import-export.c:480
 msgid "single quote"
 msgstr "aspas simples"
 
-#: ../properties/import-export.c:484
+#: ../properties/import-export.c:489
 #, c-format
 msgid "trailing escaping backslash at position %lld"
 msgstr "barra invertida de escape ao final na posição %lld"
 
-#: ../properties/import-export.c:603
+#: ../properties/import-export.c:608
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr "não foi possível ler o arquivo auth de proxy HTTP"
 
-#: ../properties/import-export.c:621
+#: ../properties/import-export.c:626
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr "não foi possível ler usuário/senha do arquivo auth de proxy HTTP"
 
-#: ../properties/import-export.c:629
+#: ../properties/import-export.c:634
 #, c-format
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr ""
 "usuário/senha do arquivo auth de proxy HTTP deve estar codificado em UTF-8"
 
-#: ../properties/import-export.c:691
+#: ../properties/import-export.c:696
 #, c-format
 msgid "'%s' is not a directory"
 msgstr "\"%s\" não é um diretório"
 
-#: ../properties/import-export.c:699
+#: ../properties/import-export.c:704
 #, c-format
 msgid "cannot create '%s' directory"
 msgstr "não foi possível criar o diretório \"%s\""
 
-#: ../properties/import-export.c:719
+#: ../properties/import-export.c:724
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr ""
 "não foi possível escrever o blob <%s> a partir da linha %ld para o arquivo "
 "(%s)"
 
-#: ../properties/import-export.c:736
+#: ../properties/import-export.c:741
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file '%s'"
 msgstr ""
 "não foi possível escrever o blob <%s> a partir da linha %ld para o arquivo "
 "\"%s\""
 
-#: ../properties/import-export.c:920
+#: ../properties/import-export.c:925
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "argumento comp-lzo sem suporte"
 
-#: ../properties/import-export.c:1008
+#: ../properties/import-export.c:1013
 #, c-format
 msgid "remote cannot contain space"
 msgstr "remoto não pode conter espaço"
 
-#: ../properties/import-export.c:1012
+#: ../properties/import-export.c:1017
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "remoto não pode conter vírgula"
 
-#: ../properties/import-export.c:1023
+#: ../properties/import-export.c:1028
 #, c-format
 msgid "remote expects protocol either udp or remote"
 msgstr "remoto espera que protocolo seja udp ou remoto"
 
-#: ../properties/import-export.c:1194
+#: ../properties/import-export.c:1199
 #, c-format
 msgid "invalid option"
 msgstr "opção inválida"
 
-#: ../properties/import-export.c:1307
+#: ../properties/import-export.c:1312
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "elemento blob/xml sem suporte"
 
-#: ../properties/import-export.c:1336
+#: ../properties/import-export.c:1341
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "elemento <%s> blob não terminado"
 
-#: ../properties/import-export.c:1386
+#: ../properties/import-export.c:1391
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "erro de configuração: %s (linha %ld)"
 
-#: ../properties/import-export.c:1387
+#: ../properties/import-export.c:1392
 msgid "unknown or unsupported option"
 msgstr "opção sem suporte ou desconhecida"
 
-#: ../properties/import-export.c:1397
+#: ../properties/import-export.c:1402
 msgid "The file to import wasn't a valid OpenVPN client configuration"
 msgstr ""
 "O arquivo a ser importado não era uma configuração de cliente OpenVPN válida"
 
-#: ../properties/import-export.c:1405
+#: ../properties/import-export.c:1410
 msgid "The file to import wasn't a valid OpenVPN configure (no remote)"
 msgstr ""
 "O arquivo a ser importado não era uma configuração OpenVPN válida (nenhum "
 "remoto)"
 
-#: ../properties/import-export.c:1547
+#: ../properties/import-export.c:1552
 msgid "could not open file for writing"
 msgstr "não foi possível abrir para escrita"
 
-#: ../properties/import-export.c:1558
+#: ../properties/import-export.c:1563
 msgid "connection was incomplete (missing gateway)"
 msgstr "conexão estava incompleta (faltando gateway)"
 
@@ -419,9 +407,9 @@ msgid ""
 "delimiters).\n"
 "config: remote"
 msgstr ""
-"Gateway remoto, com porta e protocolo opcionais (ex.: ovpn.corp.com:1234:"
-"tcp). Você pode especificar múltiplas máquinas para redundância (use "
-"vírgulas ou espaços como delimitadores.\n"
+"Gateway remoto, com porta e protocolo opcionais (ex.: "
+"ovpn.corp.com:1234:tcp). Você pode especificar múltiplas máquinas para "
+"redundância (use vírgulas ou espaços como delimitadores.\n"
 "config: remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:6
@@ -535,8 +523,8 @@ msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
 msgstr ""
-"Arquivo pré-compartilhado para o modo de criptografia de Chave Estática (não-"
-"TLS).\n"
+"Arquivo pré-compartilhado para o modo de criptografia de Chave Estática "
+"(não-TLS).\n"
 "config: static <arquivo>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:35
@@ -549,9 +537,9 @@ msgid ""
 msgstr ""
 "Direção do modo de criptografia da chave estática (não-TLS).\n"
 "Se direção da chave for utilizada, ela tem que ser oposta da usada no par da "
-"VPN.  Por exemplo: se o par utiliza \"1\", esta conexão tem que utilizar "
-"\"0\". Se você não tem certeza de qual valor utilizar, entre em contato com "
-"seu administrador de sistema.\n"
+"VPN. Por exemplo: se o par utiliza \"1\", esta conexão tem que utilizar \"0\". "
+"Se você não tem certeza de qual valor utilizar, entre em contato com seu "
+"administrador de sistema.\n"
 "config: static <arquivo> [direção]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:38
@@ -741,16 +729,16 @@ msgid ""
 msgstr ""
 "Permite que um par remoto altere seu endereço IP e/ou número de porta, tal "
 "como atingir tempo limite definido no DHCP (esse é o padrão, se --remote não "
-"for usado).  --float quando especificado com --remote permite que uma sessão "
-"OpenVPN conectar inicialmente com um par em um endereço conhecido, porém se "
-"os pacotes chegarem de um novo endereço e passar em todos os testes de "
-"autenticação, o novo endereço vai tomar controle da sessão.  Isso é útil "
+"for usado). Quando --float é especificado com --remote permite que uma "
+"sessão OpenVPN conectar inicialmente com um par em um endereço conhecido, "
+"porém se os pacotes chegarem de um novo endereço e passar em todos os testes "
+"de autenticação, o novo endereço vai tomar controle da sessão. Isso é útil "
 "quando você está conectando a um par que mantém um endereço dinâmico, tal "
 "como um usuário de conexão discada ou cliente DHCP.\n"
 "\n"
 "Essencialmente, --float diz para OpenVPN aceitar pacotes autenticados de "
-"qualquer endereço, não apenas o endereço que foi especificado na opção --"
-"remote.\n"
+"qualquer endereço, não apenas o endereço que foi especificado na opção "
+"--remote.\n"
 "\n"
 "config: float"
 
@@ -913,7 +901,7 @@ msgid ""
 msgstr ""
 "Parâmetro de direção para modo de chave estática.\n"
 "Se direção da chave for utilizada, ela tem que ser o oposto da usada no par "
-"da VPN.  Por exemplo: se o par utiliza \"1\", esta conexão tem que utilizar "
+"da VPN. Por exemplo: se o par utiliza \"1\", esta conexão tem que utilizar "
 "\"0\". Se você não tem certeza de qual valor utilizar, entre em contato com "
 "seu administrador de sistema.\n"
 "config: tls-auth <arquivo> [direção]"
@@ -1192,6 +1180,10 @@ msgid ""
 msgstr ""
 "nm-openvpn-service fornece integração dos recursos do OpenVPN para o "
 "NetworkManager."
+
+# %s nome da opção; %u número de argumentos
+#~ msgid "option %s expects exactly %u arguments"
+#~ msgstr "a opção %s espera %u argumentos"
 
 #~ msgid "empty %s service argument"
 #~ msgstr "argumento de serviço %s vazio"
