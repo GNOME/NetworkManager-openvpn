@@ -93,6 +93,8 @@
 
 const char *_nmovpn_test_temp_path = NULL;
 
+/*****************************************************************************/
+
 static gboolean
 _is_utf8 (const char *str)
 {
@@ -100,6 +102,8 @@ _is_utf8 (const char *str)
 
 	return g_utf8_validate (str, -1, NULL);
 }
+
+/*****************************************************************************/
 
 static void
 __attribute__((__format__ (__printf__, 3, 4)))
@@ -195,6 +199,8 @@ setting_vpn_eq_data_item_utf8safe (NMSettingVpn *setting,
 		return FALSE;
 	return nm_streq (expected_value, nmv_utils_str_utf8safe_unescape_c (s, &s_free));
 }
+
+/*****************************************************************************/
 
 static gboolean
 args_params_check_nargs_minmax (const char **params, guint nargs_min, guint nargs_max, char **out_error)
@@ -364,6 +370,8 @@ args_params_error_message_invalid_arg (const char **params, guint n_param)
 
 	return g_strdup_printf (_("invalid %uth argument to '%s'"), n_param, params[0]);
 }
+
+/*****************************************************************************/
 
 static char
 _ch_step_1 (const char **str, gsize *len)
@@ -578,6 +586,8 @@ args_next_line (const char **content,
 
 	return TRUE;
 }
+
+/*****************************************************************************/
 
 static gboolean
 parse_http_proxy_auth (const char *default_path,
@@ -1489,6 +1499,8 @@ out_error:
 	g_return_val_if_fail (!error || *error, NULL);
 	return NULL;
 }
+
+/*****************************************************************************/
 
 gboolean
 do_export (const char *path, NMConnection *connection, GError **error)
