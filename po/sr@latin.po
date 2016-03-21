@@ -2,18 +2,17 @@
 # Courtesy of Prevod.org team (http://prevod.org/) -- 2013—2016.
 # Copyright (C) 2013 network-manager-openvpn's COPYRIGHT HOLDER
 # This file is distributed under the same license as the network-manager-openvpn package.
-#
-# Translators: 
+# Translators:
 # Miroslav Nikolić <miroslavnikolic@rocketmail.com>, 2013—2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=Network"
 "Manager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2016-03-08 14:05+0000\n"
-"PO-Revision-Date: 2016-03-09 09:12+0200\n"
+"POT-Creation-Date: 2016-03-21 12:39+0000\n"
+"PO-Revision-Date: 2016-03-21 19:35+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
-"Language-Team: Serbian <(nothing)>\n"
+"Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -170,178 +169,182 @@ msgstr "ponovno pokretanje pinga"
 
 #: ../properties/import-export.c:212
 #, c-format
-msgid "option %s expects between %u and %u arguments"
-msgstr "opcija „%s“ očekuje između %u i %u argumenta"
+#| msgid "option %s expects between %u and %u arguments"
+msgid "option %s expects between %u and %u argument"
+msgid_plural "option %s expects between %u and %u arguments"
+msgstr[0] "opcija „%s“ očekuje između %u i %u argumenta"
+msgstr[1] "opcija „%s“ očekuje između %u i %u argumenta"
+msgstr[2] "opcija „%s“ očekuje između %u i %u argumenata"
+msgstr[3] "opcija „%s“ očekuje između %u i %u argumenta"
 
-#: ../properties/import-export.c:214
+#: ../properties/import-export.c:217
 #, c-format
 msgid "option %s expects no arguments"
 msgstr "opcija „%s“ ne očekuje argumente"
 
-#: ../properties/import-export.c:216
+#: ../properties/import-export.c:219
 #, c-format
+#| msgid "option %s expects exactly one argument"
 msgid "option %s expects exactly one argument"
-msgstr "opcija „%s“ očekuje tačno jedan argument"
+msgid_plural "option %s expects exactly %u arguments"
+msgstr[0] "opcija „%s“ očekuje tačno %u argument"
+msgstr[1] "opcija „%s“ očekuje tačno %u argumenta"
+msgstr[2] "opcija „%s“ očekuje tačno %u argumenata"
+msgstr[3] "opcija „%s“ očekuje tačno jedan argument"
 
-#: ../properties/import-export.c:218
-#, c-format
-msgid "option %s expects exactly %u arguments"
-msgstr "opcija „%s“ očekuje tačno %u argumenta"
-
-#: ../properties/import-export.c:243
+#: ../properties/import-export.c:248
 #, c-format
 msgid "argument %s of \"%s\" can not be empty"
 msgstr "argument „%s“ za „%s“ ne može biti prazan"
 
-#: ../properties/import-export.c:245
+#: ../properties/import-export.c:250
 #, c-format
 msgid "argument of \"%s\" can not be empty"
 msgstr "argument za „%s“ ne može biti prazan"
 
-#: ../properties/import-export.c:261
+#: ../properties/import-export.c:266
 #, c-format
 msgid "argument %s of \"%s\" must be UTF-8 encoded"
 msgstr "argument „%s“ za „%s“ mora biti u UTF-8 kodiranju"
 
-#: ../properties/import-export.c:263
+#: ../properties/import-export.c:268
 #, c-format
 msgid "argument of \"%s\" must be UTF-8 encoded"
 msgstr "argument za „%s“ mora biti u UTF-8 kodiranju"
 
-#: ../properties/import-export.c:287
+#: ../properties/import-export.c:292
 #, c-format
 msgid "invalid %uth argument to '%s' where number expected"
 msgstr "neispravan %u. argument za „%s“ gde je očekivan broj"
 
-#: ../properties/import-export.c:318
+#: ../properties/import-export.c:323
 #, c-format
 msgid "invalid %uth argument to '%s' where IPv4 address expected"
 msgstr "neispravan %u. argument za „%s“ gde je očekivana IPv4 adresa"
 
-#: ../properties/import-export.c:346
+#: ../properties/import-export.c:351
 #, c-format
 msgid "invalid %uth key-direction argument to '%s'"
 msgstr "neispravan %u. argument pravca ključa za „%s“"
 
-#: ../properties/import-export.c:360
+#: ../properties/import-export.c:365
 #, c-format
 msgid "invalid %uth argument to '%s'"
 msgstr "neispravan %u. argument za „%s“"
 
-#: ../properties/import-export.c:474
+#: ../properties/import-export.c:479
 #, c-format
 msgid "unterminated %s at position %lld"
 msgstr "neokončano „%s“ na %lld. položaju"
 
-#: ../properties/import-export.c:475
+#: ../properties/import-export.c:480
 msgid "double quote"
 msgstr "dvostruki navodnici"
 
-#: ../properties/import-export.c:475
+#: ../properties/import-export.c:480
 msgid "single quote"
 msgstr "Polunavodnik"
 
-#: ../properties/import-export.c:484
+#: ../properties/import-export.c:489
 #, c-format
 msgid "trailing escaping backslash at position %lld"
 msgstr "prateća kontra kosa crta kraja reda na %lld. položaju"
 
-#: ../properties/import-export.c:603
+#: ../properties/import-export.c:608
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr "ne mogu da pročitam datoteku ovlašćenja HTTP posrednika"
 
-#: ../properties/import-export.c:621
+#: ../properties/import-export.c:626
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr ""
 "ne mogu da pročitam korisnika/lozinku iz datoteke ovlašćenja HTTP posrednika"
 
-#: ../properties/import-export.c:629
+#: ../properties/import-export.c:634
 #, c-format
-#| msgid "cannot read user/password from HTTP proxy auth file"
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr ""
 "korisnik/lozinka iz datoteke ovlašćenja HTTP posrednika mora biti u UTF-8 "
 "kodiranju"
 
-#: ../properties/import-export.c:691
+#: ../properties/import-export.c:696
 #, c-format
 msgid "'%s' is not a directory"
 msgstr "„%s“ nije direktorijum"
 
-#: ../properties/import-export.c:699
+#: ../properties/import-export.c:704
 #, c-format
 msgid "cannot create '%s' directory"
 msgstr "Ne mogu da napravim „%s“ direktorijum"
 
-#: ../properties/import-export.c:719
+#: ../properties/import-export.c:724
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr "ne mogu da zapišem <%s> blob iz %ld. reda u datoteku (%s)"
 
-#: ../properties/import-export.c:736
+#: ../properties/import-export.c:741
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file '%s'"
 msgstr "ne mogu da zapišem <%s> blob iz %ld. reda u datoteku „%s“"
 
-#: ../properties/import-export.c:920
+#: ../properties/import-export.c:925
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "nepodržan argument „comp-lzo“"
 
-#: ../properties/import-export.c:1008
+#: ../properties/import-export.c:1013
 #, c-format
 msgid "remote cannot contain space"
 msgstr "udaljeni ne može da sadrži razmak"
 
-#: ../properties/import-export.c:1012
+#: ../properties/import-export.c:1017
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "udaljeni ne može da sadrži zarez"
 
-#: ../properties/import-export.c:1023
+#: ../properties/import-export.c:1028
 #, c-format
 msgid "remote expects protocol either udp or remote"
 msgstr "udaljeni očekuje ili protokol „udp“ ili „remote“"
 
-#: ../properties/import-export.c:1194
+#: ../properties/import-export.c:1199
 #, c-format
 msgid "invalid option"
 msgstr "neispravna opcija"
 
-#: ../properties/import-export.c:1307
+#: ../properties/import-export.c:1312
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "nepodržani element blob/iksml"
 
-#: ../properties/import-export.c:1336
+#: ../properties/import-export.c:1341
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "neokončani element bloba <%s>"
 
-#: ../properties/import-export.c:1386
+#: ../properties/import-export.c:1391
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "greška podešavanja: %s (%ld. red)"
 
-#: ../properties/import-export.c:1387
+#: ../properties/import-export.c:1392
 msgid "unknown or unsupported option"
 msgstr "nepoznata ili nepodržana opcija"
 
-#: ../properties/import-export.c:1397
+#: ../properties/import-export.c:1402
 msgid "The file to import wasn't a valid OpenVPN client configuration"
 msgstr "Datoteka za uvoz nije ispravno podešavanje OpenVPN klijenta"
 
-#: ../properties/import-export.c:1405
+#: ../properties/import-export.c:1410
 msgid "The file to import wasn't a valid OpenVPN configure (no remote)"
 msgstr "Datoteka za uvoz nije ispravno OpenVPN podešavanje (nema udaljenog)"
 
-#: ../properties/import-export.c:1547
+#: ../properties/import-export.c:1552
 msgid "could not open file for writing"
 msgstr "ne mogu da otvorim datoteku za pisanje"
 
-#: ../properties/import-export.c:1558
+#: ../properties/import-export.c:1563
 msgid "connection was incomplete (missing gateway)"
 msgstr "veza beše nepotpuna (nedostaje mrežni prolaz)"
 
@@ -1162,6 +1165,9 @@ msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
 "nm-openvpn-usluga obezbeđuje Upravniku mreže objedinjenu OpenVPN mogućnost."
+
+#~ msgid "option %s expects exactly %u arguments"
+#~ msgstr "opcija „%s“ očekuje tačno %u argumenta"
 
 #~ msgid "empty %s service argument"
 #~ msgstr "prazan argument „%s“ usluge"
