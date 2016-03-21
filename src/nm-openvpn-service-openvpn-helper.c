@@ -504,7 +504,7 @@ main (int argc, char *argv[])
 	is_restart = argc >= 7 && !g_strcmp0 (argv[6], "restart");
 
 	proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
-	                                       G_DBUS_PROXY_FLAGS_NONE,
+	                                       G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
 	                                       NULL,
 	                                       bus_name,
 	                                       NM_VPN_DBUS_PLUGIN_PATH,
