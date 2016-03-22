@@ -878,6 +878,17 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_NS_CERT_TYPE)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!NM_IN_STRSET (params[1], NM_OPENVPN_NS_CERT_TYPE_CLIENT, NM_OPENVPN_NS_CERT_TYPE_SERVER)) {
+				line_error = g_strdup_printf (_("invalid option"));
+				goto handle_line_error;
+			}
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_NS_CERT_TYPE, params[1]);
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TUN_MTU)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
@@ -1798,6 +1809,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		args_write_line_setting_value (f, NMV_OVPN_TAG_TLS_REMOTE, s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 		args_write_line_setting_value (f, NMV_OVPN_TAG_REMOTE_CERT_TLS, s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
+		args_write_line_setting_value (f, NMV_OVPN_TAG_NS_CERT_TYPE, s_vpn, NM_OPENVPN_KEY_NS_CERT_TYPE);
 
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
 		if (_arg_is_set (value)) {

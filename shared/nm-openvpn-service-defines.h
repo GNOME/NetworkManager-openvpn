@@ -41,6 +41,7 @@
 #define NM_OPENVPN_KEY_KEY "key"
 #define NM_OPENVPN_KEY_LOCAL_IP "local-ip" /* ??? */
 #define NM_OPENVPN_KEY_MSSFIX "mssfix"
+#define NM_OPENVPN_KEY_NS_CERT_TYPE "ns-cert-type"
 #define NM_OPENVPN_KEY_PING "ping"
 #define NM_OPENVPN_KEY_PING_EXIT "ping-exit"
 #define NM_OPENVPN_KEY_PING_RESTART "ping-restart"
@@ -95,6 +96,10 @@
 /* arguments of "--remote-cert-tls" */
 #define NM_OPENVPN_REM_CERT_TLS_CLIENT "client"
 #define NM_OPENVPN_REM_CERT_TLS_SERVER "server"
+
+/* arguments of "--ns-cert-type" */
+#define NM_OPENVPN_NS_CERT_TYPE_CLIENT "client"
+#define NM_OPENVPN_NS_CERT_TYPE_SERVER "server"
 
 /* User name and group to run nm-openvpn-service under */
 #define NM_OPENVPN_USER   "nm-openvpn"

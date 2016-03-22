@@ -141,6 +141,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_TUN_IPV6,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_REMOTE,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_CERT_TLS,      G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_NS_CERT_TYPE,         G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TUNNEL_MTU,           G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_USERNAME,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PASSWORD"-flags",     G_TYPE_STRING, 0, 0, FALSE },
@@ -1377,6 +1378,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
 	if (tmp && strlen (tmp)) {
                 add_openvpn_arg (args, "--remote-cert-tls");
+                add_openvpn_arg (args, tmp);
+	}
+
+	/* ns-cert-type */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_NS_CERT_TYPE);
+	if (tmp && tmp[0]) {
+                add_openvpn_arg (args, "--ns-cert-type");
                 add_openvpn_arg (args, tmp);
 	}
 
