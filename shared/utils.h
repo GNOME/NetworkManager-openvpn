@@ -46,6 +46,7 @@
 #define NMV_OVPN_TAG_KEYSIZE            "keysize"
 #define NMV_OVPN_TAG_MSSFIX             "mssfix"
 #define NMV_OVPN_TAG_NOBIND             "nobind"
+#define NMV_OVPN_TAG_NS_CERT_TYPE       "ns-cert-type"
 #define NMV_OVPN_TAG_PERSIST_KEY        "persist-key"
 #define NMV_OVPN_TAG_PERSIST_TUN        "persist-tun"
 #define NMV_OVPN_TAG_PING_EXIT          "ping-exit"

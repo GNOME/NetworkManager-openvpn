@@ -899,6 +899,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_REMOTE_RANDOM,
 	NM_OPENVPN_KEY_TUN_IPV6,
 	NM_OPENVPN_KEY_REMOTE_CERT_TLS,
+	NM_OPENVPN_KEY_NS_CERT_TYPE,
 	NM_OPENVPN_KEY_PING,
 	NM_OPENVPN_KEY_PING_EXIT,
 	NM_OPENVPN_KEY_PING_RESTART,
@@ -1208,6 +1209,53 @@ tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 	gtk_widget_set_sensitive (widget, use_auth);
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
 	gtk_widget_set_sensitive (widget, use_auth);
+}
+
+static void
+ns_cert_type_toggled_cb (GtkWidget *widget, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	gboolean use_ns_cert_type = FALSE;
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_checkbutton"));
+	use_ns_cert_type = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_label"));
+	gtk_widget_set_sensitive (widget, use_ns_cert_type);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_combo"));
+	gtk_widget_set_sensitive (widget, use_ns_cert_type);
+}
+
+#define NS_CERT_TYPE_COL_NAME 0
+#define NS_CERT_TYPE_COL_VALUE 1
+
+static void
+populate_ns_cert_type_combo (GtkComboBox *box, const char *type)
+{
+	GtkListStore *store;
+	GtkTreeIter iter;
+
+	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+	gtk_combo_box_set_model (box, GTK_TREE_MODEL (store));
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    NS_CERT_TYPE_COL_NAME, _("Server"),
+	                    NS_CERT_TYPE_COL_VALUE, NM_OPENVPN_NS_CERT_TYPE_SERVER,
+	                    -1);
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    NS_CERT_TYPE_COL_NAME, _("Client"),
+	                    NS_CERT_TYPE_COL_VALUE, NM_OPENVPN_NS_CERT_TYPE_CLIENT,
+	                    -1);
+
+	if (g_strcmp0 (type, NM_OPENVPN_NS_CERT_TYPE_CLIENT) == 0)
+		gtk_combo_box_set_active (box, 1);
+	else
+		gtk_combo_box_set_active (box, 0);
+
+	g_object_unref (store);
 }
 
 #define PROXY_TYPE_NONE  0
@@ -1713,6 +1761,17 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
 	populate_remote_cert_tls_combo (GTK_COMBO_BOX (widget), value);
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_checkbutton"));
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_NS_CERT_TYPE);
+	if (value && strlen (value))
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (ns_cert_type_toggled_cb), builder);
+	ns_cert_type_toggled_cb (widget, builder);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_combo"));
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_NS_CERT_TYPE);
+	populate_ns_cert_type_combo (GTK_COMBO_BOX (widget), value);
+
 	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
@@ -2049,6 +2108,21 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 					g_hash_table_insert (hash,
 					                     g_strdup (NM_OPENVPN_KEY_REMOTE_CERT_TLS),
 					                     remote_cert);
+			}
+		}
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_checkbutton"));
+		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_combo"));
+			model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
+			if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
+				char *type = NULL;
+
+				gtk_tree_model_get (model, &iter, NS_CERT_TYPE_COL_VALUE, &type, -1);
+				if (type)
+					g_hash_table_insert (hash,
+					                     g_strdup (NM_OPENVPN_KEY_NS_CERT_TYPE),
+					                     type);
 			}
 		}
 
