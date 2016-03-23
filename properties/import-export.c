@@ -1616,6 +1616,23 @@ args_write_line_int64_str (GString *f, const char *key, const char *value)
 	args_write_line_int64 (f, key, v);
 }
 
+static void
+args_write_line_setting_value (GString *f,
+                               const char *tag_key,
+                               NMSettingVpn *s_vpn,
+                               const char *setting_key)
+{
+	const char *value;
+
+	nm_assert (tag_key && tag_key[0]);
+	nm_assert (NM_IS_SETTING_VPN (s_vpn));
+	nm_assert (setting_key && setting_key[0]);
+
+	value = nm_setting_vpn_get_data_item (s_vpn, setting_key);
+	if (_arg_is_set (value))
+		args_write_line (f, tag_key, value);
+}
+
 /*****************************************************************************/
 
 static GString *
@@ -1637,7 +1654,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *port = NULL;
 	const char *ping = NULL;
 	const char *ping_exit = NULL;
-	const char *ping_restart = NULL;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
 	const char *tls_remote = NULL;
@@ -1746,10 +1762,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_EXIT);
 	if (_arg_is_set (value))
 		ping_exit = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART);
-	if (_arg_is_set (value))
-		ping_restart = value;
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
 	if (_arg_is_set (value)) {
@@ -1926,8 +1938,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (ping_exit)
 		args_write_line (f, "ping-exit", ping_exit);
 
-	if (ping_restart)
-		args_write_line (f, "ping-restart", ping_restart);
+	args_write_line_setting_value (f, "ping-restart", s_vpn, NM_OPENVPN_KEY_PING_RESTART);
 
 	if (local_ip && remote_ip)
 		args_write_line (f, "ifconfig", local_ip, remote_ip);
