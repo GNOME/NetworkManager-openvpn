@@ -1644,20 +1644,14 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *value;
 	const char *gateways = NULL;
 	char **gw_list, **gw_iter;
-	const char *cipher = NULL;
 	gs_free char *cacert = NULL;
 	const char *connection_type = NULL;
 	gs_free char *user_cert = NULL;
 	gs_free char *private_key = NULL;
 	gs_free char *static_key = NULL;
 	const char *static_key_direction = NULL;
-	const char *port = NULL;
-	const char *ping = NULL;
-	const char *ping_exit = NULL;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
-	const char *tls_remote = NULL;
-	const char *remote_cert_tls = NULL;
 	gs_free char *tls_auth = NULL;
 	const char *tls_auth_dir = NULL;
 	gs_free char *device = NULL;
@@ -1745,24 +1739,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			static_key_direction = value;
 	}
 
-	/* Export tls-remote value now*/
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
-	if (_arg_is_set (value))
-		tls_remote = value;
-
 	/* Advanced values start */
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
-	if (_arg_is_set (value))
-		port = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING);
-	if (_arg_is_set (value))
-		ping = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_EXIT);
-	if (_arg_is_set (value))
-		ping_exit = value;
-
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
 	if (_arg_is_set (value)) {
 		reneg_exists = TRUE;
@@ -1794,10 +1771,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (value && !strcmp (value, "yes"))
 		use_float = TRUE;
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER);
-	if (_arg_is_set (value))
-		cipher = value;
-
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE);
 	if (_arg_is_set (value)) {
 		keysize_exists = TRUE;
@@ -1819,10 +1792,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR);
 	if (_arg_is_set (value))
 		tls_auth_dir = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
-	if (_arg_is_set (value))
-		remote_cert_tls = value;
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM);
 	if (value && !strcmp (value, "yes"))
@@ -1899,8 +1868,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (reneg_exists)
 		args_write_line_int64 (f, "reneg-sec", reneg);
 
-	if (cipher)
-		args_write_line (f, "cipher", cipher);
+	args_write_line_setting_value (f, "cipher", s_vpn, NM_OPENVPN_KEY_CIPHER);
 
 	if (keysize_exists)
 		args_write_line_int64 (f, "keysize", keysize);
@@ -1929,14 +1897,12 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (device_type)
 		args_write_line (f, "dev-type", device_type);
 	args_write_line (f, "proto", proto_udp ? "udp" : "tcp");
-	if (port)
-		args_write_line (f, "port", port);
 
-	if (ping)
-		args_write_line (f, "ping", ping);
+	args_write_line_setting_value (f, "port", s_vpn, NM_OPENVPN_KEY_PORT);
 
-	if (ping_exit)
-		args_write_line (f, "ping-exit", ping_exit);
+	args_write_line_setting_value (f, "ping", s_vpn, NM_OPENVPN_KEY_PING);
+
+	args_write_line_setting_value (f, "ping-exit", s_vpn, NM_OPENVPN_KEY_PING_EXIT);
 
 	args_write_line_setting_value (f, "ping-restart", s_vpn, NM_OPENVPN_KEY_PING_RESTART);
 
@@ -1945,11 +1911,9 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		if (tls_remote)
-			args_write_line (f, "tls-remote", tls_remote);
 
-		if (remote_cert_tls)
-			args_write_line (f, "remote-cert-tls", remote_cert_tls);
+		args_write_line_setting_value (f, "tls-remote", s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
+		args_write_line_setting_value (f, "remote-cert-tls", s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
 
 		if (tls_auth) {
 			args_write_line (f,
