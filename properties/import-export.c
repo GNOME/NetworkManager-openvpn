@@ -39,6 +39,7 @@
 #include "nm-openvpn-service-defines.h"
 #include "utils.h"
 #include "nm-macros-internal.h"
+#include "nm-shared-utils.h"
 
 
 #define INLINE_BLOB_CA                  "ca"
