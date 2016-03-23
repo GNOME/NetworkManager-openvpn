@@ -1503,6 +1503,108 @@ out_error:
 
 /*****************************************************************************/
 
+static const char *
+escape_arg (const char *value, char **buf)
+{
+	const char *s;
+	char *result, *i_result;
+	gboolean has_single_quote = FALSE;
+	gboolean needs_quotation = FALSE;
+	gsize len;
+
+	nm_assert (value);
+	nm_assert (buf && !*buf);
+
+	if (value[0] == '\0')
+		return (*buf = g_strdup ("''"));
+
+	/* check if the string contains only benign characters... */
+	len = 0;
+	for (s = value; s[0]; s++) {
+		char c = s[0];
+
+		len++;
+		if (   (c >= '0' && c <= '9')
+		    || (c >= 'a' && c <= 'z')
+		    || (c >= 'A' && c <= 'Z')
+		    || NM_IN_SET (c, '_', '-', ':', '/'))
+			continue;
+		needs_quotation = TRUE;
+		if (c == '\'')
+			has_single_quote = TRUE;
+	}
+	if (!needs_quotation)
+		return value;
+
+	if (!has_single_quote) {
+		result = g_malloc (len + 2 + 1);
+		result[0] = '\'';
+		memcpy (&result[1], value, len);
+		result[1 + len] = '\'';
+		result[2 + len] = '\0';
+	} else {
+		i_result = result = g_malloc (len * 2 + 3);
+		*(i_result++) = '"';
+		for (s = value; s[0]; s++) {
+			if (NM_IN_SET (s[0], '\\', '"'))
+				*(i_result++) = '\\';
+			*(i_result++) = s[0];
+		}
+		*(i_result++) = '"';
+		*(i_result++) = '\0';
+	}
+
+	*buf = result;
+	return result;
+}
+
+static void
+args_write_line_v (FILE *f, gsize nargs, const char **args)
+{
+	gsize i;
+	gboolean printed;
+
+	nm_assert (args);
+	nm_assert (args[0]);
+
+	for (i = 0; i < nargs; i++) {
+		gs_free char *tmp = NULL;
+
+		/* NULL is skipped. This is for convenience to specify
+		 * optional arguments. */
+		if (!args[i])
+			continue;
+
+		if (printed)
+			fprintf (f, " ");
+		printed = TRUE;
+		fprintf (f, "%s", escape_arg (args[i], &tmp));
+	}
+	fprintf (f, "\n");
+}
+#define args_write_line(f, ...) args_write_line_v(f, NM_NARG (__VA_ARGS__), (const char *[]) { __VA_ARGS__ })
+
+static void
+args_write_line_int64 (FILE *f, const char *key, gint64 value)
+{
+	char tmp[64];
+
+	args_write_line (f, key, nm_sprintf_buf (tmp, "%"G_GINT64_FORMAT, value));
+}
+
+static void
+args_write_line_int64_str (FILE *f, const char *key, const char *value)
+{
+	gint64 v;
+
+	v = _nm_utils_ascii_str_to_int64 (value, 10, G_MININT64, G_MAXINT64, 0);
+	if (errno)
+		return;
+	args_write_line_int64 (f, key, v);
+}
+
+/*****************************************************************************/
+
 gboolean
 do_export (const char *path, NMConnection *connection, GError **error)
 {
@@ -1538,7 +1640,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	gboolean use_lzo = FALSE;
 	gboolean use_float = FALSE;
 	gboolean reneg_exists = FALSE;
-	guint32 reneg = 0;
+	glong reneg = 0;
 	gboolean keysize_exists = FALSE;
 	guint32 keysize = 0;
 	gboolean randomize_hosts = FALSE;
@@ -1703,12 +1805,13 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	/* Advanced values end */
 
-	fprintf (f, "client\n");
+	args_write_line (f, "client");
 
 	/* 'remote' */
 	gw_list = g_strsplit_set (gateways, " ,", 0);
 	for (gw_iter = gw_list; gw_iter && *gw_iter; gw_iter++) {
 		char *tmp_host, *tmp_port,*tmp_proto;
+
 		if (**gw_iter == '\0')
 			continue;
 		tmp_host = g_strstrip (*gw_iter);
@@ -1723,108 +1826,106 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		if (tmp_proto && !*tmp_proto)
 			tmp_proto = NULL;
 
-		fprintf (f, "remote %s%s%s%s%s\n",
-		         *gw_iter,
-		         tmp_port ? " " : tmp_proto ? " " : "",
-		         tmp_port ? tmp_port : tmp_proto ? !strcmp (tmp_proto, "udp") ? "1194" : "443": "",
-		         tmp_proto ? " " : "",
-		         tmp_proto ? tmp_proto : "");
+		args_write_line (f,
+		                 "remote",
+		                 *gw_iter,
+		                 tmp_port
+		                     ?: (tmp_proto
+		                             ? (nm_streq (tmp_proto, "udp") ? "1194" : "443")
+		                             : NULL),
+		                 tmp_proto);
 	}
 	g_strfreev (gw_list);
 
 	if (randomize_hosts)
-		fprintf (f, "remote-random\n");
+		args_write_line (f, "remote-random");
 
 	if (tun_ipv6)
-		fprintf (f, "tun-ipv6\n");
+		args_write_line (f, "tun-ipv6");
 
 	/* Handle PKCS#12 (all certs are the same file) */
 	if (   cacert && user_cert && private_key
 	    && !strcmp (cacert, user_cert) && !strcmp (cacert, private_key))
-		fprintf (f, "pkcs12 %s\n", cacert);
+		args_write_line (f, "pkcs12", cacert);
 	else {
 		if (cacert)
-			fprintf (f, "ca %s\n", cacert);
+			args_write_line (f, "ca", cacert);
 		if (user_cert)
-			fprintf (f, "cert %s\n", user_cert);
+			args_write_line (f, "cert", user_cert);
 		if (private_key)
-			fprintf(f, "key %s\n", private_key);
+			args_write_line (f, "key", private_key);
 	}
 
 	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
 	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
-		fprintf (f, "auth-user-pass\n");
+		args_write_line (f, "auth-user-pass");
 
 	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
-		if (static_key) {
-			fprintf (f, "secret %s%s%s\n",
-			         static_key,
-			         static_key_direction ? " " : "",
-			         static_key_direction ? static_key_direction : "");
-		}
+		if (static_key)
+			args_write_line (f, "secret", static_key, static_key_direction);
 	}
 
 	if (reneg_exists)
-		fprintf (f, "reneg-sec %d\n", reneg);
+		args_write_line_int64 (f, "reneg-sec", reneg);
 
 	if (cipher)
-		fprintf (f, "cipher %s\n", cipher);
+		args_write_line (f, "cipher", cipher);
 
 	if (keysize_exists)
-		fprintf (f, "keysize %d\n", keysize);
+		args_write_line_int64 (f, "keysize", keysize);
 
 	if (use_lzo)
-		fprintf (f, "comp-lzo yes\n");
+		args_write_line (f, "comp-lzo", "yes");
 
 	if (use_float)
-		fprintf (f, "float\n");
+		args_write_line (f, "float");
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
-	if (value && strlen (value)) {
-		if (!strcmp (value, "yes"))
-			fprintf (f, TAG_MSSFIX "\n");
-	}
+	if (nm_streq0 (value, "yes"))
+		args_write_line (f, TAG_MSSFIX);
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
 	if (value && strlen (value))
-		fprintf (f, TAG_TUN_MTU " %d\n", (int) strtol (value, NULL, 10));
+		args_write_line_int64_str (f, TAG_TUN_MTU, value);
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 	if (value && strlen (value))
-		fprintf (f, TAG_FRAGMENT " %d\n", (int) strtol (value, NULL, 10));
+		args_write_line_int64_str (f, TAG_FRAGMENT, value);
 
-	fprintf (f, "dev %s\n", device ? device : (device_type ? device_type : device_default));
+	args_write_line (f,
+	                 "dev",
+	                 device ?: (device_type ?: device_default));
 	if (device_type)
-		fprintf (f, "dev-type %s\n", device_type);
-	fprintf (f, "proto %s\n", proto_udp ? "udp" : "tcp");
+		args_write_line (f, "dev-type", device_type);
+	args_write_line (f, "proto", proto_udp ? "udp" : "tcp");
 	if (port)
-		fprintf (f, "port %s\n", port);
+		args_write_line (f, "port", port);
 
 	if (ping)
-		fprintf (f, "ping %s\n", ping);
+		args_write_line (f, "ping", ping);
 
 	if (ping_exit)
-		fprintf (f, "ping-exit %s\n", ping_exit);
+		args_write_line (f, "ping-exit", ping_exit);
 
 	if (ping_restart)
-		fprintf (f, "ping-restart %s\n", ping_restart);
+		args_write_line (f, "ping-restart", ping_restart);
 
 	if (local_ip && remote_ip)
-		fprintf (f, "ifconfig %s %s\n", local_ip, remote_ip);
+		args_write_line (f, "ifconfig", local_ip, remote_ip);
 
 	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		if (tls_remote)
-			fprintf (f,"tls-remote \"%s\"\n", tls_remote);
+			args_write_line (f, "tls-remote", tls_remote);
 
 		if (remote_cert_tls)
-			fprintf (f,"remote-cert-tls %s\n", remote_cert_tls);
+			args_write_line (f, "remote-cert-tls", remote_cert_tls);
 
 		if (tls_auth) {
-			fprintf (f, "tls-auth %s%s%s\n",
-			         tls_auth,
-			         tls_auth_dir ? " " : "",
-			         tls_auth_dir ? tls_auth_dir : "");
+			args_write_line (f,
+			                 "tls-auth",
+			                 tls_auth,
+			                 tls_auth_dir);
 		}
 	}
 
@@ -1850,13 +1951,13 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			g_free (base);
 			g_free (dirname);
 
-			fprintf (f, "http-proxy %s %s%s%s\n",
-			         proxy_server,
-			         proxy_port,
-			         proxy_username ? " " : "",
-			         proxy_username ? authfile : "");
+			args_write_line (f,
+			                 "http-proxy",
+			                 proxy_server,
+			                 proxy_port,
+			                 proxy_username ? authfile : NULL);
 			if (proxy_retry && !strcmp (proxy_retry, "yes"))
-				fprintf (f, "http-proxy-retry\n");
+				args_write_line (f, "http-proxy-retry");
 
 			/* Write out the authfile */
 			if (proxy_username) {
@@ -1870,9 +1971,9 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		} else if (!strcmp (proxy_type, "socks") && proxy_server && proxy_port) {
 			if (!proxy_port)
 				proxy_port = "1080";
-			fprintf (f, "socks-proxy %s %s\n", proxy_server, proxy_port);
+			args_write_line (f, "socks-proxy", proxy_server, proxy_port);
 			if (proxy_retry && !strcmp (proxy_retry, "yes"))
-				fprintf (f, "socks-proxy-retry\n");
+				args_write_line (f, "socks-proxy-retry");
 		}
 	}
 
@@ -1918,23 +2019,23 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			netmask = nm_utils_ip4_prefix_to_netmask (prefix);
 			inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
 
-			fprintf (f, "route %s %s %s%s\n",
-			         dest_str,
-			         netmask_str,
-			         next_hop_str,
-			         metric == -1 ? "" : nm_sprintf_buf (metric_buf, " %u", (unsigned) metric));
+			args_write_line (f,
+			                 "route",
+			                 dest_str,
+			                 netmask_str,
+			                 next_hop_str,
+			                 metric == -1 ? NULL : nm_sprintf_buf (metric_buf, "%u", (unsigned) metric));
 		}
 	}
 
 	/* Add hard-coded stuff */
-	fprintf (f,
-	         "nobind\n"
-	         "auth-nocache\n"
-	         "script-security 2\n"
-	         "persist-key\n"
-	         "persist-tun\n"
-	         "user openvpn\n"
-	         "group openvpn\n");
+	args_write_line (f, "nobind");
+	args_write_line (f, "auth-nocache");
+	args_write_line (f, "script-security", "2");
+	args_write_line (f, "persist-key");
+	args_write_line (f, "persist-tun");
+	args_write_line (f, "user", "openvpn");
+	args_write_line (f, "group", "openvpn");
 	success = TRUE;
 
 done:
