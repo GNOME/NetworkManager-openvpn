@@ -1612,8 +1612,8 @@ args_write_line_int64_str (GString *f, const char *key, const char *value)
 
 /*****************************************************************************/
 
-gboolean
-do_export (const char *path, NMConnection *connection, GError **error)
+static GString *
+do_export_create (NMConnection *connection, const char *path, GError **error)
 {
 	NMSettingConnection *s_con;
 	NMSettingIPConfig *s_ip4;
@@ -1661,10 +1661,23 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	nm_auto(_auto_free_gstring_p) GString *f = NULL;
 	gs_free_error GError *local = NULL;
 
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	if (!path || !path[0]) {
+		g_set_error_literal (error,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     _("missing path argument"));
+		return NULL;
+	}
 
+	s_con = nm_connection_get_setting_connection (connection);
 	s_vpn = nm_connection_get_setting_vpn (connection);
+	if (!s_con || !s_vpn) {
+		g_set_error_literal (error,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     _("connection is not a valid OpenVPN connection"));
+		return NULL;
+	}
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 	if (value && strlen (value))
@@ -1674,7 +1687,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		                     OPENVPN_EDITOR_PLUGIN_ERROR,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("connection was incomplete (missing gateway)"));
-		return FALSE;
+		return NULL;
 	}
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
@@ -2036,6 +2049,19 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	args_write_line (f, "persist-tun");
 	args_write_line (f, "user", "openvpn");
 	args_write_line (f, "group", "openvpn");
+
+	return nm_unauto (&f);
+}
+
+gboolean
+do_export (const char *path, NMConnection *connection, GError **error)
+{
+	nm_auto(_auto_free_gstring_p) GString *f = NULL;
+	gs_free_error GError *local = NULL;
+
+	f = do_export_create (connection, path, error);
+	if (!f)
+		return FALSE;
 
 	if (!g_file_set_contents (path, f->str, f->len, &local)) {
 		g_set_error (error,
