@@ -96,6 +96,13 @@ const char *_nmovpn_test_temp_path = NULL;
 
 /*****************************************************************************/
 
+static void
+_auto_free_gstring_p (GString **ptr)
+{
+	if (*ptr)
+		g_string_free (*ptr, TRUE);
+}
+
 static gboolean
 _is_utf8 (const char *str)
 {
@@ -1559,7 +1566,7 @@ escape_arg (const char *value, char **buf)
 }
 
 static void
-args_write_line_v (FILE *f, gsize nargs, const char **args)
+args_write_line_v (GString *f, gsize nargs, const char **args)
 {
 	gsize i;
 	gboolean printed;
@@ -1576,16 +1583,16 @@ args_write_line_v (FILE *f, gsize nargs, const char **args)
 			continue;
 
 		if (printed)
-			fprintf (f, " ");
+			g_string_append_c (f, ' ');
 		printed = TRUE;
-		fprintf (f, "%s", escape_arg (args[i], &tmp));
+		g_string_append (f, escape_arg (args[i], &tmp));
 	}
-	fprintf (f, "\n");
+	g_string_append_c (f, '\n');
 }
 #define args_write_line(f, ...) args_write_line_v(f, NM_NARG (__VA_ARGS__), (const char *[]) { __VA_ARGS__ })
 
 static void
-args_write_line_int64 (FILE *f, const char *key, gint64 value)
+args_write_line_int64 (GString *f, const char *key, gint64 value)
 {
 	char tmp[64];
 
@@ -1593,7 +1600,7 @@ args_write_line_int64 (FILE *f, const char *key, gint64 value)
 }
 
 static void
-args_write_line_int64_str (FILE *f, const char *key, const char *value)
+args_write_line_int64_str (GString *f, const char *key, const char *value)
 {
 	gint64 v;
 
@@ -1611,7 +1618,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	NMSettingConnection *s_con;
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
-	FILE *f;
+	FILE *ff;
 	const char *value;
 	const char *gateways = NULL;
 	char **gw_list, **gw_iter;
@@ -1635,7 +1642,6 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	gs_free char *device = NULL;
 	const char *device_type = NULL;
 	const char *device_default = "tun";
-	gboolean success = FALSE;
 	gboolean proto_udp = TRUE;
 	gboolean use_lzo = FALSE;
 	gboolean use_float = FALSE;
@@ -1653,20 +1659,12 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	const char *proxy_password = NULL;
 	int i;
 	guint num;
+	nm_auto(_auto_free_gstring_p) GString *f = NULL;
 
 	s_con = nm_connection_get_setting_connection (connection);
 	g_assert (s_con);
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
-
-	f = fopen (path, "w");
-	if (!f) {
-		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
-		                     _("could not open file for writing"));
-		return FALSE;
-	}
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 	if (value && strlen (value))
@@ -1676,7 +1674,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		                     OPENVPN_EDITOR_PLUGIN_ERROR,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("connection was incomplete (missing gateway)"));
-		goto done;
+		return FALSE;
 	}
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
@@ -1804,6 +1802,8 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		tun_ipv6 = TRUE;
 
 	/* Advanced values end */
+
+	f = g_string_sized_new (512);
 
 	args_write_line (f, "client");
 
@@ -2036,10 +2036,18 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	args_write_line (f, "persist-tun");
 	args_write_line (f, "user", "openvpn");
 	args_write_line (f, "group", "openvpn");
-	success = TRUE;
 
-done:
-	fclose (f);
-	return success;
+	ff = fopen (path, "w");
+	if (!ff) {
+		g_set_error_literal (error,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     _("could not open file for writing"));
+		return FALSE;
+	}
+	fprintf (ff, "%s", f->str);
+	fclose (ff);
+
+	return TRUE;
 }
 
