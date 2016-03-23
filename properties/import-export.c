@@ -1618,7 +1618,6 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	NMSettingConnection *s_con;
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
-	FILE *ff;
 	const char *value;
 	const char *gateways = NULL;
 	char **gw_list, **gw_iter;
@@ -1660,6 +1659,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	int i;
 	guint num;
 	nm_auto(_auto_free_gstring_p) GString *f = NULL;
+	gs_free_error GError *local = NULL;
 
 	s_con = nm_connection_get_setting_connection (connection);
 	g_assert (s_con);
@@ -2037,16 +2037,14 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	args_write_line (f, "user", "openvpn");
 	args_write_line (f, "group", "openvpn");
 
-	ff = fopen (path, "w");
-	if (!ff) {
-		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
-		                     _("could not open file for writing"));
+	if (!g_file_set_contents (path, f->str, f->len, &local)) {
+		g_set_error (error,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		             _("failed to write file: %s"),
+		             local->message);
 		return FALSE;
 	}
-	fprintf (ff, "%s", f->str);
-	fclose (ff);
 
 	return TRUE;
 }
