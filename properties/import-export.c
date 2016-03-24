@@ -1650,7 +1650,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *connection_type;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
-	gboolean proto_udp = TRUE;
 	gboolean use_lzo = FALSE;
 	gboolean use_float = FALSE;
 	gboolean keysize_exists = FALSE;
@@ -1698,10 +1697,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	connection_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE));
 
 	/* Advanced values start */
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
-	if (value && !strcmp (value, "yes"))
-		proto_udp = FALSE;
-
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
 	if (value && !strcmp (value, "yes"))
 		use_lzo = TRUE;
@@ -1863,7 +1858,10 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			args_write_line (f, "dev-type", device_type);
 	}
 
-	args_write_line (f, "proto", proto_udp ? "udp" : "tcp");
+	args_write_line (f,
+	                 "proto",
+	                 nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP), "yes")
+	                     ? "tcp" : "udp");
 
 	args_write_line_setting_value (f, "port", s_vpn, NM_OPENVPN_KEY_PORT);
 
