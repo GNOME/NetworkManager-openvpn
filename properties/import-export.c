@@ -1650,8 +1650,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	gs_free char *private_key = NULL;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
-	gs_free char *tls_auth = NULL;
-	const char *tls_auth_dir = NULL;
 	gs_free char *device = NULL;
 	const char *device_type = NULL;
 	const char *device_default = "tun";
@@ -1772,14 +1770,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
 	if (_arg_is_set (value))
 		remote_ip = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
-	if (_arg_is_set (value))
-		tls_auth = nmv_utils_str_utf8safe_unescape (value);
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR);
-	if (_arg_is_set (value))
-		tls_auth_dir = value;
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM);
 	if (value && !strcmp (value, "yes"))
@@ -1904,17 +1894,20 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (local_ip && remote_ip)
 		args_write_line (f, "ifconfig", local_ip, remote_ip);
 
-	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_TLS)
-	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-
+	if (NM_IN_STRSET (connection_type,
+	                  NM_OPENVPN_CONTYPE_TLS,
+	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		args_write_line_setting_value (f, "tls-remote", s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 		args_write_line_setting_value (f, "remote-cert-tls", s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
 
-		if (tls_auth) {
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
+		if (_arg_is_set (value)) {
+			gs_free char *s_free = NULL;
+
 			args_write_line (f,
 			                 "tls-auth",
-			                 tls_auth,
-			                 tls_auth_dir);
+			                 nmv_utils_str_utf8safe_unescape_c (value, &s_free),
+			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR)));
 		}
 	}
 
