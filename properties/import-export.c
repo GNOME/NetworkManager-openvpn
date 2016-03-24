@@ -1610,6 +1610,9 @@ args_write_line_int64_str (GString *f, const char *key, const char *value)
 {
 	gint64 v;
 
+	if (!_arg_is_set (value))
+		return;
+
 	v = _nm_utils_ascii_str_to_int64 (value, 10, G_MININT64, G_MAXINT64, 0);
 	if (errno)
 		return;
@@ -1656,8 +1659,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	gboolean proto_udp = TRUE;
 	gboolean use_lzo = FALSE;
 	gboolean use_float = FALSE;
-	gboolean reneg_exists = FALSE;
-	glong reneg = 0;
 	gboolean keysize_exists = FALSE;
 	guint32 keysize = 0;
 	gboolean randomize_hosts = FALSE;
@@ -1726,12 +1727,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	}
 
 	/* Advanced values start */
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
-	if (_arg_is_set (value)) {
-		reneg_exists = TRUE;
-		reneg = strtol (value, NULL, 10);
-	}
-
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
 	if (value && !strcmp (value, "yes"))
 		proto_udp = FALSE;
@@ -1850,8 +1845,9 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		}
 	}
 
-	if (reneg_exists)
-		args_write_line_int64 (f, "reneg-sec", reneg);
+	args_write_line_int64_str (f,
+	                           "reneg-sec",
+	                           nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS));
 
 	args_write_line_setting_value (f, "cipher", s_vpn, NM_OPENVPN_KEY_CIPHER);
 
@@ -1868,13 +1864,13 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (nm_streq0 (value, "yes"))
 		args_write_line (f, TAG_MSSFIX);
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
-	if (_arg_is_set (value))
-		args_write_line_int64_str (f, TAG_TUN_MTU, value);
+	args_write_line_int64_str (f,
+	                           TAG_TUN_MTU,
+	                           nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU));
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
-	if (_arg_is_set (value))
-		args_write_line_int64_str (f, TAG_FRAGMENT, value);
+	args_write_line_int64_str (f,
+	                           TAG_FRAGMENT,
+	                           nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE));
 
 	args_write_line (f,
 	                 "dev",
