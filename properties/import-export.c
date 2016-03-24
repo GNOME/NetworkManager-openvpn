@@ -1647,10 +1647,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *value;
 	const char *gateways;
 	char **gw_list, **gw_iter;
-	gs_free char *cacert = NULL;
 	const char *connection_type;
-	gs_free char *user_cert = NULL;
-	gs_free char *private_key = NULL;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
 	gboolean proto_udp = TRUE;
@@ -1699,25 +1696,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	}
 
 	connection_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE));
-
-	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
-	                                   NM_OPENVPN_CONTYPE_PASSWORD,
-	                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
-		if (_arg_is_set (value))
-			cacert = nmv_utils_str_utf8safe_unescape (value);
-	}
-
-	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
-	                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
-		if (_arg_is_set (value))
-			user_cert = nmv_utils_str_utf8safe_unescape (value);
-
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (_arg_is_set (value))
-			private_key = nmv_utils_str_utf8safe_unescape (value);
-	}
 
 	/* Advanced values start */
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
@@ -1788,17 +1766,41 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (tun_ipv6)
 		args_write_line (f, "tun-ipv6");
 
-	/* Handle PKCS#12 (all certs are the same file) */
-	if (   cacert && user_cert && private_key
-	    && !strcmp (cacert, user_cert) && !strcmp (cacert, private_key))
-		args_write_line (f, "pkcs12", cacert);
-	else {
-		if (cacert)
-			args_write_line (f, "ca", cacert);
-		if (user_cert)
-			args_write_line (f, "cert", user_cert);
-		if (private_key)
-			args_write_line (f, "key", private_key);
+	{
+		gs_free char *cacert_free = NULL, *user_cert_free = NULL, *private_key_free = NULL;
+		const char *cacert = NULL, *user_cert = NULL, *private_key = NULL;
+
+		if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
+		                                   NM_OPENVPN_CONTYPE_PASSWORD,
+		                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
+			if (_arg_is_set (value))
+				cacert = nmv_utils_str_utf8safe_unescape_c (value, &cacert_free);
+		}
+
+		if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
+		                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
+			if (_arg_is_set (value))
+				user_cert = nmv_utils_str_utf8safe_unescape_c (value, &user_cert_free);
+
+			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+			if (_arg_is_set (value))
+				private_key = nmv_utils_str_utf8safe_unescape_c (value, &private_key_free);
+		}
+
+		if (   cacert && user_cert && private_key
+		    && nm_streq (cacert, user_cert) && nm_streq (cacert, private_key)) {
+			/* Handle PKCS#12 (all certs are the same file) */
+			args_write_line (f, "pkcs12", cacert);
+		} else {
+			if (cacert)
+				args_write_line (f, "ca", cacert);
+			if (user_cert)
+				args_write_line (f, "cert", user_cert);
+			if (private_key)
+				args_write_line (f, "key", private_key);
+		}
 	}
 
 	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_PASSWORD,
