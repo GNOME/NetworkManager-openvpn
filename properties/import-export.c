@@ -50,6 +50,7 @@
 #define INLINE_BLOB_TLS_AUTH            "tls-auth"
 
 #define TAG_AUTH                        "auth"
+#define TAG_AUTH_NOCACHE                "auth-nocache"
 #define TAG_AUTH_USER_PASS              "auth-user-pass"
 #define TAG_CA                          "ca"
 #define TAG_CERT                        "cert"
@@ -60,6 +61,7 @@
 #define TAG_DEV_TYPE                    "dev-type"
 #define TAG_FLOAT                       "float"
 #define TAG_FRAGMENT                    "fragment"
+#define TAG_GROUP                       "group"
 #define TAG_HTTP_PROXY                  "http-proxy"
 #define TAG_HTTP_PROXY_RETRY            "http-proxy-retry"
 #define TAG_IFCONFIG                    "ifconfig"
@@ -69,6 +71,8 @@
 #define TAG_KEYSIZE                     "keysize"
 #define TAG_MSSFIX                      "mssfix"
 #define TAG_NOBIND                      "nobind"
+#define TAG_PERSIST_KEY                 "persist-key"
+#define TAG_PERSIST_TUN                 "persist-tun"
 #define TAG_PING_EXIT                   "ping-exit"
 #define TAG_PING                        "ping"
 #define TAG_PING_RESTART                "ping-restart"
@@ -81,6 +85,7 @@
 #define TAG_RENEG_SEC                   "reneg-sec"
 #define TAG_ROUTE                       "route"
 #define TAG_RPORT                       "rport"
+#define TAG_SCRIPT_SECURITY             "script-security"
 #define TAG_SECRET                      "secret"
 #define TAG_SOCKS_PROXY_RETRY           "socks-proxy-retry"
 #define TAG_SOCKS_PROXY                 "socks-proxy"
@@ -90,6 +95,7 @@
 #define TAG_TOPOLOGY                    "topology"
 #define TAG_TUN_MTU                     "tun-mtu"
 #define TAG_TUN_IPV6                    "tun-ipv6"
+#define TAG_USER                        "user"
 
 
 const char *_nmovpn_test_temp_path = NULL;
@@ -1686,7 +1692,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	f = g_string_sized_new (512);
 
-	args_write_line (f, "client");
+	args_write_line (f, TAG_CLIENT);
 
 	/* 'remote' */
 	gw_list = g_strsplit_set (gateways, " ,", 0);
@@ -1708,7 +1714,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			tmp_proto = NULL;
 
 		args_write_line (f,
-		                 "remote",
+		                 TAG_REMOTE,
 		                 *gw_iter,
 		                 tmp_port
 		                     ?: (tmp_proto
@@ -1719,10 +1725,10 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	g_strfreev (gw_list);
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM), "yes"))
-		args_write_line (f, "remote-random");
+		args_write_line (f, TAG_REMOTE_RANDOM);
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6), "yes"))
-		args_write_line (f, "tun-ipv6");
+		args_write_line (f, TAG_TUN_IPV6);
 
 	{
 		gs_free char *cacert_free = NULL, *user_cert_free = NULL, *private_key_free = NULL;
@@ -1750,20 +1756,20 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		if (   cacert && user_cert && private_key
 		    && nm_streq (cacert, user_cert) && nm_streq (cacert, private_key)) {
 			/* Handle PKCS#12 (all certs are the same file) */
-			args_write_line (f, "pkcs12", cacert);
+			args_write_line (f, TAG_PKCS12, cacert);
 		} else {
 			if (cacert)
-				args_write_line (f, "ca", cacert);
+				args_write_line (f, TAG_CA, cacert);
 			if (user_cert)
-				args_write_line (f, "cert", user_cert);
+				args_write_line (f, TAG_CERT, user_cert);
 			if (private_key)
-				args_write_line (f, "key", private_key);
+				args_write_line (f, TAG_KEY, private_key);
 		}
 	}
 
 	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_PASSWORD,
 	                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS))
-		args_write_line (f, "auth-user-pass");
+		args_write_line (f, TAG_AUTH_USER_PASS);
 
 	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
@@ -1771,25 +1777,25 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			gs_free char *s_free = NULL;
 
 			args_write_line (f,
-			                 "secret",
+			                 TAG_SECRET,
 			                 nmv_utils_str_utf8safe_unescape_c (value, &s_free),
 			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION)));
 		}
 	}
 
 	args_write_line_int64_str (f,
-	                           "reneg-sec",
+	                           TAG_RENEG_SEC,
 	                           nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS));
 
-	args_write_line_setting_value (f, "cipher", s_vpn, NM_OPENVPN_KEY_CIPHER);
+	args_write_line_setting_value (f, TAG_CIPHER, s_vpn, NM_OPENVPN_KEY_CIPHER);
 
-	args_write_line_int64_str (f, "keysize", nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE));
+	args_write_line_int64_str (f, TAG_KEYSIZE, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE));
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO), "yes"))
-		args_write_line (f, "comp-lzo", "yes");
+		args_write_line (f, TAG_COMP_LZO, "yes");
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
-		args_write_line (f, "float");
+		args_write_line (f, TAG_FLOAT);
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX), "yes"))
 		args_write_line (f, TAG_MSSFIX);
@@ -1810,45 +1816,45 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		device = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV));
 		device = nmv_utils_str_utf8safe_unescape_c (device, &device_free);
 		args_write_line (f,
-		                 "dev",
+		                 TAG_DEV,
 		                 device ?:
 		                     (device_type ?:
 		                         (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV), "yes")
 		                             ? "tap" : "tun")));
 		if (device_type)
-			args_write_line (f, "dev-type", device_type);
+			args_write_line (f, TAG_DEV_TYPE, device_type);
 	}
 
 	args_write_line (f,
-	                 "proto",
+	                 TAG_PROTO,
 	                 nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP), "yes")
 	                     ? "tcp" : "udp");
 
-	args_write_line_setting_value (f, "port", s_vpn, NM_OPENVPN_KEY_PORT);
+	args_write_line_setting_value (f, TAG_PORT, s_vpn, NM_OPENVPN_KEY_PORT);
 
-	args_write_line_setting_value (f, "ping", s_vpn, NM_OPENVPN_KEY_PING);
+	args_write_line_setting_value (f, TAG_PING, s_vpn, NM_OPENVPN_KEY_PING);
 
-	args_write_line_setting_value (f, "ping-exit", s_vpn, NM_OPENVPN_KEY_PING_EXIT);
+	args_write_line_setting_value (f, TAG_PING_EXIT, s_vpn, NM_OPENVPN_KEY_PING_EXIT);
 
-	args_write_line_setting_value (f, "ping-restart", s_vpn, NM_OPENVPN_KEY_PING_RESTART);
+	args_write_line_setting_value (f, TAG_PING_RESTART, s_vpn, NM_OPENVPN_KEY_PING_RESTART);
 
 	local_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP));
 	remote_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP));
 	if (local_ip && remote_ip)
-		args_write_line (f, "ifconfig", local_ip, remote_ip);
+		args_write_line (f, TAG_IFCONFIG, local_ip, remote_ip);
 
 	if (NM_IN_STRSET (connection_type,
 	                  NM_OPENVPN_CONTYPE_TLS,
 	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		args_write_line_setting_value (f, "tls-remote", s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
-		args_write_line_setting_value (f, "remote-cert-tls", s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
+		args_write_line_setting_value (f, TAG_TLS_REMOTE, s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
+		args_write_line_setting_value (f, TAG_REMOTE_CERT_TLS, s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
 
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
 		if (_arg_is_set (value)) {
 			gs_free char *s_free = NULL;
 
 			args_write_line (f,
-			                 "tls-auth",
+			                 TAG_TLS_AUTH,
 			                 nmv_utils_str_utf8safe_unescape_c (value, &s_free),
 			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR)));
 		}
@@ -1882,12 +1888,12 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			g_free (dirname);
 
 			args_write_line (f,
-			                 "http-proxy",
+			                 TAG_HTTP_PROXY,
 			                 proxy_server,
 			                 proxy_port,
 			                 proxy_username ? authfile : NULL);
 			if (proxy_retry && !strcmp (proxy_retry, "yes"))
-				args_write_line (f, "http-proxy-retry");
+				args_write_line (f, TAG_HTTP_PROXY_RETRY);
 
 			/* Write out the authfile */
 			if (proxy_username) {
@@ -1901,9 +1907,9 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		} else if (nm_streq (proxy_type, "socks") && proxy_server && proxy_port) {
 			if (!proxy_port)
 				proxy_port = "1080";
-			args_write_line (f, "socks-proxy", proxy_server, proxy_port);
+			args_write_line (f, TAG_SOCKS_PROXY, proxy_server, proxy_port);
 			if (proxy_retry && !strcmp (proxy_retry, "yes"))
-				args_write_line (f, "socks-proxy-retry");
+				args_write_line (f, TAG_SOCKS_PROXY_RETRY);
 		}
 	}
 
@@ -1950,7 +1956,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
 
 			args_write_line (f,
-			                 "route",
+			                 TAG_ROUTE,
 			                 dest_str,
 			                 netmask_str,
 			                 next_hop_str,
@@ -1959,13 +1965,13 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	}
 
 	/* Add hard-coded stuff */
-	args_write_line (f, "nobind");
-	args_write_line (f, "auth-nocache");
-	args_write_line (f, "script-security", "2");
-	args_write_line (f, "persist-key");
-	args_write_line (f, "persist-tun");
-	args_write_line (f, "user", "openvpn");
-	args_write_line (f, "group", "openvpn");
+	args_write_line (f, TAG_NOBIND);
+	args_write_line (f, TAG_AUTH_NOCACHE);
+	args_write_line (f, TAG_SCRIPT_SECURITY, "2");
+	args_write_line (f, TAG_PERSIST_KEY);
+	args_write_line (f, TAG_PERSIST_TUN);
+	args_write_line (f, TAG_USER, "openvpn");
+	args_write_line (f, TAG_GROUP, "openvpn");
 
 	return nm_unauto (&f);
 }
