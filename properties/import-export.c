@@ -1650,12 +1650,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *connection_type;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
-	gboolean use_lzo = FALSE;
-	gboolean use_float = FALSE;
 	gboolean keysize_exists = FALSE;
 	guint32 keysize = 0;
-	gboolean randomize_hosts = FALSE;
-	gboolean tun_ipv6 = FALSE;
 	const char *proxy_type = NULL;
 	const char *proxy_server = NULL;
 	const char *proxy_port = NULL;
@@ -1697,27 +1693,11 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	connection_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE));
 
 	/* Advanced values start */
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
-	if (value && !strcmp (value, "yes"))
-		use_lzo = TRUE;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT);
-	if (value && !strcmp (value, "yes"))
-		use_float = TRUE;
-
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE);
 	if (_arg_is_set (value)) {
 		keysize_exists = TRUE;
 		keysize = strtol (value, NULL, 10);
 	}
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM);
-	if (value && !strcmp (value, "yes"))
-		randomize_hosts = TRUE;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6);
-	if (value && !strcmp (value, "yes"))
-		tun_ipv6 = TRUE;
 
 	/* Advanced values end */
 
@@ -1755,10 +1735,10 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	}
 	g_strfreev (gw_list);
 
-	if (randomize_hosts)
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM), "yes"))
 		args_write_line (f, "remote-random");
 
-	if (tun_ipv6)
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6), "yes"))
 		args_write_line (f, "tun-ipv6");
 
 	{
@@ -1823,14 +1803,13 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (keysize_exists)
 		args_write_line_int64 (f, "keysize", keysize);
 
-	if (use_lzo)
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO), "yes"))
 		args_write_line (f, "comp-lzo", "yes");
 
-	if (use_float)
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
 		args_write_line (f, "float");
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
-	if (nm_streq0 (value, "yes"))
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX), "yes"))
 		args_write_line (f, TAG_MSSFIX);
 
 	args_write_line_int64_str (f,
