@@ -1648,8 +1648,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *connection_type = NULL;
 	gs_free char *user_cert = NULL;
 	gs_free char *private_key = NULL;
-	gs_free char *static_key = NULL;
-	const char *static_key_direction = NULL;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
 	gs_free char *tls_auth = NULL;
@@ -1727,16 +1725,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
 		if (_arg_is_set (value))
 			private_key = nmv_utils_str_utf8safe_unescape (value);
-	}
-
-	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
-		if (_arg_is_set (value))
-			static_key = nmv_utils_str_utf8safe_unescape (value);
-
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION);
-		if (_arg_is_set (value))
-			static_key_direction = value;
 	}
 
 	/* Advanced values start */
@@ -1861,8 +1849,15 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		args_write_line (f, "auth-user-pass");
 
 	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
-		if (static_key)
-			args_write_line (f, "secret", static_key, static_key_direction);
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
+		if (_arg_is_set (value)) {
+			gs_free char *s_free = NULL;
+
+			args_write_line (f,
+			                 "secret",
+			                 nmv_utils_str_utf8safe_unescape_c (value, &s_free),
+			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION)));
+		}
 	}
 
 	if (reneg_exists)
