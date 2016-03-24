@@ -1830,13 +1830,13 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	                 nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP), "yes")
 	                     ? "tcp" : "udp");
 
-	args_write_line_setting_value (f, TAG_PORT, s_vpn, NM_OPENVPN_KEY_PORT);
+	args_write_line_int64_str (f, TAG_PORT, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT));
 
-	args_write_line_setting_value (f, TAG_PING, s_vpn, NM_OPENVPN_KEY_PING);
+	args_write_line_int64_str (f, TAG_PING, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING));
 
-	args_write_line_setting_value (f, TAG_PING_EXIT, s_vpn, NM_OPENVPN_KEY_PING_EXIT);
+	args_write_line_int64_str (f, TAG_PING_EXIT, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_EXIT));
 
-	args_write_line_setting_value (f, TAG_PING_RESTART, s_vpn, NM_OPENVPN_KEY_PING_RESTART);
+	args_write_line_int64_str (f, TAG_PING_RESTART, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART));
 
 	local_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP));
 	remote_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP));
