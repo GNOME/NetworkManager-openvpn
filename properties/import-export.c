@@ -1612,17 +1612,26 @@ args_write_line_int64 (GString *f, const char *key, gint64 value)
 }
 
 static void
-args_write_line_int64_str (GString *f, const char *key, const char *value)
+args_write_line_setting_value_int (GString *f,
+                                   const char *tag_key,
+                                   NMSettingVpn *s_vpn,
+                                   const char *setting_key)
 {
+	const char *value;
 	gint64 v;
 
+	nm_assert (tag_key && tag_key[0]);
+	nm_assert (NM_IS_SETTING_VPN (s_vpn));
+	nm_assert (setting_key && setting_key[0]);
+
+	value = nm_setting_vpn_get_data_item (s_vpn, setting_key);
 	if (!_arg_is_set (value))
 		return;
 
 	v = _nm_utils_ascii_str_to_int64 (value, 10, G_MININT64, G_MAXINT64, 0);
 	if (errno)
 		return;
-	args_write_line_int64 (f, key, v);
+	args_write_line_int64 (f, tag_key, v);
 }
 
 static void
@@ -1632,10 +1641,6 @@ args_write_line_setting_value (GString *f,
                                const char *setting_key)
 {
 	const char *value;
-
-	nm_assert (tag_key && tag_key[0]);
-	nm_assert (NM_IS_SETTING_VPN (s_vpn));
-	nm_assert (setting_key && setting_key[0]);
 
 	value = nm_setting_vpn_get_data_item (s_vpn, setting_key);
 	if (_arg_is_set (value))
@@ -1783,13 +1788,11 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		}
 	}
 
-	args_write_line_int64_str (f,
-	                           TAG_RENEG_SEC,
-	                           nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS));
+	args_write_line_setting_value_int (f, TAG_RENEG_SEC, s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
 
 	args_write_line_setting_value (f, TAG_CIPHER, s_vpn, NM_OPENVPN_KEY_CIPHER);
 
-	args_write_line_int64_str (f, TAG_KEYSIZE, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE));
+	args_write_line_setting_value_int (f, TAG_KEYSIZE, s_vpn, NM_OPENVPN_KEY_KEYSIZE);
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO), "yes"))
 		args_write_line (f, TAG_COMP_LZO, "yes");
@@ -1800,13 +1803,9 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX), "yes"))
 		args_write_line (f, TAG_MSSFIX);
 
-	args_write_line_int64_str (f,
-	                           TAG_TUN_MTU,
-	                           nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU));
+	args_write_line_setting_value_int (f, TAG_TUN_MTU, s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
 
-	args_write_line_int64_str (f,
-	                           TAG_FRAGMENT,
-	                           nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE));
+	args_write_line_setting_value_int (f, TAG_FRAGMENT, s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 
 	{
 		gs_free char *device_free = NULL;
@@ -1830,13 +1829,13 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	                 nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP), "yes")
 	                     ? "tcp" : "udp");
 
-	args_write_line_int64_str (f, TAG_PORT, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT));
+	args_write_line_setting_value_int (f, TAG_PORT, s_vpn, NM_OPENVPN_KEY_PORT);
 
-	args_write_line_int64_str (f, TAG_PING, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING));
+	args_write_line_setting_value_int (f, TAG_PING, s_vpn, NM_OPENVPN_KEY_PING);
 
-	args_write_line_int64_str (f, TAG_PING_EXIT, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_EXIT));
+	args_write_line_setting_value_int (f, TAG_PING_EXIT, s_vpn, NM_OPENVPN_KEY_PING_EXIT);
 
-	args_write_line_int64_str (f, TAG_PING_RESTART, nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART));
+	args_write_line_setting_value_int (f, TAG_PING_RESTART, s_vpn, NM_OPENVPN_KEY_PING_RESTART);
 
 	local_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP));
 	remote_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP));
