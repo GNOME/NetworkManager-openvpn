@@ -1645,7 +1645,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
 	const char *value;
-	const char *gateways = NULL;
+	const char *gateways;
 	char **gw_list, **gw_iter;
 	gs_free char *cacert = NULL;
 	const char *connection_type;
@@ -1689,10 +1689,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		return NULL;
 	}
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
-	if (_arg_is_set (value))
-		gateways = value;
-	else {
+	gateways = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE));
+	if (!gateways) {
 		g_set_error_literal (error,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
