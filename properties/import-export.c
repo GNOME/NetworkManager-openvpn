@@ -1651,13 +1651,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
 	const char *proxy_type = NULL;
-	const char *proxy_server = NULL;
-	const char *proxy_port = NULL;
-	const char *proxy_retry = NULL;
-	const char *proxy_username = NULL;
-	const char *proxy_password = NULL;
-	int i;
-	guint num;
+	guint i, num;
 	nm_auto(_auto_free_gstring_p) GString *f = NULL;
 	gs_free_error GError *local = NULL;
 
@@ -1860,16 +1854,21 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		}
 	}
 
-	/* Proxy stuff */
 	proxy_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE);
-	if (proxy_type && strlen (proxy_type)) {
+	if (_arg_is_set (proxy_type)) {
+		const char *proxy_server;
+		const char *proxy_port;
+		const char *proxy_retry;
+		const char *proxy_username;
+		const char *proxy_password;
+
 		proxy_server = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER);
 		proxy_port = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT);
 		proxy_retry = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY);
 		proxy_username = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
 		proxy_password = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
 
-		if (!strcmp (proxy_type, "http") && proxy_server && proxy_port) {
+		if (nm_streq (proxy_type, "http") && proxy_server && proxy_port) {
 			char *authfile, *authcontents, *base, *dirname;
 
 			if (!proxy_port)
@@ -1899,7 +1898,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 				g_free (authcontents);
 			}
 			g_free (authfile);
-		} else if (!strcmp (proxy_type, "socks") && proxy_server && proxy_port) {
+		} else if (nm_streq (proxy_type, "socks") && proxy_server && proxy_port) {
 			if (!proxy_port)
 				proxy_port = "1080";
 			args_write_line (f, "socks-proxy", proxy_server, proxy_port);
