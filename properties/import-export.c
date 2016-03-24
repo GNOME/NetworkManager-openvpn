@@ -1650,8 +1650,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *connection_type;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
-	gboolean keysize_exists = FALSE;
-	guint32 keysize = 0;
 	const char *proxy_type = NULL;
 	const char *proxy_server = NULL;
 	const char *proxy_port = NULL;
@@ -1691,15 +1689,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	}
 
 	connection_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE));
-
-	/* Advanced values start */
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE);
-	if (_arg_is_set (value)) {
-		keysize_exists = TRUE;
-		keysize = strtol (value, NULL, 10);
-	}
-
-	/* Advanced values end */
 
 	f = g_string_sized_new (512);
 
@@ -1800,8 +1789,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	args_write_line_setting_value (f, "cipher", s_vpn, NM_OPENVPN_KEY_CIPHER);
 
-	if (keysize_exists)
-		args_write_line_int64 (f, "keysize", keysize);
+	args_write_line_int64_str (f, "keysize", nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE));
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO), "yes"))
 		args_write_line (f, "comp-lzo", "yes");
