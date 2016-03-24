@@ -1653,9 +1653,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	gs_free char *private_key = NULL;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
-	gs_free char *device = NULL;
-	const char *device_type = NULL;
-	const char *device_default = "tun";
 	gboolean proto_udp = TRUE;
 	gboolean use_lzo = FALSE;
 	gboolean use_float = FALSE;
@@ -1730,19 +1727,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
 	if (value && !strcmp (value, "yes"))
 		proto_udp = FALSE;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV);
-	if (_arg_is_set (value))
-		device = nmv_utils_str_utf8safe_unescape (value);
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE);
-	if (_arg_is_set (value))
-		device_type = value;
-
-	/* Read legacy 'tap-dev' property for backwards compatibility. */
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV);
-	if (value && !strcmp (value, "yes"))
-		device_default = "tap";
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
 	if (value && !strcmp (value, "yes"))
@@ -1872,11 +1856,23 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	                           TAG_FRAGMENT,
 	                           nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE));
 
-	args_write_line (f,
-	                 "dev",
-	                 device ?: (device_type ?: device_default));
-	if (device_type)
-		args_write_line (f, "dev-type", device_type);
+	{
+		gs_free char *device_free = NULL;
+		const char *device_type, *device;
+
+		device_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE));
+		device = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV));
+		device = nmv_utils_str_utf8safe_unescape_c (device, &device_free);
+		args_write_line (f,
+		                 "dev",
+		                 device ?:
+		                     (device_type ?:
+		                         (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV), "yes")
+		                             ? "tap" : "tun")));
+		if (device_type)
+			args_write_line (f, "dev-type", device_type);
+	}
+
 	args_write_line (f, "proto", proto_udp ? "udp" : "tcp");
 
 	args_write_line_setting_value (f, "port", s_vpn, NM_OPENVPN_KEY_PORT);
