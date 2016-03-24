@@ -1648,7 +1648,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *gateways = NULL;
 	char **gw_list, **gw_iter;
 	gs_free char *cacert = NULL;
-	const char *connection_type = NULL;
+	const char *connection_type;
 	gs_free char *user_cert = NULL;
 	gs_free char *private_key = NULL;
 	const char *local_ip = NULL;
@@ -1700,20 +1700,18 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		return NULL;
 	}
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	if (_arg_is_set (value))
-		connection_type = value;
+	connection_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE));
 
-	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)
-	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
-	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
+	                                   NM_OPENVPN_CONTYPE_PASSWORD,
+	                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
 		if (_arg_is_set (value))
 			cacert = nmv_utils_str_utf8safe_unescape (value);
 	}
 
-	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)
-	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
+	                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
 		if (_arg_is_set (value))
 			user_cert = nmv_utils_str_utf8safe_unescape (value);
@@ -1805,11 +1803,11 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			args_write_line (f, "key", private_key);
 	}
 
-	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
-	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
+	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_PASSWORD,
+	                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS))
 		args_write_line (f, "auth-user-pass");
 
-	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
+	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
 		if (_arg_is_set (value)) {
 			gs_free char *s_free = NULL;
