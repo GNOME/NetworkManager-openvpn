@@ -1742,14 +1742,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		keysize = strtol (value, NULL, 10);
 	}
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
-	if (_arg_is_set (value))
-		local_ip = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
-	if (_arg_is_set (value))
-		remote_ip = value;
-
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM);
 	if (value && !strcmp (value, "yes"))
 		randomize_hosts = TRUE;
@@ -1883,6 +1875,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	args_write_line_setting_value (f, "ping-restart", s_vpn, NM_OPENVPN_KEY_PING_RESTART);
 
+	local_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP));
+	remote_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP));
 	if (local_ip && remote_ip)
 		args_write_line (f, "ifconfig", local_ip, remote_ip);
 
