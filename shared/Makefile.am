@@ -13,6 +13,8 @@ libnm_openvpn_shared_la_CPPFLAGS = \
     -I$(top_srcdir)/shared
 
 libnm_vpn_plugin_openvpn_shared_la_SOURCES= \
+    nm-shared-utils.c \
+    nm-shared-utils.h \
     utils.c \
     utils.h \
     nm-openvpn-service-defines.h

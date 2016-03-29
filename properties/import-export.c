@@ -39,6 +39,7 @@
 #include "nm-openvpn-service-defines.h"
 #include "utils.h"
 #include "nm-macros-internal.h"
+#include "nm-shared-utils.h"
 
 
 #define INLINE_BLOB_CA                  "ca"
@@ -48,52 +49,22 @@
 #define INLINE_BLOB_SECRET              "secret"
 #define INLINE_BLOB_TLS_AUTH            "tls-auth"
 
-#define TAG_AUTH                        "auth"
-#define TAG_AUTH_USER_PASS              "auth-user-pass"
-#define TAG_CA                          "ca"
-#define TAG_CERT                        "cert"
-#define TAG_CIPHER                      "cipher"
-#define TAG_CLIENT                      "client"
-#define TAG_COMP_LZO                    "comp-lzo"
-#define TAG_DEV                         "dev"
-#define TAG_DEV_TYPE                    "dev-type"
-#define TAG_FLOAT                       "float"
-#define TAG_FRAGMENT                    "fragment"
-#define TAG_HTTP_PROXY                  "http-proxy"
-#define TAG_HTTP_PROXY_RETRY            "http-proxy-retry"
-#define TAG_IFCONFIG                    "ifconfig"
-#define TAG_KEEPALIVE                   "keepalive"
-#define TAG_KEY_DIRECTION               "key-direction"
-#define TAG_KEY                         "key"
-#define TAG_KEYSIZE                     "keysize"
-#define TAG_MSSFIX                      "mssfix"
-#define TAG_NOBIND                      "nobind"
-#define TAG_PING_EXIT                   "ping-exit"
-#define TAG_PING                        "ping"
-#define TAG_PING_RESTART                "ping-restart"
-#define TAG_PKCS12                      "pkcs12"
-#define TAG_PORT                        "port"
-#define TAG_PROTO                       "proto"
-#define TAG_REMOTE_CERT_TLS             "remote-cert-tls"
-#define TAG_REMOTE_RANDOM               "remote-random"
-#define TAG_REMOTE                      "remote"
-#define TAG_RENEG_SEC                   "reneg-sec"
-#define TAG_ROUTE                       "route"
-#define TAG_RPORT                       "rport"
-#define TAG_SECRET                      "secret"
-#define TAG_SOCKS_PROXY_RETRY           "socks-proxy-retry"
-#define TAG_SOCKS_PROXY                 "socks-proxy"
-#define TAG_TLS_AUTH                    "tls-auth"
-#define TAG_TLS_CLIENT                  "tls-client"
-#define TAG_TLS_REMOTE                  "tls-remote"
-#define TAG_TOPOLOGY                    "topology"
-#define TAG_TUN_MTU                     "tun-mtu"
-#define TAG_TUN_IPV6                    "tun-ipv6"
-
-
 const char *_nmovpn_test_temp_path = NULL;
 
 /*****************************************************************************/
+
+static const char *
+_arg_is_set (const char *value)
+{
+	return (value && value[0]) ? value : NULL;
+}
+
+static void
+_auto_free_gstring_p (GString **ptr)
+{
+	if (*ptr)
+		g_string_free (*ptr, TRUE);
+}
 
 static gboolean
 _is_utf8 (const char *str)
@@ -846,14 +817,14 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (g_str_has_prefix (params[0], "--"))
 			params[0] = &params[0][2];
 
-		if (NM_IN_STRSET (params[0], TAG_CLIENT, TAG_TLS_CLIENT)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CLIENT, NMV_OVPN_TAG_TLS_CLIENT)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
 			have_client = TRUE;
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_KEY_DIRECTION)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEY_DIRECTION)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_parse_key_direction (params, 1, &last_seen_key_direction, &line_error))
@@ -861,7 +832,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_DEV)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_DEV)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_check_arg_nonempty (params, 1, NULL, &line_error))
@@ -870,7 +841,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_DEV_TYPE)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_DEV_TYPE)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!NM_IN_STRSET (params[1], "tun", "tap")) {
@@ -881,7 +852,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_PROTO)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PROTO)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			/* Valid parameters are "udp", "tcp-client" and "tcp-server".
@@ -899,7 +870,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_MSSFIX)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_MSSFIX)) {
 			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
 				goto handle_line_error;
 			/* TODO: handle the mssfix argument. */
@@ -907,7 +878,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_TUN_MTU)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TUN_MTU)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
@@ -916,7 +887,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_FRAGMENT)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_FRAGMENT)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
@@ -925,7 +896,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_COMP_LZO)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_COMP_LZO)) {
 			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
 				goto handle_line_error;
 			if (params[1]) {
@@ -940,14 +911,14 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_FLOAT)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_FLOAT)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
 			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_RENEG_SEC)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_RENEG_SEC)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 1, 0, 0xffff, &v_int64, &line_error))
@@ -956,20 +927,20 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_HTTP_PROXY_RETRY, TAG_SOCKS_PROXY_RETRY)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_HTTP_PROXY_RETRY, NMV_OVPN_TAG_SOCKS_PROXY_RETRY)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
 			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY, "yes");
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_HTTP_PROXY, TAG_SOCKS_PROXY)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_HTTP_PROXY, NMV_OVPN_TAG_SOCKS_PROXY)) {
 			const char *proxy_type = NULL;
 			gint64 port = 0;
 			gs_free char *user = NULL;
 			gs_free char *pass = NULL;
 
-			if (NM_IN_STRSET (params[0], TAG_HTTP_PROXY)) {
+			if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_HTTP_PROXY)) {
 				proxy_type = "http";
 				if (!args_params_check_nargs_minmax (params, 2, 4, &line_error))
 					goto handle_line_error;
@@ -1009,7 +980,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_REMOTE)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_REMOTE)) {
 			const char *prev;
 			GString *new_remote;
 			int port = -1;
@@ -1063,21 +1034,21 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_REMOTE_RANDOM)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_REMOTE_RANDOM)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
 			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM, "yes");
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_TUN_IPV6)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TUN_IPV6)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
 			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6, "yes");
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_PORT, TAG_RPORT)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PORT, NMV_OVPN_TAG_RPORT)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_parse_port (params, 1, &v_int64, &line_error))
@@ -1086,7 +1057,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_PING, TAG_PING_EXIT, TAG_PING_RESTART)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PING, NMV_OVPN_TAG_PING_EXIT, NMV_OVPN_TAG_PING_RESTART)) {
 			const char *key = NULL;
 
 			if (!args_params_check_nargs_n (params, 1, &line_error))
@@ -1094,11 +1065,11 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			if (!args_params_parse_int64 (params, 1, 0, G_MAXINT, &v_int64, &line_error))
 				goto handle_line_error;
 
-			if (NM_IN_STRSET (params[0], TAG_PING))
+			if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PING))
 				key = NM_OPENVPN_KEY_PING;
-			else if (NM_IN_STRSET (params[0], TAG_PING_EXIT))
+			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PING_EXIT))
 				key = NM_OPENVPN_KEY_PING_EXIT;
-			else if (NM_IN_STRSET (params[0], TAG_PING_RESTART))
+			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PING_RESTART))
 				key = NM_OPENVPN_KEY_PING_RESTART;
 
 			setting_vpn_add_data_item_int64 (s_vpn, key, v_int64);
@@ -1106,20 +1077,20 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		}
 
 		if (NM_IN_STRSET (params[0],
-		                 TAG_PKCS12,
-		                 TAG_CA,
-		                 TAG_CERT,
-		                 TAG_KEY,
-		                 TAG_SECRET,
-		                 TAG_TLS_AUTH)) {
+		                 NMV_OVPN_TAG_PKCS12,
+		                 NMV_OVPN_TAG_CA,
+		                 NMV_OVPN_TAG_CERT,
+		                 NMV_OVPN_TAG_KEY,
+		                 NMV_OVPN_TAG_SECRET,
+		                 NMV_OVPN_TAG_TLS_AUTH)) {
 			const char *file;
 			gs_free char *file_free = NULL;
 			gboolean can_have_direction;
 			const char *s_direction = NULL;
 
 			can_have_direction = NM_IN_STRSET (params[0],
-			                                  TAG_SECRET,
-			                                  TAG_TLS_AUTH);
+			                                  NMV_OVPN_TAG_SECRET,
+			                                  NMV_OVPN_TAG_TLS_AUTH);
 
 			if (!args_params_check_nargs_minmax (params, 1, can_have_direction ? 2 : 1, &line_error))
 				goto handle_line_error;
@@ -1137,22 +1108,22 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			if (!g_path_is_absolute (file))
 				file = file_free = g_build_filename (default_path, file, NULL);
 
-			if (NM_IN_STRSET (params[0], TAG_PKCS12)) {
+			if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PKCS12)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CA, file);
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CERT, file);
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_KEY, file);
-			} else if (NM_IN_STRSET (params[0], TAG_CA))
+			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CA))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CA, file);
-			else if (NM_IN_STRSET (params[0], TAG_CERT))
+			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CERT))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CERT, file);
-			else if (NM_IN_STRSET (params[0], TAG_KEY))
+			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEY))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_KEY, file);
-			else if (NM_IN_STRSET (params[0], TAG_SECRET)) {
+			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_SECRET)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, file);
 				if (s_direction)
 					setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, s_direction);
 				have_sk = TRUE;
-			} else if (NM_IN_STRSET (params[0], TAG_TLS_AUTH)) {
+			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_AUTH)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_TA, file);
 				if (s_direction)
 					setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, s_direction);
@@ -1161,7 +1132,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_CIPHER)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CIPHER)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
@@ -1170,7 +1141,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_KEEPALIVE)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEEPALIVE)) {
 			gint64 v2;
 
 			if (!args_params_check_nargs_n (params, 2, &line_error))
@@ -1184,7 +1155,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_KEYSIZE)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEYSIZE)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_parse_int64 (params, 1, 1, 65535, &v_int64, &line_error))
@@ -1193,7 +1164,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_TLS_REMOTE)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_REMOTE)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
@@ -1202,7 +1173,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_REMOTE_CERT_TLS)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_REMOTE_CERT_TLS)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!NM_IN_STRSET (params[1], NM_OPENVPN_REM_CERT_TLS_CLIENT, NM_OPENVPN_REM_CERT_TLS_SERVER)) {
@@ -1213,7 +1184,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_IFCONFIG)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_IFCONFIG)) {
 			if (!args_params_check_nargs_n (params, 2, &line_error))
 				goto handle_line_error;
 			if (!args_params_check_arg_utf8 (params, 1, "local", &line_error))
@@ -1225,14 +1196,14 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_AUTH_USER_PASS)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_AUTH_USER_PASS)) {
 			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
 				goto handle_line_error;
 			have_pass = TRUE;
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_AUTH)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_AUTH)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
@@ -1241,7 +1212,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], TAG_ROUTE)) {
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_ROUTE)) {
 			in_addr_t network;
 			in_addr_t gateway = 0;
 			guint32 prefix = 32;
@@ -1502,212 +1473,188 @@ out_error:
 
 /*****************************************************************************/
 
-gboolean
-do_export (const char *path, NMConnection *connection, GError **error)
+static const char *
+escape_arg (const char *value, char **buf)
+{
+	const char *s;
+	char *result, *i_result;
+	gboolean has_single_quote = FALSE;
+	gboolean needs_quotation = FALSE;
+	gsize len;
+
+	nm_assert (value);
+	nm_assert (buf && !*buf);
+
+	if (value[0] == '\0')
+		return (*buf = g_strdup ("''"));
+
+	/* check if the string contains only benign characters... */
+	len = 0;
+	for (s = value; s[0]; s++) {
+		char c = s[0];
+
+		len++;
+		if (   (c >= '0' && c <= '9')
+		    || (c >= 'a' && c <= 'z')
+		    || (c >= 'A' && c <= 'Z')
+		    || NM_IN_SET (c, '_', '-', ':', '/'))
+			continue;
+		needs_quotation = TRUE;
+		if (c == '\'')
+			has_single_quote = TRUE;
+	}
+	if (!needs_quotation)
+		return value;
+
+	if (!has_single_quote) {
+		result = g_malloc (len + 2 + 1);
+		result[0] = '\'';
+		memcpy (&result[1], value, len);
+		result[1 + len] = '\'';
+		result[2 + len] = '\0';
+	} else {
+		i_result = result = g_malloc (len * 2 + 3);
+		*(i_result++) = '"';
+		for (s = value; s[0]; s++) {
+			if (NM_IN_SET (s[0], '\\', '"'))
+				*(i_result++) = '\\';
+			*(i_result++) = s[0];
+		}
+		*(i_result++) = '"';
+		*(i_result++) = '\0';
+	}
+
+	*buf = result;
+	return result;
+}
+
+static void
+args_write_line_v (GString *f, gsize nargs, const char **args)
+{
+	gsize i;
+	gboolean printed;
+
+	nm_assert (args);
+	nm_assert (args[0]);
+
+	for (i = 0; i < nargs; i++) {
+		gs_free char *tmp = NULL;
+
+		/* NULL is skipped. This is for convenience to specify
+		 * optional arguments. */
+		if (!args[i])
+			continue;
+
+		if (printed)
+			g_string_append_c (f, ' ');
+		printed = TRUE;
+		g_string_append (f, escape_arg (args[i], &tmp));
+	}
+	g_string_append_c (f, '\n');
+}
+#define args_write_line(f, ...) args_write_line_v(f, NM_NARG (__VA_ARGS__), (const char *[]) { __VA_ARGS__ })
+
+static void
+args_write_line_int64 (GString *f, const char *key, gint64 value)
+{
+	char tmp[64];
+
+	args_write_line (f, key, nm_sprintf_buf (tmp, "%"G_GINT64_FORMAT, value));
+}
+
+static void
+args_write_line_setting_value_int (GString *f,
+                                   const char *tag_key,
+                                   NMSettingVpn *s_vpn,
+                                   const char *setting_key)
+{
+	const char *value;
+	gint64 v;
+
+	nm_assert (tag_key && tag_key[0]);
+	nm_assert (NM_IS_SETTING_VPN (s_vpn));
+	nm_assert (setting_key && setting_key[0]);
+
+	value = nm_setting_vpn_get_data_item (s_vpn, setting_key);
+	if (!_arg_is_set (value))
+		return;
+
+	v = _nm_utils_ascii_str_to_int64 (value, 10, G_MININT64, G_MAXINT64, 0);
+	if (errno)
+		return;
+	args_write_line_int64 (f, tag_key, v);
+}
+
+static void
+args_write_line_setting_value (GString *f,
+                               const char *tag_key,
+                               NMSettingVpn *s_vpn,
+                               const char *setting_key)
+{
+	const char *value;
+
+	value = nm_setting_vpn_get_data_item (s_vpn, setting_key);
+	if (_arg_is_set (value))
+		args_write_line (f, tag_key, value);
+}
+
+/*****************************************************************************/
+
+static GString *
+do_export_create (NMConnection *connection, const char *path, GError **error)
 {
 	NMSettingConnection *s_con;
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
-	FILE *f;
 	const char *value;
-	const char *gateways = NULL;
+	const char *gateways;
 	char **gw_list, **gw_iter;
-	const char *cipher = NULL;
-	gs_free char *cacert = NULL;
-	const char *connection_type = NULL;
-	gs_free char *user_cert = NULL;
-	gs_free char *private_key = NULL;
-	gs_free char *static_key = NULL;
-	const char *static_key_direction = NULL;
-	const char *port = NULL;
-	const char *ping = NULL;
-	const char *ping_exit = NULL;
-	const char *ping_restart = NULL;
+	const char *connection_type;
 	const char *local_ip = NULL;
 	const char *remote_ip = NULL;
-	const char *tls_remote = NULL;
-	const char *remote_cert_tls = NULL;
-	gs_free char *tls_auth = NULL;
-	const char *tls_auth_dir = NULL;
-	gs_free char *device = NULL;
-	const char *device_type = NULL;
-	const char *device_default = "tun";
-	gboolean success = FALSE;
-	gboolean proto_udp = TRUE;
-	gboolean use_lzo = FALSE;
-	gboolean use_float = FALSE;
-	gboolean reneg_exists = FALSE;
-	guint32 reneg = 0;
-	gboolean keysize_exists = FALSE;
-	guint32 keysize = 0;
-	gboolean randomize_hosts = FALSE;
-	gboolean tun_ipv6 = FALSE;
 	const char *proxy_type = NULL;
-	const char *proxy_server = NULL;
-	const char *proxy_port = NULL;
-	const char *proxy_retry = NULL;
-	const char *proxy_username = NULL;
-	const char *proxy_password = NULL;
-	int i;
-	guint num;
+	guint i, num;
+	nm_auto(_auto_free_gstring_p) GString *f = NULL;
+	gs_free_error GError *local = NULL;
 
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
-
-	s_vpn = nm_connection_get_setting_vpn (connection);
-
-	f = fopen (path, "w");
-	if (!f) {
+	if (!path || !path[0]) {
 		g_set_error_literal (error,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
-		                     _("could not open file for writing"));
-		return FALSE;
+		                     _("missing path argument"));
+		return NULL;
 	}
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
-	if (value && strlen (value))
-		gateways = value;
-	else {
+	s_con = nm_connection_get_setting_connection (connection);
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	if (!s_con || !s_vpn) {
+		g_set_error_literal (error,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR,
+		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     _("connection is not a valid OpenVPN connection"));
+		return NULL;
+	}
+
+	gateways = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE));
+	if (!gateways) {
 		g_set_error_literal (error,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR,
 		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("connection was incomplete (missing gateway)"));
-		goto done;
+		return NULL;
 	}
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	if (value && strlen (value))
-		connection_type = value;
+	connection_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE));
 
-	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)
-	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
-	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
-		if (value && strlen (value))
-			cacert = nmv_utils_str_utf8safe_unescape (value);
-	}
+	f = g_string_sized_new (512);
 
-	if (   !strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)
-	    || !strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
-		if (value && strlen (value))
-			user_cert = nmv_utils_str_utf8safe_unescape (value);
-
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (value && strlen (value))
-			private_key = nmv_utils_str_utf8safe_unescape (value);
-	}
-
-	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
-		if (value && strlen (value))
-			static_key = nmv_utils_str_utf8safe_unescape (value);
-
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION);
-		if (value && strlen (value))
-			static_key_direction = value;
-	}
-
-	/* Export tls-remote value now*/
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
-	if (value && strlen (value))
-		tls_remote = value;
-
-	/* Advanced values start */
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
-	if (value && strlen (value))
-		port = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING);
-	if (value && strlen (value))
-		ping = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_EXIT);
-	if (value && strlen (value))
-		ping_exit = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART);
-	if (value && strlen (value))
-		ping_restart = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
-	if (value && strlen (value)) {
-		reneg_exists = TRUE;
-		reneg = strtol (value, NULL, 10);
-	}
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
-	if (value && !strcmp (value, "yes"))
-		proto_udp = FALSE;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV);
-	if (value && strlen (value))
-		device = nmv_utils_str_utf8safe_unescape (value);
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE);
-	if (value && strlen (value))
-		device_type = value;
-
-	/* Read legacy 'tap-dev' property for backwards compatibility. */
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV);
-	if (value && !strcmp (value, "yes"))
-		device_default = "tap";
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
-	if (value && !strcmp (value, "yes"))
-		use_lzo = TRUE;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT);
-	if (value && !strcmp (value, "yes"))
-		use_float = TRUE;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER);
-	if (value && strlen (value))
-		cipher = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE);
-	if (value && strlen (value)) {
-		keysize_exists = TRUE;
-		keysize = strtol (value, NULL, 10);
-	}
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
-	if (value && strlen (value))
-		local_ip = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
-	if (value && strlen (value))
-		remote_ip = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
-	if (value && strlen (value))
-		tls_auth = nmv_utils_str_utf8safe_unescape (value);
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR);
-	if (value && strlen (value))
-		tls_auth_dir = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
-	if (value && strlen (value))
-		remote_cert_tls = value;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM);
-	if (value && !strcmp (value, "yes"))
-		randomize_hosts = TRUE;
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6);
-	if (value && !strcmp (value, "yes"))
-		tun_ipv6 = TRUE;
-
-	/* Advanced values end */
-
-	fprintf (f, "client\n");
+	args_write_line (f, NMV_OVPN_TAG_CLIENT);
 
 	/* 'remote' */
 	gw_list = g_strsplit_set (gateways, " ,", 0);
 	for (gw_iter = gw_list; gw_iter && *gw_iter; gw_iter++) {
 		char *tmp_host, *tmp_port,*tmp_proto;
+
 		if (**gw_iter == '\0')
 			continue;
 		tmp_host = g_strstrip (*gw_iter);
@@ -1722,121 +1669,162 @@ do_export (const char *path, NMConnection *connection, GError **error)
 		if (tmp_proto && !*tmp_proto)
 			tmp_proto = NULL;
 
-		fprintf (f, "remote %s%s%s%s%s\n",
-		         *gw_iter,
-		         tmp_port ? " " : tmp_proto ? " " : "",
-		         tmp_port ? tmp_port : tmp_proto ? !strcmp (tmp_proto, "udp") ? "1194" : "443": "",
-		         tmp_proto ? " " : "",
-		         tmp_proto ? tmp_proto : "");
+		args_write_line (f,
+		                 NMV_OVPN_TAG_REMOTE,
+		                 *gw_iter,
+		                 tmp_port
+		                     ?: (tmp_proto
+		                             ? (nm_streq (tmp_proto, "udp") ? "1194" : "443")
+		                             : NULL),
+		                 tmp_proto);
 	}
 	g_strfreev (gw_list);
 
-	if (randomize_hosts)
-		fprintf (f, "remote-random\n");
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM), "yes"))
+		args_write_line (f, NMV_OVPN_TAG_REMOTE_RANDOM);
 
-	if (tun_ipv6)
-		fprintf (f, "tun-ipv6\n");
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6), "yes"))
+		args_write_line (f, NMV_OVPN_TAG_TUN_IPV6);
 
-	/* Handle PKCS#12 (all certs are the same file) */
-	if (   cacert && user_cert && private_key
-	    && !strcmp (cacert, user_cert) && !strcmp (cacert, private_key))
-		fprintf (f, "pkcs12 %s\n", cacert);
-	else {
-		if (cacert)
-			fprintf (f, "ca %s\n", cacert);
-		if (user_cert)
-			fprintf (f, "cert %s\n", user_cert);
-		if (private_key)
-			fprintf(f, "key %s\n", private_key);
-	}
+	{
+		gs_free char *cacert_free = NULL, *user_cert_free = NULL, *private_key_free = NULL;
+		const char *cacert = NULL, *user_cert = NULL, *private_key = NULL;
 
-	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD)
-	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
-		fprintf (f, "auth-user-pass\n");
+		if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
+		                                   NM_OPENVPN_CONTYPE_PASSWORD,
+		                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
+			if (_arg_is_set (value))
+				cacert = nmv_utils_str_utf8safe_unescape_c (value, &cacert_free);
+		}
 
-	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
-		if (static_key) {
-			fprintf (f, "secret %s%s%s\n",
-			         static_key,
-			         static_key_direction ? " " : "",
-			         static_key_direction ? static_key_direction : "");
+		if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
+		                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
+			if (_arg_is_set (value))
+				user_cert = nmv_utils_str_utf8safe_unescape_c (value, &user_cert_free);
+
+			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+			if (_arg_is_set (value))
+				private_key = nmv_utils_str_utf8safe_unescape_c (value, &private_key_free);
+		}
+
+		if (   cacert && user_cert && private_key
+		    && nm_streq (cacert, user_cert) && nm_streq (cacert, private_key)) {
+			/* Handle PKCS#12 (all certs are the same file) */
+			args_write_line (f, NMV_OVPN_TAG_PKCS12, cacert);
+		} else {
+			if (cacert)
+				args_write_line (f, NMV_OVPN_TAG_CA, cacert);
+			if (user_cert)
+				args_write_line (f, NMV_OVPN_TAG_CERT, user_cert);
+			if (private_key)
+				args_write_line (f, NMV_OVPN_TAG_KEY, private_key);
 		}
 	}
 
-	if (reneg_exists)
-		fprintf (f, "reneg-sec %d\n", reneg);
+	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_PASSWORD,
+	                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS))
+		args_write_line (f, NMV_OVPN_TAG_AUTH_USER_PASS);
 
-	if (cipher)
-		fprintf (f, "cipher %s\n", cipher);
+	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
+		if (_arg_is_set (value)) {
+			gs_free char *s_free = NULL;
 
-	if (keysize_exists)
-		fprintf (f, "keysize %d\n", keysize);
-
-	if (use_lzo)
-		fprintf (f, "comp-lzo yes\n");
-
-	if (use_float)
-		fprintf (f, "float\n");
-
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
-	if (value && strlen (value)) {
-		if (!strcmp (value, "yes"))
-			fprintf (f, TAG_MSSFIX "\n");
+			args_write_line (f,
+			                 NMV_OVPN_TAG_SECRET,
+			                 nmv_utils_str_utf8safe_unescape_c (value, &s_free),
+			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION)));
+		}
 	}
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
-	if (value && strlen (value))
-		fprintf (f, TAG_TUN_MTU " %d\n", (int) strtol (value, NULL, 10));
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_RENEG_SEC, s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
-	if (value && strlen (value))
-		fprintf (f, TAG_FRAGMENT " %d\n", (int) strtol (value, NULL, 10));
+	args_write_line_setting_value (f, NMV_OVPN_TAG_CIPHER, s_vpn, NM_OPENVPN_KEY_CIPHER);
 
-	fprintf (f, "dev %s\n", device ? device : (device_type ? device_type : device_default));
-	if (device_type)
-		fprintf (f, "dev-type %s\n", device_type);
-	fprintf (f, "proto %s\n", proto_udp ? "udp" : "tcp");
-	if (port)
-		fprintf (f, "port %s\n", port);
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_KEYSIZE, s_vpn, NM_OPENVPN_KEY_KEYSIZE);
 
-	if (ping)
-		fprintf (f, "ping %s\n", ping);
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO), "yes"))
+		args_write_line (f, NMV_OVPN_TAG_COMP_LZO, "yes");
 
-	if (ping_exit)
-		fprintf (f, "ping-exit %s\n", ping_exit);
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
+		args_write_line (f, NMV_OVPN_TAG_FLOAT);
 
-	if (ping_restart)
-		fprintf (f, "ping-restart %s\n", ping_restart);
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX), "yes"))
+		args_write_line (f, NMV_OVPN_TAG_MSSFIX);
 
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_TUN_MTU, s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
+
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_FRAGMENT, s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
+
+	{
+		gs_free char *device_free = NULL;
+		const char *device_type, *device;
+
+		device_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE));
+		device = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV));
+		device = nmv_utils_str_utf8safe_unescape_c (device, &device_free);
+		args_write_line (f,
+		                 NMV_OVPN_TAG_DEV,
+		                 device ?:
+		                     (device_type ?:
+		                         (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TAP_DEV), "yes")
+		                             ? "tap" : "tun")));
+		if (device_type)
+			args_write_line (f, NMV_OVPN_TAG_DEV_TYPE, device_type);
+	}
+
+	args_write_line (f,
+	                 NMV_OVPN_TAG_PROTO,
+	                 nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP), "yes")
+	                     ? "tcp" : "udp");
+
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_PORT, s_vpn, NM_OPENVPN_KEY_PORT);
+
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_PING, s_vpn, NM_OPENVPN_KEY_PING);
+
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_PING_EXIT, s_vpn, NM_OPENVPN_KEY_PING_EXIT);
+
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_PING_RESTART, s_vpn, NM_OPENVPN_KEY_PING_RESTART);
+
+	local_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP));
+	remote_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP));
 	if (local_ip && remote_ip)
-		fprintf (f, "ifconfig %s %s\n", local_ip, remote_ip);
+		args_write_line (f, NMV_OVPN_TAG_IFCONFIG, local_ip, remote_ip);
 
-	if (   !strcmp(connection_type, NM_OPENVPN_CONTYPE_TLS)
-	    || !strcmp(connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		if (tls_remote)
-			fprintf (f,"tls-remote \"%s\"\n", tls_remote);
+	if (NM_IN_STRSET (connection_type,
+	                  NM_OPENVPN_CONTYPE_TLS,
+	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
+		args_write_line_setting_value (f, NMV_OVPN_TAG_TLS_REMOTE, s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
+		args_write_line_setting_value (f, NMV_OVPN_TAG_REMOTE_CERT_TLS, s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
 
-		if (remote_cert_tls)
-			fprintf (f,"remote-cert-tls %s\n", remote_cert_tls);
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
+		if (_arg_is_set (value)) {
+			gs_free char *s_free = NULL;
 
-		if (tls_auth) {
-			fprintf (f, "tls-auth %s%s%s\n",
-			         tls_auth,
-			         tls_auth_dir ? " " : "",
-			         tls_auth_dir ? tls_auth_dir : "");
+			args_write_line (f,
+			                 NMV_OVPN_TAG_TLS_AUTH,
+			                 nmv_utils_str_utf8safe_unescape_c (value, &s_free),
+			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR)));
 		}
 	}
 
-	/* Proxy stuff */
 	proxy_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE);
-	if (proxy_type && strlen (proxy_type)) {
+	if (_arg_is_set (proxy_type)) {
+		const char *proxy_server;
+		const char *proxy_port;
+		const char *proxy_retry;
+		const char *proxy_username;
+		const char *proxy_password;
+
 		proxy_server = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER);
 		proxy_port = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT);
 		proxy_retry = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_RETRY);
 		proxy_username = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
 		proxy_password = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
 
-		if (!strcmp (proxy_type, "http") && proxy_server && proxy_port) {
+		if (nm_streq (proxy_type, "http") && proxy_server && proxy_port) {
 			char *authfile, *authcontents, *base, *dirname;
 
 			if (!proxy_port)
@@ -1849,13 +1837,13 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			g_free (base);
 			g_free (dirname);
 
-			fprintf (f, "http-proxy %s %s%s%s\n",
-			         proxy_server,
-			         proxy_port,
-			         proxy_username ? " " : "",
-			         proxy_username ? authfile : "");
+			args_write_line (f,
+			                 NMV_OVPN_TAG_HTTP_PROXY,
+			                 proxy_server,
+			                 proxy_port,
+			                 proxy_username ? authfile : NULL);
 			if (proxy_retry && !strcmp (proxy_retry, "yes"))
-				fprintf (f, "http-proxy-retry\n");
+				args_write_line (f, NMV_OVPN_TAG_HTTP_PROXY_RETRY);
 
 			/* Write out the authfile */
 			if (proxy_username) {
@@ -1866,12 +1854,12 @@ do_export (const char *path, NMConnection *connection, GError **error)
 				g_free (authcontents);
 			}
 			g_free (authfile);
-		} else if (!strcmp (proxy_type, "socks") && proxy_server && proxy_port) {
+		} else if (nm_streq (proxy_type, "socks") && proxy_server && proxy_port) {
 			if (!proxy_port)
 				proxy_port = "1080";
-			fprintf (f, "socks-proxy %s %s\n", proxy_server, proxy_port);
+			args_write_line (f, NMV_OVPN_TAG_SOCKS_PROXY, proxy_server, proxy_port);
 			if (proxy_retry && !strcmp (proxy_retry, "yes"))
-				fprintf (f, "socks-proxy-retry\n");
+				args_write_line (f, NMV_OVPN_TAG_SOCKS_PROXY_RETRY);
 		}
 	}
 
@@ -1917,27 +1905,46 @@ do_export (const char *path, NMConnection *connection, GError **error)
 			netmask = nm_utils_ip4_prefix_to_netmask (prefix);
 			inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
 
-			fprintf (f, "route %s %s %s%s\n",
-			         dest_str,
-			         netmask_str,
-			         next_hop_str,
-			         metric == -1 ? "" : nm_sprintf_buf (metric_buf, " %u", (unsigned) metric));
+			args_write_line (f,
+			                 NMV_OVPN_TAG_ROUTE,
+			                 dest_str,
+			                 netmask_str,
+			                 next_hop_str,
+			                 metric == -1 ? NULL : nm_sprintf_buf (metric_buf, "%u", (unsigned) metric));
 		}
 	}
 
 	/* Add hard-coded stuff */
-	fprintf (f,
-	         "nobind\n"
-	         "auth-nocache\n"
-	         "script-security 2\n"
-	         "persist-key\n"
-	         "persist-tun\n"
-	         "user openvpn\n"
-	         "group openvpn\n");
-	success = TRUE;
+	args_write_line (f, NMV_OVPN_TAG_NOBIND);
+	args_write_line (f, NMV_OVPN_TAG_AUTH_NOCACHE);
+	args_write_line (f, NMV_OVPN_TAG_SCRIPT_SECURITY, "2");
+	args_write_line (f, NMV_OVPN_TAG_PERSIST_KEY);
+	args_write_line (f, NMV_OVPN_TAG_PERSIST_TUN);
+	args_write_line (f, NMV_OVPN_TAG_USER, "openvpn");
+	args_write_line (f, NMV_OVPN_TAG_GROUP, "openvpn");
 
-done:
-	fclose (f);
-	return success;
+	return nm_unauto (&f);
+}
+
+gboolean
+do_export (const char *path, NMConnection *connection, GError **error)
+{
+	nm_auto(_auto_free_gstring_p) GString *f = NULL;
+	gs_free_error GError *local = NULL;
+
+	f = do_export_create (connection, path, error);
+	if (!f)
+		return FALSE;
+
+	if (!g_file_set_contents (path, f->str, f->len, &local)) {
+		g_set_error (error,
+		             OPENVPN_EDITOR_PLUGIN_ERROR,
+		             OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		             _("failed to write file: %s"),
+		             local->message);
+		return FALSE;
+	}
+
+	return TRUE;
 }
 

@@ -22,7 +22,26 @@
 #ifndef __NM_MACROS_INTERNAL_H__
 #define __NM_MACROS_INTERNAL_H__
 
-#include "nm-default.h"
+#include <stdlib.h>
+
+/********************************************************/
+
+#define nm_auto(fcn) __attribute ((cleanup(fcn)))
+
+/**
+ * nm_auto_free:
+ *
+ * Call free() on a variable location when it goes out of scope.
+ */
+#define nm_auto_free nm_auto(_nm_auto_free_impl)
+GS_DEFINE_CLEANUP_FUNCTION(void*, _nm_auto_free_impl, free)
+
+static inline void
+_nm_auto_unset_gvalue_impl (GValue *v)
+{
+	g_value_unset (v);
+}
+#define nm_auto_unset_gvalue nm_auto(_nm_auto_unset_gvalue_impl)
 
 /********************************************************/
 
@@ -103,6 +122,26 @@
 #else
 #define NM_PRAGMA_WARNING_REENABLE
 #endif
+
+/********************************************************/
+
+/**
+ * NM_G_ERROR_MSG:
+ * @error: (allow none): the #GError instance
+ *
+ * All functions must follow the convention that when they
+ * return a failure, they must also set the GError to a valid
+ * message. For external API however, we want to be extra
+ * careful before accessing the error instance. Use NM_G_ERROR_MSG()
+ * which is safe to use on NULL.
+ *
+ * Returns: the error message.
+ **/
+static inline const char *
+NM_G_ERROR_MSG (GError *error)
+{
+	return error ? (error->message ? : "(null)") : "(no-error)"; \
+}
 
 /********************************************************/
 
@@ -257,19 +296,24 @@ _NM_IN_STRSET_streq (const char *x, const char *s)
 
 #if NM_MORE_ASSERTS
 #define nm_assert(cond) G_STMT_START { g_assert (cond); } G_STMT_END
+#define nm_assert_not_reached() G_STMT_START { g_assert_not_reached (); } G_STMT_END
 #else
 #define nm_assert(cond) G_STMT_START { if (FALSE) { if (cond) { } } } G_STMT_END
+#define nm_assert_not_reached() G_STMT_START { ; } G_STMT_END
 #endif
 
 /*****************************************************************************/
 
-#define NM_GOBJECT_PROPERTIES_DEFINE(obj_type, ...) \
+#define NM_GOBJECT_PROPERTIES_DEFINE_BASE(...) \
 typedef enum { \
 	_PROPERTY_ENUMS_0, \
 	__VA_ARGS__ \
 	_PROPERTY_ENUMS_LAST, \
 } _PropertyEnums; \
-static GParamSpec *obj_properties[_PROPERTY_ENUMS_LAST] = { NULL, }; \
+static GParamSpec *obj_properties[_PROPERTY_ENUMS_LAST] = { NULL, }
+
+#define NM_GOBJECT_PROPERTIES_DEFINE(obj_type, ...) \
+NM_GOBJECT_PROPERTIES_DEFINE_BASE (__VA_ARGS__); \
 static inline void \
 _notify (obj_type *obj, _PropertyEnums prop) \
 { \
@@ -279,6 +323,38 @@ _notify (obj_type *obj, _PropertyEnums prop) \
 }
 
 /*****************************************************************************/
+
+#define nm_unauto(pp)                                               \
+    ({                                                              \
+        G_STATIC_ASSERT (sizeof *(pp) == sizeof (gpointer));        \
+        gpointer *_pp = (gpointer *) (pp);                          \
+        gpointer _p = *_pp;                                         \
+                                                                    \
+        *_pp = NULL;                                                \
+        _p;                                                         \
+    })
+
+/*****************************************************************************/
+
+static inline gpointer
+nm_g_object_ref (gpointer obj)
+{
+	/* g_object_ref() doesn't accept NULL. */
+	if (obj)
+		g_object_ref (obj);
+	return obj;
+}
+
+static inline void
+nm_g_object_unref (gpointer obj)
+{
+	/* g_object_unref() doesn't accept NULL. Usully, we workaround that
+	 * by using g_clear_object(), but sometimes that is not convinient
+	 * (for example as as destroy function for a hash table that can contain
+	 * NULL values). */
+	if (obj)
+		g_object_unref (obj);
+}
 
 static inline gboolean
 nm_clear_g_source (guint *id)
@@ -421,7 +497,7 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro) {
 		 * It disallows a buffer size of sizeof(gpointer) to catch that. */ \
 		G_STATIC_ASSERT (G_N_ELEMENTS (buf) == sizeof (buf) && sizeof (buf) != sizeof (char *)); \
 		g_snprintf (_buf, sizeof (buf), \
-		            ""format"", __VA_ARGS__); \
+		            ""format"", ##__VA_ARGS__); \
 		_buf; \
 	})
 
@@ -432,9 +508,56 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro) {
 		G_STATIC_ASSERT (sizeof (char[MAX ((n_elements), 1)]) == (n_elements)); \
 		_buf = g_alloca (n_elements); \
 		g_snprintf (_buf, n_elements, \
-		            ""format"", __VA_ARGS__); \
+		            ""format"", ##__VA_ARGS__); \
 		_buf; \
 	})
+
+/*****************************************************************************/
+
+/**
+ * The boolean type _Bool is C99 while we mostly stick to C89. However, _Bool is too
+ * convinient to miss and is effectively available in gcc and clang. So, just use it.
+ *
+ * Usually, one would include "stdbool.h" to get the "bool" define which aliases
+ * _Bool. We provide this define here, because we want to make use of it anywhere.
+ * (also, stdbool.h is again C99).
+ *
+ * Using _Bool has advantages over gboolean:
+ *
+ * - commonly _Bool is one byte large, instead of gboolean's 4 bytes (because gboolean
+ *   is a typedef for gint). Especially when having boolean fields in a struct, we can
+ *   thereby easily save some space.
+ *
+ * - _Bool type guarantees that two "true" expressions compare equal. E.g. the follwing
+ *   will not work:
+ *        gboolean v1 = 1;
+ *        gboolean v2 = 2;
+ *        g_assert_cmpint (v1, ==, v2); // will fail
+ *   For that, we often to use !! to coerce gboolean values to 0 or 1:
+ *        g_assert_cmpint (!!v2, ==, TRUE);
+ *   With _Bool type, this will be handled properly by the compiler.
+ *
+ * - For structs, we might want to safe even more space and use bitfields:
+ *       struct s1 {
+ *           gboolean v1:1;
+ *       };
+ *   But the problem here is that gboolean is signed, so that
+ *   v1 will be either 0 or -1 (not 1, TRUE). Thus, the following
+ *   fails:
+ *      struct s1 s = { .v1 = TRUE, };
+ *      g_assert_cmpint (s1.v1, ==, TRUE);
+ *   It will however work just fine with bool/_Bool while retaining the
+ *   notion of having a boolean value.
+ *
+ * Also, add the defines for "true" and "false". Those are nicely highlighted by the editor
+ * as special types, contrary to glib's "TRUE"/"FALSE".
+ */
+
+#ifndef bool
+#define bool _Bool
+#define true    1
+#define false   0
+#endif
 
 /*****************************************************************************/
 
