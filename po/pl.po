@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-16 17:42+0100\n"
-"PO-Revision-Date: 2016-03-16 17:44+0100\n"
+"POT-Creation-Date: 2016-03-29 18:58+0200\n"
+"PO-Revision-Date: 2016-03-29 18:59+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -170,7 +170,7 @@ msgstr "ping-exit"
 msgid "ping-restart"
 msgstr "ping-restart"
 
-#: ../properties/import-export.c:212
+#: ../properties/import-export.c:189
 #, c-format
 msgid "option %s expects between %u and %u argument"
 msgid_plural "option %s expects between %u and %u arguments"
@@ -178,12 +178,12 @@ msgstr[0] "opcja %s oczekuje między %u a %u parametrem"
 msgstr[1] "opcja %s oczekuje między %u a %u parametrami"
 msgstr[2] "opcja %s oczekuje między %u a %u parametrami"
 
-#: ../properties/import-export.c:217
+#: ../properties/import-export.c:194
 #, c-format
 msgid "option %s expects no arguments"
 msgstr "opcja %s oczekuje zero parametrów"
 
-#: ../properties/import-export.c:219
+#: ../properties/import-export.c:196
 #, c-format
 msgid "option %s expects exactly one argument"
 msgid_plural "option %s expects exactly %u arguments"
@@ -191,162 +191,171 @@ msgstr[0] "opcja %s oczekuje dokładnie jednego parametru"
 msgstr[1] "opcja %s oczekuje dokładnie %u parametrów"
 msgstr[2] "opcja %s oczekuje dokładnie %u parametrów"
 
-#: ../properties/import-export.c:248
+#: ../properties/import-export.c:225
 #, c-format
 msgid "argument %s of \"%s\" can not be empty"
 msgstr "parametr %s „%s” nie może być pusty"
 
-#: ../properties/import-export.c:250
+#: ../properties/import-export.c:227
 #, c-format
 msgid "argument of \"%s\" can not be empty"
 msgstr "parametr „%s” nie może być pusty"
 
-#: ../properties/import-export.c:266
+#: ../properties/import-export.c:243
 #, c-format
 msgid "argument %s of \"%s\" must be UTF-8 encoded"
 msgstr "parametr %s „%s” musi być zakodowany w UTF-8"
 
-#: ../properties/import-export.c:268
+#: ../properties/import-export.c:245
 #, c-format
 msgid "argument of \"%s\" must be UTF-8 encoded"
 msgstr "parametr „%s” musi być zakodowany w UTF-8"
 
-#: ../properties/import-export.c:292
+#: ../properties/import-export.c:269
 #, c-format
 msgid "invalid %uth argument to '%s' where number expected"
 msgstr "nieprawidłowy parametr numer %u dla „%s”, przekroczono numer"
 
-#: ../properties/import-export.c:323
+#: ../properties/import-export.c:300
 #, c-format
 msgid "invalid %uth argument to '%s' where IPv4 address expected"
 msgstr "nieprawidłowy parametr numer %u dla „%s”, oczekiwano adresu IPv4"
 
-#: ../properties/import-export.c:351
+#: ../properties/import-export.c:328
 #, c-format
 msgid "invalid %uth key-direction argument to '%s'"
 msgstr "nieprawidłowy parametr „key-direction” numer %u dla „%s”"
 
-#: ../properties/import-export.c:365
+#: ../properties/import-export.c:342
 #, c-format
 msgid "invalid %uth argument to '%s'"
 msgstr "nieprawidłowy parametr numer %u dla „%s”"
 
-#: ../properties/import-export.c:479
+#: ../properties/import-export.c:458
 #, c-format
 msgid "unterminated %s at position %lld"
 msgstr "niezakończony %s w położeniu %lld"
 
-#: ../properties/import-export.c:480
+#: ../properties/import-export.c:459
 msgid "double quote"
 msgstr "podwójny cudzysłów"
 
-#: ../properties/import-export.c:480
+#: ../properties/import-export.c:459
 msgid "single quote"
 msgstr "pojedynczy cudzysłów"
 
-#: ../properties/import-export.c:489
+#: ../properties/import-export.c:468
 #, c-format
 msgid "trailing escaping backslash at position %lld"
 msgstr "kończący sterujący wsteczny ukośnik w położeniu %lld"
 
-#: ../properties/import-export.c:608
+#: ../properties/import-export.c:589
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr "nie można odczytać pliku uwierzytelniania pośrednika HTTP"
 
-#: ../properties/import-export.c:626
+#: ../properties/import-export.c:607
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr ""
 "nie można odczytać użytkownika/hasła z pliku uwierzytelniania pośrednika HTTP"
 
-#: ../properties/import-export.c:634
+#: ../properties/import-export.c:615
 #, c-format
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr ""
 "użytkownik/hasło z pliku uwierzytelniania pośrednika HTTP musi być "
 "zakodowane w UTF-8"
 
-#: ../properties/import-export.c:696
+#: ../properties/import-export.c:677
 #, c-format
 msgid "'%s' is not a directory"
 msgstr "„%s” nie jest katalogiem"
 
-#: ../properties/import-export.c:704
+#: ../properties/import-export.c:685
 #, c-format
 msgid "cannot create '%s' directory"
 msgstr "nie można utworzyć katalogu „%s”"
 
-#: ../properties/import-export.c:724
+#: ../properties/import-export.c:705
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr "nie można zapisać „blob” <%s> z wiersza %ld do pliku (%s)"
 
-#: ../properties/import-export.c:741
+#: ../properties/import-export.c:722
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file '%s'"
 msgstr "nie można zapisać „blob” <%s> z wiersza %ld do pliku „%s”"
 
-#: ../properties/import-export.c:925
+#: ../properties/import-export.c:906
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "nieobsługiwany parametr „comp-lzo”"
 
-#: ../properties/import-export.c:1013
+#: ../properties/import-export.c:994
 #, c-format
 msgid "remote cannot contain space"
 msgstr "parametr „remote” nie może zawierać spacji"
 
-#: ../properties/import-export.c:1017
+#: ../properties/import-export.c:998
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "parametr „remote” nie może zawierać przecinków"
 
-#: ../properties/import-export.c:1028
+#: ../properties/import-export.c:1009
 #, c-format
 msgid "remote expects protocol either udp or remote"
 msgstr "parametr „remote” oczekuje protokołu „udp” lub „remote”"
 
-#: ../properties/import-export.c:1199
+#: ../properties/import-export.c:1180
 #, c-format
 msgid "invalid option"
 msgstr "nieprawidłowa opcja"
 
-#: ../properties/import-export.c:1312
+#: ../properties/import-export.c:1293
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "nieobsługiwany element „blob/xml”"
 
-#: ../properties/import-export.c:1341
+#: ../properties/import-export.c:1322
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "niezakończony element „blob” <%s>"
 
-#: ../properties/import-export.c:1391
+#: ../properties/import-export.c:1372
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "błąd konfiguracji: %s (wiersz %ld)"
 
-#: ../properties/import-export.c:1392
+#: ../properties/import-export.c:1373
 msgid "unknown or unsupported option"
 msgstr "nieznana lub nieobsługiwana opcja"
 
-#: ../properties/import-export.c:1402
+#: ../properties/import-export.c:1383
 msgid "The file to import wasn't a valid OpenVPN client configuration"
 msgstr "Importowany plik nie jest prawidłową konfiguracją klienta OpenVPN"
 
-#: ../properties/import-export.c:1410
+#: ../properties/import-export.c:1391
 msgid "The file to import wasn't a valid OpenVPN configure (no remote)"
 msgstr ""
 "Importowany plik nie jest prawidłową konfiguracją OpenVPN (brak „remote”)"
 
-#: ../properties/import-export.c:1552
-msgid "could not open file for writing"
-msgstr "nie można otworzyć pliku do zapisu"
+#: ../properties/import-export.c:1624
+msgid "missing path argument"
+msgstr "brak parametru ścieżki"
 
-#: ../properties/import-export.c:1563
+#: ../properties/import-export.c:1634
+msgid "connection is not a valid OpenVPN connection"
+msgstr "połączenie nie jest prawidłowym połączeniem OpenVPN"
+
+#: ../properties/import-export.c:1643
 msgid "connection was incomplete (missing gateway)"
 msgstr "niepełne połączenie (brak bramy)"
+
+#: ../properties/import-export.c:1943
+#, c-format
+msgid "failed to write file: %s"
+msgstr "zapisanie do pliku się nie powiodło: %s"
 
 #: ../properties/nm-openvpn.c:44
 msgid "OpenVPN"
@@ -989,6 +998,45 @@ msgstr "_Wyświetlanie hasła"
 #: ../properties/nm-openvpn-dialog.ui.h:139
 msgid "Proxies"
 msgstr "Pośredniki"
+
+#: ../shared/nm-shared-utils.c:174
+#, c-format
+msgid "object class '%s' has no property named '%s'"
+msgstr "klasa obiektów „%s” nie posiada właściwości o nazwie „%s”"
+
+#: ../shared/nm-shared-utils.c:181
+#, c-format
+msgid "property '%s' of object class '%s' is not writable"
+msgstr "właściwość „%s” klasy obiektów „%s” nie jest zapisywalna"
+
+#: ../shared/nm-shared-utils.c:188
+#, c-format
+msgid ""
+"construct property \"%s\" for object '%s' can't be set after construction"
+msgstr ""
+"właściwość konstruktu „%s” dla obiektu „%s” nie może zostać ustawiona po "
+"konstrukcji"
+
+#: ../shared/nm-shared-utils.c:196
+#, c-format
+msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
+msgstr ""
+"„%s::%s” nie jest prawidłową nazwą właściwości; „%s” nie jest podtypem "
+"GObject"
+
+#: ../shared/nm-shared-utils.c:205
+#, c-format
+msgid "unable to set property '%s' of type '%s' from value of type '%s'"
+msgstr "nie można ustawić właściwości „%s” typu „%s” z wartości typu „%s”"
+
+#: ../shared/nm-shared-utils.c:216
+#, c-format
+msgid ""
+"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
+"type '%s'"
+msgstr ""
+"wartość „%s” typu „%s” jest nieprawidłowa lub spoza zakresu dla właściwości "
+"„%s” typu „%s”"
 
 #: ../src/nm-openvpn-service.c:358
 #, c-format
