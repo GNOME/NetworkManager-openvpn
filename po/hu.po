@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2016-03-17 02:06+0000\n"
-"PO-Revision-Date: 2016-03-17 11:00+0100\n"
-"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
-"Language-Team: Hungarian <openscope at gmail dot com>\n"
+"POT-Creation-Date: 2016-03-29 14:18+0000\n"
+"PO-Revision-Date: 2016-03-30 10:13+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng at ubuntu dot com>\n"
+"Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -166,184 +166,192 @@ msgstr "ping-exit"
 msgid "ping-restart"
 msgstr "ping-restart"
 
-#: ../properties/import-export.c:212
+#: ../properties/import-export.c:189
 #, c-format
-#| msgid "option %s expects between %u and %u arguments"
 msgid "option %s expects between %u and %u argument"
 msgid_plural "option %s expects between %u and %u arguments"
 msgstr[0] "%s beállítás %u és %u közti számú argumentumot vár"
 msgstr[1] "%s beállítás %u és %u közti számú argumentumot vár"
 
-#: ../properties/import-export.c:217
+#: ../properties/import-export.c:194
 #, c-format
 msgid "option %s expects no arguments"
 msgstr "%s beállítás nem vár argumentumot"
 
-#: ../properties/import-export.c:219
+#: ../properties/import-export.c:196
 #, c-format
-#| msgid "option %s expects exactly one argument"
 msgid "option %s expects exactly one argument"
 msgid_plural "option %s expects exactly %u arguments"
 msgstr[0] "%s beállítás pontosan egy argumentumot vár"
 msgstr[1] "%s beállítás pontosan %u argumentumot vár"
 
-#: ../properties/import-export.c:248
+#: ../properties/import-export.c:225
 #, c-format
 msgid "argument %s of \"%s\" can not be empty"
 msgstr "„%2$s” %1$s argumentuma nem lehet üres"
 
-#: ../properties/import-export.c:250
+#: ../properties/import-export.c:227
 #, c-format
 msgid "argument of \"%s\" can not be empty"
 msgstr "„%s” argumentuma nem lehet üres"
 
-#: ../properties/import-export.c:266
+#: ../properties/import-export.c:243
 #, c-format
 msgid "argument %s of \"%s\" must be UTF-8 encoded"
 msgstr "„%2$s” %1$s argumentuma UTF-8 kódolású kell legyen"
 
-#: ../properties/import-export.c:268
+#: ../properties/import-export.c:245
 #, c-format
 msgid "argument of \"%s\" must be UTF-8 encoded"
 msgstr "„%s” argumentuma UTF-8 kódolású kell legyen"
 
-#: ../properties/import-export.c:292
+#: ../properties/import-export.c:269
 #, c-format
 msgid "invalid %uth argument to '%s' where number expected"
 msgstr "A(z) „%2$s” %1$u. argumentuma érvénytelen, a várttal szemben nem szám"
 
-#: ../properties/import-export.c:323
+#: ../properties/import-export.c:300
 #, c-format
 msgid "invalid %uth argument to '%s' where IPv4 address expected"
 msgstr ""
 "A(z) „%2$s” %1$u. argumentuma érvénytelen, a várttal szemben nem IPv4 cím"
 
-#: ../properties/import-export.c:351
+#: ../properties/import-export.c:328
 #, c-format
 msgid "invalid %uth key-direction argument to '%s'"
 msgstr "A(z) „%2$s” %1$u. kulcsirány argumentuma érvénytelen"
 
-#: ../properties/import-export.c:365
+#: ../properties/import-export.c:342
 #, c-format
 msgid "invalid %uth argument to '%s'"
 msgstr "A(z) „%2$s” %1$u. argumentuma érvénytelen"
 
-#: ../properties/import-export.c:479
+#: ../properties/import-export.c:458
 #, c-format
 msgid "unterminated %s at position %lld"
 msgstr "befejezetlen %s a következő pozícióban: %lld"
 
-#: ../properties/import-export.c:480
+#: ../properties/import-export.c:459
 msgid "double quote"
 msgstr "dupla idézőjel"
 
-#: ../properties/import-export.c:480
+#: ../properties/import-export.c:459
 msgid "single quote"
 msgstr "egyszeres idézőjel"
 
-#: ../properties/import-export.c:489
+#: ../properties/import-export.c:468
 #, c-format
 msgid "trailing escaping backslash at position %lld"
 msgstr "záró escape-elő visszaper a következő pozícióban: %lld"
 
-#: ../properties/import-export.c:608
+#: ../properties/import-export.c:589
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr "nem olvasható a HTTP proxy hitelesítési fájlja"
 
-#: ../properties/import-export.c:626
+#: ../properties/import-export.c:607
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr ""
 "nem olvasható a felhasználónév/jelszó a HTTP proxy hitelesítési fájljából"
 
-#: ../properties/import-export.c:634
+#: ../properties/import-export.c:615
 #, c-format
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr ""
 "a felhasználónév/jelszó a HTTP proxy hitelesítési fájljából UTF-8 kódolású "
 "kell legyen"
 
-#: ../properties/import-export.c:696
+#: ../properties/import-export.c:677
 #, c-format
 msgid "'%s' is not a directory"
 msgstr "„%s” nem egy könyvtár"
 
-#: ../properties/import-export.c:704
+#: ../properties/import-export.c:685
 #, c-format
 msgid "cannot create '%s' directory"
 msgstr "nem hozható létre „%s” könyvtár"
 
-#: ../properties/import-export.c:724
+#: ../properties/import-export.c:705
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr "nem írható <%s> blob a(z) %ld. sorból a fájlba (%s)"
 
-#: ../properties/import-export.c:741
+#: ../properties/import-export.c:722
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file '%s'"
 msgstr "nem írható <'%s> blob a(z) %ld. sorból ebbe a fájlba: „%s”"
 
-#: ../properties/import-export.c:925
+#: ../properties/import-export.c:906
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "nem támogatott comp-lzo argumentum"
 
-#: ../properties/import-export.c:1013
+#: ../properties/import-export.c:994
 #, c-format
 msgid "remote cannot contain space"
 msgstr "a távoli nem tartalmazhat szóközt"
 
-#: ../properties/import-export.c:1017
+#: ../properties/import-export.c:998
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "a távoli nem tartalmazhat vesszőt"
 
-#: ../properties/import-export.c:1028
+#: ../properties/import-export.c:1009
 #, c-format
 msgid "remote expects protocol either udp or remote"
 msgstr "a távoli protokollja udp vagy remote lehet"
 
-#: ../properties/import-export.c:1199
+#: ../properties/import-export.c:1180
 #, c-format
 msgid "invalid option"
 msgstr "érvénytelen kapcsoló"
 
-#: ../properties/import-export.c:1312
+#: ../properties/import-export.c:1293
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "nem támogatott blob/xml elem"
 
-#: ../properties/import-export.c:1341
+#: ../properties/import-export.c:1322
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "befejezetlen blob elem <%s>"
 
-#: ../properties/import-export.c:1391
+#: ../properties/import-export.c:1372
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "konfigurációs hiba: %s (%ld. sor)"
 
-#: ../properties/import-export.c:1392
+#: ../properties/import-export.c:1373
 msgid "unknown or unsupported option"
 msgstr "ismeretlen vagy nem támogatott beállítás"
 
-#: ../properties/import-export.c:1402
+#: ../properties/import-export.c:1383
 msgid "The file to import wasn't a valid OpenVPN client configuration"
 msgstr "Az importálandó fájl nem volt érvényes OpenVPN kliensbeállítás"
 
-#: ../properties/import-export.c:1410
+#: ../properties/import-export.c:1391
 msgid "The file to import wasn't a valid OpenVPN configure (no remote)"
 msgstr ""
 "Az importálandó fájl nem volt érvényes OpenVPN beállítás (nincs távoli)"
 
-#: ../properties/import-export.c:1552
-msgid "could not open file for writing"
-msgstr "a fájl nem nyitható meg írásra"
+#: ../properties/import-export.c:1624
+msgid "missing path argument"
+msgstr "hiányzó útvonal argumentum"
 
-#: ../properties/import-export.c:1563
+#: ../properties/import-export.c:1634
+#| msgid "not a valid OpenVPN configuration file"
+msgid "connection is not a valid OpenVPN connection"
+msgstr "a kapcsolat nem egy érvényes OpenVPN kapcsolat"
+
+#: ../properties/import-export.c:1643
 msgid "connection was incomplete (missing gateway)"
 msgstr "a kapcsolat nem volt teljes (hiányzó átjáró)"
+
+#: ../properties/import-export.c:1943
+#, c-format
+msgid "failed to write file: %s"
+msgstr "a fájl írása meghiúsult: %s"
 
 #: ../properties/nm-openvpn.c:44
 msgid "OpenVPN"
@@ -984,6 +992,44 @@ msgstr "_Jelszó megjelenítése"
 msgid "Proxies"
 msgstr "Proxyk"
 
+#: ../shared/nm-shared-utils.c:174
+#, c-format
+msgid "object class '%s' has no property named '%s'"
+msgstr "a(z) „%s” objektumosztálynak nincs „%s” nevű tulajdonsága"
+
+#: ../shared/nm-shared-utils.c:181
+#, c-format
+msgid "property '%s' of object class '%s' is not writable"
+msgstr "„%2$s” osztály „%1$s” tulajdonsága nem írható"
+
+#: ../shared/nm-shared-utils.c:188
+#, c-format
+msgid ""
+"construct property \"%s\" for object '%s' can't be set after construction"
+msgstr ""
+"„%2$s” objektum „%1$s” konstuktortulajdonsága nem állítható be a létrehozás "
+"után"
+
+#: ../shared/nm-shared-utils.c:196
+#, c-format
+msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
+msgstr "„%s::%s” nem érvényes tulajdonságnév, „%s” nem egy GObject résztípus"
+
+#: ../shared/nm-shared-utils.c:205
+#, c-format
+msgid "unable to set property '%s' of type '%s' from value of type '%s'"
+msgstr ""
+"nem állítható be „%2$s” típusú „%1$s” tulajdonság „%3$s” típusú értékre"
+
+#: ../shared/nm-shared-utils.c:216
+#, c-format
+msgid ""
+"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
+"type '%s'"
+msgstr ""
+"a(z) „%2$s” típusú „%1$s” érték érvénytelen vagy kívül esik a tartományon „%"
+"4$s” típusú „%3$s” tulajdonsághoz"
+
 #: ../src/nm-openvpn-service.c:358
 #, c-format
 msgid "invalid address '%s'"
@@ -1169,11 +1215,11 @@ msgid ""
 msgstr ""
 "Az nm-openvpn-service integrált OpenVPN-támogatást nyújt a Hálózatkezelőhöz."
 
+#~ msgid "could not open file for writing"
+#~ msgstr "a fájl nem nyitható meg írásra"
+
 #~ msgid "option %s expects exactly %u arguments"
 #~ msgstr "%s beállítás pontosan %u argumentumot vár"
-
-#~ msgid "not a valid OpenVPN configuration file"
-#~ msgstr "nem érvényes OpenVPN beállítófájl"
 
 #~ msgid "Saved"
 #~ msgstr "Mentett"
