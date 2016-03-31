@@ -7,20 +7,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2016-03-29 14:18+0000\n"
-"PO-Revision-Date: 2016-03-29 18:39+0200\n"
-"Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=Network"
+"Manager&keywords=I18N+L10N&component=VPN: openvpn\n"
+"POT-Creation-Date: 2016-03-31 13:34+0000\n"
+"PO-Revision-Date: 2016-03-31 19:17+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Project-Style: gnome\n"
-"X-Generator: Poedit 1.8.7.1\n"
 
 #: ../auth-dialog/main.c:180
 #, c-format
@@ -158,7 +157,7 @@ msgstr "ТАП"
 #. interface name is max 15 chars
 #: ../properties/auth-helpers.c:1647
 msgid "(automatic)"
-msgstr "(самостално)"
+msgstr "(аутоматски)"
 
 #: ../properties/auth-helpers.c:1808
 msgid "ping-exit"
@@ -242,7 +241,7 @@ msgstr "двоструки наводници"
 
 #: ../properties/import-export.c:459
 msgid "single quote"
-msgstr "Полунаводник"
+msgstr "полунаводник"
 
 #: ../properties/import-export.c:468
 #, c-format
@@ -386,7 +385,7 @@ msgstr "не могу да направим опенвпн објекат"
 
 #: ../properties/nm-openvpn.c:539
 msgid "could not load UI widget"
-msgstr "не могу да учитам елемент КС-а"
+msgstr "не могу да учитам елемент сучеља"
 
 #: ../properties/nm-openvpn.c:630
 msgid "unknown OpenVPN file extension"
@@ -411,9 +410,9 @@ msgid ""
 "delimiters).\n"
 "config: remote"
 msgstr ""
-"Удаљени мрежни пролаз(и), са изборним прикључником и протоколом (нпр. „ovpn."
-"corp.com:1234:tcp“). Можете да наведете више ставки зарад изобиља (користите "
-"зарезе да раздвојите уносе).\n"
+"Удаљени мрежни пролаз(и), са изборним прикључником и протоколом (нпр. "
+"„ovpn.corp.com:1234:tcp“). Можете да наведете више ставки зарад изобиља ("
+"користите зарезе да раздвојите уносе).\n"
 "подешавање: „remote“"
 
 #: ../properties/nm-openvpn-dialog.ui.h:6
@@ -480,7 +479,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:22
 msgid "User name:"
-msgstr "Корисничко име:"
+msgstr "Корисник:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:23
 msgid ""
@@ -541,7 +540,7 @@ msgstr ""
 "Усмерење за режим шифровања статичког кључа (не-ТЛС).\n"
 "Ако користите усмерење кључа, мора бити супротно од оног коришћеног на ВПН "
 "парњаку.  На пример, ако парњак користи „1“, ова веза мора да користи „0“.  "
-"Ако нисте сигурни коју вредност да користите, посавејтујте се са "
+"Ако нисте сигурни коју вредност да користите, посаветујте се са "
 "администратором система.\n"
 "подешавање: „static <датотека> [усмерење]“"
 
@@ -641,8 +640,8 @@ msgid ""
 "\"tap\").\n"
 "config: dev <name>"
 msgstr ""
-"Користите произвољан назив за ТУН/ТАП виртуелни уређај (уместо основног "
-"„tun“ или „tap“).\n"
+"Користите произвољан назив за ТУН/ТАП виртуелни уређај (уместо основног „tun“"
+" или „tap“).\n"
 "подешавање: dev „<назив>“"
 
 #: ../properties/nm-openvpn-dialog.ui.h:63
@@ -729,13 +728,12 @@ msgid ""
 "config: float"
 msgstr ""
 "Омогућава удаљеном парњаку да промени своју ИП адресу и/или број "
-"прикључника, као услед ДХЦП-а (ово је основно ако се не користи „--"
-"remote“).  „--float“ када је наведено са „--remote“ омогућава ОпенВПН сесији "
-"да се прво повеже са парњаком на познатој адреси, међутим ако пакети стижу "
-"са нове адресе и прођу све тестове потврђивања идентитета, нова адреса ће "
-"преузети контролу над сесијом.  Овоје корисно када се повезујете са парњаком "
-"који држи динамичку адресу као што је корисник двојне парице или ДХЦП "
-"клијент.\n"
+"прикључника, као услед ДХЦП-а (ово је основно ако се не користи „--remote“)"
+".  „--float“ када је наведено са „--remote“ омогућава ОпенВПН сесији да се "
+"прво повеже са парњаком на познатој адреси, међутим ако пакети стижу са нове "
+"адресе и прођу све тестове потврђивања идентитета, нова адреса ће преузети "
+"контролу над сесијом.  Овоје корисно када се повезујете са парњаком који "
+"држи динамичку адресу као што је корисник двојне парице или ДХЦП клијент.\n"
 "\n"
 "У основи, „--float“ говори ОпенВПН-у да прихвати проверене пакете са било "
 "које адресе, а не само са адресе која је наведена у опцији „--remote“.\n"
@@ -901,7 +899,7 @@ msgstr ""
 "Параметри усмерења за режим статичког кључа.\n"
 "Ако користите усмерење кључа, мора бити супротно од оног коришћеног на ВПН "
 "парњаку.  На пример, ако парњак користи „1“, ова веза мора да користи „0“.  "
-"Ако нисте сигурни коју вредност да користите, посавејтујте се са "
+"Ако нисте сигурни коју вредност да користите, посаветујте се са "
 "администратором система.\n"
 "подешавање: „tls-auth <датотека> [усмерење]“"
 
@@ -972,11 +970,11 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:134
 msgid "Proxy _Username:"
-msgstr "Корисничко _име за посредника:"
+msgstr "_Корисник посредника:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:135
 msgid "Proxy Passwor_d:"
-msgstr "Лозинка _посредника:"
+msgstr "_Лозинка посредника:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:136
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
@@ -1010,16 +1008,18 @@ msgstr "својство „%s“ класе објекта „%s“ није у
 msgid ""
 "construct property \"%s\" for object '%s' can't be set after construction"
 msgstr ""
+"градивно својство „%s“ за објекат „%s“ не може бити постављено након "
+"конструкције"
 
 #: ../shared/nm-shared-utils.c:196
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
-msgstr ""
+msgstr "„%s::%s“ није исправан назив својства; „%s“ није подврста Гобјекта"
 
 #: ../shared/nm-shared-utils.c:205
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
-msgstr ""
+msgstr "не могу да поставим својство „%s“ врсте „%s“ из вредности врсте „%s“"
 
 #: ../shared/nm-shared-utils.c:216
 #, c-format
@@ -1027,6 +1027,8 @@ msgid ""
 "value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
 "type '%s'"
 msgstr ""
+"вредност „%s“ врсте „%s“ је неисправна или је ван опсега за својство „%s“ "
+"врсте „%s“"
 
 #: ../src/nm-openvpn-service.c:358
 #, c-format
@@ -1036,7 +1038,7 @@ msgstr "неисправна адреса „%s“"
 #: ../src/nm-openvpn-service.c:370
 #, c-format
 msgid "invalid integer property '%s' or out of range [%d -> %d]"
-msgstr "неисправно својство целог броја „%s“ или је ван опсега [%d —> %d]"
+msgstr "неисправно својство целог броја „%s“ или је ван опсега [%d → %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
 #: ../src/nm-openvpn-service.c:381
