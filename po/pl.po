@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-01 17:40+0200\n"
-"PO-Revision-Date: 2016-04-01 17:41+0200\n"
+"POT-Creation-Date: 2016-04-14 16:30+0200\n"
+"PO-Revision-Date: 2016-04-14 16:32+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -23,6 +23,27 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: Poland\n"
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:1
+msgid "OpenVPN client"
+msgstr "Klient OpenVPN"
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:2
+msgid "Client for OpenVPN virtual private networks"
+msgstr "Klient dla wirtualnych sieci prywatnych OpenVPN"
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:3
+msgid "Support for configuring OpenVPN virtual private network connections."
+msgstr "Obsługa konfigurowania połączeń wirtualnych sieci prywatnych OpenVPN."
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:4
+msgid "OpenVPN is a popular and flexible free-software VPN solution."
+msgstr ""
+"OpenVPN to popularne i elastyczne oprogramowanie VPN na wolnej licencji."
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:5
+msgid "The NetworkManager Developers"
+msgstr "Programiści projektu NetworkManager"
 
 #: ../auth-dialog/main.c:180
 #, c-format
@@ -392,6 +413,232 @@ msgstr "nie można wczytać widżetu interfejsu użytkownika"
 #: ../properties/nm-openvpn.c:630
 msgid "unknown OpenVPN file extension"
 msgstr "nieznane rozszerzenie pliku OpenVPN"
+
+#: ../shared/nm-shared-utils.c:174
+#, c-format
+msgid "object class '%s' has no property named '%s'"
+msgstr "klasa obiektów „%s” nie posiada właściwości o nazwie „%s”"
+
+#: ../shared/nm-shared-utils.c:181
+#, c-format
+msgid "property '%s' of object class '%s' is not writable"
+msgstr "właściwość „%s” klasy obiektów „%s” nie jest zapisywalna"
+
+#: ../shared/nm-shared-utils.c:188
+#, c-format
+msgid ""
+"construct property \"%s\" for object '%s' can't be set after construction"
+msgstr ""
+"właściwość konstruktu „%s” dla obiektu „%s” nie może zostać ustawiona po "
+"konstrukcji"
+
+#: ../shared/nm-shared-utils.c:196
+#, c-format
+msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
+msgstr ""
+"„%s::%s” nie jest prawidłową nazwą właściwości; „%s” nie jest podtypem "
+"GObject"
+
+#: ../shared/nm-shared-utils.c:205
+#, c-format
+msgid "unable to set property '%s' of type '%s' from value of type '%s'"
+msgstr "nie można ustawić właściwości „%s” typu „%s” z wartości typu „%s”"
+
+#: ../shared/nm-shared-utils.c:216
+#, c-format
+msgid ""
+"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
+"type '%s'"
+msgstr ""
+"wartość „%s” typu „%s” jest nieprawidłowa lub spoza zakresu dla właściwości "
+"„%s” typu „%s”"
+
+#: ../src/nm-openvpn-service.c:359
+#, c-format
+msgid "invalid address '%s'"
+msgstr "nieprawidłowy adres „%s”"
+
+#: ../src/nm-openvpn-service.c:371
+#, c-format
+msgid "invalid integer property '%s' or out of range [%d -> %d]"
+msgstr ""
+"nieprawidłowa własność liczby całkowitej „%s” lub jest poza zakresem [%d -> "
+"%d]"
+
+#. Translators: keep "yes" and "no" untranslated!
+#: ../src/nm-openvpn-service.c:382
+#, c-format
+msgid "invalid boolean property '%s' (not yes or no)"
+msgstr ""
+"nieprawidłowa własność zmiennej logicznej „%s” (nie wynosi „yes” lub „no”)"
+
+#: ../src/nm-openvpn-service.c:389
+#, c-format
+msgid "unhandled property '%s' type %s"
+msgstr "nieobsługiwana własność „%s” typu „%s”"
+
+#: ../src/nm-openvpn-service.c:400
+#, c-format
+msgid "property '%s' invalid or not supported"
+msgstr "własność „%s” jest nieprawidłowa lub nieobsługiwana"
+
+#: ../src/nm-openvpn-service.c:416
+msgid "No VPN configuration options."
+msgstr "Brak opcji konfiguracji VPN."
+
+#: ../src/nm-openvpn-service.c:585
+msgid "A username is required."
+msgstr "Wymagana jest nazwa użytkownika."
+
+#: ../src/nm-openvpn-service.c:589
+msgid "A password is required."
+msgstr "Wymagane jest hasło."
+
+#: ../src/nm-openvpn-service.c:592
+msgid "A username and password are required."
+msgstr "Wymagana jest nazwa użytkownika i hasło."
+
+#: ../src/nm-openvpn-service.c:612
+msgid "A private key password is required."
+msgstr "Wymagane jest hasło klucza prywatnego."
+
+#: ../src/nm-openvpn-service.c:625
+msgid "An HTTP Proxy username is required."
+msgstr "Wymagana jest nazwa użytkownika pośrednika HTTP."
+
+#: ../src/nm-openvpn-service.c:629
+msgid "An HTTP Proxy password is required."
+msgstr "Wymagane jest hasło pośrednika HTTP."
+
+#: ../src/nm-openvpn-service.c:632
+msgid "An HTTP Proxy username and password are required."
+msgstr "Wymagana jest nazwa użytkownika i hasło pośrednika HTTP."
+
+#: ../src/nm-openvpn-service.c:1114
+msgid "Could not find the openvpn binary."
+msgstr "Nie można odnaleźć pliku binarnego openvpn."
+
+#: ../src/nm-openvpn-service.c:1124
+msgid "Invalid HMAC auth."
+msgstr "Nieprawidłowe uwierzytelnienie HMAC."
+
+#: ../src/nm-openvpn-service.c:1134 ../src/nm-openvpn-service.c:1834
+msgid "Invalid connection type."
+msgstr "Nieprawidłowy typ połączenia."
+
+#: ../src/nm-openvpn-service.c:1169 ../src/nm-openvpn-service.c:1179
+#, c-format
+msgid "Invalid port number '%s'."
+msgstr "Nieprawidłowy numer portu „%s”."
+
+#: ../src/nm-openvpn-service.c:1196
+#, c-format
+msgid "Invalid proto '%s'."
+msgstr "Nieprawidłowy protokół „%s”."
+
+#: ../src/nm-openvpn-service.c:1242
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Nieprawidłowy typ pośrednika „%s”."
+
+#: ../src/nm-openvpn-service.c:1265
+#, c-format
+msgid "Invalid ping duration '%s'."
+msgstr "Nieprawidłowy czas trwania ping „%s”."
+
+#: ../src/nm-openvpn-service.c:1279
+#, c-format
+msgid "Invalid ping-exit duration '%s'."
+msgstr "Nieprawidłowy czas trwania ping-exit „%s”."
+
+#: ../src/nm-openvpn-service.c:1293
+#, c-format
+msgid "Invalid ping-restart duration '%s'."
+msgstr "Nieprawidłowy czas trwania ping-restart „%s”."
+
+#: ../src/nm-openvpn-service.c:1345
+#, c-format
+msgid "Invalid keysize '%s'."
+msgstr "Nieprawidłowy rozmiar klucza „%s”."
+
+#: ../src/nm-openvpn-service.c:1402
+#, c-format
+msgid "Invalid reneg seconds '%s'."
+msgstr "Nieprawidłowe sekundy renegocjacji „%s”."
+
+#: ../src/nm-openvpn-service.c:1434
+#, c-format
+msgid "Invalid TUN MTU size '%s'."
+msgstr "Nieprawidłowy rozmiar MTU TUN „%s”."
+
+#: ../src/nm-openvpn-service.c:1449
+#, c-format
+msgid "Invalid fragment size '%s'."
+msgstr "Nieprawidłowy rozmiar fragmentu „%s”."
+
+#: ../src/nm-openvpn-service.c:1525
+msgid "Missing required local IP address for static key mode."
+msgstr "Brak wymaganego lokalnego adresu IP dla trybu klucza statycznego."
+
+#: ../src/nm-openvpn-service.c:1537
+msgid "Missing required remote IP address for static key mode."
+msgstr "Brak wymaganego zdalnego adresu IP dla trybu klucza statycznego."
+
+#: ../src/nm-openvpn-service.c:1562
+#, c-format
+msgid "Unknown connection type '%s'."
+msgstr "Nieznany typ połączenia „%s”."
+
+#: ../src/nm-openvpn-service.c:1587
+#, c-format
+msgid "User '%s' not found, check NM_OPENVPN_USER."
+msgstr ""
+"Nie odnaleziono użytkownika „%s”. Proszę sprawdzić zmienną NM_OPENVPN_USER."
+
+#: ../src/nm-openvpn-service.c:1601
+#, c-format
+msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
+msgstr "Nie odnaleziono grupy „%s”. Proszę sprawdzić zmienną NM_OPENVPN_GROUP."
+
+#: ../src/nm-openvpn-service.c:1748 ../src/nm-openvpn-service.c:1825
+#: ../src/nm-openvpn-service.c:1859
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr ""
+"Nie można przetworzyć żądania, ponieważ ustawienia połączenia VPN są "
+"nieprawidłowe."
+
+#: ../src/nm-openvpn-service.c:1757
+msgid ""
+"Could not process the request because the openvpn connection type was "
+"invalid."
+msgstr ""
+"Nie można przetworzyć żądania, ponieważ typ połączenia OpenVPN jest "
+"nieprawidłowy."
+
+#: ../src/nm-openvpn-service.c:1872
+msgid "Unhandled pending authentication."
+msgstr "Nieobsłużone oczekujące uwierzytelnienie."
+
+#: ../src/nm-openvpn-service.c:1990
+msgid "Don't quit when VPN connection terminates"
+msgstr "Nie kończy działania, kiedy połączenie VPN jest kończone"
+
+#: ../src/nm-openvpn-service.c:1991
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr "Włącza więcej komunikatów debugowania (może wyjawić hasła)"
+
+#: ../src/nm-openvpn-service.c:1992
+msgid "D-Bus name to use for this instance"
+msgstr "Nazwa D-Bus dla tego wystąpienia"
+
+#: ../src/nm-openvpn-service.c:2018
+msgid ""
+"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
+"nm-openvpn-service dostarcza zintegrowaną możliwość nawiązywania połączeń "
+"OpenVPN dla usługi NetworkManager."
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid " "
@@ -1024,229 +1271,3 @@ msgstr "_Wyświetlanie hasła"
 #: ../properties/nm-openvpn-dialog.ui.h:144
 msgid "Proxies"
 msgstr "Pośredniki"
-
-#: ../shared/nm-shared-utils.c:174
-#, c-format
-msgid "object class '%s' has no property named '%s'"
-msgstr "klasa obiektów „%s” nie posiada właściwości o nazwie „%s”"
-
-#: ../shared/nm-shared-utils.c:181
-#, c-format
-msgid "property '%s' of object class '%s' is not writable"
-msgstr "właściwość „%s” klasy obiektów „%s” nie jest zapisywalna"
-
-#: ../shared/nm-shared-utils.c:188
-#, c-format
-msgid ""
-"construct property \"%s\" for object '%s' can't be set after construction"
-msgstr ""
-"właściwość konstruktu „%s” dla obiektu „%s” nie może zostać ustawiona po "
-"konstrukcji"
-
-#: ../shared/nm-shared-utils.c:196
-#, c-format
-msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
-msgstr ""
-"„%s::%s” nie jest prawidłową nazwą właściwości; „%s” nie jest podtypem "
-"GObject"
-
-#: ../shared/nm-shared-utils.c:205
-#, c-format
-msgid "unable to set property '%s' of type '%s' from value of type '%s'"
-msgstr "nie można ustawić właściwości „%s” typu „%s” z wartości typu „%s”"
-
-#: ../shared/nm-shared-utils.c:216
-#, c-format
-msgid ""
-"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
-"type '%s'"
-msgstr ""
-"wartość „%s” typu „%s” jest nieprawidłowa lub spoza zakresu dla właściwości "
-"„%s” typu „%s”"
-
-#: ../src/nm-openvpn-service.c:359
-#, c-format
-msgid "invalid address '%s'"
-msgstr "nieprawidłowy adres „%s”"
-
-#: ../src/nm-openvpn-service.c:371
-#, c-format
-msgid "invalid integer property '%s' or out of range [%d -> %d]"
-msgstr ""
-"nieprawidłowa własność liczby całkowitej „%s” lub jest poza zakresem [%d -> "
-"%d]"
-
-#. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:382
-#, c-format
-msgid "invalid boolean property '%s' (not yes or no)"
-msgstr ""
-"nieprawidłowa własność zmiennej logicznej „%s” (nie wynosi „yes” lub „no”)"
-
-#: ../src/nm-openvpn-service.c:389
-#, c-format
-msgid "unhandled property '%s' type %s"
-msgstr "nieobsługiwana własność „%s” typu „%s”"
-
-#: ../src/nm-openvpn-service.c:400
-#, c-format
-msgid "property '%s' invalid or not supported"
-msgstr "własność „%s” jest nieprawidłowa lub nieobsługiwana"
-
-#: ../src/nm-openvpn-service.c:416
-msgid "No VPN configuration options."
-msgstr "Brak opcji konfiguracji VPN."
-
-#: ../src/nm-openvpn-service.c:585
-msgid "A username is required."
-msgstr "Wymagana jest nazwa użytkownika."
-
-#: ../src/nm-openvpn-service.c:589
-msgid "A password is required."
-msgstr "Wymagane jest hasło."
-
-#: ../src/nm-openvpn-service.c:592
-msgid "A username and password are required."
-msgstr "Wymagana jest nazwa użytkownika i hasło."
-
-#: ../src/nm-openvpn-service.c:612
-msgid "A private key password is required."
-msgstr "Wymagane jest hasło klucza prywatnego."
-
-#: ../src/nm-openvpn-service.c:625
-msgid "An HTTP Proxy username is required."
-msgstr "Wymagana jest nazwa użytkownika pośrednika HTTP."
-
-#: ../src/nm-openvpn-service.c:629
-msgid "An HTTP Proxy password is required."
-msgstr "Wymagane jest hasło pośrednika HTTP."
-
-#: ../src/nm-openvpn-service.c:632
-msgid "An HTTP Proxy username and password are required."
-msgstr "Wymagana jest nazwa użytkownika i hasło pośrednika HTTP."
-
-#: ../src/nm-openvpn-service.c:1114
-msgid "Could not find the openvpn binary."
-msgstr "Nie można odnaleźć pliku binarnego openvpn."
-
-#: ../src/nm-openvpn-service.c:1124
-msgid "Invalid HMAC auth."
-msgstr "Nieprawidłowe uwierzytelnienie HMAC."
-
-#: ../src/nm-openvpn-service.c:1134 ../src/nm-openvpn-service.c:1834
-msgid "Invalid connection type."
-msgstr "Nieprawidłowy typ połączenia."
-
-#: ../src/nm-openvpn-service.c:1169 ../src/nm-openvpn-service.c:1179
-#, c-format
-msgid "Invalid port number '%s'."
-msgstr "Nieprawidłowy numer portu „%s”."
-
-#: ../src/nm-openvpn-service.c:1196
-#, c-format
-msgid "Invalid proto '%s'."
-msgstr "Nieprawidłowy protokół „%s”."
-
-#: ../src/nm-openvpn-service.c:1242
-#, c-format
-msgid "Invalid proxy type '%s'."
-msgstr "Nieprawidłowy typ pośrednika „%s”."
-
-#: ../src/nm-openvpn-service.c:1265
-#, c-format
-msgid "Invalid ping duration '%s'."
-msgstr "Nieprawidłowy czas trwania ping „%s”."
-
-#: ../src/nm-openvpn-service.c:1279
-#, c-format
-msgid "Invalid ping-exit duration '%s'."
-msgstr "Nieprawidłowy czas trwania ping-exit „%s”."
-
-#: ../src/nm-openvpn-service.c:1293
-#, c-format
-msgid "Invalid ping-restart duration '%s'."
-msgstr "Nieprawidłowy czas trwania ping-restart „%s”."
-
-#: ../src/nm-openvpn-service.c:1345
-#, c-format
-msgid "Invalid keysize '%s'."
-msgstr "Nieprawidłowy rozmiar klucza „%s”."
-
-#: ../src/nm-openvpn-service.c:1402
-#, c-format
-msgid "Invalid reneg seconds '%s'."
-msgstr "Nieprawidłowe sekundy renegocjacji „%s”."
-
-#: ../src/nm-openvpn-service.c:1434
-#, c-format
-msgid "Invalid TUN MTU size '%s'."
-msgstr "Nieprawidłowy rozmiar MTU TUN „%s”."
-
-#: ../src/nm-openvpn-service.c:1449
-#, c-format
-msgid "Invalid fragment size '%s'."
-msgstr "Nieprawidłowy rozmiar fragmentu „%s”."
-
-#: ../src/nm-openvpn-service.c:1525
-msgid "Missing required local IP address for static key mode."
-msgstr "Brak wymaganego lokalnego adresu IP dla trybu klucza statycznego."
-
-#: ../src/nm-openvpn-service.c:1537
-msgid "Missing required remote IP address for static key mode."
-msgstr "Brak wymaganego zdalnego adresu IP dla trybu klucza statycznego."
-
-#: ../src/nm-openvpn-service.c:1562
-#, c-format
-msgid "Unknown connection type '%s'."
-msgstr "Nieznany typ połączenia „%s”."
-
-#: ../src/nm-openvpn-service.c:1587
-#, c-format
-msgid "User '%s' not found, check NM_OPENVPN_USER."
-msgstr ""
-"Nie odnaleziono użytkownika „%s”. Proszę sprawdzić zmienną NM_OPENVPN_USER."
-
-#: ../src/nm-openvpn-service.c:1601
-#, c-format
-msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
-msgstr "Nie odnaleziono grupy „%s”. Proszę sprawdzić zmienną NM_OPENVPN_GROUP."
-
-#: ../src/nm-openvpn-service.c:1748 ../src/nm-openvpn-service.c:1825
-#: ../src/nm-openvpn-service.c:1859
-msgid ""
-"Could not process the request because the VPN connection settings were "
-"invalid."
-msgstr ""
-"Nie można przetworzyć żądania, ponieważ ustawienia połączenia VPN są "
-"nieprawidłowe."
-
-#: ../src/nm-openvpn-service.c:1757
-msgid ""
-"Could not process the request because the openvpn connection type was "
-"invalid."
-msgstr ""
-"Nie można przetworzyć żądania, ponieważ typ połączenia OpenVPN jest "
-"nieprawidłowy."
-
-#: ../src/nm-openvpn-service.c:1872
-msgid "Unhandled pending authentication."
-msgstr "Nieobsłużone oczekujące uwierzytelnienie."
-
-#: ../src/nm-openvpn-service.c:1990
-msgid "Don't quit when VPN connection terminates"
-msgstr "Nie kończy działania, kiedy połączenie VPN jest kończone"
-
-#: ../src/nm-openvpn-service.c:1991
-msgid "Enable verbose debug logging (may expose passwords)"
-msgstr "Włącza więcej komunikatów debugowania (może wyjawić hasła)"
-
-#: ../src/nm-openvpn-service.c:1992
-msgid "D-Bus name to use for this instance"
-msgstr "Nazwa D-Bus dla tego wystąpienia"
-
-#: ../src/nm-openvpn-service.c:2018
-msgid ""
-"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
-msgstr ""
-"nm-openvpn-service dostarcza zintegrowaną możliwość nawiązywania połączeń "
-"OpenVPN dla usługi NetworkManager."
