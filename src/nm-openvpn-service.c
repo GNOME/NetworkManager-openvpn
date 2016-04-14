@@ -495,7 +495,7 @@ ovpn_quote_string (const char *unquoted)
 	return quoted;
 }
 
-/* sscanf is evil, and since we can't use glib regexp stuff since it's still
+/* sscanf is evil, and since we can't use glib regexp stuff as it's still
  * too new for some distros, do a simple match here.
  */
 static char *
