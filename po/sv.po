@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2016-04-01 12:34+0000\n"
-"PO-Revision-Date: 2016-04-06 21:20+0200\n"
+"POT-Creation-Date: 2016-04-14 10:36+0000\n"
+"PO-Revision-Date: 2016-04-17 14:54+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -20,6 +20,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.7.1\n"
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:1
+msgid "OpenVPN client"
+msgstr "OpenVPN-klient"
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:2
+msgid "Client for OpenVPN virtual private networks"
+msgstr "Klient för OpenVPN virtuella privata nätverk"
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:3
+msgid "Support for configuring OpenVPN virtual private network connections."
+msgstr ""
+"Stöd för att konfigurera OpenVPN virtuella privata nätverksanslutningar."
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:4
+msgid "OpenVPN is a popular and flexible free-software VPN solution."
+msgstr "OpenVPN är en populär och flexibel VPN-lösning som är fri programvara."
+
+#: ../appdata/network-manager-openvpn.appdata.xml.in.h:5
+msgid "The NetworkManager Developers"
+msgstr "Utvecklarna av Nätverkshanteraren"
 
 #: ../auth-dialog/main.c:180
 #, c-format
@@ -381,6 +402,227 @@ msgstr "kunde inte läsa in UI-komponent"
 #: ../properties/nm-openvpn.c:630
 msgid "unknown OpenVPN file extension"
 msgstr "okänd filändelse för OpenVPN"
+
+#: ../shared/nm-shared-utils.c:174
+#, c-format
+msgid "object class '%s' has no property named '%s'"
+msgstr "objektklassen ”%s” har ingen egenskap med namnet ”%s”"
+
+#: ../shared/nm-shared-utils.c:181
+#, c-format
+msgid "property '%s' of object class '%s' is not writable"
+msgstr "egenskapen ”%s” för objektklassen ”%s” är inte skrivbar"
+
+#: ../shared/nm-shared-utils.c:188
+#, c-format
+msgid ""
+"construct property \"%s\" for object '%s' can't be set after construction"
+msgstr ""
+"konstruktionsegenskap ”%s” för objektet ”%s” kan inte ställas in efter att "
+"det skapats"
+
+#: ../shared/nm-shared-utils.c:196
+#, c-format
+msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
+msgstr ""
+"”%s::%s” är inte ett giltigt egenskapsnamn; ”%s” är inte en undertyp till "
+"GObject"
+
+#: ../shared/nm-shared-utils.c:205
+#, c-format
+msgid "unable to set property '%s' of type '%s' from value of type '%s'"
+msgstr "kan inte sätta egenskapen ”%s” av typen ”%s” från värdet av typen ”%s”"
+
+#: ../shared/nm-shared-utils.c:216
+#, c-format
+msgid ""
+"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
+"type '%s'"
+msgstr ""
+"värdet ”%s” av typ ”%s” är ogiltigt eller utanför intervallet för egenskapen "
+"”%s” av typ ”%s”"
+
+#: ../src/nm-openvpn-service.c:359
+#, c-format
+msgid "invalid address '%s'"
+msgstr "ogiltig adress \"%s\""
+
+#: ../src/nm-openvpn-service.c:371
+#, c-format
+msgid "invalid integer property '%s' or out of range [%d -> %d]"
+msgstr "ogiltig heltalsegenskap ”%s” eller utanför intervallet [%d -> %d]"
+
+#. Translators: keep "yes" and "no" untranslated!
+#: ../src/nm-openvpn-service.c:382
+#, c-format
+msgid "invalid boolean property '%s' (not yes or no)"
+msgstr "ogiltig boolesk egenskap ”%s” (inte yes eller no)"
+
+#: ../src/nm-openvpn-service.c:389
+#, c-format
+msgid "unhandled property '%s' type %s"
+msgstr "ej hanterad egenskap ”%s” typ %s"
+
+#: ../src/nm-openvpn-service.c:400
+#, c-format
+msgid "property '%s' invalid or not supported"
+msgstr "egenskapen ”%s” är ogiltig eller stöds inte"
+
+#: ../src/nm-openvpn-service.c:416
+msgid "No VPN configuration options."
+msgstr "Inga VPN-konfigurationsalternativ."
+
+#: ../src/nm-openvpn-service.c:585
+msgid "A username is required."
+msgstr "Ett användarnamn krävs."
+
+#: ../src/nm-openvpn-service.c:589
+msgid "A password is required."
+msgstr "Ett lösenord krävs."
+
+#: ../src/nm-openvpn-service.c:592
+msgid "A username and password are required."
+msgstr "Användarnamn och lösenord krävs."
+
+#: ../src/nm-openvpn-service.c:612
+msgid "A private key password is required."
+msgstr "Ett lösenord för privat nyckel krävs."
+
+#: ../src/nm-openvpn-service.c:625
+msgid "An HTTP Proxy username is required."
+msgstr "Användarnamn för HTTP-proxy krävs."
+
+#: ../src/nm-openvpn-service.c:629
+msgid "An HTTP Proxy password is required."
+msgstr "Lösenord för HTTP-proxy krävs."
+
+#: ../src/nm-openvpn-service.c:632
+msgid "An HTTP Proxy username and password are required."
+msgstr "Användarnamn och lösenord för HTTP-proxy krävs."
+
+#: ../src/nm-openvpn-service.c:1114
+msgid "Could not find the openvpn binary."
+msgstr "Kunde inte hitta binärfilen openvpn."
+
+#: ../src/nm-openvpn-service.c:1124
+msgid "Invalid HMAC auth."
+msgstr "Ogiltig HMAC-autentisering."
+
+#: ../src/nm-openvpn-service.c:1134 ../src/nm-openvpn-service.c:1834
+msgid "Invalid connection type."
+msgstr "Ogiltig anslutningstyp."
+
+#: ../src/nm-openvpn-service.c:1169 ../src/nm-openvpn-service.c:1179
+#, c-format
+msgid "Invalid port number '%s'."
+msgstr "Ogiltigt portnummer ”%s”."
+
+#: ../src/nm-openvpn-service.c:1196
+#, c-format
+msgid "Invalid proto '%s'."
+msgstr "Ogiltig proto ”%s”."
+
+#: ../src/nm-openvpn-service.c:1242
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Ogiltig proxytyp ”%s”."
+
+#: ../src/nm-openvpn-service.c:1265
+#, c-format
+msgid "Invalid ping duration '%s'."
+msgstr "Ogiltig ping-längd ”%s”."
+
+#: ../src/nm-openvpn-service.c:1279
+#, c-format
+msgid "Invalid ping-exit duration '%s'."
+msgstr "Ogiltig ping-exit-längd ”%s”."
+
+#: ../src/nm-openvpn-service.c:1293
+#, c-format
+msgid "Invalid ping-restart duration '%s'."
+msgstr "Ogiltig ping-restart-längd ”%s”."
+
+#: ../src/nm-openvpn-service.c:1345
+#, c-format
+msgid "Invalid keysize '%s'."
+msgstr "Ogiltig nyckelstorlek ”%s”."
+
+#: ../src/nm-openvpn-service.c:1402
+#, c-format
+msgid "Invalid reneg seconds '%s'."
+msgstr "Ogiltigt antal sekunder för omförhandling ”%s”."
+
+#: ../src/nm-openvpn-service.c:1434
+#, c-format
+msgid "Invalid TUN MTU size '%s'."
+msgstr "Ogiltig TUN MTU-storlek ”%s”."
+
+#: ../src/nm-openvpn-service.c:1449
+#, c-format
+msgid "Invalid fragment size '%s'."
+msgstr "Ogiltig fragmenteringsstorlek ”%s”."
+
+#: ../src/nm-openvpn-service.c:1525
+msgid "Missing required local IP address for static key mode."
+msgstr "Saknar nödvändig lokal IP-adress för statisk nyckelläge."
+
+#: ../src/nm-openvpn-service.c:1537
+msgid "Missing required remote IP address for static key mode."
+msgstr "Saknar nödvändig fjärr-IP-adress för statisk nyckelläge."
+
+#: ../src/nm-openvpn-service.c:1562
+#, c-format
+msgid "Unknown connection type '%s'."
+msgstr "Okänd anslutningstyp ”%s”."
+
+#: ../src/nm-openvpn-service.c:1587
+#, c-format
+msgid "User '%s' not found, check NM_OPENVPN_USER."
+msgstr "Användaren ”%s” inte funnen, kontrollera NM_OPENVPN_USER."
+
+#: ../src/nm-openvpn-service.c:1601
+#, c-format
+msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
+msgstr "Gruppen ”%s” inte funnen, kontrollera NM_OPENVPN_GROUP."
+
+#: ../src/nm-openvpn-service.c:1748 ../src/nm-openvpn-service.c:1825
+#: ../src/nm-openvpn-service.c:1859
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr ""
+"Kunde inte behandla begäran eftersom inställningar i VPN-konfigurationen var "
+"ogiltiga."
+
+#: ../src/nm-openvpn-service.c:1757
+msgid ""
+"Could not process the request because the openvpn connection type was "
+"invalid."
+msgstr ""
+"Kunde inte behandla begäran eftersom openvpn-anslutningstypen var ogiltig."
+
+#: ../src/nm-openvpn-service.c:1872
+msgid "Unhandled pending authentication."
+msgstr "Ej hanterad väntande autentisering."
+
+#: ../src/nm-openvpn-service.c:1990
+msgid "Don't quit when VPN connection terminates"
+msgstr "Avsluta inte när VPN-anslutningen avslutas"
+
+#: ../src/nm-openvpn-service.c:1991
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr "Aktivera informativ felsökningsloggning (kan exponera lösenord)"
+
+#: ../src/nm-openvpn-service.c:1992
+msgid "D-Bus name to use for this instance"
+msgstr "D-Bus-namn att använda för denna instans"
+
+#: ../src/nm-openvpn-service.c:2018
+msgid ""
+"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
+"nm-openvpn-service tillhandahåller integrerade OpenVPN-förmågor till "
+"Nätverkshanterare."
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid " "
@@ -1009,227 +1251,6 @@ msgstr "Vi_sa lösenord"
 #: ../properties/nm-openvpn-dialog.ui.h:144
 msgid "Proxies"
 msgstr "Proxyservrar"
-
-#: ../shared/nm-shared-utils.c:174
-#, c-format
-msgid "object class '%s' has no property named '%s'"
-msgstr "objektklassen ”%s” har ingen egenskap med namnet ”%s”"
-
-#: ../shared/nm-shared-utils.c:181
-#, c-format
-msgid "property '%s' of object class '%s' is not writable"
-msgstr "egenskapen ”%s” för objektklassen ”%s” är inte skrivbar"
-
-#: ../shared/nm-shared-utils.c:188
-#, c-format
-msgid ""
-"construct property \"%s\" for object '%s' can't be set after construction"
-msgstr ""
-"konstruktionsegenskap ”%s” för objektet ”%s” kan inte ställas in efter att "
-"det skapats"
-
-#: ../shared/nm-shared-utils.c:196
-#, c-format
-msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
-msgstr ""
-"”%s::%s” är inte ett giltigt egenskapsnamn; ”%s” är inte en undertyp till "
-"GObject"
-
-#: ../shared/nm-shared-utils.c:205
-#, c-format
-msgid "unable to set property '%s' of type '%s' from value of type '%s'"
-msgstr "kan inte sätta egenskapen ”%s” av typen ”%s” från värdet av typen ”%s”"
-
-#: ../shared/nm-shared-utils.c:216
-#, c-format
-msgid ""
-"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
-"type '%s'"
-msgstr ""
-"värdet ”%s” av typ ”%s” är ogiltigt eller utanför intervallet för egenskapen "
-"”%s” av typ ”%s”"
-
-#: ../src/nm-openvpn-service.c:359
-#, c-format
-msgid "invalid address '%s'"
-msgstr "ogiltig adress \"%s\""
-
-#: ../src/nm-openvpn-service.c:371
-#, c-format
-msgid "invalid integer property '%s' or out of range [%d -> %d]"
-msgstr "ogiltig heltalsegenskap ”%s” eller utanför intervallet [%d -> %d]"
-
-#. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:382
-#, c-format
-msgid "invalid boolean property '%s' (not yes or no)"
-msgstr "ogiltig boolesk egenskap ”%s” (inte yes eller no)"
-
-#: ../src/nm-openvpn-service.c:389
-#, c-format
-msgid "unhandled property '%s' type %s"
-msgstr "ej hanterad egenskap ”%s” typ %s"
-
-#: ../src/nm-openvpn-service.c:400
-#, c-format
-msgid "property '%s' invalid or not supported"
-msgstr "egenskapen ”%s” är ogiltig eller stöds inte"
-
-#: ../src/nm-openvpn-service.c:416
-msgid "No VPN configuration options."
-msgstr "Inga VPN-konfigurationsalternativ."
-
-#: ../src/nm-openvpn-service.c:585
-msgid "A username is required."
-msgstr "Ett användarnamn krävs."
-
-#: ../src/nm-openvpn-service.c:589
-msgid "A password is required."
-msgstr "Ett lösenord krävs."
-
-#: ../src/nm-openvpn-service.c:592
-msgid "A username and password are required."
-msgstr "Användarnamn och lösenord krävs."
-
-#: ../src/nm-openvpn-service.c:612
-msgid "A private key password is required."
-msgstr "Ett lösenord för privat nyckel krävs."
-
-#: ../src/nm-openvpn-service.c:625
-msgid "An HTTP Proxy username is required."
-msgstr "Användarnamn för HTTP-proxy krävs."
-
-#: ../src/nm-openvpn-service.c:629
-msgid "An HTTP Proxy password is required."
-msgstr "Lösenord för HTTP-proxy krävs."
-
-#: ../src/nm-openvpn-service.c:632
-msgid "An HTTP Proxy username and password are required."
-msgstr "Användarnamn och lösenord för HTTP-proxy krävs."
-
-#: ../src/nm-openvpn-service.c:1114
-msgid "Could not find the openvpn binary."
-msgstr "Kunde inte hitta binärfilen openvpn."
-
-#: ../src/nm-openvpn-service.c:1124
-msgid "Invalid HMAC auth."
-msgstr "Ogiltig HMAC-autentisering."
-
-#: ../src/nm-openvpn-service.c:1134 ../src/nm-openvpn-service.c:1834
-msgid "Invalid connection type."
-msgstr "Ogiltig anslutningstyp."
-
-#: ../src/nm-openvpn-service.c:1169 ../src/nm-openvpn-service.c:1179
-#, c-format
-msgid "Invalid port number '%s'."
-msgstr "Ogiltigt portnummer ”%s”."
-
-#: ../src/nm-openvpn-service.c:1196
-#, c-format
-msgid "Invalid proto '%s'."
-msgstr "Ogiltig proto ”%s”."
-
-#: ../src/nm-openvpn-service.c:1242
-#, c-format
-msgid "Invalid proxy type '%s'."
-msgstr "Ogiltig proxytyp ”%s”."
-
-#: ../src/nm-openvpn-service.c:1265
-#, c-format
-msgid "Invalid ping duration '%s'."
-msgstr "Ogiltig ping-längd ”%s”."
-
-#: ../src/nm-openvpn-service.c:1279
-#, c-format
-msgid "Invalid ping-exit duration '%s'."
-msgstr "Ogiltig ping-exit-längd ”%s”."
-
-#: ../src/nm-openvpn-service.c:1293
-#, c-format
-msgid "Invalid ping-restart duration '%s'."
-msgstr "Ogiltig ping-restart-längd ”%s”."
-
-#: ../src/nm-openvpn-service.c:1345
-#, c-format
-msgid "Invalid keysize '%s'."
-msgstr "Ogiltig nyckelstorlek ”%s”."
-
-#: ../src/nm-openvpn-service.c:1402
-#, c-format
-msgid "Invalid reneg seconds '%s'."
-msgstr "Ogiltigt antal sekunder för omförhandling ”%s”."
-
-#: ../src/nm-openvpn-service.c:1434
-#, c-format
-msgid "Invalid TUN MTU size '%s'."
-msgstr "Ogiltig TUN MTU-storlek ”%s”."
-
-#: ../src/nm-openvpn-service.c:1449
-#, c-format
-msgid "Invalid fragment size '%s'."
-msgstr "Ogiltig fragmenteringsstorlek ”%s”."
-
-#: ../src/nm-openvpn-service.c:1525
-msgid "Missing required local IP address for static key mode."
-msgstr "Saknar nödvändig lokal IP-adress för statisk nyckelläge."
-
-#: ../src/nm-openvpn-service.c:1537
-msgid "Missing required remote IP address for static key mode."
-msgstr "Saknar nödvändig fjärr-IP-adress för statisk nyckelläge."
-
-#: ../src/nm-openvpn-service.c:1562
-#, c-format
-msgid "Unknown connection type '%s'."
-msgstr "Okänd anslutningstyp ”%s”."
-
-#: ../src/nm-openvpn-service.c:1587
-#, c-format
-msgid "User '%s' not found, check NM_OPENVPN_USER."
-msgstr "Användaren ”%s” inte funnen, kontrollera NM_OPENVPN_USER."
-
-#: ../src/nm-openvpn-service.c:1601
-#, c-format
-msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
-msgstr "Gruppen ”%s” inte funnen, kontrollera NM_OPENVPN_GROUP."
-
-#: ../src/nm-openvpn-service.c:1748 ../src/nm-openvpn-service.c:1825
-#: ../src/nm-openvpn-service.c:1859
-msgid ""
-"Could not process the request because the VPN connection settings were "
-"invalid."
-msgstr ""
-"Kunde inte behandla begäran eftersom inställningar i VPN-konfigurationen var "
-"ogiltiga."
-
-#: ../src/nm-openvpn-service.c:1757
-msgid ""
-"Could not process the request because the openvpn connection type was "
-"invalid."
-msgstr ""
-"Kunde inte behandla begäran eftersom openvpn-anslutningstypen var ogiltig."
-
-#: ../src/nm-openvpn-service.c:1872
-msgid "Unhandled pending authentication."
-msgstr "Ej hanterad väntande autentisering."
-
-#: ../src/nm-openvpn-service.c:1990
-msgid "Don't quit when VPN connection terminates"
-msgstr "Avsluta inte när VPN-anslutningen avslutas"
-
-#: ../src/nm-openvpn-service.c:1991
-msgid "Enable verbose debug logging (may expose passwords)"
-msgstr "Aktivera informativ felsökningsloggning (kan exponera lösenord)"
-
-#: ../src/nm-openvpn-service.c:1992
-msgid "D-Bus name to use for this instance"
-msgstr "D-Bus-namn att använda för denna instans"
-
-#: ../src/nm-openvpn-service.c:2018
-msgid ""
-"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
-msgstr ""
-"nm-openvpn-service tillhandahåller integrerade OpenVPN-förmågor till "
-"Nätverkshanterare."
 
 #~ msgid "option %s expects exactly %u arguments"
 #~ msgstr "flaggan %s förväntar sig precis %u argument"
