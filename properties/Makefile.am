@@ -6,16 +6,19 @@ if WITH_LIBNM_GLIB
 plugin_LTLIBRARIES += libnm-openvpn-properties.la
 endif
 
-libnm_vpn_plugin_openvpn_la_SOURCES =                   \
-        nm-openvpn.c                                    \
-        nm-openvpn.h                                    \
-        auth-helpers.c                                  \
-        auth-helpers.h                                  \
-        import-export.c                                 \
+plugin_sources = \
+        nm-openvpn.c \
+        nm-openvpn.h \
+        auth-helpers.c \
+        auth-helpers.h \
+        import-export.c \
         import-export.h
 
-libnm_openvpn_properties_la_SOURCES =               \
-        $(libnm_vpn_plugin_openvpn_la_SOURCES)
+libnm_vpn_plugin_openvpn_la_SOURCES = \
+        $(plugin_sources)
+
+libnm_openvpn_properties_la_SOURCES = \
+        $(plugin_sources)
 
 uidir = $(datadir)/gnome-vpn-properties/openvpn
 ui_DATA = nm-openvpn-dialog.ui
@@ -52,13 +55,36 @@ libnm_openvpn_properties_la_LIBADD =                \
         $(LIBNM_GTK_LIBS)                               \
         $(top_builddir)/shared/libnm-openvpn-shared.la
 
-libnm_vpn_plugin_openvpn_la_LDFLAGS =                   \
-        -avoid-version
+libnm_vpn_plugin_openvpn_la_LDFLAGS = \
+        -avoid-version \
+        -Wl,--version-script=libnm-vpn-plugin-openvpn.ver
 
-libnm_openvpn_properties_la_LDFLAGS =               \
-        $(libnm_vpn_plugin_openvpn_la_LDFLAGS)
+libnm_openvpn_properties_la_LDFLAGS = \
+        -avoid-version \
+        -Wl,--version-script=libnm-openvpn-properties.ver
+
+libnm_vpn_plugin_openvpn_test_la_SOURCES = $(libnm_vpn_plugin_openvpn_la_SOURCES)
+libnm_vpn_plugin_openvpn_test_la_CFLAGS = $(libnm_vpn_plugin_openvpn_la_CFLAGS)
+libnm_vpn_plugin_openvpn_test_la_LIBADD = $(libnm_vpn_plugin_openvpn_la_LIBADD)
+libnm_vpn_plugin_openvpn_test_la_LDFLAGS = \
+    -avoid-version
+
+libnm_openvpn_properties_test_la_SOURCES = $(libnm_openvpn_properties_la_SOURCES)
+libnm_openvpn_properties_test_la_CFLAGS = $(libnm_openvpn_properties_la_CFLAGS)
+libnm_openvpn_properties_test_la_LIBADD = $(libnm_openvpn_properties_la_LIBADD)
+libnm_openvpn_properties_test_la_LDFLAGS = \
+    -avoid-version
+
+noinst_LTLIBRARIES = \
+    libnm-vpn-plugin-openvpn-test.la
+if WITH_LIBNM_GLIB
+noinst_LTLIBRARIES += libnm-openvpn-properties-test.la
+endif
 
 CLEANFILES = *.bak *~
 
-EXTRA_DIST =                            \
+EXTRA_DIST = \
+        libnm-vpn-plugin-openvpn.ver \
+        libnm-openvpn-properties.ver \
         $(ui_DATA)
+
