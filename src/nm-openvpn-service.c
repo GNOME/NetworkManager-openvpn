@@ -1951,6 +1951,7 @@ nm_openvpn_plugin_new (const char *bus_name)
 
 	plugin =  (NMOpenvpnPlugin *) g_initable_new (NM_TYPE_OPENVPN_PLUGIN, NULL, &error,
 	                                              NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME, bus_name,
+	                                              NM_VPN_SERVICE_PLUGIN_DBUS_WATCH_PEER, !gl.debug,
 	                                              NULL);
 
 	if (plugin) {
