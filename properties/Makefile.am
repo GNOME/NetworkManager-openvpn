@@ -57,11 +57,11 @@ libnm_openvpn_properties_la_LIBADD =                \
 
 libnm_vpn_plugin_openvpn_la_LDFLAGS = \
         -avoid-version \
-        -Wl,--version-script=libnm-vpn-plugin-openvpn.ver
+        -Wl,--version-script=$(srcdir)/libnm-vpn-plugin-openvpn.ver
 
 libnm_openvpn_properties_la_LDFLAGS = \
         -avoid-version \
-        -Wl,--version-script=libnm-openvpn-properties.ver
+        -Wl,--version-script=$(srcdir)/libnm-openvpn-properties.ver
 
 libnm_vpn_plugin_openvpn_test_la_SOURCES = $(libnm_vpn_plugin_openvpn_la_SOURCES)
 libnm_vpn_plugin_openvpn_test_la_CFLAGS = $(libnm_vpn_plugin_openvpn_la_CFLAGS)
