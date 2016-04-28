@@ -46,9 +46,7 @@
 #include <grp.h>
 #include "glib-unix.h"
 
-#include "nm-utils.h"
 #include "utils.h"
-#include "nm-macros-internal.h"
 
 #if !defined(DIST_VERSION)
 # define DIST_VERSION VERSION
