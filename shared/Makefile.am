@@ -1,4 +1,6 @@
-noinst_LTLIBRARIES=libnm-vpn-plugin-openvpn-shared.la
+noinst_LTLIBRARIES = \
+	libnm-vpn-plugin-openvpn-shared.la \
+	libnm-vpn-editor-utils-shared.la
 if WITH_LIBNM_GLIB
 noinst_LTLIBRARIES += libnm-openvpn-shared.la
 endif
@@ -34,6 +36,20 @@ libnm_openvpn_shared_la_CPPFLAGS = \
 
 libnm_openvpn_shared_la_LIBADD = \
     $(LIBNM_GLIB_LIBS)
+
+###############################################################################
+
+libnm_vpn_editor_utils_shared_la_CPPFLAGS = \
+    $(LIBNM_CFLAGS) \
+    -I$(top_srcdir)/shared
+
+libnm_vpn_editor_utils_shared_la_SOURCES = \
+    nm-vpn-plugin-utils.c \
+    nm-vpn-plugin-utils.h
+
+libnm_vpn_editor_utils_shared_la_LIBADD = \
+    $(LIBNM_LIBS) \
+    -ldl
 
 ###############################################################################
 

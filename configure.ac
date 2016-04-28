@@ -95,8 +95,14 @@ AC_SUBST(NM_VPN_SERVICE_DIR)
 
 NM_COMPILER_WARNINGS
 
-test x"$enable_absolute_paths" = x"yes" && NM_PLUGIN_DIR='$(libdir)/NetworkManager/'
+NM_PLUGIN_DIR="$libdir/NetworkManager"
 AC_SUBST(NM_PLUGIN_DIR)
+if test x"$enable_absolute_paths" == x"yes"; then
+	NM_PLUGIN_DIR_NAME_FILE="$NM_PLUGIN_DIR/"
+else
+	NM_PLUGIN_DIR_NAME_FILE=""
+fi
+AC_SUBST(NM_PLUGIN_DIR_NAME_FILE)
 
 dnl
 dnl Tests

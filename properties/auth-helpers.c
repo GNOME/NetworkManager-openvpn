@@ -33,7 +33,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "nm-openvpn-editor.h"
 #include "utils.h"
 
 #define BLOCK_HANDLER_ID "block-handler-id"

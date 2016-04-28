@@ -37,7 +37,6 @@
 #include <gtk/gtk.h>
 
 #include "auth-helpers.h"
-#include "import-export.h"
 
 /*****************************************************************************/
 
@@ -587,4 +586,21 @@ openvpn_editor_plugin_widget_class_init (OpenvpnEditorClass *req_class)
 
 	object_class->dispose = dispose;
 }
+
+/*****************************************************************************/
+
+#ifndef NM_OPENVPN_OLD
+
+#include "nm-openvpn-editor-plugin.h"
+
+G_MODULE_EXPORT NMVpnEditor *
+nm_vpn_editor_factory_openvpn (NMVpnEditorPlugin *editor_plugin,
+                               NMConnection *connection,
+                               GError **error)
+{
+	g_return_val_if_fail (!error || !*error, NULL);
+
+	return openvpn_editor_new (connection, error);
+}
+#endif
 
