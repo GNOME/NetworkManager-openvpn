@@ -27,7 +27,6 @@
 #include <sys/stat.h>
 
 #include "nm-openvpn.h"
-#include "nm-openvpn-service-defines.h"
 #include "import-export.h"
 #include "utils.h"
 

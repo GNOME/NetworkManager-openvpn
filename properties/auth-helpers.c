@@ -34,7 +34,6 @@
 #include <errno.h>
 
 #include "nm-openvpn.h"
-#include "nm-openvpn-service-defines.h"
 #include "utils.h"
 
 #define BLOCK_HANDLER_ID "block-handler-id"

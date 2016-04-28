@@ -36,7 +36,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-#include "nm-openvpn-service-defines.h"
 #include "auth-helpers.h"
 #include "import-export.h"
 
