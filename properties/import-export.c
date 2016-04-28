@@ -1543,7 +1543,7 @@ static void
 args_write_line_v (GString *f, gsize nargs, const char **args)
 {
 	gsize i;
-	gboolean printed;
+	gboolean printed = FALSE;
 
 	nm_assert (args);
 	nm_assert (args[0]);
