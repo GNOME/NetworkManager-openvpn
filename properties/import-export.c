@@ -36,7 +36,6 @@
 
 #include "nm-openvpn.h"
 #include "utils.h"
-#include "nm-macros-internal.h"
 #include "nm-shared-utils.h"
 
 

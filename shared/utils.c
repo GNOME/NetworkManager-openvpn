@@ -26,8 +26,6 @@
 #include <string.h>
 #include <errno.h>
 
-#include "nm-macros-internal.h"
-
 gboolean
 is_pkcs12 (const char *filepath)
 {

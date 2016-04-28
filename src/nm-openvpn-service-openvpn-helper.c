@@ -40,7 +40,6 @@
 #include <netdb.h>
 
 #include "nm-openvpn-service.h"
-#include "nm-utils.h"
 
 extern char **environ;
 
