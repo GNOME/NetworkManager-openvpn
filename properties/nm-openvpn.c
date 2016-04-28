@@ -569,20 +569,15 @@ dispose (GObject *object)
 	OpenvpnEditor *plugin = OPENVPN_EDITOR (object);
 	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (plugin);
 
-	if (priv->group)
-		g_object_unref (priv->group);
+	g_clear_object (&priv->group);
 
-	if (priv->window_group)
-		g_object_unref (priv->window_group);
+	g_clear_object (&priv->window_group);
 
-	if (priv->widget)
-		g_object_unref (priv->widget);
+	g_clear_object (&priv->widget);
 
-	if (priv->builder)
-		g_object_unref (priv->builder);
+	g_clear_object (&priv->builder);
 
-	if (priv->advanced)
-		g_hash_table_destroy (priv->advanced);
+	g_clear_pointer (&priv->advanced, g_hash_table_destroy);
 
 	G_OBJECT_CLASS (openvpn_editor_plugin_widget_parent_class)->dispose (object);
 }
