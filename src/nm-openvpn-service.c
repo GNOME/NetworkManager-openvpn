@@ -46,8 +46,6 @@
 #include <grp.h>
 #include "glib-unix.h"
 
-#include <nm-vpn-service-plugin.h>
-
 #include "nm-utils.h"
 #include "utils.h"
 #include "nm-macros-internal.h"
