@@ -24,13 +24,6 @@
 
 #include <gtk/gtk.h>
 
-#ifdef NM_OPENVPN_OLD
-#include <nm-connection.h>
-#include <nm-setting-vpn.h>
-#else /* !NM_OPENVPN_OLD */
-#include <NetworkManager.h>
-#endif
-
 typedef void (*ChangedCallback) (GtkWidget *widget, gpointer user_data);
 
 void tls_pw_init_auth_widget (GtkBuilder *builder,
