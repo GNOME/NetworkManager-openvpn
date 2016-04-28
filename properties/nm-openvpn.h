@@ -23,27 +23,6 @@
 #ifndef _NM_OPENVPN_H_
 #define _NM_OPENVPN_H_
 
-#define OPENVPN_TYPE_EDITOR_PLUGIN                (openvpn_editor_plugin_get_type ())
-#define OPENVPN_EDITOR_PLUGIN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_EDITOR_PLUGIN, OpenvpnEditorPlugin))
-#define OPENVPN_EDITOR_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_EDITOR_PLUGIN, OpenvpnEditorPluginClass))
-#define OPENVPN_IS_EDITOR_PLUGIN(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OPENVPN_TYPE_EDITOR_PLUGIN))
-#define OPENVPN_IS_EDITOR_PLUGIN_CLASS(klass)     (G_TYPE_CHECK_CLASS_TYPE ((klass), OPENVPN_TYPE_EDITOR_PLUGIN))
-#define OPENVPN_EDITOR_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), OPENVPN_TYPE_EDITOR_PLUGIN, OpenvpnEditorPluginClass))
-
-typedef struct _OpenvpnEditorPlugin OpenvpnEditorPlugin;
-typedef struct _OpenvpnEditorPluginClass OpenvpnEditorPluginClass;
-
-struct _OpenvpnEditorPlugin {
-	GObject parent;
-};
-
-struct _OpenvpnEditorPluginClass {
-	GObjectClass parent;
-};
-
-GType openvpn_editor_plugin_get_type (void);
-
-
 #define OPENVPN_TYPE_EDITOR            (openvpn_editor_plugin_widget_get_type ())
 #define OPENVPN_EDITOR(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_EDITOR, OpenvpnEditor))
 #define OPENVPN_EDITOR_CLASS(klass)              (G_TYPE_CHECK_CLASS_CAST ((klass), OPENVPN_TYPE_EDITOR, OpenvpnEditorClass))
@@ -63,6 +42,8 @@ struct _OpenvpnEditorClass {
 };
 
 GType openvpn_editor_plugin_widget_get_type (void);
+
+NMVpnEditor *openvpn_editor_new (NMConnection *connection, GError **error);
 
 #endif	/* _NM_OPENVPN_H_ */
 

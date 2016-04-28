@@ -34,7 +34,6 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include "nm-openvpn.h"
 #include "utils.h"
 #include "nm-shared-utils.h"
 

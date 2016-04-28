@@ -26,6 +26,7 @@
 #include <locale.h>
 #include <sys/stat.h>
 
+#include "nm-openvpn-editor-plugin.h"
 #include "nm-openvpn.h"
 #include "import-export.h"
 #include "utils.h"

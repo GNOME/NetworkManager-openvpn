@@ -7,6 +7,8 @@ plugin_LTLIBRARIES += libnm-openvpn-properties.la
 endif
 
 plugin_sources = \
+        nm-openvpn-editor-plugin.c \
+        nm-openvpn-editor-plugin.h \
         nm-openvpn.c \
         nm-openvpn.h \
         auth-helpers.c \
