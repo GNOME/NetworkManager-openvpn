@@ -1836,7 +1836,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		proxy_username = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
 		proxy_password = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
 
-		if (nm_streq (proxy_type, "http") && proxy_server && proxy_port) {
+		if (nm_streq (proxy_type, "http") && proxy_server) {
 			char *authfile, *authcontents, *base, *dirname;
 
 			if (!proxy_port)
