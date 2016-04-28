@@ -59,6 +59,7 @@ typedef struct {
 	gboolean new_connection;
 } OpenvpnEditorPrivate;
 
+/*****************************************************************************/
 
 #define COL_AUTH_NAME 0
 #define COL_AUTH_PAGE 1
@@ -476,6 +477,13 @@ is_new_func (const char *key, const char *value, gpointer user_data)
 	*is_new = FALSE;
 }
 
+/*****************************************************************************/
+
+static void
+openvpn_editor_plugin_widget_init (OpenvpnEditor *plugin)
+{
+}
+
 NMVpnEditor *
 openvpn_editor_new (NMConnection *connection, GError **error)
 {
@@ -563,6 +571,14 @@ dispose (GObject *object)
 }
 
 static void
+openvpn_editor_plugin_widget_interface_init (NMVpnEditorInterface *iface_class)
+{
+	/* interface implementation */
+	iface_class->get_widget = get_widget;
+	iface_class->update_connection = update_connection;
+}
+
+static void
 openvpn_editor_plugin_widget_class_init (OpenvpnEditorClass *req_class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (req_class);
@@ -570,18 +586,5 @@ openvpn_editor_plugin_widget_class_init (OpenvpnEditorClass *req_class)
 	g_type_class_add_private (req_class, sizeof (OpenvpnEditorPrivate));
 
 	object_class->dispose = dispose;
-}
-
-static void
-openvpn_editor_plugin_widget_init (OpenvpnEditor *plugin)
-{
-}
-
-static void
-openvpn_editor_plugin_widget_interface_init (NMVpnEditorInterface *iface_class)
-{
-	/* interface implementation */
-	iface_class->get_widget = get_widget;
-	iface_class->update_connection = update_connection;
 }
 
