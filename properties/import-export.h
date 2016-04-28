@@ -22,8 +22,6 @@
 #ifndef _IMPORT_EXPORT_H_
 #define _IMPORT_EXPORT_H_
 
-#include <glib.h>
-
 #ifdef NM_OPENVPN_OLD
 #include <nm-connection.h>
 #else /* !NM_OPENVPN_OLD */

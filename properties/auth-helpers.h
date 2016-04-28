@@ -22,7 +22,6 @@
 #ifndef _AUTH_HELPERS_H_
 #define _AUTH_HELPERS_H_
 
-#include <glib.h>
 #include <gtk/gtk.h>
 
 #ifdef NM_OPENVPN_OLD
