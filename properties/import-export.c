@@ -1866,7 +1866,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 				g_free (authcontents);
 			}
 			g_free (authfile);
-		} else if (nm_streq (proxy_type, "socks") && proxy_server && proxy_port) {
+		} else if (nm_streq (proxy_type, "socks") && proxy_server) {
 			if (!proxy_port)
 				proxy_port = "1080";
 			args_write_line (f, NMV_OVPN_TAG_SOCKS_PROXY, proxy_server, proxy_port);
