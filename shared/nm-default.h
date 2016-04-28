@@ -62,6 +62,7 @@
 #ifdef NM_OPENVPN_OLD
 
 #define NM_VPN_LIBNM_COMPAT
+#include <nm-connection.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-8021x.h>
 #include <nm-setting-ip4-config.h>

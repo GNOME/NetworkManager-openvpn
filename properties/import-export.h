@@ -22,12 +22,6 @@
 #ifndef _IMPORT_EXPORT_H_
 #define _IMPORT_EXPORT_H_
 
-#ifdef NM_OPENVPN_OLD
-#include <nm-connection.h>
-#else /* !NM_OPENVPN_OLD */
-#include <NetworkManager.h>
-#endif
-
 extern const char *_nmovpn_test_temp_path;
 
 gboolean _nmovpn_test_args_parse_line (const char *line,
