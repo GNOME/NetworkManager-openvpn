@@ -36,6 +36,8 @@
 
 /*****************************************************************************/
 
+#include <config.h>
+
 /* always include these headers for our internal source files. */
 
 #include "nm-glib.h"
