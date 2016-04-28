@@ -34,7 +34,7 @@
 #include <string.h>
 
 #include "auth-helpers.h"
-#include "nm-openvpn.h"
+#include "nm-openvpn-editor.h"
 #include "import-export.h"
 
 #define OPENVPN_PLUGIN_NAME    _("OpenVPN")

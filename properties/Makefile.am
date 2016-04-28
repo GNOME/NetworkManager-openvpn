@@ -9,8 +9,8 @@ endif
 plugin_sources = \
         nm-openvpn-editor-plugin.c \
         nm-openvpn-editor-plugin.h \
-        nm-openvpn.c \
-        nm-openvpn.h \
+        nm-openvpn-editor.c \
+        nm-openvpn-editor.h \
         auth-helpers.c \
         auth-helpers.h \
         import-export.c \

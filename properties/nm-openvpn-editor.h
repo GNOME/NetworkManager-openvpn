@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /***************************************************************************
- * nm-openvpn.h : GNOME UI dialogs for configuring openvpn VPN connections
+ * nm-openvpn-editor.h : GNOME UI dialogs for configuring openvpn VPN connections
  *
  * Copyright (C) 2008 Dan Williams, <dcbw@redhat.com>
  *
@@ -20,8 +20,8 @@
  *
  **************************************************************************/
 
-#ifndef _NM_OPENVPN_H_
-#define _NM_OPENVPN_H_
+#ifndef __NM_OPENVPN_EDITOR_H__
+#define __NM_OPENVPN_EDITOR_H__
 
 #define OPENVPN_TYPE_EDITOR            (openvpn_editor_plugin_widget_get_type ())
 #define OPENVPN_EDITOR(obj)                      (G_TYPE_CHECK_INSTANCE_CAST ((obj), OPENVPN_TYPE_EDITOR, OpenvpnEditor))
@@ -45,5 +45,5 @@ GType openvpn_editor_plugin_widget_get_type (void);
 
 NMVpnEditor *openvpn_editor_new (NMConnection *connection, GError **error);
 
-#endif	/* _NM_OPENVPN_H_ */
+#endif	/* __NM_OPENVPN_EDITOR_H__ */
 

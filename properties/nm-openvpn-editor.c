@@ -27,7 +27,7 @@
 
 #include "nm-default.h"
 
-#include "nm-openvpn.h"
+#include "nm-openvpn-editor.h"
 
 #include <netinet/in.h>
 #include <arpa/inet.h>
