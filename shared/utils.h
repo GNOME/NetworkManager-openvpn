@@ -22,8 +22,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <glib.h>
-
 #define NMV_OVPN_TAG_AUTH               "auth"
 #define NMV_OVPN_TAG_AUTH_NOCACHE       "auth-nocache"
 #define NMV_OVPN_TAG_AUTH_USER_PASS     "auth-user-pass"
