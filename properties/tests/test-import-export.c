@@ -18,15 +18,13 @@
  *
  */
 
-#include "config.h"
+#include "nm-default.h"
 
 #include <string.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <locale.h>
 #include <sys/stat.h>
-
-#include "nm-default.h"
 
 #include "nm-openvpn.h"
 #include "nm-openvpn-service-defines.h"

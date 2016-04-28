@@ -25,7 +25,9 @@
  *
  **************************************************************************/
 
-#include "config.h"
+#include "nm-default.h"
+
+#include "nm-openvpn.h"
 
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -34,10 +36,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-#include "nm-default.h"
-
 #include "nm-openvpn-service-defines.h"
-#include "nm-openvpn.h"
 #include "auth-helpers.h"
 #include "import-export.h"
 

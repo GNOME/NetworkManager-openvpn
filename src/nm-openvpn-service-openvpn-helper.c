@@ -25,7 +25,7 @@
  * $Id: nm-openvpn-service-openvpn-helper.c 4170 2008-10-11 14:44:45Z dcbw $
  */
 
-#include "config.h"
+#include "nm-default.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -38,8 +38,6 @@
 #include <arpa/inet.h>
 #include <ctype.h>
 #include <netdb.h>
-
-#include "nm-default.h"
 
 #include "nm-openvpn-service.h"
 #include "nm-utils.h"

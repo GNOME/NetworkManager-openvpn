@@ -19,13 +19,13 @@
  * (C) Copyright 2010 Red Hat, Inc.
  */
 
-#include "config.h"
+#include "nm-default.h"
+
+#include "utils.h"
 
 #include <string.h>
 #include <errno.h>
 
-#include "nm-default.h"
-#include "utils.h"
 #include "nm-macros-internal.h"
 
 gboolean

@@ -22,7 +22,7 @@
  *               2005 Tim Niemueller [www.niemueller.de]
  */
 
-#include "config.h"
+#include "nm-default.h"
 
 #include <errno.h>
 #include <string.h>
@@ -31,8 +31,6 @@
 
 #define SECRET_API_SUBJECT_TO_CHANGE
 #include <libsecret/secret.h>
-
-#include "nm-default.h"
 
 #include <nm-vpn-service-plugin.h>
 #include <nma-vpn-password-dialog.h>
