@@ -3,30 +3,39 @@ if WITH_LIBNM_GLIB
 noinst_LTLIBRARIES += libnm-openvpn-shared.la
 endif
 
-libnm_vpn_plugin_openvpn_shared_la_CPPFLAGS = \
-    $(LIBNM_CFLAGS) \
-    -I$(top_srcdir)/shared
-
-libnm_openvpn_shared_la_CPPFLAGS = \
-    -DNM_OPENVPN_OLD \
-    $(LIBNM_GLIB_CFLAGS) \
-    -I$(top_srcdir)/shared
-
-libnm_vpn_plugin_openvpn_shared_la_SOURCES= \
+shared_sources = \
     nm-shared-utils.c \
     nm-shared-utils.h \
     utils.c \
     utils.h \
     nm-openvpn-service-defines.h
 
-libnm_openvpn_shared_la_SOURCES = \
-    $(libnm_vpn_plugin_openvpn_shared_la_SOURCES)
+###############################################################################
+
+libnm_vpn_plugin_openvpn_shared_la_CPPFLAGS = \
+    $(LIBNM_CFLAGS) \
+    -I$(top_srcdir)/shared
+
+libnm_vpn_plugin_openvpn_shared_la_SOURCES= \
+    $(shared_sources)
 
 libnm_vpn_plugin_openvpn_shared_la_LIBADD = \
     $(LIBNM_LIBS)
 
+###############################################################################
+
+libnm_openvpn_shared_la_SOURCES = \
+    $(shared_sources)
+
+libnm_openvpn_shared_la_CPPFLAGS = \
+    -DNM_OPENVPN_OLD \
+    $(LIBNM_GLIB_CFLAGS) \
+    -I$(top_srcdir)/shared
+
 libnm_openvpn_shared_la_LIBADD = \
     $(LIBNM_GLIB_LIBS)
+
+###############################################################################
 
 EXTRA_DIST = \
      gsystem-local-alloc.h \
