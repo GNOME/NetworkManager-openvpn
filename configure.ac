@@ -50,10 +50,25 @@ AC_SUBST([ACLOCAL_AMFLAGS])
 dnl
 dnl GNOME support
 dnl
-AC_ARG_WITH(gnome, AS_HELP_STRING([--without-gnome], [Build NetworkManager-openvpn without GNOME support, e.g. vpn service only]))
-AM_CONDITIONAL(WITH_GNOME, test x"$with_gnome" != xno)
-AC_ARG_WITH(libnm-glib, AS_HELP_STRING([--without-libnm-glib], [Build NetworkManager-openvpn without libnm-glib comatibility]))
-AM_CONDITIONAL(WITH_LIBNM_GLIB, test x"$with_libnm_glib" != xno)
+AC_ARG_WITH(gnome, AS_HELP_STRING([--without-gnome], [Build NetworkManager-openvpn without GNOME support, e.g. vpn service only]), [], [with_gnome_specified=no])
+AC_ARG_WITH(libnm-glib, AS_HELP_STRING([--without-libnm-glib], [Build NetworkManager-openvpn without libnm-glib comatibility]), [], [with_libnm_glib_specified=no])
+if test "$with_libnm_glib_specified" != no -a "$with_libnm_glib" != no; then
+	if test "$with_gnome_specified" != no -a "$with_gnome" == no; then
+		AC_MSG_ERROR(Building --with-libnm-glib conflicts with --without-gnome)
+	fi
+fi
+if test "$with_gnome" != no; then
+	with_gnome=yes
+fi
+if test "$with_libnm_glib_specified" == no; then
+	with_libnm_glib="$with_gnome"
+fi
+if test "$with_libnm_glib" != no; then
+	with_libnm_glib=yes
+fi
+AM_CONDITIONAL(WITH_GNOME, test "$with_gnome" != no)
+AM_CONDITIONAL(WITH_LIBNM_GLIB, test "$with_libnm_glib" != no)
+
 AC_ARG_ENABLE(absolute-paths, AS_HELP_STRING([--enable-absolute-paths], [Use absolute paths to in .name files. Useful for development. (default is no)]))
 
 GETTEXT_PACKAGE=NetworkManager-openvpn
@@ -100,6 +115,7 @@ AC_SUBST(NM_PLUGIN_DIR)
 if test x"$enable_absolute_paths" == x"yes"; then
 	NM_PLUGIN_DIR_NAME_FILE="$NM_PLUGIN_DIR/"
 else
+	enable_absolute_paths=no
 	NM_PLUGIN_DIR_NAME_FILE=""
 fi
 AC_SUBST(NM_PLUGIN_DIR_NAME_FILE)
@@ -132,10 +148,8 @@ AC_ARG_WITH(more-asserts,
             [more_asserts=no])
 if test "${more_asserts}" = "no"; then
     more_asserts=0
-else
-    if test "${more_asserts}" = "yes"; then
-        more_asserts=100
-    fi
+elif test "${more_asserts}" = "yes" -o "#${more_asserts}#" != "$(printf '%s' "${more_asserts}" | sed -n '1s/^[0-9]\+$/#\0#/p')"; then
+    more_asserts=100
 fi
 AC_DEFINE_UNQUOTED(NM_MORE_ASSERTS, $more_asserts, [Define if more asserts are enabled])
 
@@ -150,3 +164,11 @@ po/Makefile.in
 shared/Makefile
 ])
 AC_OUTPUT
+
+echo ""
+echo "Build configuration: "
+echo "  --with-gnome=$with_gnome"
+echo "  --with-libnm-glib=$with_libnm_glib"
+echo "  --enable-absolute-paths=$enable_absolute_paths"
+echo "  --enable-more-warnings=$set_more_warnings"
+echo "  --with-more-asserts=$more_asserts"
