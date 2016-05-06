@@ -19,7 +19,9 @@
  *
  **************************************************************************/
 
-#include "config.h"
+#include "nm-default.h"
+
+#include "import-export.h"
 
 #include <string.h>
 #include <sys/types.h>
@@ -32,13 +34,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include "nm-default.h"
-
-#include "import-export.h"
-#include "nm-openvpn.h"
-#include "nm-openvpn-service-defines.h"
 #include "utils.h"
-#include "nm-macros-internal.h"
 #include "nm-shared-utils.h"
 
 

@@ -25,7 +25,9 @@
 /* makefiles define NETWORKMANAGER_COMPILATION for compiling NetworkManager.
  * Depending on which parts are compiled, different values are set. */
 #define NM_NETWORKMANAGER_COMPILATION_DEFAULT             0x0001
-#define NM_NETWORKMANAGER_COMPILATION_LIB                 0x0002
+#define NM_NETWORKMANAGER_COMPILATION_LIB_BASE            0x0002
+#define NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR          0x0004
+#define NM_NETWORKMANAGER_COMPILATION_LIB                 (0x0002 | 0x0004)
 
 #ifndef NETWORKMANAGER_COMPILATION
 /* For convenience, we don't require our Makefile.am to define
@@ -36,16 +38,19 @@
 
 /*****************************************************************************/
 
+#include <config.h>
+
 /* always include these headers for our internal source files. */
 
 #include "nm-glib.h"
 #include "nm-version.h"
 #include "gsystem-local-alloc.h"
 #include "nm-macros-internal.h"
+#include "nm-openvpn-service-defines.h"
 
 /*****************************************************************************/
 
-#if (NETWORKMANAGER_COMPILATION) == NM_NETWORKMANAGER_COMPILATION_LIB
+#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_LIB)
 
 #include <glib/gi18n-lib.h>
 
@@ -60,6 +65,7 @@
 #ifdef NM_OPENVPN_OLD
 
 #define NM_VPN_LIBNM_COMPAT
+#include <nm-connection.h>
 #include <nm-setting-connection.h>
 #include <nm-setting-8021x.h>
 #include <nm-setting-ip4-config.h>
@@ -96,7 +102,7 @@
 
 /*****************************************************************************/
 
-#if (NETWORKMANAGER_COMPILATION) == NM_NETWORKMANAGER_COMPILATION_LIB
+#if (NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR
 
 #ifdef NM_OPENVPN_OLD
 #include <nm-ui-utils.h>
@@ -104,7 +110,7 @@
 #include <nma-ui-utils.h>
 #endif /* NM_OPENVPN_OLD */
 
-#endif /* NM_NETWORKMANAGER_COMPILATION_LIB */
+#endif /* NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR */
 
 /*****************************************************************************/
 

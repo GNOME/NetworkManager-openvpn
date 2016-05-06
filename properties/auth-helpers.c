@@ -21,7 +21,9 @@
  *
  **************************************************************************/
 
-#include "config.h"
+#include "nm-default.h"
+
+#include "auth-helpers.h"
 
 #include <string.h>
 #include <sys/types.h>
@@ -31,11 +33,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "nm-default.h"
-
-#include "auth-helpers.h"
-#include "nm-openvpn.h"
-#include "nm-openvpn-service-defines.h"
 #include "utils.h"
 
 #define BLOCK_HANDLER_ID "block-handler-id"

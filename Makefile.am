@@ -1,9 +1,9 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = shared src
+SUBDIRS = shared src properties
 
 if WITH_GNOME
-SUBDIRS += auth-dialog properties po
+SUBDIRS += auth-dialog po
 endif
 
 dbusservicedir = $(sysconfdir)/dbus-1/system.d
@@ -19,7 +19,7 @@ install-data-hook:
 	mkdir -p $(DESTDIR)$(sysconfdir)/NetworkManager/VPN
 	sed -e "1s|^|# This file is obsoleted by a file in $(NM_VPN_SERVICE_DIR)\n\n|" \
 	    -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
-	    -e 's|[@]PLUGINDIR[@]|$(libdir)/NetworkManager|g' \
+	    -e 's|[@]PLUGINDIR[@]|@NM_PLUGIN_DIR@|g' \
 	    <$(srcdir)/nm-openvpn-service.name.in \
 	    >$(DESTDIR)$(sysconfdir)/NetworkManager/VPN/nm-openvpn-service.name
 
@@ -34,7 +34,7 @@ appdata_in_files = appdata/network-manager-openvpn.metainfo.xml.in
 
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 	sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
-	    -e 's|[@]PLUGINDIR[@]/|@NM_PLUGIN_DIR@|g' \
+	    -e 's|[@]PLUGINDIR[@]/|@NM_PLUGIN_DIR_NAME_FILE@|g' \
 	    $^ >$@
 
 DISTCHECK_CONFIGURE_FLAGS = \

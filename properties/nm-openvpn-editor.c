@@ -25,7 +25,9 @@
  *
  **************************************************************************/
 
-#include "config.h"
+#include "nm-default.h"
+
+#include "nm-openvpn-editor.h"
 
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -34,32 +36,9 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-#include "nm-default.h"
-
-#include "nm-openvpn-service-defines.h"
-#include "nm-openvpn.h"
 #include "auth-helpers.h"
-#include "import-export.h"
 
-#define OPENVPN_PLUGIN_NAME    _("OpenVPN")
-#define OPENVPN_PLUGIN_DESC    _("Compatible with the OpenVPN server.")
-
-/************** plugin class **************/
-
-enum {
-	PROP_0,
-	PROP_NAME,
-	PROP_DESC,
-	PROP_SERVICE
-};
-
-static void openvpn_editor_plugin_interface_init (NMVpnEditorPluginInterface *iface_class);
-
-G_DEFINE_TYPE_EXTENDED (OpenvpnEditorPlugin, openvpn_editor_plugin, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (NM_TYPE_VPN_EDITOR_PLUGIN,
-                                               openvpn_editor_plugin_interface_init))
-
-/************** UI widget class **************/
+/*****************************************************************************/
 
 static void openvpn_editor_plugin_widget_interface_init (NMVpnEditorInterface *iface_class);
 
@@ -79,6 +58,7 @@ typedef struct {
 	gboolean new_connection;
 } OpenvpnEditorPrivate;
 
+/*****************************************************************************/
 
 #define COL_AUTH_NAME 0
 #define COL_AUTH_PAGE 1
@@ -496,8 +476,15 @@ is_new_func (const char *key, const char *value, gpointer user_data)
 	*is_new = FALSE;
 }
 
-static NMVpnEditor *
-nm_vpn_editor_interface_new (NMConnection *connection, GError **error)
+/*****************************************************************************/
+
+static void
+openvpn_editor_plugin_widget_init (OpenvpnEditor *plugin)
+{
+}
+
+NMVpnEditor *
+openvpn_editor_new (NMConnection *connection, GError **error)
 {
 	NMVpnEditor *object;
 	OpenvpnEditorPrivate *priv;
@@ -583,6 +570,14 @@ dispose (GObject *object)
 }
 
 static void
+openvpn_editor_plugin_widget_interface_init (NMVpnEditorInterface *iface_class)
+{
+	/* interface implementation */
+	iface_class->get_widget = get_widget;
+	iface_class->update_connection = update_connection;
+}
+
+static void
 openvpn_editor_plugin_widget_class_init (OpenvpnEditorClass *req_class)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (req_class);
@@ -592,156 +587,20 @@ openvpn_editor_plugin_widget_class_init (OpenvpnEditorClass *req_class)
 	object_class->dispose = dispose;
 }
 
-static void
-openvpn_editor_plugin_widget_init (OpenvpnEditor *plugin)
+/*****************************************************************************/
+
+#ifndef NM_OPENVPN_OLD
+
+#include "nm-openvpn-editor-plugin.h"
+
+G_MODULE_EXPORT NMVpnEditor *
+nm_vpn_editor_factory_openvpn (NMVpnEditorPlugin *editor_plugin,
+                               NMConnection *connection,
+                               GError **error)
 {
+	g_return_val_if_fail (!error || !*error, NULL);
+
+	return openvpn_editor_new (connection, error);
 }
-
-static void
-openvpn_editor_plugin_widget_interface_init (NMVpnEditorInterface *iface_class)
-{
-	/* interface implementation */
-	iface_class->get_widget = get_widget;
-	iface_class->update_connection = update_connection;
-}
-
-static NMConnection *
-import (NMVpnEditorPlugin *iface, const char *path, GError **error)
-{
-	NMConnection *connection = NULL;
-	char *contents = NULL;
-	char *ext;
-	gsize contents_len;
-
-	ext = strrchr (path, '.');
-
-	if (!ext || (   !g_str_has_suffix (ext, ".ovpn")
-	             && !g_str_has_suffix (ext, ".conf")
-	             && !g_str_has_suffix (ext, ".cnf")
-	             && !g_str_has_suffix (ext, ".ovpntest"))) {   /* Special extension for testcases */
-		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
-		                     _("unknown OpenVPN file extension"));
-		goto out;
-	}
-
-	if (!g_file_get_contents (path, &contents, &contents_len, error))
-		return NULL;
-
-	connection = do_import (path, contents, contents_len, error);
-
-out:
-	g_free (contents);
-	return connection;
-}
-
-static gboolean
-export (NMVpnEditorPlugin *iface,
-        const char *path,
-        NMConnection *connection,
-        GError **error)
-{
-	return do_export (path, connection, error);
-}
-
-static char *
-get_suggested_filename (NMVpnEditorPlugin *iface, NMConnection *connection)
-{
-	NMSettingConnection *s_con;
-	const char *id;
-
-	g_return_val_if_fail (connection != NULL, NULL);
-
-	s_con = nm_connection_get_setting_connection (connection);
-	g_return_val_if_fail (s_con != NULL, NULL);
-
-	id = nm_setting_connection_get_id (s_con);
-	g_return_val_if_fail (id != NULL, NULL);
-
-	return g_strdup_printf ("%s (openvpn).conf", id);
-}
-
-static guint32
-get_capabilities (NMVpnEditorPlugin *iface)
-{
-	return (NM_VPN_EDITOR_PLUGIN_CAPABILITY_IMPORT |
-	        NM_VPN_EDITOR_PLUGIN_CAPABILITY_EXPORT |
-	        NM_VPN_EDITOR_PLUGIN_CAPABILITY_IPV6);
-}
-
-static NMVpnEditor *
-get_editor (NMVpnEditorPlugin *iface, NMConnection *connection, GError **error)
-{
-	return nm_vpn_editor_interface_new (connection, error);
-}
-
-static void
-get_property (GObject *object, guint prop_id,
-			  GValue *value, GParamSpec *pspec)
-{
-	switch (prop_id) {
-	case PROP_NAME:
-		g_value_set_string (value, OPENVPN_PLUGIN_NAME);
-		break;
-	case PROP_DESC:
-		g_value_set_string (value, OPENVPN_PLUGIN_DESC);
-		break;
-	case PROP_SERVICE:
-		g_value_set_string (value, NM_VPN_SERVICE_TYPE_OPENVPN);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-openvpn_editor_plugin_class_init (OpenvpnEditorPluginClass *req_class)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (req_class);
-
-	object_class->get_property = get_property;
-
-	g_object_class_override_property (object_class,
-	                                  PROP_NAME,
-	                                  NM_VPN_EDITOR_PLUGIN_NAME);
-
-	g_object_class_override_property (object_class,
-	                                  PROP_DESC,
-	                                  NM_VPN_EDITOR_PLUGIN_DESCRIPTION);
-
-	g_object_class_override_property (object_class,
-	                                  PROP_SERVICE,
-	                                  NM_VPN_EDITOR_PLUGIN_SERVICE);
-}
-
-static void
-openvpn_editor_plugin_init (OpenvpnEditorPlugin *plugin)
-{
-}
-
-static void
-openvpn_editor_plugin_interface_init (NMVpnEditorPluginInterface *iface_class)
-{
-	/* interface implementation */
-	iface_class->get_editor = get_editor;
-	iface_class->get_capabilities = get_capabilities;
-	iface_class->import_from_file = import;
-	iface_class->export_to_file = export;
-	iface_class->get_suggested_filename = get_suggested_filename;
-}
-
-
-G_MODULE_EXPORT NMVpnEditorPlugin *
-nm_vpn_editor_plugin_factory (GError **error)
-{
-	if (error)
-		g_return_val_if_fail (*error == NULL, NULL);
-
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-
-	return g_object_new (OPENVPN_TYPE_EDITOR_PLUGIN, NULL);
-}
+#endif
 

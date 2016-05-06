@@ -22,7 +22,9 @@
  *
  */
 
-#include "config.h"
+#include "nm-default.h"
+
+#include "nm-openvpn-service.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -44,14 +46,7 @@
 #include <grp.h>
 #include "glib-unix.h"
 
-#include "nm-default.h"
-
-#include <nm-vpn-service-plugin.h>
-
-#include "nm-openvpn-service.h"
-#include "nm-utils.h"
 #include "utils.h"
-#include "nm-macros-internal.h"
 
 #if !defined(DIST_VERSION)
 # define DIST_VERSION VERSION

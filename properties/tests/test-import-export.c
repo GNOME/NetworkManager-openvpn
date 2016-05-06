@@ -18,7 +18,7 @@
  *
  */
 
-#include "config.h"
+#include "nm-default.h"
 
 #include <string.h>
 #include <netinet/in.h>
@@ -26,10 +26,8 @@
 #include <locale.h>
 #include <sys/stat.h>
 
-#include "nm-default.h"
-
-#include "nm-openvpn.h"
-#include "nm-openvpn-service-defines.h"
+#include "nm-openvpn-editor-plugin.h"
+#include "nm-openvpn-editor.h"
 #include "import-export.h"
 #include "utils.h"
 

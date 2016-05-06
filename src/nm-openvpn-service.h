@@ -23,12 +23,6 @@
 #ifndef NM_OPENVPN_SERVICE_H
 #define NM_OPENVPN_SERVICE_H
 
-#include <glib.h>
-#include <glib-object.h>
-#include <nm-vpn-service-plugin.h>
-
-#include "nm-openvpn-service-defines.h"
-
 #define NM_TYPE_OPENVPN_PLUGIN            (nm_openvpn_plugin_get_type ())
 #define NM_OPENVPN_PLUGIN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPlugin))
 #define NM_OPENVPN_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginClass))
