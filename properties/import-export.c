@@ -1622,7 +1622,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	const char *proxy_type = NULL;
 	guint i, num;
 	nm_auto(_auto_free_gstring_p) GString *f = NULL;
-	gs_free_error GError *local = NULL;
 
 	if (!path || !path[0]) {
 		g_set_error_literal (error,
