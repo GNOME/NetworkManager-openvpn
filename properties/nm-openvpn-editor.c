@@ -128,7 +128,7 @@ check_validity (OpenvpnEditor *self, GError **error)
 	/* Change entry background colour while editing */
 	if (!gateway_valid)
 		gdk_rgba_parse (&rgba, "red3");
-	gtk_widget_override_background_color (widget, GTK_STATE_NORMAL, !gateway_valid ? &rgba : NULL);
+	gtk_widget_override_background_color (widget, GTK_STATE_FLAG_NORMAL, !gateway_valid ? &rgba : NULL);
 	if (!gateway_valid) {
 		g_set_error (error,
 		             OPENVPN_EDITOR_PLUGIN_ERROR,
