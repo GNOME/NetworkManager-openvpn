@@ -1373,10 +1373,10 @@ device_name_changed_cb (GtkEntry *entry,
 	/* Change cell's background to red if the value is invalid */
 	if (entry_sensitive && entry_text[0] != '\0' && !nm_utils_iface_valid_name (entry_text)) {
 		gdk_rgba_parse (&rgba, "red");
-		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_NORMAL, &rgba);
+		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_FLAG_NORMAL, &rgba);
 		gtk_widget_set_sensitive (ok_button, FALSE);
 	} else {
-		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_NORMAL, NULL);
+		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_FLAG_NORMAL, NULL);
 		gtk_widget_set_sensitive (ok_button, TRUE);
 	}
 
