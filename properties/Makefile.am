@@ -22,7 +22,9 @@ editor_sources = \
         auth-helpers.h
 
 uidir = $(datadir)/gnome-vpn-properties/openvpn
+if WITH_GNOME
 ui_DATA = nm-openvpn-dialog.ui
+endif
 
 common_CFLAGS =                                         \
         $(GLIB_CFLAGS)                                  \
@@ -125,5 +127,5 @@ EXTRA_DIST = \
         libnm-vpn-plugin-openvpn.ver \
         libnm-vpn-plugin-openvpn-editor.ver \
         libnm-openvpn-properties.ver \
-        $(ui_DATA)
+        nm-openvpn-dialog.ui
 
