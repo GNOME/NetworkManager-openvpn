@@ -41,7 +41,6 @@ nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 	    $^ >$@
 
 DISTCHECK_CONFIGURE_FLAGS = \
-	--with-tests=yes \
 	--enable-more-warnings=yes
 
 EXTRA_DIST = nm-openvpn-service.name.in \

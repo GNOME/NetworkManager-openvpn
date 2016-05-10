@@ -121,20 +121,6 @@ fi
 AC_SUBST(NM_PLUGIN_DIR_NAME_FILE)
 
 dnl
-dnl Tests
-dnl
-AC_ARG_WITH(tests, AS_HELP_STRING([--with-tests], [Build NetworkManager tests]))
-AM_CONDITIONAL(WITH_TESTS, test "x$with_tests" = "xyes")
-case $with_tests in
-    yes)
-        with_tests=yes
-        ;;
-    *)
-        with_tests=no
-        ;;
-esac
-
-dnl
 dnl Distribution version string
 dnl
 AC_ARG_WITH(dist-version, AS_HELP_STRING([--with-dist-version=<dist-version>], [Define the custom version (like distribution package name and revision)]), ac_distver=$withval, ac_distver="")
