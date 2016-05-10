@@ -82,7 +82,7 @@ libnm_openvpn_properties_la_SOURCES = \
         $(editor_sources)
 
 libnm_openvpn_properties_la_CFLAGS =                \
-        -DNM_OPENVPN_OLD \
+        -DNM_VPN_OLD \
         $(common_CFLAGS)                                \
         $(GTK_CFLAGS) \
         -DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB \

@@ -30,7 +30,7 @@ libnm_openvpn_shared_la_SOURCES = \
     $(shared_sources)
 
 libnm_openvpn_shared_la_CPPFLAGS = \
-    -DNM_OPENVPN_OLD \
+    -DNM_VPN_OLD \
     $(LIBNM_GLIB_CFLAGS) \
     -I$(top_srcdir)/shared
 

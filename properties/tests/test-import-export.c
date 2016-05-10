@@ -1113,7 +1113,7 @@ test_route_import (void)
 	/* IP4 setting */
 	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	g_assert (s_ip4);
-#ifdef NM_OPENVPN_OLD
+#ifdef NM_VPN_OLD
 	{
 		NMIP4Route *route;
 		const char *expected_nh2   = "0.0.0.0";

@@ -34,7 +34,7 @@ test_import_export_glib_SOURCES = \
 	test-import-export.c
 
 test_import_export_glib_CPPFLAGS = \
-	-DNM_OPENVPN_OLD \
+	-DNM_VPN_OLD \
 	$(GLIB_CFLAGS) \
 	$(GTK_CFLAGS) \
 	$(LIBNM_GLIB_CFLAGS) \

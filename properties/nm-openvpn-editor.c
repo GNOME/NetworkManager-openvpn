@@ -589,7 +589,7 @@ openvpn_editor_plugin_widget_class_init (OpenvpnEditorClass *req_class)
 
 /*****************************************************************************/
 
-#ifndef NM_OPENVPN_OLD
+#ifndef NM_VPN_OLD
 
 #include "nm-openvpn-editor-plugin.h"
 

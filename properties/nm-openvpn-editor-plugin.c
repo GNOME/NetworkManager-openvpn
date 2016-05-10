@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef NM_OPENVPN_OLD
+#ifdef NM_VPN_OLD
 #include "nm-openvpn-editor.h"
 #else
 #include "nm-vpn-plugin-utils.h"
@@ -126,7 +126,7 @@ get_capabilities (NMVpnEditorPlugin *iface)
 	        NM_VPN_EDITOR_PLUGIN_CAPABILITY_IPV6);
 }
 
-#ifndef NM_OPENVPN_OLD
+#ifndef NM_VPN_OLD
 static NMVpnEditor *
 _call_editor_factory (gpointer factory,
                       NMVpnEditorPlugin *editor_plugin,
@@ -148,7 +148,7 @@ get_editor (NMVpnEditorPlugin *iface, NMConnection *connection, GError **error)
 	g_return_val_if_fail (!error || !*error, NULL);
 
 	{
-#ifdef NM_OPENVPN_OLD
+#ifdef NM_VPN_OLD
 		return openvpn_editor_new (connection, error);
 #else
 		return nm_vpn_plugin_utils_load_editor (NM_PLUGIN_DIR"/libnm-vpn-plugin-openvpn-editor.so",

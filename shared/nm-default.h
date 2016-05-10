@@ -62,7 +62,7 @@
 
 /*****************************************************************************/
 
-#ifdef NM_OPENVPN_OLD
+#ifdef NM_VPN_OLD
 
 #define NM_VPN_LIBNM_COMPAT
 #include <nm-connection.h>
@@ -86,7 +86,7 @@
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_SETTING_VPN_ERROR_UNKNOWN
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_INVALID        NM_SETTING_VPN_ERROR_UNKNOWN
 
-#else /* !NM_OPENVPN_OLD */
+#else /* !NM_VPN_OLD */
 
 #include <NetworkManager.h>
 
@@ -98,17 +98,17 @@
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_CONNECTION_ERROR_FAILED
 #define OPENVPN_EDITOR_PLUGIN_ERROR_FILE_INVALID        NM_CONNECTION_ERROR_FAILED
 
-#endif /* NM_OPENVPN_OLD */
+#endif /* NM_VPN_OLD */
 
 /*****************************************************************************/
 
 #if (NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR
 
-#ifdef NM_OPENVPN_OLD
+#ifdef NM_VPN_OLD
 #include <nm-ui-utils.h>
-#else /* NM_OPENVPN_OLD */
+#else /* NM_VPN_OLD */
 #include <nma-ui-utils.h>
-#endif /* NM_OPENVPN_OLD */
+#endif /* NM_VPN_OLD */
 
 #endif /* NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR */
 
