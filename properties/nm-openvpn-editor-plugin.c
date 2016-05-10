@@ -76,8 +76,8 @@ import (NMVpnEditorPlugin *iface, const char *path, GError **error)
 	             && !g_str_has_suffix (ext, ".cnf")
 	             && !g_str_has_suffix (ext, ".ovpntest"))) {   /* Special extension for testcases */
 		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("unknown OpenVPN file extension"));
 		goto out;
 	}

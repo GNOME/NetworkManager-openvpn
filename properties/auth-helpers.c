@@ -430,8 +430,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
-		             OPENVPN_EDITOR_PLUGIN_ERROR,
-		             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+		             NMV_EDITOR_PLUGIN_ERROR,
+		             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_CA);
 		return FALSE;
 	}
@@ -441,8 +441,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
-		             OPENVPN_EDITOR_PLUGIN_ERROR,
-		             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+		             NMV_EDITOR_PLUGIN_ERROR,
+		             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_CERT);
 		return FALSE;
 	}
@@ -453,8 +453,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
-		             OPENVPN_EDITOR_PLUGIN_ERROR,
-		             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+		             NMV_EDITOR_PLUGIN_ERROR,
+		             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_KEY);
 		return FALSE;
 	}
@@ -475,8 +475,8 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 	if (encrypted && secrets_required) {
 		if (!gtk_entry_get_text_length (GTK_ENTRY (widget))) {
 			g_set_error (error,
-			             OPENVPN_EDITOR_PLUGIN_ERROR,
-			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+			             NMV_EDITOR_PLUGIN_ERROR,
+			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_CERTPASS);
 			return FALSE;
 		}
@@ -502,16 +502,16 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
-			             OPENVPN_EDITOR_PLUGIN_ERROR,
-			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+			             NMV_EDITOR_PLUGIN_ERROR,
+			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_USERNAME);
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		if (!validate_file_chooser (builder, "pw_ca_cert_chooser")) {
 			g_set_error (error,
-			             OPENVPN_EDITOR_PLUGIN_ERROR,
-			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+			             NMV_EDITOR_PLUGIN_ERROR,
+			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_CA);
 			return FALSE;
 		}
@@ -519,16 +519,16 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
-			             OPENVPN_EDITOR_PLUGIN_ERROR,
-			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+			             NMV_EDITOR_PLUGIN_ERROR,
+			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_USERNAME);
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		if (!validate_file_chooser (builder, "sk_key_chooser")) {
 			g_set_error (error,
-			             OPENVPN_EDITOR_PLUGIN_ERROR,
-			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+			             NMV_EDITOR_PLUGIN_ERROR,
+			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_STATIC_KEY);
 			return FALSE;
 		}
@@ -537,8 +537,8 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
-			             OPENVPN_EDITOR_PLUGIN_ERROR,
-			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+			             NMV_EDITOR_PLUGIN_ERROR,
+			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_LOCAL_IP);
 			return FALSE;
 		}
@@ -547,8 +547,8 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (!str || !strlen (str)) {
 			g_set_error (error,
-			             OPENVPN_EDITOR_PLUGIN_ERROR,
-			             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+			             NMV_EDITOR_PLUGIN_ERROR,
+			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_REMOTE_IP);
 			return FALSE;
 		}

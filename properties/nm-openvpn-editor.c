@@ -131,8 +131,8 @@ check_validity (OpenvpnEditor *self, GError **error)
 	gtk_widget_override_background_color (widget, GTK_STATE_FLAG_NORMAL, !gateway_valid ? &rgba : NULL);
 	if (!gateway_valid) {
 		g_set_error (error,
-		             OPENVPN_EDITOR_PLUGIN_ERROR,
-		             OPENVPN_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
+		             NMV_EDITOR_PLUGIN_ERROR,
+		             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 		             NM_OPENVPN_KEY_REMOTE);
 		return FALSE;
 	}
@@ -497,7 +497,7 @@ openvpn_editor_new (NMConnection *connection, GError **error)
 
 	object = g_object_new (OPENVPN_TYPE_EDITOR, NULL);
 	if (!object) {
-		g_set_error_literal (error, OPENVPN_EDITOR_PLUGIN_ERROR, 0, _("could not create openvpn object"));
+		g_set_error_literal (error, NMV_EDITOR_PLUGIN_ERROR, 0, _("could not create openvpn object"));
 		return NULL;
 	}
 
@@ -512,7 +512,7 @@ openvpn_editor_new (NMConnection *connection, GError **error)
 		g_warning ("Couldn't load builder file: %s",
 		           error && *error ? (*error)->message : "(unknown)");
 		g_clear_error (error);
-		g_set_error (error, OPENVPN_EDITOR_PLUGIN_ERROR, 0,
+		g_set_error (error, NMV_EDITOR_PLUGIN_ERROR, 0,
 		             "could not load required resources from %s", ui_file);
 		g_free (ui_file);
 		g_object_unref (object);
@@ -523,7 +523,7 @@ openvpn_editor_new (NMConnection *connection, GError **error)
 
 	priv->widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "openvpn-vbox"));
 	if (!priv->widget) {
-		g_set_error_literal (error, OPENVPN_EDITOR_PLUGIN_ERROR, 0, _("could not load UI widget"));
+		g_set_error_literal (error, NMV_EDITOR_PLUGIN_ERROR, 0, _("could not load UI widget"));
 		g_object_unref (object);
 		return NULL;
 	}

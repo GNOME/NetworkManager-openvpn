@@ -696,8 +696,8 @@ inline_blob_write_out (const InlineBlobData *data, GError **error)
 		/* in test mode we don't create the certificate directory. */
 		if (!inline_blob_mkdir_parents (data, data->path, &err_msg)) {
 			g_set_error (error,
-			             OPENVPN_EDITOR_PLUGIN_ERROR,
-			             OPENVPN_EDITOR_PLUGIN_ERROR_FAILED,
+			             NMV_EDITOR_PLUGIN_ERROR,
+			             NMV_EDITOR_PLUGIN_ERROR_FAILED,
 			             _("cannot write <%s> blob from line %ld to file (%s)"),
 			             data->token,
 			             (long) data->token_start_line,
@@ -713,8 +713,8 @@ inline_blob_write_out (const InlineBlobData *data, GError **error)
 	 * access the file later on is left as exercise for the user. */
 	if (!g_file_set_contents (data->path, data->blob_data->str, data->blob_data->len, NULL)) {
 		g_set_error (error,
-		             OPENVPN_EDITOR_PLUGIN_ERROR,
-		             OPENVPN_EDITOR_PLUGIN_ERROR_FAILED,
+		             NMV_EDITOR_PLUGIN_ERROR,
+		             NMV_EDITOR_PLUGIN_ERROR_FAILED,
 		             _("cannot write <%s> blob from line %ld to file '%s'"),
 		             data->token,
 		             (long) data->token_start_line,
@@ -1374,8 +1374,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 
 handle_line_error:
 		g_set_error (error,
-		             OPENVPN_EDITOR_PLUGIN_ERROR,
-		             OPENVPN_EDITOR_PLUGIN_ERROR_FILE_INVALID,
+		             NMV_EDITOR_PLUGIN_ERROR,
+		             NMV_EDITOR_PLUGIN_ERROR_FILE_INVALID,
 		             _("configuration error: %s (line %ld)"),
 		             line_error ? : _("unknown or unsupported option"),
 		             (long) contents_cur_line);
@@ -1385,16 +1385,16 @@ handle_line_error:
 
 	if (!have_client && !have_sk) {
 		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("The file to import wasn't a valid OpenVPN client configuration"));
 		goto out_error;
 	}
 
 	if (!have_remote) {
 		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("The file to import wasn't a valid OpenVPN configure (no remote)"));
 		goto out_error;
 	}
@@ -1625,8 +1625,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	if (!path || !path[0]) {
 		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("missing path argument"));
 		return NULL;
 	}
@@ -1635,8 +1635,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_con || !s_vpn) {
 		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("connection is not a valid OpenVPN connection"));
 		return NULL;
 	}
@@ -1644,8 +1644,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	gateways = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE));
 	if (!gateways) {
 		g_set_error_literal (error,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR,
-		                     OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		                     _("connection was incomplete (missing gateway)"));
 		return NULL;
 	}
@@ -1945,8 +1945,8 @@ do_export (const char *path, NMConnection *connection, GError **error)
 
 	if (!g_file_set_contents (path, f->str, f->len, &local)) {
 		g_set_error (error,
-		             OPENVPN_EDITOR_PLUGIN_ERROR,
-		             OPENVPN_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		             NMV_EDITOR_PLUGIN_ERROR,
+		             NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
 		             _("failed to write file: %s"),
 		             local->message);
 		return FALSE;
