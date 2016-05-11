@@ -55,7 +55,6 @@ libnm_vpn_editor_utils_shared_la_LIBADD = \
 
 EXTRA_DIST = \
      gsystem-local-alloc.h \
-     nm-dbus-compat.h \
      nm-default.h \
      nm-glib.h \
      nm-macros-internal.h \
