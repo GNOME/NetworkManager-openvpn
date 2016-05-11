@@ -1386,7 +1386,7 @@ handle_line_error:
 	if (!have_client && !have_sk) {
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
-		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
 		                     _("The file to import wasn't a valid OpenVPN client configuration"));
 		goto out_error;
 	}
@@ -1394,7 +1394,7 @@ handle_line_error:
 	if (!have_remote) {
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
-		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
 		                     _("The file to import wasn't a valid OpenVPN configure (no remote)"));
 		goto out_error;
 	}
@@ -1626,7 +1626,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (!path || !path[0]) {
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
-		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
 		                     _("missing path argument"));
 		return NULL;
 	}
@@ -1636,7 +1636,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (!s_con || !s_vpn) {
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
-		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
 		                     _("connection is not a valid OpenVPN connection"));
 		return NULL;
 	}
@@ -1645,7 +1645,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (!gateways) {
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
-		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
 		                     _("connection was incomplete (missing gateway)"));
 		return NULL;
 	}
@@ -1946,7 +1946,7 @@ do_export (const char *path, NMConnection *connection, GError **error)
 	if (!g_file_set_contents (path, f->str, f->len, &local)) {
 		g_set_error (error,
 		             NMV_EDITOR_PLUGIN_ERROR,
-		             NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_OPENVPN,
+		             NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
 		             _("failed to write file: %s"),
 		             local->message);
 		return FALSE;
