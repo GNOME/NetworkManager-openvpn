@@ -46,7 +46,7 @@
 #include "nm-version.h"
 #include "gsystem-local-alloc.h"
 #include "nm-macros-internal.h"
-#include "nm-openvpn-service-defines.h"
+#include "nm-service-defines.h"
 
 /*****************************************************************************/
 

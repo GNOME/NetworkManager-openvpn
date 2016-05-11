@@ -1,6 +1,5 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* nm-openvpn-service - openvpn integration with NetworkManager
- *
+/*
  * Copyright (C) 2005 - 2008 Tim Niemueller <tim@niemueller.de>
  * Copyright (C) 2005 - 2008 Dan Williams <dcbw@redhat.com>
  *
@@ -20,8 +19,8 @@
  *
  */
 
-#ifndef NM_OPENVPN_SERVICE_DEFINES_H
-#define NM_OPENVPN_SERVICE_DEFINES_H
+#ifndef __NM_SERVICE_DEFINES_H__
+#define __NM_SERVICE_DEFINES_H__
 
 #define NM_VPN_SERVICE_TYPE_OPENVPN "org.freedesktop.NetworkManager.openvpn"
 
@@ -106,4 +105,4 @@
 #define NM_OPENVPN_GROUP  "nm-openvpn"
 #define NM_OPENVPN_CHROOT LOCALSTATEDIR "/lib/openvpn/chroot"
 
-#endif /* NM_OPENVPN_SERVICE_DEFINES_H */
+#endif /* __NM_SERVICE_DEFINES_H__ */

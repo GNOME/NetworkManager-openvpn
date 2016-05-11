@@ -10,7 +10,7 @@ shared_sources = \
     nm-shared-utils.h \
     utils.c \
     utils.h \
-    nm-openvpn-service-defines.h
+    nm-service-defines.h
 
 ###############################################################################
 

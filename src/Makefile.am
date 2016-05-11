@@ -17,11 +17,11 @@ libexec_PROGRAMS = nm-openvpn-service nm-openvpn-service-openvpn-helper
 nm_openvpn_service_SOURCES = \
 	nm-openvpn-service.c \
 	nm-openvpn-service.h \
-	$(top_srcdir)/shared/nm-openvpn-service-defines.h
+	$(top_srcdir)/shared/nm-service-defines.h
 
 nm_openvpn_service_LDADD = \
 	$(LIBNM_LIBS) \
-        $(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
+	$(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
 
 nm_openvpn_service_openvpn_helper_SOURCES = \
 	nm-openvpn-service-openvpn-helper.c
