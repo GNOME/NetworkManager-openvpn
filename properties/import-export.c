@@ -907,15 +907,11 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_COMP_LZO)) {
 			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
 				goto handle_line_error;
-			if (params[1]) {
-				if (nm_streq (params[1], "no"))
-					continue;
-				if (!nm_streq (params[1], "yes")) {
-					line_error = g_strdup_printf (_("unsupported comp-lzo argument"));
-					goto handle_line_error;
-				}
+			if (!NM_IN_STRSET (params[1], NULL, "no", "yes", "adaptive")) {
+				line_error = g_strdup_printf (_("unsupported comp-lzo argument"));
+				goto handle_line_error;
 			}
-			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, params[1] ?: "adaptive");
 			continue;
 		}
 
@@ -1752,8 +1748,9 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_KEYSIZE, s_vpn, NM_OPENVPN_KEY_KEYSIZE);
 
-	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO), "yes"))
-		args_write_line (f, NMV_OVPN_TAG_COMP_LZO, "yes");
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
+	if (value)
+		args_write_line (f, NMV_OVPN_TAG_COMP_LZO, value);
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_FLOAT);

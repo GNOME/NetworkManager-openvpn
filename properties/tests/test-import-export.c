@@ -231,7 +231,7 @@ test_tls_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
-	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
+	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "adaptive");
 	_check_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
 	_check_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "173.8.149.245:1194");
@@ -324,7 +324,7 @@ test_tls_inline_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
-	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
+	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "adaptive");
 	_check_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
 	_check_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "173.8.149.245:1194");
@@ -418,7 +418,7 @@ test_pkcs12_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
-	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "yes");
+	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "adaptive");
 	_check_item (s_vpn, NM_OPENVPN_KEY_FLOAT, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "173.8.149.245:1194");

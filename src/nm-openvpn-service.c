@@ -105,7 +105,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_CERT,                 G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CIPHER,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_KEYSIZE,              G_TYPE_INT, 1, 65535, FALSE },
-	{ NM_OPENVPN_KEY_COMP_LZO,             G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_COMP_LZO,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CONNECTION_TYPE,      G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FLOAT,                G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FRAGMENT_SIZE,        G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -1242,8 +1242,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
-	if (tmp && !strcmp (tmp, "yes"))
+	if (NM_IN_STRSET (tmp, "yes", "no", "adaptive")) {
 		add_openvpn_arg (args, "--comp-lzo");
+		add_openvpn_arg (args, tmp);
+	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT);
 	if (tmp && !strcmp (tmp, "yes"))
