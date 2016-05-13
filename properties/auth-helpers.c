@@ -1639,7 +1639,12 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	}
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO);
-	if (value && !strcmp (value, "yes")) {
+	if (NM_IN_STRSET (value, "yes", "adaptive")) {
+		/* the UI currently only supports "--comp-lzo yes" or omitting the "--comp-lzo"
+		 * flag.
+		 *
+		 * Internally, we also support "--comp-lzo [adaptive]" and "--comp-lzo no"
+		 * which have different meaning for openvpn. */
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_checkbutton"));
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	}
@@ -2007,8 +2012,12 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_checkbutton"));
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		/* we only have a checkbox, which we either map to "--comp-lzo yes" or
+		 * no "--comp-lzo" flag. In the UI, we cannot express "--comp-lzo [adaptive]"
+		 * or "--comp-lzo no". */
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_COMP_LZO), g_strdup ("yes"));
+	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
