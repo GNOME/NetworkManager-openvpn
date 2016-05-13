@@ -36,7 +36,7 @@
 #ifdef NM_VPN_OLD
 #include "nm-openvpn-editor.h"
 #else
-#include "nm-vpn-plugin-utils.h"
+#include "nm-vpn/nm-vpn-plugin-utils.h"
 #endif
 
 #include "import-export.h"

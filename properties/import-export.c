@@ -35,7 +35,7 @@
 #include <stdio.h>
 
 #include "utils.h"
-#include "nm-shared-utils.h"
+#include "nm-utils/nm-shared-utils.h"
 
 
 #define INLINE_BLOB_CA                  "ca"

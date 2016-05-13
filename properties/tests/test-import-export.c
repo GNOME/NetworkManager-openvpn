@@ -31,7 +31,7 @@
 #include "import-export.h"
 #include "utils.h"
 
-#include "nm-test-utils.h"
+#include "nm-utils/nm-test-utils.h"
 
 #define SRCDIR TEST_SRCDIR"/conf"
 #define TMPDIR TEST_BUILDDIR"/conf-tmp"
