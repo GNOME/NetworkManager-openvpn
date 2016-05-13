@@ -73,23 +73,21 @@ get_basic_connection (NMVpnEditorPlugin *plugin,
 	return connection;
 }
 
-static void
-_check_item (NMSettingVpn *s_vpn,
-             const char *item,
-             const char *expected)
-{
-	g_assert (s_vpn);
-	g_assert_cmpstr (nm_setting_vpn_get_data_item (s_vpn, item), ==, expected);
-}
+#define _check_item(s_vpn, item, expected) \
+	G_STMT_START { \
+		NMSettingVpn *_s_vpn = (s_vpn); \
+		\
+		g_assert (_s_vpn); \
+		g_assert_cmpstr (nm_setting_vpn_get_data_item (_s_vpn, (item)), ==, (expected)); \
+	} G_STMT_END
 
-static void
-_check_secret (NMSettingVpn *s_vpn,
-               const char *item,
-               const char *expected)
-{
-	g_assert (s_vpn);
-	g_assert_cmpstr (nm_setting_vpn_get_secret (s_vpn, item), ==, expected);
-}
+#define _check_secret(s_vpn, item, expected) \
+	G_STMT_START { \
+		NMSettingVpn *_s_vpn = (s_vpn); \
+		\
+		g_assert (_s_vpn); \
+		g_assert_cmpstr (nm_setting_vpn_get_secret (_s_vpn, (item)), ==, (expected)); \
+	} G_STMT_END
 
 /*****************************************************************************/
 
