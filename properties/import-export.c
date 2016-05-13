@@ -1924,8 +1924,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	args_write_line (f, NMV_OVPN_TAG_SCRIPT_SECURITY, "2");
 	args_write_line (f, NMV_OVPN_TAG_PERSIST_KEY);
 	args_write_line (f, NMV_OVPN_TAG_PERSIST_TUN);
-	args_write_line (f, NMV_OVPN_TAG_USER, "openvpn");
-	args_write_line (f, NMV_OVPN_TAG_GROUP, "openvpn");
+	args_write_line (f, NMV_OVPN_TAG_USER, NM_OPENVPN_USER);
+	args_write_line (f, NMV_OVPN_TAG_GROUP, NM_OPENVPN_GROUP);
 
 	return nm_unauto (&f);
 }
