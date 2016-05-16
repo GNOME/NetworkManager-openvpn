@@ -1098,7 +1098,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	char *stmp;
 	const char *defport, *proto_tcp;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
-	gchar *bus_name;
+	gs_free char *bus_name = NULL;
 
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
