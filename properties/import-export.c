@@ -1927,7 +1927,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	args_write_line (f, NMV_OVPN_TAG_USER, NM_OPENVPN_USER);
 	args_write_line (f, NMV_OVPN_TAG_GROUP, NM_OPENVPN_GROUP);
 
-	return nm_unauto (&f);
+	return g_steal_pointer (&f);
 }
 
 gboolean

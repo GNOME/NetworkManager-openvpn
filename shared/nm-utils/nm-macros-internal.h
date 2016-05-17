@@ -27,6 +27,9 @@
 /********************************************************/
 
 #define _nm_packed __attribute__ ((packed))
+#define _nm_unused __attribute__ ((unused))
+#define _nm_pure   __attribute__ ((pure))
+#define _nm_const  __attribute__ ((const))
 
 #define nm_auto(fcn) __attribute__ ((cleanup(fcn)))
 
@@ -296,6 +299,22 @@ _NM_IN_STRSET_streq (const char *x, const char *s)
 
 /*****************************************************************************/
 
+/* glib/C provides the following kind of assertions:
+ *   - assert() -- disable with NDEBUG
+ *   - g_return_if_fail() -- disable with G_DISABLE_CHECKS
+ *   - g_assert() -- disable with G_DISABLE_ASSERT
+ * but they are all enabled by default and usually even production builds have
+ * these kind of assertions enabled. It also means, that disabling assertions
+ * is an untested configuration, and might have bugs.
+ *
+ * Add our own assertion macro nm_assert(), which is disabled by default and must
+ * be explicitly enabled. They are useful for more expensive checks or checks that
+ * depend less on runtime conditions (that is, are generally expected to be true). */
+
+#ifndef NM_MORE_ASSERTS
+#define NM_MORE_ASSERTS 0
+#endif
+
 #if NM_MORE_ASSERTS
 #define nm_assert(cond) G_STMT_START { g_assert (cond); } G_STMT_END
 #define nm_assert_not_reached() G_STMT_START { g_assert_not_reached (); } G_STMT_END
@@ -323,18 +342,6 @@ _notify (obj_type *obj, _PropertyEnums prop) \
 	nm_assert ((gsize) prop < G_N_ELEMENTS (obj_properties)); \
 	g_object_notify_by_pspec ((GObject *) obj, obj_properties[prop]); \
 }
-
-/*****************************************************************************/
-
-#define nm_unauto(pp)                                               \
-    ({                                                              \
-        G_STATIC_ASSERT (sizeof *(pp) == sizeof (gpointer));        \
-        gpointer *_pp = (gpointer *) (pp);                          \
-        gpointer _p = *_pp;                                         \
-                                                                    \
-        *_pp = NULL;                                                \
-        _p;                                                         \
-    })
 
 /*****************************************************************************/
 
