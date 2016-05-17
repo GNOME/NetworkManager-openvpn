@@ -132,17 +132,6 @@ if ! test x"$ac_distver" = x""; then
   AC_DEFINE_UNQUOTED(DIST_VERSION, "$ac_distver", [Define the distribution version string])
 fi
 
-AC_ARG_WITH(more-asserts,
-            AS_HELP_STRING([--with-more-asserts=level], [Enable more assertions for debugging (default: 0)]),
-            [more_asserts=${with_more_asserts}],
-            [more_asserts=no])
-if test "${more_asserts}" = "no"; then
-    more_asserts=0
-elif test "${more_asserts}" = "yes" -o "#${more_asserts}#" != "$(printf '%s' "${more_asserts}" | sed -n '1s/^[0-9]\+$/#\0#/p')"; then
-    more_asserts=100
-fi
-AC_DEFINE_UNQUOTED(NM_MORE_ASSERTS, $more_asserts, [Define if more asserts are enabled])
-
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
@@ -161,4 +150,3 @@ echo "  --with-gnome=$with_gnome"
 echo "  --with-libnm-glib=$with_libnm_glib"
 echo "  --enable-absolute-paths=$enable_absolute_paths"
 echo "  --enable-more-warnings=$set_more_warnings"
-echo "  --with-more-asserts=$more_asserts"
