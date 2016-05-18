@@ -1144,6 +1144,15 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_CIPHER)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_CIPHER, params[1]);
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEEPALIVE)) {
 			gint64 v2;
 
@@ -1744,6 +1753,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_RENEG_SEC, s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
 
 	args_write_line_setting_value (f, NMV_OVPN_TAG_CIPHER, s_vpn, NM_OPENVPN_KEY_CIPHER);
+
+	args_write_line_setting_value (f, NMV_OVPN_TAG_TLS_CIPHER, s_vpn, NM_OPENVPN_KEY_TLS_CIPHER);
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_KEYSIZE, s_vpn, NM_OPENVPN_KEY_KEYSIZE);
 
