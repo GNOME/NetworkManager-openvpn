@@ -64,6 +64,7 @@
 #define NMV_OVPN_TAG_SOCKS_PROXY_RETRY  "socks-proxy-retry"
 #define NMV_OVPN_TAG_SOCKS_PROXY        "socks-proxy"
 #define NMV_OVPN_TAG_TLS_AUTH           "tls-auth"
+#define NMV_OVPN_TAG_TLS_CIPHER         "tls-cipher"
 #define NMV_OVPN_TAG_TLS_CLIENT         "tls-client"
 #define NMV_OVPN_TAG_TLS_REMOTE         "tls-remote"
 #define NMV_OVPN_TAG_TOPOLOGY           "topology"
