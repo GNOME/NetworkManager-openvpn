@@ -44,9 +44,11 @@
 #include <locale.h>
 #include <pwd.h>
 #include <grp.h>
-#include "glib-unix.h"
+#include <syslog.h>
+#include <glib-unix.h>
 
 #include "utils.h"
+#include "nm-utils/nm-shared-utils.h"
 
 #if !defined(DIST_VERSION)
 # define DIST_VERSION VERSION
@@ -54,6 +56,8 @@
 
 static struct {
 	gboolean debug;
+	int log_level;
+	bool log_syslog;
 	GSList *pids_pending_list;
 } gl/*obal*/;
 
@@ -167,7 +171,7 @@ static ValidProperty valid_secrets[] = {
 static gboolean
 _LOGD_enabled (void)
 {
-	return gl.debug;
+	return gl.log_level >= LOG_INFO;
 }
 
 #define _LOGD(...) _LOG(FALSE, G_LOG_LEVEL_INFO, __VA_ARGS__)
@@ -1417,11 +1421,19 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg (args, "0");
 	}
 
-	if (gl.debug) {
+	if (gl.log_level > 0) {
 		add_openvpn_arg (args, "--verb");
-		add_openvpn_arg (args, "10");
+		if (gl.log_level >= LOG_DEBUG)
+			add_openvpn_arg (args, "10");
+		else if (gl.log_level >= LOG_INFO)
+			add_openvpn_arg (args, "5");
+		else
+			add_openvpn_arg (args, "2");
 	} else {
-		/* Syslog */
+		/* the default level is already "--verb 1", which is fine for us. */
+	}
+
+	if (gl.log_syslog) {
 		add_openvpn_arg (args, "--syslog");
 		add_openvpn_arg (args, "nm-openvpn");
 	}
@@ -1472,7 +1484,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Up script, called when connection has been established or has been restarted */
 	add_openvpn_arg (args, "--up");
 	g_object_get (plugin, NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME, &bus_name, NULL);
-	stmp = g_strdup_printf ("%s%s --bus-name %s %s --", NM_OPENVPN_HELPER_PATH, gl.debug ? " --helper-debug" : "",
+	stmp = g_strdup_printf ("%s%s --bus-name %s %s --", NM_OPENVPN_HELPER_PATH, _LOGD_enabled () ? " --helper-debug" : "",
 	                        bus_name, dev_type_is_tap ? "--tap" : "--tun");
 	add_openvpn_arg (args, stmp);
 	g_free (stmp);
@@ -2029,6 +2041,14 @@ main (int argc, char *argv[])
 		exit (1);
 	}
 	g_option_context_free (opt_ctx);
+
+	gl.log_level = _nm_utils_ascii_str_to_int64 (getenv ("NM_VPN_LOG_LEVEL"),
+	                                             10, 0, LOG_DEBUG,
+	                                             gl.debug ? LOG_DEBUG : 0);
+
+	gl.log_syslog = _nm_utils_ascii_str_to_int64 (getenv ("NM_VPN_LOG_SYSLOG"),
+	                                              10, 0, 1,
+	                                              gl.debug ? 0 : 1);
 
 	_LOGD ("nm-openvpn-service (version " DIST_VERSION ") starting...");
 
