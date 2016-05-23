@@ -280,10 +280,12 @@ args_params_parse_port (const char **params, guint n_param, gint64 *out, char **
 static gboolean
 args_params_parse_ip4 (const char **params,
                        guint n_param,
+                       gboolean ovpn_extended_format,
                        in_addr_t *out,
                        char **out_error)
 {
 	in_addr_t a;
+	const char *p;
 
 	g_return_val_if_fail (params, FALSE);
 	g_return_val_if_fail (params[0], FALSE);
@@ -292,14 +294,44 @@ args_params_parse_ip4 (const char **params,
 	g_return_val_if_fail (out, FALSE);
 	g_return_val_if_fail (out_error && !*out_error, FALSE);
 
-	if (inet_pton (AF_INET, params[n_param], &a) != 1) {
-		*out_error = g_strdup_printf (_("invalid %uth argument to '%s' where IPv4 address expected"),
+	if (inet_pton (AF_INET, params[n_param], &a) == 1) {
+		*out = a;
+		return TRUE;
+	}
+
+	if (   ovpn_extended_format
+	    && NM_IN_STRSET (params[n_param], "vpn_gateway", "net_gateway", "remote_host")) {
+		/* we don't support these special destinations, as they currently cannot be expressed
+		 * in a connection. */
+		*out_error = g_strdup_printf (_("unsupported %uth argument %s to '%s'"),
+		                              n_param,
+		                              params[n_param],
+		                              params[0]);
+		return FALSE;
+	}
+
+	if (   ovpn_extended_format
+	    && params[n_param]
+	    && strlen (params[n_param]) <= 255) {
+		for (p = params[n_param]; *p; p++) {
+			if (NM_IN_SET (*p, '-', '.'))
+				continue;
+			if (g_ascii_isalnum (*p))
+				continue;
+			goto not_dns;
+		}
+		/* we also don't support specifing a FQDN. */
+		*out_error = g_strdup_printf (_("unsupported %uth argument to '%s' which looks like a FQDN but only IPv4 address supported"),
 		                              n_param,
 		                              params[0]);
 		return FALSE;
 	}
-	*out = a;
-	return TRUE;
+
+not_dns:
+	*out_error = g_strdup_printf (_("invalid %uth argument to '%s' where IPv4 address expected"),
+	                              n_param,
+	                              params[0]);
+	return FALSE;
 }
 
 static gboolean
@@ -1233,18 +1265,18 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			if (!args_params_check_nargs_minmax (params, 1, 4, &line_error))
 				goto handle_line_error;
 
-			if (!args_params_parse_ip4 (params, 1, &network, &line_error))
+			if (!args_params_parse_ip4 (params, 1, TRUE, &network, &line_error))
 				goto handle_line_error;
 
 			if (params[2]) {
 				in_addr_t netmask;
 
-				if (!args_params_parse_ip4 (params, 2, &netmask, &line_error))
+				if (!args_params_parse_ip4 (params, 2, FALSE, &netmask, &line_error))
 					goto handle_line_error;
 				prefix = nm_utils_ip4_netmask_to_prefix (netmask);
 
 				if (params[3]) {
-					if (!args_params_parse_ip4 (params, 3, &gateway, &line_error))
+					if (!args_params_parse_ip4 (params, 3, TRUE, &gateway, &line_error))
 						goto handle_line_error;
 					if (params[4]) {
 						if (!args_params_parse_int64 (params, 4, 0, G_MAXUINT32, &v_int64, &line_error))
