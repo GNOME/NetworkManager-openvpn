@@ -1486,8 +1486,11 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Up script, called when connection has been established or has been restarted */
 	add_openvpn_arg (args, "--up");
 	g_object_get (plugin, NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME, &bus_name, NULL);
-	stmp = g_strdup_printf ("%s%s --bus-name %s %s --", NM_OPENVPN_HELPER_PATH, _LOGD_enabled () ? " --helper-debug" : "",
-	                        bus_name, dev_type_is_tap ? "--tap" : "--tun");
+	stmp = g_strdup_printf ("%s --debug %d %ld --bus-name %s %s --",
+	                        NM_OPENVPN_HELPER_PATH,
+	                        gl.log_level, (long) getpid(),
+	                        bus_name,
+	                        dev_type_is_tap ? "--tap" : "--tun");
 	add_openvpn_arg (args, stmp);
 	g_free (stmp);
 	add_openvpn_arg (args, "--up-restart");
