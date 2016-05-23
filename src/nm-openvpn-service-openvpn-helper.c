@@ -169,28 +169,6 @@ addr4_to_gvariant (const char *str)
 	return g_variant_new_uint32 (temp_addr.s_addr);
 }
 
-static void
-parse_addr4_list (GPtrArray *array, const char *str)
-{
-	char **split;
-	int i;
-	struct in_addr temp_addr;
-
-	/* Empty */
-	if (!str || strlen (str) < 1)
-		return;
-
-	split = g_strsplit (str, " ", -1);
-	for (i = 0; split[i]; i++) {
-		if (inet_pton (AF_INET, split[i], &temp_addr) > 0)
-			g_ptr_array_add (array, g_variant_new_uint32 (temp_addr.s_addr));
-	}
-
-	g_strfreev (split);
-
-	return;
-}
-
 static GVariant *
 addr6_to_gvariant (const char *str)
 {
@@ -209,6 +187,30 @@ addr6_to_gvariant (const char *str)
 	for (i = 0; i < sizeof (temp_addr); i++)
 		g_variant_builder_add (&builder, "y", ((guint8 *) &temp_addr)[i]);
 	return g_variant_builder_end (&builder);
+}
+
+static void
+parse_addr_list (GPtrArray *array4, GPtrArray *array6, const char *str)
+{
+	char **split;
+	int i;
+	GVariant *variant;
+
+	/* Empty */
+	if (!str || strlen (str) < 1)
+		return;
+
+	split = g_strsplit (str, " ", -1);
+	for (i = 0; split[i]; i++) {
+		if (array4 && (variant = addr4_to_gvariant (split[i])) != NULL)
+			g_ptr_array_add (array4, variant);
+		else if (array6 && (variant = addr6_to_gvariant (split[i])) != NULL)
+			g_ptr_array_add (array6, variant);
+	}
+
+	g_strfreev (split);
+
+	return;
 }
 
 static inline gboolean
@@ -458,7 +460,7 @@ main (int argc, char *argv[])
 	GVariant *val;
 	int i;
 	GError *err = NULL;
-	GPtrArray *dns_list;
+	GPtrArray *dns4_list, *dns6_list;
 	GPtrArray *nbns_list;
 	GPtrArray *dns_domains;
 	struct in_addr temp_addr;
@@ -468,6 +470,7 @@ main (int argc, char *argv[])
 	gboolean is_restart;
 	gboolean has_ip4_prefix = FALSE;
 	gboolean has_ip4_address = FALSE;
+	gboolean has_ip6_address = FALSE;
 	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
@@ -642,9 +645,10 @@ main (int argc, char *argv[])
 	tmp = getenv ("ifconfig_ipv6_local");
 	if (tmp && strlen (tmp)) {
 		val = addr6_to_gvariant (tmp);
-		if (val)
+		if (val) {
 			g_variant_builder_add (&ip6builder, "{sv}", NM_VPN_PLUGIN_IP6_CONFIG_ADDRESS, val);
-		else
+			has_ip6_address = TRUE;
+		} else
 			helper_failed (proxy, "IP6 Address");
 	}
 
@@ -679,7 +683,8 @@ main (int argc, char *argv[])
 
 	/* DNS and WINS servers */
 	dns_domains = g_ptr_array_sized_new (3);
-	dns_list = g_ptr_array_new ();
+	dns4_list = g_ptr_array_new ();
+	dns6_list = g_ptr_array_new ();
 	nbns_list = g_ptr_array_new ();
 
 	for (i = 1; i < 256; i++) {
@@ -698,16 +703,21 @@ main (int argc, char *argv[])
 		tmp += 12; /* strlen ("dhcp-option ") */
 
 		if (g_str_has_prefix (tmp, "DNS "))
-			parse_addr4_list (dns_list, tmp + 4);
+			parse_addr_list (dns4_list, dns6_list, tmp + 4);
 		else if (g_str_has_prefix (tmp, "WINS "))
-			parse_addr4_list (nbns_list, tmp + 5);
+			parse_addr_list (nbns_list, NULL, tmp + 5);
 		else if (g_str_has_prefix (tmp, "DOMAIN ") && is_domain_valid (tmp + 7))
 			g_ptr_array_add (dns_domains, tmp + 7);
 	}
 
-	if (dns_list->len) {
-		val = g_variant_new_array (G_VARIANT_TYPE_UINT32, (GVariant **) dns_list->pdata, dns_list->len);
+	if (dns4_list->len) {
+		val = g_variant_new_array (G_VARIANT_TYPE_UINT32, (GVariant **) dns4_list->pdata, dns4_list->len);
 		g_variant_builder_add (&ip4builder, "{sv}", NM_VPN_PLUGIN_IP4_CONFIG_DNS, val);
+	}
+
+	if (has_ip6_address && dns6_list->len) {
+		val = g_variant_new_array (G_VARIANT_TYPE ("ay"), (GVariant **) dns6_list->pdata, dns6_list->len);
+		g_variant_builder_add (&ip6builder, "{sv}", NM_VPN_PLUGIN_IP6_CONFIG_DNS, val);
 	}
 
 	if (nbns_list->len) {
@@ -718,9 +728,16 @@ main (int argc, char *argv[])
 	if (dns_domains->len) {
 		val = g_variant_new_strv ((const gchar **) dns_domains->pdata, dns_domains->len);
 		g_variant_builder_add (&ip4builder, "{sv}", NM_VPN_PLUGIN_IP4_CONFIG_DOMAINS, val);
+
+		/* Domains apply to both IPv4 and IPv6 configurations */
+		if (has_ip6_address) {
+			val = g_variant_new_strv ((const gchar **) dns_domains->pdata, dns_domains->len);
+			g_variant_builder_add (&ip6builder, "{sv}", NM_VPN_PLUGIN_IP6_CONFIG_DOMAINS, val);
+		}
 	}
 
-	g_ptr_array_unref (dns_list);
+	g_ptr_array_unref (dns4_list);
+	g_ptr_array_unref (dns6_list);
 	g_ptr_array_unref (nbns_list);
 	g_ptr_array_unref (dns_domains);
 
