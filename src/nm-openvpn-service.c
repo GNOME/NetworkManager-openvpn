@@ -44,7 +44,6 @@
 #include <locale.h>
 #include <pwd.h>
 #include <grp.h>
-#include <syslog.h>
 #include <glib-unix.h>
 
 #include "utils.h"
@@ -161,10 +160,13 @@ static ValidProperty valid_secrets[] = {
 
 /*****************************************************************************/
 
-#define _LOG(log_always, level, ...) \
+#define _NMLOG(level, log_always, ...) \
 	G_STMT_START { \
-		if ((log_always) || _LOGD_enabled ()) { \
-			g_log (G_LOG_DOMAIN, level, __VA_ARGS__); \
+		if ((log_always) || gl.log_level >= (level)) { \
+			g_print ("nm-openvpn[%ld] %-7s " _NM_UTILS_MACRO_FIRST (__VA_ARGS__) "\n", \
+			         (long) getpid (), \
+			         nm_utils_syslog_to_str (level) \
+			         _NM_UTILS_MACRO_REST (__VA_ARGS__)); \
 		} \
 	} G_STMT_END
 
@@ -174,9 +176,9 @@ _LOGD_enabled (void)
 	return gl.log_level >= LOG_INFO;
 }
 
-#define _LOGD(...) _LOG(FALSE, G_LOG_LEVEL_INFO, __VA_ARGS__)
-#define _LOGI(...) _LOG(TRUE,  G_LOG_LEVEL_MESSAGE, __VA_ARGS__)
-#define _LOGW(...) _LOG(TRUE,  G_LOG_LEVEL_WARNING, __VA_ARGS__)
+#define _LOGD(...) _NMLOG(LOG_INFO,    FALSE, __VA_ARGS__)
+#define _LOGI(...) _NMLOG(LOG_NOTICE,  TRUE,  __VA_ARGS__)
+#define _LOGW(...) _NMLOG(LOG_WARNING, TRUE,  __VA_ARGS__)
 
 /*****************************************************************************/
 

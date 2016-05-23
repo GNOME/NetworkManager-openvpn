@@ -22,6 +22,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <syslog.h>
+
 #define NMV_OVPN_TAG_AUTH               "auth"
 #define NMV_OVPN_TAG_AUTH_NOCACHE       "auth-nocache"
 #define NMV_OVPN_TAG_AUTH_USER_PASS     "auth-user-pass"
@@ -80,6 +82,21 @@ char *      nmv_utils_str_utf8safe_escape     (const char *str);
 const char *nmv_utils_str_utf8safe_escape_c   (const char *str, char **out_clone);
 char *      nmv_utils_str_utf8safe_unescape   (const char *str);
 const char *nmv_utils_str_utf8safe_unescape_c (const char *str, char **str_free);
+
+static inline const char *
+nm_utils_syslog_to_str (int syslog_level)
+{
+	/* Maps the levels the same way as NetworkManager's nm-logging.c does */
+	if (syslog_level >= LOG_DEBUG)
+		return "<trace>";
+	if (syslog_level >= LOG_INFO)
+		return "<debug>";
+	if (syslog_level >= LOG_NOTICE)
+		return "<info>";
+	if (syslog_level >= LOG_WARNING)
+		return "<warn>";
+	return "<error>";
+}
 
 #endif  /* UTILS_H */
 
