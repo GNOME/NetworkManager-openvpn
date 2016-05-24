@@ -159,18 +159,18 @@ static ValidProperty valid_secrets[] = {
 
 #define _LOG(log_always, level, ...) \
 	G_STMT_START { \
-		if ((log_always) || _LOGd_enabled ()) { \
+		if ((log_always) || _LOGD_enabled ()) { \
 			g_log (G_LOG_DOMAIN, level, __VA_ARGS__); \
 		} \
 	} G_STMT_END
 
 static gboolean
-_LOGd_enabled (void)
+_LOGD_enabled (void)
 {
 	return gl.debug;
 }
 
-#define _LOGd(...) _LOG(FALSE, G_LOG_LEVEL_INFO, __VA_ARGS__)
+#define _LOGD(...) _LOG(FALSE, G_LOG_LEVEL_INFO, __VA_ARGS__)
 #define _LOGI(...) _LOG(TRUE,  G_LOG_LEVEL_MESSAGE, __VA_ARGS__)
 #define _LOGW(...) _LOG(TRUE,  G_LOG_LEVEL_WARNING, __VA_ARGS__)
 
@@ -658,7 +658,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 		return TRUE;
 	}
 
-	_LOGd ("VPN request '%s'", str);
+	_LOGD ("VPN request '%s'", str);
 
 	auth = get_detail (str, ">PASSWORD:Need '");
 	if (auth) {
@@ -672,7 +672,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 				if (priv->interactive) {
 					gs_free char *joined = NULL;
 
-					_LOGd ("Requesting new secrets: '%s', %s%s%s", message,
+					_LOGD ("Requesting new secrets: '%s', %s%s%s", message,
 					        NM_PRINT_FMT_QUOTED (hints, "(", (joined = g_strjoinv (",", (char **) hints)), ")", "no hints"));
 
 					nm_vpn_service_plugin_secrets_required ((NMVpnServicePlugin *) plugin, message, (const char **) hints);
@@ -1621,7 +1621,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	{
 		gs_free char *cmd = NULL;
 
-		_LOGd ("EXEC: '%s'", (cmd = g_strjoinv (" ", (char **) args->pdata)));
+		_LOGD ("EXEC: '%s'", (cmd = g_strjoinv (" ", (char **) args->pdata)));
 	}
 
 	if (!g_spawn_async (NULL, (char **) args->pdata, NULL,
@@ -1815,8 +1815,8 @@ real_need_secrets (NMVpnServicePlugin *plugin,
 	g_return_val_if_fail (NM_IS_VPN_SERVICE_PLUGIN (plugin), FALSE);
 	g_return_val_if_fail (NM_IS_CONNECTION (connection), FALSE);
 
-	if (_LOGd_enabled ()) {
-		_LOGd ("connection -------------------------------------");
+	if (_LOGD_enabled ()) {
+		_LOGD ("connection -------------------------------------");
 		nm_connection_dump (connection);
 	}
 
@@ -1863,7 +1863,7 @@ real_new_secrets (NMVpnServicePlugin *plugin,
 		return FALSE;
 	}
 
-	_LOGd ("VPN received new secrets; sending to management interface");
+	_LOGD ("VPN received new secrets; sending to management interface");
 
 	update_io_data_from_vpn_setting (priv->io_data, s_vpn, NULL);
 
@@ -1878,7 +1878,7 @@ real_new_secrets (NMVpnServicePlugin *plugin,
 
 	/* Request new secrets if we need any */
 	if (message) {
-		_LOGd ("Requesting new secrets: '%s'", message);
+		_LOGD ("Requesting new secrets: '%s'", message);
 		nm_vpn_service_plugin_secrets_required (plugin, message, (const char **) hints);
 	}
 	if (hints)
@@ -2030,7 +2030,7 @@ main (int argc, char *argv[])
 	}
 	g_option_context_free (opt_ctx);
 
-	_LOGd ("nm-openvpn-service (version " DIST_VERSION ") starting...");
+	_LOGD ("nm-openvpn-service (version " DIST_VERSION ") starting...");
 
 	if (   !g_file_test ("/sys/class/misc/tun", G_FILE_TEST_EXISTS)
 	    && (system ("/sbin/modprobe tun") == -1))
