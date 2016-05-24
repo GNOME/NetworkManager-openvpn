@@ -38,26 +38,56 @@
 #include <arpa/inet.h>
 #include <ctype.h>
 #include <netdb.h>
+#include <syslog.h>
 
-#include "nm-openvpn-service.h"
+#include "utils.h"
+#include "nm-utils/nm-shared-utils.h"
 
 extern char **environ;
 
-static gboolean helper_debug = FALSE;
+static struct {
+	int log_level;
+	const char *log_prefix_token;
+} gl;
+
+/*****************************************************************************/
+
+#define _NMLOG(level, ...) \
+	G_STMT_START { \
+		if (gl.log_level >= (level)) { \
+			g_print ("nm-openvpn[%s]: %-7s [helper-%ld] " _NM_UTILS_MACRO_FIRST (__VA_ARGS__) "\n", \
+			         gl.log_prefix_token ?: "???", \
+			         nm_utils_syslog_to_str (level), \
+			         (long) getpid () \
+			         _NM_UTILS_MACRO_REST (__VA_ARGS__)); \
+		} \
+	} G_STMT_END
+
+static inline gboolean
+_LOGD_enabled (void)
+{
+	return gl.log_level >= LOG_INFO;
+}
+
+#define _LOGD(...) _NMLOG(LOG_INFO,    __VA_ARGS__)
+#define _LOGI(...) _NMLOG(LOG_NOTICE,  __VA_ARGS__)
+#define _LOGW(...) _NMLOG(LOG_WARNING, __VA_ARGS__)
+
+/*****************************************************************************/
 
 static void
 helper_failed (GDBusProxy *proxy, const char *reason)
 {
 	GError *err = NULL;
 
-	g_warning ("nm-openvpn-service-openvpn-helper did not receive a valid %s from openvpn", reason);
+	_LOGW ("nm-openvpn-service-openvpn-helper did not receive a valid %s from openvpn", reason);
 
 	if (!g_dbus_proxy_call_sync (proxy, "SetFailure",
 	                             g_variant_new ("(s)", reason),
 	                             G_DBUS_CALL_FLAGS_NONE, -1,
 	                             NULL,
 	                             &err)) {
-		g_warning ("Could not send failure information: %s", err->message);
+		_LOGW ("Could not send failure information: %s", err->message);
 		g_error_free (err);
 	}
 
@@ -75,7 +105,7 @@ send_config (GDBusProxy *proxy, GVariant *config,
 	                             G_DBUS_CALL_FLAGS_NONE, -1,
 	                             NULL,
 	                             &err)) {
-		g_warning ("Could not send configuration information: %s", err->message);
+		_LOGW ("Could not send configuration information: %s", err->message);
 		g_error_free (err);
 		err = NULL;
 	}
@@ -86,7 +116,7 @@ send_config (GDBusProxy *proxy, GVariant *config,
 	                                     G_DBUS_CALL_FLAGS_NONE, -1,
 	                                     NULL,
 		                             &err)) {
-			g_warning ("Could not send IPv4 configuration information: %s", err->message);
+			_LOGW ("Could not send IPv4 configuration information: %s", err->message);
 			g_error_free (err);
 			err = NULL;
 		}
@@ -98,7 +128,7 @@ send_config (GDBusProxy *proxy, GVariant *config,
 	                                     G_DBUS_CALL_FLAGS_NONE, -1,
 	                                     NULL,
 		                             &err)) {
-			g_warning ("Could not send IPv6 configuration information: %s", err->message);
+			_LOGW ("Could not send IPv6 configuration information: %s", err->message);
 			g_error_free (err);
 			err = NULL;
 		}
@@ -213,14 +243,14 @@ get_ip4_routes (void)
 			break;
 
 		if (inet_pton (AF_INET, tmp, &network) <= 0) {
-			g_warning ("Ignoring invalid static route address '%s'", tmp ? tmp : "NULL");
+			_LOGW ("Ignoring invalid static route address '%s'", tmp ? tmp : "NULL");
 			continue;
 		}
 
 		snprintf (buf, BUFLEN, "route_netmask_%d", i);
 		tmp = getenv (buf);
 		if (!tmp || inet_pton (AF_INET, tmp, &netmask) <= 0) {
-			g_warning ("Ignoring invalid static route netmask '%s'", tmp ? tmp : "NULL");
+			_LOGW ("Ignoring invalid static route netmask '%s'", tmp ? tmp : "NULL");
 			continue;
 		}
 
@@ -228,7 +258,7 @@ get_ip4_routes (void)
 		tmp = getenv (buf);
 		/* gateway can be missing */
 		if (tmp && (inet_pton (AF_INET, tmp, &gateway) <= 0)) {
-			g_warning ("Ignoring invalid static route gateway '%s'", tmp ? tmp : "NULL");
+			_LOGW ("Ignoring invalid static route gateway '%s'", tmp ? tmp : "NULL");
 			continue;
 		}
 
@@ -241,7 +271,7 @@ get_ip4_routes (void)
 			errno = 0;
 			tmp_metric = strtol (tmp, NULL, 10);
 			if (errno || tmp_metric < 0 || tmp_metric > G_MAXUINT32) {
-				g_warning ("Ignoring invalid static route metric '%s'", tmp);
+				_LOGW ("Ignoring invalid static route metric '%s'", tmp);
 				continue;
 			}
 			metric = (guint32) tmp_metric;
@@ -297,13 +327,13 @@ get_ip6_routes (void)
 			errno = 0;
 			tmp_prefix = strtol (tmp, NULL, 10);
 			if (errno || tmp_prefix <= 0 || tmp_prefix > 128) {
-				g_warning ("Ignoring invalid static route prefix '%s'", tmp ? tmp : "NULL");
+				_LOGW ("Ignoring invalid static route prefix '%s'", tmp ? tmp : "NULL");
 				g_strfreev (dest_prefix);
 				continue;
 			}
 			prefix = (guint32) tmp_prefix;
 		} else {
-			g_warning ("Ignoring static route %d with no prefix length", i);
+			_LOGW ("Ignoring static route %d with no prefix length", i);
 			g_strfreev (dest_prefix);
 			continue;
 		}
@@ -314,7 +344,7 @@ get_ip6_routes (void)
 		route = nm_ip_route_new (AF_INET6, dest_prefix[0], prefix, tmp, -1, &error);
 		g_strfreev (dest_prefix);
 		if (!route) {
-			g_warning ("Ignoring a route: %s", error->message);
+			_LOGW ("Ignoring a route: %s", error->message);
 			g_error_free (error);
 			continue;
 		}
@@ -340,8 +370,8 @@ trusted_remote_to_gvariant (void)
 	if (tmp) {
 		val = addr6_to_gvariant (tmp);
 		if (val == NULL) {
-			g_warning ("%s: failed to convert VPN gateway address '%s' (%d)",
-			           __func__, tmp, errno);
+			_LOGW ("failed to convert VPN gateway address '%s' (%d)",
+			       tmp, errno);
 			return NULL;
 		}
 		return val;
@@ -351,7 +381,7 @@ trusted_remote_to_gvariant (void)
 	if (!tmp)
 		tmp = getenv ("remote_1");
 	if (!tmp) {
-		g_warning ("%s: did not receive remote gateway address", __func__);
+		_LOGW ("did not receive remote gateway address");
 		return NULL;
 	}
 
@@ -379,8 +409,8 @@ trusted_remote_to_gvariant (void)
 		hints.ai_flags = AI_ADDRCONFIG;
 		err = getaddrinfo (tmp, NULL, &hints, &result);
 		if (err != 0) {
-			g_warning ("%s: failed to look up VPN gateway address '%s' (%d)",
-			           __func__, tmp, err);
+			_LOGW ("failed to look up VPN gateway address '%s' (%d)",
+			       tmp, err);
 			return NULL;
 		}
 
@@ -402,15 +432,15 @@ trusted_remote_to_gvariant (void)
 		if (addr.s_addr != 0)
 			return g_variant_new_uint32 (addr.s_addr);
 		else {
-			g_warning ("%s: failed to convert or look up VPN gateway address '%s'",
-			           __func__, tmp);
+			_LOGW ("failed to convert or look up VPN gateway address '%s'",
+			       tmp);
 			return NULL;
 		}
 	} else {
 		val = addr4_to_gvariant (tmp);
 		if (val == NULL) {
-			g_warning ("%s: failed to convert VPN gateway address '%s' (%d)",
-			           __func__, tmp, errno);
+			_LOGW ("failed to convert VPN gateway address '%s' (%d)",
+			       tmp, errno);
 			return NULL;
 		}
 	}
@@ -449,19 +479,24 @@ main (int argc, char *argv[])
 			i++;
 			break;
 		}
-		if (!strcmp (argv[i], "--helper-debug"))
-			helper_debug = TRUE;
-		else if (!strcmp (argv[i], "--tun"))
+		if (nm_streq (argv[i], "--debug")) {
+			if (i + 2 >= argc) {
+				g_printerr ("Missing debug arguments (requires <LEVEL> <PREFIX_TOKEN>)\n");
+				exit (1);
+			}
+			gl.log_level = _nm_utils_ascii_str_to_int64 (argv[++i], 10, 0, LOG_DEBUG, 0);
+			gl.log_prefix_token = argv[++i];
+		} else if (!strcmp (argv[i], "--tun"))
 			tapdev = 0;
 		else if (!strcmp (argv[i], "--tap"))
 			tapdev = 1;
 		else if (!strcmp (argv[i], "--bus-name")) {
 			if (++i == argc) {
-				g_warning ("Missing bus name argument");
+				g_printerr ("Missing bus name argument\n");
 				exit (1);
 			}
 			if (!g_dbus_is_name (argv[i])) {
-				g_warning ("Invalid bus name");
+				g_printerr ("Invalid bus name\n");
 				exit (1);
 			}
 			bus_name = argv[i];
@@ -470,7 +505,7 @@ main (int argc, char *argv[])
 	}
 	shift = i - 1;
 
-	if (helper_debug) {
+	if (_LOGD_enabled ()) {
 		GString *args;
 
 		args = g_string_new (NULL);
@@ -484,13 +519,12 @@ main (int argc, char *argv[])
 			g_free (tmp);
 		}
 
-		g_message ("command line: %s", args->str);
+		_LOGD ("command line: %s", args->str);
 		g_string_free (args, TRUE);
-		g_message ("openvpn script environment ---------------------------");
+
 		iter = environ;
 		while (iter && *iter)
-			g_message ("%s", *iter++);
-		g_message ("------------------------------------------------------");
+			_LOGD ("environment: %s", *iter++);
 	}
 
 	/* shift the arguments to the right leaving only those provided by openvpn */
@@ -508,7 +542,7 @@ main (int argc, char *argv[])
 	                                       NM_VPN_DBUS_PLUGIN_INTERFACE,
 	                                       NULL, &err);
 	if (!proxy) {
-		g_warning ("Could not create a D-Bus proxy: %s", err->message);
+		_LOGW ("Could not create a D-Bus proxy: %s", err->message);
 		g_error_free (err);
 		exit (1);
 	}
@@ -599,7 +633,7 @@ main (int argc, char *argv[])
 			g_variant_builder_add (&ip4builder, "{sv}", NM_VPN_PLUGIN_IP4_CONFIG_PREFIX, val);
 		}
 	} else
-		g_warning ("No IP4 netmask/prefix (missing or invalid 'ifconfig_netmask')");
+		_LOGW ("No IP4 netmask/prefix (missing or invalid 'ifconfig_netmask')");
 
 	val = get_ip4_routes ();
 	if (val)
@@ -633,7 +667,7 @@ main (int argc, char *argv[])
 		errno = 0;
 		netbits = strtol (tmp, NULL, 10);
 		if (errno || netbits < 0 || netbits > 128) {
-			g_warning ("Ignoring invalid prefix '%s'", tmp);
+			_LOGW ("Ignoring invalid prefix '%s'", tmp);
 		} else {
 			val = g_variant_new_uint32 ((guint32) netbits);
 			g_variant_builder_add (&ip6builder, "{sv}", NM_VPN_PLUGIN_IP6_CONFIG_PREFIX, val);
@@ -699,7 +733,7 @@ main (int argc, char *argv[])
 		errno = 0;
 		mtu = strtol (tmp, NULL, 10);
 		if (errno || mtu < 0 || mtu > 20000) {
-			g_warning ("Ignoring invalid tunnel MTU '%s'", tmp);
+			_LOGW ("Ignoring invalid tunnel MTU '%s'", tmp);
 		} else {
 			val = g_variant_new_uint32 ((guint32) mtu);
 			g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CONFIG_MTU, val);

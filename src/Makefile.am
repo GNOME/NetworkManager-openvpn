@@ -12,7 +12,11 @@ AM_CPPFLAGS = \
 	-DNM_OPENVPN_LOCALEDIR=\"$(datadir)/locale\" \
 	-DG_LOG_DOMAIN=\"nm-openvpn\"
 
-libexec_PROGRAMS = nm-openvpn-service nm-openvpn-service-openvpn-helper
+libexec_PROGRAMS = \
+	nm-openvpn-service \
+	nm-openvpn-service-openvpn-helper
+
+###############################################################################
 
 nm_openvpn_service_SOURCES = \
 	nm-openvpn-service.c \
@@ -23,10 +27,16 @@ nm_openvpn_service_LDADD = \
 	$(LIBNM_LIBS) \
 	$(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
 
+###############################################################################
+
 nm_openvpn_service_openvpn_helper_SOURCES = \
-	nm-openvpn-service-openvpn-helper.c
+	nm-openvpn-service-openvpn-helper.c \
+	$(top_srcdir)/shared/nm-service-defines.h
 
 nm_openvpn_service_openvpn_helper_LDADD = \
-	$(LIBNM_LIBS)
+	$(LIBNM_LIBS) \
+	$(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
+
+###############################################################################
 
 CLEANFILES = *~

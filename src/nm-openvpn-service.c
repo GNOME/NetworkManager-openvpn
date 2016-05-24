@@ -44,9 +44,10 @@
 #include <locale.h>
 #include <pwd.h>
 #include <grp.h>
-#include "glib-unix.h"
+#include <glib-unix.h>
 
 #include "utils.h"
+#include "nm-utils/nm-shared-utils.h"
 
 #if !defined(DIST_VERSION)
 # define DIST_VERSION VERSION
@@ -54,6 +55,9 @@
 
 static struct {
 	gboolean debug;
+	int log_level;
+	int log_level_ovpn;
+	bool log_syslog;
 	GSList *pids_pending_list;
 } gl/*obal*/;
 
@@ -157,23 +161,25 @@ static ValidProperty valid_secrets[] = {
 
 /*****************************************************************************/
 
-#define _LOG(log_always, level, ...) \
+#define _NMLOG(level, ...) \
 	G_STMT_START { \
-		if ((log_always) || _LOG_d_enabled ()) { \
-			g_log (G_LOG_DOMAIN, level, __VA_ARGS__); \
+		if (gl.log_level >= (level)) { \
+			g_print ("nm-openvpn[%ld] %-7s " _NM_UTILS_MACRO_FIRST (__VA_ARGS__) "\n", \
+			         (long) getpid (), \
+			         nm_utils_syslog_to_str (level) \
+			         _NM_UTILS_MACRO_REST (__VA_ARGS__)); \
 		} \
 	} G_STMT_END
 
 static gboolean
-_LOG_d_enabled (void)
+_LOGD_enabled (void)
 {
-	return gl.debug;
+	return gl.log_level >= LOG_INFO;
 }
 
-#define _LOG_d(...) _LOG(FALSE, G_LOG_LEVEL_INFO, __VA_ARGS__)
-#define _LOG_D(...) _LOG(TRUE,  G_LOG_LEVEL_INFO, __VA_ARGS__)
-#define _LOG_I(...) _LOG(TRUE,  G_LOG_LEVEL_MESSAGE, __VA_ARGS__)
-#define _LOG_W(...) _LOG(TRUE,  G_LOG_LEVEL_WARNING, __VA_ARGS__)
+#define _LOGD(...) _NMLOG(LOG_INFO,    __VA_ARGS__)
+#define _LOGI(...) _NMLOG(LOG_NOTICE,  __VA_ARGS__)
+#define _LOGW(...) _NMLOG(LOG_WARNING, __VA_ARGS__)
 
 /*****************************************************************************/
 
@@ -212,16 +218,16 @@ pids_pending_child_watch_cb (GPid pid, gint status, gpointer user_data)
 
 		exit_status = WEXITSTATUS (status);
 		if (exit_status != 0)
-			_LOG_W ("openvpn[%ld] exited with error code %d", (long) pid, exit_status);
+			_LOGW ("openvpn[%ld] exited with error code %d", (long) pid, exit_status);
 		else
-			_LOG_I ("openvpn[%ld] exited with success", (long) pid);
+			_LOGI ("openvpn[%ld] exited with success", (long) pid);
 	}
 	else if (WIFSTOPPED (status))
-		_LOG_W ("openvpn[%ld] stopped unexpectedly with signal %d", (long) pid, WSTOPSIG (status));
+		_LOGW ("openvpn[%ld] stopped unexpectedly with signal %d", (long) pid, WSTOPSIG (status));
 	else if (WIFSIGNALED (status))
-		_LOG_W ("openvpn[%ld] died with signal %d", (long) pid, WTERMSIG (status));
+		_LOGW ("openvpn[%ld] died with signal %d", (long) pid, WTERMSIG (status));
 	else
-		_LOG_W ("openvpn[%ld] died from an unnatural cause", (long) pid);
+		_LOGW ("openvpn[%ld] died from an unnatural cause", (long) pid);
 
 	g_return_if_fail (pid_data);
 	g_return_if_fail (pid_data->pid == pid);
@@ -245,7 +251,7 @@ pids_pending_add (GPid pid, NMOpenvpnPlugin *plugin)
 	g_return_if_fail (NM_IS_OPENVPN_PLUGIN (plugin));
 	g_return_if_fail (pid > 0);
 
-	_LOG_I ("openvpn[%ld] started", (long) pid);
+	_LOGI ("openvpn[%ld] started", (long) pid);
 
 	pid_data = g_slice_new (PidsPendingData);
 	pid_data->pid = pid;
@@ -264,7 +270,7 @@ pids_pending_ensure_killed (gpointer user_data)
 
 	g_return_val_if_fail (pid_data && pid_data == pids_pending_get (pid_data->pid), FALSE);
 
-	_LOG_I ("openvpn[%ld]: send SIGKILL", (long) pid_data->pid);
+	_LOGI ("openvpn[%ld]: send SIGKILL", (long) pid_data->pid);
 
 	pid_data->kill_id = 0;
 	kill (pid_data->pid, SIGKILL);
@@ -279,7 +285,7 @@ pids_pending_send_sigterm (GPid pid)
 	pid_data = pids_pending_get (pid);
 	g_return_if_fail (pid_data);
 
-	_LOG_I ("openvpn[%ld]: send SIGTERM", (long) pid);
+	_LOGI ("openvpn[%ld]: send SIGTERM", (long) pid);
 
 	kill (pid, SIGTERM);
 	pid_data->kill_id = g_timeout_add (2000, pids_pending_ensure_killed, pid_data);
@@ -289,7 +295,7 @@ static void
 pids_pending_wait_for_processes (GMainLoop *main_loop)
 {
 	if (gl.pids_pending_list) {
-		_LOG_I ("wait for %u openvpn processes to terminate...", g_slist_length (gl.pids_pending_list));
+		_LOGI ("wait for %u openvpn processes to terminate...", g_slist_length (gl.pids_pending_list));
 
 		do {
 			g_main_context_iteration (g_main_loop_get_context (main_loop), TRUE);
@@ -659,7 +665,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 		return TRUE;
 	}
 
-	_LOG_d ("VPN request '%s'", str);
+	_LOGD ("VPN request '%s'", str);
 
 	auth = get_detail (str, ">PASSWORD:Need '");
 	if (auth) {
@@ -673,13 +679,13 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 				if (priv->interactive) {
 					gs_free char *joined = NULL;
 
-					_LOG_d ("Requesting new secrets: '%s', %s%s%s", message,
+					_LOGD ("Requesting new secrets: '%s', %s%s%s", message,
 					        NM_PRINT_FMT_QUOTED (hints, "(", (joined = g_strjoinv (",", (char **) hints)), ")", "no hints"));
 
 					nm_vpn_service_plugin_secrets_required ((NMVpnServicePlugin *) plugin, message, (const char **) hints);
 				} else {
 					/* Interactive not allowed, can't ask for more secrets */
-					_LOG_W ("More secrets required but cannot ask interactively");
+					_LOGW ("More secrets required but cannot ask interactively");
 					*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
 					again = FALSE;
 				}
@@ -687,7 +693,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 			if (hints)
 				g_free (hints);  /* elements are 'const' */
 		} else {
-			_LOG_W ("Unhandled management socket request '%s'", auth);
+			_LOGW ("Unhandled management socket request '%s'", auth);
 			*out_failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
 			again = FALSE;
 		}
@@ -699,7 +705,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 		gboolean fail = TRUE;
 
 		if (!strcmp (auth, "Auth")) {
-			_LOG_W ("Password verification failed");
+			_LOGW ("Password verification failed");
 			if (priv->interactive) {
 				/* Clear existing password in interactive mode, openvpn
 				 * will request a new one after restarting.
@@ -710,9 +716,9 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 				fail = FALSE;
 			}
 		} else if (!strcmp (auth, "Private Key"))
-			_LOG_W ("Private key verification failed");
+			_LOGW ("Private key verification failed");
 		else
-			_LOG_W ("Unknown verification failed: %s", auth);
+			_LOGW ("Unknown verification failed: %s", auth);
 
 		if (fail) {
 			*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
@@ -755,7 +761,7 @@ nm_openvpn_connect_timer_cb (gpointer data)
 	/* open socket and start listener */
 	fd = socket (AF_UNIX, SOCK_STREAM, 0);
 	if (fd < 0) {
-		_LOG_W ("Could not create management socket");
+		_LOGW ("Could not create management socket");
 		nm_vpn_service_plugin_failure (NM_VPN_SERVICE_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
 		goto out;
 	}
@@ -769,7 +775,7 @@ nm_openvpn_connect_timer_cb (gpointer data)
 
 		priv->connect_timer = 0;
 
-		_LOG_W ("Could not open management socket");
+		_LOGW ("Could not open management socket");
 		nm_vpn_service_plugin_failure (NM_VPN_SERVICE_PLUGIN (plugin), NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED);
 	} else {
 		io_data->socket_channel = g_io_channel_unix_new (fd);
@@ -1418,11 +1424,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg (args, "0");
 	}
 
-	if (gl.debug) {
+	if (gl.log_level_ovpn >= 0) {
+		char buf[20];
+
 		add_openvpn_arg (args, "--verb");
-		add_openvpn_arg (args, "10");
-	} else {
-		/* Syslog */
+		add_openvpn_arg (args, nm_sprintf_buf (buf, "%d", gl.log_level_ovpn));
+	}
+
+	if (gl.log_syslog) {
 		add_openvpn_arg (args, "--syslog");
 		add_openvpn_arg (args, "nm-openvpn");
 	}
@@ -1473,8 +1482,11 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Up script, called when connection has been established or has been restarted */
 	add_openvpn_arg (args, "--up");
 	g_object_get (plugin, NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME, &bus_name, NULL);
-	stmp = g_strdup_printf ("%s%s --bus-name %s %s --", NM_OPENVPN_HELPER_PATH, gl.debug ? " --helper-debug" : "",
-	                        bus_name, dev_type_is_tap ? "--tap" : "--tun");
+	stmp = g_strdup_printf ("%s --debug %d %ld --bus-name %s %s --",
+	                        NM_OPENVPN_HELPER_PATH,
+	                        gl.log_level, (long) getpid(),
+	                        bus_name,
+	                        dev_type_is_tap ? "--tap" : "--tun");
 	add_openvpn_arg (args, stmp);
 	g_free (stmp);
 	add_openvpn_arg (args, "--up-restart");
@@ -1613,7 +1625,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			add_openvpn_arg (args, "--chroot");
 			add_openvpn_arg (args, nm_openvpn_chroot);
 		} else
-			_LOG_W ("Directory '%s' not usable for chroot by '%s', openvpn will not be chrooted.",
+			_LOGW ("Directory '%s' not usable for chroot by '%s', openvpn will not be chrooted.",
 			        nm_openvpn_chroot, nm_openvpn_user);
 	}
 
@@ -1622,7 +1634,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	{
 		gs_free char *cmd = NULL;
 
-		_LOG_d ("EXEC: '%s'", (cmd = g_strjoinv (" ", (char **) args->pdata)));
+		_LOGD ("EXEC: '%s'", (cmd = g_strjoinv (" ", (char **) args->pdata)));
 	}
 
 	if (!g_spawn_async (NULL, (char **) args->pdata, NULL,
@@ -1740,7 +1752,7 @@ _connect_common (NMVpnServicePlugin   *plugin,
 	const char *user_name;
 
 	if (!real_disconnect (plugin, error)) {
-		_LOG_W ("Could not clean up previous daemon run: %s", (*error)->message);
+		_LOGW ("Could not clean up previous daemon run: %s", (*error)->message);
 		g_clear_error (error);
 	}
 
@@ -1816,8 +1828,8 @@ real_need_secrets (NMVpnServicePlugin *plugin,
 	g_return_val_if_fail (NM_IS_VPN_SERVICE_PLUGIN (plugin), FALSE);
 	g_return_val_if_fail (NM_IS_CONNECTION (connection), FALSE);
 
-	if (_LOG_d_enabled ()) {
-		_LOG_d ("connection -------------------------------------");
+	if (_LOGD_enabled ()) {
+		_LOGD ("connection -------------------------------------");
 		nm_connection_dump (connection);
 	}
 
@@ -1864,7 +1876,7 @@ real_new_secrets (NMVpnServicePlugin *plugin,
 		return FALSE;
 	}
 
-	_LOG_d ("VPN received new secrets; sending to management interface");
+	_LOGD ("VPN received new secrets; sending to management interface");
 
 	update_io_data_from_vpn_setting (priv->io_data, s_vpn, NULL);
 
@@ -1879,7 +1891,7 @@ real_new_secrets (NMVpnServicePlugin *plugin,
 
 	/* Request new secrets if we need any */
 	if (message) {
-		_LOG_d ("Requesting new secrets: '%s'", message);
+		_LOGD ("Requesting new secrets: '%s'", message);
 		nm_vpn_service_plugin_secrets_required (plugin, message, (const char **) hints);
 	}
 	if (hints)
@@ -1961,7 +1973,7 @@ nm_openvpn_plugin_new (const char *bus_name)
 	if (plugin) {
 		g_signal_connect (G_OBJECT (plugin), "state-changed", G_CALLBACK (plugin_state_changed), NULL);
 	} else {
-		_LOG_W ("Failed to initialize a plugin instance: %s", error->message);
+		_LOGW ("Failed to initialize a plugin instance: %s", error->message);
 		g_error_free (error);
 	}
 
@@ -2024,14 +2036,39 @@ main (int argc, char *argv[])
 	                                "OpenVPN capability to NetworkManager."));
 
 	if (!g_option_context_parse (opt_ctx, &argc, &argv, &error)) {
-		_LOG_W ("Error parsing the command line options: %s", error->message);
+		_LOGW ("Error parsing the command line options: %s", error->message);
 		g_option_context_free (opt_ctx);
 		g_clear_error (&error);
 		exit (1);
 	}
 	g_option_context_free (opt_ctx);
 
-	_LOG_d ("nm-openvpn-service (version " DIST_VERSION ") starting...");
+	gl.log_level = _nm_utils_ascii_str_to_int64 (getenv ("NM_VPN_LOG_LEVEL"),
+	                                             10, 0, LOG_DEBUG, -1);
+	if (gl.log_level >= 0) {
+		if (gl.log_level >= LOG_DEBUG)
+			gl.log_level_ovpn = 10;
+		else if (gl.log_level >= LOG_INFO)
+			gl.log_level_ovpn = 5;
+		else if (gl.log_level > 0)
+			gl.log_level_ovpn = 2;
+		else
+			gl.log_level_ovpn = 1;
+	} else if (gl.debug)
+		gl.log_level_ovpn = 10;
+	else {
+		/* the default level is already "--verb 1", which is fine for us. */
+		gl.log_level_ovpn = -1;
+	}
+
+	if (gl.log_level < 0)
+		gl.log_level = gl.debug ? LOG_DEBUG : LOG_NOTICE;
+
+	gl.log_syslog = _nm_utils_ascii_str_to_int64 (getenv ("NM_VPN_LOG_SYSLOG"),
+	                                              10, 0, 1,
+	                                              gl.debug ? 0 : 1);
+
+	_LOGD ("nm-openvpn-service (version " DIST_VERSION ") starting...");
 
 	if (   !g_file_test ("/sys/class/misc/tun", G_FILE_TEST_EXISTS)
 	    && (system ("/sbin/modprobe tun") == -1))
