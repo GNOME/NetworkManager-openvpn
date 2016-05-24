@@ -2062,7 +2062,7 @@ main (int argc, char *argv[])
 	}
 
 	if (gl.log_level < 0)
-		gl.log_level = gl.debug ? LOG_DEBUG : LOG_NOTICE;
+		gl.log_level = gl.debug ? LOG_INFO : LOG_NOTICE;
 
 	gl.log_syslog = _nm_utils_ascii_str_to_int64 (getenv ("NM_VPN_LOG_SYSLOG"),
 	                                              10, 0, 1,
