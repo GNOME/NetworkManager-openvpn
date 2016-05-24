@@ -2036,7 +2036,7 @@ main (int argc, char *argv[])
 	                                "OpenVPN capability to NetworkManager."));
 
 	if (!g_option_context_parse (opt_ctx, &argc, &argv, &error)) {
-		_LOGW ("Error parsing the command line options: %s", error->message);
+		g_printerr ("Error parsing the command line options: %s\n", error->message);
 		g_option_context_free (opt_ctx);
 		g_clear_error (&error);
 		exit (1);
