@@ -56,6 +56,7 @@
 static struct {
 	gboolean debug;
 	int log_level;
+	int log_level_ovpn;
 	bool log_syslog;
 	GSList *pids_pending_list;
 } gl/*obal*/;
@@ -160,9 +161,9 @@ static ValidProperty valid_secrets[] = {
 
 /*****************************************************************************/
 
-#define _NMLOG(level, log_always, ...) \
+#define _NMLOG(level, ...) \
 	G_STMT_START { \
-		if ((log_always) || gl.log_level >= (level)) { \
+		if (gl.log_level >= (level)) { \
 			g_print ("nm-openvpn[%ld] %-7s " _NM_UTILS_MACRO_FIRST (__VA_ARGS__) "\n", \
 			         (long) getpid (), \
 			         nm_utils_syslog_to_str (level) \
@@ -176,9 +177,9 @@ _LOGD_enabled (void)
 	return gl.log_level >= LOG_INFO;
 }
 
-#define _LOGD(...) _NMLOG(LOG_INFO,    FALSE, __VA_ARGS__)
-#define _LOGI(...) _NMLOG(LOG_NOTICE,  TRUE,  __VA_ARGS__)
-#define _LOGW(...) _NMLOG(LOG_WARNING, TRUE,  __VA_ARGS__)
+#define _LOGD(...) _NMLOG(LOG_INFO,    __VA_ARGS__)
+#define _LOGI(...) _NMLOG(LOG_NOTICE,  __VA_ARGS__)
+#define _LOGW(...) _NMLOG(LOG_WARNING, __VA_ARGS__)
 
 /*****************************************************************************/
 
@@ -1423,16 +1424,11 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg (args, "0");
 	}
 
-	if (gl.log_level > 0) {
+	if (gl.log_level_ovpn >= 0) {
+		char buf[20];
+
 		add_openvpn_arg (args, "--verb");
-		if (gl.log_level >= LOG_DEBUG)
-			add_openvpn_arg (args, "10");
-		else if (gl.log_level >= LOG_INFO)
-			add_openvpn_arg (args, "5");
-		else
-			add_openvpn_arg (args, "2");
-	} else {
-		/* the default level is already "--verb 1", which is fine for us. */
+		add_openvpn_arg (args, nm_sprintf_buf (buf, "%d", gl.log_level_ovpn));
 	}
 
 	if (gl.log_syslog) {
@@ -2048,8 +2044,25 @@ main (int argc, char *argv[])
 	g_option_context_free (opt_ctx);
 
 	gl.log_level = _nm_utils_ascii_str_to_int64 (getenv ("NM_VPN_LOG_LEVEL"),
-	                                             10, 0, LOG_DEBUG,
-	                                             gl.debug ? LOG_DEBUG : 0);
+	                                             10, 0, LOG_DEBUG, -1);
+	if (gl.log_level >= 0) {
+		if (gl.log_level >= LOG_DEBUG)
+			gl.log_level_ovpn = 10;
+		else if (gl.log_level >= LOG_INFO)
+			gl.log_level_ovpn = 5;
+		else if (gl.log_level > 0)
+			gl.log_level_ovpn = 2;
+		else
+			gl.log_level_ovpn = 1;
+	} else if (gl.debug)
+		gl.log_level_ovpn = 10;
+	else {
+		/* the default level is already "--verb 1", which is fine for us. */
+		gl.log_level_ovpn = -1;
+	}
+
+	if (gl.log_level < 0)
+		gl.log_level = gl.debug ? LOG_DEBUG : LOG_NOTICE;
 
 	gl.log_syslog = _nm_utils_ascii_str_to_int64 (getenv ("NM_VPN_LOG_SYSLOG"),
 	                                              10, 0, 1,
