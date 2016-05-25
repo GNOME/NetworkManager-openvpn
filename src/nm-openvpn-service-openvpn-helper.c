@@ -40,8 +40,8 @@
 #include <netdb.h>
 #include <syslog.h>
 
-#include "utils.h"
 #include "nm-utils/nm-shared-utils.h"
+#include "nm-vpn/nm-vpn-plugin-macros.h"
 
 extern char **environ;
 
