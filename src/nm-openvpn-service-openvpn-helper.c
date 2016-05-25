@@ -522,9 +522,8 @@ main (int argc, char *argv[])
 		_LOGD ("command line: %s", args->str);
 		g_string_free (args, TRUE);
 
-		iter = environ;
-		while (iter && *iter)
-			_LOGD ("environment: %s", *iter++);
+		for (iter = environ; iter && *iter; iter++)
+			_LOGD ("environment: %s", *iter);
 	}
 
 	/* shift the arguments to the right leaving only those provided by openvpn */
