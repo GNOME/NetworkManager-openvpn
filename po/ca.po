@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-15 07:36+0100\n"
-"PO-Revision-Date: 2016-03-14 09:52+0100\n"
+"POT-Creation-Date: 2016-05-28 07:05+0200\n"
+"PO-Revision-Date: 2016-04-07 18:55+0200\n"
 "Last-Translator: Walter Garcia-Fontes <walter.garcia@upf.edu>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -23,362 +23,651 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../auth-dialog/main.c:180
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:1
+#, fuzzy
+msgid "OpenVPN client"
+msgstr "OpenVPN"
+
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:2
+msgid "Client for OpenVPN virtual private networks"
+msgstr ""
+
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:3
+msgid "Support for configuring OpenVPN virtual private network connections."
+msgstr ""
+
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:4
+msgid "OpenVPN is a popular and flexible free-software VPN solution."
+msgstr ""
+
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:5
+msgid "The NetworkManager Developers"
+msgstr ""
+
+#: ../auth-dialog/main.c:175
 #, c-format
 msgid "Authenticate VPN %s"
 msgstr "Autentica la VPN %s"
 
-#: ../auth-dialog/main.c:187 ../properties/nm-openvpn-dialog.ui.h:21
+#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-dialog.ui.h:21
 msgid "Password:"
 msgstr "Contrasenya:"
 
-#: ../auth-dialog/main.c:194
+#: ../auth-dialog/main.c:189
 msgid "Certificate password:"
 msgstr "Contrasenya del certificat:"
 
-#: ../auth-dialog/main.c:201
+#: ../auth-dialog/main.c:196
 msgid "HTTP proxy password:"
 msgstr "C_ontrasenya del servidor intermediari HTTP:"
 
-#: ../auth-dialog/main.c:239
+#: ../auth-dialog/main.c:234
 msgid "Authenticate VPN"
 msgstr "Autentica la VPN"
 
-#: ../auth-dialog/main.c:248
+#: ../auth-dialog/main.c:243
 msgid "Certificate pass_word:"
 msgstr "Contrasenya del _certificat:"
 
-#: ../auth-dialog/main.c:254
+#: ../auth-dialog/main.c:249
 msgid "_HTTP proxy password:"
 msgstr "C_ontrasenya del servidor intermediari HTTP:"
 
-#: ../auth-dialog/main.c:518
+#: ../auth-dialog/main.c:513
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network '%s'."
 msgstr "Us heu d'autenticar per poder accedir a la xarxa privada virtual «%s»."
 
-#: ../properties/auth-helpers.c:167
+#: ../properties/auth-helpers.c:164
 msgid "Choose your personal certificate..."
 msgstr "Trieu el vostre certificat personal..."
 
-#: ../properties/auth-helpers.c:185
+#: ../properties/auth-helpers.c:182
 msgid "Choose your private key..."
 msgstr "Trieu la vostra clau privada..."
 
-#: ../properties/auth-helpers.c:301
+#: ../properties/auth-helpers.c:298
 msgid "Choose a Certificate Authority certificate..."
 msgstr "Trieu un certificat d'autoritat de certificació..."
 
-#: ../properties/auth-helpers.c:345
+#: ../properties/auth-helpers.c:342
 msgid "Choose an OpenVPN static key..."
 msgstr "Trieu una clau estàtica OpenVPN..."
 
-#: ../properties/auth-helpers.c:369 ../properties/auth-helpers.c:1110
-#: ../properties/auth-helpers.c:1741
+#: ../properties/auth-helpers.c:366 ../properties/auth-helpers.c:1108
+#: ../properties/auth-helpers.c:1802
 msgid "None"
 msgstr "Cap"
 
-#: ../properties/auth-helpers.c:811
+#: ../properties/auth-helpers.c:808
 msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
 msgstr "Certificats PEM o PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
 
-#: ../properties/auth-helpers.c:812
+#: ../properties/auth-helpers.c:809
 msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
 msgstr "Certificats PEM (*.pem, *.crt, *.key, *.cer)"
 
-#: ../properties/auth-helpers.c:872
+#: ../properties/auth-helpers.c:869
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Claus estàtiques OpenVPN (*.key)"
 
-#: ../properties/auth-helpers.c:1014 ../properties/auth-helpers.c:1102
+#: ../properties/auth-helpers.c:1012 ../properties/auth-helpers.c:1100
 msgid "Default"
 msgstr "Predeterminat"
 
-#: ../properties/auth-helpers.c:1112
+#: ../properties/auth-helpers.c:1110
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/auth-helpers.c:1114
+#: ../properties/auth-helpers.c:1112
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/auth-helpers.c:1116
+#: ../properties/auth-helpers.c:1114
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/auth-helpers.c:1118
+#: ../properties/auth-helpers.c:1116
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/auth-helpers.c:1120
+#: ../properties/auth-helpers.c:1118
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/auth-helpers.c:1122
+#: ../properties/auth-helpers.c:1120
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/auth-helpers.c:1124
+#: ../properties/auth-helpers.c:1122
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/auth-helpers.c:1126
+#: ../properties/auth-helpers.c:1124
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/auth-helpers.c:1177
+#: ../properties/auth-helpers.c:1175 ../properties/auth-helpers.c:1241
 msgid "Server"
 msgstr "Servidor"
 
-#: ../properties/auth-helpers.c:1182
+#: ../properties/auth-helpers.c:1180 ../properties/auth-helpers.c:1246
 msgid "Client"
 msgstr "Client"
 
-#: ../properties/auth-helpers.c:1450 ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/auth-helpers.c:1495 ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
 msgstr "No necessari"
 
-#: ../properties/auth-helpers.c:1452
+#: ../properties/auth-helpers.c:1497
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/auth-helpers.c:1454
+#: ../properties/auth-helpers.c:1499
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/auth-helpers.c:1638
+#: ../properties/auth-helpers.c:1688
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/auth-helpers.c:1640
+#: ../properties/auth-helpers.c:1690
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1647
+#: ../properties/auth-helpers.c:1697
 msgid "(automatic)"
 msgstr "(automàtic)"
 
-#: ../properties/auth-helpers.c:1808
+#: ../properties/auth-helpers.c:1869
 msgid "ping-exit"
 msgstr "ping-surt"
 
-#: ../properties/auth-helpers.c:1810
+#: ../properties/auth-helpers.c:1871
 msgid "ping-restart"
 msgstr "ping-reinicia"
 
-#: ../properties/import-export.c:212
+#: ../properties/import-export.c:185
 #, c-format
-msgid "option %s expects between %u and %u arguments"
-msgstr ""
+msgid "option %s expects between %u and %u argument"
+msgid_plural "option %s expects between %u and %u arguments"
+msgstr[0] "l'opció %s espera un argument entre %u i %u"
+msgstr[1] "l'opció %s espera arguments entre %u i %u"
 
-#: ../properties/import-export.c:214
+#: ../properties/import-export.c:190
 #, c-format
 msgid "option %s expects no arguments"
-msgstr ""
+msgstr "l'opció %s no espera cap argument"
 
-#: ../properties/import-export.c:216
+#: ../properties/import-export.c:192
 #, c-format
 msgid "option %s expects exactly one argument"
-msgstr ""
+msgid_plural "option %s expects exactly %u arguments"
+msgstr[0] "l'opció %s espera exactament un argument"
+msgstr[1] "l'opció %s espera exactament %u arguments"
 
-#: ../properties/import-export.c:218
-#, c-format
-msgid "option %s expects exactly %u arguments"
-msgstr ""
-
-#: ../properties/import-export.c:243
+#: ../properties/import-export.c:221
 #, c-format
 msgid "argument %s of \"%s\" can not be empty"
-msgstr ""
+msgstr "l'argument %s de «%s» no pot estar buida"
 
-#: ../properties/import-export.c:245
+#: ../properties/import-export.c:223
 #, c-format
 msgid "argument of \"%s\" can not be empty"
-msgstr ""
+msgstr "l'argument de «%s» no pot estar buida"
 
-#: ../properties/import-export.c:261
+#: ../properties/import-export.c:239
 #, c-format
 msgid "argument %s of \"%s\" must be UTF-8 encoded"
-msgstr ""
+msgstr "l'argument %s de «%s» ha de ser codificat en UTF-8"
 
-#: ../properties/import-export.c:263
+#: ../properties/import-export.c:241
 #, c-format
 msgid "argument of \"%s\" must be UTF-8 encoded"
-msgstr ""
+msgstr "l'argument de «%s» ha de ser codificat en UTF-8"
 
-#: ../properties/import-export.c:287
+#: ../properties/import-export.c:265
 #, c-format
 msgid "invalid %uth argument to '%s' where number expected"
-msgstr ""
+msgstr "argument %uth no vàlida per a «%s» quan s'esperava un número"
 
-#: ../properties/import-export.c:318
+#. we don't support these special destinations, as they currently cannot be expressed
+#. * in a connection.
+#: ../properties/import-export.c:306
+#, fuzzy, c-format
+msgid "unsupported %uth argument %s to '%s'"
+msgstr "argument %uth no vàlid per a «%s»"
+
+#. we also don't support specifing a FQDN.
+#: ../properties/import-export.c:324
+#, fuzzy, c-format
+msgid ""
+"unsupported %uth argument to '%s' which looks like a FQDN but only IPv4 "
+"address supported"
+msgstr "argument %uth no vàlid per a «%s» on s'esperava una adreça IPv4"
+
+#: ../properties/import-export.c:331
 #, c-format
 msgid "invalid %uth argument to '%s' where IPv4 address expected"
-msgstr ""
+msgstr "argument %uth no vàlid per a «%s» on s'esperava una adreça IPv4"
 
-#: ../properties/import-export.c:346
+#: ../properties/import-export.c:356
 #, c-format
 msgid "invalid %uth key-direction argument to '%s'"
-msgstr ""
+msgstr "argument no vàlid %uth de direcció de la clau per a «%s»"
 
-#: ../properties/import-export.c:360
-#, fuzzy, c-format
+#: ../properties/import-export.c:370
+#, c-format
 msgid "invalid %uth argument to '%s'"
-msgstr "Mida «%s» de fragment no vàlida."
+msgstr "argument %uth no vàlid per a «%s»"
 
-#: ../properties/import-export.c:474
+#: ../properties/import-export.c:486
 #, c-format
 msgid "unterminated %s at position %lld"
-msgstr ""
+msgstr "%s sense terminar a la posició  %lld"
 
-#: ../properties/import-export.c:475
+#: ../properties/import-export.c:487
 msgid "double quote"
-msgstr ""
+msgstr "cometes dobles"
 
-#: ../properties/import-export.c:475
+#: ../properties/import-export.c:487
 msgid "single quote"
-msgstr ""
+msgstr "cometa simple"
 
-#: ../properties/import-export.c:484
+#: ../properties/import-export.c:496
 #, c-format
 msgid "trailing escaping backslash at position %lld"
-msgstr ""
+msgstr "barra inversa d'escapament al final a la posició %lld"
 
-#: ../properties/import-export.c:603
+#: ../properties/import-export.c:617
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr ""
+"no s'ha pogut llegir el fitxer d'autorització de servidor intermediari HTTP"
 
-#: ../properties/import-export.c:621
+#: ../properties/import-export.c:635
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr ""
+"no es pot llegir l'usuari/contrasenya des del fitxer d'autorització del "
+"servidor intermediari HTTP"
 
-#: ../properties/import-export.c:629
+#: ../properties/import-export.c:643
 #, c-format
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr ""
+"l'usuari/contrasenya del fitxer d'autorització del servidor intermediari "
+"HTTP ha d'estar codificat en UTF-8"
 
-#: ../properties/import-export.c:691
+#: ../properties/import-export.c:705
 #, c-format
 msgid "'%s' is not a directory"
-msgstr ""
+msgstr "«%s» no és un directori"
 
-#: ../properties/import-export.c:699
+#: ../properties/import-export.c:713
 #, c-format
 msgid "cannot create '%s' directory"
-msgstr ""
+msgstr "no s'ha pogut crear el directori «%s»"
 
-#: ../properties/import-export.c:719
+#: ../properties/import-export.c:733
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
-msgstr ""
+msgstr "no es pot escriure la bombolla <%s> des de la línia %ld al fitxer (%s)"
 
-#: ../properties/import-export.c:736
+#: ../properties/import-export.c:750
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file '%s'"
-msgstr ""
+msgstr "no es pot escriure la bombolla <%s> des de la línia %ld al fiter «%s»"
 
-#: ../properties/import-export.c:920
+#: ../properties/import-export.c:913 ../properties/import-export.c:1224
+#, c-format
+msgid "invalid option"
+msgstr "opció no vàlida"
+
+#: ../properties/import-export.c:942
 #, c-format
 msgid "unsupported comp-lzo argument"
-msgstr ""
+msgstr "argumento comp-lzo no suportat"
 
-#: ../properties/import-export.c:1008
+#: ../properties/import-export.c:1029
 #, c-format
 msgid "remote cannot contain space"
-msgstr ""
+msgstr "el remot no pot contenir un espai"
 
-#: ../properties/import-export.c:1012
+#: ../properties/import-export.c:1033
 #, c-format
 msgid "remote cannot contain comma"
-msgstr ""
+msgstr "el remot no pot contenir una coma"
 
-#: ../properties/import-export.c:1023
+#: ../properties/import-export.c:1044
 #, c-format
 msgid "remote expects protocol either udp or remote"
-msgstr ""
+msgstr "el remot espera un protocol o bé udp o bé remot"
 
-#: ../properties/import-export.c:1194
-#, fuzzy, c-format
-msgid "invalid option"
-msgstr "Tipus de connexió no vàlida."
-
-#: ../properties/import-export.c:1307
+#: ../properties/import-export.c:1337
 #, c-format
 msgid "unsupported blob/xml element"
-msgstr ""
+msgstr "element bombolla/xml no suportat"
 
-#: ../properties/import-export.c:1336
+#: ../properties/import-export.c:1366
 #, c-format
 msgid "unterminated blob element <%s>"
-msgstr ""
+msgstr "element bombolla no terminat <%s>"
 
-#: ../properties/import-export.c:1386
+#: ../properties/import-export.c:1416
 #, c-format
 msgid "configuration error: %s (line %ld)"
-msgstr ""
+msgstr "error de configuració: %s (línia %ld)"
 
-#: ../properties/import-export.c:1387
+#: ../properties/import-export.c:1417
 msgid "unknown or unsupported option"
-msgstr ""
+msgstr "opció desconeguda o no suportada"
 
-#: ../properties/import-export.c:1397
-#, fuzzy
+#: ../properties/import-export.c:1427
 msgid "The file to import wasn't a valid OpenVPN client configuration"
 msgstr "El fitxer a importar no era una configuració vàlida de client OpenVPN."
 
-#: ../properties/import-export.c:1405
-#, fuzzy
+#: ../properties/import-export.c:1435
 msgid "The file to import wasn't a valid OpenVPN configure (no remote)"
 msgstr ""
 "El fitxer a importar no era una configuració vàlida de client OpenVPN (sense "
 "remot).<"
 
-#: ../properties/import-export.c:1547
-msgid "could not open file for writing"
-msgstr "no s'ha pogut obrir el fitxer per escriure"
+#: ../properties/import-export.c:1667
+msgid "missing path argument"
+msgstr "no s'ha trobat l'argument de camí "
 
-#: ../properties/import-export.c:1558
+#: ../properties/import-export.c:1677
+msgid "connection is not a valid OpenVPN connection"
+msgstr "la connexió no és una connexió vàlida OpenVPN"
+
+#: ../properties/import-export.c:1686
 msgid "connection was incomplete (missing gateway)"
 msgstr "la connexió era incompleta (falta la passarel·la)"
 
-#: ../properties/nm-openvpn.c:44
+#: ../properties/import-export.c:1990
+#, c-format
+msgid "failed to write file: %s"
+msgstr "no s'ha pogut escriure el fitxer: %s"
+
+#: ../properties/nm-openvpn-editor-plugin.c:44
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:45
+#: ../properties/nm-openvpn-editor-plugin.c:45
 msgid "Compatible with the OpenVPN server."
 msgstr "Compatible amb el servidor OpenVPN."
 
-#: ../properties/nm-openvpn.c:329
+#: ../properties/nm-openvpn-editor-plugin.c:81
+msgid "unknown OpenVPN file extension"
+msgstr "extensió desconeguda de fitxer OpenVPN"
+
+#: ../properties/nm-openvpn-editor.c:309
 msgid "Certificates (TLS)"
 msgstr "Certificats (TLS)"
 
-#: ../properties/nm-openvpn.c:340
+#: ../properties/nm-openvpn-editor.c:320
 msgid "Password"
 msgstr "Contrasenya"
 
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn-editor.c:333
 msgid "Password with Certificates (TLS)"
 msgstr "Contrasenya amb certificats (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn-editor.c:345
 msgid "Static Key"
 msgstr "Clau estàtica"
 
-#: ../properties/nm-openvpn.c:513
+#: ../properties/nm-openvpn-editor.c:500
 msgid "could not create openvpn object"
 msgstr "no s'ha pogut crear el objecte openvpn"
 
-#: ../properties/nm-openvpn.c:539
+#: ../properties/nm-openvpn-editor.c:526
 msgid "could not load UI widget"
 msgstr "no s'ha pogut carregar el giny IU"
 
-#: ../properties/nm-openvpn.c:630
-msgid "unknown OpenVPN file extension"
-msgstr "extensió desconeguda de fitxer OpenVPN"
+#: ../shared/nm-utils/nm-shared-utils.c:185
+#, c-format
+msgid "object class '%s' has no property named '%s'"
+msgstr "la classe «%s» d'objecte no té una propietat anomenada «%s»"
+
+#: ../shared/nm-utils/nm-shared-utils.c:192
+#, c-format
+msgid "property '%s' of object class '%s' is not writable"
+msgstr "la propietat «%s» de la classe «%s» d'objectes no es pot escriure"
+
+#: ../shared/nm-utils/nm-shared-utils.c:199
+#, c-format
+msgid ""
+"construct property \"%s\" for object '%s' can't be set after construction"
+msgstr ""
+"la propietat «%s» de construcció per a l'objecte «%s» no es pot establir "
+"després de la construcció"
+
+#: ../shared/nm-utils/nm-shared-utils.c:207
+#, c-format
+msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
+msgstr "«%s::%s» no és un nom vàlid de propietat; «%s» no un subtipus GObject"
+
+#: ../shared/nm-utils/nm-shared-utils.c:216
+#, c-format
+msgid "unable to set property '%s' of type '%s' from value of type '%s'"
+msgstr ""
+"no s'ha pogut establir la propietat «%s» de tipus «%s» a partir del valor de "
+"tipus «%s»"
+
+#: ../shared/nm-utils/nm-shared-utils.c:227
+#, c-format
+msgid ""
+"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
+"type '%s'"
+msgstr ""
+"el valor «%s» de tipus «%s» no és vàlid o està fora de rang per a la "
+"propietat «%s» de tipus «%s»"
+
+#: ../shared/nm-vpn/nm-vpn-plugin-utils.c:80
+#, c-format
+msgid "missing plugin file \"%s\""
+msgstr ""
+
+#: ../shared/nm-vpn/nm-vpn-plugin-utils.c:86
+#, c-format
+msgid "cannot load editor plugin: %s"
+msgstr ""
+
+#: ../shared/nm-vpn/nm-vpn-plugin-utils.c:95
+#, c-format
+msgid "cannot load factory %s from plugin: %s"
+msgstr ""
+
+#: ../shared/nm-vpn/nm-vpn-plugin-utils.c:121
+msgid "unknown error creating editor instance"
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:362
+#, c-format
+msgid "invalid address '%s'"
+msgstr "adreça no vàlida «%s»"
+
+#: ../src/nm-openvpn-service.c:374
+#, c-format
+msgid "invalid integer property '%s' or out of range [%d -> %d]"
+msgstr "propietat no vàlida d'enter «%s» o fora de rang [%d-> %d]"
+
+#. Translators: keep "yes" and "no" untranslated!
+#: ../src/nm-openvpn-service.c:385
+#, c-format
+msgid "invalid boolean property '%s' (not yes or no)"
+msgstr "Propietat «%s» booleana no vàlida (no és sí o no)"
+
+#: ../src/nm-openvpn-service.c:392
+#, c-format
+msgid "unhandled property '%s' type %s"
+msgstr "propietat no gestionada «%s» tipus %s"
+
+#: ../src/nm-openvpn-service.c:403
+#, c-format
+msgid "property '%s' invalid or not supported"
+msgstr "propietat «%s» no vàlida o no suportada"
+
+#: ../src/nm-openvpn-service.c:419
+msgid "No VPN configuration options."
+msgstr "No hi ha cap opció de configuració del VPN."
+
+#: ../src/nm-openvpn-service.c:588
+msgid "A username is required."
+msgstr "Es requereix un nom d'usuari."
+
+#: ../src/nm-openvpn-service.c:592
+msgid "A password is required."
+msgstr "Es requereix una contrasenya."
+
+#: ../src/nm-openvpn-service.c:595
+msgid "A username and password are required."
+msgstr "Es requereix un nom d'usuari i una contrasenya."
+
+#: ../src/nm-openvpn-service.c:615
+msgid "A private key password is required."
+msgstr "Es requereix una contrasenya de la clau privada."
+
+#: ../src/nm-openvpn-service.c:628
+msgid "An HTTP Proxy username is required."
+msgstr "Es requereix un nom d'usuari de proxy HTTP."
+
+#: ../src/nm-openvpn-service.c:632
+msgid "An HTTP Proxy password is required."
+msgstr "Es requereix una contrasenya de proxy HTTP."
+
+#: ../src/nm-openvpn-service.c:635
+msgid "An HTTP Proxy username and password are required."
+msgstr "Es requereix un nom d'usuari i una contrasenya de proxy HTTP."
+
+#: ../src/nm-openvpn-service.c:1117
+msgid "Could not find the openvpn binary."
+msgstr "No s'ha pogut trobar el binari de l'openvpn."
+
+#: ../src/nm-openvpn-service.c:1127
+msgid "Invalid HMAC auth."
+msgstr "Autenticació HMC no vàlida."
+
+#: ../src/nm-openvpn-service.c:1137 ../src/nm-openvpn-service.c:1851
+msgid "Invalid connection type."
+msgstr "Tipus de connexió no vàlida."
+
+#: ../src/nm-openvpn-service.c:1172 ../src/nm-openvpn-service.c:1182
+#, c-format
+msgid "Invalid port number '%s'."
+msgstr "Número «%s» de port no vàlid."
+
+#: ../src/nm-openvpn-service.c:1199
+#, c-format
+msgid "Invalid proto '%s'."
+msgstr "Proto «%s» no vàlid."
+
+#: ../src/nm-openvpn-service.c:1245
+#, c-format
+msgid "Invalid proxy type '%s'."
+msgstr "Tipus «%s» de proxy no vàlid."
+
+#: ../src/nm-openvpn-service.c:1270
+#, c-format
+msgid "Invalid ping duration '%s'."
+msgstr "Duració «%s» de ping no vàlida."
+
+#: ../src/nm-openvpn-service.c:1284
+#, c-format
+msgid "Invalid ping-exit duration '%s'."
+msgstr "Duració «%s» de ping-exit no vàlida."
+
+#: ../src/nm-openvpn-service.c:1298
+#, c-format
+msgid "Invalid ping-restart duration '%s'."
+msgstr "Duració «%s» de ping-restar no vàlida."
+
+#: ../src/nm-openvpn-service.c:1356
+#, c-format
+msgid "Invalid keysize '%s'."
+msgstr "Mida de clau «%s» no vàlida."
+
+#: ../src/nm-openvpn-service.c:1413
+#, c-format
+msgid "Invalid reneg seconds '%s'."
+msgstr "Segons «%s» de renegociació no vàlids."
+
+#: ../src/nm-openvpn-service.c:1448
+#, c-format
+msgid "Invalid TUN MTU size '%s'."
+msgstr "Mida «%s» de TUN MTU no vàlida."
+
+#: ../src/nm-openvpn-service.c:1463
+#, c-format
+msgid "Invalid fragment size '%s'."
+msgstr "Mida «%s» de fragment no vàlida."
+
+#: ../src/nm-openvpn-service.c:1542
+msgid "Missing required local IP address for static key mode."
+msgstr "Falta l'adreça IP local requerida per al mode de clau estàtica."
+
+#: ../src/nm-openvpn-service.c:1554
+msgid "Missing required remote IP address for static key mode."
+msgstr "Falta l'adreça IP remota requerida per al mode de clau estàtica.<"
+
+#: ../src/nm-openvpn-service.c:1579
+#, c-format
+msgid "Unknown connection type '%s'."
+msgstr "Tipus de connexió desconeguda «%s»."
+
+#: ../src/nm-openvpn-service.c:1604
+#, c-format
+msgid "User '%s' not found, check NM_OPENVPN_USER."
+msgstr "Usuari «%s» no trobat, verifiqueu NM_OPENVPN_USER."
+
+#: ../src/nm-openvpn-service.c:1618
+#, c-format
+msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
+msgstr "Grup «%s» no trobat, verifiqueu NM_OPENVPN_GROUP."
+
+#: ../src/nm-openvpn-service.c:1765 ../src/nm-openvpn-service.c:1842
+#: ../src/nm-openvpn-service.c:1876
+msgid ""
+"Could not process the request because the VPN connection settings were "
+"invalid."
+msgstr ""
+"No s'ha pogut processar la demanda perquè els paràmetres de configuració de "
+"la VPN eren erroni."
+
+#: ../src/nm-openvpn-service.c:1774
+msgid ""
+"Could not process the request because the openvpn connection type was "
+"invalid."
+msgstr ""
+"No s'ha pogut trobar la demanda perquè el tipus de la connexió openvpn no "
+"era vàlid."
+
+#: ../src/nm-openvpn-service.c:1889
+msgid "Unhandled pending authentication."
+msgstr "Autenticació pendent sense gestionar."
+
+#: ../src/nm-openvpn-service.c:2008
+msgid "Don't quit when VPN connection terminates"
+msgstr "No surtis quan la connexió VPN acabi"
+
+#: ../src/nm-openvpn-service.c:2009
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr ""
+"Habilita el registre de depuració amb missatges (pot exposar contrasenyes)"
+
+#: ../src/nm-openvpn-service.c:2010
+msgid "D-Bus name to use for this instance"
+msgstr "Nom D-Bus a usar per a aquesta instància"
+
+#: ../src/nm-openvpn-service.c:2036
+msgid ""
+"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
+"el nm-openvpn-service proveeix funcionalitat OpenVPN integrada al "
+"NetworkManager."
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid " "
@@ -691,13 +980,15 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:75
 msgid "IPv6 tun link"
-msgstr ""
+msgstr "enllaç tun IPv6"
 
 #: ../properties/nm-openvpn-dialog.ui.h:76
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
 msgstr ""
+"Construeix un enllaç tun capaç de reenviar el tràfic IPv6\n"
+"config: tun-ipv6"
 
 #: ../properties/nm-openvpn-dialog.ui.h:78
 msgid "Accept authenticated packets from any address (F_loat)"
@@ -796,7 +1087,7 @@ msgid ""
 "is SHA1.\n"
 "config: auth"
 msgstr ""
-"Autentica els paquests amb HMAC usant l'algoritme de resum de missatges. Per "
+"Autentica els paquets amb HMAC usant l'algoritme de resum de missatges. Per "
 "defecte és SHA1.\n"
 "config: auth"
 
@@ -862,18 +1153,45 @@ msgstr ""
 "config: remote-cert-tls client|server"
 
 #: ../properties/nm-openvpn-dialog.ui.h:111
+msgid "_Verify peer (server) certificate nsCertType designation"
+msgstr ""
+"_Verifica la designació nsCertType del certificat del parell (servidor)"
+
+#: ../properties/nm-openvpn-dialog.ui.h:112
+msgid ""
+"Require that peer certificate was signed with an explicit nsCertType "
+"designation."
+msgstr ""
+"Requereix que el certificat del parell hagi estat signat amb una designació "
+"nsCertType explícita"
+
+#: ../properties/nm-openvpn-dialog.ui.h:113
+msgid "_Remote peer certificate nsCert designation:"
+msgstr "Designació _remota nsCert del certificat del parell"
+
+#: ../properties/nm-openvpn-dialog.ui.h:114
+msgid ""
+"Require that peer certificate was signed with an explicit nsCertType "
+"designation.\n"
+"config: ns-cert-type client|server"
+msgstr ""
+"Requereix que el certificat del parell hagi estat signat amb una designació "
+"nsCertType explícita\n"
+"config: ns-cert-type client|server"
+
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid "Use additional _TLS authentication"
 msgstr "Utilitza autenticació _TLS addicional"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:117
 msgid "Add an additional layer of HMAC authentication."
 msgstr "Afegeix una capa addicional d'autenticació HMAC."
 
-#: ../properties/nm-openvpn-dialog.ui.h:113
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Key _Direction:"
 msgstr "_Direcció de la clau:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks.\n"
@@ -883,7 +1201,7 @@ msgstr ""
 "TLS per protegir contra atacs DoS.\n"
 "config: tls-auth <file> [direcció]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:116
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -898,15 +1216,15 @@ msgstr ""
 "amb l'administrador del sistema.\n"
 "config: tls-auth <fitxer> [direcció]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:124
 msgid "Key _File:"
 msgstr "_Fitxer de clau:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:125
 msgid "TLS Authentication"
 msgstr "Autenticació TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:126
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -914,11 +1232,11 @@ msgstr ""
 "Tipus de proxy: HTTP o Socks.\n"
 "config: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:123
+#: ../properties/nm-openvpn-dialog.ui.h:128
 msgid "Proxy _Type:"
 msgstr "_Tipus de servidor intermediari:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:124
+#: ../properties/nm-openvpn-dialog.ui.h:129
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -926,11 +1244,11 @@ msgstr ""
 "<i>Seleccioneu aquesta opció si la vostra organització requereix l'ús d'un "
 "servidor intermediari per accedir a Internet.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:125
+#: ../properties/nm-openvpn-dialog.ui.h:130
 msgid "Server _Address:"
 msgstr "_Adreça del servidor:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:126
+#: ../properties/nm-openvpn-dialog.ui.h:131
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -938,11 +1256,11 @@ msgstr ""
 "Connecta't a l'amfitrió remot mitjançant un proxy amb aquesta adreça.\n"
 "config: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:128
+#: ../properties/nm-openvpn-dialog.ui.h:133
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:129
+#: ../properties/nm-openvpn-dialog.ui.h:134
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -950,11 +1268,11 @@ msgstr ""
 "Connecta a l'amfitrió remot mitjançant un proxy amb aquest port.\n"
 "config: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:131
+#: ../properties/nm-openvpn-dialog.ui.h:136
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Reintenta-ho indefinidament quan es produeixin errors"
 
-#: ../properties/nm-openvpn-dialog.ui.h:132
+#: ../properties/nm-openvpn-dialog.ui.h:137
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -963,220 +1281,36 @@ msgstr ""
 "SIGUSR1.\n"
 "config: http-proxy-retry or socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:134
+#: ../properties/nm-openvpn-dialog.ui.h:139
 msgid "Proxy _Username:"
 msgstr "_Nom d'usuari del servidor intermediari:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:135
+#: ../properties/nm-openvpn-dialog.ui.h:140
 msgid "Proxy Passwor_d:"
 msgstr "C_ontrasenya del servidor intermediari:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:136
+#: ../properties/nm-openvpn-dialog.ui.h:141
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "El nom d'usuari del proxy HTTP/Socks que s'ha passat a l'OpenVPN quan es va "
 "demanar."
 
-#: ../properties/nm-openvpn-dialog.ui.h:137
+#: ../properties/nm-openvpn-dialog.ui.h:142
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "La contrasenya del proxy HTTP/Socks que s'ha passat a l'OpenVPN quan es va "
 "demanar."
 
-#: ../properties/nm-openvpn-dialog.ui.h:138
+#: ../properties/nm-openvpn-dialog.ui.h:143
 msgid "_Show password"
 msgstr "Mo_stra les contrasenyes"
 
-#: ../properties/nm-openvpn-dialog.ui.h:139
+#: ../properties/nm-openvpn-dialog.ui.h:144
 msgid "Proxies"
 msgstr "Servidors intermediaris"
 
-#: ../src/nm-openvpn-service.c:358
-#, c-format
-msgid "invalid address '%s'"
-msgstr "adreça no vàlida «%s»"
-
-#: ../src/nm-openvpn-service.c:370
-#, c-format
-msgid "invalid integer property '%s' or out of range [%d -> %d]"
-msgstr "propietat no vàlida d'enter «%s» o fora de rang [%d-> %d]"
-
-#. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:381
-#, c-format
-msgid "invalid boolean property '%s' (not yes or no)"
-msgstr "Propietat «%s» booleana no vàlida (no és sí o no)"
-
-#: ../src/nm-openvpn-service.c:388
-#, c-format
-msgid "unhandled property '%s' type %s"
-msgstr "propietat no gestionada «%s» tipus %s"
-
-#: ../src/nm-openvpn-service.c:399
-#, c-format
-msgid "property '%s' invalid or not supported"
-msgstr "propietat «%s» no vàlida o no suportada"
-
-#: ../src/nm-openvpn-service.c:415
-msgid "No VPN configuration options."
-msgstr "No hi ha cap opció de configuració del VPN."
-
-#: ../src/nm-openvpn-service.c:584
-msgid "A username is required."
-msgstr "Es requereix un nom d'usuari"
-
-#: ../src/nm-openvpn-service.c:588
-msgid "A password is required."
-msgstr "Es requereix una contrasenya"
-
-#: ../src/nm-openvpn-service.c:591
-msgid "A username and password are required."
-msgstr "Es requereix un nom d'usuari i una contrasenya."
-
-#: ../src/nm-openvpn-service.c:611
-msgid "A private key password is required."
-msgstr "Es requereix una contrasenya de la clau privada."
-
-#: ../src/nm-openvpn-service.c:624
-msgid "An HTTP Proxy username is required."
-msgstr "Es requereix un nom d'usuari de proxy HTTP"
-
-#: ../src/nm-openvpn-service.c:628
-msgid "An HTTP Proxy password is required."
-msgstr "Es requereix una contrasenya de proxy HTTP."
-
-#: ../src/nm-openvpn-service.c:631
-msgid "An HTTP Proxy username and password are required."
-msgstr "Es requereix un nom d'usuari i una contrasenya de proxy HTTP"
-
-#: ../src/nm-openvpn-service.c:1113
-msgid "Could not find the openvpn binary."
-msgstr "No s'ha pogut trobar el binari de l'openvpn."
-
-#: ../src/nm-openvpn-service.c:1123
-msgid "Invalid HMAC auth."
-msgstr "Autenticació HMC no vàlida."
-
-#: ../src/nm-openvpn-service.c:1133 ../src/nm-openvpn-service.c:1826
-msgid "Invalid connection type."
-msgstr "Tipus de connexió no vàlida."
-
-#: ../src/nm-openvpn-service.c:1168 ../src/nm-openvpn-service.c:1178
-#, c-format
-msgid "Invalid port number '%s'."
-msgstr "Número «%s» de port no vàlid."
-
-#: ../src/nm-openvpn-service.c:1195
-#, c-format
-msgid "Invalid proto '%s'."
-msgstr "Proto «%s» no vàlid."
-
-#: ../src/nm-openvpn-service.c:1241
-#, c-format
-msgid "Invalid proxy type '%s'."
-msgstr "Tipus «%s» de proxy no vàlid."
-
-#: ../src/nm-openvpn-service.c:1264
-#, c-format
-msgid "Invalid ping duration '%s'."
-msgstr "Duració «%s» de ping no vàlida."
-
-#: ../src/nm-openvpn-service.c:1278
-#, c-format
-msgid "Invalid ping-exit duration '%s'."
-msgstr "Duració «%s» de ping-exit no vàlida."
-
-#: ../src/nm-openvpn-service.c:1292
-#, c-format
-msgid "Invalid ping-restart duration '%s'."
-msgstr "Duració «%s» de ping-restar no vàlida."
-
-#: ../src/nm-openvpn-service.c:1344
-#, c-format
-msgid "Invalid keysize '%s'."
-msgstr "Mida de clau «%s» no vàlida."
-
-#: ../src/nm-openvpn-service.c:1394
-#, c-format
-msgid "Invalid reneg seconds '%s'."
-msgstr "Segons «%s» de renegociació no vàlids."
-
-#: ../src/nm-openvpn-service.c:1426
-#, c-format
-msgid "Invalid TUN MTU size '%s'."
-msgstr "Mida «%s» de TUN MTU no vàlida."
-
-#: ../src/nm-openvpn-service.c:1441
-#, c-format
-msgid "Invalid fragment size '%s'."
-msgstr "Mida «%s» de fragment no vàlida."
-
-#: ../src/nm-openvpn-service.c:1517
-msgid "Missing required local IP address for static key mode."
-msgstr "Falta l'adreça IP local requerida per al mode de clau estàtica."
-
-#: ../src/nm-openvpn-service.c:1529
-msgid "Missing required remote IP address for static key mode."
-msgstr "Falta l'adreça IP remota requerida per al mode de clau estàtica.<"
-
-#: ../src/nm-openvpn-service.c:1554
-#, c-format
-msgid "Unknown connection type '%s'."
-msgstr "Tipus de connexió desconeguda «%s»."
-
-#: ../src/nm-openvpn-service.c:1579
-#, c-format
-msgid "User '%s' not found, check NM_OPENVPN_USER."
-msgstr "Usuari «%s» no trobat, verifiqueu NM_OPENVPN_USER."
-
-#: ../src/nm-openvpn-service.c:1593
-#, c-format
-msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
-msgstr "Grup «%s» no trobat, verifiqueu NM_OPENVPN_GROUP."
-
-#: ../src/nm-openvpn-service.c:1740 ../src/nm-openvpn-service.c:1817
-#: ../src/nm-openvpn-service.c:1851
-msgid ""
-"Could not process the request because the VPN connection settings were "
-"invalid."
-msgstr ""
-"No s'ha pogut processar la demanda perquè els paràmetres de configuració de "
-"la VPN eren erroni."
-
-#: ../src/nm-openvpn-service.c:1749
-msgid ""
-"Could not process the request because the openvpn connection type was "
-"invalid."
-msgstr ""
-"No s'ha pogut trobar la demanda perquè el tipus de la connexió openvpn no "
-"era vàlid."
-
-#: ../src/nm-openvpn-service.c:1864
-msgid "Unhandled pending authentication."
-msgstr "Autenticació pendent sense gestionar."
-
-#: ../src/nm-openvpn-service.c:1982
-msgid "Don't quit when VPN connection terminates"
-msgstr "No surtis quan la connexió VPN acabi"
-
-#: ../src/nm-openvpn-service.c:1983
-msgid "Enable verbose debug logging (may expose passwords)"
-msgstr ""
-"Habilita el registre de depuració amb missatges (pot exposar contrasenyes)"
-
-#: ../src/nm-openvpn-service.c:1984
-msgid "D-Bus name to use for this instance"
-msgstr "Nom D-Bus a usar per a aquesta instància"
-
-#: ../src/nm-openvpn-service.c:2010
-msgid ""
-"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
-msgstr ""
-"el nm-openvpn-service proveeix funcioanalitat OpenVPN integrada al "
-"NetworkManager."
-
-#~ msgid "not a valid OpenVPN configuration file"
-#~ msgstr "no és un fitxer vàlid de configuració de l'OpenVPN"
+#~ msgid "could not open file for writing"
+#~ msgstr "no s'ha pogut obrir el fitxer per escriure"
 
 #, fuzzy
 #~ msgid "Not Required"
@@ -1313,9 +1447,6 @@ msgstr ""
 
 #~ msgid "Failed to export configuration"
 #~ msgstr "No s'ha pogut exportar la configuració"
-
-#~ msgid "Failed to save file %s"
-#~ msgstr "No s'ha pogut desar el fitxer %s"
 
 #~ msgid "65536"
 #~ msgstr "65536"
