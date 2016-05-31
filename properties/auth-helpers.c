@@ -84,8 +84,8 @@ tls_cert_changed_cb (GtkWidget *widget, gpointer data)
 {
 	GtkWidget *other_widgets[2] = { ((TlsChooserSignalData *) data)->widget1,
 	                                ((TlsChooserSignalData *) data)->widget2 };
-	GtkFileChooser *this, *others[2];
-	char *fname, *other_fnames[2];
+	GtkFileChooser *this = GTK_FILE_CHOOSER (widget);
+	char *fname, *dirname, *tmp;
 	int i;
 
 	/* If the just-changed file chooser is a PKCS#12 file, then all of the
@@ -97,43 +97,38 @@ tls_cert_changed_cb (GtkWidget *widget, gpointer data)
 	 * connection (CA, client cert, private key).
 	 */
 
-	this = GTK_FILE_CHOOSER (widget);
-	others[0] = GTK_FILE_CHOOSER (other_widgets[0]);
-	others[1] = GTK_FILE_CHOOSER (other_widgets[1]);
-
 	fname = gtk_file_chooser_get_filename (this);
-	other_fnames[0] = gtk_file_chooser_get_filename (others[0]);
-	other_fnames[1] = gtk_file_chooser_get_filename (others[1]);
+	dirname = g_path_get_dirname (fname);
 
-	if (is_pkcs12 (fname)) {
-		/* Make sure all choosers have this PKCS#12 file */
-		for (i = 0; i < 2; i++) {
-			if (!other_fnames[i] || strcmp (fname, other_fnames[i])) {
-				/* Next chooser was different, make it the same as the first */
-				gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (other_widgets[i]),
-				                                                 BLOCK_HANDLER_ID));
-				g_signal_handler_block (other_widgets[i], id);
-				gtk_file_chooser_set_filename (others[i], fname);
-				g_signal_handler_unblock (other_widgets[i], id);
-			}
+	for (i = 0; i < G_N_ELEMENTS (other_widgets); i++) {
+		GtkFileChooser *other = GTK_FILE_CHOOSER (other_widgets[i]);
+		char *other_fname = gtk_file_chooser_get_filename (other);
+		gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (other), BLOCK_HANDLER_ID));
+
+		g_signal_handler_block (other, id);
+		if (is_pkcs12 (fname)) {
+			/* Make sure all choosers have this PKCS#12 file */
+			if (!other_fname || strcmp (fname, other_fname))
+				gtk_file_chooser_set_filename (other, fname);
+		} else {
+			/* Just-chosen file isn't PKCS#12 or no file was chosen, so clear out other
+			 * file selectors that have PKCS#12 files in them.
+			 */
+			if (is_pkcs12 (other_fname))
+				gtk_file_chooser_unselect_all (other);
+
+			/* Set directory of un-set file choosers to the directory just selected */
+			tmp = gtk_file_chooser_get_filename (other);
+			if (!tmp && dirname)
+				gtk_file_chooser_set_current_folder (other, dirname);
+			g_free (tmp);
 		}
-	} else {
-		/* Just-chosen file isn't PKCS#12 or no file was chosen, so clear out other
-		 * file selectors that have PKCS#12 files in them.
-		 */
-		for (i = 0; i < 2; i++) {
-			if (is_pkcs12 (other_fnames[i])) {
-				gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (other_widgets[i]),
-				                                                 BLOCK_HANDLER_ID));
-				g_signal_handler_block (other_widgets[i], id);
-				gtk_file_chooser_unselect_all (others[i]);
-				g_signal_handler_unblock (other_widgets[i], id);
-			}
-		}
+		g_signal_handler_unblock (other, id);
+		g_free (other_fname);
 	}
+
 	g_free (fname);
-	g_free (other_fnames[0]);
-	g_free (other_fnames[1]);
+	g_free (dirname);
 }
 
 static void
