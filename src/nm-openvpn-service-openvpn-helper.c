@@ -41,7 +41,7 @@
 #include <syslog.h>
 
 #include "nm-utils/nm-shared-utils.h"
-#include "nm-vpn/nm-vpn-plugin-macros.h"
+#include "nm-utils/nm-vpn-plugin-macros.h"
 
 extern char **environ;
 
