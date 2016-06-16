@@ -9,6 +9,14 @@ plugin_LTLIBRARIES += libnm-openvpn-properties.la
 endif
 endif
 
+shared_sources = \
+        $(top_srcdir)/shared/nm-utils/nm-shared-utils.c \
+        $(top_srcdir)/shared/nm-utils/nm-shared-utils.h \
+        $(top_srcdir)/shared/utils.c \
+        $(top_srcdir)/shared/utils.h \
+        $(top_srcdir)/shared/nm-service-defines.h \
+        $(NULL)
+
 plugin_sources = \
         nm-openvpn-editor-plugin.c \
         nm-openvpn-editor-plugin.h \
@@ -36,6 +44,10 @@ common_CFLAGS =                                         \
 ###############################################################################
 
 libnm_vpn_plugin_openvpn_la_SOURCES = \
+        $(shared_sources) \
+        $(top_srcdir)/shared/nm-utils/nm-vpn-plugin-utils.c \
+        $(top_srcdir)/shared/nm-utils/nm-vpn-plugin-utils.h \
+        $(top_srcdir)/shared/nm-utils/nm-vpn-plugin-macros.h \
         $(plugin_sources)
 
 libnm_vpn_plugin_openvpn_la_CFLAGS =                    \
@@ -45,9 +57,7 @@ libnm_vpn_plugin_openvpn_la_CFLAGS =                    \
         $(LIBNM_CFLAGS)
 
 libnm_vpn_plugin_openvpn_la_LIBADD = \
-        $(LIBNM_LIBS) \
-        $(top_builddir)/shared/libnm-vpn-editor-utils-shared.la \
-        $(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
+        $(LIBNM_LIBS)
 
 libnm_vpn_plugin_openvpn_la_LDFLAGS = \
         -avoid-version \
@@ -56,6 +66,7 @@ libnm_vpn_plugin_openvpn_la_LDFLAGS = \
 ###############################################################################
 
 libnm_vpn_plugin_openvpn_editor_la_SOURCES = \
+        $(shared_sources) \
         $(editor_sources)
 
 libnm_vpn_plugin_openvpn_editor_la_CFLAGS = \
@@ -68,8 +79,7 @@ libnm_vpn_plugin_openvpn_editor_la_CFLAGS = \
 libnm_vpn_plugin_openvpn_editor_la_LIBADD = \
         $(GTK_LIBS) \
         $(LIBNM_LIBS) \
-        $(LIBNMA_LIBS) \
-        $(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
+        $(LIBNMA_LIBS)
 
 libnm_vpn_plugin_openvpn_editor_la_LDFLAGS = \
         -avoid-version \
@@ -78,6 +88,7 @@ libnm_vpn_plugin_openvpn_editor_la_LDFLAGS = \
 ###############################################################################
 
 libnm_openvpn_properties_la_SOURCES = \
+        $(shared_sources) \
         $(plugin_sources) \
         $(editor_sources)
 
@@ -92,8 +103,7 @@ libnm_openvpn_properties_la_CFLAGS =                \
 libnm_openvpn_properties_la_LIBADD =                \
         $(GTK_LIBS)                                     \
         $(LIBNM_GLIB_LIBS)                              \
-        $(LIBNM_GTK_LIBS)                               \
-        $(top_builddir)/shared/libnm-openvpn-shared.la
+        $(LIBNM_GTK_LIBS)
 
 libnm_openvpn_properties_la_LDFLAGS = \
         -avoid-version \

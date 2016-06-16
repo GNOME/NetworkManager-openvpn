@@ -16,26 +16,32 @@ libexec_PROGRAMS = \
 	nm-openvpn-service \
 	nm-openvpn-service-openvpn-helper
 
+shared_sources = \
+	$(top_srcdir)/shared/nm-utils/nm-shared-utils.c \
+	$(top_srcdir)/shared/nm-utils/nm-shared-utils.h \
+	$(top_srcdir)/shared/utils.c \
+	$(top_srcdir)/shared/utils.h \
+	$(top_srcdir)/shared/nm-service-defines.h \
+	$(NULL)
+
 ###############################################################################
 
 nm_openvpn_service_SOURCES = \
+	$(shared_sources) \
 	nm-openvpn-service.c \
-	nm-openvpn-service.h \
-	$(top_srcdir)/shared/nm-service-defines.h
+	nm-openvpn-service.h
 
 nm_openvpn_service_LDADD = \
-	$(LIBNM_LIBS) \
-	$(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
+	$(LIBNM_LIBS)
 
 ###############################################################################
 
 nm_openvpn_service_openvpn_helper_SOURCES = \
-	nm-openvpn-service-openvpn-helper.c \
-	$(top_srcdir)/shared/nm-service-defines.h
+	$(shared_sources) \
+	nm-openvpn-service-openvpn-helper.c
 
 nm_openvpn_service_openvpn_helper_LDADD = \
-	$(LIBNM_LIBS) \
-	$(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
+	$(LIBNM_LIBS)
 
 ###############################################################################
 

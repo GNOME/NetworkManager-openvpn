@@ -13,13 +13,14 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"
 
 nm_openvpn_auth_dialog_SOURCES = \
+	$(top_srcdir)/shared/utils.c \
+	$(top_srcdir)/shared/utils.h \
 	main.c
 
 nm_openvpn_auth_dialog_LDADD = \
 	$(GTK_LIBS) \
 	$(LIBNM_LIBS) \
 	$(LIBNMA_LIBS) \
-	$(LIBSECRET_LIBS) \
-	$(top_builddir)/shared/libnm-vpn-plugin-openvpn-shared.la
+	$(LIBSECRET_LIBS)
 
 CLEANFILES = *~
