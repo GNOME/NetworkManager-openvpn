@@ -27,6 +27,7 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <gtk/gtk.h>
 
 #include <libsecret/secret.h>
@@ -208,6 +209,29 @@ std_no_secrets_required (void)
 {
 	printf ("%s\n%s\n\n\n", NM_OPENVPN_KEY_NOSECRET, "true");
 }
+static gboolean
+stdin_ready_cb (GIOChannel *source, GIOCondition condition, gpointer user_data)
+{
+	NMAVpnPasswordDialog *dialog = user_data;
+	NMSecretAgentCancelReason reason_code;
+	gs_free char *reason_str = NULL;
+	char *line;
+
+	if (!(condition & G_IO_IN))
+		return TRUE;
+
+	if (g_io_channel_read_line (source, &line, NULL, NULL, NULL) == G_IO_STATUS_NORMAL) {
+		if (g_str_has_prefix (line, "CANCEL")){
+			if (sscanf (line, "%*s %u %m[^\n]", &reason_code, &reason_str) == 2)
+				nma_vpn_password_dialog_set_expired (dialog, reason_str);
+			else
+				nma_vpn_password_dialog_set_expired (dialog, NULL);
+			return FALSE;
+		}
+		g_free (line);
+	}
+	return TRUE;
+}
 
 static gboolean
 std_ask_user (const char *vpn_name,
@@ -224,6 +248,8 @@ std_ask_user (const char *vpn_name,
 {
 	NMAVpnPasswordDialog *dialog;
 	gboolean success = FALSE;
+	GIOChannel *channel;
+	guint channel_eventid;
 
 	g_return_val_if_fail (vpn_name != NULL, FALSE);
 	g_return_val_if_fail (prompt != NULL, FALSE);
@@ -232,6 +258,10 @@ std_ask_user (const char *vpn_name,
 	g_return_val_if_fail (out_new_proxypass != NULL, FALSE);
 
 	dialog = NMA_VPN_PASSWORD_DIALOG (nma_vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
+
+	channel = g_io_channel_unix_new (STDIN_FILENO);
+	channel_eventid = g_io_add_watch (channel, G_IO_IN, stdin_ready_cb, dialog);
+	g_io_channel_set_encoding (channel, NULL, NULL);
 
 	/* pre-fill dialog with existing passwords */
 	nma_vpn_password_dialog_set_show_password (dialog, need_password);
@@ -263,6 +293,7 @@ std_ask_user (const char *vpn_name,
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (dialog));
+	g_io_channel_unref (channel);
 	return success;
 }
 
@@ -278,7 +309,7 @@ wait_for_quit (void)
 	start = time (NULL);
 	do {
 		errno = 0;
-		n = read (0, &c, 1);
+		n = read (STDIN_FILENO, &c, 1);
 		if (n == 0 || (n < 0 && errno == EAGAIN))
 			g_usleep (G_USEC_PER_SEC / 10);
 		else if (n == 1) {
