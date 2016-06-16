@@ -1,4 +1,5 @@
 EXTRA_DIST = \
+    README \
     nm-utils/gsystem-local-alloc.h \
     nm-utils/nm-glib.h \
     nm-utils/nm-macros-internal.h \
