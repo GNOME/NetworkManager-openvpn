@@ -50,6 +50,7 @@
 #define NMV_OVPN_TAG_PING_EXIT          "ping-exit"
 #define NMV_OVPN_TAG_PING               "ping"
 #define NMV_OVPN_TAG_PING_RESTART       "ping-restart"
+#define NMV_OVPN_TAG_PKCS11_ID          "pkcs11-id"
 #define NMV_OVPN_TAG_PKCS12             "pkcs12"
 #define NMV_OVPN_TAG_PORT               "port"
 #define NMV_OVPN_TAG_PROTO              "proto"

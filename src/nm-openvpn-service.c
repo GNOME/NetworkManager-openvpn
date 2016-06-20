@@ -90,6 +90,7 @@ typedef struct {
 	NMOpenvpnPluginIOData *io_data;
 	gboolean interactive;
 	char *mgt_path;
+	int p11_fd;
 } NMOpenvpnPluginPrivate;
 
 typedef struct {
@@ -123,6 +124,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_PING,                 G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_EXIT,            G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_RESTART,         G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_PKCS11_ID,            G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PROTO_TCP,            G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PORT,                 G_TYPE_INT, 1, 65535, FALSE },
 	{ NM_OPENVPN_KEY_PROXY_TYPE,           G_TYPE_STRING, 0, 0, FALSE },
@@ -152,6 +154,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_CERTPASS"-flags",     G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NOSECRET,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags", G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PKCS11_PIN"-flags",   G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
 
@@ -160,6 +163,7 @@ static ValidProperty valid_secrets[] = {
 	{ NM_OPENVPN_KEY_CERTPASS,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NOSECRET,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PKCS11_PIN,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
 
@@ -976,14 +980,14 @@ add_openvpn_arg_int (GPtrArray *args, const char *arg)
 	return TRUE;
 }
 
-static void
-add_cert_args (GPtrArray *args, NMSettingVpn *s_vpn)
+static gboolean
+add_cert_args (GPtrArray *args, NMSettingVpn *s_vpn, GError **error)
 {
-	const char *ca, *cert, *key;
+	const char *ca, *cert, *key, *pkcs11_id;
 	gs_free char *ca_free = NULL, *cert_free = NULL, *key_free = NULL;
 
-	g_return_if_fail (args != NULL);
-	g_return_if_fail (s_vpn != NULL);
+	g_return_val_if_fail (args != NULL, FALSE);
+	g_return_val_if_fail (s_vpn != NULL, FALSE);
 
 	ca   = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
 	cert = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
@@ -992,6 +996,31 @@ add_cert_args (GPtrArray *args, NMSettingVpn *s_vpn)
 	ca   = nmv_utils_str_utf8safe_unescape_c (ca,   &ca_free);
 	cert = nmv_utils_str_utf8safe_unescape_c (cert, &cert_free);
 	key  = nmv_utils_str_utf8safe_unescape_c (key,  &key_free);
+
+	pkcs11_id = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PKCS11_ID);
+	if (pkcs11_id) {
+		if (!g_getenv ("P11_REMOTE_FD")) {
+			g_set_error_literal (error,
+			                     NM_VPN_PLUGIN_ERROR,
+			                     NM_VPN_PLUGIN_ERROR_FAILED,
+			                     _("PKCS#11 remoting not available."));
+			return FALSE;
+		}
+
+		/* The openvpn might not be configured to default to use p11-kit. */
+		add_openvpn_arg (args, "--pkcs11-providers");
+		add_openvpn_arg (args, "p11-kit-proxy.so");
+
+		if (ca && strlen (ca)) {
+			add_openvpn_arg (args, "--ca");
+			add_openvpn_arg (args, ca);
+		}
+
+		add_openvpn_arg (args, "--pkcs11-id");
+		add_openvpn_arg (args, pkcs11_id);
+
+		return TRUE;
+	}
 
 	if (   ca && strlen (ca)
 	    && cert && strlen (cert)
@@ -1016,6 +1045,8 @@ add_cert_args (GPtrArray *args, NMSettingVpn *s_vpn)
 			add_openvpn_arg (args, key);
 		}
 	}
+
+	return TRUE;
 }
 
 static void
@@ -1552,7 +1583,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Now append configuration options which are dependent on the configuration type */
 	if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_TLS)) {
 		add_openvpn_arg (args, "--client");
-		add_cert_args (args, s_vpn);
+		if (!add_cert_args (args, s_vpn, error)) {
+			free_openvpn_args (args);
+			return FALSE;
+		}
 	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
 		if (tmp && strlen (tmp)) {
@@ -1602,7 +1636,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		add_openvpn_arg (args, "--client");
-		add_cert_args (args, s_vpn);
+		if (!add_cert_args (args, s_vpn, error)) {
+			free_openvpn_args (args);
+			return FALSE;
+		}
 		/* Use user/path authentication */
 		add_openvpn_arg (args, "--auth-user-pass");
 	} else {
@@ -1672,7 +1709,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 
 	if (!g_spawn_async (NULL, (char **) args->pdata, NULL,
-	                    G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, error)) {
+	                    G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_LEAVE_DESCRIPTORS_OPEN,
+	                    NULL, NULL, &pid, error)) {
 		free_openvpn_args (args);
 		return FALSE;
 	}
@@ -1781,9 +1819,12 @@ _connect_common (NMVpnServicePlugin   *plugin,
                  GVariant      *details,
                  GError       **error)
 {
+	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 	NMSettingVpn *s_vpn;
 	const char *connection_type;
 	const char *user_name;
+	gboolean success = FALSE;
+	gs_free gchar *fd_str = NULL;
 
 	if (!real_disconnect (plugin, error)) {
 		_LOGW ("Could not clean up previous daemon run: %s", (*error)->message);
@@ -1796,7 +1837,7 @@ _connect_common (NMVpnServicePlugin   *plugin,
 		                     NM_VPN_PLUGIN_ERROR,
 		                     NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION,
 		                     _("Could not process the request because the VPN connection settings were invalid."));
-		return FALSE;
+		goto out;
 	}
 
 	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
@@ -1805,16 +1846,28 @@ _connect_common (NMVpnServicePlugin   *plugin,
 		                     NM_VPN_PLUGIN_ERROR,
 		                     NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION,
 		                     _("Could not process the request because the openvpn connection type was invalid."));
-		return FALSE;
+		goto out;
 	}
 
 	/* Validate the properties */
 	if (!nm_openvpn_properties_validate (s_vpn, error))
-		return FALSE;
+		goto out;
 
 	/* Validate secrets */
 	if (!nm_openvpn_secrets_validate (s_vpn, error))
-		return FALSE;
+		goto out;
+
+	if (priv->p11_fd) {
+		fd_str = g_strdup_printf ("%d", priv->p11_fd);
+
+		if (!g_setenv ("P11_REMOTE_FD", fd_str, 1)) {
+			g_set_error (error,
+				     NM_VPN_PLUGIN_ERROR,
+				     NM_VPN_PLUGIN_ERROR_FAILED,
+				     _("Could not set variable P11_REMOTE_FD=%s"), fd_str);
+			goto out;
+		}
+	}
 
 	/* Finally try to start OpenVPN */
 	user_name = nm_setting_vpn_get_user_name (s_vpn);
@@ -1823,9 +1876,16 @@ _connect_common (NMVpnServicePlugin   *plugin,
 	                                      user_name,
 	                                      nm_connection_get_uuid (connection),
 	                                      error))
-		return FALSE;
+		goto out;
 
-	return TRUE;
+	success = TRUE;
+
+out:
+	g_unsetenv ("P11_REMOTE_FD");
+	close (priv->p11_fd);
+	priv->p11_fd = 0;
+
+	return success;
 }
 
 static gboolean
@@ -1933,6 +1993,71 @@ real_new_secrets (NMVpnServicePlugin *plugin,
 	return TRUE;
 }
 
+#if NM_CHECK_VERSION(1,3,0)
+static gboolean
+real_need_p11_fd (NMVpnServicePlugin *plugin,
+                      NMConnection *connection,
+                      const char **uri,
+                      GError **error)
+{
+	NMSettingVpn *s_vpn;
+	const char *pkcs11_id;
+
+	g_return_val_if_fail (NM_IS_VPN_SERVICE_PLUGIN (plugin), FALSE);
+	g_return_val_if_fail (NM_IS_CONNECTION (connection), FALSE);
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	if (!s_vpn) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION,
+		                     _("Could not process the request because the VPN connection settings were invalid."));
+		return FALSE;
+	}
+
+	pkcs11_id = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PKCS11_ID);
+	if (pkcs11_id) {
+		*uri = pkcs11_id;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
+real_p11_fd (NMVpnServicePlugin *plugin,
+                 int fd,
+                 GError **error)
+{
+	int flags;
+	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
+
+	_LOGD ("VPN received p11-kit remoting fd: %d", fd);
+
+	if (priv->p11_fd) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_FAILED,
+		                     _("Got an extra p11-kit fd"));
+		return FALSE;
+	}
+
+	flags = fcntl (fd, F_GETFD, 0);
+	flags &= ~FD_CLOEXEC;
+	if (fcntl (fd, F_SETFD, flags) == -1) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_FAILED,
+		                     _("Could not clear close-on exec on p11-kit remoting fd"));
+		return FALSE;
+	}
+
+	priv->p11_fd = fd;
+
+	return TRUE;
+}
+#endif
+
 static void
 nm_openvpn_plugin_init (NMOpenvpnPlugin *plugin)
 {
@@ -1945,6 +2070,11 @@ dispose (GObject *object)
 
 	nm_clear_g_source (&priv->connect_timer);
 	real_disconnect (NM_VPN_SERVICE_PLUGIN (object), NULL);
+
+	if (priv->p11_fd) {
+		close (priv->p11_fd);
+		priv->p11_fd = 0;
+	}
 
 	G_OBJECT_CLASS (nm_openvpn_plugin_parent_class)->dispose (object);
 }
@@ -1965,6 +2095,10 @@ nm_openvpn_plugin_class_init (NMOpenvpnPluginClass *plugin_class)
 	parent_class->need_secrets = real_need_secrets;
 	parent_class->disconnect   = real_disconnect;
 	parent_class->new_secrets  = real_new_secrets;
+#if NM_CHECK_VERSION(1,3,0)
+	parent_class->need_p11_fd = real_need_p11_fd;
+	parent_class->p11_fd  = real_p11_fd;
+#endif
 }
 
 static void
