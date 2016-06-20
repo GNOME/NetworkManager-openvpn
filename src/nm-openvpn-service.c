@@ -77,6 +77,7 @@ typedef struct {
 	char *priv_key_pass;
 	char *proxy_username;
 	char *proxy_password;
+	char *pkcs11_pin;
 	char *pending_auth;
 	GIOChannel *socket_channel;
 	guint socket_channel_eventid;
@@ -477,6 +478,10 @@ nm_openvpn_disconnect_management_socket (NMOpenvpnPlugin *plugin)
 		secret_password_wipe (io_data->proxy_password);
 	g_free (io_data->proxy_password);
 
+	if (io_data->pkcs11_pin)
+		secret_password_wipe (io_data->pkcs11_pin);
+	g_free (io_data->pkcs11_pin);
+
 	g_free (priv->io_data);
 	priv->io_data = NULL;
 }
@@ -597,7 +602,7 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 				*out_message = _("A username and password are required.");
 		}
 		handled = TRUE;
-	} else if (!strcmp (requested_auth, "Private Key")) {
+	} else if (strcmp (requested_auth, "Private Key") == 0) {
 		if (io_data->priv_key_pass) {
 			char *qpass, *buf;
 
@@ -635,6 +640,25 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			}
 			if (!io_data->proxy_username && !io_data->proxy_password)
 				*out_message = _("An HTTP Proxy username and password are required.");
+		}
+		handled = TRUE;
+	} else if (g_str_has_suffix (requested_auth, " token")) {
+		if (io_data->pkcs11_pin) {
+			char *qpass, *buf;
+
+			qpass = ovpn_quote_string (io_data->pkcs11_pin);
+			buf = g_strdup_printf ("password \"%s\" \"%s\"\n", requested_auth, qpass);
+			secret_password_wipe (qpass);
+			g_free (qpass);
+
+			/* Will always write everything in blocking channels (on success) */
+			g_io_channel_write_chars (io_data->socket_channel, buf, strlen (buf), NULL, NULL);
+			g_io_channel_flush (io_data->socket_channel, NULL);
+			g_free (buf);
+		} else {
+			hints = g_new0 (char *, 2);
+			hints[i++] = NM_OPENVPN_KEY_PKCS11_PIN;
+			*out_message = _("A PIN for the security token is required.");
 		}
 		handled = TRUE;
 	}
@@ -1034,6 +1058,13 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 	}
 	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
 	io_data->proxy_password = tmp ? g_strdup (tmp) : NULL;
+
+	if (io_data->pkcs11_pin) {
+		secret_password_wipe (io_data->pkcs11_pin);
+		g_free (io_data->pkcs11_pin);
+	}
+	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PKCS11_PIN);
+	io_data->pkcs11_pin = tmp ? g_strdup (tmp) : NULL;
 }
 
 #define MAX_GROUPS 128
