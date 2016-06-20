@@ -1,6 +1,7 @@
 AM_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
 	$(LIBNM_CFLAGS) \
+	$(LIBSECRET_CFLAGS) \
 	-I$(top_srcdir)/shared \
 	-DBINDIR=\"$(bindir)\" \
 	-DPREFIX=\""$(prefix)"\" \
@@ -32,7 +33,8 @@ nm_openvpn_service_SOURCES = \
 	nm-openvpn-service.h
 
 nm_openvpn_service_LDADD = \
-	$(LIBNM_LIBS)
+	$(LIBNM_LIBS) \
+	$(LIBSECRET_LIBS)
 
 ###############################################################################
 

@@ -46,6 +46,8 @@
 #include <grp.h>
 #include <glib-unix.h>
 
+#include <libsecret/secret.h>
+
 #include "utils.h"
 #include "nm-utils/nm-shared-utils.h"
 #include "nm-utils/nm-vpn-plugin-macros.h"
@@ -464,15 +466,15 @@ nm_openvpn_disconnect_management_socket (NMOpenvpnPlugin *plugin)
 	g_free (io_data->pending_auth);
 
 	if (io_data->password)
-		memset (io_data->password, 0, strlen (io_data->password));
+		secret_password_wipe (io_data->password);
 	g_free (io_data->password);
 
 	if (io_data->priv_key_pass)
-		memset (io_data->priv_key_pass, 0, strlen (io_data->priv_key_pass));
+		secret_password_wipe (io_data->priv_key_pass);
 	g_free (io_data->priv_key_pass);
 
 	if (io_data->proxy_password)
-		memset (io_data->proxy_password, 0, strlen (io_data->proxy_password));
+		secret_password_wipe (io_data->proxy_password);
 	g_free (io_data->proxy_password);
 
 	g_free (priv->io_data);
@@ -543,7 +545,7 @@ write_user_pass (GIOChannel *channel,
 	                       "password \"%s\" \"%s\"\n",
 	                       authtype, quser,
 	                       authtype, qpass);
-	memset (qpass, 0, strlen (qpass));
+	secret_password_wipe (qpass);
 	g_free (qpass);
 	g_free (quser);
 
@@ -551,7 +553,7 @@ write_user_pass (GIOChannel *channel,
 	g_io_channel_write_chars (channel, buf, strlen (buf), NULL, NULL);
 	g_io_channel_flush (channel, NULL);
 
-	memset (buf, 0, strlen (buf));
+	secret_password_wipe (buf);
 	g_free (buf);
 }
 
@@ -602,7 +604,7 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			/* Quote strings passed back to openvpn */
 			qpass = ovpn_quote_string (io_data->priv_key_pass);
 			buf = g_strdup_printf ("password \"%s\" \"%s\"\n", requested_auth, qpass);
-			memset (qpass, 0, strlen (qpass));
+			secret_password_wipe (qpass);
 			g_free (qpass);
 
 			/* Will always write everything in blocking channels (on success) */
@@ -712,7 +714,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 				 * will request a new one after restarting.
 				 */
 				if (priv->io_data->password)
-					memset (priv->io_data->password, 0, strlen (priv->io_data->password));
+					secret_password_wipe (priv->io_data->password);
 				g_clear_pointer (&priv->io_data->password, g_free);
 				fail = FALSE;
 			}
@@ -1009,14 +1011,14 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 	io_data->username = tmp ? g_strdup (tmp) : NULL;
 
 	if (io_data->password) {
-		memset (io_data->password, 0, strlen (io_data->password));
+		secret_password_wipe (io_data->password);
 		g_free (io_data->password);
 	}
 	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD);
 	io_data->password = tmp ? g_strdup (tmp) : NULL;
 
 	if (io_data->priv_key_pass) {
-		memset (io_data->priv_key_pass, 0, strlen (io_data->priv_key_pass));
+		secret_password_wipe (io_data->priv_key_pass);
 		g_free (io_data->priv_key_pass);
 	}
 	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS);
@@ -1027,7 +1029,7 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 	io_data->proxy_username = tmp ? g_strdup (tmp) : NULL;
 
 	if (io_data->proxy_password) {
-		memset (io_data->proxy_password, 0, strlen (io_data->proxy_password));
+		secret_password_wipe (io_data->proxy_password);
 		g_free (io_data->proxy_password);
 	}
 	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);

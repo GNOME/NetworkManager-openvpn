@@ -433,7 +433,7 @@ static void
 free_secret (char *p)
 {
 	if (p) {
-		memset (p, 0, strlen (p));
+		secret_password_wipe (p);
 		g_free (p);
 	}
 }
