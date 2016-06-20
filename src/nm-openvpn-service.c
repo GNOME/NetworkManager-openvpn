@@ -1913,11 +1913,7 @@ dispose (GObject *object)
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (object);
 
 	nm_clear_g_source (&priv->connect_timer);
-
-	if (priv->pid) {
-		pids_pending_send_sigterm (priv->pid);
-		priv->pid = 0;
-	}
+	real_disconnect (NM_VPN_SERVICE_PLUGIN (object), NULL);
 
 	G_OBJECT_CLASS (nm_openvpn_plugin_parent_class)->dispose (object);
 }
