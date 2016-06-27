@@ -1301,6 +1301,16 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				}
 			}
 
+			if (prefix == 0 && network == 0) {
+				/* the default-route cannot be specified as normal route in NMSettingIPConfig.
+				 * Just set never-default=FALSE (which is already the default). */
+				g_object_set (s_ip4,
+				              NM_SETTING_IP_CONFIG_NEVER_DEFAULT,
+				              FALSE,
+				              NULL);
+				continue;
+			}
+
 			{
 #ifdef NM_VPN_OLD
 				NMIP4Route *route;
