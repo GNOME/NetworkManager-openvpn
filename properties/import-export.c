@@ -459,7 +459,7 @@ args_parse_line (const char *line,
 
 	index = g_array_new (FALSE, FALSE, sizeof (gsize));
 
-	do {
+	for (;;) {
 		char quote, ch0;
 		gssize word_start = line - line_start;
 		gsize index_i;
@@ -467,51 +467,66 @@ args_parse_line (const char *line,
 		index_i = str_buf - str_buf_orig;
 		g_array_append_val (index, index_i);
 
-		do {
-			switch ((ch0 = _ch_step_1 (&line, &line_len))) {
-			case '"':
-			case '\'':
-				quote = ch0;
+		switch ((ch0 = _ch_step_1 (&line, &line_len))) {
+		case '"':
+		case '\'':
+			quote = ch0;
 
-				while (line_len > 0 && line[0] != quote) {
-					if (quote == '"' && line[0] == '\\') {
-						_ch_step_1 (&line, &line_len);
-						if (line_len <= 0)
-							break;
-					}
-					_strbuf_append_c (&str_buf, &str_buf_len, _ch_step_1 (&line, &line_len));
-				}
-
-				if (line_len <= 0) {
-					*out_error = g_strdup_printf (_("unterminated %s at position %lld"),
-					                              quote == '"' ? _("double quote") : _("single quote"),
-					                              (long long) word_start);
-					return FALSE;
-				}
-
-				_ch_step_1 (&line, &line_len);
-				break;
-			case '\\':
-				if (line_len <= 0) {
-					*out_error = g_strdup_printf (_("trailing escaping backslash at position %lld"),
-					                              (long long) word_start);
-					return FALSE;
+			while (line_len > 0 && line[0] != quote) {
+				if (quote == '"' && line[0] == '\\') {
+					_ch_step_1 (&line, &line_len);
+					if (line_len <= 0)
+						break;
 				}
 				_strbuf_append_c (&str_buf, &str_buf_len, _ch_step_1 (&line, &line_len));
-				break;
-			default:
-				if (g_ascii_isspace (ch0))
-					goto word_completed;
-				_strbuf_append_c (&str_buf, &str_buf_len, ch0);
-				break;
 			}
-		} while (line_len > 0);
-word_completed:
+
+			if (line_len <= 0) {
+				*out_error = g_strdup_printf (_("unterminated %s at position %lld"),
+				                              quote == '"' ? _("double quote") : _("single quote"),
+				                              (long long) word_start);
+				return FALSE;
+			}
+
+			/* openvpn terminates parsing of quoted paramaters after the closing quote.
+			 * E.g. "'a'b" gives "a", "b". */
+			_ch_step_1 (&line, &line_len);
+			break;
+		default:
+			/* once openvpn encounters a non-quoted word, it doesn't consider quoting
+			 * inside the word.
+			 * E.g. "a'b'" gives "a'b'". */
+			for (;;) {
+				if (ch0 == '\\') {
+					if (line_len <= 0) {
+						*out_error = g_strdup_printf (_("trailing escaping backslash at position %lld"),
+						                              (long long) word_start);
+						return FALSE;
+					}
+					ch0 = _ch_step_1 (&line, &line_len);
+				}
+				_strbuf_append_c (&str_buf, &str_buf_len, ch0);
+				if (line_len <= 0)
+					break;
+				ch0 = _ch_step_1 (&line, &line_len);
+				if (g_ascii_isspace (ch0))
+					break;
+			}
+			break;
+		}
 
 		/* the current word is complete.*/
 		_strbuf_append_c (&str_buf, &str_buf_len, '\0');
 		_ch_skip_over_leading_whitespace (&line, &line_len);
-	} while (line_len > 0);
+
+		if (line_len <= 0)
+			break;
+
+		if (NM_IN_SET (line[0], ';', '#')) {
+			/* comments are allowed to start at the beginning of the next word. */
+			break;
+		}
+	}
 
 	str_buf_len = str_buf - str_buf_orig;
 

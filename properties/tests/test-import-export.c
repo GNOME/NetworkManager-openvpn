@@ -1287,9 +1287,9 @@ test_args_parse_line (void)
 	do_test_args_parse_line (" b \\ \\a ", TRUE, "b", " a");
 	do_test_args_parse_line ("\\ b \\ \\a ", TRUE, " b", " a");
 	do_test_args_parse_line ("'\\ b \\ \\a '", TRUE, "\\ b \\ \\a ");
-	do_test_args_parse_line ("\"\\ b \\ \\a \"a'b'", TRUE, " b  a ab");
-	do_test_args_parse_line ("\"\\ b \\ \\a \"a\\ 'b'", TRUE, " b  a a b");
-	do_test_args_parse_line ("\"\\ b \\ \\a \"a\\ 'b'   sd\\ \t", TRUE, " b  a a b", "sd ");
+	do_test_args_parse_line ("\"\\ b \\ \\a \"a'b'", TRUE, " b  a ", "a'b'");
+	do_test_args_parse_line ("\"\\ b \\ \\a \"a\\ 'b'", TRUE, " b  a ", "a 'b'");
+	do_test_args_parse_line ("\"\\ b \\ \\a \"a\\ 'b'   sd\\ \t", TRUE, " b  a ", "a 'b'", "sd ");
 
 	do_test_args_parse_line ("\"adfdaf  adf  ", FALSE);
 	do_test_args_parse_line ("\"adfdaf  adf  \\\"", FALSE);
