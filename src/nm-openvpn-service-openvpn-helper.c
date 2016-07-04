@@ -640,6 +640,11 @@ main (int argc, char *argv[])
 	val = get_ip4_routes ();
 	if (val)
 		g_variant_builder_add (&ip4builder, "{sv}", NM_VPN_PLUGIN_IP4_CONFIG_ROUTES, val);
+	else if (is_restart) {
+		g_variant_builder_add (&ip4builder, "{sv}",
+		                       NM_VPN_PLUGIN_IP4_CONFIG_PRESERVE_ROUTES,
+		                       g_variant_new_boolean (TRUE));
+	}
 
 	/* IPv6 address */
 	tmp = getenv ("ifconfig_ipv6_local");
@@ -680,6 +685,11 @@ main (int argc, char *argv[])
 	val = get_ip6_routes ();
 	if (val)
 		g_variant_builder_add (&ip6builder, "{sv}", NM_VPN_PLUGIN_IP6_CONFIG_ROUTES, val);
+	else if (is_restart) {
+		g_variant_builder_add (&ip6builder, "{sv}",
+		                       NM_VPN_PLUGIN_IP6_CONFIG_PRESERVE_ROUTES,
+		                       g_variant_new_boolean (TRUE));
+	}
 
 	/* DNS and WINS servers */
 	dns_domains = g_ptr_array_sized_new (3);
