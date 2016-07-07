@@ -127,4 +127,3 @@ nm_vpn_plugin_utils_load_editor (const char *module_name,
 	g_return_val_if_fail (NM_IS_VPN_EDITOR (editor), NULL);
 	return editor;
 }
-

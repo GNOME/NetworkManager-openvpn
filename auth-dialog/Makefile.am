@@ -15,6 +15,8 @@ nm_openvpn_auth_dialog_CPPFLAGS =			\
 nm_openvpn_auth_dialog_SOURCES = \
 	$(top_srcdir)/shared/utils.c \
 	$(top_srcdir)/shared/utils.h \
+	$(top_srcdir)/shared/nm-utils/nm-vpn-plugin-utils.c \
+	$(top_srcdir)/shared/nm-utils/nm-vpn-plugin-utils.h \
 	main.c
 
 nm_openvpn_auth_dialog_LDADD = \

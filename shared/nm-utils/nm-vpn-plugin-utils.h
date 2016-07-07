@@ -23,6 +23,7 @@
 #define __NM_VPN_PLUGIN_UTILS_H__
 
 #include <NetworkManager.h>
+#include <dlfcn.h>
 
 typedef NMVpnEditor *(NMVpnPluginUtilsEditorFactory) (gpointer factory,
                                                       NMVpnEditorPlugin *editor_plugin,
@@ -37,6 +38,22 @@ NMVpnEditor *nm_vpn_plugin_utils_load_editor (const char *module_name,
                                               NMConnection *connection,
                                               gpointer user_data,
                                               GError **error);
+
+#define _NM_SYMBOL_RUN_DYNAMIC_VOID(new_func, func_str, typed_args, args) \
+void new_func typed_args \
+{ \
+	void *dl_module; \
+	void (*func) typed_args; \
+	\
+	dl_module = dlopen (NULL, RTLD_LAZY | RTLD_LOCAL); \
+	if (!dl_module) \
+		return; \
+	func = dlsym (dl_module, func_str); \
+	if (func) \
+		func args; \
+	\
+	dlclose (dl_module); \
+}
 
 #endif /* __NM_VPN_PLUGIN_UTILS_H__ */
 

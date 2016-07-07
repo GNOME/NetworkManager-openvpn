@@ -31,9 +31,9 @@
 #include <gtk/gtk.h>
 
 #include <libsecret/secret.h>
-
 #include <nma-vpn-password-dialog.h>
 
+#include "nm-utils/nm-vpn-plugin-utils.h"
 #include "utils.h"
 
 #define KEYRING_UUID_TAG "connection-uuid"
@@ -204,6 +204,15 @@ eui_finish (const char *vpn_name,
 
 /*****************************************************************/
 
+/* nma_password_dialog_set_expired() is NMA 1.4 API and we don't want
+ * a hard dependency on it. If the symbol it's not available the dialog
+ * will remain displayed as before.
+ */
+_NM_SYMBOL_RUN_DYNAMIC_VOID(nma_vpn_password_dialog_set_expired_compat,
+                            "nma_vpn_password_dialog_set_expired",
+                            (NMAVpnPasswordDialog *dialog, const char *reason),
+                            (dialog, reason));
+
 static void
 std_no_secrets_required (void)
 {
@@ -223,9 +232,9 @@ stdin_ready_cb (GIOChannel *source, GIOCondition condition, gpointer user_data)
 	if (g_io_channel_read_line (source, &line, NULL, NULL, NULL) == G_IO_STATUS_NORMAL) {
 		if (g_str_has_prefix (line, "CANCEL")){
 			if (sscanf (line, "%*s %u %m[^\n]", &reason_code, &reason_str) == 2)
-				nma_vpn_password_dialog_set_expired (dialog, reason_str);
+				nma_vpn_password_dialog_set_expired_compat (dialog, reason_str);
 			else
-				nma_vpn_password_dialog_set_expired (dialog, NULL);
+				nma_vpn_password_dialog_set_expired_compat (dialog, NULL);
 			return FALSE;
 		}
 		g_free (line);
