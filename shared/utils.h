@@ -71,6 +71,7 @@
 #define NMV_OVPN_TAG_TUN_MTU            "tun-mtu"
 #define NMV_OVPN_TAG_TUN_IPV6           "tun-ipv6"
 #define NMV_OVPN_TAG_USER               "user"
+#define NMV_OVPN_TAG_MAX_ROUTES         "max-routes"
 
 gboolean is_pkcs12 (const char *filepath);
 
