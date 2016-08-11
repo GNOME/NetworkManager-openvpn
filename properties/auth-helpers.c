@@ -2010,7 +2010,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		/* we only have a checkbox, which we either map to "--comp-lzo yes" or
 		 * no "--comp-lzo" flag. In the UI, we cannot express "--comp-lzo [adaptive]"
-		 * or "--comp-lzo no". */
+		 * or "--comp-lzo no".
+		 *
+		 * Note that "--comp-lzo no" must be encoded as "comp-lzo=no-by-default" (bgo#769177).
+		 */
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_COMP_LZO), g_strdup ("yes"));
 	}
 
