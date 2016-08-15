@@ -1563,31 +1563,11 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "show_proxy_password"));
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (show_proxy_password_toggled_cb), builder);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_checkbutton"));
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PORT);
-	if (value && strlen (value)) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "port_checkbutton", "port_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 1194));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp > 0 && tmp < 65536 && tmp != 1194) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget),
-			                           (gdouble) tmp);
-		}
-		gtk_widget_set_sensitive (widget, TRUE);
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1194.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_checkbutton"));
 	g_assert (widget);
