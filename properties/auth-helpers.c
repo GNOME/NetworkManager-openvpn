@@ -1754,16 +1754,16 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	/* ping-exit / ping-restart */
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_checkbutton"));
-	ping_exit_restart_checkbox_toggled_cb (widget, builder);
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (ping_exit_restart_checkbox_toggled_cb), builder);
-
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
 	combo = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_combo"));
+	g_signal_connect ((GObject *) widget, "toggled", G_CALLBACK (ping_exit_restart_checkbox_toggled_cb), builder);
+
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING_EXIT);
-	if (value && *value)
-		active = PING_EXIT;
-	else {
+	active = PING_EXIT;
+	if (!value) {
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING_RESTART);
-		active = PING_RESTART;
+		if (value)
+			active = PING_RESTART;
 	}
 
 	store = gtk_list_store_new (1, G_TYPE_STRING);
@@ -1773,27 +1773,13 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	gtk_list_store_set (store, &iter, 0, _("ping-restart"), -1);
 	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
 	g_object_unref (store);
-	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), active);
+	gtk_combo_box_set_active ((GtkComboBox *) combo, active);
 
-	if (value && *value) {
-		long int tmp;
-
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp > 0 && tmp < 65536) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-			gtk_widget_set_sensitive (widget, TRUE);
-		}
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 30.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
+	gtk_spin_button_set_value ((GtkSpinButton *) spin,
+	                           (double) _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 30));
+	gtk_widget_set_sensitive (combo, !!value);
+	gtk_widget_set_sensitive (spin, !!value);
+	gtk_toggle_button_set_active ((GtkToggleButton *) widget, !!value);
 
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MAX_ROUTES);
