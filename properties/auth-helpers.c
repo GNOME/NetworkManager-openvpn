@@ -1401,6 +1401,20 @@ dev_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
 	device_name_changed_cb (GTK_ENTRY (entry), ok_button);
 }
 
+static gboolean
+_hash_get_boolean (GHashTable *hash,
+                   const char *key)
+{
+	const char *value;
+
+	nm_assert (hash);
+	nm_assert (key && key[0]);
+
+	value = g_hash_table_lookup (hash, key);
+
+	return nm_streq0 (value, "yes");
+}
+
 static void
 _builder_init_toggle_button (GtkBuilder *builder,
                              const char *widget_name,
@@ -1600,23 +1614,10 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO);
 	_builder_init_toggle_button (builder, "lzo_checkbutton", NM_IN_STRSET (value, "yes", "adaptive"));
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MSSFIX);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
+	_builder_init_toggle_button (builder, "mssfix_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_MSSFIX));
+	_builder_init_toggle_button (builder, "float_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_FLOAT));
+	_builder_init_toggle_button (builder, "tcp_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_PROTO_TCP));
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FLOAT);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "float_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
-
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROTO_TCP);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
 
 	/* Populate device-related widgets */
 	dev =      g_hash_table_lookup (hash, NM_OPENVPN_KEY_DEV);
@@ -1651,17 +1652,8 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	if (dev && dev[0] != '\0')
 		gtk_entry_set_text (GTK_ENTRY (entry), dev);
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_RANDOM);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_random_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
-
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUN_IPV6);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tun_ipv6_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
+	_builder_init_toggle_button (builder, "remote_random_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_REMOTE_RANDOM));
+	_builder_init_toggle_button (builder, "tun_ipv6_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_TUN_IPV6));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
