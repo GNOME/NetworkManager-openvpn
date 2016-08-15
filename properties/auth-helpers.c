@@ -1402,6 +1402,19 @@ dev_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
 }
 
 static void
+_builder_init_toggle_button (GtkBuilder *builder,
+                             const char *widget_name,
+                             gboolean active_state)
+{
+	GtkToggleButton *widget;
+
+	widget = (GtkToggleButton *) gtk_builder_get_object (builder, widget_name);
+	g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+
+	gtk_toggle_button_set_active (widget, active_state);
+}
+
+static void
 _builder_init_optional_spinbutton (GtkBuilder *builder,
                                    const char *checkbutton_name,
                                    const char *spinbutton_name,
@@ -1579,16 +1592,13 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 65535, 1300));
 
 
+	/* the UI currently only supports "--comp-lzo yes" or omitting the "--comp-lzo"
+	 * flag.
+	 *
+	 * Internally, we also support "--comp-lzo [adaptive]" and "--comp-lzo no"
+	 * which have different meaning for openvpn. */
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO);
-	if (NM_IN_STRSET (value, "yes", "adaptive")) {
-		/* the UI currently only supports "--comp-lzo yes" or omitting the "--comp-lzo"
-		 * flag.
-		 *
-		 * Internally, we also support "--comp-lzo [adaptive]" and "--comp-lzo no"
-		 * which have different meaning for openvpn. */
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
+	_builder_init_toggle_button (builder, "lzo_checkbutton", NM_IN_STRSET (value, "yes", "adaptive"));
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MSSFIX);
 	if (value && !strcmp (value, "yes")) {
