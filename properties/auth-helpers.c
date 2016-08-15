@@ -1569,31 +1569,10 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 1194));
 
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_checkbutton"));
-	g_assert (widget);
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
-
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUNNEL_MTU);
-	if (value && strlen (value)) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "tunmtu_checkbutton", "tunmtu_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 1500));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp > 0 && tmp < 65536) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-			gtk_widget_set_sensitive (widget, TRUE);
-		}
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1500.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_checkbutton"));
 	spin = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
