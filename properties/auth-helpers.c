@@ -1649,8 +1649,8 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	gtk_entry_set_placeholder_text (GTK_ENTRY (entry), _("(automatic)"));
 	g_signal_connect (G_OBJECT (entry), "insert-text", G_CALLBACK (device_name_filter_cb), NULL);
 	g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (device_name_changed_cb), ok_button);
-	if (dev && dev[0] != '\0')
-		gtk_entry_set_text (GTK_ENTRY (entry), dev);
+	gtk_entry_set_text (GTK_ENTRY (entry), dev ?: "");
+
 
 	_builder_init_toggle_button (builder, "remote_random_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_REMOTE_RANDOM));
 	_builder_init_toggle_button (builder, "tun_ipv6_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_TUN_IPV6));
@@ -1669,11 +1669,9 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_AUTH);
 	populate_hmacauth_combo (GTK_COMBO_BOX (widget), value);
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_REMOTE);
-	if (value && strlen (value)) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
-		gtk_entry_set_text (GTK_ENTRY(widget), value);
-	}
+	gtk_entry_set_text (GTK_ENTRY (widget), value ?: "");
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_checkbutton"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
