@@ -34,6 +34,7 @@
 #include <errno.h>
 
 #include "utils.h"
+#include "nm-utils/nm-shared-utils.h"
 
 #define BLOCK_HANDLER_ID "block-handler-id"
 
@@ -1401,6 +1402,30 @@ dev_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
 }
 
 static void
+_builder_init_optional_spinbutton (GtkBuilder *builder,
+                                   const char *checkbutton_name,
+                                   const char *spinbutton_name,
+                                   gboolean active_state,
+                                   gint64 value)
+{
+	GtkWidget *widget;
+	GtkWidget *spin;
+
+	widget = (GtkWidget *) gtk_builder_get_object (builder, checkbutton_name);
+	g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+
+	spin = (GtkWidget *) gtk_builder_get_object (builder, spinbutton_name);
+	g_return_if_fail (GTK_IS_SPIN_BUTTON (spin));
+
+	g_signal_connect ((GObject *) widget, "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
+
+	gtk_spin_button_set_value ((GtkSpinButton *) spin, (double) value);
+
+	gtk_widget_set_sensitive (spin, active_state);
+	gtk_toggle_button_set_active ((GtkToggleButton *) widget, active_state);
+}
+
+static void
 ping_exit_restart_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
 {
 	GtkBuilder *builder = (GtkBuilder *) user_data;
@@ -1889,16 +1914,10 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
 
-	/* max routes */
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_checkbutton"));
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-		int max_routes;
 
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_spinbutton"));
-		max_routes = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
-		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_MAX_ROUTES), g_strdup_printf ("%d", max_routes));
-	}
-
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MAX_ROUTES);
+	_builder_init_optional_spinbutton (builder, "max_routes_checkbutton", "max_routes_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 100000000, 100));
 
 
 out:
