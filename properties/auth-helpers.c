@@ -1483,30 +1483,11 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "ok_button"));
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_checkbutton"));
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_RENEG_SECONDS);
-	if (value && strlen (value)) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "reneg_checkbutton", "reneg_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, G_MAXINT, 0));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp >= 0 && tmp <= 604800) {  /* up to a week? */
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-		}
-		gtk_widget_set_sensitive (widget, TRUE);
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
 
 	/* Proxy support */
 	combo = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_type_combo"));
