@@ -42,6 +42,7 @@
 #define NMV_OVPN_TAG_KEY_DIRECTION      "key-direction"
 #define NMV_OVPN_TAG_KEY                "key"
 #define NMV_OVPN_TAG_KEYSIZE            "keysize"
+#define NMV_OVPN_TAG_MAX_ROUTES         "max-routes"
 #define NMV_OVPN_TAG_MSSFIX             "mssfix"
 #define NMV_OVPN_TAG_NOBIND             "nobind"
 #define NMV_OVPN_TAG_NS_CERT_TYPE       "ns-cert-type"
@@ -71,7 +72,6 @@
 #define NMV_OVPN_TAG_TUN_MTU            "tun-mtu"
 #define NMV_OVPN_TAG_TUN_IPV6           "tun-ipv6"
 #define NMV_OVPN_TAG_USER               "user"
-#define NMV_OVPN_TAG_MAX_ROUTES         "max-routes"
 
 gboolean is_pkcs12 (const char *filepath);
 
