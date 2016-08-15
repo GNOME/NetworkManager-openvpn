@@ -27,7 +27,6 @@ test_import_export_LDADD = \
 	$(GTK_LIBS) \
 	$(LIBNM_LIBS) \
 	$(LIBNMA_LIBS) \
-	-ldl \
 	$(top_builddir)/properties/libnm-vpn-plugin-openvpn-test.la
 
 

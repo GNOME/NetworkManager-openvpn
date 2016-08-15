@@ -58,7 +58,8 @@ libnm_vpn_plugin_openvpn_la_CFLAGS =                    \
 
 libnm_vpn_plugin_openvpn_la_LIBADD = \
         $(LIBNM_LIBS) \
-        $(DLOPEN)
+        $(DL_LIBS) \
+        $(NULL)
 
 libnm_vpn_plugin_openvpn_la_LDFLAGS = \
         -avoid-version \
