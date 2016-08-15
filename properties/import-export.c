@@ -987,6 +987,15 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_MAX_ROUTES)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 1, 0, 100000000, &v_int64, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_MAX_ROUTES, v_int64);
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_HTTP_PROXY_RETRY, NMV_OVPN_TAG_SOCKS_PROXY_RETRY)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
@@ -1818,6 +1827,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	}
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_RENEG_SEC, s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS);
+
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_MAX_ROUTES, s_vpn, NM_OPENVPN_KEY_MAX_ROUTES);
 
 	args_write_line_setting_value (f, NMV_OVPN_TAG_CIPHER, s_vpn, NM_OPENVPN_KEY_CIPHER);
 

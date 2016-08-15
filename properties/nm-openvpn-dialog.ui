@@ -53,6 +53,14 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment9">
+    <property name="lower">1</property>
+    <property name="upper">65535</property>
+    <property name="value">200</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+
   <object class="GtkListStore" id="liststore1"/>
   <object class="GtkListStore" id="liststore2"/>
   <object class="GtkListStore" id="model1">
@@ -1555,6 +1563,53 @@ config: ping &lt;n&gt;</property>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="hbox10">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="max_routes_checkbutton">
+                        <property name="label" translatable="yes">Specify max routes:</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Specify the maximum number of routes the server is allowed so specify.
+config: max-routes &lt;n&gt;</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="max_routes_spinbutton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Specify the maximum number of routes the server is allowed so specify.
+config: max-routes&lt;n&gt;</property>
+                        <property name="adjustment">adjustment9</property>
+                        <property name="climb_rate">1</property>
+                        <property name="numeric">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">12</property>
                   </packing>
                 </child>
                 <child>

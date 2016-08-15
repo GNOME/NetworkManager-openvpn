@@ -895,6 +895,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_PING,
 	NM_OPENVPN_KEY_PING_EXIT,
 	NM_OPENVPN_KEY_PING_RESTART,
+	NM_OPENVPN_KEY_MAX_ROUTES,
 	NULL
 };
 
@@ -1888,6 +1889,18 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_widget_set_sensitive (widget, FALSE);
 	}
 
+	/* max routes */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int max_routes;
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_spinbutton"));
+		max_routes = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_MAX_ROUTES), g_strdup_printf ("%d", max_routes));
+	}
+
+
+
 out:
 	g_free (ui_file);
 	return dialog;
@@ -2155,7 +2168,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		}
 	}
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));
+        widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		int ping_val;
 
@@ -2182,6 +2195,16 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		                       g_strdup (NM_OPENVPN_KEY_PING_EXIT) :
 		                       g_strdup (NM_OPENVPN_KEY_PING_RESTART),
 		                     g_strdup_printf ("%d", ping_val));
+	}
+
+	/* max routes */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int max_routes;
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_spinbutton"));
+		max_routes = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_MAX_ROUTES), g_strdup_printf ("%d", max_routes));
 	}
 
 	return hash;

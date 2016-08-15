@@ -120,6 +120,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_PING,                 G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_EXIT,            G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_RESTART,         G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_MAX_ROUTES,           G_TYPE_INT, 0, 100000000, FALSE },
 	{ NM_OPENVPN_KEY_PROTO_TCP,            G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PORT,                 G_TYPE_INT, 1, 65535, FALSE },
 	{ NM_OPENVPN_KEY_PROXY_TYPE,           G_TYPE_STRING, 0, 0, FALSE },
@@ -1327,6 +1328,24 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 
 	add_openvpn_arg (args, "--nobind");
+
+	/* max routes allowed from openvpn server */
+	tmp = nm_setting_vpn_get_data_item(s_vpn, NM_OPENVPN_KEY_MAX_ROUTES);
+	if (tmp) {
+		/* max-routes option is deprecated in 2.4 release
+		 * https://github.com/OpenVPN/openvpn/commit/d0085293e709c8a722356cfa68ad74c962aef9a2
+		 */
+		add_openvpn_arg (args, "--max-routes");
+		if (!add_openvpn_arg_int (args, tmp)) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("Invalid max-routes argument '%s'."),
+			             tmp);
+			free_openvpn_args (args);
+			return FALSE;
+		}
+	}
 
 	/* Device and device type, defaults to tun */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV);
