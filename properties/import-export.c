@@ -1826,8 +1826,11 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_KEYSIZE, s_vpn, NM_OPENVPN_KEY_KEYSIZE);
 
 	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
-	if (value)
+	if (value) {
+		if (nm_streq (value, "no-by-default"))
+			value = "no";
 		args_write_line (f, NMV_OVPN_TAG_COMP_LZO, value);
+	}
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_FLOAT);
