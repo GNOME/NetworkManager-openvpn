@@ -34,6 +34,7 @@
 #include <errno.h>
 
 #include "utils.h"
+#include "nm-utils/nm-shared-utils.h"
 
 #define BLOCK_HANDLER_ID "block-handler-id"
 
@@ -1400,6 +1401,57 @@ dev_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
 	device_name_changed_cb (GTK_ENTRY (entry), ok_button);
 }
 
+static gboolean
+_hash_get_boolean (GHashTable *hash,
+                   const char *key)
+{
+	const char *value;
+
+	nm_assert (hash);
+	nm_assert (key && key[0]);
+
+	value = g_hash_table_lookup (hash, key);
+
+	return nm_streq0 (value, "yes");
+}
+
+static void
+_builder_init_toggle_button (GtkBuilder *builder,
+                             const char *widget_name,
+                             gboolean active_state)
+{
+	GtkToggleButton *widget;
+
+	widget = (GtkToggleButton *) gtk_builder_get_object (builder, widget_name);
+	g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+
+	gtk_toggle_button_set_active (widget, active_state);
+}
+
+static void
+_builder_init_optional_spinbutton (GtkBuilder *builder,
+                                   const char *checkbutton_name,
+                                   const char *spinbutton_name,
+                                   gboolean active_state,
+                                   gint64 value)
+{
+	GtkWidget *widget;
+	GtkWidget *spin;
+
+	widget = (GtkWidget *) gtk_builder_get_object (builder, checkbutton_name);
+	g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+
+	spin = (GtkWidget *) gtk_builder_get_object (builder, spinbutton_name);
+	g_return_if_fail (GTK_IS_SPIN_BUTTON (spin));
+
+	g_signal_connect ((GObject *) widget, "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
+
+	gtk_spin_button_set_value ((GtkSpinButton *) spin, (double) value);
+
+	gtk_widget_set_sensitive (spin, active_state);
+	gtk_toggle_button_set_active ((GtkToggleButton *) widget, active_state);
+}
+
 static void
 ping_exit_restart_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
 {
@@ -1458,30 +1510,11 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "ok_button"));
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_checkbutton"));
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_RENEG_SECONDS);
-	if (value && strlen (value)) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "reneg_checkbutton", "reneg_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, G_MAXINT, 0));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp >= 0 && tmp <= 604800) {  /* up to a week? */
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-		}
-		gtk_widget_set_sensitive (widget, TRUE);
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "reneg_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 0.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
 
 	/* Proxy support */
 	combo = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_type_combo"));
@@ -1557,111 +1590,34 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "show_proxy_password"));
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (show_proxy_password_toggled_cb), builder);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_checkbutton"));
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PORT);
-	if (value && strlen (value)) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "port_checkbutton", "port_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 1194));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp > 0 && tmp < 65536 && tmp != 1194) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget),
-			                           (gdouble) tmp);
-		}
-		gtk_widget_set_sensitive (widget, TRUE);
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "port_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1194.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_checkbutton"));
-	g_assert (widget);
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUNNEL_MTU);
-	if (value && strlen (value)) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "tunmtu_checkbutton", "tunmtu_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 1500));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp > 0 && tmp < 65536) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-			gtk_widget_set_sensitive (widget, TRUE);
-		}
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1500.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_checkbutton"));
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FRAGMENT_SIZE);
-	if (value && strlen (value)) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "fragment_checkbutton", "fragment_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 65535, 1300));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp >= 0 && tmp < 65536) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-			gtk_widget_set_sensitive (widget, TRUE);
-		}
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 1300.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
-
+	/* the UI currently only supports "--comp-lzo yes" or omitting the "--comp-lzo"
+	 * flag.
+	 *
+	 * Internally, we also support "--comp-lzo [adaptive]" and "--comp-lzo no"
+	 * which have different meaning for openvpn. */
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO);
-	if (NM_IN_STRSET (value, "yes", "adaptive")) {
-		/* the UI currently only supports "--comp-lzo yes" or omitting the "--comp-lzo"
-		 * flag.
-		 *
-		 * Internally, we also support "--comp-lzo [adaptive]" and "--comp-lzo no"
-		 * which have different meaning for openvpn. */
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
+	_builder_init_toggle_button (builder, "lzo_checkbutton", NM_IN_STRSET (value, "yes", "adaptive"));
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MSSFIX);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
+	_builder_init_toggle_button (builder, "mssfix_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_MSSFIX));
+	_builder_init_toggle_button (builder, "float_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_FLOAT));
+	_builder_init_toggle_button (builder, "tcp_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_PROTO_TCP));
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FLOAT);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "float_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
-
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROTO_TCP);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
 
 	/* Populate device-related widgets */
 	dev =      g_hash_table_lookup (hash, NM_OPENVPN_KEY_DEV);
@@ -1693,60 +1649,29 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	gtk_entry_set_placeholder_text (GTK_ENTRY (entry), _("(automatic)"));
 	g_signal_connect (G_OBJECT (entry), "insert-text", G_CALLBACK (device_name_filter_cb), NULL);
 	g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (device_name_changed_cb), ok_button);
-	if (dev && dev[0] != '\0')
-		gtk_entry_set_text (GTK_ENTRY (entry), dev);
+	gtk_entry_set_text (GTK_ENTRY (entry), dev ?: "");
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_RANDOM);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_random_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
 
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TUN_IPV6);
-	if (value && !strcmp (value, "yes")) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tun_ipv6_checkbutton"));
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-	}
+	_builder_init_toggle_button (builder, "remote_random_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_REMOTE_RANDOM));
+	_builder_init_toggle_button (builder, "tun_ipv6_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_TUN_IPV6));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
 	populate_cipher_combo (GTK_COMBO_BOX (widget), value);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_checkbutton"));
-	g_assert (widget);
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_KEYSIZE);
-	if (value && strlen (value)) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "keysize_checkbutton", "keysize_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 128));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp > 0 && tmp < 65536) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-			gtk_widget_set_sensitive (widget, TRUE);
-		}
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "keysize_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 128.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "hmacauth_combo"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_AUTH);
 	populate_hmacauth_combo (GTK_COMBO_BOX (widget), value);
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_REMOTE);
-	if (value && strlen (value)) {
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
-		gtk_entry_set_text (GTK_ENTRY(widget), value);
-	}
+	gtk_entry_set_text (GTK_ENTRY (widget), value ?: "");
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_checkbutton"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
@@ -1821,43 +1746,24 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2);
 	}
 
-	/* ping */
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));
-	spin = GTK_WIDGET (gtk_builder_get_object (builder, "ping_spinbutton"));
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (checkbox_toggled_update_widget_cb), spin);
+
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING);
-	if (value && *value) {
-		long int tmp;
+	_builder_init_optional_spinbutton (builder, "ping_checkbutton", "ping_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 30));
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp > 0 && tmp < 65536) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-			gtk_widget_set_sensitive (widget, TRUE);
-		}
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 30.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
 
 	/* ping-exit / ping-restart */
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_checkbutton"));
-	ping_exit_restart_checkbox_toggled_cb (widget, builder);
-	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (ping_exit_restart_checkbox_toggled_cb), builder);
-
+	spin = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
 	combo = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_combo"));
+	g_signal_connect ((GObject *) widget, "toggled", G_CALLBACK (ping_exit_restart_checkbox_toggled_cb), builder);
+
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING_EXIT);
-	if (value && *value)
-		active = PING_EXIT;
-	else {
+	active = PING_EXIT;
+	if (!value) {
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING_RESTART);
-		active = PING_RESTART;
+		if (value)
+			active = PING_RESTART;
 	}
 
 	store = gtk_list_store_new (1, G_TYPE_STRING);
@@ -1867,38 +1773,18 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	gtk_list_store_set (store, &iter, 0, _("ping-restart"), -1);
 	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
 	g_object_unref (store);
-	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), active);
+	gtk_combo_box_set_active ((GtkComboBox *) combo, active);
 
-	if (value && *value) {
-		long int tmp;
+	gtk_spin_button_set_value ((GtkSpinButton *) spin,
+	                           (double) _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 30));
+	gtk_widget_set_sensitive (combo, !!value);
+	gtk_widget_set_sensitive (spin, !!value);
+	gtk_toggle_button_set_active ((GtkToggleButton *) widget, !!value);
 
-		errno = 0;
-		tmp = strtol (value, NULL, 10);
-		if (errno == 0 && tmp > 0 && tmp < 65536) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
-			gtk_widget_set_sensitive (widget, TRUE);
-		}
-	} else {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_exit_restart_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), 30.0);
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
-
-	/* max routes */
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_checkbutton"));
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-		int max_routes;
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_spinbutton"));
-		max_routes = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
-		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_MAX_ROUTES), g_strdup_printf ("%d", max_routes));
-	}
-
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MAX_ROUTES);
+	_builder_init_optional_spinbutton (builder, "max_routes_checkbutton", "max_routes_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 100000000, 100));
 
 
 out:
