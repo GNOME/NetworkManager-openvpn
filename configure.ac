@@ -38,6 +38,9 @@ dnl
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
 AC_CHECK_FUNCS(select socket uname)
+AC_SEARCH_LIBS([dlopen], [dl dld], [], [
+  AC_MSG_ERROR([unable to find the dlopen() function])
+])
 
 dnl ensure that when the Automake generated makefile calls aclocal,
 dnl it honours the $ACLOCAL_FLAGS environment variable
