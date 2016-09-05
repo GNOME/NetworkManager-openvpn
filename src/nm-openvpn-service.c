@@ -142,6 +142,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_TUN_IPV6,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_CIPHER,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_REMOTE,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_VERIFY_X509_NAME,     G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_CERT_TLS,      G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NS_CERT_TYPE,         G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TUNNEL_MTU,           G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -1424,22 +1425,49 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* tls-remote */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 	if (tmp && strlen (tmp)) {
-                add_openvpn_arg (args, "--tls-remote");
-                add_openvpn_arg (args, tmp);
+		add_openvpn_arg (args, "--tls-remote");
+		add_openvpn_arg (args, tmp);
+	}
+
+	/* verify-x509-name */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_VERIFY_X509_NAME);
+	if (tmp && strlen (tmp)) {
+		const char *name;
+		gs_free char *type = NULL;
+
+		name = strchr (tmp, ':');
+		if (name) {
+			type = g_strndup (tmp, name - tmp);
+			name++;
+		} else {
+			name = tmp;
+		}
+
+		if (!name[0] || !g_utf8_validate(name, -1, NULL)) {
+			g_set_error (error, NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("Invalid verify-x509-name."));
+			free_openvpn_args (args);
+			return FALSE;
+		}
+
+		add_openvpn_arg (args, "--verify-x509-name");
+		add_openvpn_arg (args, name);
+		add_openvpn_arg (args, type ?: "subject");
 	}
 
 	/* remote-cert-tls */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
 	if (tmp && strlen (tmp)) {
-                add_openvpn_arg (args, "--remote-cert-tls");
-                add_openvpn_arg (args, tmp);
+		add_openvpn_arg (args, "--remote-cert-tls");
+		add_openvpn_arg (args, tmp);
 	}
 
 	/* ns-cert-type */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_NS_CERT_TYPE);
 	if (tmp && tmp[0]) {
-                add_openvpn_arg (args, "--ns-cert-type");
-                add_openvpn_arg (args, tmp);
+		add_openvpn_arg (args, "--ns-cert-type");
+		add_openvpn_arg (args, tmp);
 	}
 
 	/* Reneg seconds */

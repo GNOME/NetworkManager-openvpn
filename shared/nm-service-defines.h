@@ -66,6 +66,7 @@
 #define NM_OPENVPN_KEY_TUN_IPV6 "tun-ipv6"
 #define NM_OPENVPN_KEY_TLS_CIPHER "tls-cipher"
 #define NM_OPENVPN_KEY_TLS_REMOTE "tls-remote"
+#define NM_OPENVPN_KEY_VERIFY_X509_NAME "verify-x509-name"
 #define NM_OPENVPN_KEY_REMOTE_CERT_TLS "remote-cert-tls"
 #define NM_OPENVPN_KEY_MAX_ROUTES "max-routes"
 
@@ -101,6 +102,11 @@
 /* arguments of "--ns-cert-type" */
 #define NM_OPENVPN_NS_CERT_TYPE_CLIENT "client"
 #define NM_OPENVPN_NS_CERT_TYPE_SERVER "server"
+
+/* possible types for verify-x509-name */
+#define NM_OPENVPN_VERIFY_X509_NAME_TYPE_SUBJECT     "subject"
+#define NM_OPENVPN_VERIFY_X509_NAME_TYPE_NAME        "name"
+#define NM_OPENVPN_VERIFY_X509_NAME_TYPE_NAME_PREFIX "name-prefix"
 
 /* User name and group to run nm-openvpn-service under */
 #define NM_OPENVPN_USER   "nm-openvpn"

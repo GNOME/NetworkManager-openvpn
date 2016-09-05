@@ -1251,6 +1251,32 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_VERIFY_X509_NAME)) {
+			const char *type = "subject";
+			gs_free char *item = NULL;
+
+			if (!args_params_check_nargs_minmax (params, 1, 2, &line_error))
+				goto handle_line_error;
+			if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
+				goto handle_line_error;
+
+			if (params[2]) {
+				if (!NM_IN_STRSET (params[2],
+				                   NM_OPENVPN_VERIFY_X509_NAME_TYPE_SUBJECT,
+				                   NM_OPENVPN_VERIFY_X509_NAME_TYPE_NAME,
+				                   NM_OPENVPN_VERIFY_X509_NAME_TYPE_NAME_PREFIX)) {
+					line_error = g_strdup_printf (_("Invalid verify-x509-name type: %s"), params[2]);
+					goto handle_line_error;
+				}
+
+				type = params[2];
+			}
+
+			item = g_strdup_printf ("%s:%s", type, params[1]);
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_VERIFY_X509_NAME, item);
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_REMOTE_CERT_TLS)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
@@ -1891,17 +1917,35 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (NM_IN_STRSET (connection_type,
 	                  NM_OPENVPN_CONTYPE_TLS,
 	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
-		args_write_line_setting_value (f, NMV_OVPN_TAG_TLS_REMOTE, s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
+		const char *x509_name, *ta_key;
+
 		args_write_line_setting_value (f, NMV_OVPN_TAG_REMOTE_CERT_TLS, s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
 		args_write_line_setting_value (f, NMV_OVPN_TAG_NS_CERT_TYPE, s_vpn, NM_OPENVPN_KEY_NS_CERT_TYPE);
+		args_write_line_setting_value (f, NMV_OVPN_TAG_TLS_REMOTE, s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 
-		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
-		if (_arg_is_set (value)) {
+		x509_name =  nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_VERIFY_X509_NAME);
+		if (_arg_is_set (x509_name)) {
+			const char *name;
+			gs_free char *type = NULL;
+
+			name = strchr (x509_name, ':');
+			if (name) {
+				type = g_strndup (x509_name, name - x509_name);
+				name++;
+			} else {
+				name = x509_name;
+			}
+
+			args_write_line (f, NMV_OVPN_TAG_VERIFY_X509_NAME, name, type);
+		}
+
+		ta_key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
+		if (_arg_is_set (ta_key)) {
 			gs_free char *s_free = NULL;
 
 			args_write_line (f,
 			                 NMV_OVPN_TAG_TLS_AUTH,
-			                 nmv_utils_str_utf8safe_unescape_c (value, &s_free),
+			                 nmv_utils_str_utf8safe_unescape_c (ta_key, &s_free),
 			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR)));
 		}
 	}
