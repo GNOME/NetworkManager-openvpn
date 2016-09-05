@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.4"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -1064,6 +1064,17 @@ config: static &lt;file&gt; [direction]</property>
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="model9">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes"> </col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="openvpn-advanced-dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -1846,6 +1857,8 @@ config: auth</property>
                       <object class="GtkGrid" id="table10">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="hexpand">True</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
@@ -1855,35 +1868,10 @@ config: auth</property>
                             <property name="label" translatable="yes">_Subject Match:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">tls_remote_entry</property>
-                            <property name="xalign">0</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkAlignment" id="alignment26">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="xscale">0</property>
-                            <child>
-                              <object class="GtkLabel" id="label33">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="valign">start</property>
-                                <property name="label" translatable="yes">&lt;i&gt;Connect only to servers whose certificate matches the given subject.
-Example: /CN=myvpn.company.com&lt;/i&gt;</property>
-                                <property name="use_markup">True</property>
-                                <property name="wrap">True</property>
-                                <property name="width_chars">30</property>
-                                <property name="xalign">0</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
                           </packing>
                         </child>
@@ -1891,8 +1879,51 @@ Example: /CN=myvpn.company.com&lt;/i&gt;</property>
                           <object class="GtkEntry" id="tls_remote_entry">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Accept connections only from a host with X509 name or common name equal to the specified one.
-config: tls-remote</property>
+                            <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes">Subject or Common Name to verify server certificate information against.
+
+config: verify-x509-name subject-or-name [mode]
+config (legacy modew): tls-remote subject-or-name</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="tls_remote_mode_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Server _Certificate Check:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">tls_remote_mode_combo</property>
+                            <property name="xalign">1</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="tls_remote_mode_combo">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="tooltip_text" translatable="yes">Verify server certificate identification.
+
+When enabled, connection will only succeed if the server certificate matches some expected properties.
+Matching can either apply to the whole certificate subject (all the fields),
+or just the Common Name (CN field).
+
+config: verify-x509-name subject-or-name [mode]
+config (legacy mode): tls-remote subject-or-name</property>
+                            <property name="model">model9</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="renderer12"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -2082,7 +2113,7 @@ config: ns-cert-type client|server</property>
                                 <property name="label" translatable="yes">Key _Direction:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">direction_combo</property>
-                                <property name="xalign">0</property>
+                                <property name="xalign">1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -2129,7 +2160,7 @@ config: tls-auth &lt;file&gt; [direction]</property>
                                 <property name="label" translatable="yes">Key _File:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">tls_auth_chooser</property>
-                                <property name="xalign">0</property>
+                                <property name="xalign">1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
