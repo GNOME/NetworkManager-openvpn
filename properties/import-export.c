@@ -1265,7 +1265,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				                   NM_OPENVPN_VERIFY_X509_NAME_TYPE_SUBJECT,
 				                   NM_OPENVPN_VERIFY_X509_NAME_TYPE_NAME,
 				                   NM_OPENVPN_VERIFY_X509_NAME_TYPE_NAME_PREFIX)) {
-					line_error = g_strdup_printf (_("Invalid verify-x509-name type: %s"), params[2]);
+					line_error = g_strdup_printf (_("invalid verify-x509-name type"));
 					goto handle_line_error;
 				}
 
