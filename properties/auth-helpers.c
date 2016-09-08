@@ -1501,18 +1501,16 @@ device_name_changed_cb (GtkEntry *entry,
 	GtkWidget *ok_button = user_data;
 	gboolean entry_sensitive;
 	char *entry_text;
-	GdkRGBA rgba;
 
 	entry_sensitive = gtk_widget_get_sensitive (GTK_WIDGET (entry));
 	entry_text = gtk_editable_get_chars (editable, 0, -1);
 
 	/* Change cell's background to red if the value is invalid */
 	if (entry_sensitive && entry_text[0] != '\0' && !nm_utils_iface_valid_name (entry_text)) {
-		gdk_rgba_parse (&rgba, "red");
-		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_FLAG_NORMAL, &rgba);
+		widget_set_error (GTK_WIDGET (editable));
 		gtk_widget_set_sensitive (ok_button, FALSE);
 	} else {
-		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_FLAG_NORMAL, NULL);
+		widget_unset_error (GTK_WIDGET (editable));
 		gtk_widget_set_sensitive (ok_button, TRUE);
 	}
 
