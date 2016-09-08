@@ -69,8 +69,8 @@
 #define NMV_OVPN_TAG_TLS_CLIENT         "tls-client"
 #define NMV_OVPN_TAG_TLS_REMOTE         "tls-remote"
 #define NMV_OVPN_TAG_TOPOLOGY           "topology"
-#define NMV_OVPN_TAG_TUN_MTU            "tun-mtu"
 #define NMV_OVPN_TAG_TUN_IPV6           "tun-ipv6"
+#define NMV_OVPN_TAG_TUN_MTU            "tun-mtu"
 #define NMV_OVPN_TAG_USER               "user"
 #define NMV_OVPN_TAG_VERIFY_X509_NAME   "verify-x509-name"
 
@@ -84,4 +84,3 @@ char *      nmv_utils_str_utf8safe_unescape   (const char *str);
 const char *nmv_utils_str_utf8safe_unescape_c (const char *str, char **str_free);
 
 #endif  /* UTILS_H */
-

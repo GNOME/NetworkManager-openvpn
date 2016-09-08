@@ -1932,9 +1932,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			if (name) {
 				type = g_strndup (x509_name, name - x509_name);
 				name++;
-			} else {
+			} else
 				name = x509_name;
-			}
 
 			args_write_line (f, NMV_OVPN_TAG_VERIFY_X509_NAME, name, type);
 		}

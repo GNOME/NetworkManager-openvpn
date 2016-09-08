@@ -1439,9 +1439,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		if (name) {
 			type = g_strndup (tmp, name - tmp);
 			name++;
-		} else {
+		} else
 			name = tmp;
-		}
 
 		if (!name[0] || !g_utf8_validate(name, -1, NULL)) {
 			g_set_error (error, NM_VPN_PLUGIN_ERROR,
