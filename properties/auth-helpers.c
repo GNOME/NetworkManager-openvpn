@@ -69,6 +69,25 @@ setup_secret_widget (GtkBuilder *builder,
 	return widget;
 }
 
+/* From gnome-control-center/panels/network/connection-editor/ui-helpers.c */
+
+static void
+widget_set_error (GtkWidget *widget)
+{
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+
+	gtk_style_context_add_class (gtk_widget_get_style_context (widget), "error");
+}
+
+static void
+widget_unset_error (GtkWidget *widget)
+{
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+
+	gtk_style_context_remove_class (gtk_widget_get_style_context (widget), "error");
+}
+
+
 typedef struct {
 	GtkWidget *widget1;
 	GtkWidget *widget2;
@@ -889,6 +908,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_TA,
 	NM_OPENVPN_KEY_RENEG_SECONDS,
 	NM_OPENVPN_KEY_TLS_REMOTE,
+	NM_OPENVPN_KEY_VERIFY_X509_NAME,
 	NM_OPENVPN_KEY_REMOTE_RANDOM,
 	NM_OPENVPN_KEY_TUN_IPV6,
 	NM_OPENVPN_KEY_REMOTE_CERT_TLS,
@@ -1139,6 +1159,126 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 	g_object_unref (store);
 }
 
+#define TLS_REMOTE_MODE_NONE        "none"
+#define TLS_REMOTE_MODE_SUBJECT     NM_OPENVPN_VERIFY_X509_NAME_TYPE_SUBJECT
+#define TLS_REMOTE_MODE_NAME        NM_OPENVPN_VERIFY_X509_NAME_TYPE_NAME
+#define TLS_REMOTE_MODE_NAME_PREFIX NM_OPENVPN_VERIFY_X509_NAME_TYPE_NAME_PREFIX
+#define TLS_REMOTE_MODE_LEGACY      "legacy"
+
+#define TLS_REMOTE_MODE_COL_NAME 0
+#define TLS_REMOTE_MODE_COL_VALUE 1
+
+static void
+populate_tls_remote_mode_entry_combo (GtkEntry* entry, GtkComboBox *box,
+                                      const char *tls_remote, const char *x509_name)
+{
+	GtkListStore *store;
+	GtkTreeIter iter;
+	const char *subject_name = NULL;
+
+	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+	gtk_combo_box_set_model (box, GTK_TREE_MODEL (store));
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    TLS_REMOTE_MODE_COL_NAME, _("Don't verify certificate identification"),
+	                    TLS_REMOTE_MODE_COL_VALUE, TLS_REMOTE_MODE_NONE,
+	                    -1);
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    TLS_REMOTE_MODE_COL_NAME, _("Verify whole subject exactly"),
+	                    TLS_REMOTE_MODE_COL_VALUE, TLS_REMOTE_MODE_SUBJECT,
+	                    -1);
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    TLS_REMOTE_MODE_COL_NAME, _("Verify name exactly"),
+	                    TLS_REMOTE_MODE_COL_VALUE, TLS_REMOTE_MODE_NAME,
+	                    -1);
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    TLS_REMOTE_MODE_COL_NAME, _("Verify name by prefix"),
+	                    TLS_REMOTE_MODE_COL_VALUE, TLS_REMOTE_MODE_NAME_PREFIX,
+	                    -1);
+
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+	                    TLS_REMOTE_MODE_COL_NAME, _("Verify subject partially (legacy mode)"),
+	                    TLS_REMOTE_MODE_COL_VALUE, TLS_REMOTE_MODE_LEGACY,
+	                    -1);
+
+	if (x509_name && strlen (x509_name)) {
+		if (g_str_has_prefix (x509_name, "name:"))
+			gtk_combo_box_set_active (box, 2);
+		else if (g_str_has_prefix (x509_name, "name-prefix:"))
+			gtk_combo_box_set_active (box, 3);
+		else
+			gtk_combo_box_set_active (box, 1);
+
+		subject_name = strchr (x509_name, ':');
+		if (subject_name)
+			subject_name++;
+		else
+			subject_name = x509_name;
+	} else if (tls_remote && strlen (tls_remote)) {
+		gtk_combo_box_set_active (box, 4);
+
+		subject_name = tls_remote;
+	} else {
+		gtk_combo_box_set_active (box, 0);
+
+		subject_name = "";
+	}
+
+	gtk_entry_set_text (entry, subject_name);
+
+    g_object_unref (store);
+}
+
+static void
+tls_remote_changed (GtkWidget *widget, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	GtkWidget *entry, *combo, *ok_button;
+	GtkTreeIter iter;
+	gboolean entry_enabled = TRUE, entry_has_error = FALSE;
+
+	entry     = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
+	combo     = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_mode_combo"));
+	ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "ok_button"));
+
+	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter)) {
+		gs_free char *tls_remote_mode = NULL;
+		GtkTreeModel *combo_model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+
+		gtk_tree_model_get (combo_model, &iter, TLS_REMOTE_MODE_COL_VALUE, &tls_remote_mode, -1);
+		g_return_if_fail (tls_remote_mode);
+
+		/* If a mode of 'none' is selected, disable the subject entry control.
+		   Otherwise, enable the entry, and set up it's error state based on
+		   whether it is empty or not (it should not be). */
+		if (!strcmp (tls_remote_mode, TLS_REMOTE_MODE_NONE)) {
+			entry_enabled = FALSE;
+		} else {
+			const char *subject = gtk_entry_get_text (GTK_ENTRY (entry));
+
+			entry_enabled = TRUE;
+			entry_has_error = !subject || !subject[0];
+		}
+	}
+
+	gtk_widget_set_sensitive (entry, entry_enabled);
+	if(entry_has_error) {
+		widget_set_error (entry);
+		gtk_widget_set_sensitive (ok_button, FALSE);
+	} else {
+		widget_unset_error (entry);
+		gtk_widget_set_sensitive (ok_button, TRUE);
+	}
+}
+
 static void
 remote_tls_cert_toggled_cb (GtkWidget *widget, gpointer user_data)
 {
@@ -1361,18 +1501,16 @@ device_name_changed_cb (GtkEntry *entry,
 	GtkWidget *ok_button = user_data;
 	gboolean entry_sensitive;
 	char *entry_text;
-	GdkRGBA rgba;
 
 	entry_sensitive = gtk_widget_get_sensitive (GTK_WIDGET (entry));
 	entry_text = gtk_editable_get_chars (editable, 0, -1);
 
 	/* Change cell's background to red if the value is invalid */
 	if (entry_sensitive && entry_text[0] != '\0' && !nm_utils_iface_valid_name (entry_text)) {
-		gdk_rgba_parse (&rgba, "red");
-		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_FLAG_NORMAL, &rgba);
+		widget_set_error (GTK_WIDGET (editable));
 		gtk_widget_set_sensitive (ok_button, FALSE);
 	} else {
-		gtk_widget_override_background_color (GTK_WIDGET (editable), GTK_STATE_FLAG_NORMAL, NULL);
+		widget_unset_error (GTK_WIDGET (editable));
 		gtk_widget_set_sensitive (ok_button, TRUE);
 	}
 
@@ -1669,9 +1807,14 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_AUTH);
 	populate_hmacauth_combo (GTK_COMBO_BOX (widget), value);
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_REMOTE);
-	gtk_entry_set_text (GTK_ENTRY (widget), value ?: "");
+	entry = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_mode_combo"));
+	populate_tls_remote_mode_entry_combo (GTK_ENTRY (entry), GTK_COMBO_BOX (combo),
+	                                      g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_REMOTE),
+	                                      g_hash_table_lookup (hash, NM_OPENVPN_KEY_VERIFY_X509_NAME));
+	g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (tls_remote_changed), builder);
+	g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (tls_remote_changed), builder);
+	tls_remote_changed (entry, builder);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_checkbutton"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
@@ -1796,7 +1939,7 @@ GHashTable *
 advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 {
 	GHashTable *hash;
-	GtkWidget *widget;
+	GtkWidget *widget, *entry, *combo;
 	GtkBuilder *builder;
 	const char *contype = NULL;
 	const char *value;
@@ -1994,10 +2137,25 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
-		value = gtk_entry_get_text (GTK_ENTRY(widget));
-		if (value && strlen (value))
-			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TLS_REMOTE), g_strdup (value));
+		entry = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
+		value = gtk_entry_get_text (GTK_ENTRY (entry));
+
+		combo = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_mode_combo"));
+		model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+
+		if (value && strlen (value) && gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter)) {
+			gs_free char *tls_remote_mode = NULL;
+			gtk_tree_model_get (model, &iter, TLS_REMOTE_MODE_COL_VALUE, &tls_remote_mode, -1);
+
+			if (!g_strcmp0 (tls_remote_mode, TLS_REMOTE_MODE_NONE)) {
+				// pass
+			} else if (!g_strcmp0 (tls_remote_mode, TLS_REMOTE_MODE_LEGACY)) {
+				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TLS_REMOTE), g_strdup(value));
+			} else {
+				char *x509_name = g_strdup_printf ("%s:%s", tls_remote_mode, value);
+				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_VERIFY_X509_NAME), x509_name);
+			}
+		}
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_checkbutton"));
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {

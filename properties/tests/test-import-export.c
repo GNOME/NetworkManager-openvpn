@@ -244,6 +244,8 @@ test_tls_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, "/CN=myvpn.company.com");
+	_check_item (s_vpn, NM_OPENVPN_KEY_VERIFY_X509_NAME,
+	             "subject:C=US, L=Cambridge, CN=GNOME, emailAddress=networkmanager-list@gnome.org");
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, "server");
 
 	expected_path = g_strdup_printf ("%s/keys/mg8.ca", SRCDIR);
