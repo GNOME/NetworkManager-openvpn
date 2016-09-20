@@ -997,9 +997,12 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 	if (tmp && *tmp) {
+		char *tmp_clone = NULL;
+		char *tmp_remaining;
 		char *tok, *port, *proto;
-		char *tmp_dup = strdup (tmp);
-		while ((tok = strsep (&tmp_dup, " \t,")) != NULL) {
+
+		tmp_remaining = tmp_clone = g_strdup (tmp);
+		while ((tok = strsep (&tmp_remaining, " \t,")) != NULL) {
 			if (*tok) {
 				port = strchr (tok, ':');
 				proto = port ? strchr (port + 1, ':') : NULL;
@@ -1017,7 +1020,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 						             _("Invalid port number '%s'."), port);
 						free_openvpn_args (args);
-						g_free (tmp_dup);
+						g_free (tmp_clone);
 						return FALSE;
 					}
 				} else if (defport) {
@@ -1028,6 +1031,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						             _("Invalid port number '%s'."),
 						             defport);
 						free_openvpn_args (args);
+						g_free (tmp_clone);
 						return FALSE;
 					}
 				} else
@@ -1044,7 +1048,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 						             _("Invalid proto '%s'."), proto);
 						free_openvpn_args (args);
-						g_free (tmp_dup);
+						g_free (tmp_clone);
 						return FALSE;
 					}
 				} else if (proto_tcp && !strcmp (proto_tcp, "yes"))
@@ -1053,7 +1057,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 					add_openvpn_arg (args, "udp");
 			}
 		}
-		g_free (tmp_dup);
+		g_free (tmp_clone);
 	}
 
 	/* Remote random */
