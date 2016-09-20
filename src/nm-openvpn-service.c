@@ -54,6 +54,8 @@
 # define DIST_VERSION VERSION
 #endif
 
+#define RUNDIR  LOCALSTATEDIR"/run/NetworkManager"
+
 static struct {
 	gboolean debug;
 	int log_level;
@@ -1029,6 +1031,26 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 	io_data->proxy_password = tmp ? g_strdup (tmp) : NULL;
 }
 
+static char *
+mgt_path_create (NMConnection *connection, GError **error)
+{
+	int errsv;
+
+	/* Setup runtime directory */
+	if (g_mkdir_with_parents (RUNDIR, 0755) != 0) {
+		errsv = errno;
+		g_set_error (error,
+		             NM_VPN_PLUGIN_ERROR,
+		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		             "Cannot create run-dir %s (%s)",
+		             RUNDIR, g_strerror (errsv));
+		return NULL;
+	}
+
+	return g_strdup_printf (RUNDIR"/nm-openvpn-%s",
+	                        nm_connection_get_uuid (connection));
+}
+
 #define MAX_GROUPS 128
 static gboolean
 is_dir_writable (const char *dir, const char *user)
@@ -1566,10 +1588,11 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	add_openvpn_arg (args, "--persist-tun");
 
 	/* Management socket for localhost access to supply username and password */
+	g_clear_pointer (&priv->mgt_path, g_free);
+	priv->mgt_path = mgt_path_create (connection, error);
+	if (!priv->mgt_path)
+		return FALSE;
 	add_openvpn_arg (args, "--management");
-	g_warn_if_fail (priv->mgt_path == NULL);
-	priv->mgt_path = g_strdup_printf (LOCALSTATEDIR "/run/NetworkManager/nm-openvpn-%s",
-	                                  nm_connection_get_uuid (connection));
 	add_openvpn_arg (args, priv->mgt_path);
 	add_openvpn_arg (args, "unix");
 	add_openvpn_arg (args, "--management-client-user");
