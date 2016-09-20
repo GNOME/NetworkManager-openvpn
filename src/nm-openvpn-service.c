@@ -905,13 +905,6 @@ nm_find_openvpn (void)
 }
 
 static void
-free_openvpn_args (GPtrArray *args)
-{
-	g_ptr_array_foreach (args, (GFunc) g_free, NULL);
-	g_ptr_array_free (args, TRUE);
-}
-
-static void
 add_openvpn_arg (GPtrArray *args, const char *arg)
 {
 	g_return_if_fail (args != NULL);
@@ -1100,7 +1093,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 	const char *openvpn_binary, *auth, *tmp, *tmp2, *tmp3, *tmp4;
-	GPtrArray *args;
+	gs_unref_ptrarray GPtrArray *args = NULL;
 	GPid pid;
 	gboolean dev_type_is_tap;
 	char *stmp;
@@ -1157,7 +1150,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 
-	args = g_ptr_array_new ();
+	args = g_ptr_array_new_with_free_func (g_free);
+
 	add_openvpn_arg (args, openvpn_binary);
 
 	defport = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
@@ -1189,7 +1183,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						             NM_VPN_PLUGIN_ERROR,
 						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 						             _("Invalid port number '%s'."), port);
-						free_openvpn_args (args);
 						g_free (tmp_dup);
 						return FALSE;
 					}
@@ -1200,7 +1193,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 						             _("Invalid port number '%s'."),
 						             defport);
-						free_openvpn_args (args);
 						return FALSE;
 					}
 				} else
@@ -1216,7 +1208,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 						             NM_VPN_PLUGIN_ERROR,
 						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 						             _("Invalid proto '%s'."), proto);
-						free_openvpn_args (args);
 						g_free (tmp_dup);
 						return FALSE;
 					}
@@ -1263,7 +1254,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 				         NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 				         _("Invalid proxy type '%s'."),
 				         tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1312,7 +1302,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid ping duration '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1326,7 +1315,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid ping-exit duration '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1340,7 +1328,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid ping-restart duration '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1360,7 +1347,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid max-routes argument '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1416,7 +1402,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid keysize '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1463,7 +1448,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error, NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid verify-x509-name."));
-			free_openvpn_args (args);
 			return FALSE;
 		}
 
@@ -1499,7 +1483,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid reneg seconds '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	} else {
@@ -1534,7 +1517,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid TUN MTU size '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1549,7 +1531,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid fragment size '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1628,7 +1609,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			                     NM_VPN_PLUGIN_ERROR,
 			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			                     _("Missing required local IP address for static key mode."));
-			free_openvpn_args (args);
 			return FALSE;
 		}
 		add_openvpn_arg (args, tmp);
@@ -1640,7 +1620,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			                     NM_VPN_PLUGIN_ERROR,
 			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			                     _("Missing required remote IP address for static key mode."));
-			free_openvpn_args (args);
 			return FALSE;
 		}
 		add_openvpn_arg (args, tmp);
@@ -1666,7 +1645,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		             _("Unknown connection type '%s'."),
 		             connection_type);
-		free_openvpn_args (args);
 		return FALSE;
 	}
 
@@ -1686,7 +1664,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("User '%s' not found, check NM_OPENVPN_USER."),
 			             nm_openvpn_user);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1700,7 +1677,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Group '%s' not found, check NM_OPENVPN_GROUP."),
 			             nm_openvpn_group);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1726,11 +1702,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 
 	if (!g_spawn_async (NULL, (char **) args->pdata, NULL,
-	                    G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, error)) {
-		free_openvpn_args (args);
+	                    G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, error))
 		return FALSE;
-	}
-	free_openvpn_args (args);
 
 	pids_pending_add (pid, plugin);
 
