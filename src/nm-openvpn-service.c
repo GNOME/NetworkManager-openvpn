@@ -1652,17 +1652,12 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		return FALSE;
 	}
 
-	/* Allow openvpn to be run as a specified user:group and drop privileges. */
-	nm_openvpn_user = getenv ("NM_OPENVPN_USER");
-	nm_openvpn_group = getenv ("NM_OPENVPN_GROUP");
-	nm_openvpn_chroot = getenv ("NM_OPENVPN_CHROOT");
-	if (!nm_openvpn_user)
-		nm_openvpn_user = NM_OPENVPN_USER;
-	if (!nm_openvpn_group)
-		nm_openvpn_group = NM_OPENVPN_GROUP;
-	if (!nm_openvpn_chroot)
-		nm_openvpn_chroot = NM_OPENVPN_CHROOT;
-
+	/* Allow openvpn to be run as a specified user:group.
+	 *
+	 * We do this by default. The only way to disable it is by setting
+	 * empty environment variables NM_OPENVPN_USER and NM_OPENVPN_GROUP. */
+	nm_openvpn_user = getenv ("NM_OPENVPN_USER") ?: NM_OPENVPN_USER;
+	nm_openvpn_group = getenv ("NM_OPENVPN_GROUP") ?: NM_OPENVPN_GROUP;
 	if (*nm_openvpn_user) {
 		if (getpwnam (nm_openvpn_user)) {
 			add_openvpn_arg (args, "--user");
@@ -1691,6 +1686,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			return FALSE;
 		}
 	}
+
+	/* we try to chroot be default. The only way to disable that is by
+	 * setting the an empty environment variable NM_OPENVPN_CHROOT. */
+	nm_openvpn_chroot = getenv ("NM_OPENVPN_CHROOT") ?: NM_OPENVPN_CHROOT;
 	if (*nm_openvpn_chroot) {
 		if (check_chroot_dir_usability (nm_openvpn_chroot, nm_openvpn_user)) {
 			add_openvpn_arg (args, "--chroot");
