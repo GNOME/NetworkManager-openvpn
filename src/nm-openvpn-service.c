@@ -45,6 +45,7 @@
 #include <pwd.h>
 #include <grp.h>
 #include <glib-unix.h>
+#include <glib/gstdio.h>
 
 #include "utils.h"
 #include "nm-utils/nm-shared-utils.h"
@@ -1051,61 +1052,125 @@ mgt_path_create (NMConnection *connection, GError **error)
 	                        nm_connection_get_uuid (connection));
 }
 
-#define MAX_GROUPS 128
 static gboolean
-is_dir_writable (const char *dir, const char *user)
+_passwd_get_uid (const char *name, uid_t *out_uid)
 {
-	struct stat sb;
 	struct passwd *pw;
 
-	if (stat (dir, &sb) == -1)
+	if (!name || !name[0]) {
+		errno = EINVAL;
 		return FALSE;
-	pw = getpwnam (user);
+	}
+
+	pw = getpwnam (name);
 	if (!pw)
 		return FALSE;
 
-	if (pw->pw_uid == 0)
-		return TRUE;
-
-	if (sb.st_mode & S_IWOTH)
-		return TRUE;
-	else if (sb.st_mode & S_IWGRP) {
-		/* Group has write access. Is user in that group? */
-		int i, ngroups = MAX_GROUPS;
-		gid_t groups[MAX_GROUPS];
-
-		getgrouplist (user, pw->pw_gid, groups, &ngroups);
-		for (i = 0; i < ngroups && i < MAX_GROUPS; i++) {
-			if (groups[i] == sb.st_gid)
-				return TRUE;
-		}
-	} else if (sb.st_mode & S_IWUSR) {
-		/* The owner has write access. Does the user own the file? */
-		if (pw->pw_uid == sb.st_uid)
-			return TRUE;
-	}
-	return FALSE;
+	NM_SET_OUT (out_uid, pw->pw_uid);
+	return TRUE;
 }
 
-/* Check existence of 'tmp' directory inside @chdir
- * and write access in @chdir and @chdir/tmp for @user.
- */
 static gboolean
-check_chroot_dir_usability (const char *chdir, const char *user)
+_passwd_get_gid (const char *name, gid_t *out_gid)
 {
-	char *tmp_dir;
-	gboolean b1, b2;
+	struct group *gr;
 
-	tmp_dir = g_strdup_printf ("%s/tmp", chdir);
-	if (!g_file_test (tmp_dir, G_FILE_TEST_IS_DIR)) {
-		g_free (tmp_dir);
+	if (!name || !name[0]) {
+		errno = EINVAL;
 		return FALSE;
 	}
 
-	b1 = is_dir_writable (chdir, user);
-	b2 = is_dir_writable (tmp_dir, user);
-	g_free (tmp_dir);
-	return b1 && b2;
+	gr = getgrnam (name);
+	if (!gr)
+		return FALSE;
+
+	NM_SET_OUT (out_gid, gr->gr_gid);
+	return TRUE;
+}
+
+static gboolean
+chroot_create (const char *chroot_dir,
+               const char *user,
+               uid_t passwd_uid,
+               const char *group,
+               gid_t passwd_gid,
+               char **out_chroot_dir,
+               GError **error)
+{
+	const char *chroot_dir_orig;
+	gs_free char *chroot_dir_c = NULL;
+	gboolean chroot_dir_created = FALSE;
+	gs_free char *tmp_dir = NULL;
+	int errsv;
+
+	nm_assert (user && user[0]);
+	nm_assert (group && group[0]);
+	nm_assert (out_chroot_dir && !*out_chroot_dir);
+	nm_assert (error && !*error);
+
+	if (   !chroot_dir
+	    || g_str_has_prefix (chroot_dir, "/run/nm-openvpn/chroot/")) {
+		if (g_mkdir_with_parents ("/run/nm-openvpn/chroot", 0755) != 0) {
+			errsv = errno;
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_FAILED,
+			             "failed creating \"/run/nm-openvpn/chroot\": %s",
+			             g_strerror (errsv));
+			return FALSE;
+		}
+	}
+
+	chroot_dir_orig = chroot_dir;
+	if (chroot_dir) {
+		if (g_mkdir (chroot_dir, 0700) != 0) {
+			errsv = errno;
+			if (errsv != EEXIST) {
+				g_set_error (error,
+				             NM_VPN_PLUGIN_ERROR,
+				             NM_VPN_PLUGIN_ERROR_FAILED,
+				             "failed creating chroot dir %s: %s",
+				             chroot_dir, g_strerror (errsv));
+				return FALSE;
+			}
+		} else
+			chroot_dir_created = TRUE;
+	} else {
+		chroot_dir_c = g_strdup ("/run/nm-openvpn/chroot/XXXXXX");
+		if (!g_mkdtemp_full (chroot_dir_c, 0700)) {
+			errsv = errno;
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_FAILED,
+			             "failed creating chroot dir /run/nm-openvpn/chroot/XXXXXX: %s",
+			             g_strerror (errsv));
+			return FALSE;
+		}
+		chroot_dir_created = TRUE;
+		chroot_dir = chroot_dir_c;
+	}
+
+	tmp_dir = g_build_filename (chroot_dir_c, "tmp", NULL);
+
+	if (g_mkdir (tmp_dir, 0755) != 0) {
+		errsv = errno;
+		g_set_error (error,
+		             NM_VPN_PLUGIN_ERROR,
+		             NM_VPN_PLUGIN_ERROR_FAILED,
+		             "failed creating temp dir %s: %s",
+		             tmp_dir, g_strerror (errsv));
+		goto cleanup_chroot;
+	}
+
+	/* TODO: fix ownership. */
+
+	*out_chroot_dir =    g_steal_pointer (&chroot_dir_c)
+	                  ?: g_strdup (chroot_dir);
+	return TRUE;
+cleanup_chroot:
+	if (chroot_dir_created)
+		(void) rmdir (chroot_dir);
+	return FALSE;
 }
 
 static gboolean
@@ -1124,6 +1189,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	gs_free char *bus_name = NULL;
 	NMSettingVpn *s_vpn;
 	const char *connection_type;
+	gid_t passwd_gid = 0;
+	uid_t passwd_uid = 0;
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -1679,7 +1746,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	nm_openvpn_user = getenv ("NM_OPENVPN_USER") ?: NM_OPENVPN_USER;
 	nm_openvpn_group = getenv ("NM_OPENVPN_GROUP") ?: NM_OPENVPN_GROUP;
 	if (*nm_openvpn_user) {
-		if (getpwnam (nm_openvpn_user)) {
+		if (_passwd_get_uid (nm_openvpn_user, &passwd_uid)) {
 			add_openvpn_arg (args, "--user");
 			add_openvpn_arg (args, nm_openvpn_user);
 		} else {
@@ -1692,7 +1759,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 	if (*nm_openvpn_group) {
-		if (getgrnam (nm_openvpn_group)) {
+		if (_passwd_get_gid (nm_openvpn_group, &passwd_gid)) {
 			add_openvpn_arg (args, "--group");
 			add_openvpn_arg (args, nm_openvpn_group);
 		} else {
@@ -1705,18 +1772,32 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 
-	/* we try to chroot be default. The only way to disable that is by
-	 * setting the an empty environment variable NM_OPENVPN_CHROOT. */
-	nm_openvpn_chroot = getenv ("NM_OPENVPN_CHROOT") ?: NM_OPENVPN_CHROOT;
-	if (*nm_openvpn_chroot) {
-		if (check_chroot_dir_usability (nm_openvpn_chroot, nm_openvpn_user)) {
-			add_openvpn_arg (args, "--chroot");
-			add_openvpn_arg (args, nm_openvpn_chroot);
-		} else
-			_LOGW ("Directory '%s' not usable for chroot by '%s', openvpn will not be chrooted.",
-			        nm_openvpn_chroot, nm_openvpn_user);
-	}
+	nm_openvpn_chroot = getenv ("NM_OPENVPN_CHROOT");
+	if (   (!nm_openvpn_chroot || !*nm_openvpn_chroot)
+	    && passwd_uid && passwd_gid) {
+		GError *local = NULL;
+		gs_free char *chroot_dir = NULL;
 
+		if (!chroot_create (nm_openvpn_chroot,
+		                    nm_openvpn_user,
+		                    passwd_uid,
+		                    nm_openvpn_group,
+		                    passwd_gid,
+		                    &chroot_dir,
+		                    &local)) {
+			_LOGW ("Failure to chroot to \'%s\' for user %s:%s: %s",
+			       nm_openvpn_chroot ?: "/run/nm-openvpn/chroot/XXXXXX",
+			       nm_openvpn_user, nm_openvpn_group,
+			       local->message);
+		} else {
+			nm_assert (chroot_dir && chroot_dir[0]);
+			_LOGD ("Created chroot directory %s", chroot_dir);
+			add_openvpn_arg (args, "--chroot");
+			add_openvpn_arg (args, chroot_dir);
+			add_openvpn_arg (args, "--tmp-dir");
+			add_openvpn_arg (args, "/tmp");
+		}
+	}
 	g_ptr_array_add (args, NULL);
 
 	{
