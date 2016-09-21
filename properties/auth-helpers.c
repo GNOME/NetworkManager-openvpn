@@ -1725,7 +1725,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 		gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 		g_object_unref (store);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active < 0 ? 0 : active);
+		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active);
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
 		if (value && strlen (value)) {
