@@ -1817,7 +1817,12 @@ real_disconnect (NMVpnServicePlugin *plugin,
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 
-	g_clear_pointer (&priv->mgt_path, g_free);
+	if (priv->mgt_path) {
+		/* openvpn does not cleanup the management socket upon exit,
+		 * possibly it could not even because it changed user */
+		(void) unlink (priv->mgt_path);
+		g_clear_pointer (&priv->mgt_path, g_free);
+	}
 
 	if (priv->pid) {
 		pids_pending_send_sigterm (priv->pid);
