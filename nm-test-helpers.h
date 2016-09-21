@@ -26,17 +26,17 @@
 #include <unistd.h>
 #include <stdarg.h>
 
+__attribute__ ((__format__ (__printf__, 2, 3)))
 static void
 FAIL(const char *test_name, const char *fmt, ...)
 {
 	va_list args;
-	char buf[500];
 
-	snprintf (buf, 500, "FAIL: (%s) %s\n", test_name, fmt);
-
+	fprintf (stderr, "FAIL: (%s) ", test_name);
 	va_start (args, fmt);
-	vfprintf (stderr, buf, args);
+	vfprintf (stderr, fmt, args);
 	va_end (args);
+	fprintf (stderr, "\n");
 	_exit (1);
 }
 
