@@ -54,6 +54,8 @@
 # define DIST_VERSION VERSION
 #endif
 
+#define RUNDIR  LOCALSTATEDIR"/run/NetworkManager"
+
 static struct {
 	gboolean debug;
 	int log_level;
@@ -905,13 +907,6 @@ nm_find_openvpn (void)
 }
 
 static void
-free_openvpn_args (GPtrArray *args)
-{
-	g_ptr_array_foreach (args, (GFunc) g_free, NULL);
-	g_ptr_array_free (args, TRUE);
-}
-
-static void
 add_openvpn_arg (GPtrArray *args, const char *arg)
 {
 	g_return_if_fail (args != NULL);
@@ -1036,6 +1031,26 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 	io_data->proxy_password = tmp ? g_strdup (tmp) : NULL;
 }
 
+static char *
+mgt_path_create (NMConnection *connection, GError **error)
+{
+	int errsv;
+
+	/* Setup runtime directory */
+	if (g_mkdir_with_parents (RUNDIR, 0755) != 0) {
+		errsv = errno;
+		g_set_error (error,
+		             NM_VPN_PLUGIN_ERROR,
+		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		             "Cannot create run-dir %s (%s)",
+		             RUNDIR, g_strerror (errsv));
+		return NULL;
+	}
+
+	return g_strdup_printf (RUNDIR"/nm-openvpn-%s",
+	                        nm_connection_get_uuid (connection));
+}
+
 #define MAX_GROUPS 128
 static gboolean
 is_dir_writable (const char *dir, const char *user)
@@ -1095,20 +1110,46 @@ check_chroot_dir_usability (const char *chdir, const char *user)
 
 static gboolean
 nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
-                                 NMSettingVpn *s_vpn,
-                                 const char *default_username,
-                                 const char *uuid,
+                                 NMConnection *connection,
                                  GError **error)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-	const char *openvpn_binary, *auth, *connection_type, *tmp, *tmp2, *tmp3, *tmp4;
-	GPtrArray *args;
+	const char *openvpn_binary, *auth, *tmp, *tmp2, *tmp3, *tmp4;
+	gs_unref_ptrarray GPtrArray *args = NULL;
 	GPid pid;
 	gboolean dev_type_is_tap;
 	char *stmp;
 	const char *defport, *proto_tcp;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
 	gs_free char *bus_name = NULL;
+	NMSettingVpn *s_vpn;
+	const char *connection_type;
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	if (!s_vpn) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION,
+		                     _("Could not process the request because the VPN connection settings were invalid."));
+		return FALSE;
+	}
+
+	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
+	if (!validate_connection_type (connection_type)) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		                     _("Invalid connection type."));
+		return FALSE;
+	}
+
+	/* Validate the properties */
+	if (!nm_openvpn_properties_validate (s_vpn, error))
+		return FALSE;
+
+	/* Validate secrets */
+	if (!nm_openvpn_secrets_validate (s_vpn, error))
+		return FALSE;
 
 	/* Find openvpn */
 	openvpn_binary = nm_find_openvpn ();
@@ -1131,16 +1172,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 
-	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	if (!validate_connection_type (connection_type)) {
-		g_set_error_literal (error,
-		                     NM_VPN_PLUGIN_ERROR,
-		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		                     _("Invalid connection type."));
-		return FALSE;
-	}
+	args = g_ptr_array_new_with_free_func (g_free);
 
-	args = g_ptr_array_new ();
 	add_openvpn_arg (args, openvpn_binary);
 
 	defport = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PORT);
@@ -1153,63 +1186,61 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 	if (tmp && *tmp) {
+		gs_free char *tmp_clone = NULL;
+		char *tmp_remaining;
 		char *tok, *port, *proto;
-		char *tmp_dup = strdup (tmp);
-		while ((tok = strsep (&tmp_dup, " \t,")) != NULL) {
-			if (*tok) {
-				port = strchr (tok, ':');
-				proto = port ? strchr (port + 1, ':') : NULL;
-				if (port)
-					*port++ = '\0';
-				if (proto)
-					*proto++ = '\0';
 
-				add_openvpn_arg (args, "--remote");
-				add_openvpn_arg (args, tok);
-				if (port) {
-					if (!add_openvpn_arg_int (args, port)) {
-						g_set_error (error,
-						             NM_VPN_PLUGIN_ERROR,
-						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-						             _("Invalid port number '%s'."), port);
-						free_openvpn_args (args);
-						g_free (tmp_dup);
-						return FALSE;
-					}
-				} else if (defport) {
-					if (!add_openvpn_arg_int (args, defport)) {
-						g_set_error (error,
-						             NM_VPN_PLUGIN_ERROR,
-						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-						             _("Invalid port number '%s'."),
-						             defport);
-						free_openvpn_args (args);
-						return FALSE;
-					}
-				} else
-					add_openvpn_arg (args, "1194"); /* default IANA port */
+		tmp_remaining = tmp_clone = g_strdup (tmp);
+		while ((tok = strsep (&tmp_remaining, " \t,")) != NULL) {
+			if (!*tok)
+				continue;
 
-				if (proto) {
-					if (!strcmp (proto, "udp"))
-							add_openvpn_arg (args, proto);
-					else if (!strcmp (proto, "tcp"))
-							add_openvpn_arg (args, "tcp-client");
-					else {
-						g_set_error (error,
-						             NM_VPN_PLUGIN_ERROR,
-						             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-						             _("Invalid proto '%s'."), proto);
-						free_openvpn_args (args);
-						g_free (tmp_dup);
-						return FALSE;
-					}
-				} else if (proto_tcp && !strcmp (proto_tcp, "yes"))
+			port = strchr (tok, ':');
+			proto = port ? strchr (port + 1, ':') : NULL;
+			if (port)
+				*port++ = '\0';
+			if (proto)
+				*proto++ = '\0';
+
+			add_openvpn_arg (args, "--remote");
+			add_openvpn_arg (args, tok);
+			if (port) {
+				if (!add_openvpn_arg_int (args, port)) {
+					g_set_error (error,
+					             NM_VPN_PLUGIN_ERROR,
+					             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+					             _("Invalid port number '%s'."), port);
+					return FALSE;
+				}
+			} else if (defport) {
+				if (!add_openvpn_arg_int (args, defport)) {
+					g_set_error (error,
+					             NM_VPN_PLUGIN_ERROR,
+					             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+					             _("Invalid port number '%s'."),
+					             defport);
+					return FALSE;
+				}
+			} else
+				add_openvpn_arg (args, "1194"); /* default IANA port */
+
+			if (proto) {
+				if (!strcmp (proto, "udp"))
+					add_openvpn_arg (args, proto);
+				else if (!strcmp (proto, "tcp"))
 					add_openvpn_arg (args, "tcp-client");
-				else
-					add_openvpn_arg (args, "udp");
-			}
+				else {
+					g_set_error (error,
+					             NM_VPN_PLUGIN_ERROR,
+					             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+					             _("Invalid proto '%s'."), proto);
+					return FALSE;
+				}
+			} else if (proto_tcp && !strcmp (proto_tcp, "yes"))
+				add_openvpn_arg (args, "tcp-client");
+			else
+				add_openvpn_arg (args, "udp");
 		}
-		g_free (tmp_dup);
 	}
 
 	/* Remote random */
@@ -1246,7 +1277,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 				         NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 				         _("Invalid proxy type '%s'."),
 				         tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1295,7 +1325,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid ping duration '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1309,7 +1338,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid ping-exit duration '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1323,7 +1351,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid ping-restart duration '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1343,7 +1370,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid max-routes argument '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1399,7 +1425,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid keysize '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1446,7 +1471,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error, NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid verify-x509-name."));
-			free_openvpn_args (args);
 			return FALSE;
 		}
 
@@ -1482,7 +1506,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid reneg seconds '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	} else {
@@ -1517,7 +1540,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid TUN MTU size '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1532,7 +1554,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Invalid fragment size '%s'."),
 			             tmp);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1567,9 +1588,11 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	add_openvpn_arg (args, "--persist-tun");
 
 	/* Management socket for localhost access to supply username and password */
+	g_clear_pointer (&priv->mgt_path, g_free);
+	priv->mgt_path = mgt_path_create (connection, error);
+	if (!priv->mgt_path)
+		return FALSE;
 	add_openvpn_arg (args, "--management");
-	g_warn_if_fail (priv->mgt_path == NULL);
-	priv->mgt_path = g_strdup_printf (LOCALSTATEDIR "/run/NetworkManager/nm-openvpn-%s", uuid);
 	add_openvpn_arg (args, priv->mgt_path);
 	add_openvpn_arg (args, "unix");
 	add_openvpn_arg (args, "--management-client-user");
@@ -1610,7 +1633,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			                     NM_VPN_PLUGIN_ERROR,
 			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			                     _("Missing required local IP address for static key mode."));
-			free_openvpn_args (args);
 			return FALSE;
 		}
 		add_openvpn_arg (args, tmp);
@@ -1622,7 +1644,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			                     NM_VPN_PLUGIN_ERROR,
 			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			                     _("Missing required remote IP address for static key mode."));
-			free_openvpn_args (args);
 			return FALSE;
 		}
 		add_openvpn_arg (args, tmp);
@@ -1648,21 +1669,15 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		             _("Unknown connection type '%s'."),
 		             connection_type);
-		free_openvpn_args (args);
 		return FALSE;
 	}
 
-	/* Allow openvpn to be run as a specified user:group and drop privileges. */
-	nm_openvpn_user = getenv ("NM_OPENVPN_USER");
-	nm_openvpn_group = getenv ("NM_OPENVPN_GROUP");
-	nm_openvpn_chroot = getenv ("NM_OPENVPN_CHROOT");
-	if (!nm_openvpn_user)
-		nm_openvpn_user = NM_OPENVPN_USER;
-	if (!nm_openvpn_group)
-		nm_openvpn_group = NM_OPENVPN_GROUP;
-	if (!nm_openvpn_chroot)
-		nm_openvpn_chroot = NM_OPENVPN_CHROOT;
-
+	/* Allow openvpn to be run as a specified user:group.
+	 *
+	 * We do this by default. The only way to disable it is by setting
+	 * empty environment variables NM_OPENVPN_USER and NM_OPENVPN_GROUP. */
+	nm_openvpn_user = getenv ("NM_OPENVPN_USER") ?: NM_OPENVPN_USER;
+	nm_openvpn_group = getenv ("NM_OPENVPN_GROUP") ?: NM_OPENVPN_GROUP;
 	if (*nm_openvpn_user) {
 		if (getpwnam (nm_openvpn_user)) {
 			add_openvpn_arg (args, "--user");
@@ -1673,7 +1688,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("User '%s' not found, check NM_OPENVPN_USER."),
 			             nm_openvpn_user);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
@@ -1687,10 +1701,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("Group '%s' not found, check NM_OPENVPN_GROUP."),
 			             nm_openvpn_group);
-			free_openvpn_args (args);
 			return FALSE;
 		}
 	}
+
+	/* we try to chroot be default. The only way to disable that is by
+	 * setting the an empty environment variable NM_OPENVPN_CHROOT. */
+	nm_openvpn_chroot = getenv ("NM_OPENVPN_CHROOT") ?: NM_OPENVPN_CHROOT;
 	if (*nm_openvpn_chroot) {
 		if (check_chroot_dir_usability (nm_openvpn_chroot, nm_openvpn_user)) {
 			add_openvpn_arg (args, "--chroot");
@@ -1709,11 +1726,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 
 	if (!g_spawn_async (NULL, (char **) args->pdata, NULL,
-	                    G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, error)) {
-		free_openvpn_args (args);
+	                    G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, error))
 		return FALSE;
-	}
-	free_openvpn_args (args);
 
 	pids_pending_add (pid, plugin);
 
@@ -1731,7 +1745,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	    || nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME)) {
 
 		priv->io_data = g_malloc0 (sizeof (NMOpenvpnPluginIOData));
-		update_io_data_from_vpn_setting (priv->io_data, s_vpn, default_username);
+		update_io_data_from_vpn_setting (priv->io_data, s_vpn,
+		                                 nm_setting_vpn_get_user_name (s_vpn));
 		nm_openvpn_schedule_connect_timer (plugin);
 	}
 
@@ -1802,7 +1817,12 @@ real_disconnect (NMVpnServicePlugin *plugin,
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 
-	g_clear_pointer (&priv->mgt_path, g_free);
+	if (priv->mgt_path) {
+		/* openvpn does not cleanup the management socket upon exit,
+		 * possibly it could not even because it changed user */
+		(void) unlink (priv->mgt_path);
+		g_clear_pointer (&priv->mgt_path, g_free);
+	}
 
 	if (priv->pid) {
 		pids_pending_send_sigterm (priv->pid);
@@ -1818,51 +1838,16 @@ _connect_common (NMVpnServicePlugin   *plugin,
                  GVariant      *details,
                  GError       **error)
 {
-	NMSettingVpn *s_vpn;
-	const char *connection_type;
-	const char *user_name;
+	GError *local = NULL;
 
-	if (!real_disconnect (plugin, error)) {
-		_LOGW ("Could not clean up previous daemon run: %s", (*error)->message);
-		g_clear_error (error);
+	if (!real_disconnect (plugin, &local)) {
+		_LOGW ("Could not clean up previous daemon run: %s", local->message);
+		g_error_free (local);
 	}
 
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	if (!s_vpn) {
-		g_set_error_literal (error,
-		                     NM_VPN_PLUGIN_ERROR,
-		                     NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION,
-		                     _("Could not process the request because the VPN connection settings were invalid."));
-		return FALSE;
-	}
-
-	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	if (!validate_connection_type (connection_type)) {
-		g_set_error_literal (error,
-		                     NM_VPN_PLUGIN_ERROR,
-		                     NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION,
-		                     _("Could not process the request because the openvpn connection type was invalid."));
-		return FALSE;
-	}
-
-	/* Validate the properties */
-	if (!nm_openvpn_properties_validate (s_vpn, error))
-		return FALSE;
-
-	/* Validate secrets */
-	if (!nm_openvpn_secrets_validate (s_vpn, error))
-		return FALSE;
-
-	/* Finally try to start OpenVPN */
-	user_name = nm_setting_vpn_get_user_name (s_vpn);
-	if (!nm_openvpn_start_openvpn_binary (NM_OPENVPN_PLUGIN (plugin),
-	                                      s_vpn,
-	                                      user_name,
-	                                      nm_connection_get_uuid (connection),
-	                                      error))
-		return FALSE;
-
-	return TRUE;
+	return nm_openvpn_start_openvpn_binary (NM_OPENVPN_PLUGIN (plugin),
+	                                        connection,
+	                                        error);
 }
 
 static gboolean
