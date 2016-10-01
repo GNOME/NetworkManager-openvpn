@@ -981,7 +981,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_RENEG_SEC)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
-			if (!args_params_parse_int64 (params, 1, 0, 604800, &v_int64, &line_error))
+			if (!args_params_parse_int64 (params, 1, 0, G_MAXINT, &v_int64, &line_error))
 				goto handle_line_error;
 			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, v_int64);
 			continue;
