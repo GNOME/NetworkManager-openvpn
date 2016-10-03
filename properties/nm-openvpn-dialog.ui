@@ -843,7 +843,7 @@ config: static &lt;file&gt;</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="tooltip_text" translatable="yes">Direction for Static Key encryption mode (non-TLS).
-If key direction is used, it must be the opposite of that used on the VPN peer.  For example, if the peer uses “1”, this connection must use “0”.  If you are unsure what value to use, contact your system administrator.
+If key direction is used, it must be the opposite of that used on the VPN peer. For example, if the peer uses “1”, this connection must use “0”. If you are unsure what value to use, contact your system administrator.
 config: static &lt;file&gt; [direction]</property>
                                 <property name="model">model1</property>
                                 <child>
@@ -1517,7 +1517,7 @@ config: tun-ipv6</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Allow remote peer to change its IP address and/or port number, such as due to DHCP (this is the default if --remote is not used).  --float when specified with --remote allows an OpenVPN session to initially connect to a  peer  at  a  known  address, however if packets arrive from a new address and pass all authentication tests, the new address will take control of the session.  This is useful when you are connecting to a peer which holds a dynamic address such as a dial-in user or DHCP client.
+                    <property name="tooltip_text" translatable="yes">Allow remote peer to change its IP address and/or port number, such as due to DHCP (this is the default if --remote is not used). --float when specified with --remote allows an OpenVPN session to initially connect to a peer at a known address, however if packets arrive from a new address and pass all authentication tests, the new address will take control of the session. This is useful when you are connecting to a peer which holds a dynamic address such as a dial-in user or DHCP client.
 
 Essentially, --float tells OpenVPN to accept authenticated packets from any address, not only the address which was specified in the --remote option.
 
@@ -2141,7 +2141,7 @@ config: tls-auth &lt;file&gt; [direction]</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="tooltip_text" translatable="yes">Direction parameter for static key mode.
-If key direction is used, it must be the opposite of that used on the VPN peer.  For example, if the peer uses “1”, this connection must use “0”.  If you are unsure what value to use, contact your system administrator.
+If key direction is used, it must be the opposite of that used on the VPN peer. For example, if the peer uses “1”, this connection must use “0”. If you are unsure what value to use, contact your system administrator.
 config: tls-auth &lt;file&gt; [direction]</property>
                                 <property name="model">model5</property>
                                 <child>
