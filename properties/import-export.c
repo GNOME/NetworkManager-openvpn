@@ -218,9 +218,9 @@ args_params_check_arg_nonempty (const char **params,
 
 	if (params[n_param][0] == '\0') {
 		if (argument_name)
-			*out_error = g_strdup_printf (_("argument %s of \"%s\" can not be empty"), argument_name, params[0]);
+			*out_error = g_strdup_printf (_("argument %s of “%s” can not be empty"), argument_name, params[0]);
 		else
-			*out_error = g_strdup_printf (_("argument of \"%s\" can not be empty"), params[0]);
+			*out_error = g_strdup_printf (_("argument of “%s” can not be empty"), params[0]);
 		return FALSE;
 	}
 	return TRUE;
@@ -236,9 +236,9 @@ args_params_check_arg_utf8 (const char **params,
 		return FALSE;
 	if (!_is_utf8 (params[n_param])) {
 		if (argument_name)
-			*out_error = g_strdup_printf (_("argument %s of \"%s\" must be UTF-8 encoded"), argument_name, params[0]);
+			*out_error = g_strdup_printf (_("argument %s of “%s” must be UTF-8 encoded"), argument_name, params[0]);
 		else
-			*out_error = g_strdup_printf (_("argument of \"%s\" must be UTF-8 encoded"), params[0]);
+			*out_error = g_strdup_printf (_("argument of “%s” must be UTF-8 encoded"), params[0]);
 		return FALSE;
 	}
 	return TRUE;
@@ -262,7 +262,7 @@ args_params_parse_int64 (const char **params,
 
 	v = _nm_utils_ascii_str_to_int64 (params[n_param], 10, min, max, -1);
 	if (errno) {
-		*out_error = g_strdup_printf (_("invalid %uth argument to '%s' where number expected"),
+		*out_error = g_strdup_printf (_("invalid %uth argument to “%s” where number expected"),
 		                              n_param,
 		                              params[0]);
 		return FALSE;
@@ -303,7 +303,7 @@ args_params_parse_ip4 (const char **params,
 	    && NM_IN_STRSET (params[n_param], "vpn_gateway", "net_gateway", "remote_host")) {
 		/* we don't support these special destinations, as they currently cannot be expressed
 		 * in a connection. */
-		*out_error = g_strdup_printf (_("unsupported %uth argument %s to '%s'"),
+		*out_error = g_strdup_printf (_("unsupported %uth argument %s to “%s”"),
 		                              n_param,
 		                              params[n_param],
 		                              params[0]);
@@ -321,14 +321,14 @@ args_params_parse_ip4 (const char **params,
 			goto not_dns;
 		}
 		/* we also don't support specifing a FQDN. */
-		*out_error = g_strdup_printf (_("unsupported %uth argument to '%s' which looks like a FQDN but only IPv4 address supported"),
+		*out_error = g_strdup_printf (_("unsupported %uth argument to “%s” which looks like a FQDN but only IPv4 address supported"),
 		                              n_param,
 		                              params[0]);
 		return FALSE;
 	}
 
 not_dns:
-	*out_error = g_strdup_printf (_("invalid %uth argument to '%s' where IPv4 address expected"),
+	*out_error = g_strdup_printf (_("invalid %uth argument to “%s” where IPv4 address expected"),
 	                              n_param,
 	                              params[0]);
 	return FALSE;
@@ -353,7 +353,7 @@ args_params_parse_key_direction (const char **params,
 	else if (nm_streq (params[n_param], "1"))
 		*out_key_direction = "1";
 	else {
-		*out_error = g_strdup_printf (_("invalid %uth key-direction argument to '%s'"), n_param, params[0]);
+		*out_error = g_strdup_printf (_("invalid %uth key-direction argument to “%s”"), n_param, params[0]);
 		return FALSE;
 	}
 	return TRUE;
@@ -367,7 +367,7 @@ args_params_error_message_invalid_arg (const char **params, guint n_param)
 	g_return_val_if_fail (n_param > 0, FALSE);
 	g_return_val_if_fail (n_param < g_strv_length ((char **) params), FALSE);
 
-	return g_strdup_printf (_("invalid %uth argument to '%s'"), n_param, params[0]);
+	return g_strdup_printf (_("invalid %uth argument to “%s”"), n_param, params[0]);
 }
 
 /*****************************************************************************/
@@ -717,7 +717,7 @@ inline_blob_mkdir_parents (const InlineBlobData *data, const char *filepath, cha
 		return TRUE;
 
 	if (g_file_test (dirname, G_FILE_TEST_EXISTS)) {
-		*out_error = g_strdup_printf (_("'%s' is not a directory"), dirname);
+		*out_error = g_strdup_printf (_("“%s” is not a directory"), dirname);
 		return FALSE;
 	}
 
@@ -725,7 +725,7 @@ inline_blob_mkdir_parents (const InlineBlobData *data, const char *filepath, cha
 		return FALSE;
 
 	if (mkdir (dirname, 0755) < 0) {
-		*out_error = g_strdup_printf (_("cannot create '%s' directory"), dirname);
+		*out_error = g_strdup_printf (_("cannot create “%s” directory"), dirname);
 		return FALSE;
 	}
 
@@ -762,7 +762,7 @@ inline_blob_write_out (const InlineBlobData *data, GError **error)
 		g_set_error (error,
 		             NMV_EDITOR_PLUGIN_ERROR,
 		             NMV_EDITOR_PLUGIN_ERROR_FAILED,
-		             _("cannot write <%s> blob from line %ld to file '%s'"),
+		             _("cannot write <%s> blob from line %ld to file “%s”"),
 		             data->token,
 		             (long) data->token_start_line,
 		             data->path);
@@ -1494,7 +1494,7 @@ handle_line_error:
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
 		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
-		                     _("The file to import wasn't a valid OpenVPN client configuration"));
+		                     _("The file to import wasn’t a valid OpenVPN client configuration"));
 		goto out_error;
 	}
 
@@ -1502,7 +1502,7 @@ handle_line_error:
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
 		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
-		                     _("The file to import wasn't a valid OpenVPN configure (no remote)"));
+		                     _("The file to import wasn’t a valid OpenVPN configure (no remote)"));
 		goto out_error;
 	}
 

@@ -363,7 +363,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("invalid address '%s'"),
+			             _("invalid address “%s”"),
 			             key);
 			break;
 		case G_TYPE_INT:
@@ -375,7 +375,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("invalid integer property '%s' or out of range [%d -> %d]"),
+			             _("invalid integer property “%s” or out of range [%d -> %d]"),
 			             key, prop.int_min, prop.int_max);
 			break;
 		case G_TYPE_BOOLEAN:
@@ -386,14 +386,14 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             /* Translators: keep "yes" and "no" untranslated! */
-			             _("invalid boolean property '%s' (not yes or no)"),
+			             _("invalid boolean property “%s” (not yes or no)"),
 			             key);
 			break;
 		default:
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("unhandled property '%s' type %s"),
+			             _("unhandled property “%s” type %s"),
 			             key, g_type_name (prop.type));
 			break;
 		}
@@ -404,7 +404,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 		g_set_error (info->error,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             _("property '%s' invalid or not supported"),
+		             _("property “%s” invalid or not supported"),
 		             key);
 	}
 }
@@ -1209,7 +1209,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 					g_set_error (error,
 					             NM_VPN_PLUGIN_ERROR,
 					             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-					             _("Invalid port number '%s'."), port);
+					             _("Invalid port number “%s”."), port);
 					return FALSE;
 				}
 			} else if (defport) {
@@ -1217,7 +1217,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 					g_set_error (error,
 					             NM_VPN_PLUGIN_ERROR,
 					             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-					             _("Invalid port number '%s'."),
+					             _("Invalid port number “%s”."),
 					             defport);
 					return FALSE;
 				}
@@ -1233,7 +1233,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 					g_set_error (error,
 					             NM_VPN_PLUGIN_ERROR,
 					             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-					             _("Invalid proto '%s'."), proto);
+					             _("Invalid proto “%s”."), proto);
 					return FALSE;
 				}
 			} else if (proto_tcp && !strcmp (proto_tcp, "yes"))
@@ -1275,7 +1275,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 				         NM_VPN_PLUGIN_ERROR,
 				         NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-				         _("Invalid proxy type '%s'."),
+				         _("Invalid proxy type “%s”."),
 				         tmp);
 			return FALSE;
 		}
@@ -1323,7 +1323,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid ping duration '%s'."),
+			             _("Invalid ping duration “%s”."),
 			             tmp);
 			return FALSE;
 		}
@@ -1336,7 +1336,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid ping-exit duration '%s'."),
+			             _("Invalid ping-exit duration “%s”."),
 			             tmp);
 			return FALSE;
 		}
@@ -1349,7 +1349,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid ping-restart duration '%s'."),
+			             _("Invalid ping-restart duration “%s”."),
 			             tmp);
 			return FALSE;
 		}
@@ -1368,7 +1368,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid max-routes argument '%s'."),
+			             _("Invalid max-routes argument “%s”."),
 			             tmp);
 			return FALSE;
 		}
@@ -1423,7 +1423,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid keysize '%s'."),
+			             _("Invalid keysize “%s”."),
 			             tmp);
 			return FALSE;
 		}
@@ -1504,7 +1504,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid reneg seconds '%s'."),
+			             _("Invalid reneg seconds “%s”."),
 			             tmp);
 			return FALSE;
 		}
@@ -1538,7 +1538,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid TUN MTU size '%s'."),
+			             _("Invalid TUN MTU size “%s”."),
 			             tmp);
 			return FALSE;
 		}
@@ -1552,7 +1552,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Invalid fragment size '%s'."),
+			             _("Invalid fragment size “%s”."),
 			             tmp);
 			return FALSE;
 		}
@@ -1667,7 +1667,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		g_set_error (error,
 		             NM_VPN_PLUGIN_ERROR,
 		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             _("Unknown connection type '%s'."),
+		             _("Unknown connection type “%s”."),
 		             connection_type);
 		return FALSE;
 	}
@@ -1686,7 +1686,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("User '%s' not found, check NM_OPENVPN_USER."),
+			             _("User “%s” not found, check NM_OPENVPN_USER."),
 			             nm_openvpn_user);
 			return FALSE;
 		}
@@ -1699,7 +1699,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			g_set_error (error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("Group '%s' not found, check NM_OPENVPN_GROUP."),
+			             _("Group “%s” not found, check NM_OPENVPN_GROUP."),
 			             nm_openvpn_group);
 			return FALSE;
 		}
@@ -2060,7 +2060,7 @@ main (int argc, char *argv[])
 	GMainLoop *loop;
 
 	GOptionEntry options[] = {
-		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don't quit when VPN connection terminates"), NULL },
+		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don’t quit when VPN connection terminates"), NULL },
 		{ "debug", 0, 0, G_OPTION_ARG_NONE, &gl.debug, N_("Enable verbose debug logging (may expose passwords)"), NULL },
 		{ "bus-name", 0, 0, G_OPTION_ARG_STRING, &bus_name, N_("D-Bus name to use for this instance"), NULL },
 		{NULL}

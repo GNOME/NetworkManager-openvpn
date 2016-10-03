@@ -510,7 +510,7 @@ main (int argc, char *argv[])
 	 */
 	prompt = get_passwords_required (data, hints, &need_password, &need_certpass, &need_proxypass);
 	if (!prompt)
-		prompt = g_strdup_printf (_("You need to authenticate to access the Virtual Private Network '%s'."), vpn_name);
+		prompt = g_strdup_printf (_("You need to authenticate to access the Virtual Private Network “%s”."), vpn_name);
 
 	/* Exit early if we don't need any passwords */
 	if (!need_password && !need_certpass && !need_proxypass)

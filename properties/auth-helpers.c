@@ -176,7 +176,7 @@ tls_setup (GtkBuilder *builder,
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (cert), filter);
 	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (cert), TRUE);
 	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (cert),
-	                                   _("Choose your personal certificate..."));
+	                                   _("Choose your personal certificate…"));
 	g_signal_connect (G_OBJECT (cert), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
 	if (s_vpn) {
@@ -194,7 +194,7 @@ tls_setup (GtkBuilder *builder,
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (key), filter);
 	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (key), TRUE);
 	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (key),
-	                                   _("Choose your private key..."));
+	                                   _("Choose your private key…"));
 	g_signal_connect (G_OBJECT (key), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
 	if (s_vpn) {
@@ -310,7 +310,7 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (ca), filter);
 	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (ca), TRUE);
 	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (ca),
-	                                   _("Choose a Certificate Authority certificate..."));
+	                                   _("Choose a Certificate Authority certificate…"));
 	g_signal_connect (G_OBJECT (ca), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
 	if (s_vpn) {
@@ -354,7 +354,7 @@ sk_init_auth_widget (GtkBuilder *builder,
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
 	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (widget), TRUE);
 	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (widget),
-	                                   _("Choose an OpenVPN static key..."));
+	                                   _("Choose an OpenVPN static key…"));
 	g_signal_connect (G_OBJECT (widget), "selection-changed", G_CALLBACK (changed_cb), user_data);
 
 	if (s_vpn) {
@@ -1181,7 +1181,7 @@ populate_tls_remote_mode_entry_combo (GtkEntry* entry, GtkComboBox *box,
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
-	                    TLS_REMOTE_MODE_COL_NAME, _("Don't verify certificate identification"),
+	                    TLS_REMOTE_MODE_COL_NAME, _("Don’t verify certificate identification"),
 	                    TLS_REMOTE_MODE_COL_VALUE, TLS_REMOTE_MODE_NONE,
 	                    -1);
 
