@@ -101,9 +101,11 @@
           <object class="GtkLabel" id="label22">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;b&gt;General&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
+            <property name="label" translatable="yes">General</property>
             <property name="xalign">0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -183,9 +185,11 @@ config: remote</property>
           <object class="GtkLabel" id="label25">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">&lt;b&gt;Authentication&lt;/b&gt;</property>
-            <property name="use_markup">True</property>
+            <property name="label" translatable="yes">Authentication</property>
             <property name="xalign">0</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -976,7 +980,6 @@ config: static &lt;file&gt; [direction]</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Ad_vanced…</property>
-                    <property name="use_markup">True</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
