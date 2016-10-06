@@ -34,7 +34,12 @@
 #include "nm-utils/nm-test-utils.h"
 
 #define SRCDIR TEST_SRCDIR"/conf"
-#define TMPDIR TEST_BUILDDIR"/conf-tmp"
+
+#ifdef NM_VPN_OLD
+#define TMPDIR TEST_BUILDDIR"/conf-tmp-old"
+#else
+#define TMPDIR TEST_BUILDDIR"/conf-tmp-new"
+#endif
 
 /*****************************************************************************/
 
