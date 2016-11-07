@@ -118,7 +118,7 @@ static ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_FRAGMENT_SIZE,        G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_KEY,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_LOCAL_IP,             G_TYPE_STRING, 0, 0, TRUE },
-	{ NM_OPENVPN_KEY_MSSFIX,               G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_MSSFIX,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PING,                 G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_EXIT,            G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_RESTART,         G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -1124,6 +1124,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	gs_free char *bus_name = NULL;
 	NMSettingVpn *s_vpn;
 	const char *connection_type;
+	gint64 v_int64;
+	char sbuf_64[65];
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -1519,10 +1521,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 
 	if (gl.log_level_ovpn >= 0) {
-		char buf[20];
-
 		add_openvpn_arg (args, "--verb");
-		add_openvpn_arg (args, nm_sprintf_buf (buf, "%d", gl.log_level_ovpn));
+		add_openvpn_arg (args, nm_sprintf_buf (sbuf_64, "%d", gl.log_level_ovpn));
 	}
 
 	if (gl.log_syslog) {
@@ -1560,8 +1560,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	/* mssfix */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
-	if (tmp && !strcmp (tmp, "yes")) {
-		add_openvpn_arg (args, "--mssfix");
+	if (tmp) {
+		if (nm_streq (tmp, "yes"))
+			add_openvpn_arg (args, "--mssfix");
+		else if ((v_int64 = _nm_utils_ascii_str_to_int64 (tmp, 10, 1, G_MAXINT32, 0))) {
+			add_openvpn_arg (args, "--mssfix");
+			add_openvpn_arg (args, nm_sprintf_buf (sbuf_64, "%d", (int) v_int64));
+		}
 	}
 
 	/* Punch script security in the face; this option was added to OpenVPN 2.1-rc9

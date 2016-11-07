@@ -916,8 +916,12 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_MSSFIX)) {
 			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
 				goto handle_line_error;
-			/* TODO: handle the mssfix argument. */
-			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
+			if (params[1]) {
+				if (!args_params_parse_int64 (params, 1, 1, G_MAXINT32, &v_int64, &line_error))
+					goto handle_line_error;
+				setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_MSSFIX, v_int64);
+			} else
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
 			continue;
 		}
 
@@ -1872,8 +1876,11 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_FLOAT);
 
-	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX), "yes"))
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MSSFIX);
+	if (nm_streq0 (value, "yes"))
 		args_write_line (f, NMV_OVPN_TAG_MSSFIX);
+	else if (value)
+		args_write_line_setting_value_int (f, NMV_OVPN_TAG_MSSFIX, s_vpn, NM_OPENVPN_KEY_MSSFIX);
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_TUN_MTU, s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
 
