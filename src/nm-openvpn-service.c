@@ -1740,6 +1740,15 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg (args, tmp);
 	}
 
+	/* ifconfig */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
+	tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
+	if (tmp && tmp2) {
+		add_openvpn_arg (args, "--ifconfig");
+		add_openvpn_arg (args, tmp);
+		add_openvpn_arg (args, tmp2);
+	}
+
 	/* Punch script security in the face; this option was added to OpenVPN 2.1-rc9
 	 * and defaults to disallowing any scripts, a behavior change from previous
 	 * versions.
@@ -1799,30 +1808,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			if (tmp && tmp[0])
 				add_openvpn_arg (args, tmp);
 		}
-
-		add_openvpn_arg (args, "--ifconfig");
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
-		if (!tmp) {
-			/* Insufficient data (FIXME: this should really be detected when validating the properties */
-			g_set_error_literal (error,
-			                     NM_VPN_PLUGIN_ERROR,
-			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			                     _("Missing required local IP address for static key mode."));
-			return FALSE;
-		}
-		add_openvpn_arg (args, tmp);
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
-		if (!tmp) {
-			/* Insufficient data (FIXME: this should really be detected when validating the properties */
-			g_set_error_literal (error,
-			                     NM_VPN_PLUGIN_ERROR,
-			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			                     _("Missing required remote IP address for static key mode."));
-			return FALSE;
-		}
-		add_openvpn_arg (args, tmp);
 	} else if (!strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		/* Client mode */
 		add_openvpn_arg (args, "--client");
