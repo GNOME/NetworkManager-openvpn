@@ -1068,7 +1068,7 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 			gtk_list_store_set (store, &iter,
 			                    TLS_CIPHER_COL_NAME, *item,
 			                    TLS_CIPHER_COL_DEFAULT, FALSE, -1);
-			if (!user_added && user_cipher && !strcmp (*item, user_cipher)) {
+			if (!user_added && user_cipher && !g_ascii_strcasecmp (*item, user_cipher)) {
 				gtk_combo_box_set_active_iter (box, &iter);
 				user_added = TRUE;
 			}
@@ -1153,7 +1153,7 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 		                    HMACAUTH_COL_NAME, name,
 		                    HMACAUTH_COL_VALUE, *item,
 		                    HMACAUTH_COL_DEFAULT, FALSE, -1);
-		if (hmacauth && !strcmp (*item, hmacauth)) {
+		if (hmacauth && !g_ascii_strcasecmp (*item, hmacauth)) {
 			gtk_combo_box_set_active_iter (box, &iter);
 			active_initialized = TRUE;
 		}
