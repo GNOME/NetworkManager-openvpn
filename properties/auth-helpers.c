@@ -1074,7 +1074,7 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 		gtk_list_store_insert (store, &iter, 1);
 		gtk_list_store_set (store, &iter,
 		                    TLS_CIPHER_COL_NAME, user_cipher,
-		                    TLS_CIPHER_COL_DEFAULT, FALSE -1);
+		                    TLS_CIPHER_COL_DEFAULT, FALSE, -1);
 		gtk_combo_box_set_active_iter (box, &iter);
 	} else if (!user_added) {
 		gtk_combo_box_set_active (box, 0);
