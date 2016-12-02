@@ -1003,7 +1003,7 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 	gboolean user_added = FALSE;
 	char *argv[3];
 	GError *error = NULL;
-	gboolean success, found_blank = FALSE;
+	gboolean success, ignore_lines = TRUE;
 
 	openvpn_binary = nm_find_openvpn ();
 	if (!openvpn_binary)
@@ -1042,15 +1042,21 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 	g_free (tmp);
 
 	for (item = items; *item; item++) {
-		char *space = strchr (*item, ' ');
+		char *space;
 
-		/* Don't add anything until after the first blank line */
-		if (!found_blank) {
-			if (!strlen (*item))
-				found_blank = TRUE;
+		/* Don't add anything until after the first blank line. Also,
+		 * any blank line indicates the start of a comment, ended by
+		 * another blank line.
+		 */
+		if (!strlen (*item)) {
+			ignore_lines = !ignore_lines;
 			continue;
 		}
 
+		if (ignore_lines)
+			continue;
+
+		space = strchr (*item, ' ');
 		if (space)
 			*space = '\0';
 
