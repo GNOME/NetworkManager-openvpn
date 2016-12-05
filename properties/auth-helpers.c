@@ -1003,7 +1003,7 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 	gboolean user_added = FALSE;
 	char *argv[3];
 	GError *error = NULL;
-	gboolean success, found_blank = FALSE;
+	gboolean success, ignore_lines = TRUE;
 
 	openvpn_binary = nm_find_openvpn ();
 	if (!openvpn_binary)
@@ -1042,15 +1042,21 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 	g_free (tmp);
 
 	for (item = items; *item; item++) {
-		char *space = strchr (*item, ' ');
+		char *space;
 
-		/* Don't add anything until after the first blank line */
-		if (!found_blank) {
-			if (!strlen (*item))
-				found_blank = TRUE;
+		/* Don't add anything until after the first blank line. Also,
+		 * any blank line indicates the start of a comment, ended by
+		 * another blank line.
+		 */
+		if (!strlen (*item)) {
+			ignore_lines = !ignore_lines;
 			continue;
 		}
 
+		if (ignore_lines)
+			continue;
+
+		space = strchr (*item, ' ');
 		if (space)
 			*space = '\0';
 
@@ -1062,7 +1068,7 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 			gtk_list_store_set (store, &iter,
 			                    TLS_CIPHER_COL_NAME, *item,
 			                    TLS_CIPHER_COL_DEFAULT, FALSE, -1);
-			if (!user_added && user_cipher && !strcmp (*item, user_cipher)) {
+			if (!user_added && user_cipher && !g_ascii_strcasecmp (*item, user_cipher)) {
 				gtk_combo_box_set_active_iter (box, &iter);
 				user_added = TRUE;
 			}
@@ -1074,7 +1080,7 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 		gtk_list_store_insert (store, &iter, 1);
 		gtk_list_store_set (store, &iter,
 		                    TLS_CIPHER_COL_NAME, user_cipher,
-		                    TLS_CIPHER_COL_DEFAULT, FALSE -1);
+		                    TLS_CIPHER_COL_DEFAULT, FALSE, -1);
 		gtk_combo_box_set_active_iter (box, &iter);
 	} else if (!user_added) {
 		gtk_combo_box_set_active (box, 0);
@@ -1147,7 +1153,7 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 		                    HMACAUTH_COL_NAME, name,
 		                    HMACAUTH_COL_VALUE, *item,
 		                    HMACAUTH_COL_DEFAULT, FALSE, -1);
-		if (hmacauth && !strcmp (*item, hmacauth)) {
+		if (hmacauth && !g_ascii_strcasecmp (*item, hmacauth)) {
 			gtk_combo_box_set_active_iter (box, &iter);
 			active_initialized = TRUE;
 		}
