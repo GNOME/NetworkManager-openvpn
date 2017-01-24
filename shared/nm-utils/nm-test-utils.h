@@ -106,12 +106,12 @@
 
 #include "nm-utils.h"
 
-/*******************************************************************************/
+/*****************************************************************************/
 
 #define NMTST_G_RETURN_MSG_S(expr) "*: assertion '"NM_ASSERT_G_RETURN_EXPR(expr)"' failed"
 #define NMTST_G_RETURN_MSG(expr)   NMTST_G_RETURN_MSG_S(#expr)
 
-/*******************************************************************************/
+/*****************************************************************************/
 
 /* general purpose functions that have no dependency on other nmtst functions */
 
@@ -168,7 +168,7 @@
 		g_assert (!(success)); \
 	} G_STMT_END
 
-/*******************************************************************************/
+/*****************************************************************************/
 
 struct __nmtst_internal
 {
@@ -832,6 +832,31 @@ nmtst_rand_perm (GRand *rand, void *dst, const void *src, gsize elmt_size, gsize
 	return dst;
 }
 
+inline static GSList *
+nmtst_rand_perm_gslist (GRand *rand, GSList *list)
+{
+	GSList *result;
+	guint l;
+
+	if (!rand)
+		rand = nmtst_get_rand ();
+
+	/* no need for an efficient implementation :) */
+
+	result = 0;
+	for (l = g_slist_length (list); l > 0; l--) {
+		GSList *tmp;
+
+		tmp = g_slist_nth (list, g_rand_int (rand) % l);
+		g_assert (tmp);
+
+		list = g_slist_remove_link (list, tmp);
+		result = g_slist_concat (tmp, result);
+	}
+	g_assert (!list);
+	return result;
+}
+
 /*****************************************************************************/
 
 inline static gboolean
@@ -979,6 +1004,10 @@ __define_nmtst_static(02, 1024)
 __define_nmtst_static(03, 1024)
 #undef __define_nmtst_static
 
+#define NMTST_UUID_INIT(uuid) \
+	gs_free char *_nmtst_hidden_##uuid = nm_utils_uuid_generate (); \
+	const char *const uuid = _nmtst_hidden_##uuid
+
 inline static const char *
 nmtst_uuid_generate (void)
 {
@@ -1123,7 +1152,7 @@ __nmtst_spawn_sync (const char *working_directory, char **standard_out, char **s
 	return exit_status;
 }
 
-/*******************************************************************************/
+/*****************************************************************************/
 
 inline static char *
 nmtst_file_resolve_relative_path (const char *rel, const char *cwd)
@@ -1139,6 +1168,62 @@ nmtst_file_resolve_relative_path (const char *rel, const char *cwd)
 		cwd = cwd_free = g_get_current_dir ();
 	return g_build_filename (cwd, rel, NULL);
 }
+
+inline static char *
+nmtst_file_get_contents (const char *filename)
+{
+	GError *error = NULL;
+	gboolean success;
+	char *contents = NULL;
+	gsize len;
+
+	success = g_file_get_contents (filename, &contents, &len, &error);
+	nmtst_assert_success (success && contents, error);
+	g_assert_cmpint (strlen (contents), ==, len);
+	return contents;
+}
+
+/*****************************************************************************/
+
+inline static void
+nmtst_file_unlink_if_exists (const char *name)
+{
+	int errsv;
+
+	g_assert (name && name[0]);
+
+	if (unlink (name) != 0) {
+		errsv = errno;
+		if (errsv != ENOENT)
+			g_error ("nmtst_file_unlink_if_exists(%s): failed with %s", name, strerror (errsv));
+	}
+}
+
+inline static void
+nmtst_file_unlink (const char *name)
+{
+	int errsv;
+
+	g_assert (name && name[0]);
+
+	if (unlink (name) != 0) {
+		errsv = errno;
+		g_error ("nmtst_file_unlink(%s): failed with %s", name, strerror (errsv));
+	}
+}
+
+inline static void
+_nmtst_auto_unlinkfile (char **p_name)
+{
+	if (*p_name) {
+		nmtst_file_unlink (*p_name);
+		nm_clear_g_free (p_name);
+	}
+}
+
+#define nmtst_auto_unlinkfile nm_auto(_nmtst_auto_unlinkfile)
+
+/*****************************************************************************/
 
 inline static void
 _nmtst_assert_resolve_relative_path_equals (const char *f1, const char *f2, const char *file, int line)
@@ -1156,7 +1241,7 @@ _nmtst_assert_resolve_relative_path_equals (const char *f1, const char *f2, cons
 }
 #define nmtst_assert_resolve_relative_path_equals(f1, f2) _nmtst_assert_resolve_relative_path_equals (f1, f2, __FILE__, __LINE__);
 
-/*******************************************************************************/
+/*****************************************************************************/
 
 #ifdef NM_SETTING_IP_CONFIG_H
 inline static void
