@@ -1,7 +1,7 @@
 AC_PREREQ(2.52)
 
 AC_INIT(NetworkManager-openvpn,
-        1.2.7,
+        1.2.8,
         https://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager,
         NetworkManager-openvpn)
 AM_INIT_AUTOMAKE([1.9 tar-ustar no-dist-gzip dist-xz])
