@@ -67,6 +67,7 @@
 #define NMV_OVPN_TAG_TLS_AUTH           "tls-auth"
 #define NMV_OVPN_TAG_TLS_CIPHER         "tls-cipher"
 #define NMV_OVPN_TAG_TLS_CLIENT         "tls-client"
+#define NMV_OVPN_TAG_TLS_CRYPT          "tls-crypt"
 #define NMV_OVPN_TAG_TLS_REMOTE         "tls-remote"
 #define NMV_OVPN_TAG_TOPOLOGY           "topology"
 #define NMV_OVPN_TAG_TUN_IPV6           "tun-ipv6"

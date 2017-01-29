@@ -1579,12 +1579,15 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* TA */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
 	if (tmp && tmp[0]) {
-		add_openvpn_arg (args, "--tls-auth");
-		add_openvpn_arg_utf8safe (args, tmp);
-
-		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR);
-		if (tmp && tmp[0])
-			add_openvpn_arg (args, tmp);
+		tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR);
+		if (tmp2 && strlen (tmp2)) {
+			add_openvpn_arg (args, "--tls-auth");
+			add_openvpn_arg_utf8safe (args, tmp);
+			add_openvpn_arg (args, tmp2);
+		} else {
+			add_openvpn_arg (args, "--tls-crypt");
+			add_openvpn_arg_utf8safe (args, tmp);
+		}
 	}
 
 	/* tls-remote */
