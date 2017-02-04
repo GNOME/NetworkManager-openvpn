@@ -38,6 +38,41 @@
 
 #define BLOCK_HANDLER_ID "block-handler-id"
 
+/*****************************************************************************/
+
+static const char *comp_lzo_values[] = {
+	"adaptive",
+	"yes",
+	"no-by-default",
+	NULL,
+};
+
+static const char *
+comp_lzo_values_conf_coerce (const char *value_conf)
+{
+	if (!value_conf || nm_streq (value_conf, "no"))
+		return NULL;
+	if (nm_streq (value_conf, "yes"))
+		return "yes";
+	if (nm_streq (value_conf, "no-by-default"))
+		return "no-by-default";
+	return "adaptive";
+}
+
+static const char *
+comp_lzo_values_conf_to_display (const char *value_conf)
+{
+	if (nm_streq (value_conf, "yes"))
+		return "yes";
+	if (nm_streq (value_conf, "no-by-default"))
+		return "no";
+	if (nm_streq (value_conf, "adaptive"))
+		return "adaptive";
+	g_return_val_if_reached ("adaptive");
+}
+
+/*****************************************************************************/
+
 static void
 show_password (GtkToggleButton *togglebutton, GtkEntry *password_entry)
 {
@@ -1559,7 +1594,7 @@ _hash_get_boolean (GHashTable *hash,
 	return nm_streq0 (value, "yes");
 }
 
-static void
+static GtkToggleButton *
 _builder_init_toggle_button (GtkBuilder *builder,
                              const char *widget_name,
                              gboolean active_state)
@@ -1567,9 +1602,10 @@ _builder_init_toggle_button (GtkBuilder *builder,
 	GtkToggleButton *widget;
 
 	widget = (GtkToggleButton *) gtk_builder_get_object (builder, widget_name);
-	g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+	g_return_val_if_fail (GTK_IS_TOGGLE_BUTTON (widget), NULL);
 
 	gtk_toggle_button_set_active (widget, active_state);
+	return widget;
 }
 
 static void
@@ -1623,6 +1659,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	const char *dev, *dev_type, *tap_dev;
 	GtkListStore *store;
 	GtkTreeIter iter;
+	guint i;
 	guint32 active;
 	guint32 pw_flags = NM_SETTING_SECRET_FLAG_NONE;
 	GError *error = NULL;
@@ -1750,13 +1787,23 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 65535, 1300));
 
 
-	/* the UI currently only supports "--comp-lzo yes" or omitting the "--comp-lzo"
-	 * flag.
-	 *
-	 * Internally, we also support "--comp-lzo [adaptive]" and "--comp-lzo no"
-	 * which have different meaning for openvpn. */
-	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO);
-	_builder_init_toggle_button (builder, "lzo_checkbutton", NM_IN_STRSET (value, "yes", "adaptive"));
+	value = comp_lzo_values_conf_coerce (g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO));
+	widget = GTK_WIDGET (_builder_init_toggle_button (builder, "lzo_checkbutton", value != NULL));
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_combo"));
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+	active = 0;
+	for (i = 0; comp_lzo_values[i]; i++) {
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+		                    0, comp_lzo_values_conf_to_display (comp_lzo_values[i]),
+		                    -1);
+		if (nm_streq (comp_lzo_values[i], value ?: "adaptive"))
+			active = i;
+	}
+	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
+	g_object_unref (store);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combo), active);
+	g_object_bind_property (widget, "active", combo, "sensitive", G_BINDING_SYNC_CREATE);
 
 	_builder_init_toggle_button (builder, "mssfix_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_MSSFIX));
 	_builder_init_toggle_button (builder, "float_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_FLOAT));
@@ -1949,6 +1996,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	GtkBuilder *builder;
 	const char *contype = NULL;
 	const char *value;
+	int active;
 	int proxy_type = PROXY_TYPE_NONE;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -2056,13 +2104,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-		/* we only have a checkbox, which we either map to "--comp-lzo yes" or
-		 * no "--comp-lzo" flag. In the UI, we cannot express "--comp-lzo [adaptive]"
-		 * or "--comp-lzo no".
-		 *
-		 * Note that "--comp-lzo no" must be encoded as "comp-lzo=no-by-default" (bgo#769177).
-		 */
-		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_COMP_LZO), g_strdup ("yes"));
+		combo = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_combo"));
+		active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
+		if (active >= 0 && active < G_N_ELEMENTS (comp_lzo_values))
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_COMP_LZO), g_strdup (comp_lzo_values[active]));
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
