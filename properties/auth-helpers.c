@@ -44,7 +44,6 @@ static const char *comp_lzo_values[] = {
 	"adaptive",
 	"yes",
 	"no-by-default",
-	NULL,
 };
 
 static const char *
@@ -1792,7 +1791,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	combo = GTK_WIDGET (gtk_builder_get_object (builder, "lzo_combo"));
 	store = gtk_list_store_new (1, G_TYPE_STRING);
 	active = 0;
-	for (i = 0; comp_lzo_values[i]; i++) {
+	for (i = 0; G_N_ELEMENTS (comp_lzo_values); i++) {
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
 		                    0, comp_lzo_values_conf_to_display (comp_lzo_values[i]),
