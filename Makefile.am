@@ -1,6 +1,10 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = shared src properties po
+SUBDIRS = \
+	shared \
+	src \
+	properties \
+	po
 
 if WITH_GNOME
 SUBDIRS += auth-dialog
@@ -43,17 +47,22 @@ nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-more-warnings=yes
 
-EXTRA_DIST = nm-openvpn-service.name.in \
-             $(dbusservice_DATA)  \
-             $(appdata_in_files)  \
-             $(appdata_files)     \
-             intltool-extract.in  \
-             intltool-merge.in    \
-             intltool-update.in
+EXTRA_DIST = \
+	nm-openvpn-service.name.in \
+	$(dbusservice_DATA) \
+	$(appdata_in_files) \
+	$(appdata_files) \
+	intltool-extract.in \
+	intltool-merge.in \
+	intltool-update.in
 
-CLEANFILES = $(nmvpnservice_DATA) \
-             $(appdata_files)
+CLEANFILES = \
+	$(nmvpnservice_DATA) \
+	$(appdata_files)
 
-DISTCLEANFILES = intltool-extract intltool-merge intltool-update
+DISTCLEANFILES = \
+	intltool-extract \
+	intltool-merge \
+	intltool-update
 
 ACLOCAL_AMFLAGS = -I m4
