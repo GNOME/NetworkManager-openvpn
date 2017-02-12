@@ -67,18 +67,26 @@ src_nm_openvpn_service_SOURCES = \
 	src/nm-openvpn-service.c \
 	src/nm-openvpn-service.h
 src_nm_openvpn_service_CPPFLAGS = $(src_cppflags)
+src_nm_openvpn_service_LDFLAGS = \
+	-Wl,--version-script="$(srcdir)/linker-script-binary.ver"
 src_nm_openvpn_service_LDADD = \
 	src/libnm-utils.la \
 	$(GLIB_LIBS) \
 	$(LIBNM_LIBS)
+EXTRA_src_nm_openvpn_service_DEPENDENCIES = \
+	linker-script-binary.ver
 
 libexec_PROGRAMS += src/nm-openvpn-service-openvpn-helper
 
 src_nm_openvpn_service_openvpn_helper_CPPFLAGS = $(src_cppflags)
+src_nm_openvpn_service_openvpn_helper_LDFLAGS = \
+	-Wl,--version-script="$(srcdir)/linker-script-binary.ver"
 src_nm_openvpn_service_openvpn_helper_LDADD = \
 	src/libnm-utils.la \
 	$(GLIB_LIBS) \
 	$(LIBNM_LIBS)
+EXTRA_src_nm_openvpn_service_openvpn_helper_DEPENDENCIES = \
+	linker-script-binary.ver
 
 ###############################################################################
 
@@ -316,12 +324,16 @@ auth_dialog_nm_openvpn_auth_dialog_CPPFLAGS = \
 	$(LIBNM_CFLAGS) \
 	$(LIBNMA_CFLAGS) \
 	$(LIBSECRET_CFLAGS)
+auth_dialog_nm_openvpn_auth_dialog_LDFLAGS = \
+	-Wl,--version-script="$(srcdir)/linker-script-binary.ver"
 auth_dialog_nm_openvpn_auth_dialog_LDADD = \
 	$(GLIB_LIBS) \
 	$(GTK_LIBS) \
 	$(LIBNM_LIBS) \
 	$(LIBNMA_LIBS) \
 	$(LIBSECRET_LIBS)
+EXTRA_auth_dialog_nm_openvpn_auth_dialog_DEPENDENCIES = \
+	linker-script-binary.ver
 
 ###############################################################################
 
@@ -359,6 +371,7 @@ noinst_PROGRAMS += $(check_programs)
 TESTS = $(check_programs)
 
 EXTRA_DIST += \
+	linker-script-binary.ver \
 	nm-openvpn-service.name.in \
 	$(dbusservice_DATA) \
 	$(appdata_in_files) \
