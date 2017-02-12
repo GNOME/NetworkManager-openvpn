@@ -1,9 +1,13 @@
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign subdir-objects
+
+libexec_PROGRAMS =
 
 EXTRA_DIST =
 
+CLEANFILES =
+
 SUBDIRS = \
-	src \
+	. \
 	properties \
 	po
 
@@ -16,6 +20,57 @@ dbusservice_DATA = nm-openvpn-service.conf
 
 nmvpnservicedir = $(NM_VPN_SERVICE_DIR)
 nmvpnservice_DATA = nm-openvpn-service.name
+
+###############################################################################
+
+shared_sources = \
+	shared/nm-utils/nm-shared-utils.c \
+	shared/nm-utils/nm-shared-utils.h \
+	shared/utils.c \
+	shared/utils.h \
+	shared/nm-service-defines.h \
+	$(NULL)
+
+src_cppflags = \
+	-DBINDIR=\"$(bindir)\" \
+	-DPREFIX=\""$(prefix)"\" \
+	-DSYSCONFDIR=\""$(sysconfdir)"\" \
+	-DLIBDIR=\""$(libdir)"\" \
+	-DLIBEXECDIR=\""$(libexecdir)"\" \
+	-DLOCALSTATEDIR=\""$(localstatedir)"\" \
+	-DDATADIR=\"$(datadir)\" \
+	-DNM_OPENVPN_LOCALEDIR=\"$(datadir)/locale\" \
+	-DG_LOG_DOMAIN=\"nm-openvpn\" \
+	-I$(srcdir)/shared \
+	$(GLIB_CFLAGS) \
+	$(LIBNM_CFLAGS)
+
+libexec_PROGRAMS += src/nm-openvpn-service
+
+src_nm_openvpn_service_SOURCES = \
+	$(shared_sources) \
+	src/nm-openvpn-service.c \
+	src/nm-openvpn-service.h
+
+src_nm_openvpn_service_CFLAGS = $(src_cppflags)
+
+src_nm_openvpn_service_LDADD = \
+	$(LIBNM_LIBS)
+
+libexec_PROGRAMS += src/nm-openvpn-service-openvpn-helper
+
+src_nm_openvpn_service_openvpn_helper_SOURCES = \
+	$(shared_sources) \
+	src/nm-openvpn-service-openvpn-helper.c
+
+src_nm_openvpn_service_openvpn_helper_CPPFLAGS = $(src_cppflags)
+
+src_nm_openvpn_service_openvpn_helper_LDADD = \
+	$(LIBNM_LIBS)
+
+CLEANFILES += src/*~
+
+###############################################################################
 
 if WITH_LIBNM_GLIB
 # Install a file with full path to plugins for an old gnome-shell
@@ -71,7 +126,7 @@ EXTRA_DIST += \
 	intltool-merge.in \
 	intltool-update.in
 
-CLEANFILES = \
+CLEANFILES += \
 	$(nmvpnservice_DATA) \
 	$(appdata_files)
 
