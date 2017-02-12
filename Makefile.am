@@ -80,8 +80,6 @@ src_nm_openvpn_service_openvpn_helper_LDADD = \
 	$(GLIB_LIBS) \
 	$(LIBNM_LIBS)
 
-CLEANFILES += src/*~
-
 ###############################################################################
 
 plugin_sources = \
@@ -216,12 +214,6 @@ properties_libnm_openvpn_properties_la_LDFLAGS = \
 	-avoid-version \
 	-Wl,--version-script=$(srcdir)/properties/libnm-openvpn-properties.ver
 
-###############################################################################
-
-CLEANFILES += \
-	properties/*.bak \
-	properties/*~
-
 EXTRA_DIST += \
 	properties/libnm-vpn-plugin-openvpn.ver \
 	properties/libnm-vpn-plugin-openvpn-editor.ver \
@@ -330,9 +322,6 @@ auth_dialog_nm_openvpn_auth_dialog_LDADD = \
 	$(LIBNM_LIBS) \
 	$(LIBNMA_LIBS) \
 	$(LIBSECRET_LIBS)
-
-CLEANFILES += \
-	auth-dialog/*~
 
 ###############################################################################
 
