@@ -6,6 +6,7 @@ AC_INIT(NetworkManager-openvpn,
         NetworkManager-openvpn)
 AM_INIT_AUTOMAKE([1.9 tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE
+AM_SILENT_RULES([yes])
 
 AC_CONFIG_MACRO_DIR([m4])
 
