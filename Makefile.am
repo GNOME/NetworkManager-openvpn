@@ -1,7 +1,8 @@
 AUTOMAKE_OPTIONS = foreign
 
+EXTRA_DIST =
+
 SUBDIRS = \
-	shared \
 	src \
 	properties \
 	po
@@ -44,10 +45,24 @@ nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 	    -e 's|[@]PLUGINDIR[@]/|@NM_PLUGIN_DIR_NAME_FILE@|g' \
 	    $^ >$@
 
+EXTRA_DIST += \
+	shared/README \
+	shared/nm-utils/gsystem-local-alloc.h \
+	shared/nm-utils/nm-glib.h \
+	shared/nm-utils/nm-macros-internal.h \
+	shared/nm-utils/nm-shared-utils.c \
+	shared/nm-utils/nm-shared-utils.h \
+	shared/nm-utils/nm-test-utils.h \
+	shared/nm-default.h \
+	shared/nm-service-defines.h \
+	shared/utils.c \
+	shared/utils.h \
+	$(NULL)
+
 DISTCHECK_CONFIGURE_FLAGS = \
 	--enable-more-warnings=yes
 
-EXTRA_DIST = \
+EXTRA_DIST += \
 	nm-openvpn-service.name.in \
 	$(dbusservice_DATA) \
 	$(appdata_in_files) \
