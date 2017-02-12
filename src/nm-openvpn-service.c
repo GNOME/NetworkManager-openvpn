@@ -24,8 +24,6 @@
 
 #include "nm-default.h"
 
-#include "nm-openvpn-service.h"
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -66,9 +64,35 @@ static struct {
 
 #define NM_OPENVPN_HELPER_PATH LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
 
-G_DEFINE_TYPE (NMOpenvpnPlugin, nm_openvpn_plugin, NM_TYPE_VPN_SERVICE_PLUGIN)
+/*****************************************************************************/
 
-#define NM_OPENVPN_PLUGIN_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginPrivate))
+#define NM_TYPE_OPENVPN_PLUGIN            (nm_openvpn_plugin_get_type ())
+#define NM_OPENVPN_PLUGIN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPlugin))
+#define NM_OPENVPN_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginClass))
+#define NM_IS_OPENVPN_PLUGIN(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), NM_TYPE_OPENVPN_PLUGIN))
+#define NM_IS_OPENVPN_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), NM_TYPE_OPENVPN_PLUGIN))
+#define NM_OPENVPN_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginClass))
+
+typedef struct {
+	NMVpnServicePlugin parent;
+} NMOpenvpnPlugin;
+
+typedef struct {
+	NMVpnServicePluginClass parent;
+} NMOpenvpnPluginClass;
+
+GType nm_openvpn_plugin_get_type (void);
+
+NMOpenvpnPlugin *nm_openvpn_plugin_new (const char *bus_name);
+
+/*****************************************************************************/
+
+typedef struct {
+	GPid pid;
+	guint watch_id;
+	guint kill_id;
+	NMOpenvpnPlugin *plugin;
+} PidsPendingData;
 
 typedef struct {
 	char *default_username;
@@ -91,6 +115,12 @@ typedef struct {
 	char *mgt_path;
 } NMOpenvpnPluginPrivate;
 
+G_DEFINE_TYPE (NMOpenvpnPlugin, nm_openvpn_plugin, NM_TYPE_VPN_SERVICE_PLUGIN)
+
+#define NM_OPENVPN_PLUGIN_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginPrivate))
+
+/*****************************************************************************/
+
 typedef struct {
 	const char *name;
 	GType type;
@@ -98,13 +128,6 @@ typedef struct {
 	gint int_max;
 	gboolean address;
 } ValidProperty;
-
-typedef struct {
-	GPid pid;
-	guint watch_id;
-	guint kill_id;
-	NMOpenvpnPlugin *plugin;
-} PidsPendingData;
 
 static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_AUTH,                 G_TYPE_STRING, 0, 0, FALSE },

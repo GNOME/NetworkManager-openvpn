@@ -63,9 +63,6 @@ src_libnm_utils_la_LIBADD = \
 
 libexec_PROGRAMS += src/nm-openvpn-service
 
-src_nm_openvpn_service_SOURCES = \
-	src/nm-openvpn-service.c \
-	src/nm-openvpn-service.h
 src_nm_openvpn_service_CPPFLAGS = $(src_cppflags)
 src_nm_openvpn_service_LDFLAGS = \
 	-Wl,--version-script="$(srcdir)/linker-script-binary.ver"
