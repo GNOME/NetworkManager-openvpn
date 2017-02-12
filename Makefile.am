@@ -2,24 +2,35 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 
 libexec_PROGRAMS =
 
+noinst_LTLIBRARIES =
+
 EXTRA_DIST =
 
 CLEANFILES =
 
+check_programs =
+
+noinst_PROGRAMS =
+
 SUBDIRS = \
 	. \
-	properties \
 	po
 
 if WITH_GNOME
 SUBDIRS += auth-dialog
 endif
 
+plugindir = $(libdir)/NetworkManager
+plugin_LTLIBRARIES =
+
 dbusservicedir = $(sysconfdir)/dbus-1/system.d
 dbusservice_DATA = nm-openvpn-service.conf
 
 nmvpnservicedir = $(NM_VPN_SERVICE_DIR)
 nmvpnservice_DATA = nm-openvpn-service.name
+
+uidir = $(datadir)/gnome-vpn-properties/openvpn
+ui_DATA =
 
 ###############################################################################
 
@@ -52,7 +63,7 @@ src_nm_openvpn_service_SOURCES = \
 	src/nm-openvpn-service.c \
 	src/nm-openvpn-service.h
 
-src_nm_openvpn_service_CFLAGS = $(src_cppflags)
+src_nm_openvpn_service_CPPFLAGS = $(src_cppflags)
 
 src_nm_openvpn_service_LDADD = \
 	$(LIBNM_LIBS)
@@ -69,6 +80,222 @@ src_nm_openvpn_service_openvpn_helper_LDADD = \
 	$(LIBNM_LIBS)
 
 CLEANFILES += src/*~
+
+###############################################################################
+
+plugin_sources = \
+	properties/nm-openvpn-editor-plugin.c \
+	properties/nm-openvpn-editor-plugin.h \
+	properties/import-export.c \
+	properties/import-export.h
+
+editor_sources = \
+	properties/nm-openvpn-editor.c \
+	properties/nm-openvpn-editor.h \
+	properties/auth-helpers.c \
+	properties/auth-helpers.h
+
+properties_cppflags = \
+	-DICONDIR=\""$(datadir)/pixmaps"\" \
+	-DUIDIR=\""$(uidir)"\" \
+	-DLOCALEDIR=\"$(datadir)/locale\" \
+	-I$(srcdir)/shared \
+	$(GLIB_CFLAGS)
+
+###############################################################################
+
+plugin_LTLIBRARIES += properties/libnm-vpn-plugin-openvpn.la
+
+properties_libnm_vpn_plugin_openvpn_la_SOURCES = \
+	$(shared_sources) \
+	shared/nm-utils/nm-vpn-plugin-utils.c \
+	shared/nm-utils/nm-vpn-plugin-utils.h \
+	shared/nm-utils/nm-vpn-plugin-macros.h \
+	$(plugin_sources)
+
+properties_libnm_vpn_plugin_openvpn_la_CPPFLAGS = \
+	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB_BASE \
+	-DNM_PLUGIN_DIR=\"$(NM_PLUGIN_DIR)\" \
+	$(properties_cppflags) \
+	$(LIBNM_CFLAGS)
+
+properties_libnm_vpn_plugin_openvpn_la_LIBADD = \
+	$(LIBNM_LIBS) \
+	$(DL_LIBS) \
+	$(NULL)
+
+properties_libnm_vpn_plugin_openvpn_la_LDFLAGS = \
+	-avoid-version \
+	-Wl,--version-script=$(srcdir)/properties/libnm-vpn-plugin-openvpn.ver
+
+###############################################################################
+
+if WITH_GNOME
+ui_DATA += properties/nm-openvpn-dialog.ui
+endif
+
+if WITH_GNOME
+plugin_LTLIBRARIES += properties/libnm-vpn-plugin-openvpn-editor.la
+endif
+
+properties_libnm_vpn_plugin_openvpn_editor_la_SOURCES = \
+	$(shared_sources) \
+	$(editor_sources)
+
+properties_libnm_vpn_plugin_openvpn_editor_la_CPPFLAGS = \
+	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR \
+	$(properties_cppflags) \
+	$(GTK_CFLAGS) \
+	$(LIBNM_CFLAGS) \
+	$(LIBNMA_CFLAGS)
+
+properties_libnm_vpn_plugin_openvpn_editor_la_LIBADD = \
+	$(GTK_LIBS) \
+	$(LIBNM_LIBS) \
+	$(LIBNMA_LIBS)
+
+properties_libnm_vpn_plugin_openvpn_editor_la_LDFLAGS = \
+	-avoid-version \
+	-Wl,--version-script=$(srcdir)/properties/libnm-vpn-plugin-openvpn-editor.ver
+
+###############################################################################
+
+if WITH_GNOME
+if WITH_LIBNM_GLIB
+plugin_LTLIBRARIES += properties/libnm-openvpn-properties.la
+endif
+endif
+
+properties_libnm_openvpn_properties_la_SOURCES = \
+	$(shared_sources) \
+	$(plugin_sources) \
+	$(editor_sources)
+
+properties_libnm_openvpn_properties_la_CPPFLAGS = \
+	-DNM_VPN_OLD \
+	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB \
+	$(properties_cppflags) \
+	$(GTK_CFLAGS) \
+	$(LIBNM_GLIB_CFLAGS) \
+	$(LIBNM_GTK_CFLAGS)
+
+properties_libnm_openvpn_properties_la_LIBADD = \
+	$(GTK_LIBS) \
+	$(LIBNM_GLIB_LIBS) \
+	$(LIBNM_GTK_LIBS)
+
+properties_libnm_openvpn_properties_la_LDFLAGS = \
+	-avoid-version \
+	-Wl,--version-script=$(srcdir)/properties/libnm-openvpn-properties.ver
+
+###############################################################################
+
+noinst_LTLIBRARIES += properties/libnm-vpn-plugin-openvpn-test.la
+
+properties_libnm_vpn_plugin_openvpn_test_la_SOURCES = $(properties_libnm_vpn_plugin_openvpn_la_SOURCES)
+properties_libnm_vpn_plugin_openvpn_test_la_CPPFLAGS = $(properties_libnm_vpn_plugin_openvpn_la_CPPFLAGS)
+properties_libnm_vpn_plugin_openvpn_test_la_LIBADD = $(properties_libnm_vpn_plugin_openvpn_la_LIBADD)
+properties_libnm_vpn_plugin_openvpn_test_la_LDFLAGS = \
+    -avoid-version
+
+if WITH_LIBNM_GLIB
+noinst_LTLIBRARIES += properties/libnm-openvpn-properties-test.la
+endif
+
+properties_libnm_openvpn_properties_test_la_SOURCES = $(properties_libnm_openvpn_properties_la_SOURCES)
+properties_libnm_openvpn_properties_test_la_CPPFLAGS = $(properties_libnm_openvpn_properties_la_CPPFLAGS)
+properties_libnm_openvpn_properties_test_la_LIBADD = $(properties_libnm_openvpn_properties_la_LIBADD)
+properties_libnm_openvpn_properties_test_la_LDFLAGS = \
+    -avoid-version
+
+###############################################################################
+
+CLEANFILES += \
+	properties/*.bak \
+	properties/*~
+
+EXTRA_DIST += \
+	properties/libnm-vpn-plugin-openvpn.ver \
+	properties/libnm-vpn-plugin-openvpn-editor.ver \
+	properties/libnm-openvpn-properties.ver \
+	properties/nm-openvpn-dialog.ui
+
+###############################################################################
+
+properties_tests_cppflags = \
+	-DTEST_SRCDIR="\"$(abs_srcdir)/properties/tests\"" \
+	-DTEST_BUILDDIR="\"$(abs_builddir)/properties/tests\"" \
+	-I$(srcdir)/shared \
+	-I$(srcdir)/properties \
+	$(GLIB_CFLAGS)
+
+
+check_programs += properties/tests/test-import-export
+
+properties_tests_test_import_export_SOURCES = \
+	properties/tests/test-import-export.c
+
+properties_tests_test_import_export_CPPFLAGS = \
+	$(properties_tests_cppflags) \
+	$(GTK_CFLAGS) \
+	$(LIBNM_CFLAGS) \
+	$(LIBNMA_CFLAGS)
+
+properties_tests_test_import_export_LDADD = \
+	properties/libnm-vpn-plugin-openvpn-test.la
+	$(GTHREAD_LIBS) \
+	$(GTK_LIBS) \
+	$(LIBNM_LIBS) \
+	$(LIBNMA_LIBS)
+
+
+if WITH_LIBNM_GLIB
+check_programs += properties/tests/test-import-export-glib
+endif
+
+properties_tests_test_import_export_glib_SOURCES = \
+	properties/tests/test-import-export.c
+
+properties_tests_test_import_export_glib_CPPFLAGS = \
+	-DNM_VPN_OLD \
+	$(properties_tests_cppflags) \
+	$(GTK_CFLAGS) \
+	$(LIBNM_GLIB_CFLAGS) \
+	$(LIBNM_GTK_CFLAGS)
+
+properties_tests_test_import_export_glib_LDADD = \
+	properties/libnm-openvpn-properties-test.la \
+	$(GTHREAD_LIBS) \
+	$(GTK_LIBS) \
+	$(LIBNM_GLIB_LIBS) \
+	$(LIBNM_GTK_LIBS)
+
+EXTRA_DIST += \
+	properties/tests/conf/iso885915.ovpn \
+	properties/tests/conf/password.conf \
+	properties/tests/conf/pkcs12.ovpn \
+	properties/tests/conf/port.ovpn \
+	properties/tests/conf/rport.ovpn \
+	properties/tests/conf/static.key \
+	properties/tests/conf/static.ovpn \
+	properties/tests/conf/tls.ovpn \
+	properties/tests/conf/tun-opts.conf \
+	properties/tests/conf/proxy-http.ovpn \
+	properties/tests/conf/httpauthfile \
+	properties/tests/conf/proxy-socks.ovpn \
+	properties/tests/conf/proxy-http-with-auth.ovpn \
+	properties/tests/conf/keysize.ovpn \
+	properties/tests/conf/device.ovpn \
+	properties/tests/conf/device-notype.ovpn \
+	properties/tests/conf/keepalive.ovpn \
+	properties/tests/conf/ping-with-exit.ovpn \
+	properties/tests/conf/ping-with-restart.ovpn \
+	properties/tests/conf/route.ovpn \
+	properties/tests/conf/tls-inline.ovpn \
+	properties/tests/conf/tls-inline-ca.pem \
+	properties/tests/conf/tls-inline-cert.pem \
+	properties/tests/conf/tls-inline-key.pem \
+	properties/tests/conf/tls-inline-ta.pem
 
 ###############################################################################
 
@@ -99,6 +326,11 @@ nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 	sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
 	    -e 's|[@]PLUGINDIR[@]/|@NM_PLUGIN_DIR_NAME_FILE@|g' \
 	    $^ >$@
+
+# we always build the tests during regular build.
+noinst_PROGRAMS += $(check_programs)
+
+TESTS = $(check_programs)
 
 EXTRA_DIST += \
 	shared/README \

@@ -142,9 +142,6 @@ fi
 AC_CONFIG_FILES([
 Makefile
 auth-dialog/Makefile
-properties/Makefile
-properties/tests/Makefile
-properties/tests/conf/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT
