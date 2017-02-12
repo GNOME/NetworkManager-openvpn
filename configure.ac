@@ -12,6 +12,10 @@ AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_HEADERS([config.h])
 
+dnl Prefer gcc-* variants; the ones libtool would choose don't work with LTO
+AC_CHECK_TOOLS(AR, [gcc-ar ar], false)
+AC_CHECK_TOOLS(RANLIB, [gcc-ranlib ranlib], :)
+
 dnl
 dnl Require programs
 dnl
