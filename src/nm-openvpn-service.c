@@ -24,8 +24,6 @@
 
 #include "nm-default.h"
 
-#include "nm-openvpn-service.h"
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -66,9 +64,35 @@ static struct {
 
 #define NM_OPENVPN_HELPER_PATH LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
 
-G_DEFINE_TYPE (NMOpenvpnPlugin, nm_openvpn_plugin, NM_TYPE_VPN_SERVICE_PLUGIN)
+/*****************************************************************************/
 
-#define NM_OPENVPN_PLUGIN_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginPrivate))
+#define NM_TYPE_OPENVPN_PLUGIN            (nm_openvpn_plugin_get_type ())
+#define NM_OPENVPN_PLUGIN(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPlugin))
+#define NM_OPENVPN_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginClass))
+#define NM_IS_OPENVPN_PLUGIN(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), NM_TYPE_OPENVPN_PLUGIN))
+#define NM_IS_OPENVPN_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), NM_TYPE_OPENVPN_PLUGIN))
+#define NM_OPENVPN_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginClass))
+
+typedef struct {
+	NMVpnServicePlugin parent;
+} NMOpenvpnPlugin;
+
+typedef struct {
+	NMVpnServicePluginClass parent;
+} NMOpenvpnPluginClass;
+
+GType nm_openvpn_plugin_get_type (void);
+
+NMOpenvpnPlugin *nm_openvpn_plugin_new (const char *bus_name);
+
+/*****************************************************************************/
+
+typedef struct {
+	GPid pid;
+	guint watch_id;
+	guint kill_id;
+	NMOpenvpnPlugin *plugin;
+} PidsPendingData;
 
 typedef struct {
 	char *default_username;
@@ -91,6 +115,12 @@ typedef struct {
 	char *mgt_path;
 } NMOpenvpnPluginPrivate;
 
+G_DEFINE_TYPE (NMOpenvpnPlugin, nm_openvpn_plugin, NM_TYPE_VPN_SERVICE_PLUGIN)
+
+#define NM_OPENVPN_PLUGIN_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), NM_TYPE_OPENVPN_PLUGIN, NMOpenvpnPluginPrivate))
+
+/*****************************************************************************/
+
 typedef struct {
 	const char *name;
 	GType type;
@@ -99,14 +129,7 @@ typedef struct {
 	gboolean address;
 } ValidProperty;
 
-typedef struct {
-	GPid pid;
-	guint watch_id;
-	guint kill_id;
-	NMOpenvpnPlugin *plugin;
-} PidsPendingData;
-
-static ValidProperty valid_properties[] = {
+static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_AUTH,                 G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CA,                   G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CERT,                 G_TYPE_STRING, 0, 0, FALSE },
@@ -156,7 +179,7 @@ static ValidProperty valid_properties[] = {
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
 
-static ValidProperty valid_secrets[] = {
+static const ValidProperty valid_secrets[] = {
 	{ NM_OPENVPN_KEY_PASSWORD,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CERTPASS,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NOSECRET,             G_TYPE_STRING, 0, 0, FALSE },
@@ -328,7 +351,7 @@ validate_address (const char *address)
 }
 
 typedef struct ValidateInfo {
-	ValidProperty *table;
+	const ValidProperty *table;
 	GError **error;
 	gboolean have_items;
 } ValidateInfo;
@@ -349,15 +372,15 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 		return;
 
 	for (i = 0; info->table[i].name; i++) {
-		ValidProperty prop = info->table[i];
+		const ValidProperty *prop = &info->table[i];
 		long int tmp;
 
-		if (strcmp (prop.name, key))
+		if (strcmp (prop->name, key))
 			continue;
 
-		switch (prop.type) {
+		switch (prop->type) {
 		case G_TYPE_STRING:
-			if (!prop.address || validate_address (value))
+			if (!prop->address || validate_address (value))
 				return; /* valid */
 
 			g_set_error (info->error,
@@ -369,14 +392,14 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 		case G_TYPE_INT:
 			errno = 0;
 			tmp = strtol (value, NULL, 10);
-			if (errno == 0 && tmp >= prop.int_min && tmp <= prop.int_max)
+			if (errno == 0 && tmp >= prop->int_min && tmp <= prop->int_max)
 				return; /* valid */
 
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("invalid integer property “%s” or out of range [%d -> %d]"),
-			             key, prop.int_min, prop.int_max);
+			             key, prop->int_min, prop->int_max);
 			break;
 		case G_TYPE_BOOLEAN:
 			if (!strcmp (value, "yes") || !strcmp (value, "no"))
@@ -394,7 +417,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("unhandled property “%s” type %s"),
-			             key, g_type_name (prop.type));
+			             key, g_type_name (prop->type));
 			break;
 		}
 	}

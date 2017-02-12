@@ -6,6 +6,7 @@ AC_INIT(NetworkManager-openvpn,
         NetworkManager-openvpn)
 AM_INIT_AUTOMAKE([1.9 tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE
+AM_SILENT_RULES([yes])
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -118,6 +119,8 @@ NM_VPN_SERVICE_DIR=`$PKG_CONFIG --define-variable prefix='\${prefix}' --variable
 AC_SUBST(NM_VPN_SERVICE_DIR)
 
 NM_COMPILER_WARNINGS([yes])
+NM_LTO
+NM_LD_GC
 
 NM_PLUGIN_DIR="$libdir/NetworkManager"
 AC_SUBST(NM_PLUGIN_DIR)
@@ -139,13 +142,7 @@ fi
 
 AC_CONFIG_FILES([
 Makefile
-src/Makefile
-auth-dialog/Makefile
-properties/Makefile
-properties/tests/Makefile
-properties/tests/conf/Makefile
 po/Makefile.in
-shared/Makefile
 ])
 AC_OUTPUT
 
@@ -155,3 +152,6 @@ echo "  --with-gnome=$with_gnome"
 echo "  --with-libnm-glib=$with_libnm_glib"
 echo "  --enable-absolute-paths=$enable_absolute_paths"
 echo "  --enable-more-warnings=$set_more_warnings"
+echo "  --enable-lto=$enable_lto"
+echo "  --enable-ld-gc=$enable_ld_gc"
+echo ""
