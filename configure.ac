@@ -118,6 +118,8 @@ NM_VPN_SERVICE_DIR=`$PKG_CONFIG --define-variable prefix='\${prefix}' --variable
 AC_SUBST(NM_VPN_SERVICE_DIR)
 
 NM_COMPILER_WARNINGS([yes])
+NM_LTO
+NM_LD_GC
 
 NM_PLUGIN_DIR="$libdir/NetworkManager"
 AC_SUBST(NM_PLUGIN_DIR)
@@ -155,3 +157,6 @@ echo "  --with-gnome=$with_gnome"
 echo "  --with-libnm-glib=$with_libnm_glib"
 echo "  --enable-absolute-paths=$enable_absolute_paths"
 echo "  --enable-more-warnings=$set_more_warnings"
+echo "  --enable-lto=$enable_lto"
+echo "  --enable-ld-gc=$enable_ld_gc"
+echo ""
