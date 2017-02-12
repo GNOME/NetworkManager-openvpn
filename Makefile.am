@@ -16,10 +16,6 @@ SUBDIRS = \
 	. \
 	po
 
-if WITH_GNOME
-SUBDIRS += auth-dialog
-endif
-
 plugindir = $(libdir)/NetworkManager
 plugin_LTLIBRARIES =
 
@@ -296,6 +292,38 @@ EXTRA_DIST += \
 	properties/tests/conf/tls-inline-cert.pem \
 	properties/tests/conf/tls-inline-key.pem \
 	properties/tests/conf/tls-inline-ta.pem
+
+###############################################################################
+
+if WITH_GNOME
+libexec_PROGRAMS += auth-dialog/nm-openvpn-auth-dialog
+endif
+
+auth_dialog_nm_openvpn_auth_dialog_CPPFLAGS = \
+	-DICONDIR=\""$(datadir)/pixmaps"\" \
+	-DUIDIR=\""$(uidir)"\" \
+	-DBINDIR=\""$(bindir)"\" \
+	-DGNOMELOCALEDIR=\"$(datadir)/locale\" \
+	-I$(srcdir)/shared \
+	$(GLIB_CFLAGS) \
+	$(GTK_CFLAGS) \
+	$(LIBNM_CFLAGS) \
+	$(LIBNMA_CFLAGS) \
+	$(LIBSECRET_CFLAGS)
+
+auth_dialog_nm_openvpn_auth_dialog_SOURCES = \
+	shared/utils.c \
+	shared/utils.h \
+	auth-dialog/main.c
+
+auth_dialog_nm_openvpn_auth_dialog_LDADD = \
+	$(GTK_LIBS) \
+	$(LIBNM_LIBS) \
+	$(LIBNMA_LIBS) \
+	$(LIBSECRET_LIBS)
+
+CLEANFILES += \
+	auth-dialog/*~
 
 ###############################################################################
 
