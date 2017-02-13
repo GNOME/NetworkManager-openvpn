@@ -211,6 +211,25 @@ _LOGD_enabled (void)
 
 /*****************************************************************************/
 
+static const char *
+openvpn_binary_find_exepath (void)
+{
+	static const char *paths[] = {
+		"/usr/sbin/openvpn",
+		"/sbin/openvpn",
+		"/usr/local/sbin/openvpn",
+	};
+	int i;
+
+	for (i = 0; i < G_N_ELEMENTS (paths); i++) {
+		if (g_file_test (paths[i], G_FILE_TEST_EXISTS))
+			return paths[i];
+	}
+	return NULL;
+}
+
+/*****************************************************************************/
+
 static void
 pids_pending_data_free (PidsPendingData *pid_data)
 {
@@ -909,26 +928,6 @@ connection_type_is_tls_mode (const char *connection_type)
 	    || strcmp (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS) == 0;
 }
 
-static const char *
-nm_find_openvpn (void)
-{
-	static const char *openvpn_binary_paths[] = {
-		"/usr/sbin/openvpn",
-		"/sbin/openvpn",
-		"/usr/local/sbin/openvpn",
-		NULL
-	};
-	const char  **openvpn_binary = openvpn_binary_paths;
-
-	while (*openvpn_binary != NULL) {
-		if (g_file_test (*openvpn_binary, G_FILE_TEST_EXISTS))
-			break;
-		openvpn_binary++;
-	}
-
-	return *openvpn_binary;
-}
-
 static void
 add_openvpn_arg (GPtrArray *args, const char *arg)
 {
@@ -1177,7 +1176,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		return FALSE;
 
 	/* Find openvpn */
-	openvpn_binary = nm_find_openvpn ();
+	openvpn_binary = openvpn_binary_find_exepath ();
 	if (!openvpn_binary) {
 		g_set_error_literal (error,
 		                     NM_VPN_PLUGIN_ERROR,
