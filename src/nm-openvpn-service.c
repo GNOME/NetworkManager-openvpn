@@ -87,6 +87,13 @@ NMOpenvpnPlugin *nm_openvpn_plugin_new (const char *bus_name);
 
 /*****************************************************************************/
 
+typedef enum {
+	OPENVPN_BINARY_VERSION_INVALID,
+	OPENVPN_BINARY_VERSION_UNKNOWN,
+	OPENVPN_BINARY_VERSION_2_3_OR_OLDER,
+	OPENVPN_BINARY_VERSION_2_4_OR_NEWER,
+} OpenvpnBinaryVersion;
+
 typedef struct {
 	GPid pid;
 	guint watch_id;
@@ -226,6 +233,64 @@ openvpn_binary_find_exepath (void)
 			return paths[i];
 	}
 	return NULL;
+}
+
+static OpenvpnBinaryVersion
+openvpn_binary_detect_version (const char *exepath)
+{
+	gs_free char *s_stdout = NULL;
+	const char *s;
+	int exit_code;
+	int n;
+
+	g_return_val_if_fail (exepath && exepath[0] == '/', OPENVPN_BINARY_VERSION_UNKNOWN);
+
+	if (!g_spawn_sync (NULL,
+	                   (char *[]) { (char *) exepath, "--version", NULL },
+	                   NULL,
+	                   G_SPAWN_STDERR_TO_DEV_NULL,
+	                   NULL,
+	                   NULL,
+	                   &s_stdout,
+	                   NULL,
+	                   &exit_code,
+	                   NULL))
+		return OPENVPN_BINARY_VERSION_UNKNOWN;
+
+	if (   !WIFEXITED (exit_code)
+	    || WEXITSTATUS (exit_code) != 1) {
+		/* expect return code 1 (OPENVPN_EXIT_STATUS_USAGE) */
+		return OPENVPN_BINARY_VERSION_UNKNOWN;
+	}
+
+	/* the output for --version starts with title_string, which starts with PACKAGE_STRING,
+	 * which looks like "OpenVPN 2.#...". Do a strict parsing here... */
+	if (   !s_stdout
+	    || !g_str_has_prefix (s_stdout, "OpenVPN 2."))
+		return OPENVPN_BINARY_VERSION_UNKNOWN;
+	s = &s_stdout[NM_STRLEN ("OpenVPN 2.")];
+
+	if (!g_ascii_isdigit (s[0]))
+		return OPENVPN_BINARY_VERSION_UNKNOWN;
+
+	n = 0;
+	do {
+		if (n > G_MAXINT / 100)
+			return OPENVPN_BINARY_VERSION_UNKNOWN;
+		n = (n * 10) + (s[0] - '0');
+	} while (g_ascii_isdigit ((++s)[0]));
+
+	if (n <= 3)
+		return OPENVPN_BINARY_VERSION_2_3_OR_OLDER;
+	return OPENVPN_BINARY_VERSION_2_4_OR_NEWER;
+}
+
+static OpenvpnBinaryVersion
+openvpn_binary_detect_version_cached (const char *exepath, OpenvpnBinaryVersion *cached)
+{
+	if (G_UNLIKELY (*cached == OPENVPN_BINARY_VERSION_INVALID))
+		*cached = openvpn_binary_detect_version (exepath);
+	return *cached;
 }
 
 /*****************************************************************************/
@@ -1142,12 +1207,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	gboolean dev_type_is_tap;
 	char *stmp;
 	const char *defport, *proto_tcp;
+	const char *tls_remote = NULL;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
 	gs_free char *bus_name = NULL;
 	NMSettingVpn *s_vpn;
 	const char *connection_type;
 	gint64 v_int64;
 	char sbuf_64[65];
+	OpenvpnBinaryVersion openvpn_binary_version = OPENVPN_BINARY_VERSION_INVALID;
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -1474,8 +1541,17 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* tls-remote */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 	if (tmp && tmp[0]) {
-		add_openvpn_arg (args, "--tls-remote");
-		add_openvpn_arg (args, tmp);
+		if (openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) != OPENVPN_BINARY_VERSION_2_4_OR_NEWER) {
+			_LOGW ("the tls-remote option is deprecated and removed from OpenVPN 2.4. Update your connection to use verify-x509-name");
+			add_openvpn_arg (args, "--tls-remote");
+			add_openvpn_arg (args, tmp);
+		} else {
+			_LOGW ("the tls-remote option is deprecated and removed from OpenVPN 2.4. For compatibility, the plugin uses \"verify-x509-name\" \"%s\" \"name\" instead. Update your connection to use verify-x509-name", tmp);
+			add_openvpn_arg (args, "--verify-x509-name");
+			add_openvpn_arg (args, tmp);
+			add_openvpn_arg (args, "name");
+		}
+		tls_remote = tmp;
 	}
 
 	/* verify-x509-name */
@@ -1483,6 +1559,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (tmp && tmp[0]) {
 		const char *name;
 		gs_free char *type = NULL;
+
+		if (tls_remote) {
+			g_set_error (error, NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("Invalid configuration with tls-remote and verify-x509-name."));
+			return FALSE;
+		}
 
 		name = strchr (tmp, ':');
 		if (name) {
