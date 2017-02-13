@@ -1256,7 +1256,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		}
 
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_VERIFY_X509_NAME)) {
-			const char *type = "subject";
+			const char *type = NM_OPENVPN_VERIFY_X509_NAME_TYPE_SUBJECT;
 			gs_free char *item = NULL;
 
 			if (!args_params_check_nargs_minmax (params, 1, 2, &line_error))

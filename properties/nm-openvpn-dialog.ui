@@ -1950,6 +1950,8 @@ When enabled, connection will only succeed if the server certificate matches som
 Matching can either apply to the whole certificate subject (all the fields),
 or just the Common Name (CN field).
 
+The legacy option tls-remote is deprecated and removed from OpenVPN 2.4 and newer. Do not use it anymore.
+
 config: verify-x509-name subject-or-name [mode]
 config (legacy mode): tls-remote subject-or-name</property>
                             <property name="model">model9</property>
