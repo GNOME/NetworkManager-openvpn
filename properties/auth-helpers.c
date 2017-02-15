@@ -1245,7 +1245,7 @@ populate_tls_remote_mode_entry_combo (GtkEntry* entry, GtkComboBox *box,
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
-	                    TLS_REMOTE_MODE_COL_NAME, _("Verify subject partially (legacy mode)"),
+	                    TLS_REMOTE_MODE_COL_NAME, _("Verify subject partially (legacy mode, strongly discouraged)"),
 	                    TLS_REMOTE_MODE_COL_VALUE, TLS_REMOTE_MODE_LEGACY,
 	                    -1);
 
@@ -1284,6 +1284,7 @@ tls_remote_changed (GtkWidget *widget, gpointer user_data)
 	GtkWidget *entry, *combo, *ok_button;
 	GtkTreeIter iter;
 	gboolean entry_enabled = TRUE, entry_has_error = FALSE;
+	gboolean legacy_tls_remote = FALSE;
 
 	entry     = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
 	combo     = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_mode_combo"));
@@ -1306,6 +1307,7 @@ tls_remote_changed (GtkWidget *widget, gpointer user_data)
 
 			entry_enabled = TRUE;
 			entry_has_error = !subject || !subject[0];
+			legacy_tls_remote = nm_streq (tls_remote_mode, TLS_REMOTE_MODE_LEGACY);
 		}
 	}
 
@@ -1314,9 +1316,17 @@ tls_remote_changed (GtkWidget *widget, gpointer user_data)
 		widget_set_error (entry);
 		gtk_widget_set_sensitive (ok_button, FALSE);
 	} else {
-		widget_unset_error (entry);
+		if (legacy_tls_remote) {
+			/* selecting tls-remote is not an error, but strongly discouraged. I wish
+			 * there would be a warning-class as well. Anyway, mark the widget as
+			 * erroneous, although this doesn't make the connection invalid (which
+			 * is an ugly inconsistency). */
+			widget_set_error (entry);
+		} else
+			widget_unset_error (entry);
 		gtk_widget_set_sensitive (ok_button, TRUE);
 	}
+
 }
 
 static void
