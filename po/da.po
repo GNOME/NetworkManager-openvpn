@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
 "POT-Creation-Date: 2016-10-03 20:58+0000\n"
-"PO-Revision-Date: 2017-02-07 18:23+0100\n"
+"PO-Revision-Date: 2017-02-25 19:28+0100\n"
 "Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -463,7 +463,7 @@ msgstr "egenskaben \"%s\" for objektklassen \"%s\" er skrivebeskyttet"
 #: ../shared/nm-utils/nm-shared-utils.c:278
 #, c-format
 msgid "construct property \"%s\" for object '%s' can't be set after construction"
-msgstr "construct-egenskaben \"%s\" for objektet \"%s\" kan ikke angives efter construction"
+msgstr "construct-egenskaben \"%s\" for objektet \"%s\" kan ikke angives efter konstruktion"
 
 # streng findes også i applet
 #: ../shared/nm-utils/nm-shared-utils.c:286
@@ -583,7 +583,7 @@ msgstr "Ugyldig forbindelsestype."
 
 #: ../src/nm-openvpn-service.c:1162
 msgid "Could not find the openvpn binary."
-msgstr "Kunne ikke finde binær fil for openvpn."
+msgstr "Kunne ikke finde binærfil for openvpn."
 
 #: ../src/nm-openvpn-service.c:1172
 msgid "Invalid HMAC auth."
@@ -1078,21 +1078,21 @@ msgid ""
 "mode).\n"
 "config: cipher"
 msgstr ""
-"Kryptér pakker med chifferalgoritme. Standarden er BF-CBC (Blowfish i Cipher Block Chaining-"
+"Kryptér pakker med krypteringsalgoritme. Standarden er BF-CBC (Blowfish i Cipher Block Chaining-"
 "tilstand).\n"
 "Konfiguration: cipher"
 
 #: ../properties/nm-openvpn-dialog.ui.h:96
 msgid "Use custom _size of cipher key:"
-msgstr "Brug tilpasset _størrelse på chiffernøgle:"
+msgstr "Brug tilpasset _størrelse på krypteringsalgoritmenøgle:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:97
 msgid ""
 "Set cipher key size to a custom value. If unspecified, it defaults to cipher-specific size.\n"
 "config: keysize <n>"
 msgstr ""
-"Angiv chiffernøglestørrelse til en tilpasset værdi. Hvis ikke angivet, er størrelsen chiffer-"
-"specifik.\n"
+"Angiv krypteringsalgoritmens nøglestørrelse til en tilpasset værdi. Hvis ikke angivet, er "
+"størrelsen specifik for krypteringsalgoritmen.\n"
 "Konfiguration: keysize <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:99
@@ -1105,7 +1105,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:101
 msgid "Ci_pher:"
-msgstr "_Chiffer:"
+msgstr "_Krypteringsalgoritme:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:102
 msgid "_HMAC Authentication:"
