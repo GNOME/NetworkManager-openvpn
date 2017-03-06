@@ -487,7 +487,6 @@ openvpn_editor_new (NMConnection *connection, GError **error)
 {
 	NMVpnEditor *object;
 	OpenvpnEditorPrivate *priv;
-	char *ui_file;
 	gboolean new = TRUE;
 	NMSettingVpn *s_vpn;
 
@@ -502,29 +501,20 @@ openvpn_editor_new (NMConnection *connection, GError **error)
 
 	priv = OPENVPN_EDITOR_GET_PRIVATE (object);
 
-	ui_file = g_strdup_printf ("%s/%s", UIDIR, "nm-openvpn-dialog.ui");
 	priv->builder = gtk_builder_new ();
 
 	gtk_builder_set_translation_domain (priv->builder, GETTEXT_PACKAGE);
 
-	if (!gtk_builder_add_from_file (priv->builder, ui_file, error)) {
-		g_warning ("Couldn't load builder file: %s",
-		           error && *error ? (*error)->message : "(unknown)");
-		g_clear_error (error);
-		g_set_error (error, NMV_EDITOR_PLUGIN_ERROR, 0,
-		             "could not load required resources from %s", ui_file);
-		g_free (ui_file);
+	if (!gtk_builder_add_from_resource (priv->builder, "/org/freedesktop/network-manager-openvpn/nm-openvpn-dialog.ui", error)) {
 		g_object_unref (object);
-		return NULL;
+		g_return_val_if_reached (NULL);
 	}
-
-	g_free (ui_file);
 
 	priv->widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "openvpn-vbox"));
 	if (!priv->widget) {
 		g_set_error_literal (error, NMV_EDITOR_PLUGIN_ERROR, 0, _("could not load UI widget"));
 		g_object_unref (object);
-		return NULL;
+		g_return_val_if_reached (NULL);
 	}
 	g_object_ref_sink (priv->widget);
 

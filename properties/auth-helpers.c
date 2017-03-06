@@ -1682,7 +1682,6 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 {
 	GtkBuilder *builder;
 	GtkWidget *dialog = NULL;
-	char *ui_file = NULL;
 	GtkWidget *widget, *combo, *spin, *entry, *ok_button;
 	const char *value, *value2;
 	const char *dev, *dev_type, *tap_dev;
@@ -1695,22 +1694,20 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	g_return_val_if_fail (hash != NULL, NULL);
 
-	ui_file = g_strdup_printf ("%s/%s", UIDIR, "nm-openvpn-dialog.ui");
 	builder = gtk_builder_new ();
 
 	gtk_builder_set_translation_domain (builder, GETTEXT_PACKAGE);
 
-	if (!gtk_builder_add_from_file (builder, ui_file, &error)) {
-		g_warning ("Couldn't load builder file: %s", error->message);
+	if (!gtk_builder_add_from_resource (builder, "/org/freedesktop/network-manager-openvpn/nm-openvpn-dialog.ui", &error)) {
 		g_error_free (error);
 		g_object_unref (G_OBJECT (builder));
-		goto out;
+		g_return_val_if_reached (NULL);
 	}
 
 	dialog = GTK_WIDGET (gtk_builder_get_object (builder, "openvpn-advanced-dialog"));
 	if (!dialog) {
 		g_object_unref (G_OBJECT (builder));
-		goto out;
+		g_return_val_if_reached (NULL);
 	}
 	gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
@@ -2023,9 +2020,6 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	_builder_init_optional_spinbutton (builder, "max_routes_checkbutton", "max_routes_spinbutton", !!value,
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 100000000, 100));
 
-
-out:
-	g_free (ui_file);
 	return dialog;
 }
 
