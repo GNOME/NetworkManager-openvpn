@@ -360,7 +360,7 @@ appdata_in_files = appdata/network-manager-openvpn.metainfo.xml.in
 @INTLTOOL_XML_RULE@
 
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
-	sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
+	$(AM_V_GEN) sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
 	    -e 's|[@]PLUGINDIR[@]/|@NM_PLUGIN_DIR_NAME_FILE@|g' \
 	    $^ >$@
 
