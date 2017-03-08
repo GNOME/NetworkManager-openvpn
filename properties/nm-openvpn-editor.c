@@ -118,7 +118,6 @@ check_validity (OpenvpnEditor *self, GError **error)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	const char *contype = NULL;
-	GdkRGBA rgba;
 	gboolean gateway_valid;
 	gboolean success;
 
@@ -126,10 +125,10 @@ check_validity (OpenvpnEditor *self, GError **error)
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
 	gateway_valid = check_gateway_entry (str);
 	/* Change entry background colour while editing */
-	if (!gateway_valid)
-		gdk_rgba_parse (&rgba, "red3");
-	gtk_widget_override_background_color (widget, GTK_STATE_FLAG_NORMAL, !gateway_valid ? &rgba : NULL);
-	if (!gateway_valid) {
+	if (gateway_valid) {
+		gtk_style_context_remove_class (gtk_widget_get_style_context (widget), "error");
+	} else {
+		gtk_style_context_add_class (gtk_widget_get_style_context (widget), "error");
 		g_set_error (error,
 		             NMV_EDITOR_PLUGIN_ERROR,
 		             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
