@@ -33,6 +33,10 @@
 #include <unistd.h>
 #include <errno.h>
 
+#ifdef NM_VPN_OLD
+#define nm_utils_is_valid_iface_name(n,e) nm_utils_iface_valid_name(n)
+#endif
+
 #include "utils.h"
 #include "nm-utils/nm-shared-utils.h"
 
@@ -1576,7 +1580,7 @@ device_name_changed_cb (GtkEntry *entry,
 	entry_text = gtk_editable_get_chars (editable, 0, -1);
 
 	/* Change cell's background to red if the value is invalid */
-	if (entry_sensitive && entry_text[0] != '\0' && !nm_utils_iface_valid_name (entry_text)) {
+	if (entry_sensitive && entry_text[0] != '\0' && !nm_utils_is_valid_iface_name (entry_text, NULL)) {
 		widget_set_error (GTK_WIDGET (editable));
 		gtk_widget_set_sensitive (ok_button, FALSE);
 	} else {
