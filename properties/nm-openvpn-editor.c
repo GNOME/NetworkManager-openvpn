@@ -51,11 +51,11 @@ G_DEFINE_TYPE_EXTENDED (OpenvpnEditor, openvpn_editor_plugin_widget, G_TYPE_OBJE
 typedef struct {
 	GtkBuilder *builder;
 	GtkWidget *widget;
-	GtkSizeGroup *group;
 	GtkWindowGroup *window_group;
 	gboolean window_added;
 	GHashTable *advanced;
 	gboolean new_connection;
+	GtkWidget *tls_user_cert_chooser;
 } OpenvpnEditorPrivate;
 
 /*****************************************************************************/
@@ -160,14 +160,11 @@ auth_combo_changed_cb (GtkWidget *combo, gpointer user_data)
 	OpenvpnEditor *self = OPENVPN_EDITOR (user_data);
 	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 	GtkWidget *auth_notebook;
-	GtkWidget *show_passwords;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gint new_page = 0;
 
 	auth_notebook = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_notebook"));
-	g_assert (auth_notebook);
-	show_passwords = GTK_WIDGET (gtk_builder_get_object (priv->builder, "show_passwords"));
 	g_assert (auth_notebook);
 
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
@@ -175,9 +172,6 @@ auth_combo_changed_cb (GtkWidget *combo, gpointer user_data)
 	g_assert (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter));
 
 	gtk_tree_model_get (model, &iter, COL_AUTH_PAGE, &new_page, -1);
-
-	/* Static key page doesn't have any passwords */
-	gtk_widget_set_sensitive (show_passwords, new_page != 3);
 
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (auth_notebook), new_page);
 
@@ -269,11 +263,8 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 
-	priv->group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
 	g_return_val_if_fail (widget != NULL, FALSE);
-	gtk_size_group_add_widget (priv->group, widget);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 		if (value)
@@ -283,7 +274,6 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_combo"));
 	g_return_val_if_fail (widget != NULL, FALSE);
-	gtk_size_group_add_widget (priv->group, widget);
 
 	store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING);
 
@@ -300,7 +290,7 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 	}
 
 	/* TLS auth widget */
-	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
+		tls_pw_init_auth_widget (priv->builder, s_vpn,
 	                         NM_OPENVPN_CONTYPE_TLS, "tls",
 	                         stuff_changed_cb, self);
 	gtk_list_store_append (store, &iter);
@@ -311,7 +301,7 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 	                    -1);
 
 	/* Password auth widget */
-	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, s_vpn,
 	                         NM_OPENVPN_CONTYPE_PASSWORD, "pw",
 	                         stuff_changed_cb, self);
 	gtk_list_store_append (store, &iter);
@@ -324,7 +314,7 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 		active = 1;
 
 	/* Password+TLS auth widget */
-	tls_pw_init_auth_widget (priv->builder, priv->group, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, s_vpn,
 	                         NM_OPENVPN_CONTYPE_PASSWORD_TLS, "pw_tls",
 	                         stuff_changed_cb, self);
 	gtk_list_store_append (store, &iter);
@@ -337,7 +327,7 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 		active = 2;
 
 	/* Static key auth widget */
-	sk_init_auth_widget (priv->builder, priv->group, s_vpn, stuff_changed_cb, self);
+	sk_init_auth_widget (priv->builder, s_vpn, stuff_changed_cb, self);
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
@@ -544,8 +534,6 @@ dispose (GObject *object)
 {
 	OpenvpnEditor *plugin = OPENVPN_EDITOR (object);
 	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (plugin);
-
-	g_clear_object (&priv->group);
 
 	g_clear_object (&priv->window_group);
 
