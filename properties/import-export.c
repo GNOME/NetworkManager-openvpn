@@ -1387,6 +1387,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			gs_free char *end_token = NULL;
 			gsize end_token_len;
 			gsize my_contents_cur_line = contents_cur_line;
+			gboolean is_base64 = FALSE;
 			char *f_path;
 			const char *key;
 			gboolean can_have_direction = FALSE;
@@ -1399,9 +1400,10 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				key = NM_OPENVPN_KEY_CERT;
 			else if (nm_streq (token, INLINE_BLOB_KEY))
 				key = NM_OPENVPN_KEY_KEY;
-			else if (nm_streq (token, INLINE_BLOB_PKCS12))
+			else if (nm_streq (token, INLINE_BLOB_PKCS12)) {
+				is_base64 = TRUE;
 				key = NULL;
-			else if (nm_streq (token, INLINE_BLOB_TLS_AUTH)) {
+			} else if (nm_streq (token, INLINE_BLOB_TLS_AUTH)) {
 				key = NM_OPENVPN_KEY_TA;
 				can_have_direction = TRUE;
 			} else if (nm_streq (token, INLINE_BLOB_SECRET)) {
@@ -1440,6 +1442,15 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				line_error = g_strdup_printf (_("unterminated blob element <%s>"), token);
 				g_string_free (blob_data, TRUE);
 				goto handle_line_error;
+			}
+
+			if (is_base64) {
+				gs_free guint8 *d = NULL;
+				gsize l;
+
+				d = g_base64_decode (blob_data->str, &l);
+				g_string_truncate (blob_data, 0);
+				g_string_append_len (blob_data, (const char *) d, l);
 			}
 
 			/* the latest cert wins... */
