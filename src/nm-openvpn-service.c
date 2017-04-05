@@ -652,7 +652,7 @@ parse_challenge (const char *failure_reason, char **challenge_state_id, char **c
 	char *colon[4];
 	int challenge_len;
 
-	if (!(failure_reason && !strncmp (failure_reason, "CRV1:", 4)))
+	if (!(failure_reason && !strncmp (failure_reason, "CRV1:", 5)))
 		return FALSE;
 
 	colon[0] = strchr (failure_reason, ':');
