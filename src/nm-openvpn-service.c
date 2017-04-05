@@ -614,33 +614,22 @@ ovpn_quote_string (const char *unquoted)
 	return quoted;
 }
 
-/* sscanf is evil, and since we can't use glib regexp stuff since it's still
- * too new for some distros, do a simple match here.
- */
 static char *
 get_detail (const char *input, const char *prefix)
 {
-	char *ret = NULL;
-	guint32 i = 0;
-	const char *p, *start;
+	const char *end;
 
-	g_return_val_if_fail (prefix != NULL, NULL);
+	nm_assert (prefix);
 
 	if (!g_str_has_prefix (input, prefix))
 		return NULL;
 
 	/* Grab characters until the next ' */
-	p = start = input + strlen (prefix);
-	while (*p) {
-		if (*p == '\'') {
-			ret = g_malloc0 (i + 1);
-			strncpy (ret, start, i);
-			break;
-		}
-		p++, i++;
-	}
-
-	return ret;
+	input += strlen (prefix);
+	end = strchr (input, '\'');
+	if (end)
+		return g_strndup (input, end - input);
+	return NULL;
 }
 
 /* Parse challenge response protocol message of the form
@@ -649,10 +638,10 @@ get_detail (const char *input, const char *prefix)
 static gboolean
 parse_challenge (const char *failure_reason, char **challenge_state_id, char **challenge_text)
 {
-	char *colon[4];
-	int challenge_len;
+	const char *colon[4];
 
-	if (!(failure_reason && !strncmp (failure_reason, "CRV1:", 5)))
+	if (   !failure_reason
+	    || !g_str_has_prefix (failure_reason, "CRV1:"))
 		return FALSE;
 
 	colon[0] = strchr (failure_reason, ':');
@@ -671,11 +660,8 @@ parse_challenge (const char *failure_reason, char **challenge_state_id, char **c
 	if (!colon[3])
 		return FALSE;
 
-	challenge_len = colon[2] - colon[1] - 1;
-	*challenge_state_id = g_memdup (colon[1] + 1, challenge_len + 1);
-	(*challenge_state_id)[challenge_len] = '\0';
+	*challenge_state_id = g_strndup (colon[1] + 1, colon[2] - colon[1] - 1);
 	*challenge_text = g_strdup (colon[3] + 1);
-
 	return TRUE;
 }
 
@@ -728,20 +714,17 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			username = io_data->default_username;
 
 		if (username != NULL && io_data->password != NULL && io_data->challenge_state_id) {
-			char *response = g_strdup_printf ("CRV1::%s::%s",
-			                                  io_data->challenge_state_id,
-			                                  io_data->password);
+			gs_free char *response = NULL;
+
+			response = g_strdup_printf ("CRV1::%s::%s",
+			                            io_data->challenge_state_id,
+			                            io_data->password);
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
 			                 username,
 			                 response);
-			g_free (response);
-
-			/* Avoid re-using challenge state. */
-			g_free (io_data->challenge_state_id);
-			io_data->challenge_state_id = NULL;
-			g_free (io_data->challenge_text);
-			io_data->challenge_text = NULL;
+			nm_clear_g_free (&io_data->challenge_state_id);
+			nm_clear_g_free (&io_data->challenge_text);
 		} else if (username != NULL && io_data->password != NULL) {
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
@@ -874,16 +857,15 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 		gboolean fail = TRUE;
 
 		if (!strcmp (auth, "Auth")) {
-			char *failure_reason = get_detail (auth, ">PASSWORD:Verification Failed: 'Auth' ['");
+			gs_free char *failure_reason = NULL;
 
+			failure_reason = get_detail (auth, ">PASSWORD:Verification Failed: 'Auth' ['");
 			if (parse_challenge (failure_reason, &priv->io_data->challenge_state_id, &priv->io_data->challenge_text)) {
 				_LOGD ("Received challenge '%s' for state '%s'",
 				       priv->io_data->challenge_state_id,
 				       priv->io_data->challenge_text);
-			} else {
+			} else
 				_LOGW ("Password verification failed");
-			}
-			g_free(failure_reason);
 
 			if (priv->interactive) {
 				/* Clear existing password in interactive mode, openvpn
