@@ -644,15 +644,14 @@ get_detail (const char *input, const char *prefix)
 }
 
 /* Parse challenge response protocol message of the form
- * >PASSWORD:Verification Failed: 'Auth' ['CRV1:flags:state_id:username:text']
+ * CRV1:flags:state_id:username:text
  */
 static gboolean
-parse_challenge (const char *input, char **challenge_state_id, char **challenge_text)
+parse_challenge (const char *failure_reason, char **challenge_state_id, char **challenge_text)
 {
-	char *failure_reason, *colon[4];
+	char *colon[4];
 	int challenge_len;
 
-	failure_reason = get_detail (input, ">PASSWORD:Verification Failed: 'Auth' ['");
 	if (!(failure_reason && !strncmp (failure_reason, "CRV1:", 4)))
 		return FALSE;
 
@@ -875,13 +874,17 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 		gboolean fail = TRUE;
 
 		if (!strcmp (auth, "Auth")) {
-			if (parse_challenge (str, &priv->io_data->challenge_state_id, &priv->io_data->challenge_text)) {
+			char *failure_reason = get_detail (auth, ">PASSWORD:Verification Failed: 'Auth' ['");
+
+			if (parse_challenge (failure_reason, &priv->io_data->challenge_state_id, &priv->io_data->challenge_text)) {
 				_LOGD ("Received challenge '%s' for state '%s'",
 				       priv->io_data->challenge_state_id,
 				       priv->io_data->challenge_text);
 			} else {
 				_LOGW ("Password verification failed");
 			}
+			g_free(failure_reason);
+
 			if (priv->interactive) {
 				/* Clear existing password in interactive mode, openvpn
 				 * will request a new one after restarting.
