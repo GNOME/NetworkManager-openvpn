@@ -283,6 +283,7 @@ EXTRA_DIST += \
 	properties/tests/conf/static.key \
 	properties/tests/conf/static.ovpn \
 	properties/tests/conf/tls.ovpn \
+	properties/tests/conf/tls2.ovpn \
 	properties/tests/conf/tun-opts.conf \
 	properties/tests/conf/proxy-http.ovpn \
 	properties/tests/conf/httpauthfile \
