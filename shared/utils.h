@@ -44,6 +44,7 @@
 #define NMV_OVPN_TAG_KEYSIZE            "keysize"
 #define NMV_OVPN_TAG_MAX_ROUTES         "max-routes"
 #define NMV_OVPN_TAG_MSSFIX             "mssfix"
+#define NMV_OVPN_TAG_MTU_DISC           "mtu-disc"
 #define NMV_OVPN_TAG_NOBIND             "nobind"
 #define NMV_OVPN_TAG_NS_CERT_TYPE       "ns-cert-type"
 #define NMV_OVPN_TAG_PERSIST_KEY        "persist-key"

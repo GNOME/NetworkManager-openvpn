@@ -40,6 +40,7 @@
 #define NM_OPENVPN_KEY_KEY "key"
 #define NM_OPENVPN_KEY_LOCAL_IP "local-ip" /* ??? */
 #define NM_OPENVPN_KEY_MSSFIX "mssfix"
+#define NM_OPENVPN_KEY_MTU_DISC "mtu-disc"
 #define NM_OPENVPN_KEY_NS_CERT_TYPE "ns-cert-type"
 #define NM_OPENVPN_KEY_PING "ping"
 #define NM_OPENVPN_KEY_PING_EXIT "ping-exit"

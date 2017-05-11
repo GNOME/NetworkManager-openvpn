@@ -926,6 +926,17 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_MTU_DISC)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!NM_IN_STRSET (params[1], "no", "maybe", "yes")) {
+				line_error = g_strdup_printf (_("unsupported mtu-disc argument"));
+				goto handle_line_error;
+			}
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MTU_DISC, params[1]);
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_NS_CERT_TYPE)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
@@ -1898,6 +1909,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		args_write_line (f, NMV_OVPN_TAG_MSSFIX);
 	else if (value)
 		args_write_line_setting_value_int (f, NMV_OVPN_TAG_MSSFIX, s_vpn, NM_OPENVPN_KEY_MSSFIX);
+
+	args_write_line_setting_value (f, NMV_OVPN_TAG_MTU_DISC, s_vpn, NM_OPENVPN_KEY_MTU_DISC);
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_TUN_MTU, s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
 

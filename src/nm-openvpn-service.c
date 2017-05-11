@@ -151,6 +151,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_KEY,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_LOCAL_IP,             G_TYPE_STRING, 0, 0, TRUE },
 	{ NM_OPENVPN_KEY_MSSFIX,               G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_MTU_DISC,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PING,                 G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_EXIT,            G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_RESTART,         G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -1730,6 +1731,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			add_openvpn_arg (args, "--mssfix");
 			add_openvpn_arg (args, nm_sprintf_buf (sbuf_64, "%d", (int) v_int64));
 		}
+	}
+
+	/* mtu-disc */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MTU_DISC);
+	if (NM_IN_STRSET (tmp, "no", "maybe", "yes")) {
+		add_openvpn_arg (args, "--mtu-disc");
+		add_openvpn_arg (args, tmp);
 	}
 
 	/* Punch script security in the face; this option was added to OpenVPN 2.1-rc9

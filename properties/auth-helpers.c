@@ -952,6 +952,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_PING_EXIT,
 	NM_OPENVPN_KEY_PING_RESTART,
 	NM_OPENVPN_KEY_MAX_ROUTES,
+	NM_OPENVPN_KEY_MTU_DISC,
 	NULL
 };
 
@@ -1446,6 +1447,19 @@ populate_ns_cert_type_combo (GtkComboBox *box, const char *type)
 		gtk_combo_box_set_active (box, 0);
 
 	g_object_unref (store);
+}
+
+static void
+mtu_disc_toggled_cb (GtkWidget *widget, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	gboolean use_mtu_disc;
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mtu_disc_checkbutton"));
+	use_mtu_disc = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mtu_disc_combo"));
+	gtk_widget_set_sensitive (widget, use_mtu_disc);
 }
 
 #define PROXY_TYPE_NONE  0
@@ -1989,6 +2003,21 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	gtk_widget_set_sensitive (spin, !!value);
 	gtk_toggle_button_set_active ((GtkToggleButton *) widget, !!value);
 
+	/* MTU discovery */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mtu_disc_checkbutton"));
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MTU_DISC);
+	if (value && value[0]) {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+		combo = GTK_WIDGET (gtk_builder_get_object (builder, "mtu_disc_combo"));
+		if (nm_streq (value, "maybe"))
+			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 1);
+		else if (nm_streq (value, "yes"))
+			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 2);
+		else
+			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+	}
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (mtu_disc_toggled_cb), builder);
+	mtu_disc_toggled_cb (widget, builder);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MAX_ROUTES);
 	_builder_init_optional_spinbutton (builder, "max_routes_checkbutton", "max_routes_spinbutton", !!value,
@@ -2321,6 +2350,30 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_spinbutton"));
 		max_routes = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_MAX_ROUTES), g_strdup_printf ("%d", max_routes));
+	}
+
+	/* MTU discovery */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mtu_disc_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		char *val = NULL;
+
+		combo = GTK_WIDGET (gtk_builder_get_object (builder, "mtu_disc_combo"));
+		switch (gtk_combo_box_get_active (GTK_COMBO_BOX (combo))) {
+		case 0:
+			val = "no";
+			break;
+		case 1:
+			val = "maybe";
+			break;
+		case 2:
+			val = "yes";
+			break;
+		}
+		if (val) {
+			g_hash_table_insert (hash,
+			                     g_strdup (NM_OPENVPN_KEY_MTU_DISC),
+			                     g_strdup (val));
+		}
 	}
 
 	return hash;
