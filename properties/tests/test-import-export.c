@@ -278,6 +278,71 @@ test_tls_import (void)
 }
 
 static void
+test_tls_import_2 (void)
+{
+	_CREATE_PLUGIN (plugin);
+	NMConnection *connection;
+	NMSettingConnection *s_con;
+	NMSettingVpn *s_vpn;
+	char *expected_path;
+
+	connection = get_basic_connection (plugin, SRCDIR, "tls2.ovpn");
+	g_assert (connection);
+
+	/* Connection setting */
+	s_con = nm_connection_get_setting_connection (connection);
+	g_assert (s_con);
+	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, "tls2");
+	g_assert (!nm_setting_connection_get_uuid (s_con));
+
+	/* VPN setting */
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	g_assert (s_vpn);
+
+	/* Data items */
+	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "adaptive");
+	_check_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
+	_check_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "173.8.149.245:1194");
+	_check_item (s_vpn, NM_OPENVPN_KEY_PORT, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, "/CN=myvpn.company.com");
+	_check_item (s_vpn, NM_OPENVPN_KEY_VERIFY_X509_NAME,
+	             "subject:C=US, L=Cambridge, CN=GNOME, emailAddress=networkmanager-list@gnome.org");
+	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, "server");
+
+	expected_path = g_strdup_printf ("%s/keys/mg8.ca", SRCDIR);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CA, expected_path);
+	g_free (expected_path);
+
+	expected_path = g_strdup_printf ("%s/keys/clee.crt", SRCDIR);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CERT, expected_path);
+	g_free (expected_path);
+
+	expected_path = g_strdup_printf ("%s/keys/clee.key", SRCDIR);
+	_check_item (s_vpn, NM_OPENVPN_KEY_KEY, expected_path);
+	g_free (expected_path);
+
+	expected_path = g_strdup_printf ("%s/keys/46.key", SRCDIR);
+	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT, expected_path);
+	g_free (expected_path);
+
+	/* Secrets */
+	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
+	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
+
+	g_object_unref (connection);
+}
+
+static void
 test_file_contents (const char *id,
                     const char *dir,
                     NMSettingVpn *s_vpn,
@@ -376,6 +441,42 @@ test_tls_export (void)
 	GError *error = NULL;
 
 	connection = get_basic_connection (plugin, SRCDIR, "tls.ovpn");
+	g_assert (connection);
+
+	path = g_build_path ("/", TMPDIR, TLS_EXPORTED_NAME, NULL);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
+	g_assert_no_error (error);
+	g_assert (success);
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection (plugin, TMPDIR, TLS_EXPORTED_NAME);
+	(void) unlink (path);
+	g_assert (reimported);
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
+#undef TLS_EXPORTED_NAME
+#define TLS_EXPORTED_NAME "tls2.ovpntest"
+static void
+test_tls_export_2 (void)
+{
+	_CREATE_PLUGIN (plugin);
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+
+	connection = get_basic_connection (plugin, SRCDIR, "tls2.ovpn");
 	g_assert (connection);
 
 	path = g_build_path ("/", TMPDIR, TLS_EXPORTED_NAME, NULL);
@@ -1405,6 +1506,9 @@ int main (int argc, char **argv)
 	_add_test_func_simple (test_tls_import);
 	_add_test_func_simple (test_tls_inline_import);
 	_add_test_func_simple (test_tls_export);
+
+	_add_test_func_simple (test_tls_import_2);
+	_add_test_func_simple (test_tls_export_2);
 
 	_add_test_func_simple (test_pkcs12_import);
 	_add_test_func_simple (test_pkcs12_export);
