@@ -940,6 +940,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_AUTH,
 	NM_OPENVPN_KEY_TA_DIR,
 	NM_OPENVPN_KEY_TA,
+	NM_OPENVPN_KEY_TLS_CRYPT,
 	NM_OPENVPN_KEY_RENEG_SECONDS,
 	NM_OPENVPN_KEY_TLS_REMOTE,
 	NM_OPENVPN_KEY_VERIFY_X509_NAME,
@@ -1376,23 +1377,28 @@ populate_remote_cert_tls_combo (GtkComboBox *box, const char *remote_cert)
 	g_object_unref (store);
 }
 
+#define TLS_AUTH_MODE_NONE  0
+#define TLS_AUTH_MODE_AUTH  1
+#define TLS_AUTH_MODE_CRYPT 2
+
 static void
 tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
 {
 	GtkBuilder *builder = (GtkBuilder *) user_data;
-	gboolean use_auth = FALSE;
+	gint active;
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
-	use_auth = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_mode"));
+	active = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_label"));
-	gtk_widget_set_sensitive (widget, use_auth);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_label"));
-	gtk_widget_set_sensitive (widget, use_auth);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
-	gtk_widget_set_sensitive (widget, use_auth);
+	gtk_widget_set_sensitive (widget, active == TLS_AUTH_MODE_AUTH);
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
-	gtk_widget_set_sensitive (widget, use_auth);
+	gtk_widget_set_sensitive (widget, active == TLS_AUTH_MODE_AUTH);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_label"));
+	gtk_widget_set_sensitive (widget, active != TLS_AUTH_MODE_NONE);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
+	gtk_widget_set_sensitive (widget, active != TLS_AUTH_MODE_NONE);
 }
 
 static void
@@ -1900,52 +1906,49 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_NS_CERT_TYPE);
 	populate_ns_cert_type_combo (GTK_COMBO_BOX (widget), value);
 
-	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
-	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
-	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
+	if (NM_IN_STRSET (contype,
+	                  NM_OPENVPN_CONTYPE_TLS,
+	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS,
+	                  NM_OPENVPN_CONTYPE_PASSWORD)) {
 		int direction = -1;
 
-		active = 0;
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
-		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
-		if (value && strlen (value))
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-		g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (tls_auth_toggled_cb), builder);
-		tls_auth_toggled_cb (widget, builder);
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
-		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA_DIR);
-		if (value && strlen (value)) {
-			direction = (int) strtol (value, NULL, 10);
-			/* If direction is not 0 or 1, use no direction */
-			if (direction != 0 && direction != 1)
-				direction = -1;
-		}
-
+		/* Initialize direction combo */
+		combo = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
 		store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
-
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter, TA_DIR_COL_NAME, _("None"), TA_DIR_COL_NUM, -1, -1);
-
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter, TA_DIR_COL_NAME, "0", TA_DIR_COL_NUM, 0, -1);
-		if (direction == 0)
-			active = 1;
-
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter, TA_DIR_COL_NAME, "1", TA_DIR_COL_NUM, 1, -1);
-		if (direction == 1)
-			active = 2;
-
-		gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
+		gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store));
 		g_object_unref (store);
-		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active);
+		gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
+		combo = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_mode"));
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
-		if (value && strlen (value)) {
-			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
+		value2 = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_CRYPT);
+		if (value2 && value2[0]) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_CRYPT);
+			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value2);
+		} else if (value && value[0]) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_AUTH);
 			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
-		}
+			value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA_DIR);
+			if (value && value[0]) {
+				direction = (int) strtol (value, NULL, 10);
+				/* If direction is not 0 or 1, use no direction */
+				if (direction != 0 && direction != 1)
+					direction = -1;
+			}
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
+			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), direction + 1);
+		} else
+			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_NONE);
+
+		g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (tls_auth_toggled_cb), builder);
+		tls_auth_toggled_cb (combo, builder);
 	} else {
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "options_notebook"));
 		gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2);
@@ -2196,6 +2199,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	if (   !strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)
 	    || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
+		char *filename;
 
 		entry = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_entry"));
 		value = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -2247,15 +2251,13 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 			}
 		}
 
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_checkbutton"));
-		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
-			char *filename;
-
+		combo = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_mode"));
+		switch (gtk_combo_box_get_active (GTK_COMBO_BOX (combo))) {
+		case TLS_AUTH_MODE_AUTH:
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
 			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-			if (filename && strlen (filename)) {
+			if (filename && filename[0])
 				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TA), g_strdup (filename));
-			}
 			g_free (filename);
 
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
@@ -2269,10 +2271,20 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 					                     g_strdup_printf ("%d", direction));
 				}
 			}
+			break;
+		case TLS_AUTH_MODE_CRYPT:
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
+			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+			if (filename && filename[0])
+				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TLS_CRYPT), g_strdup (filename));
+			g_free (filename);
+			break;
+		case TLS_AUTH_MODE_NONE:
+			break;
 		}
 	}
 
-        widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
 		int ping_val;
 
