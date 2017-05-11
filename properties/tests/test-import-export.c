@@ -1182,6 +1182,66 @@ test_device_export (gconstpointer test_data)
 }
 
 static void
+test_mtu_disc_import (gconstpointer test_data)
+{
+	_CREATE_PLUGIN (plugin);
+	NMConnection *connection;
+	NMSettingVpn *s_vpn;
+	const char *file, *expected_val;
+
+	nmtst_test_data_unpack (test_data, &file, &expected_val);
+
+	connection = get_basic_connection (plugin, SRCDIR, file);
+	g_assert (connection);
+
+	/* VPN setting */
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	g_assert (s_vpn);
+
+	/* Data items */
+	_check_item (s_vpn, NM_OPENVPN_KEY_MTU_DISC, expected_val);
+
+	g_object_unref (connection);
+}
+
+static void
+test_mtu_disc_export (gconstpointer test_data)
+{
+	_CREATE_PLUGIN (plugin);
+	NMConnection *connection;
+	NMConnection *reimported;
+	char *path;
+	gboolean success;
+	GError *error = NULL;
+	const char *file, *exported_name;
+
+	nmtst_test_data_unpack (test_data, &file, &exported_name);
+
+	connection = get_basic_connection (plugin, SRCDIR, file);
+	g_assert (connection);
+
+	path = g_build_path ("/", TMPDIR, exported_name, NULL);
+	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
+	g_assert_no_error (error);
+	g_assert (success);
+
+	/* Now re-import it and compare the connections to ensure they are the same */
+	reimported = get_basic_connection (plugin, TMPDIR, exported_name);
+	(void) unlink (path);
+	g_assert (reimported);
+
+	/* Clear secrets first, since they don't get exported, and thus would
+	 * make the connection comparison below fail.
+	 */
+	remove_secrets (connection);
+	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
+
+	g_object_unref (reimported);
+	g_object_unref (connection);
+	g_free (path);
+}
+
+static void
 test_route_import (void)
 {
 	_CREATE_PLUGIN (plugin);
@@ -1552,6 +1612,9 @@ int main (int argc, char **argv)
 
 	_add_test_func ("device-import-notype", test_device_import, "device-notype.ovpn", "tap", NULL);
 	_add_test_func ("device-export-notype", test_device_export, "device-notype.ovpn", "device-notype.ovpntest");
+
+	_add_test_func ("mtu-disc-import", test_mtu_disc_import, "mtu-disc.ovpn", "yes");
+	_add_test_func ("mtu-disc-export", test_mtu_disc_export, "mtu-disc.ovpn", "mtu-disc.ovpntest");
 
 	_add_test_func_simple (test_route_import);
 	_add_test_func_simple (test_route_export);
