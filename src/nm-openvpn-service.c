@@ -151,6 +151,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_KEY,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_LOCAL_IP,             G_TYPE_STRING, 0, 0, TRUE },
 	{ NM_OPENVPN_KEY_MSSFIX,               G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_MTU_DISC,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PING,                 G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_EXIT,            G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_RESTART,         G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -175,6 +176,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_DEV_TYPE,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TUN_IPV6,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_CIPHER,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TLS_CRYPT,            G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_REMOTE,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_VERIFY_X509_NAME,     G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_CERT_TLS,      G_TYPE_STRING, 0, 0, FALSE },
@@ -1576,7 +1578,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 	add_openvpn_arg (args, "--auth-nocache");
 
-	/* TA */
+	/* tls-auth */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
 	if (tmp && tmp[0]) {
 		add_openvpn_arg (args, "--tls-auth");
@@ -1587,6 +1589,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			add_openvpn_arg (args, tmp);
 	}
 
+	/* tls-crypt */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT);
+	if (tmp && tmp[0]) {
+		add_openvpn_arg (args, "--tls-crypt");
+		add_openvpn_arg_utf8safe (args, tmp);
+	}
+
+	
 	/* tls-remote */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 	if (tmp && tmp[0]) {
@@ -1721,6 +1731,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			add_openvpn_arg (args, "--mssfix");
 			add_openvpn_arg (args, nm_sprintf_buf (sbuf_64, "%d", (int) v_int64));
 		}
+	}
+
+	/* mtu-disc */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MTU_DISC);
+	if (NM_IN_STRSET (tmp, "no", "maybe", "yes")) {
+		add_openvpn_arg (args, "--mtu-disc");
+		add_openvpn_arg (args, tmp);
 	}
 
 	/* Punch script security in the face; this option was added to OpenVPN 2.1-rc9

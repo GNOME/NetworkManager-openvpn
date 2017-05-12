@@ -40,6 +40,7 @@
 #define NM_OPENVPN_KEY_KEY "key"
 #define NM_OPENVPN_KEY_LOCAL_IP "local-ip" /* ??? */
 #define NM_OPENVPN_KEY_MSSFIX "mssfix"
+#define NM_OPENVPN_KEY_MTU_DISC "mtu-disc"
 #define NM_OPENVPN_KEY_NS_CERT_TYPE "ns-cert-type"
 #define NM_OPENVPN_KEY_PING "ping"
 #define NM_OPENVPN_KEY_PING_EXIT "ping-exit"
@@ -65,6 +66,7 @@
 #define NM_OPENVPN_KEY_DEV_TYPE "dev-type"
 #define NM_OPENVPN_KEY_TUN_IPV6 "tun-ipv6"
 #define NM_OPENVPN_KEY_TLS_CIPHER "tls-cipher"
+#define NM_OPENVPN_KEY_TLS_CRYPT "tls-crypt"
 #define NM_OPENVPN_KEY_TLS_REMOTE "tls-remote"
 #define NM_OPENVPN_KEY_VERIFY_X509_NAME "verify-x509-name"
 #define NM_OPENVPN_KEY_REMOTE_CERT_TLS "remote-cert-tls"
