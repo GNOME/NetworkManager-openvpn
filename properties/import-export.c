@@ -934,6 +934,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				goto handle_line_error;
 			}
 			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_MTU_DISC, params[1]);
+			continue;
 		}
 
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_NS_CERT_TYPE)) {
