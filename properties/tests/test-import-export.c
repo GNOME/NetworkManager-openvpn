@@ -176,9 +176,8 @@ remove_secrets (NMConnection *connection)
 	g_slist_free (keys);
 }
 
-#define PASSWORD_EXPORTED_NAME "password.ovpntest"
 static void
-test_password_export (void)
+test_export_compare (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
 	NMConnection *connection;
@@ -186,17 +185,20 @@ test_password_export (void)
 	char *path;
 	gboolean success;
 	GError *error = NULL;
+	const char *file, *exported_name;
 
-	connection = get_basic_connection (plugin, SRCDIR, "password.conf");
+	nmtst_test_data_unpack (test_data, &file, &exported_name);
+
+	connection = get_basic_connection (plugin, SRCDIR, file);
 	g_assert (connection);
 
-	path = g_build_path ("/", TMPDIR, PASSWORD_EXPORTED_NAME, NULL);
+	path = g_build_path ("/", TMPDIR, exported_name, NULL);
 	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
 	g_assert_no_error (error);
 	g_assert (success);
 
 	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, PASSWORD_EXPORTED_NAME);
+	reimported = get_basic_connection (plugin, TMPDIR, exported_name);
 	(void) unlink (path);
 	g_assert (reimported);
 
@@ -428,78 +430,6 @@ test_tls_inline_import (void)
 	g_object_unref (connection);
 }
 
-
-#define TLS_EXPORTED_NAME "tls.ovpntest"
-static void
-test_tls_export (void)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-
-	connection = get_basic_connection (plugin, SRCDIR, "tls.ovpn");
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, TLS_EXPORTED_NAME, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, TLS_EXPORTED_NAME);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
-}
-
-#undef TLS_EXPORTED_NAME
-#define TLS_EXPORTED_NAME "tls2.ovpntest"
-static void
-test_tls_export_2 (void)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-
-	connection = get_basic_connection (plugin, SRCDIR, "tls2.ovpn");
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, TLS_EXPORTED_NAME, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, TLS_EXPORTED_NAME);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
-}
-
 static void
 test_pkcs12_import (void)
 {
@@ -556,41 +486,6 @@ test_pkcs12_import (void)
 	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
 
 	g_object_unref (connection);
-}
-
-#define PKCS12_EXPORTED_NAME "pkcs12.ovpntest"
-static void
-test_pkcs12_export (void)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-
-	connection = get_basic_connection (plugin, SRCDIR, "pkcs12.ovpn");
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, PKCS12_EXPORTED_NAME, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, PKCS12_EXPORTED_NAME);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
 }
 
 static void
@@ -678,41 +573,6 @@ test_static_key_import (void)
 	g_object_unref (connection);
 }
 
-#define STATIC_KEY_EXPORTED_NAME "static.ovpntest"
-static void
-test_static_key_export (void)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-
-	connection = get_basic_connection (plugin, SRCDIR, "static.ovpn");
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, STATIC_KEY_EXPORTED_NAME, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, STATIC_KEY_EXPORTED_NAME);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
-}
-
 static void
 test_port_import (gconstpointer test_data)
 {
@@ -774,43 +634,6 @@ test_ping_import (gconstpointer test_data)
 }
 
 static void
-test_port_export (gconstpointer test_data)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-	const char *file, *exported_name;
-
-	nmtst_test_data_unpack (test_data, &file, &exported_name);
-
-	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, exported_name, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, exported_name);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
-}
-
-static void
 test_tun_opts_import (void)
 {
 	_CREATE_PLUGIN (plugin);
@@ -830,41 +653,6 @@ test_tun_opts_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, "1200");
 
 	g_object_unref (connection);
-}
-
-#define TUNOPTS_EXPORTED_NAME "tun-opts.ovpntest"
-static void
-test_tun_opts_export (void)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-
-	connection = get_basic_connection (plugin, SRCDIR, "tun-opts.conf");
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, TUNOPTS_EXPORTED_NAME, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, TUNOPTS_EXPORTED_NAME);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
 }
 
 static void
@@ -1030,41 +818,6 @@ test_proxy_socks_import (void)
 	g_object_unref (connection);
 }
 
-#define PROXY_SOCKS_EXPORTED_NAME "proxy-socks.ovpntest"
-static void
-test_proxy_socks_export (void)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-
-	connection = get_basic_connection (plugin, SRCDIR, "proxy-socks.ovpn");
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, PROXY_SOCKS_EXPORTED_NAME, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, PROXY_SOCKS_EXPORTED_NAME);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
-}
-
 static void
 test_keysize_import (void)
 {
@@ -1083,41 +836,6 @@ test_keysize_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE, "512");
 
 	g_object_unref (connection);
-}
-
-#define KEYSIZE_EXPORTED_NAME "keysize.ovpntest"
-static void
-test_keysize_export (void)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-
-	connection = get_basic_connection (plugin, SRCDIR, "keysize.ovpn");
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, KEYSIZE_EXPORTED_NAME, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, KEYSIZE_EXPORTED_NAME);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
 }
 
 static void
@@ -1145,43 +863,6 @@ test_device_import (gconstpointer test_data)
 }
 
 static void
-test_device_export (gconstpointer test_data)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-	const char *file, *exported_name;
-
-	nmtst_test_data_unpack (test_data, &file, &exported_name);
-
-	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, exported_name, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, exported_name);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
-}
-
-static void
 test_mtu_disc_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
@@ -1202,43 +883,6 @@ test_mtu_disc_import (gconstpointer test_data)
 	_check_item (s_vpn, NM_OPENVPN_KEY_MTU_DISC, expected_val);
 
 	g_object_unref (connection);
-}
-
-static void
-test_mtu_disc_export (gconstpointer test_data)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-	const char *file, *exported_name;
-
-	nmtst_test_data_unpack (test_data, &file, &exported_name);
-
-	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, exported_name, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, exported_name);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
 }
 
 static void
@@ -1341,41 +985,6 @@ test_route_import (void)
 #endif
 
 	g_object_unref (connection);
-}
-
-#define ROUTE_EXPORTED_NAME "route.ovpntest"
-static void
-test_route_export (void)
-{
-	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
-	gboolean success;
-	GError *error = NULL;
-
-	connection = get_basic_connection (plugin, SRCDIR, "route.ovpn");
-	g_assert (connection);
-
-	path = g_build_path ("/", TMPDIR, ROUTE_EXPORTED_NAME, NULL);
-	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
-
-	/* Now re-import it and compare the connections to ensure they are the same */
-	reimported = get_basic_connection (plugin, TMPDIR, ROUTE_EXPORTED_NAME);
-	(void) unlink (path);
-	g_assert (reimported);
-
-	/* Clear secrets first, since they don't get exported, and thus would
-	 * make the connection comparison below fail.
-	 */
-	remove_secrets (connection);
-	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
 }
 
 /*****************************************************************************/
@@ -1561,40 +1170,40 @@ int main (int argc, char **argv)
 #define _add_test_func(detail, func, ...) nmtst_add_test_func ("/ovpn/properties/" detail, func, ##__VA_ARGS__)
 
 	_add_test_func_simple (test_password_import);
-	_add_test_func_simple (test_password_export);
+	_add_test_func ("password-export", test_export_compare, "password.conf", "password.ovpntest");
 
 	_add_test_func_simple (test_tls_import);
 	_add_test_func_simple (test_tls_inline_import);
-	_add_test_func_simple (test_tls_export);
+	_add_test_func ("tls-export", test_export_compare, "tls.ovpn", "tls.ovpntest");
 
 	_add_test_func_simple (test_tls_import_2);
-	_add_test_func_simple (test_tls_export_2);
+	_add_test_func ("tls2-export", test_export_compare, "tls2.ovpn", "tls2.ovpntest");
 
 	_add_test_func_simple (test_pkcs12_import);
-	_add_test_func_simple (test_pkcs12_export);
+	_add_test_func ("pkcs12-export", test_export_compare, "pkcs12.ovpn", "pkcs12.ovpntest");
 
 	_add_test_func_simple (test_non_utf8_import);
 
 	_add_test_func_simple (test_static_key_import);
-	_add_test_func_simple (test_static_key_export);
+	_add_test_func ("static", test_export_compare, "static.ovpn", "static.ovpntest");
 
 	_add_test_func ("port-import", test_port_import, "port.ovpn", "port", "2345");
-	_add_test_func ("port-export", test_port_export, "port.ovpn", "port.ovpntest");
+	_add_test_func ("port-export", test_export_compare, "port.ovpn", "port.ovpntest");
 
 	_add_test_func ("rport-import", test_port_import, "rport.ovpn", "rport", "6789");
-	_add_test_func ("rport-export", test_port_export, "rport.ovpn", "rport.ovpntest");
+	_add_test_func ("rport-export", test_export_compare, "rport.ovpn", "rport.ovpntest");
 
 	_add_test_func_simple (test_tun_opts_import);
-	_add_test_func_simple (test_tun_opts_export);
+	_add_test_func ("tun-opts-export", test_export_compare, "tun-opts.conf", "tun-opts.ovpntest");
 
 	_add_test_func ("ping-with-exit-import", test_ping_import, "ping-with-exit.ovpn", "10", "120", NULL);
 	_add_test_func ("ping-with-restart-import", test_ping_import, "ping-with-restart.ovpn", "10", NULL, "30");
 
-	_add_test_func ("ping-with-exit-export", test_port_export, "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
-	_add_test_func ("ping-with-restart-export", test_port_export, "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
+	_add_test_func ("ping-with-exit-export", test_export_compare, "ping-with-exit.ovpn", "ping-with-exit.ovpntest");
+	_add_test_func ("ping-with-restart-export", test_export_compare, "ping-with-restart.ovpn", "ping-with-restart.ovpntest");
 
 	_add_test_func ("keepalive-import", test_ping_import, "keepalive.ovpn", "10", NULL, "30");
-	_add_test_func ("keepalive-export", test_port_export, "keepalive.ovpn", "keepalive.ovpntest");
+	_add_test_func ("keepalive-export", test_export_compare, "keepalive.ovpn", "keepalive.ovpntest");
 
 	_add_test_func_simple (test_proxy_http_import);
 	_add_test_func_simple (test_proxy_http_export);
@@ -1602,22 +1211,22 @@ int main (int argc, char **argv)
 	_add_test_func_simple (test_proxy_http_with_auth_import);
 
 	_add_test_func_simple (test_proxy_socks_import);
-	_add_test_func_simple (test_proxy_socks_export);
+	_add_test_func ("proxy-socks-export", test_export_compare, "proxy-socks.ovpn", "proxy-socks.ovpntest");
 
 	_add_test_func_simple (test_keysize_import);
-	_add_test_func_simple (test_keysize_export);
+	_add_test_func ("keysize-export", test_export_compare, "keysize.ovpn", "keysize.ovpntest");
 
 	_add_test_func ("device-import-default", test_device_import, "device.ovpn", "company0", "tun");
-	_add_test_func ("device-export-default", test_device_export, "device.ovpn", "device.ovpntest");
+	_add_test_func ("device-export-default", test_export_compare, "device.ovpn", "device.ovpntest");
 
 	_add_test_func ("device-import-notype", test_device_import, "device-notype.ovpn", "tap", NULL);
-	_add_test_func ("device-export-notype", test_device_export, "device-notype.ovpn", "device-notype.ovpntest");
+	_add_test_func ("device-export-notype", test_export_compare, "device-notype.ovpn", "device-notype.ovpntest");
 
 	_add_test_func ("mtu-disc-import", test_mtu_disc_import, "mtu-disc.ovpn", "yes");
-	_add_test_func ("mtu-disc-export", test_mtu_disc_export, "mtu-disc.ovpn", "mtu-disc.ovpntest");
+	_add_test_func ("mtu-disc-export", test_export_compare, "mtu-disc.ovpn", "mtu-disc.ovpntest");
 
 	_add_test_func_simple (test_route_import);
-	_add_test_func_simple (test_route_export);
+	_add_test_func ("route-export", test_export_compare, "route.ovpn", "route.ovpntest");
 
 	_add_test_func_simple (test_args_parse_line);
 
