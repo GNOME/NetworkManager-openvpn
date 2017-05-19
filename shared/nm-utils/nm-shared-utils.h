@@ -24,6 +24,10 @@
 
 /*****************************************************************************/
 
+extern const void *const _NM_PTRARRAY_EMPTY[1];
+
+#define NM_PTRARRAY_EMPTY(type) ((type const*) _NM_PTRARRAY_EMPTY)
+
 static inline void
 _nm_utils_strbuf_init (char *buf, gsize len, char **p_buf_ptr, gsize *p_buf_len)
 {
@@ -45,6 +49,11 @@ void nm_utils_strbuf_append_str (char **buf, gsize *len, const char *str);
 
 gssize nm_utils_strv_find_first (char **list, gssize len, const char *needle);
 
+char **_nm_utils_strv_cleanup (char **strv,
+                               gboolean strip_whitespace,
+                               gboolean skip_empty,
+                               gboolean skip_repeated);
+
 /*****************************************************************************/
 
 gint64 _nm_utils_ascii_str_to_int64 (const char *str, guint base, gint64 min, gint64 max, gint64 fallback);
@@ -62,10 +71,12 @@ gint _nm_utils_ascii_str_to_bool (const char *str,
  *   error reason. Depending on the usage, this might indicate a bug because
  *   usually the target object should stay alive as long as there are pending
  *   operations.
+ * @NM_UTILS_ERROR_INVALID_ARGUMENT: invalid argument.
  */
 typedef enum {
 	NM_UTILS_ERROR_UNKNOWN = 0,                 /*< nick=Unknown >*/
 	NM_UTILS_ERROR_CANCELLED_DISPOSING,         /*< nick=CancelledDisposing >*/
+	NM_UTILS_ERROR_INVALID_ARGUMENT,            /*< nick=InvalidArgument >*/
 } NMUtilsError;
 
 #define NM_UTILS_ERROR (nm_utils_error_quark ())
@@ -83,6 +94,22 @@ gboolean nm_g_object_set_property (GObject *object,
                                    const gchar  *property_name,
                                    const GValue *value,
                                    GError **error);
+
+/*****************************************************************************/
+
+typedef enum {
+	NM_UTILS_STR_UTF8_SAFE_FLAG_NONE                = 0,
+	NM_UTILS_STR_UTF8_SAFE_FLAG_ESCAPE_CTRL         = 0x0001,
+	NM_UTILS_STR_UTF8_SAFE_FLAG_ESCAPE_NON_ASCII    = 0x0002,
+} NMUtilsStrUtf8SafeFlags;
+
+const char *nm_utils_str_utf8safe_escape   (const char *str, NMUtilsStrUtf8SafeFlags flags, char **to_free);
+const char *nm_utils_str_utf8safe_unescape (const char *str, char **to_free);
+
+char *nm_utils_str_utf8safe_escape_cp   (const char *str, NMUtilsStrUtf8SafeFlags flags);
+char *nm_utils_str_utf8safe_unescape_cp (const char *str);
+
+char *nm_utils_str_utf8safe_escape_take (char *str, NMUtilsStrUtf8SafeFlags flags);
 
 /*****************************************************************************/
 

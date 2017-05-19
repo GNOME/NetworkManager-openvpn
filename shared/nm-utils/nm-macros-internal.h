@@ -56,6 +56,14 @@ _nm_auto_unset_gvalue_impl (GValue *v)
 #define nm_auto_unset_gvalue nm_auto(_nm_auto_unset_gvalue_impl)
 
 static inline void
+_nm_auto_unref_gtypeclass (GTypeClass **v)
+{
+	if (v && *v)
+		g_type_class_unref (*v);
+}
+#define nm_auto_unref_gtypeclass nm_auto(_nm_auto_unref_gtypeclass)
+
+static inline void
 _nm_auto_free_gstring_impl (GString **str)
 {
 	if (*str)
@@ -106,12 +114,14 @@ _nm_auto_protect_errno (int *p_saved_errno)
 #define __NM_UTILS_MACRO_REST_HELPER_ONE(first)
 #define __NM_UTILS_MACRO_REST_HELPER_TWOORMORE(first, ...)    , __VA_ARGS__
 #define __NM_UTILS_MACRO_REST_NUM(...) \
-    __NM_UTILS_MACRO_REST_SELECT_20TH(__VA_ARGS__, \
+    __NM_UTILS_MACRO_REST_SELECT_30TH(__VA_ARGS__, \
+                TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE,\
+                TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE,\
                 TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE,\
                 TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE,\
                 TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE, TWOORMORE,\
                 TWOORMORE, TWOORMORE, TWOORMORE, ONE, throwaway)
-#define __NM_UTILS_MACRO_REST_SELECT_20TH(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, ...) a20
+#define __NM_UTILS_MACRO_REST_SELECT_30TH(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20, a21, a22, a23, a24, a25, a26, a27, a28, a29, a30, ...) a30
 
 /*****************************************************************************/
 
@@ -178,7 +188,7 @@ _nm_auto_protect_errno (int *p_saved_errno)
 
 /**
  * NM_G_ERROR_MSG:
- * @error: (allow none): the #GError instance
+ * @error: (allow-none): the #GError instance
  *
  * All functions must follow the convention that when they
  * return a failure, they must also set the GError to a valid
@@ -198,6 +208,23 @@ NM_G_ERROR_MSG (GError *error)
 
 /* macro to return strlen() of a compile time string. */
 #define NM_STRLEN(str)     ( sizeof ("" str) - 1 )
+
+/* returns the length of a NULL terminated array of pointers,
+ * like g_strv_length() does. The difference is:
+ *  - it operats on arrays of pointers (of any kind, requiring no cast).
+ *  - it accepts NULL to return zero. */
+#define NM_PTRARRAY_LEN(array) \
+	({ \
+		typeof (*(array)) *const _array = (array); \
+		gsize _n = 0; \
+		\
+		if (_array) { \
+			_nm_unused typeof (*(_array[0])) *_array_check = _array[0]; \
+			while (_array[_n]) \
+				_n++; \
+		} \
+		_n; \
+	})
 
 /* Note: @value is only evaluated when *out_val is present.
  * Thus,
@@ -233,21 +260,34 @@ NM_G_ERROR_MSG (GError *error)
 #define _NM_IN_SET_EVAL_16(op, _x, y, ...)      (_x == (y)) op _NM_IN_SET_EVAL_15 (op, _x, __VA_ARGS__)
 
 #define _NM_IN_SET_EVAL_N2(op, _x, n, ...)      (_NM_IN_SET_EVAL_##n(op, _x, __VA_ARGS__))
-#define _NM_IN_SET_EVAL_N(op, x, n, ...)                            \
+#define _NM_IN_SET_EVAL_N(op, type, x, n, ...)                      \
     ({                                                              \
-        typeof(x) _x = (x);                                         \
+        type _x = (x);                                              \
+                                                                    \
+        /* trigger a -Wenum-compare warning */                      \
+        nm_assert (TRUE || _x == (x));                              \
+                                                                    \
         !!_NM_IN_SET_EVAL_N2(op, _x, n, __VA_ARGS__);               \
     })
+
+#define _NM_IN_SET(op, type, x, ...)        _NM_IN_SET_EVAL_N(op, type, x, NM_NARG (__VA_ARGS__), __VA_ARGS__)
 
 /* Beware that this does short-circuit evaluation (use "||" instead of "|")
  * which has a possibly unexpected non-function-like behavior.
  * Use NM_IN_SET_SE if you need all arguments to be evaluted. */
-#define NM_IN_SET(x, ...)               _NM_IN_SET_EVAL_N(||, x, NM_NARG (__VA_ARGS__), __VA_ARGS__)
+#define NM_IN_SET(x, ...)                   _NM_IN_SET(||, typeof (x), x, __VA_ARGS__)
 
 /* "SE" stands for "side-effect". Contrary to NM_IN_SET(), this does not do
  * short-circuit evaluation, which can make a difference if the arguments have
  * side-effects. */
-#define NM_IN_SET_SE(x, ...)            _NM_IN_SET_EVAL_N(|, x, NM_NARG (__VA_ARGS__), __VA_ARGS__)
+#define NM_IN_SET_SE(x, ...)                _NM_IN_SET(|,  typeof (x), x, __VA_ARGS__)
+
+/* the *_TYPED forms allow to explicitly select the type of "x". This is useful
+ * if "x" doesn't support typeof (bitfields) or you want to gracefully convert
+ * a type using automatic type conversion rules (but not forcing the conversion
+ * with a cast). */
+#define NM_IN_SET_TYPED(type, x, ...)       _NM_IN_SET(||, type,       x, __VA_ARGS__)
+#define NM_IN_SET_SE_TYPED(type, x, ...)    _NM_IN_SET(|,  type,       x, __VA_ARGS__)
 
 /*****************************************************************************/
 
@@ -278,8 +318,8 @@ _NM_IN_STRSET_streq (const char *x, const char *s)
 #define _NM_IN_STRSET_EVAL_N(op, x, n, ...)                       \
     ({                                                            \
         const char *_x = (x);                                     \
-        (   ((_x == NULL) && _NM_IN_SET_EVAL_N2    (op, (const char *) NULL, n, __VA_ARGS__)) \
-         || ((_x != NULL) && _NM_IN_STRSET_EVAL_N2 (op, _x,                  n, __VA_ARGS__)) \
+        (   ((_x == NULL) && _NM_IN_SET_EVAL_N2    (op, ((const char *) NULL), n, __VA_ARGS__)) \
+         || ((_x != NULL) && _NM_IN_STRSET_EVAL_N2 (op, _x,                    n, __VA_ARGS__)) \
         ); \
     })
 
@@ -469,6 +509,9 @@ _notify (obj_type *obj, _PropertyEnums prop) \
 
 /*****************************************************************************/
 
+/* these are implemented as a macro, because they accept self
+ * as both (type*) and (const type*), and return a const
+ * private pointer accordingly. */
 #define __NM_GET_PRIVATE(self, type, is_check, result_cmd) \
 	({ \
 		/* preserve the const-ness of self. Unfortunately, that
@@ -476,7 +519,7 @@ _notify (obj_type *obj, _PropertyEnums prop) \
 		typeof (self) _self = (self); \
 		\
 		/* Get compiler error if variable is of wrong type */ \
-		_nm_unused const type *_self2 = (_self); \
+		_nm_unused const type *const _self2 = (_self); \
 		\
 		nm_assert (is_check (_self)); \
 		( result_cmd ); \
@@ -484,6 +527,21 @@ _notify (obj_type *obj, _PropertyEnums prop) \
 
 #define _NM_GET_PRIVATE(self, type, is_check)     __NM_GET_PRIVATE(self, type, is_check, &_self->_priv)
 #define _NM_GET_PRIVATE_PTR(self, type, is_check) __NM_GET_PRIVATE(self, type, is_check,  _self->_priv)
+
+#define __NM_GET_PRIVATE_VOID(self, type, is_check, result_cmd) \
+	({ \
+		/* (self) can be any non-const pointer. It will be cast to "type *".
+		 * We don't explicitly cast but assign first to (void *) which
+		 * will fail if @self is pointing to const. */ \
+		void *const _self1 = (self); \
+		type *const _self = _self1; \
+		\
+		nm_assert (is_check (_self)); \
+		( result_cmd ); \
+	})
+
+#define _NM_GET_PRIVATE_VOID(self, type, is_check)     __NM_GET_PRIVATE_VOID(self, type, is_check, &_self->_priv)
+#define _NM_GET_PRIVATE_PTR_VOID(self, type, is_check) __NM_GET_PRIVATE_VOID(self, type, is_check,  _self->_priv)
 
 /*****************************************************************************/
 
@@ -577,17 +635,61 @@ nm_clear_g_cancellable (GCancellable **cancellable)
 
 /* Determine whether @x is a power of two (@x being an integer type).
  * For the special cases @x equals zero or one, it also returns true.
- * For negative @x, always returns FALSE. That only applies, if the data
- * type of @x is signed. */
+ * In case @x being a signed type, for negative @x always return FALSE. */
 #define nm_utils_is_power_of_two(x) ({ \
 		typeof(x) __x = (x); \
 		\
 		/* Check if the value is negative. In that case, return FALSE.
 		 * The first expression is a compile time constant, depending on whether
 		 * the type is signed. The second expression is a clumsy way for (__x >= 0),
-		 * which causes a compiler warning for unsigned types. */ \
-		    ( ( ((typeof(__x)) -1) > ((typeof(__x)) 0) ) || (__x > 0) || (__x == 0) ) \
+		 * which otherwise causes a compiler warning for unsigned types. */ \
+		    (    (((typeof(__x)) -1) > ((typeof(__x)) 0)) \
+		      || (__x > 0 || __x == 0) ) \
 		 && ((__x & (__x - 1)) == 0); \
+	})
+
+/*****************************************************************************/
+
+#define NM_UTILS_LOOKUP_DEFAULT(v)            return (v)
+#define NM_UTILS_LOOKUP_DEFAULT_WARN(v)       g_return_val_if_reached (v)
+#define NM_UTILS_LOOKUP_DEFAULT_NM_ASSERT(v)  { nm_assert_not_reached (); return (v); }
+#define NM_UTILS_LOOKUP_ITEM(v, n)            (void) 0; case v: return (n); (void) 0
+#define NM_UTILS_LOOKUP_STR_ITEM(v, n)        NM_UTILS_LOOKUP_ITEM(v, ""n"")
+#define NM_UTILS_LOOKUP_ITEM_IGNORE(v)        (void) 0; case v: break; (void) 0
+#define NM_UTILS_LOOKUP_ITEM_IGNORE_OTHER()   (void) 0; default: break; (void) 0
+
+#define _NM_UTILS_LOOKUP_DEFINE(scope, fcn_name, lookup_type, result_type, unknown_val, ...) \
+scope result_type \
+fcn_name (lookup_type val) \
+{ \
+	switch (val) { \
+		(void) 0, \
+		__VA_ARGS__ \
+		(void) 0; \
+	}; \
+	{ unknown_val; } \
+}
+
+#define NM_UTILS_LOOKUP_STR_DEFINE(fcn_name, lookup_type, unknown_val, ...) \
+	_NM_UTILS_LOOKUP_DEFINE (, fcn_name, lookup_type, const char *, unknown_val, __VA_ARGS__)
+#define NM_UTILS_LOOKUP_STR_DEFINE_STATIC(fcn_name, lookup_type, unknown_val, ...) \
+	_NM_UTILS_LOOKUP_DEFINE (static, fcn_name, lookup_type, const char *, unknown_val, __VA_ARGS__)
+
+/* Call the string-lookup-table function @fcn_name. If the function returns
+ * %NULL, the numeric index is converted to string using a alloca() buffer.
+ * Beware: this macro uses alloca(). */
+#define NM_UTILS_LOOKUP_STR(fcn_name, idx) \
+	({ \
+		typeof (idx) _idx = (idx); \
+		const char *_s; \
+		\
+		_s = fcn_name (_idx); \
+		if (!_s) { \
+			_s = g_alloca (30); \
+			\
+			g_snprintf ((char *) _s, 30, "(%lld)", (long long) _idx); \
+		} \
+		_s; \
 	})
 
 /*****************************************************************************/
@@ -595,7 +697,7 @@ nm_clear_g_cancellable (GCancellable **cancellable)
 /* check if @flags has exactly one flag (@check) set. You should call this
  * only with @check being a compile time constant and a power of two. */
 #define NM_FLAGS_HAS(flags, check)  \
-    ( (G_STATIC_ASSERT_EXPR ( ((check) != 0) && ((check) & ((check)-1)) == 0 )), (NM_FLAGS_ANY ((flags), (check))) )
+    ( G_STATIC_ASSERT_EXPR ((check) > 0 && ((check) & ((check) - 1)) == 0), NM_FLAGS_ANY ((flags), (check)) )
 
 #define NM_FLAGS_ANY(flags, check)  ( ( ((flags) & (check)) != 0       ) ? TRUE : FALSE )
 #define NM_FLAGS_ALL(flags, check)  ( ( ((flags) & (check)) == (check) ) ? TRUE : FALSE )
@@ -748,13 +850,15 @@ nm_cmp_uint32_p_with_data (gconstpointer p_a, gconstpointer p_b, gpointer user_d
 /*****************************************************************************/
 
 static inline guint
-nm_encode_version (guint major, guint minor, guint micro) {
+nm_encode_version (guint major, guint minor, guint micro)
+{
 	/* analog to the preprocessor macro NM_ENCODE_VERSION(). */
 	return (major << 16) | (minor << 8) | micro;
 }
 
 static inline void
-nm_decode_version (guint version, guint *major, guint *minor, guint *micro) {
+nm_decode_version (guint version, guint *major, guint *minor, guint *micro)
+{
 	*major = (version & 0xFFFF0000u) >> 16;
 	*minor = (version & 0x0000FF00u) >>  8;
 	*micro = (version & 0x000000FFu);
@@ -802,7 +906,8 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro) {
 			: "(null)"); \
 	})
 
-#define nm_sprintf_buf(buf, format, ...) ({ \
+#define nm_sprintf_buf(buf, format, ...) \
+	({ \
 		char * _buf = (buf); \
 		int _buf_len; \
 		\
@@ -900,7 +1005,6 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro) {
 	})
 #define _G_BOOLEAN_EXPR(expr) __NM_G_BOOLEAN_EXPR_IMPL (NM_UNIQ, expr)
 #endif
-
 
 /*****************************************************************************/
 
