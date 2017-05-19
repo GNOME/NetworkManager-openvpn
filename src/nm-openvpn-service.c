@@ -1061,7 +1061,7 @@ add_openvpn_arg_utf8safe (GPtrArray *args, const char *arg)
 	g_return_val_if_fail (args, NULL);
 	g_return_val_if_fail (arg, NULL);
 
-	arg_unescaped = nmv_utils_str_utf8safe_unescape (arg);
+	arg_unescaped = nm_utils_str_utf8safe_unescape_cp (arg);
 	g_ptr_array_add (args, arg_unescaped);
 	return arg_unescaped;
 }
@@ -1098,9 +1098,9 @@ add_cert_args (GPtrArray *args, NMSettingVpn *s_vpn)
 	cert = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
 	key  = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
 
-	ca   = nmv_utils_str_utf8safe_unescape_c (ca,   &ca_free);
-	cert = nmv_utils_str_utf8safe_unescape_c (cert, &cert_free);
-	key  = nmv_utils_str_utf8safe_unescape_c (key,  &key_free);
+	ca   = nm_utils_str_utf8safe_unescape (ca,   &ca_free);
+	cert = nm_utils_str_utf8safe_unescape (cert, &cert_free);
+	key  = nm_utils_str_utf8safe_unescape (key,  &key_free);
 
 	if (   ca && strlen (ca)
 	    && cert && strlen (cert)
@@ -1949,7 +1949,7 @@ check_need_secrets (NMSettingVpn *s_vpn, gboolean *need_secrets)
 	if (!strcmp (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		/* Will require a password and maybe private key password */
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		key = nmv_utils_str_utf8safe_unescape_c (key, &key_free);
+		key = nm_utils_str_utf8safe_unescape (key, &key_free);
 		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
 			*need_secrets = TRUE;
 
@@ -1972,7 +1972,7 @@ check_need_secrets (NMSettingVpn *s_vpn, gboolean *need_secrets)
 	} else if (!strcmp (ctype, NM_OPENVPN_CONTYPE_TLS)) {
 		/* May require private key password */
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		key = nmv_utils_str_utf8safe_unescape_c (key, &key_free);
+		key = nm_utils_str_utf8safe_unescape (key, &key_free);
 		if (is_encrypted (key) && !nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS))
 			*need_secrets = TRUE;
 	} else {

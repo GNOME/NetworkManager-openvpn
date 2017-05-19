@@ -80,9 +80,4 @@ gboolean is_pkcs12 (const char *filepath);
 
 gboolean is_encrypted (const char *filename);
 
-char *      nmv_utils_str_utf8safe_escape     (const char *str);
-const char *nmv_utils_str_utf8safe_escape_c   (const char *str, char **out_clone);
-char *      nmv_utils_str_utf8safe_unescape   (const char *str);
-const char *nmv_utils_str_utf8safe_unescape_c (const char *str, char **str_free);
-
 #endif  /* UTILS_H */
