@@ -116,7 +116,6 @@ editor_sources = \
 
 properties_cppflags = \
 	-DICONDIR=\""$(datadir)/pixmaps"\" \
-	-DUIDIR=\""$(uidir)"\" \
 	-DLOCALEDIR=\"$(datadir)/locale\" \
 	-I$(srcdir)/shared \
 	$(GLIB_CFLAGS)
