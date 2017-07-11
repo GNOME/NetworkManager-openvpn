@@ -33,6 +33,13 @@
 #include <unistd.h>
 #include <errno.h>
 
+#ifdef NM_VPN_OLD
+#define nm_utils_is_valid_iface_name(n,e) nm_utils_iface_valid_name(n)
+#include <nm-cert-chooser.h>
+#else
+#include <nma-cert-chooser.h>
+#endif
+
 #include "utils.h"
 #include "nm-utils/nm-shared-utils.h"
 
@@ -72,37 +79,6 @@ comp_lzo_values_conf_to_display (const char *value_conf)
 
 /*****************************************************************************/
 
-static void
-show_password (GtkToggleButton *togglebutton, GtkEntry *password_entry)
-{
-	gtk_entry_set_visibility (password_entry, gtk_toggle_button_get_active (togglebutton));
-}
-
-static GtkWidget *
-setup_secret_widget (GtkBuilder *builder,
-                     const char *widget_name,
-                     NMSettingVpn *s_vpn,
-                     const char *secret_key)
-{
-	GtkWidget *widget;
-	GtkWidget *show_passwords;
-	const char *tmp;
-
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
-	g_assert (widget);
-
-	show_passwords = GTK_WIDGET (gtk_builder_get_object (builder, "show_passwords"));
-	g_signal_connect (show_passwords, "toggled", G_CALLBACK (show_password), widget);
-
-	if (s_vpn) {
-		tmp = nm_setting_vpn_get_secret (s_vpn, secret_key);
-		if (tmp)
-			gtk_entry_set_text (GTK_ENTRY (widget), tmp);
-	}
-
-	return widget;
-}
-
 /* From gnome-control-center/panels/network/connection-editor/ui-helpers.c */
 
 static void
@@ -128,152 +104,77 @@ typedef struct {
 } TlsChooserSignalData;
 
 static void
-tls_chooser_signal_data_destroy (gpointer data, GClosure *closure)
+tls_cert_changed_cb (NMACertChooser *this, gpointer user_data)
 {
-	g_slice_free (TlsChooserSignalData, data);
-}
+	NMACertChooser *other = user_data;
+	NMSetting8021xCKScheme scheme;
+	char *this_cert, *other_cert;
+	char *this_key, *other_key;
 
-static void
-tls_cert_changed_cb (GtkWidget *widget, gpointer data)
-{
-	GtkWidget *other_widgets[2] = { ((TlsChooserSignalData *) data)->widget1,
-	                                ((TlsChooserSignalData *) data)->widget2 };
-	GtkFileChooser *this = GTK_FILE_CHOOSER (widget);
-	char *fname, *dirname, *tmp;
-	int i;
+	other_key = nma_cert_chooser_get_key (other, &scheme);
+	this_key = nma_cert_chooser_get_key (this, &scheme);
+	other_cert = nma_cert_chooser_get_cert (other, &scheme);
+	this_cert = nma_cert_chooser_get_cert (this, &scheme);
 
-	/* If the just-changed file chooser is a PKCS#12 file, then all of the
-	 * TLS filechoosers have to be PKCS#12.  But if it just changed to something
-	 * other than a PKCS#12 file, then clear out the other file choosers.
-	 *
-	 * Basically, all the choosers have to contain PKCS#12 files, or none of
-	 * them can, because PKCS#12 files contain everything required for the TLS
-	 * connection (CA, client cert, private key).
-	 */
-
-	fname = gtk_file_chooser_get_filename (this);
-	dirname = g_path_get_dirname (fname);
-
-	for (i = 0; i < G_N_ELEMENTS (other_widgets); i++) {
-		GtkFileChooser *other = GTK_FILE_CHOOSER (other_widgets[i]);
-		char *other_fname = gtk_file_chooser_get_filename (other);
-		gulong id = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (other), BLOCK_HANDLER_ID));
-
-		g_signal_handler_block (other, id);
-		if (is_pkcs12 (fname)) {
-			/* Make sure all choosers have this PKCS#12 file */
-			if (!other_fname || strcmp (fname, other_fname))
-				gtk_file_chooser_set_filename (other, fname);
-		} else {
-			/* Just-chosen file isn't PKCS#12 or no file was chosen, so clear out other
-			 * file selectors that have PKCS#12 files in them.
-			 */
-			if (is_pkcs12 (other_fname))
-				gtk_file_chooser_unselect_all (other);
-
-			/* Set directory of un-set file choosers to the directory just selected */
-			tmp = gtk_file_chooser_get_filename (other);
-			if (!tmp && dirname)
-				gtk_file_chooser_set_current_folder (other, dirname);
-			g_free (tmp);
+	if (   scheme == NM_SETTING_802_1X_CK_SCHEME_PATH
+	    && is_pkcs12 (this_cert)) {
+		if (!this_key)
+			nma_cert_chooser_set_key (this, this_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
+		if (!other_cert) {
+			nma_cert_chooser_set_cert (other, this_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
+			if (!other_key)
+				nma_cert_chooser_set_key (other, this_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
 		}
-		g_signal_handler_unblock (other, id);
-		g_free (other_fname);
 	}
 
-	g_free (fname);
-	g_free (dirname);
+	g_free (this_cert);
+	g_free (other_cert);
+	g_free (this_key);
+	g_free (other_key);
 }
 
 static void
 tls_setup (GtkBuilder *builder,
-           GtkSizeGroup *group,
            NMSettingVpn *s_vpn,
            const char *prefix,
-           GtkWidget *ca_chooser,
+           NMACertChooser *ca_chooser,
            ChangedCallback changed_cb,
            gpointer user_data)
 {
-	GtkWidget *widget, *cert, *key;
+	NMACertChooser *cert;
 	const char *value;
 	char *tmp;
-	GtkFileFilter *filter;
-	TlsChooserSignalData *ca_chooser_data, *cert_data, *key_data;
-	gulong id1, id2, id3;
 
-	tmp = g_strdup_printf ("%s_user_cert_chooser", prefix);
-	cert = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
+	tmp = g_strdup_printf ("%s_user_cert", prefix);
+	cert = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, tmp));
 	g_free (tmp);
 
-	gtk_size_group_add_widget (group, cert);
-	filter = tls_file_chooser_filter_new (TRUE);
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (cert), filter);
-	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (cert), TRUE);
-	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (cert),
-	                                   _("Choose your personal certificate…"));
-	g_signal_connect (G_OBJECT (cert), "selection-changed", G_CALLBACK (changed_cb), user_data);
+	nma_cert_chooser_add_to_size_group (cert, GTK_SIZE_GROUP (gtk_builder_get_object (builder, "labels")));
+	g_signal_connect (G_OBJECT (cert), "changed", G_CALLBACK (changed_cb), user_data);
 
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
 		if (value && strlen (value))
-			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (cert), value);
-	}
+			nma_cert_chooser_set_cert (cert, value, NM_SETTING_802_1X_CK_SCHEME_PATH);
 
-	tmp = g_strdup_printf ("%s_private_key_chooser", prefix);
-	key = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
-	g_free (tmp);
-
-	gtk_size_group_add_widget (group, key);
-	filter = tls_file_chooser_filter_new (TRUE);
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (key), filter);
-	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (key), TRUE);
-	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (key),
-	                                   _("Choose your private key…"));
-	g_signal_connect (G_OBJECT (key), "selection-changed", G_CALLBACK (changed_cb), user_data);
-
-	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
 		if (value && strlen (value))
-			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (key), value);
+			nma_cert_chooser_set_key (cert, value, NM_SETTING_802_1X_CK_SCHEME_PATH);
+		value = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS);
+		if (value)
+			nma_cert_chooser_set_key_password (cert, value);
 	}
 
-	ca_chooser_data = g_slice_new0 (TlsChooserSignalData);
-	ca_chooser_data->widget1 = cert;
-	ca_chooser_data->widget2 = key;
-	cert_data = g_slice_new0 (TlsChooserSignalData);
-	cert_data->widget1 = ca_chooser;
-	cert_data->widget2 = key;
-	key_data = g_slice_new0 (TlsChooserSignalData);
-	key_data->widget1 = ca_chooser;
-	key_data->widget2 = cert;
+	nma_cert_chooser_setup_key_password_storage (cert, 0, (NMSetting *) s_vpn,
+	                                             NM_OPENVPN_KEY_CERTPASS, TRUE, FALSE);
 
 	/* Link choosers to the PKCS#12 changer callback */
-	id1 = g_signal_connect_data (ca_chooser, "selection-changed", G_CALLBACK (tls_cert_changed_cb),
-	                             ca_chooser_data, tls_chooser_signal_data_destroy, 0);
-	id2 = g_signal_connect_data (cert, "selection-changed", G_CALLBACK (tls_cert_changed_cb),
-	                             cert_data, tls_chooser_signal_data_destroy, 0);
-	id3 = g_signal_connect_data (key, "selection-changed", G_CALLBACK (tls_cert_changed_cb),
-	                             key_data, tls_chooser_signal_data_destroy, 0);
-
-	/* Store handler id to be able to block the signal in tls_cert_changed_cb() */
-	g_object_set_data (G_OBJECT (ca_chooser), BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id1));
-	g_object_set_data (G_OBJECT (cert), BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id2));
-	g_object_set_data (G_OBJECT (key), BLOCK_HANDLER_ID, GSIZE_TO_POINTER (id3));
-
-	/* Fill in the private key password */
-	tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
-	widget = setup_secret_widget (builder, tmp, s_vpn, NM_OPENVPN_KEY_CERTPASS);
-	g_free (tmp);
-	gtk_size_group_add_widget (group, widget);
-	g_signal_connect (widget, "changed", G_CALLBACK (changed_cb), user_data);
-
-	nma_utils_setup_password_storage (widget, 0, (NMSetting *) s_vpn, NM_OPENVPN_KEY_CERTPASS,
-	                                  TRUE, FALSE);
+	g_signal_connect_object (ca_chooser, "changed", G_CALLBACK (tls_cert_changed_cb), cert, 0);
+	g_signal_connect_object (cert, "changed", G_CALLBACK (tls_cert_changed_cb), ca_chooser, 0);
 }
 
 static void
 pw_setup (GtkBuilder *builder,
-          GtkSizeGroup *group,
           NMSettingVpn *s_vpn,
           const char *prefix,
           ChangedCallback changed_cb,
@@ -286,7 +187,6 @@ pw_setup (GtkBuilder *builder,
 	tmp = g_strdup_printf ("%s_username_entry", prefix);
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 	g_free (tmp);
-	gtk_size_group_add_widget (group, widget);
 
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME);
@@ -297,10 +197,15 @@ pw_setup (GtkBuilder *builder,
 
 	/* Fill in the user password */
 	tmp = g_strdup_printf ("%s_password_entry", prefix);
-	widget = setup_secret_widget (builder, tmp, s_vpn, NM_OPENVPN_KEY_PASSWORD);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
 	g_free (tmp);
-	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (widget, "changed", G_CALLBACK (changed_cb), user_data);
+
+	if (s_vpn) {
+		value = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD);
+		if (value)
+			gtk_entry_set_text (GTK_ENTRY (widget), value);
+	}
 
 	nma_utils_setup_password_storage (widget, 0, (NMSetting *) s_vpn, NM_OPENVPN_KEY_PASSWORD,
 	                                  TRUE, FALSE);
@@ -308,28 +213,25 @@ pw_setup (GtkBuilder *builder,
 
 void
 tls_pw_init_auth_widget (GtkBuilder *builder,
-                         GtkSizeGroup *group,
                          NMSettingVpn *s_vpn,
                          const char *contype,
                          const char *prefix,
                          ChangedCallback changed_cb,
                          gpointer user_data)
 {
-	GtkWidget *ca;
+	NMACertChooser *ca;
 	const char *value;
 	char *tmp;
-	GtkFileFilter *filter;
 	gboolean tls = FALSE, pw = FALSE;
 
 	g_return_if_fail (builder != NULL);
-	g_return_if_fail (group != NULL);
 	g_return_if_fail (changed_cb != NULL);
 	g_return_if_fail (prefix != NULL);
 
-	tmp = g_strdup_printf ("%s_ca_cert_chooser", prefix);
-	ca = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
+	tmp = g_strdup_printf ("%s_ca_cert", prefix);
+	ca = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, tmp));
 	g_free (tmp);
-	gtk_size_group_add_widget (group, ca);
+	nma_cert_chooser_add_to_size_group (ca, GTK_SIZE_GROUP (gtk_builder_get_object (builder, "labels")));
 
 	/* Three major connection types here: TLS-only, PW-only, and TLS + PW */
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS) || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
@@ -337,27 +239,18 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD) || !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
 		pw = TRUE;
 
-	/* Only TLS types can use PKCS#12 */
-	filter = tls_file_chooser_filter_new (tls);
-
-	/* Set up CA cert file picker which all connection types support */
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (ca), filter);
-	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (ca), TRUE);
-	gtk_file_chooser_button_set_title (GTK_FILE_CHOOSER_BUTTON (ca),
-	                                   _("Choose a Certificate Authority certificate…"));
-	g_signal_connect (G_OBJECT (ca), "selection-changed", G_CALLBACK (changed_cb), user_data);
-
+	g_signal_connect (ca, "changed", G_CALLBACK (changed_cb), user_data);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
 		if (value && strlen (value))
-			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (ca), value);
+			nma_cert_chooser_set_cert (ca, value, NM_SETTING_802_1X_CK_SCHEME_PATH);
 	}
 
 	/* Set up the rest of the options */
 	if (tls)
-		tls_setup (builder, group, s_vpn, prefix, ca, changed_cb, user_data);
+		tls_setup (builder, s_vpn, prefix, ca, changed_cb, user_data);
 	if (pw)
-		pw_setup (builder, group, s_vpn, prefix, changed_cb, user_data);
+		pw_setup (builder, s_vpn, prefix, changed_cb, user_data);
 }
 
 #define SK_DIR_COL_NAME 0
@@ -365,7 +258,6 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 
 void
 sk_init_auth_widget (GtkBuilder *builder,
-                     GtkSizeGroup *group,
                      NMSettingVpn *s_vpn,
                      ChangedCallback changed_cb,
                      gpointer user_data)
@@ -379,11 +271,9 @@ sk_init_auth_widget (GtkBuilder *builder,
 	GtkFileFilter *filter;
 
 	g_return_if_fail (builder != NULL);
-	g_return_if_fail (group != NULL);
 	g_return_if_fail (changed_cb != NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_key_chooser"));
-	gtk_size_group_add_widget (group, widget);
 	filter = sk_file_chooser_filter_new ();
 	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
 	gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (widget), TRUE);
@@ -425,14 +315,12 @@ sk_init_auth_widget (GtkBuilder *builder,
 		active = 2;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_direction_combo"));
-	gtk_size_group_add_widget (group, widget);
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 	g_object_unref (store);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), active < 0 ? 0 : active);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_local_address_entry"));
-	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
@@ -441,7 +329,6 @@ sk_init_auth_widget (GtkBuilder *builder,
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_remote_address_entry"));
-	gtk_size_group_add_widget (group, widget);
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
@@ -451,18 +338,12 @@ sk_init_auth_widget (GtkBuilder *builder,
 }
 
 static gboolean
-validate_file_chooser (GtkBuilder *builder, const char *name)
+validate_cert_chooser (GtkBuilder *builder, const char *name, GError **error)
 {
-	GtkWidget *widget;
-	char *str;
-	gboolean valid = FALSE;
+	NMACertChooser *chooser;
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, name));
-	str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-	if (str && strlen (str))
-		valid = TRUE;
-	g_free (str);
-	return valid;
+	chooser = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, name));
+	return nma_cert_chooser_validate (chooser, error);
 }
 
 static gboolean
@@ -470,59 +351,49 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 {
 	char *tmp;
 	gboolean valid, encrypted = FALSE;
-	GtkWidget *widget;
+	NMACertChooser *user_cert;
 	NMSettingSecretFlags pw_flags;
 	gboolean secrets_required = TRUE;
+	NMSetting8021xCKScheme scheme;
+	GError *local = NULL;
 
-	tmp = g_strdup_printf ("%s_ca_cert_chooser", prefix);
-	valid = validate_file_chooser (builder, tmp);
+	tmp = g_strdup_printf ("%s_ca_cert", prefix);
+	valid = validate_cert_chooser (builder, tmp, &local);
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
 		             NMV_EDITOR_PLUGIN_ERROR,
 		             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
-		             NM_OPENVPN_KEY_CA);
+		             "%s: %s", NM_OPENVPN_KEY_CA, local->message);
+		g_error_free (local);
 		return FALSE;
 	}
 
-	tmp = g_strdup_printf ("%s_user_cert_chooser", prefix);
-	valid = validate_file_chooser (builder, tmp);
+	tmp = g_strdup_printf ("%s_user_cert", prefix);
+	user_cert = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, tmp));
+	valid = validate_cert_chooser (builder, tmp, &local);
 	g_free (tmp);
 	if (!valid) {
 		g_set_error (error,
 		             NMV_EDITOR_PLUGIN_ERROR,
 		             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
-		             NM_OPENVPN_KEY_CERT);
-		return FALSE;
-	}
-
-	tmp = g_strdup_printf ("%s_private_key_chooser", prefix);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
-	valid = validate_file_chooser (builder, tmp);
-	g_free (tmp);
-	if (!valid) {
-		g_set_error (error,
-		             NMV_EDITOR_PLUGIN_ERROR,
-		             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
-		             NM_OPENVPN_KEY_KEY);
+		             "%s: %s", NM_OPENVPN_KEY_CERT, local->message);
+		g_error_free (local);
 		return FALSE;
 	}
 
 	/* Encrypted certificates require a password */
-	tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+	tmp = nma_cert_chooser_get_cert (user_cert, &scheme);
 	encrypted = is_encrypted (tmp);
 	g_free (tmp);
 
-	tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
-	g_free (tmp);
-	pw_flags = nma_utils_menu_to_secret_flags (widget);
+	pw_flags = nma_cert_chooser_get_key_password_flags (user_cert);
 	if (   pw_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED
 	    || pw_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED)
 		secrets_required = FALSE;
 
 	if (encrypted && secrets_required) {
-		if (!gtk_entry_get_text_length (GTK_ENTRY (widget))) {
+		if (!nma_cert_chooser_get_key_password (user_cert)) {
 			g_set_error (error,
 			             NMV_EDITOR_PLUGIN_ERROR,
 			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
@@ -539,6 +410,8 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 {
 	GtkWidget *widget;
 	const char *str;
+	char *filename;
+	GError *local = NULL;
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS)) {
 		if (!validate_tls (builder, "tls", error))
@@ -557,11 +430,12 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		if (!validate_file_chooser (builder, "pw_ca_cert_chooser")) {
+		if (!validate_cert_chooser (builder, "pw_ca_cert", &local)) {
 			g_set_error (error,
 			             NMV_EDITOR_PLUGIN_ERROR,
 			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
-			             NM_OPENVPN_KEY_CA);
+			             "%s: %s", NM_OPENVPN_KEY_CA, local->message);
+			g_error_free (local);
 			return FALSE;
 		}
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "pw_username_entry"));
@@ -574,13 +448,17 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
-		if (!validate_file_chooser (builder, "sk_key_chooser")) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_key_chooser"));
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+		if (filename && strlen (filename)) {
+			g_free (filename);
 			g_set_error (error,
 			             NMV_EDITOR_PLUGIN_ERROR,
 			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             NM_OPENVPN_KEY_STATIC_KEY);
 			return FALSE;
 		}
+		g_free (filename);
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_local_address_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
@@ -608,55 +486,66 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 }
 
 static void
-update_from_filechooser (GtkBuilder *builder,
-                         const char *key,
-                         const char *prefix,
-                         const char *widget_name,
-                         NMSettingVpn *s_vpn)
+update_from_cert_chooser (GtkBuilder *builder,
+                          const char *cert_prop,
+                          const char *key_prop,
+                          const char *key_pass_prop,
+                          const char *prefix,
+                          const char *widget_name,
+                          NMSettingVpn *s_vpn)
 {
-	GtkWidget *widget;
-	char *tmp, *filename;
+	NMSetting8021xCKScheme scheme;
+	NMACertChooser *cert_chooser;
+	NMSettingSecretFlags pw_flags;
+	char *tmp;
+	const char *password;
 
 	g_return_if_fail (builder != NULL);
-	g_return_if_fail (key != NULL);
+	g_return_if_fail (cert_prop != NULL);
 	g_return_if_fail (prefix != NULL);
 	g_return_if_fail (widget_name != NULL);
 	g_return_if_fail (s_vpn != NULL);
 
 	tmp = g_strdup_printf ("%s_%s", prefix, widget_name);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
+	cert_chooser = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, tmp));
 	g_free (tmp);
 
-	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-	if (filename && strlen (filename))
-		nm_setting_vpn_add_data_item (s_vpn, key, filename);
-	g_free (filename);
+	tmp = nma_cert_chooser_get_cert (cert_chooser, &scheme);
+	if (tmp && strlen (tmp))
+		nm_setting_vpn_add_data_item (s_vpn, cert_prop, tmp);
+	g_free (tmp);
+
+	if (key_prop) {
+		g_return_if_fail (key_pass_prop != NULL);
+
+		tmp = nma_cert_chooser_get_key (cert_chooser, &scheme);
+		if (tmp && strlen (tmp))
+			nm_setting_vpn_add_data_item (s_vpn, key_prop, tmp);
+		g_free (tmp);
+
+		password = nma_cert_chooser_get_key_password (cert_chooser);
+		if (password && strlen (password))
+			nm_setting_vpn_add_secret (s_vpn, key_pass_prop, password);
+
+		pw_flags = nma_cert_chooser_get_key_password_flags (cert_chooser);
+		nm_setting_set_secret_flags (NM_SETTING (s_vpn), key_pass_prop, pw_flags, NULL);
+	}
 }
 
 static void
 update_tls (GtkBuilder *builder, const char *prefix, NMSettingVpn *s_vpn)
 {
-	GtkWidget *widget;
-	NMSettingSecretFlags pw_flags;
-	char *tmp;
-	const char *str;
+	update_from_cert_chooser (builder,
+	                          NM_OPENVPN_KEY_CA,
+	                          NULL,
+	                          NULL,
+	                          prefix, "ca_cert", s_vpn);
 
-	update_from_filechooser (builder, NM_OPENVPN_KEY_CA, prefix, "ca_cert_chooser", s_vpn);
-	update_from_filechooser (builder, NM_OPENVPN_KEY_CERT, prefix, "user_cert_chooser", s_vpn);
-	update_from_filechooser (builder, NM_OPENVPN_KEY_KEY, prefix, "private_key_chooser", s_vpn);
-
-	/* Password */
-	tmp = g_strdup_printf ("%s_private_key_password_entry", prefix);
-	widget = (GtkWidget *) gtk_builder_get_object (builder, tmp);
-	g_assert (widget);
-	g_free (tmp);
-
-	str = gtk_entry_get_text (GTK_ENTRY (widget));
-	if (str && strlen (str))
-		nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, str);
-
-	pw_flags = nma_utils_menu_to_secret_flags (widget);
-	nm_setting_set_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_CERTPASS, pw_flags, NULL);
+	update_from_cert_chooser (builder,
+	                          NM_OPENVPN_KEY_CERT,
+	                          NM_OPENVPN_KEY_KEY,
+	                          NM_OPENVPN_KEY_CERTPASS,
+	                          prefix, "ca_cert", s_vpn);
 }
 
 static void
@@ -703,18 +592,24 @@ auth_widget_update_connection (GtkBuilder *builder,
 	GtkTreeIter iter;
 	GtkWidget *widget;
 	const char *str;
+	char *filename;
 
 	if (!strcmp (contype, NM_OPENVPN_CONTYPE_TLS)) {
 		update_tls (builder, "tls", s_vpn);
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
-		update_from_filechooser (builder, NM_OPENVPN_KEY_CA, "pw", "ca_cert_chooser", s_vpn);
+		update_from_cert_chooser (builder, NM_OPENVPN_KEY_CA, NULL, NULL,
+		                          "pw", "ca_cert", s_vpn);
 		update_pw (builder, "pw", s_vpn);
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		update_tls (builder, "pw_tls", s_vpn);
 		update_pw (builder, "pw_tls", s_vpn);
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		/* Update static key */
-		update_from_filechooser (builder, NM_OPENVPN_KEY_STATIC_KEY, "sk", "key_chooser", s_vpn);
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_key_chooser"));
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+		if (filename && strlen (filename))
+			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, filename);
+		g_free (filename);
 
 		/* Update direction */
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_direction_combo"));
@@ -765,100 +660,6 @@ find_tag (const char *tag, const char *buf, gsize len)
 	}
 	return NULL;
 }
-
-static const char *pem_rsa_key_begin = "-----BEGIN RSA PRIVATE KEY-----";
-static const char *pem_dsa_key_begin = "-----BEGIN DSA PRIVATE KEY-----";
-static const char *pem_pkcs8_key_begin = "-----BEGIN ENCRYPTED PRIVATE KEY-----";
-static const char *pem_cert_begin = "-----BEGIN CERTIFICATE-----";
-static const char *pem_unenc_key_begin = "-----BEGIN PRIVATE KEY-----";
-
-static gboolean
-tls_default_filter (const GtkFileFilterInfo *filter_info, gpointer data)
-{
-	char *contents = NULL, *p, *ext;
-	gsize bytes_read = 0;
-	gboolean show = FALSE;
-	gboolean pkcs_allowed = GPOINTER_TO_UINT (data);
-	struct stat statbuf;
-
-	if (!filter_info->filename)
-		return FALSE;
-
-	p = strrchr (filter_info->filename, '.');
-	if (!p)
-		return FALSE;
-
-	ext = g_ascii_strdown (p, -1);
-	if (!ext)
-		return FALSE;
-
-	if (pkcs_allowed && g_str_has_suffix (ext, ".p12") && is_pkcs12 (filter_info->filename)) {
-		g_free (ext);
-		return TRUE;
-	}
-
-	if (!g_str_has_suffix (ext, ".pem") && !g_str_has_suffix (ext, ".crt") &&
-		!g_str_has_suffix (ext, ".key") && !g_str_has_suffix (ext, ".cer")) {
-		g_free (ext);
-		return FALSE;
-	}
-	g_free (ext);
-
-	/* Ignore files that are really large */
-	if (!stat (filter_info->filename, &statbuf)) {
-		if (statbuf.st_size > 500000)
-			return FALSE;
-	}
-
-	if (!g_file_get_contents (filter_info->filename, &contents, &bytes_read, NULL))
-		return FALSE;
-
-	if (bytes_read < 400)  /* needs to be lower? */
-		goto out;
-
-	/* Check for PEM signatures */
-	if (find_tag (pem_rsa_key_begin, (const char *) contents, bytes_read)) {
-		show = TRUE;
-		goto out;
-	}
-
-	if (find_tag (pem_dsa_key_begin, (const char *) contents, bytes_read)) {
-		show = TRUE;
-		goto out;
-	}
-
-	if (find_tag (pem_cert_begin, (const char *) contents, bytes_read)) {
-		show = TRUE;
-		goto out;
-	}
-
-	if (find_tag (pem_pkcs8_key_begin, (const char *) contents, bytes_read)) {
-		show = TRUE;
-		goto out;
-	}
-
-	if (find_tag (pem_unenc_key_begin, (const char *) contents, bytes_read)) {
-		show = TRUE;
-		goto out;
-	}
-
-out:
-	g_free (contents);
-	return show;
-}
-
-GtkFileFilter *
-tls_file_chooser_filter_new (gboolean pkcs_allowed)
-{
-	GtkFileFilter *filter;
-
-	filter = gtk_file_filter_new ();
-	gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_FILENAME, tls_default_filter, GUINT_TO_POINTER (pkcs_allowed), NULL);
-	gtk_file_filter_set_name (filter, pkcs_allowed ? _("PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)")
-	                                               : _("PEM certificates (*.pem, *.crt, *.key, *.cer)"));
-	return filter;
-}
-
 
 static const char *sk_key_begin = "-----BEGIN OpenVPN Static key V1-----";
 
@@ -1576,7 +1377,7 @@ device_name_changed_cb (GtkEntry *entry,
 	entry_text = gtk_editable_get_chars (editable, 0, -1);
 
 	/* Change cell's background to red if the value is invalid */
-	if (entry_sensitive && entry_text[0] != '\0' && !nm_utils_iface_valid_name (entry_text)) {
+	if (entry_sensitive && entry_text[0] != '\0' && !nm_utils_is_valid_iface_name (entry_text, NULL)) {
 		widget_set_error (GTK_WIDGET (editable));
 		gtk_widget_set_sensitive (ok_button, FALSE);
 	} else {
@@ -1682,7 +1483,6 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 {
 	GtkBuilder *builder;
 	GtkWidget *dialog = NULL;
-	char *ui_file = NULL;
 	GtkWidget *widget, *combo, *spin, *entry, *ok_button;
 	const char *value, *value2;
 	const char *dev, *dev_type, *tap_dev;
@@ -1695,22 +1495,20 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	g_return_val_if_fail (hash != NULL, NULL);
 
-	ui_file = g_strdup_printf ("%s/%s", UIDIR, "nm-openvpn-dialog.ui");
 	builder = gtk_builder_new ();
 
 	gtk_builder_set_translation_domain (builder, GETTEXT_PACKAGE);
 
-	if (!gtk_builder_add_from_file (builder, ui_file, &error)) {
-		g_warning ("Couldn't load builder file: %s", error->message);
+	if (!gtk_builder_add_from_resource (builder, "/org/freedesktop/network-manager-openvpn/nm-openvpn-dialog.ui", &error)) {
 		g_error_free (error);
 		g_object_unref (G_OBJECT (builder));
-		goto out;
+		g_return_val_if_reached (NULL);
 	}
 
 	dialog = GTK_WIDGET (gtk_builder_get_object (builder, "openvpn-advanced-dialog"));
 	if (!dialog) {
 		g_object_unref (G_OBJECT (builder));
-		goto out;
+		g_return_val_if_reached (NULL);
 	}
 	gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
@@ -2023,9 +1821,6 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	_builder_init_optional_spinbutton (builder, "max_routes_checkbutton", "max_routes_spinbutton", !!value,
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 100000000, 100));
 
-
-out:
-	g_free (ui_file);
 	return dialog;
 }
 

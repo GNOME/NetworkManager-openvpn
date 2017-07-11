@@ -87,6 +87,19 @@ EXTRA_src_nm_openvpn_service_openvpn_helper_DEPENDENCIES = \
 
 ###############################################################################
 
+properties/resources.h: properties/gresource.xml
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ --sourcedir=$(srcdir)/properties --generate-header --internal
+
+properties/resources.c: properties/gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/properties --generate-dependencies $(srcdir)/properties/gresource.xml)
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ --sourcedir=$(srcdir)/properties --generate-source --internal
+
+CLEANFILES += \
+	properties/resources.c \
+	properties/resources.h
+
+EXTRA_DIST += \
+	properties/gresource.xml
+
 plugin_sources = \
 	properties/nm-openvpn-editor-plugin.c \
 	properties/nm-openvpn-editor-plugin.h \
@@ -94,6 +107,8 @@ plugin_sources = \
 	properties/import-export.h
 
 editor_sources = \
+	properties/resources.c \
+	properties/resources.h \
 	properties/nm-openvpn-editor.c \
 	properties/nm-openvpn-editor.h \
 	properties/auth-helpers.c \
@@ -152,10 +167,6 @@ properties_libnm_vpn_plugin_openvpn_la_LDFLAGS = \
 	-Wl,--version-script=$(srcdir)/properties/libnm-vpn-plugin-openvpn.ver
 
 ###############################################################################
-
-if WITH_GNOME
-ui_DATA += properties/nm-openvpn-dialog.ui
-endif
 
 if WITH_GNOME
 plugin_LTLIBRARIES += properties/libnm-vpn-plugin-openvpn-editor.la
@@ -314,7 +325,6 @@ auth_dialog_nm_openvpn_auth_dialog_SOURCES = \
 	auth-dialog/main.c
 auth_dialog_nm_openvpn_auth_dialog_CPPFLAGS = \
 	-DICONDIR=\""$(datadir)/pixmaps"\" \
-	-DUIDIR=\""$(uidir)"\" \
 	-DBINDIR=\""$(bindir)"\" \
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\" \
 	-I$(srcdir)/shared \
@@ -360,7 +370,7 @@ appdata_in_files = appdata/network-manager-openvpn.metainfo.xml.in
 @INTLTOOL_XML_RULE@
 
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
-	sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
+	$(AM_V_GEN) sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
 	    -e 's|[@]PLUGINDIR[@]/|@NM_PLUGIN_DIR_NAME_FILE@|g' \
 	    $^ >$@
 
