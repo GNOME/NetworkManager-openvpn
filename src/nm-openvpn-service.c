@@ -861,7 +861,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 		if (!strcmp (auth, "Auth")) {
 			gs_free char *failure_reason = NULL;
 
-			failure_reason = get_detail (auth, ">PASSWORD:Verification Failed: 'Auth' ['");
+			failure_reason = get_detail (str, ">PASSWORD:Verification Failed: 'Auth' ['");
 			if (parse_challenge (failure_reason, &priv->io_data->challenge_state_id, &priv->io_data->challenge_text)) {
 				_LOGD ("Received challenge '%s' for state '%s'",
 				       priv->io_data->challenge_state_id,
