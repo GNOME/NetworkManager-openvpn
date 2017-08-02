@@ -75,6 +75,9 @@
 #define NM_OPENVPN_KEY_PASSWORD "password"
 #define NM_OPENVPN_KEY_CERTPASS "cert-pass"
 #define NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD "http-proxy-password"
+
+#define NM_OPENVPN_KEY_CHALLENGE_DYNAMIC "challenge-dynamic"
+
 /* Internal auth-dialog -> service token indicating that no secrets are
  * required for the connection.
  */
