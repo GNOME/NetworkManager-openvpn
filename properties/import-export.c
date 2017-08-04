@@ -794,7 +794,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	gs_free char *basename = NULL;
 	gs_free char *default_path = NULL;
 	char *tmp, *tmp2;
-	const char *last_seen_key_direction = NULL;
+	const char *ta_direction = NULL, *secret_direction = NULL;
+	gboolean allow_ta_direction = FALSE, allow_secret_direction = FALSE;
 	gboolean have_certs, have_ca;
 	GSList *inline_blobs = NULL, *sl_iter;
 
@@ -871,8 +872,9 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEY_DIRECTION)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
-			if (!args_params_parse_key_direction (params, 1, &last_seen_key_direction, &line_error))
+			if (!args_params_parse_key_direction (params, 1, &ta_direction, &line_error))
 				goto handle_line_error;
+			secret_direction = ta_direction;
 			continue;
 		}
 
@@ -1175,8 +1177,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			const char *s_direction = NULL;
 
 			can_have_direction = NM_IN_STRSET (params[0],
-			                                  NMV_OVPN_TAG_SECRET,
-			                                  NMV_OVPN_TAG_TLS_AUTH);
+			                                   NMV_OVPN_TAG_SECRET,
+			                                   NMV_OVPN_TAG_TLS_AUTH);
 
 			if (!args_params_check_nargs_minmax (params, 1, can_have_direction ? 2 : 1, &line_error))
 				goto handle_line_error;
@@ -1188,7 +1190,6 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			if (params[2]) {
 				if (!args_params_parse_key_direction (params, 2, &s_direction, &line_error))
 					goto handle_line_error;
-				last_seen_key_direction = s_direction;
 			}
 
 			if (!g_path_is_absolute (file))
@@ -1207,12 +1208,14 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_SECRET)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, file);
 				if (s_direction)
-					setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, s_direction);
+					secret_direction = s_direction;
+				allow_secret_direction = TRUE;
 				have_sk = TRUE;
 			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_AUTH)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_TA, file);
 				if (s_direction)
-					setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, s_direction);
+					ta_direction = s_direction;
+				allow_ta_direction = TRUE;
 			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_CRYPT))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT, file);
 			else
@@ -1405,7 +1408,6 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			gboolean is_base64 = FALSE;
 			char *f_path;
 			const char *key;
-			gboolean can_have_direction = FALSE;
 			GString *blob_data;
 			InlineBlobData *inline_blob_data;
 
@@ -1422,10 +1424,10 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				key = NM_OPENVPN_KEY_TLS_CRYPT;
 			else if (nm_streq (token, INLINE_BLOB_TLS_AUTH)) {
 				key = NM_OPENVPN_KEY_TA;
-				can_have_direction = TRUE;
+				allow_ta_direction = TRUE;
 			} else if (nm_streq (token, INLINE_BLOB_SECRET)) {
 				key = NM_OPENVPN_KEY_STATIC_KEY;
-				can_have_direction = TRUE;
+				allow_secret_direction = TRUE;
 			} else {
 				line_error = g_strdup_printf (_("unsupported blob/xml element"));
 				goto handle_line_error;
@@ -1502,9 +1504,6 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CERT, f_path);
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_KEY, f_path);
 			}
-			if (   can_have_direction
-			    && last_seen_key_direction)
-				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, last_seen_key_direction);
 			continue;
 		}
 
@@ -1521,6 +1520,11 @@ handle_line_error:
 		g_free (line_error);
 		goto out_error;
 	}
+
+	if (allow_secret_direction && secret_direction)
+		setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, secret_direction);
+	if (allow_ta_direction && ta_direction)
+		setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, ta_direction);
 
 	if (!have_client && !have_sk) {
 		g_set_error_literal (error,

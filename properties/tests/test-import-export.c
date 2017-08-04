@@ -523,16 +523,18 @@ test_non_utf8_import (void)
 }
 
 static void
-test_static_key_import (void)
+test_static_key_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
 	NMConnection *connection;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
-	const char *expected_id = "static";
+	const char *file, *expected_id, *expected_dir;
 	char *expected_path;
 
-	connection = get_basic_connection (plugin, SRCDIR, "static.ovpn");
+	nmtst_test_data_unpack (test_data, &file, &expected_id, &expected_dir);
+
+	connection = get_basic_connection (plugin, SRCDIR, file);
 	g_assert (connection);
 
 	/* Connection setting */
@@ -554,7 +556,7 @@ test_static_key_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "10.11.12.13");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PORT, NULL);
-	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, "1");
+	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, expected_dir);
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
@@ -1109,7 +1111,8 @@ int main (int argc, char **argv)
 
 	_add_test_func_simple (test_non_utf8_import);
 
-	_add_test_func_simple (test_static_key_import);
+	_add_test_func ("static-import-1", test_static_key_import, "static.ovpn", "static", "1");
+	_add_test_func ("static-import-2", test_static_key_import, "static2.ovpn", "static2", "0");
 	_add_test_func ("static", test_export_compare, "static.ovpn", "static.ovpntest");
 
 	_add_test_func ("port-import", test_port_import, "port.ovpn", "port", "2345");
