@@ -80,4 +80,22 @@ gboolean is_pkcs12 (const char *filepath);
 
 gboolean is_encrypted (const char *filename);
 
+#define NMOVPN_PROTCOL_TYPES \
+	"udp", \
+	"udp4", \
+	"udp6", \
+	"tcp", \
+	"tcp4", \
+	"tcp6", \
+	"tcp-client", \
+	"tcp4-client", \
+	"tcp6-client"
+
+gssize nmovpn_remote_parse (const char *str,
+                            char **out_buf,
+                            const char **out_host,
+                            const char **out_port,
+                            const char **out_proto,
+                            GError **error);
+
 #endif  /* UTILS_H */

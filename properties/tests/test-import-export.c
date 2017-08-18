@@ -43,6 +43,71 @@
 
 /*****************************************************************************/
 
+static void
+_test_nmovpn_remote_parse (const char *str,
+                           const char *exp_host,
+                           const char *exp_port,
+                           const char *exp_proto)
+{
+	gs_free char *str_free = NULL;
+	gssize r;
+	const char *host, *port, *proto;
+	gs_free_error GError *error = NULL;
+
+	g_assert (exp_host || (!exp_port && !exp_proto));
+
+	r = nmovpn_remote_parse (str, &str_free, &host, &port, &proto, &error);
+	if (!exp_host) {
+		g_assert (r >= 0);
+		g_assert (error);
+		return;
+	}
+	nmtst_assert_success (r == -1, error);
+
+	g_assert_cmpstr (exp_host, ==, host);
+	g_assert_cmpstr (exp_port, ==, port);
+	g_assert_cmpstr (exp_proto, ==, proto);
+}
+
+static void
+test_nmovpn_remote_parse (void)
+{
+	_test_nmovpn_remote_parse ("a",                          "a",                      NULL,    NULL);
+	_test_nmovpn_remote_parse ("a:",                         "a",                      NULL,    NULL);
+	_test_nmovpn_remote_parse ("t::",                        "t",                      NULL,    NULL);
+	_test_nmovpn_remote_parse ("a::",                        "a::",                    NULL,    NULL);
+	_test_nmovpn_remote_parse ("[a::]:",                     "a::",                    NULL,    NULL);
+	_test_nmovpn_remote_parse ("t:::",                       "t:",                     NULL,    NULL);
+	_test_nmovpn_remote_parse ("a:::",                       "a::",                    NULL,    NULL);
+	_test_nmovpn_remote_parse ("a:t::",                      "a:t",                    NULL,    NULL);
+	_test_nmovpn_remote_parse ("a:b::",                      "a:b::",                  NULL,    NULL);
+	_test_nmovpn_remote_parse ("a::udp",                     "a",                      NULL,    "udp");
+	_test_nmovpn_remote_parse ("a:1:",                       "a",                      "1",     NULL);
+	_test_nmovpn_remote_parse ("t::1:",                      "t:",                     "1",     NULL);
+	_test_nmovpn_remote_parse ("t::1:",                      "t:",                     "1",     NULL);
+	_test_nmovpn_remote_parse ("[a:]:1:",                    "[a:]",                   "1",     NULL);
+	_test_nmovpn_remote_parse ("a::1:",                      "a::1",                   NULL,    NULL);
+	_test_nmovpn_remote_parse ("a::1:1194",                  "a::1:1194",              NULL,    NULL);
+	_test_nmovpn_remote_parse ("[a::1]:1194",                "a::1",                   "1194",  NULL);
+	_test_nmovpn_remote_parse ("a::1194",                    "a::1194",                NULL,    NULL);
+	_test_nmovpn_remote_parse ("a::1194:",                   "a::1194",                NULL,    NULL);
+	_test_nmovpn_remote_parse ("[a:]:1194:",                 "[a:]",                   "1194",  NULL);
+	_test_nmovpn_remote_parse ("a:1:tcp",                    "a",                      "1",     "tcp");
+	_test_nmovpn_remote_parse ("aa:bb::1:1194:udp",          NULL,                     NULL,    NULL);
+	_test_nmovpn_remote_parse ("[aa:bb::1]:1194:udp",        "aa:bb::1",               "1194",  "udp");
+	_test_nmovpn_remote_parse ("[aa:bb::1]::udp",            "aa:bb::1",               NULL,    "udp");
+	_test_nmovpn_remote_parse ("aa:bb::1::udp",              "aa:bb::1",               NULL,    "udp");
+	_test_nmovpn_remote_parse ("aa:bb::1::",                 "aa:bb::1",               NULL,    NULL);
+	_test_nmovpn_remote_parse ("abc.com:1234:udp",           "abc.com",                "1234",  "udp");
+	_test_nmovpn_remote_parse ("ovpnserver.company.com:443", "ovpnserver.company.com", "443",   NULL);
+	_test_nmovpn_remote_parse ("vpn.example.com::tcp",       "vpn.example.com",        NULL,    "tcp");
+	_test_nmovpn_remote_parse ("dead:beef::1:1194",          "dead:beef::1:1194",      NULL,    NULL);
+	_test_nmovpn_remote_parse ("dead:beef::1:1194",          "dead:beef::1:1194",      NULL,    NULL);
+	_test_nmovpn_remote_parse ("2001:dead:beef::1194::",     "2001:dead:beef::1194",   NULL,    NULL);
+}
+
+/*****************************************************************************/
+
 static NMVpnEditorPlugin *
 _create_plugin (void)
 {
@@ -678,7 +743,7 @@ test_proxy_http_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_FLOAT, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, "0");
-	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "test.server.com:443");
+	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "[aa:bb::1]:1194:udp");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PORT, "2352");
 	_check_item (s_vpn, NM_OPENVPN_KEY_CERT, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_KEY, NULL);
@@ -1095,6 +1160,8 @@ int main (int argc, char **argv)
 
 #define _add_test_func_simple(func)       g_test_add_func ("/ovpn/properties/" #func, func)
 #define _add_test_func(detail, func, ...) nmtst_add_test_func ("/ovpn/properties/" detail, func, ##__VA_ARGS__)
+
+	_add_test_func_simple (test_nmovpn_remote_parse);
 
 	_add_test_func_simple (test_password_import);
 	_add_test_func ("password-export", test_export_compare, "password.conf", "password.ovpntest");

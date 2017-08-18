@@ -37,6 +37,7 @@
 #include <gtk/gtk.h>
 
 #include "auth-helpers.h"
+#include "utils.h"
 
 /*****************************************************************************/
 
@@ -64,48 +65,30 @@ typedef struct {
 #define COL_AUTH_PAGE 1
 #define COL_AUTH_TYPE 2
 
-/* Example: abc.com:1234:udp, ovpnserver.company.com:443, vpn.example.com::tcp */
 static gboolean
 check_gateway_entry (const char *str)
 {
-	char **list, **iter;
-	char *host, *port, *proto;
-	long int port_int;
+	gs_free char *str_clone = NULL;
+	char *str_iter;
+	const char *tok;
 	gboolean success = FALSE;
 
-	if (!str || !*str)
+	if (!str || !str[0])
 		return FALSE;
 
-	list = g_strsplit_set (str, " \t,", -1);
-	for (iter = list; iter && *iter; iter++) {
-		if (!**iter)
-			continue;
-		host = g_strstrip (*iter);
-		port = strchr (host, ':');
-		proto = port ? strchr (port + 1, ':') : NULL;
-		if (port)
-			*port++ = '\0';
-		if (proto)
-			*proto++ = '\0';
-
-		/* check hostname */
-		if (!*host)
-			goto out;
-		/* check port */
-		if (port && *port) {
-			char *end;
-			errno = 0;
-			port_int = strtol (port, &end, 10);
-			if (errno != 0 || *end != '\0' || port_int < 1 || port_int > 65535)
-				goto out;
-		}
-		/* check proto */
-		if (proto && strcmp (proto, "udp") && strcmp (proto, "tcp"))
-			goto out;
+	str_clone = g_strdup (str);
+	str_iter = str_clone;
+	while ((tok = strsep (&str_iter, " \t,"))) {
+		if (   tok[0]
+		    && (nmovpn_remote_parse (tok,
+		                             NULL,
+		                             NULL,
+		                             NULL,
+		                             NULL,
+		                             NULL) != -1))
+		   return FALSE;
+		success = TRUE;
 	}
-	success = TRUE;
-out:
-	g_strfreev (list);
 	return success;
 }
 
@@ -118,16 +101,13 @@ check_validity (OpenvpnEditor *self, GError **error)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	const char *contype = NULL;
-	gboolean gateway_valid;
 	gboolean success;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
-	gateway_valid = check_gateway_entry (str);
-	/* Change entry background colour while editing */
-	if (gateway_valid) {
+	if (str && check_gateway_entry (str))
 		gtk_style_context_remove_class (gtk_widget_get_style_context (widget), "error");
-	} else {
+	else {
 		gtk_style_context_add_class (gtk_widget_get_style_context (widget), "error");
 		g_set_error (error,
 		             NMV_EDITOR_PLUGIN_ERROR,
@@ -401,7 +381,8 @@ update_connection (NMVpnEditor *iface,
 	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 	NMSettingVpn *s_vpn;
 	GtkWidget *widget;
-	char *str, *auth_type;
+	char *auth_type;
+	const char *str;
 	gboolean valid = FALSE;
 
 	if (!check_validity (self, error))
@@ -410,10 +391,9 @@ update_connection (NMVpnEditor *iface,
 	s_vpn = NM_SETTING_VPN (nm_setting_vpn_new ());
 	g_object_set (s_vpn, NM_SETTING_VPN_SERVICE_TYPE, NM_VPN_SERVICE_TYPE_OPENVPN, NULL);
 
-	/* Gateway */
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
-	str = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-	if (str && strlen (str))
+	str = gtk_entry_get_text (GTK_ENTRY (widget));
+	if (str && str[0])
 		nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, str);
 
 	auth_type = get_auth_type (priv->builder);

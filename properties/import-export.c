@@ -1071,6 +1071,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			const char *prev;
 			GString *new_remote;
 			int port = -1;
+			gboolean host_has_colon;
+			struct in6_addr a;
 
 			if (!args_params_check_nargs_minmax (params, 1, 3, &line_error))
 				goto handle_line_error;
@@ -1092,8 +1094,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				port = v_int64;
 
 				if (params[3]) {
-					if (!NM_IN_STRSET (params[3], "udp", "tcp")) {
-						line_error = g_strdup_printf (_("remote expects protocol either udp or remote"));
+					if (!NM_IN_STRSET (params[3], NMOVPN_PROTCOL_TYPES)) {
+						line_error = g_strdup_printf (_("remote expects protocol type like 'udp' or 'tcp'"));
 						goto handle_line_error;
 					}
 				}
@@ -1106,14 +1108,25 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				g_string_assign (new_remote, prev);
 				g_string_append (new_remote, ", ");
 			}
-			g_string_append (new_remote, params[1]);
+
+			host_has_colon = (strchr (params[1], ':') != NULL);
+			if (   host_has_colon
+			    && inet_pton (AF_INET6, params[1], &a) == 1) {
+				/* need to escape the host. */
+				g_string_append_printf (new_remote, "[%s]", params[1]);
+			} else
+				g_string_append (new_remote, params[1]);
+
 			if (params[2]) {
 				g_string_append_printf (new_remote, ":%d", port);
 				if (params[3]) {
 					g_string_append_c (new_remote, ':');
 					g_string_append (new_remote, params[3]);
-				}
-			}
+				} else if (host_has_colon)
+					g_string_append_c (new_remote, ':');
+			} else if (host_has_colon)
+				g_string_append (new_remote, "::");
+
 			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE, new_remote->str);
 			g_string_free (new_remote, TRUE);
 
@@ -1800,32 +1813,25 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	args_write_line (f, NMV_OVPN_TAG_CLIENT);
 
 	/* 'remote' */
-	gw_list = g_strsplit_set (gateways, " ,", 0);
+	gw_list = g_strsplit_set (gateways, " \t,", 0);
 	for (gw_iter = gw_list; gw_iter && *gw_iter; gw_iter++) {
-		char *tmp_host, *tmp_port,*tmp_proto;
+		gs_free char *str_free = NULL;
+		const char *host, *port, *proto;
+		gssize eidx;
 
-		if (**gw_iter == '\0')
+		eidx = nmovpn_remote_parse (*gw_iter,
+		                            &str_free,
+		                            &host,
+		                            &port,
+		                            &proto,
+		                            NULL);
+		if (eidx >= 0)
 			continue;
-		tmp_host = g_strstrip (*gw_iter);
-		tmp_port = strchr (tmp_host, ':');
-		tmp_proto = tmp_port ? strchr (tmp_port + 1, ':') : NULL;
-		if (tmp_port)
-			*tmp_port++ = '\0';
-		if (tmp_proto)
-			*tmp_proto++ = '\0';
-		if (tmp_port && !*tmp_port)
-			tmp_port = NULL;
-		if (tmp_proto && !*tmp_proto)
-			tmp_proto = NULL;
-
 		args_write_line (f,
 		                 NMV_OVPN_TAG_REMOTE,
-		                 *gw_iter,
-		                 tmp_port
-		                     ?: (tmp_proto
-		                             ? (nm_streq (tmp_proto, "udp") ? "1194" : "443")
-		                             : NULL),
-		                 tmp_proto);
+		                 host,
+		                 port ?: (proto ? "1194" : NULL),
+		                 proto);
 	}
 	g_strfreev (gw_list);
 

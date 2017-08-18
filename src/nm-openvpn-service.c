@@ -1330,22 +1330,25 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (tmp && *tmp) {
 		gs_free char *tmp_clone = NULL;
 		char *tmp_remaining;
-		char *tok, *port, *proto;
+		const char *tok;
 
 		tmp_remaining = tmp_clone = g_strdup (tmp);
 		while ((tok = strsep (&tmp_remaining, " \t,")) != NULL) {
-			if (!*tok)
+			gs_free char *str_free = NULL;
+			const char *host, *port, *proto;
+			gssize eidx;
+
+			eidx = nmovpn_remote_parse (tok,
+			                            &str_free,
+			                            &host,
+			                            &port,
+			                            &proto,
+			                            NULL);
+			if (eidx >= 0)
 				continue;
 
-			port = strchr (tok, ':');
-			proto = port ? strchr (port + 1, ':') : NULL;
-			if (port)
-				*port++ = '\0';
-			if (proto)
-				*proto++ = '\0';
-
 			add_openvpn_arg (args, "--remote");
-			add_openvpn_arg (args, tok);
+			add_openvpn_arg (args, host);
 			if (port) {
 				if (!add_openvpn_arg_int (args, port)) {
 					g_set_error (error,
@@ -1367,10 +1370,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 				add_openvpn_arg (args, "1194"); /* default IANA port */
 
 			if (proto) {
-				if (!strcmp (proto, "udp"))
-					add_openvpn_arg (args, proto);
-				else if (!strcmp (proto, "tcp"))
+				if (nm_streq (proto, "tcp"))
 					add_openvpn_arg (args, "tcp-client");
+				else if (nm_streq (proto, "tcp4"))
+					add_openvpn_arg (args, "tcp4-client");
+				else if (nm_streq (proto, "tcp6"))
+					add_openvpn_arg (args, "tcp6-client");
+				else if (NM_IN_STRSET (proto, NMOVPN_PROTCOL_TYPES))
+					add_openvpn_arg (args, proto);
 				else {
 					g_set_error (error,
 					             NM_VPN_PLUGIN_ERROR,
