@@ -1095,7 +1095,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 
 				if (params[3]) {
 					if (!NM_IN_STRSET (params[3], NMOVPN_PROTCOL_TYPES)) {
-						line_error = g_strdup_printf (_("remote expects protocol type like 'udp' or 'tcp'"));
+						line_error = g_strdup_printf (_("remote expects protocol type like “udp” or “tcp”"));
 						goto handle_line_error;
 					}
 				}
