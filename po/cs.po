@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2017-07-11 16:01+0000\n"
-"PO-Revision-Date: 2017-03-30 10:21+0200\n"
+"POT-Creation-Date: 2017-08-28 15:51+0000\n"
+"PO-Revision-Date: 2017-09-06 12:43+0200\n"
 "Last-Translator: Zdeněk Hataš <zdenek.hatas@gmail.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -321,82 +321,82 @@ msgstr "nelze zapsat binární data <%s> z řádku %ld do souboru (%s)"
 msgid "cannot write <%s> blob from line %ld to file “%s”"
 msgstr "nelze zapsat binární data <%s> z řádku %ld do souboru „%s“"
 
-#: ../properties/import-export.c:933
+#: ../properties/import-export.c:935
 #, c-format
 msgid "unsupported mtu-disc argument"
 msgstr "nepodporovaný argument mtu-disc"
 
-#: ../properties/import-export.c:944 ../properties/import-export.c:1303
+#: ../properties/import-export.c:946 ../properties/import-export.c:1319
 #, c-format
 msgid "invalid option"
 msgstr "neplatná volba"
 
-#: ../properties/import-export.c:983
+#: ../properties/import-export.c:985
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "nepodporovaný argument com-lzo"
 
-#: ../properties/import-export.c:1079
+#: ../properties/import-export.c:1083
 #, c-format
 msgid "remote cannot contain space"
 msgstr "remote nemůže obsahovat mezeru"
 
-#: ../properties/import-export.c:1083
+#: ../properties/import-export.c:1087
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "remote obsahuje čárku"
 
-#: ../properties/import-export.c:1094
+#: ../properties/import-export.c:1098
 #, c-format
-msgid "remote expects protocol either udp or remote"
-msgstr "remote očekává protokol remote nebo udp"
+msgid "remote expects protocol type like “udp” or “tcp”"
+msgstr "protistrana očekává protokol typu „tcp“ nebo „udp“"
 
-#: ../properties/import-export.c:1287
+#: ../properties/import-export.c:1303
 #, c-format
 msgid "invalid verify-x509-name type"
 msgstr "neplatný typ verify-x509-name"
 
-#: ../properties/import-export.c:1430
+#: ../properties/import-export.c:1445
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "nepodporovaný blob/xml element"
 
-#: ../properties/import-export.c:1459
+#: ../properties/import-export.c:1474
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "neukončený blob element <%s>"
 
-#: ../properties/import-export.c:1518
+#: ../properties/import-export.c:1530
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "chyba v nastavení: %s (řádek %ld)"
 
-#: ../properties/import-export.c:1519
+#: ../properties/import-export.c:1531
 msgid "unknown or unsupported option"
 msgstr "neznámá nebo nepodporovaná volba"
 
-#: ../properties/import-export.c:1529
+#: ../properties/import-export.c:1546
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr "Importovaný soubor nebyl platným nastavením klienta OpenVPN."
 
-#: ../properties/import-export.c:1537
+#: ../properties/import-export.c:1554
 msgid "The file to import wasn’t a valid OpenVPN configure (no remote)"
 msgstr ""
 "Importovaný soubor nebyl platným nastavením OpenVPN (chybí protistrana)."
 
-#: ../properties/import-export.c:1769
+#: ../properties/import-export.c:1786
 msgid "missing path argument"
 msgstr "chybí argument s cestou"
 
-#: ../properties/import-export.c:1779
+#: ../properties/import-export.c:1796
 msgid "connection is not a valid OpenVPN connection"
 msgstr "připojení není platné připojení OpenVPN"
 
-#: ../properties/import-export.c:1788
+#: ../properties/import-export.c:1805
 msgid "connection was incomplete (missing gateway)"
 msgstr "připojení nebylo úplné (chybí brána)"
 
-#: ../properties/import-export.c:2127
+#: ../properties/import-export.c:2137
 #, c-format
 msgid "failed to write file: %s"
 msgstr "selhal zápis do souboru: %s"
@@ -413,27 +413,27 @@ msgstr "Kompatibilní s OpenVPN serverem."
 msgid "unknown OpenVPN file extension"
 msgstr "neznámá přípona souboru OpenVPN"
 
-#: ../properties/nm-openvpn-editor.c:298
+#: ../properties/nm-openvpn-editor.c:278
 msgid "Certificates (TLS)"
 msgstr "Certifikáty (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:309
+#: ../properties/nm-openvpn-editor.c:289
 msgid "Password"
 msgstr "Heslo"
 
-#: ../properties/nm-openvpn-editor.c:322
+#: ../properties/nm-openvpn-editor.c:302
 msgid "Password with Certificates (TLS)"
 msgstr "Heslo s certifikáty (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:334
+#: ../properties/nm-openvpn-editor.c:314
 msgid "Static Key"
 msgstr "Statický klíč"
 
-#: ../properties/nm-openvpn-editor.c:488
+#: ../properties/nm-openvpn-editor.c:468
 msgid "could not create openvpn object"
 msgstr "nelze vytvořit objekt openvpn"
 
-#: ../properties/nm-openvpn-editor.c:505
+#: ../properties/nm-openvpn-editor.c:485
 msgid "could not load UI widget"
 msgstr "nelze nahrát widget uživatelského rozhraní"
 
@@ -491,6 +491,31 @@ msgstr "nelze načíst generátor %s ze zásuvného modulu: %s"
 #: ../shared/nm-utils/nm-vpn-plugin-utils.c:121
 msgid "unknown error creating editor instance"
 msgstr "neznámá chyba při vytváření instance editoru"
+
+#: ../shared/utils.c:159
+#, c-format
+msgid "invalid delimiter character '%c'"
+msgstr "neplatný znak „%c“ v oddělovači"
+
+#: ../shared/utils.c:166
+#, c-format
+msgid "invalid non-utf-8 character"
+msgstr "neplatný znak nepatřící do UTF-8"
+
+#: ../shared/utils.c:194
+#, c-format
+msgid "empty host"
+msgstr "neuvedený hostitel"
+
+#: ../shared/utils.c:204
+#, c-format
+msgid "invalid port"
+msgstr "neplatný port"
+
+#: ../shared/utils.c:215
+#, c-format
+msgid "invalid protocol"
+msgstr "neplatný protokol"
 
 #: ../src/nm-openvpn-service.c:477
 #, c-format
@@ -550,14 +575,14 @@ msgstr "Je požadováno heslo k HTTP proxy."
 msgid "An HTTP Proxy username and password are required."
 msgstr "Je požadováno uživatelské jméno a heslo k HTTP proxy."
 
-#: ../src/nm-openvpn-service.c:1275 ../src/nm-openvpn-service.c:2058
-#: ../src/nm-openvpn-service.c:2092
+#: ../src/nm-openvpn-service.c:1275 ../src/nm-openvpn-service.c:2065
+#: ../src/nm-openvpn-service.c:2099
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr "Nelze zpracovat požadavek, protože nastavení VPN nejsou platná."
 
-#: ../src/nm-openvpn-service.c:1284 ../src/nm-openvpn-service.c:2067
+#: ../src/nm-openvpn-service.c:1284 ../src/nm-openvpn-service.c:2074
 msgid "Invalid connection type."
 msgstr "Neplatný typ připojení."
 
@@ -569,103 +594,103 @@ msgstr "Nelze nalézt program openvpn."
 msgid "Invalid HMAC auth."
 msgstr "Neplatná autentizace HMAC."
 
-#: ../src/nm-openvpn-service.c:1354 ../src/nm-openvpn-service.c:1362
+#: ../src/nm-openvpn-service.c:1357 ../src/nm-openvpn-service.c:1365
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "Neplatné číslo portu „%s“."
 
-#: ../src/nm-openvpn-service.c:1378
+#: ../src/nm-openvpn-service.c:1385
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "Neplatný protokol „%s“."
 
-#: ../src/nm-openvpn-service.c:1420
+#: ../src/nm-openvpn-service.c:1427
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "Neplatný typ proxy „%s“."
 
-#: ../src/nm-openvpn-service.c:1468
+#: ../src/nm-openvpn-service.c:1475
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "Neplatná doba trvání pinknutí „%s“."
 
-#: ../src/nm-openvpn-service.c:1481
+#: ../src/nm-openvpn-service.c:1488
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "Neplatná doba trvání ukončení pinknutí ping-exit „%s“."
 
-#: ../src/nm-openvpn-service.c:1494
+#: ../src/nm-openvpn-service.c:1501
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "Neplatná doba trvání restartu pinknutí ping-restart „%s“."
 
-#: ../src/nm-openvpn-service.c:1513
+#: ../src/nm-openvpn-service.c:1520
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "Neplatný argument max-routes „%s“"
 
-#: ../src/nm-openvpn-service.c:1568
+#: ../src/nm-openvpn-service.c:1575
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "Neplatná délka klíče „%s“."
 
-#: ../src/nm-openvpn-service.c:1625
+#: ../src/nm-openvpn-service.c:1632
 #, c-format
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "Neplatná konfugurace s tls-remote a verify-x509-name."
 
-#: ../src/nm-openvpn-service.c:1639
+#: ../src/nm-openvpn-service.c:1646
 #, c-format
 msgid "Invalid verify-x509-name."
 msgstr "Neplatné verify-x509-name."
 
-#: ../src/nm-openvpn-service.c:1673
+#: ../src/nm-openvpn-service.c:1680
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "Neplatná počet sekund opětovného vyjednávání „%s“."
 
-#: ../src/nm-openvpn-service.c:1705
+#: ../src/nm-openvpn-service.c:1712
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "Neplatná velikost TUN MTU „%s“."
 
-#: ../src/nm-openvpn-service.c:1719
+#: ../src/nm-openvpn-service.c:1726
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "Neplatná velikost fragmentu „%s“."
 
-#: ../src/nm-openvpn-service.c:1831
+#: ../src/nm-openvpn-service.c:1838
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "Neznámý typ připojení „%s“."
 
-#: ../src/nm-openvpn-service.c:1850
+#: ../src/nm-openvpn-service.c:1857
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "Uživatel „%s“ nebyl nalezen, zkontrolujte proměnnou NM_OPENVPN_USER."
 
-#: ../src/nm-openvpn-service.c:1863
+#: ../src/nm-openvpn-service.c:1870
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "Skupina „%s“ nebyla nalezena, zkontrolujte proměnnou NM_OPENVPN_GROUP."
 
-#: ../src/nm-openvpn-service.c:2105
+#: ../src/nm-openvpn-service.c:2112
 msgid "Unhandled pending authentication."
 msgstr "Neošetřená čekající autentizace."
 
-#: ../src/nm-openvpn-service.c:2224
+#: ../src/nm-openvpn-service.c:2231
 msgid "Don’t quit when VPN connection terminates"
 msgstr "Neukončovat během ukončování spojení VPN"
 
-#: ../src/nm-openvpn-service.c:2225
+#: ../src/nm-openvpn-service.c:2232
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Povolit podrobný ladicí výpis (může prozradit hesla)"
 
-#: ../src/nm-openvpn-service.c:2226
+#: ../src/nm-openvpn-service.c:2233
 msgid "D-Bus name to use for this instance"
 msgstr "Název použitý pro tuto instanci v D-Bus"
 
-#: ../src/nm-openvpn-service.c:2252
+#: ../src/nm-openvpn-service.c:2259
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
@@ -1313,4 +1338,3 @@ msgstr "Zjištění MTU cesty"
 #: ../properties/nm-openvpn-dialog.ui.h:154
 msgid "Misc"
 msgstr "Různé"
-
