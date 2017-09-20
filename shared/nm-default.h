@@ -88,6 +88,8 @@
 #define NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_SETTING_VPN_ERROR_UNKNOWN
 #define NMV_EDITOR_PLUGIN_ERROR_FILE_INVALID        NM_SETTING_VPN_ERROR_UNKNOWN
 
+#define _nm_utils_is_valid_iface_name(n)            nm_utils_iface_valid_name(n)
+
 #else /* !NM_VPN_OLD */
 
 #include <NetworkManager.h>
@@ -99,6 +101,8 @@
 #define NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN        NM_CONNECTION_ERROR_FAILED
 #define NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_CONNECTION_ERROR_FAILED
 #define NMV_EDITOR_PLUGIN_ERROR_FILE_INVALID        NM_CONNECTION_ERROR_FAILED
+
+#define _nm_utils_is_valid_iface_name(n)            nm_utils_is_valid_iface_name(n, NULL)
 
 #endif /* NM_VPN_OLD */
 
