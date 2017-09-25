@@ -41,7 +41,7 @@
  * NMTST_SEED_RAND environment variable:
  *   Tests that use random numbers from nmtst_get_rand() get seeded randomly at each start.
  *   You can specify the seed by setting NMTST_SEED_RAND. Also, tests will print the seed
- *   to stdout, so that you know the choosen seed.
+ *   to stdout, so that you know the chosen seed.
  *
  *
  * NMTST_DEBUG environment variable:
@@ -82,7 +82,8 @@
  *   Whether long-running tests are enabled is determined as follows (highest priority first):
  *     - specifying the value in NMTST_DEBUG has highest priority
  *     - respect g_test_quick(), if the command line contains '-mslow', '-mquick', '-mthorough'.
- *     - use compile time default
+ *     - use compile time default (CFLAGS=-DNMTST_TEST_QUICK=TRUE)
+ *     - enable slow tests by default
  *
  * "p=PATH"|"s=PATH": passes the path to g_test_init() as "-p" and "-s", respectively.
  *   Unfortunately, these options conflict with "--tap" which our makefile passes to the
@@ -137,12 +138,13 @@
 #define NMTST_WAIT(max_wait_ms, wait) \
 	({ \
 		gboolean _not_expired = TRUE; \
-		gint64 _nmtst_end, _nmtst_max_wait_us = (max_wait_ms) * 1000L; \
+		const gint64 nmtst_wait_start_us = g_get_monotonic_time (); \
+		const gint64 nmtst_wait_duration_us = (max_wait_ms) * 1000L; \
+		const gint64 nmtst_wait_end_us = nmtst_wait_start_us + nmtst_wait_duration_us; \
 		\
-		_nmtst_end = g_get_monotonic_time () + _nmtst_max_wait_us; \
 		while (TRUE) { \
 			{ wait }; \
-			if (g_get_monotonic_time () > _nmtst_end) { \
+			if (g_get_monotonic_time () > nmtst_wait_end_us) { \
 				_not_expired = FALSE; \
 				break; \
 			} \
@@ -278,6 +280,15 @@ nmtst_free (void)
 	g_strfreev (__nmtst_internal.orig_argv);
 
 	memset (&__nmtst_internal, 0, sizeof (__nmtst_internal));
+}
+
+static inline void
+_nmtst_log_handler (const gchar   *log_domain,
+                    GLogLevelFlags log_level,
+                    const gchar   *message,
+                    gpointer       user_data)
+{
+	g_print ("%s\n", message);
 }
 
 static inline void
@@ -589,6 +600,11 @@ __nmtst_init (int *argc, char ***argv, gboolean assert_logging, const char *log_
 		g_assert_no_error (error);
 	}
 #endif
+
+	g_log_set_handler (G_LOG_DOMAIN,
+	                   G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
+	                   _nmtst_log_handler,
+	                   NULL);
 }
 
 #ifndef _NMTST_INSIDE_CORE
@@ -647,13 +663,18 @@ nmtst_test_quick (void)
 
 typedef struct _NmtstTestData NmtstTestData;
 
-typedef void (*NmtstTestDataRelease) (const NmtstTestData *test_data);
+typedef void (*NmtstTestHandler) (const NmtstTestData *test_data);
 
 struct _NmtstTestData {
-	const char *testpath;
-	NmtstTestDataRelease fcn_release;
+	union {
+		const char *testpath;
+		char *_testpath;
+	};
 	gsize n_args;
-	gpointer args[1];
+	gpointer *args;
+	NmtstTestHandler _func_setup;
+	GTestDataFunc _func_test;
+	NmtstTestHandler _func_teardown;
 };
 
 static inline void
@@ -670,8 +691,8 @@ _nmtst_test_data_unpack (const NmtstTestData *test_data, gsize n_args, ...)
 	for (i = 0; i < n_args; i++) {
 		p = va_arg (ap, gpointer *);
 
-		g_assert (p);
-		*p = test_data->args[i];
+		if (p)
+			*p = test_data->args[i];
 	}
 	va_end (ap);
 }
@@ -684,25 +705,42 @@ _nmtst_test_data_free (gpointer data)
 
 	g_assert (test_data);
 
-	if (test_data->fcn_release)
-		test_data->fcn_release (test_data);
-
-	g_free ((gpointer) test_data->testpath);
+	g_free (test_data->_testpath);
 	g_free (test_data);
 }
 
 static inline void
-_nmtst_add_test_func_full (const char *testpath, GTestDataFunc test_func, NmtstTestDataRelease fcn_release, gsize n_args, ...)
+_nmtst_test_run (gconstpointer data)
+{
+	const NmtstTestData *test_data = data;
+
+	if (test_data->_func_setup)
+		test_data->_func_setup (test_data);
+
+	test_data->_func_test (test_data);
+
+	if (test_data->_func_teardown)
+		test_data->_func_teardown (test_data);
+}
+
+static inline void
+_nmtst_add_test_func_full (const char *testpath, GTestDataFunc func_test, NmtstTestHandler func_setup, NmtstTestHandler func_teardown, gsize n_args, ...)
 {
 	gsize i;
 	NmtstTestData *data;
 	va_list ap;
 
-	data = g_malloc (G_STRUCT_OFFSET (NmtstTestData, args) + sizeof (gpointer) * (n_args + 1));
+	g_assert (testpath && testpath[0]);
+	g_assert (func_test);
 
-	data->testpath = g_strdup (testpath);
-	data->fcn_release = fcn_release;
+	data = g_malloc0 (sizeof (NmtstTestData) + (sizeof (gpointer) * (n_args + 1)));
+
+	data->_testpath = g_strdup (testpath);
+	data->_func_test = func_test;
+	data->_func_setup = func_setup;
+	data->_func_teardown = func_teardown;
 	data->n_args = n_args;
+	data->args = (gpointer) &data[1];
 	va_start (ap, n_args);
 	for (i = 0; i < n_args; i++)
 		data->args[i] = va_arg (ap, gpointer);
@@ -711,11 +749,11 @@ _nmtst_add_test_func_full (const char *testpath, GTestDataFunc test_func, NmtstT
 
 	g_test_add_data_func_full (testpath,
 	                           data,
-	                           test_func,
+	                           _nmtst_test_run,
 	                           _nmtst_test_data_free);
 }
-#define nmtst_add_test_func_full(testpath, test_func, fcn_release, ...) _nmtst_add_test_func_full(testpath, test_func, fcn_release, NM_NARG (__VA_ARGS__), ##__VA_ARGS__)
-#define nmtst_add_test_func(testpath, test_func, ...) nmtst_add_test_func_full(testpath, test_func, NULL, ##__VA_ARGS__)
+#define nmtst_add_test_func_full(testpath, func_test, func_setup, func_teardown, ...) _nmtst_add_test_func_full(testpath, func_test, func_setup, func_teardown, NM_NARG (__VA_ARGS__), ##__VA_ARGS__)
+#define nmtst_add_test_func(testpath, func_test, ...) nmtst_add_test_func_full(testpath, func_test, NULL, NULL, ##__VA_ARGS__)
 
 /*****************************************************************************/
 
@@ -1182,6 +1220,15 @@ nmtst_file_get_contents (const char *filename)
 	g_assert_cmpint (strlen (contents), ==, len);
 	return contents;
 }
+
+#define nmtst_file_set_contents(filename, content) \
+	G_STMT_START { \
+		GError *_error = NULL; \
+		gboolean _success; \
+		\
+		_success = g_file_set_contents ((filename), (content), -1, &_error); \
+		nmtst_assert_success (_success, _error); \
+	} G_STMT_END
 
 /*****************************************************************************/
 

@@ -26,15 +26,15 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "nm-glib.h"
-
-/*****************************************************************************/
-
 #define _nm_packed __attribute__ ((packed))
 #define _nm_unused __attribute__ ((unused))
 #define _nm_pure   __attribute__ ((pure))
 #define _nm_const  __attribute__ ((const))
 #define _nm_printf(a,b) __attribute__ ((__format__ (__printf__, a, b)))
+
+#include "nm-glib.h"
+
+/*****************************************************************************/
 
 #define nm_offsetofend(t,m) (G_STRUCT_OFFSET (t,m) + sizeof (((t *) NULL)->m))
 
@@ -56,10 +56,10 @@ _nm_auto_unset_gvalue_impl (GValue *v)
 #define nm_auto_unset_gvalue nm_auto(_nm_auto_unset_gvalue_impl)
 
 static inline void
-_nm_auto_unref_gtypeclass (GTypeClass **v)
+_nm_auto_unref_gtypeclass (gpointer v)
 {
-	if (v && *v)
-		g_type_class_unref (*v);
+	if (v && *((gpointer *) v))
+		g_type_class_unref (*((gpointer *) v));
 }
 #define nm_auto_unref_gtypeclass nm_auto(_nm_auto_unref_gtypeclass)
 
@@ -242,6 +242,35 @@ NM_G_ERROR_MSG (GError *error)
 
 /*****************************************************************************/
 
+#if (defined (__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 9 ))) || (defined (__clang__))
+#define _NM_CC_SUPPORT_GENERIC 1
+#else
+#define _NM_CC_SUPPORT_GENERIC 0
+#endif
+
+#if _NM_CC_SUPPORT_GENERIC
+#define _NM_CONSTCAST(type, obj) \
+	(_Generic ((obj), \
+	           void *           : ((type *) (obj)), \
+	           void *const      : ((type *) (obj)), \
+	           const void *     : ((const type *) (obj)), \
+	           const void *const: ((const type *) (obj)), \
+	           const type *     : (obj), \
+	           const type *const: (obj), \
+	           type *           : (obj), \
+	           type *const      : (obj)))
+#else
+/* _NM_CONSTCAST() is there to preserve constness of a pointer.
+ * It uses C11's _Generic(). If that is not supported, we fall back
+ * to casting away constness. So, with _Generic, we get some additional
+ * static type checking by preserving constness, without, we cast it
+ * to a non-const pointer. */
+#define _NM_CONSTCAST(type, obj) \
+	((type *) (obj))
+#endif
+
+/*****************************************************************************/
+
 #define _NM_IN_SET_EVAL_1( op, _x, y)           (_x == (y))
 #define _NM_IN_SET_EVAL_2( op, _x, y, ...)      (_x == (y)) op _NM_IN_SET_EVAL_1  (op, _x, __VA_ARGS__)
 #define _NM_IN_SET_EVAL_3( op, _x, y, ...)      (_x == (y)) op _NM_IN_SET_EVAL_2  (op, _x, __VA_ARGS__)
@@ -381,6 +410,21 @@ _NM_IN_STRSET_streq (const char *x, const char *s)
 
 /*****************************************************************************/
 
+static inline guint
+NM_HASH_COMBINE (guint h, guint val)
+{
+	/* see g_str_hash() for reasons */
+	return (h << 5) + h + val;
+}
+
+static inline guint
+NM_HASH_COMBINE_UINT64 (guint h, guint64 val)
+{
+	return NM_HASH_COMBINE (h, (((guint) val) & 0xFFFFFFFFu) + ((guint) (val >> 32)));
+}
+
+/*****************************************************************************/
+
 /* NM_CACHED_QUARK() returns the GQuark for @string, but caches
  * it in a static variable to speed up future lookups.
  *
@@ -419,6 +463,16 @@ fcn (void) \
 #define nm_streq0(s1, s2) (g_strcmp0 (s1, s2) == 0)
 
 /*****************************************************************************/
+
+static inline GString *
+nm_gstring_prepare (GString **l)
+{
+	if (*l)
+		g_string_set_size (*l, 0);
+	else
+		*l = g_string_sized_new (30);
+	return *l;
+}
 
 static inline const char *
 nm_str_not_empty (const char *str)
@@ -512,7 +566,7 @@ _notify (obj_type *obj, _PropertyEnums prop) \
 /* these are implemented as a macro, because they accept self
  * as both (type*) and (const type*), and return a const
  * private pointer accordingly. */
-#define __NM_GET_PRIVATE(self, type, is_check, result_cmd) \
+#define __NM_GET_PRIVATE(self, type, is_check, addrop) \
 	({ \
 		/* preserve the const-ness of self. Unfortunately, that
 		 * way, @self cannot be a void pointer */ \
@@ -522,11 +576,11 @@ _notify (obj_type *obj, _PropertyEnums prop) \
 		_nm_unused const type *const _self2 = (_self); \
 		\
 		nm_assert (is_check (_self)); \
-		( result_cmd ); \
+		( addrop ( _NM_CONSTCAST (type, _self)->_priv) ); \
 	})
 
-#define _NM_GET_PRIVATE(self, type, is_check)     __NM_GET_PRIVATE(self, type, is_check, &_self->_priv)
-#define _NM_GET_PRIVATE_PTR(self, type, is_check) __NM_GET_PRIVATE(self, type, is_check,  _self->_priv)
+#define _NM_GET_PRIVATE(self, type, is_check)     __NM_GET_PRIVATE(self, type, is_check, &)
+#define _NM_GET_PRIVATE_PTR(self, type, is_check) __NM_GET_PRIVATE(self, type, is_check,  )
 
 #define __NM_GET_PRIVATE_VOID(self, type, is_check, result_cmd) \
 	({ \
@@ -565,6 +619,36 @@ nm_g_object_unref (gpointer obj)
 		g_object_unref (obj);
 }
 
+/* Assigns GObject @obj to destination @pdst, and takes an additional ref.
+ * The previous value of @pdst is unrefed.
+ *
+ * It makes sure to first increase the ref-count of @obj, and handles %NULL
+ * @obj correctly.
+ * */
+#define nm_g_object_ref_set(pp, obj) \
+	({ \
+		typeof (*(pp)) *const _pp = (pp); \
+		typeof (**_pp) *const _obj = (obj); \
+		typeof (**_pp) *_p; \
+		gboolean _changed = FALSE; \
+		\
+		if (   _pp \
+		    && ((_p = *_pp) != _obj)) { \
+			if (_obj) { \
+				nm_assert (G_IS_OBJECT (_obj)); \
+				 g_object_ref (_obj); \
+			} \
+			if (_p) { \
+				nm_assert (G_IS_OBJECT (_p)); \
+				*_pp = NULL; \
+				g_object_unref (_p); \
+			} \
+			*_pp = _obj; \
+			_changed = TRUE; \
+		} \
+		_changed; \
+	})
+
 /* basically, replaces
  *   g_clear_pointer (&location, g_free)
  * with
@@ -577,13 +661,32 @@ nm_g_object_unref (gpointer obj)
 #define nm_clear_g_free(pp) \
 	({  \
 		typeof (*(pp)) *_pp = (pp); \
-		typeof (**_pp) *_p = *_pp; \
+		typeof (**_pp) *_p; \
+		gboolean _changed = FALSE; \
 		\
-		if (_p) { \
+		if (  _pp \
+		    && (_p = *_pp)) { \
 			*_pp = NULL; \
 			g_free (_p); \
+			_changed = TRUE; \
 		} \
-		!!_p; \
+		_changed; \
+	})
+
+#define nm_clear_g_object(pp) \
+	({ \
+		typeof (*(pp)) *_pp = (pp); \
+		typeof (**_pp) *_p; \
+		gboolean _changed = FALSE; \
+		\
+		if (   _pp \
+		    && (_p = *_pp)) { \
+			nm_assert (G_IS_OBJECT (_p)); \
+			*_pp = NULL; \
+			g_object_unref (_p); \
+			_changed = TRUE; \
+		} \
+		_changed; \
 	})
 
 static inline gboolean
@@ -634,18 +737,13 @@ nm_clear_g_cancellable (GCancellable **cancellable)
 /*****************************************************************************/
 
 /* Determine whether @x is a power of two (@x being an integer type).
- * For the special cases @x equals zero or one, it also returns true.
- * In case @x being a signed type, for negative @x always return FALSE. */
+ * Basically, this returns TRUE, if @x has exactly one bit set.
+ * For negative values and zero, this always returns FALSE. */
 #define nm_utils_is_power_of_two(x) ({ \
 		typeof(x) __x = (x); \
 		\
-		/* Check if the value is negative. In that case, return FALSE.
-		 * The first expression is a compile time constant, depending on whether
-		 * the type is signed. The second expression is a clumsy way for (__x >= 0),
-		 * which otherwise causes a compiler warning for unsigned types. */ \
-		    (    (((typeof(__x)) -1) > ((typeof(__x)) 0)) \
-		      || (__x > 0 || __x == 0) ) \
-		 && ((__x & (__x - 1)) == 0); \
+		(    (__x > ((typeof(__x)) 0)) \
+		 && ((__x & (__x - (((typeof(__x)) 1)))) == ((typeof(__x)) 0))); \
 	})
 
 /*****************************************************************************/
