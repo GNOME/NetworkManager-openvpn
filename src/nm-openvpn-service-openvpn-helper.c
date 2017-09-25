@@ -219,145 +219,125 @@ is_domain_valid (const char *str)
 	return (str && (strlen(str) >= 1) && (strlen(str) <= 255));
 }
 
-#define BUFLEN 256
-
 static GVariant *
 get_ip4_routes (void)
 {
 	GVariantBuilder builder;
-	GVariant *value;
 	char *tmp;
-	int i, size = 0;
+	gboolean has_any = FALSE;
+	guint i;
 
 	g_variant_builder_init (&builder, G_VARIANT_TYPE ("aau"));
 
-	for (i = 1; i < 256; i++) {
+	for (i = 1;; i++) {
 		GVariantBuilder array;
-		char buf[BUFLEN];
-		struct in_addr network;
-		struct in_addr netmask;
-		struct in_addr gateway = { 0, };
-		guint32 prefix, metric = 0;
+		char key_name[255];
+		in_addr_t network;
+		in_addr_t netmask;
+		in_addr_t gateway;
+		guint32 metric;
 
-		snprintf (buf, BUFLEN, "route_network_%d", i);
-		tmp = getenv (buf);
-		if (!tmp || strlen (tmp) < 1)
+		nm_sprintf_buf (key_name, "route_network_%u", i);
+		tmp = getenv (key_name);
+		if (!tmp || !tmp[0])
 			break;
 
-		if (inet_pton (AF_INET, tmp, &network) <= 0) {
-			_LOGW ("Ignoring invalid static route address '%s'", tmp ? tmp : "NULL");
+		if (inet_pton (AF_INET, tmp, &network) != 1) {
+			_LOGW ("Ignoring invalid static route address %s = \"%s\"", key_name, tmp);
 			continue;
 		}
 
-		snprintf (buf, BUFLEN, "route_netmask_%d", i);
-		tmp = getenv (buf);
-		if (!tmp || inet_pton (AF_INET, tmp, &netmask) <= 0) {
-			_LOGW ("Ignoring invalid static route netmask '%s'", tmp ? tmp : "NULL");
+		nm_sprintf_buf (key_name, "route_netmask_%u", i);
+		tmp = getenv (key_name);
+		if (   !tmp
+		    || inet_pton (AF_INET, tmp, &netmask) != 1) {
+			_LOGW ("Ignoring invalid static route netmask %s = %s%s%s", key_name, NM_PRINT_FMT_QUOTE_STRING (tmp));
 			continue;
 		}
 
-		snprintf (buf, BUFLEN, "route_gateway_%d", i);
-		tmp = getenv (buf);
+		nm_sprintf_buf (key_name, "route_gateway_%u", i);
+		tmp = getenv (key_name);
 		/* gateway can be missing */
-		if (tmp && (inet_pton (AF_INET, tmp, &gateway) <= 0)) {
-			_LOGW ("Ignoring invalid static route gateway '%s'", tmp ? tmp : "NULL");
+		if (   tmp
+		    && inet_pton (AF_INET, tmp, &gateway) != 1) {
+			_LOGW ("Ignoring invalid static route gateway %s = \"%s\"", key_name, tmp);
 			continue;
-		}
+		} else
+			gateway = 0;
 
-		snprintf (buf, BUFLEN, "route_metric_%d", i);
-		tmp = getenv (buf);
+		nm_sprintf_buf (key_name, "route_metric_%u", i);
+		tmp = getenv (key_name);
 		/* metric can be missing */
-		if (tmp && strlen (tmp)) {
-			long int tmp_metric;
-
-			errno = 0;
-			tmp_metric = strtol (tmp, NULL, 10);
-			if (errno || tmp_metric < 0 || tmp_metric > G_MAXUINT32) {
-				_LOGW ("Ignoring invalid static route metric '%s'", tmp);
+		if (tmp && tmp[0]) {
+			metric = _nm_utils_ascii_str_to_int64 (tmp, 10, 0, G_MAXUINT32, 0);
+			if (errno) {
+				_LOGW ("Ignoring invalid static route metric %s = \"%s\"", key_name, tmp);
 				continue;
 			}
-			metric = (guint32) tmp_metric;
-		}
+		} else
+			metric = 0;
 
 		g_variant_builder_init (&array, G_VARIANT_TYPE ("au"));
-		g_variant_builder_add_value (&array, g_variant_new_uint32 (network.s_addr));
-		prefix = nm_utils_ip4_netmask_to_prefix (netmask.s_addr);
-		g_variant_builder_add_value (&array, g_variant_new_uint32 (prefix));
-		g_variant_builder_add_value (&array, g_variant_new_uint32 (gateway.s_addr));
+		g_variant_builder_add_value (&array, g_variant_new_uint32 (network));
+		g_variant_builder_add_value (&array, g_variant_new_uint32 (nm_utils_ip4_netmask_to_prefix (netmask)));
+		g_variant_builder_add_value (&array, g_variant_new_uint32 (gateway));
 		g_variant_builder_add_value (&array, g_variant_new_uint32 (metric));
 		g_variant_builder_add_value (&builder, g_variant_builder_end (&array));
-		size++;
+		has_any = TRUE;
 	}
 
-	value = g_variant_builder_end (&builder);
-	if (size > 0)
-		return value;
+	if (!has_any) {
+		g_variant_builder_clear (&builder);
+		return NULL;
+	}
 
-	g_variant_unref (value);
-	return NULL;
+	return g_variant_builder_end (&builder);
 }
 
 static GVariant *
 get_ip6_routes (void)
 {
-	GVariant *value = NULL;
-	GPtrArray *routes;
-	char *tmp;
-	int i;
+	gs_unref_ptrarray GPtrArray *routes = NULL;
+	guint i;
 
-	routes = g_ptr_array_new_full (256, (GDestroyNotify) nm_ip_route_unref);
+	routes = g_ptr_array_new_full (10, (GDestroyNotify) nm_ip_route_unref);
 
-	for (i = 1; i < 256; i++) {
+	for (i = 1;; i++) {
 		NMIPRoute *route;
-		char buf[BUFLEN];
-		guint32 prefix;
-		gchar **dest_prefix;
 		GError *error = NULL;
+		gs_free char *dst = NULL;
+		char key_name[255];
+		int prefix;
+		const char *tmp;
 
-		snprintf (buf, BUFLEN, "route_ipv6_network_%d", i);
-		tmp = getenv (buf);
-		if (!tmp || strlen (tmp) < 1)
+		nm_sprintf_buf (key_name, "route_ipv6_network_%u", i);
+		tmp = getenv (key_name);
+		if (!tmp || !tmp[0])
 			break;
 
-		/* Split network string in "dest/prefix" format */
-		dest_prefix = g_strsplit (tmp, "/", 2);
-
-		tmp = dest_prefix[1];
-		if (tmp) {
-			long int tmp_prefix;
-
-			errno = 0;
-			tmp_prefix = strtol (tmp, NULL, 10);
-			if (errno || tmp_prefix <= 0 || tmp_prefix > 128) {
-				_LOGW ("Ignoring invalid static route prefix '%s'", tmp ? tmp : "NULL");
-				g_strfreev (dest_prefix);
-				continue;
-			}
-			prefix = (guint32) tmp_prefix;
-		} else {
-			_LOGW ("Ignoring static route %d with no prefix length", i);
-			g_strfreev (dest_prefix);
+		if (   !nm_utils_parse_inaddr_prefix (tmp, AF_INET6, &dst, &prefix)
+		    || prefix == -1) {
+			_LOGW ("Ignoring invalid static route %s = \"%s\"", key_name, tmp);
 			continue;
 		}
 
-		snprintf (buf, BUFLEN, "route_ipv6_gateway_%d", i);
-		tmp = getenv (buf);
+		nm_sprintf_buf (key_name, "route_ipv6_gateway_%u", i);
+		tmp = getenv (key_name);
 
-		route = nm_ip_route_new (AF_INET6, dest_prefix[0], prefix, tmp, -1, &error);
-		g_strfreev (dest_prefix);
+		route = nm_ip_route_new (AF_INET6, dst, prefix, tmp, -1, &error);
 		if (!route) {
-			_LOGW ("Ignoring a route: %s", error->message);
+			_LOGW ("Ignoring route#%u: %s", i, error->message);
 			g_error_free (error);
 			continue;
 		}
+
 		g_ptr_array_add (routes, route);
 	}
 
-	if (routes->len)
-		value = nm_utils_ip6_routes_to_variant (routes);
-	g_ptr_array_unref (routes);
+	if (!routes->len)
+		return NULL;
 
-	return value;
+	return nm_utils_ip6_routes_to_variant (routes);
 }
 
 static GVariant *
@@ -753,16 +733,16 @@ main (int argc, char *argv[])
 
 	/* Tunnel MTU */
 	tmp = getenv ("tun_mtu");
-	if (tmp && strlen (tmp)) {
-		long int mtu;
+	if (tmp && tmp[0]) {
+		guint32 mtu;
 
-		errno = 0;
-		mtu = strtol (tmp, NULL, 10);
-		if (errno || mtu < 0 || mtu > 20000) {
+		mtu = _nm_utils_ascii_str_to_int64 (tmp, 10, 0, G_MAXUINT32, 0);
+		if (errno)
 			_LOGW ("Ignoring invalid tunnel MTU '%s'", tmp);
-		} else {
-			val = g_variant_new_uint32 ((guint32) mtu);
-			g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CONFIG_MTU, val);
+		else {
+			g_variant_builder_add (&builder, "{sv}",
+			                       NM_VPN_PLUGIN_CONFIG_MTU,
+			                       g_variant_new_uint32 (mtu));
 		}
 	}
 
