@@ -24,10 +24,15 @@
 #include "nm-shared-utils.h"
 
 #include <errno.h>
+#include <arpa/inet.h>
 
 /*****************************************************************************/
 
 const void *const _NM_PTRARRAY_EMPTY[1] = { NULL };
+
+/*****************************************************************************/
+
+const NMIPAddr nm_ip_addr_zero = { 0 };
 
 /*****************************************************************************/
 
@@ -110,6 +115,163 @@ nm_utils_strbuf_append (char **buf, gsize *len, const char *format, ...)
 
 /*****************************************************************************/
 
+/**
+ * _nm_utils_ip4_prefix_to_netmask:
+ * @prefix: a CIDR prefix
+ *
+ * Returns: the netmask represented by the prefix, in network byte order
+ **/
+guint32
+_nm_utils_ip4_prefix_to_netmask (guint32 prefix)
+{
+	return prefix < 32 ? ~htonl(0xFFFFFFFF >> prefix) : 0xFFFFFFFF;
+}
+
+/**
+ * _nm_utils_ip4_get_default_prefix:
+ * @ip: an IPv4 address (in network byte order)
+ *
+ * When the Internet was originally set up, various ranges of IP addresses were
+ * segmented into three network classes: A, B, and C.  This function will return
+ * a prefix that is associated with the IP address specified defining where it
+ * falls in the predefined classes.
+ *
+ * Returns: the default class prefix for the given IP
+ **/
+/* The function is originally from ipcalc.c of Red Hat's initscripts. */
+guint32
+_nm_utils_ip4_get_default_prefix (guint32 ip)
+{
+	if (((ntohl (ip) & 0xFF000000) >> 24) <= 127)
+		return 8;  /* Class A - 255.0.0.0 */
+	else if (((ntohl (ip) & 0xFF000000) >> 24) <= 191)
+		return 16;  /* Class B - 255.255.0.0 */
+
+	return 24;  /* Class C - 255.255.255.0 */
+}
+
+gboolean
+nm_utils_ip_is_site_local (int addr_family,
+                           const void *address)
+{
+	in_addr_t addr4;
+
+	switch (addr_family) {
+	case AF_INET:
+		/* RFC1918 private addresses
+		 * 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 */
+		addr4 = ntohl (*((const in_addr_t *) address));
+		return    (addr4 & 0xff000000) == 0x0a000000
+		       || (addr4 & 0xfff00000) == 0xac100000
+		       || (addr4 & 0xffff0000) == 0xc0a80000;
+	case AF_INET6:
+		return IN6_IS_ADDR_SITELOCAL (address);
+	default:
+		g_return_val_if_reached (FALSE);
+	}
+}
+
+/*****************************************************************************/
+
+gboolean
+nm_utils_parse_inaddr_bin  (const char *text,
+                            int family,
+                            gpointer out_addr)
+{
+	NMIPAddr addrbin;
+
+	g_return_val_if_fail (text, FALSE);
+
+	if (family == AF_UNSPEC)
+		family = strchr (text, ':') ? AF_INET6 : AF_INET;
+	else
+		g_return_val_if_fail (NM_IN_SET (family, AF_INET, AF_INET6), FALSE);
+
+	if (inet_pton (family, text, out_addr ?: &addrbin) != 1)
+		return FALSE;
+	return TRUE;
+}
+
+gboolean
+nm_utils_parse_inaddr (const char *text,
+                       int family,
+                       char **out_addr)
+{
+	NMIPAddr addrbin;
+	char addrstr_buf[MAX (INET_ADDRSTRLEN, INET6_ADDRSTRLEN)];
+
+	if (!nm_utils_parse_inaddr_bin (text, family, &addrbin))
+		return FALSE;
+	NM_SET_OUT (out_addr, g_strdup (inet_ntop (family, &addrbin, addrstr_buf, sizeof (addrstr_buf))));
+	return TRUE;
+}
+
+gboolean
+nm_utils_parse_inaddr_prefix_bin (const char *text,
+                                  int family,
+                                  gpointer out_addr,
+                                  int *out_prefix)
+{
+	gs_free char *addrstr_free = NULL;
+	int prefix = -1;
+	const char *slash;
+	const char *addrstr;
+	NMIPAddr addrbin;
+	int addr_len;
+
+	g_return_val_if_fail (text, FALSE);
+
+	if (family == AF_UNSPEC)
+		family = strchr (text, ':') ? AF_INET6 : AF_INET;
+
+	if (family == AF_INET)
+		addr_len = sizeof (in_addr_t);
+	else if (family == AF_INET6)
+		addr_len = sizeof (struct in6_addr);
+	else
+		g_return_val_if_reached (FALSE);
+
+	slash = strchr (text, '/');
+	if (slash)
+		addrstr = addrstr_free = g_strndup (text, slash - text);
+	else
+		addrstr = text;
+
+	if (inet_pton (family, addrstr, &addrbin) != 1)
+		return FALSE;
+
+	if (slash) {
+		prefix = _nm_utils_ascii_str_to_int64 (slash + 1, 10,
+		                                       0,
+		                                       family == AF_INET ? 32 : 128,
+		                                       -1);
+		if (prefix == -1)
+			return FALSE;
+	}
+
+	if (out_addr)
+		memcpy (out_addr, &addrbin, addr_len);
+	NM_SET_OUT (out_prefix, prefix);
+	return TRUE;
+}
+
+gboolean
+nm_utils_parse_inaddr_prefix (const char *text,
+                              int family,
+                              char **out_addr,
+                              int *out_prefix)
+{
+	NMIPAddr addrbin;
+	char addrstr_buf[MAX (INET_ADDRSTRLEN, INET6_ADDRSTRLEN)];
+
+	if (!nm_utils_parse_inaddr_prefix_bin (text, family, &addrbin, out_prefix))
+		return FALSE;
+	NM_SET_OUT (out_addr, g_strdup (inet_ntop (family, &addrbin, addrstr_buf, sizeof (addrstr_buf))));
+	return TRUE;
+}
+
+/*****************************************************************************/
+
 /* _nm_utils_ascii_str_to_int64:
  *
  * A wrapper for g_ascii_strtoll, that checks whether the whole string
@@ -161,6 +323,118 @@ _nm_utils_ascii_str_to_int64 (const char *str, guint base, gint64 min, gint64 ma
 }
 
 /*****************************************************************************/
+
+/**
+ * nm_utils_strsplit_set:
+ * @str: the string to split.
+ * @delimiters: the set of delimiters. If %NULL, defaults to " \t\n",
+ *   like bash's $IFS.
+ *
+ * This is a replacement for g_strsplit_set() which avoids copying
+ * each word once (the entire strv array), but instead copies it once
+ * and all words point into that internal copy.
+ *
+ * Another difference from g_strsplit_set() is that this never returns
+ * empty words. Multiple delimiters are combined and treated as one.
+ *
+ * Returns: %NULL if @str is %NULL or contains only delimiters.
+ *   Otherwise, a %NULL terminated strv array containing non-empty
+ *   words, split at the delimiter characters (delimiter characters
+ *   are removed).
+ *   The strings to which the result strv array points to are allocated
+ *   after the returned result itself. Don't free the strings themself,
+ *   but free everything with g_free().
+ */
+const char **
+nm_utils_strsplit_set (const char *str, const char *delimiters)
+{
+	const char **ptr, **ptr0;
+	gsize alloc_size, plen, i;
+	gsize str_len;
+	char *s0;
+	char *s;
+	guint8 delimiters_table[256];
+
+	if (!str)
+		return NULL;
+
+	/* initialize lookup table for delimiter */
+	if (!delimiters)
+		delimiters = " \t\n";
+	memset (delimiters_table, 0, sizeof (delimiters_table));
+	for (i = 0; delimiters[i]; i++)
+		delimiters_table[(guint8) delimiters[i]] = 1;
+
+#define _is_delimiter(ch, delimiters_table) \
+	((delimiters_table)[(guint8) (ch)] != 0)
+
+	/* skip initial delimiters, and return of the remaining string is
+	 * empty. */
+	while (_is_delimiter (str[0], delimiters_table))
+		str++;
+	if (!str[0])
+		return NULL;
+
+	str_len = strlen (str) + 1;
+	alloc_size = 8;
+
+	/* we allocate the buffer larger, so to copy @str at the
+	 * end of it as @s0. */
+	ptr0 = g_malloc ((sizeof (const char *) * (alloc_size + 1)) + str_len);
+	s0 = (char *) &ptr0[alloc_size + 1];
+	memcpy (s0, str, str_len);
+
+	plen = 0;
+	s = s0;
+	ptr = ptr0;
+
+	while (TRUE) {
+		if (plen >= alloc_size) {
+			const char **ptr_old = ptr;
+
+			/* reallocate the buffer. Note that for now the string
+			 * continues to be in ptr0/s0. We fix that at the end. */
+			alloc_size += 2;
+			ptr = g_malloc ((sizeof (const char *) * (alloc_size + 1)) + str_len);
+			memcpy (ptr, ptr_old, sizeof (const char *) * plen);
+			if (ptr_old != ptr0)
+				g_free (ptr_old);
+		}
+
+		ptr[plen++] = s;
+
+		nm_assert (s[0] && !_is_delimiter (s[0], delimiters_table));
+
+		while (TRUE) {
+			s++;
+			if (_is_delimiter (s[0], delimiters_table))
+				break;
+			if (s[0] == '\0')
+				goto done;
+		}
+
+		s[0] = '\0';
+		s++;
+		while (_is_delimiter (s[0], delimiters_table))
+			s++;
+		if (s[0] == '\0')
+			break;
+	}
+done:
+	ptr[plen] = NULL;
+
+	if (ptr != ptr0) {
+		/* we reallocated the buffer. We must copy over the
+		 * string @s0 and adjust the pointers. */
+		s = (char *) &ptr[alloc_size + 1];
+		memcpy (s, s0, str_len);
+		for (i = 0; i < plen; i++)
+			ptr[i] = &s[ptr[i] - s0];
+		g_free (ptr0);
+	}
+
+	return ptr;
+}
 
 /**
  * nm_utils_strv_find_first:
@@ -394,6 +668,16 @@ nm_g_object_set_property (GObject *object,
 
 	g_object_set_property (object, property_name, &tmp_value);
 	return TRUE;
+}
+
+GParamSpec *
+nm_g_object_class_find_property_from_gtype (GType gtype,
+                                            const char *property_name)
+{
+	nm_auto_unref_gtypeclass GObjectClass *gclass = NULL;
+
+	gclass = g_type_class_ref (gtype);
+	return g_object_class_find_property (gclass, property_name);
 }
 
 /*****************************************************************************/
