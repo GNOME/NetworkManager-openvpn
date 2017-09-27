@@ -449,7 +449,7 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_key_chooser"));
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-		if (filename && strlen (filename)) {
+		if (!filename || !filename[0]) {
 			g_free (filename);
 			g_set_error (error,
 			             NMV_EDITOR_PLUGIN_ERROR,
