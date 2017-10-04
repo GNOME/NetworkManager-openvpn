@@ -234,7 +234,7 @@ get_ip4_routes (void)
 		char key_name[255];
 		in_addr_t network;
 		in_addr_t netmask;
-		in_addr_t gateway;
+		in_addr_t gateway = 0;
 		guint32 metric;
 
 		nm_sprintf_buf (key_name, "route_network_%u", i);
@@ -262,8 +262,7 @@ get_ip4_routes (void)
 		    && inet_pton (AF_INET, tmp, &gateway) != 1) {
 			_LOGW ("Ignoring invalid static route gateway %s = \"%s\"", key_name, tmp);
 			continue;
-		} else
-			gateway = 0;
+		}
 
 		nm_sprintf_buf (key_name, "route_metric_%u", i);
 		tmp = getenv (key_name);
