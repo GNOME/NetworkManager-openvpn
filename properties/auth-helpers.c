@@ -415,7 +415,7 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "pw_tls_username_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (!str || !strlen (str)) {
+		if (!str || !*str) {
 			g_set_error (error,
 			             NMV_EDITOR_PLUGIN_ERROR,
 			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
@@ -433,7 +433,7 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 		}
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "pw_username_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (!str || !strlen (str)) {
+		if (!str || !*str) {
 			g_set_error (error,
 			             NMV_EDITOR_PLUGIN_ERROR,
 			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
@@ -455,7 +455,7 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_local_address_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (!str || !strlen (str)) {
+		if (!str || !*str) {
 			g_set_error (error,
 			             NMV_EDITOR_PLUGIN_ERROR,
 			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
@@ -465,7 +465,7 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_remote_address_entry"));
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (!str || !strlen (str)) {
+		if (!str || !*str) {
 			g_set_error (error,
 			             NMV_EDITOR_PLUGIN_ERROR,
 			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
