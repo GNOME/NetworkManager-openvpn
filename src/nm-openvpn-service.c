@@ -698,15 +698,15 @@ static gboolean
 handle_auth (NMOpenvpnPluginIOData *io_data,
              const char *requested_auth,
              const char **out_message,
-             char ***out_hints)
+             const char ***out_hints)
 {
 	gboolean handled = FALSE;
 	guint i = 0;
-	char **hints = NULL;
+	gs_free const char **hints = NULL;
 
-	g_return_val_if_fail (requested_auth != NULL, FALSE);
-	g_return_val_if_fail (out_message != NULL, FALSE);
-	g_return_val_if_fail (out_hints != NULL, FALSE);
+	g_return_val_if_fail (requested_auth, FALSE);
+	g_return_val_if_fail (out_message && !*out_message, FALSE);
+	g_return_val_if_fail (out_hints && !*out_hints, FALSE);
 
 	if (strcmp (requested_auth, "Auth") == 0) {
 		const char *username = io_data->username;
@@ -733,7 +733,7 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			                 username,
 			                 io_data->password);
 		} else {
-			hints = g_new0 (char *, 3);
+			hints = g_new0 (const char *, 3);
 			if (!username) {
 				hints[i++] = NM_OPENVPN_KEY_USERNAME;
 				*out_message = _("A username is required.");
@@ -763,7 +763,7 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			g_io_channel_flush (io_data->socket_channel, NULL);
 			g_free (buf);
 		} else {
-			hints = g_new0 (char *, 2);
+			hints = g_new0 (const char *, 2);
 			hints[i++] = NM_OPENVPN_KEY_CERTPASS;
 			*out_message = _("A private key password is required.");
 		}
@@ -775,7 +775,7 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			                 io_data->proxy_username,
 			                 io_data->proxy_password);
 		} else {
-			hints = g_new0 (char *, 3);
+			hints = g_new0 (const char *, 3);
 			if (!io_data->proxy_username) {
 				hints[i++] = NM_OPENVPN_KEY_HTTP_PROXY_USERNAME;
 				*out_message = _("An HTTP Proxy username is required.");
@@ -790,8 +790,20 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 		handled = TRUE;
 	}
 
-	*out_hints = hints;
+	*out_hints = g_steal_pointer (&hints);
 	return handled;
+}
+
+static void
+_request_secrets (NMOpenvpnPlugin *plugin,
+                  const char *message,
+                  const char *const* hints)
+{
+	gs_free char *joined = NULL;
+
+	_LOGD ("Requesting new secrets: '%s', %s%s%s", message,
+	        NM_PRINT_FMT_QUOTED (hints, "(", (joined = g_strjoinv (",", (char **) hints)), ")", "no hints"));
+	nm_vpn_service_plugin_secrets_required ((NMVpnServicePlugin *) plugin, message, (const char **) hints);
 }
 
 static gboolean
@@ -804,7 +816,6 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 	gboolean again = TRUE;
 	char *str = NULL, *auth = NULL;
 	const char *message = NULL;
-	char **hints = NULL;
 
 	g_assert (out_failure);
 
@@ -823,6 +834,8 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 
 	auth = get_detail (str, ">PASSWORD:Need '");
 	if (auth) {
+		gs_free const char **hints = NULL;
+
 		if (priv->io_data->pending_auth)
 			g_free (priv->io_data->pending_auth);
 		priv->io_data->pending_auth = auth;
@@ -830,22 +843,15 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 		if (handle_auth (priv->io_data, auth, &message, &hints)) {
 			/* Request new secrets if we need any */
 			if (message) {
-				if (priv->interactive) {
-					gs_free char *joined = NULL;
-
-					_LOGD ("Requesting new secrets: '%s', %s%s%s", message,
-					        NM_PRINT_FMT_QUOTED (hints, "(", (joined = g_strjoinv (",", (char **) hints)), ")", "no hints"));
-
-					nm_vpn_service_plugin_secrets_required ((NMVpnServicePlugin *) plugin, message, (const char **) hints);
-				} else {
+				if (priv->interactive)
+					_request_secrets (plugin, message, hints);
+				else {
 					/* Interactive not allowed, can't ask for more secrets */
 					_LOGW ("More secrets required but cannot ask interactively");
 					*out_failure = NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED;
 					again = FALSE;
 				}
 			}
-			if (hints)
-				g_free (hints);  /* elements are 'const' */
 		} else {
 			_LOGW ("Unhandled management socket request '%s'", auth);
 			*out_failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
@@ -2076,14 +2082,15 @@ real_need_secrets (NMVpnServicePlugin *plugin,
 }
 
 static gboolean
-real_new_secrets (NMVpnServicePlugin *plugin,
+real_new_secrets (NMVpnServicePlugin *base_plugin,
                   NMConnection *connection,
                   GError **error)
 {
+	NMOpenvpnPlugin *plugin = NM_OPENVPN_PLUGIN (base_plugin);
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 	NMSettingVpn *s_vpn;
 	const char *message = NULL;
-	char **hints = NULL;
+	gs_free const char **hints = NULL;
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -2108,12 +2115,8 @@ real_new_secrets (NMVpnServicePlugin *plugin,
 	}
 
 	/* Request new secrets if we need any */
-	if (message) {
-		_LOGD ("Requesting new secrets: '%s'", message);
-		nm_vpn_service_plugin_secrets_required (plugin, message, (const char **) hints);
-	}
-	if (hints)
-		g_free (hints);  /* elements are 'const' */
+	if (message)
+		_request_secrets (plugin, message, hints);
 	return TRUE;
 }
 
