@@ -110,9 +110,7 @@ editor_sources = \
 	properties/resources.c \
 	properties/resources.h \
 	properties/nm-openvpn-editor.c \
-	properties/nm-openvpn-editor.h \
-	properties/auth-helpers.c \
-	properties/auth-helpers.h
+	properties/nm-openvpn-editor.h
 
 properties_cppflags = \
 	-DICONDIR=\""$(datadir)/pixmaps"\" \
