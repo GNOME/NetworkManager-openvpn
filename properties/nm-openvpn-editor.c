@@ -106,24 +106,22 @@ widget_unset_error (GtkWidget *widget)
 	gtk_style_context_remove_class (gtk_widget_get_style_context (widget), "error");
 }
 
-typedef struct {
-	GtkWidget *widget1;
-	GtkWidget *widget2;
-} TlsChooserSignalData;
+/*****************************************************************************/
 
 static void
 tls_cert_changed_cb (NMACertChooser *this, gpointer user_data)
 {
 	NMACertChooser *other = user_data;
 	NMSetting8021xCKScheme scheme;
-	char *this_cert, *other_cert;
-	char *this_key, *other_key;
+	gs_free char *this_cert = NULL;
+	gs_free char *other_cert = NULL;
+	gs_free char *this_key = NULL;
+	gs_free char *other_key = NULL;
 
 	other_key = nma_cert_chooser_get_key (other, &scheme);
 	this_key = nma_cert_chooser_get_key (this, &scheme);
 	other_cert = nma_cert_chooser_get_cert (other, &scheme);
 	this_cert = nma_cert_chooser_get_cert (this, &scheme);
-
 	if (   scheme == NM_SETTING_802_1X_CK_SCHEME_PATH
 	    && is_pkcs12 (this_cert)) {
 		if (!this_key)
@@ -134,11 +132,6 @@ tls_cert_changed_cb (NMACertChooser *this, gpointer user_data)
 				nma_cert_chooser_set_key (other, this_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
 		}
 	}
-
-	g_free (this_cert);
-	g_free (other_cert);
-	g_free (this_key);
-	g_free (other_key);
 }
 
 static void
@@ -151,22 +144,21 @@ tls_setup (GtkBuilder *builder,
 {
 	NMACertChooser *cert;
 	const char *value;
-	char *tmp;
+	char namebuf[150];
 
-	tmp = g_strdup_printf ("%s_user_cert", prefix);
-	cert = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, tmp));
-	g_free (tmp);
+	nm_sprintf_buf (namebuf, "%s_user_cert", prefix);
+	cert = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, namebuf));
 
 	nma_cert_chooser_add_to_size_group (cert, GTK_SIZE_GROUP (gtk_builder_get_object (builder, "labels")));
 	g_signal_connect (G_OBJECT (cert), "changed", G_CALLBACK (changed_cb), user_data);
 
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
-		if (value && strlen (value))
+		if (value && *value)
 			nma_cert_chooser_set_cert (cert, value, NM_SETTING_802_1X_CK_SCHEME_PATH);
 
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-		if (value && strlen (value))
+		if (value && *value)
 			nma_cert_chooser_set_key (cert, value, NM_SETTING_802_1X_CK_SCHEME_PATH);
 		value = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS);
 		if (value)
@@ -190,23 +182,21 @@ pw_setup (GtkBuilder *builder,
 {
 	GtkWidget *widget;
 	const char *value;
-	char *tmp;
+	char namebuf[150];
 
-	tmp = g_strdup_printf ("%s_username_entry", prefix);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
-	g_free (tmp);
+	nm_sprintf_buf (namebuf, "%s_username_entry", prefix);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, namebuf));
 
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME);
-		if (value && strlen (value))
+		if (value && *value)
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 	}
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
 
 	/* Fill in the user password */
-	tmp = g_strdup_printf ("%s_password_entry", prefix);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
-	g_free (tmp);
+	nm_sprintf_buf (namebuf, "%s_password_entry", prefix);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, namebuf));
 	g_signal_connect (widget, "changed", G_CALLBACK (changed_cb), user_data);
 
 	if (s_vpn) {
@@ -229,16 +219,15 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 {
 	NMACertChooser *ca;
 	const char *value;
-	char *tmp;
+	char namebuf[150];
 	gboolean tls = FALSE, pw = FALSE;
 
 	g_return_if_fail (builder != NULL);
 	g_return_if_fail (changed_cb != NULL);
 	g_return_if_fail (prefix != NULL);
 
-	tmp = g_strdup_printf ("%s_ca_cert", prefix);
-	ca = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, tmp));
-	g_free (tmp);
+	nm_sprintf_buf (namebuf, "%s_ca_cert", prefix);
+	ca = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, namebuf));
 	nma_cert_chooser_add_to_size_group (ca, GTK_SIZE_GROUP (gtk_builder_get_object (builder, "labels")));
 
 	/* Three major connection types here: TLS-only, PW-only, and TLS + PW */
@@ -250,7 +239,7 @@ tls_pw_init_auth_widget (GtkBuilder *builder,
 	g_signal_connect (ca, "changed", G_CALLBACK (changed_cb), user_data);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
-		if (value && strlen (value))
+		if (value && *value)
 			nma_cert_chooser_set_cert (ca, value, NM_SETTING_802_1X_CK_SCHEME_PATH);
 	}
 
@@ -275,7 +264,7 @@ sk_init_auth_widget (GtkBuilder *builder,
 	GtkListStore *store;
 	GtkTreeIter iter;
 	gint active = -1;
-	gint direction = -1;
+	gint direction;
 	GtkFileFilter *filter;
 
 	g_return_if_fail (builder != NULL);
@@ -291,7 +280,7 @@ sk_init_auth_widget (GtkBuilder *builder,
 
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
-		if (value && strlen (value))
+		if (value && *value)
 			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
 	}
 
@@ -299,15 +288,9 @@ sk_init_auth_widget (GtkBuilder *builder,
 
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION);
-		if (value && strlen (value)) {
-			long int tmp;
-
-			errno = 0;
-			tmp = strtol (value, NULL, 10);
-			if (errno == 0 && (tmp == 0 || tmp == 1))
-				direction = (guint32) tmp;
-		}
-	}
+		direction = _nm_utils_ascii_str_to_int64 (value, 10, 0, 1, -1);
+	} else
+		direction = -1;
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter, SK_DIR_COL_NAME, _("None"), SK_DIR_COL_NUM, -1, -1);
@@ -332,7 +315,7 @@ sk_init_auth_widget (GtkBuilder *builder,
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
-		if (value && strlen (value))
+		if (value && *value)
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 	}
 
@@ -340,7 +323,7 @@ sk_init_auth_widget (GtkBuilder *builder,
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (changed_cb), user_data);
 	if (s_vpn) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);
-		if (value && strlen (value))
+		if (value && *value)
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 	}
 }
@@ -357,17 +340,17 @@ validate_cert_chooser (GtkBuilder *builder, const char *name, GError **error)
 static gboolean
 validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 {
-	char *tmp;
 	gboolean valid, encrypted = FALSE;
 	NMACertChooser *user_cert;
 	NMSettingSecretFlags pw_flags;
 	gboolean secrets_required = TRUE;
 	NMSetting8021xCKScheme scheme;
 	GError *local = NULL;
+	char *tmp;
+	char namebuf[150];
 
-	tmp = g_strdup_printf ("%s_ca_cert", prefix);
-	valid = validate_cert_chooser (builder, tmp, &local);
-	g_free (tmp);
+	nm_sprintf_buf (namebuf, "%s_ca_cert", prefix);
+	valid = validate_cert_chooser (builder, namebuf, &local);
 	if (!valid) {
 		g_set_error (error,
 		             NMV_EDITOR_PLUGIN_ERROR,
@@ -377,10 +360,9 @@ validate_tls (GtkBuilder *builder, const char *prefix, GError **error)
 		return FALSE;
 	}
 
-	tmp = g_strdup_printf ("%s_user_cert", prefix);
-	user_cert = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, tmp));
-	valid = validate_cert_chooser (builder, tmp, &local);
-	g_free (tmp);
+	nm_sprintf_buf (namebuf, "%s_user_cert", prefix);
+	user_cert = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, namebuf));
+	valid = validate_cert_chooser (builder, namebuf, &local);
 	if (!valid) {
 		g_set_error (error,
 		             NMV_EDITOR_PLUGIN_ERROR,
@@ -488,7 +470,7 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 			return FALSE;
 		}
 	} else
-		g_assert_not_reached ();
+		g_return_val_if_reached (FALSE);
 
 	return TRUE;
 }
@@ -506,6 +488,7 @@ update_from_cert_chooser (GtkBuilder *builder,
 	NMACertChooser *cert_chooser;
 	NMSettingSecretFlags pw_flags;
 	char *tmp;
+	char namebuf[150];
 	const char *password;
 
 	g_return_if_fail (builder != NULL);
@@ -514,12 +497,11 @@ update_from_cert_chooser (GtkBuilder *builder,
 	g_return_if_fail (widget_name != NULL);
 	g_return_if_fail (s_vpn != NULL);
 
-	tmp = g_strdup_printf ("%s_%s", prefix, widget_name);
-	cert_chooser = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, tmp));
-	g_free (tmp);
+	nm_sprintf_buf (namebuf, "%s_%s", prefix, widget_name);
+	cert_chooser = NMA_CERT_CHOOSER (gtk_builder_get_object (builder, namebuf));
 
 	tmp = nma_cert_chooser_get_cert (cert_chooser, &scheme);
-	if (tmp && strlen (tmp))
+	if (tmp && *tmp)
 		nm_setting_vpn_add_data_item (s_vpn, cert_prop, tmp);
 	g_free (tmp);
 
@@ -527,12 +509,12 @@ update_from_cert_chooser (GtkBuilder *builder,
 		g_return_if_fail (key_pass_prop != NULL);
 
 		tmp = nma_cert_chooser_get_key (cert_chooser, &scheme);
-		if (tmp && strlen (tmp))
+		if (tmp && *tmp)
 			nm_setting_vpn_add_data_item (s_vpn, key_prop, tmp);
 		g_free (tmp);
 
 		password = nma_cert_chooser_get_key_password (cert_chooser);
-		if (password && strlen (password))
+		if (password && *password)
 			nm_setting_vpn_add_secret (s_vpn, key_pass_prop, password);
 
 		pw_flags = nma_cert_chooser_get_key_password_flags (cert_chooser);
@@ -561,32 +543,24 @@ update_pw (GtkBuilder *builder, const char *prefix, NMSettingVpn *s_vpn)
 {
 	GtkWidget *widget;
 	NMSettingSecretFlags pw_flags;
-	char *tmp;
+	char namebuf[150];
 	const char *str;
 
 	g_return_if_fail (builder != NULL);
 	g_return_if_fail (prefix != NULL);
 	g_return_if_fail (s_vpn != NULL);
 
-	tmp = g_strdup_printf ("%s_username_entry", prefix);
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, tmp));
-	g_free (tmp);
-
+	nm_sprintf_buf (namebuf, "%s_username_entry", prefix);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, namebuf));
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
-	if (str && strlen (str))
+	if (str && *str)
 		nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME, str);
 
-	/* Password */
-	tmp = g_strdup_printf ("%s_password_entry", prefix);
-	widget = (GtkWidget *) gtk_builder_get_object (builder, tmp);
-	g_assert (widget);
-	g_free (tmp);
-
+	nm_sprintf_buf (namebuf, "%s_password_entry", prefix);
+	widget = (GtkWidget *) gtk_builder_get_object (builder, namebuf);
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
-	if (str && strlen (str))
+	if (str && *str)
 		nm_setting_vpn_add_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, str);
-
-	/* Update password flags */
 	pw_flags = nma_utils_menu_to_secret_flags (widget);
 	nm_setting_set_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_PASSWORD, pw_flags, NULL);
 }
@@ -615,40 +589,38 @@ auth_widget_update_connection (GtkBuilder *builder,
 		/* Update static key */
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_key_chooser"));
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-		if (filename && strlen (filename))
+		if (filename && *filename)
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, filename);
 		g_free (filename);
 
 		/* Update direction */
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_direction_combo"));
-		g_assert (widget);
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
 			int direction = -1;
 
 			gtk_tree_model_get (model, &iter, SK_DIR_COL_NUM, &direction, -1);
 			if (direction > -1) {
-				char *tmp = g_strdup_printf ("%d", direction);
+				char tmp[30];
+
+				nm_sprintf_buf (tmp, "%d", direction);
 				nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, tmp);
-				g_free (tmp);
 			}
 		}
 
 		/* Update local address */
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_local_address_entry"));
-		g_assert (widget);
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (str && strlen (str))
+		if (str && *str)
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, str);
 
 		/* Update remote address */
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_remote_address_entry"));
-		g_assert (widget);
 		str = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (str && strlen (str))
+		if (str && *str)
 			nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, str);
 	} else
-		g_assert_not_reached ();
+		g_return_val_if_reached (FALSE);
 
 	return TRUE;
 }
@@ -945,18 +917,20 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 	GtkListStore *store;
 	GtkTreeIter iter;
 	gboolean active_initialized = FALSE;
-	const char **item;
-	static const char *items[] = {
-		NM_OPENVPN_AUTH_NONE,
-		NM_OPENVPN_AUTH_RSA_MD4,
-		NM_OPENVPN_AUTH_MD5,
-		NM_OPENVPN_AUTH_SHA1,
-		NM_OPENVPN_AUTH_SHA224,
-		NM_OPENVPN_AUTH_SHA256,
-		NM_OPENVPN_AUTH_SHA384,
-		NM_OPENVPN_AUTH_SHA512,
-		NM_OPENVPN_AUTH_RIPEMD160,
-		NULL
+	int i;
+	static const struct {
+		const char *name;
+		const char *pretty_name;
+	} items[] = {
+		{ NM_OPENVPN_AUTH_NONE,      N_("None") },
+		{ NM_OPENVPN_AUTH_RSA_MD4,   N_("RSA MD-4") },
+		{ NM_OPENVPN_AUTH_MD5,       N_("MD-5") },
+		{ NM_OPENVPN_AUTH_SHA1,      N_("SHA-1") },
+		{ NM_OPENVPN_AUTH_SHA224,    N_("SHA-224") },
+		{ NM_OPENVPN_AUTH_SHA256,    N_("SHA-256") },
+		{ NM_OPENVPN_AUTH_SHA384,    N_("SHA-384") },
+		{ NM_OPENVPN_AUTH_SHA512,    N_("SHA-512") },
+		{ NM_OPENVPN_AUTH_RIPEMD160, N_("RIPEMD-160") },
 	};
 
 	store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
@@ -968,37 +942,15 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 	                    HMACAUTH_COL_NAME, _("Default"),
 	                    HMACAUTH_COL_DEFAULT, TRUE, -1);
 
-	/* Add options */
-	for (item = items; *item; item++) {
-		const char *name = NULL;
-
-		if (!strcmp (*item, NM_OPENVPN_AUTH_NONE))
-			name = _("None");
-		else if (!strcmp (*item, NM_OPENVPN_AUTH_RSA_MD4))
-			name = _("RSA MD-4");
-		else if (!strcmp (*item, NM_OPENVPN_AUTH_MD5))
-			name = _("MD-5");
-		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA1))
-			name = _("SHA-1");
-		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA224))
-			name = _("SHA-224");
-		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA256))
-			name = _("SHA-256");
-		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA384))
-			name = _("SHA-384");
-		else if (!strcmp (*item, NM_OPENVPN_AUTH_SHA512))
-			name = _("SHA-512");
-		else if (!strcmp (*item, NM_OPENVPN_AUTH_RIPEMD160))
-			name = _("RIPEMD-160");
-		else
-			g_assert_not_reached ();
+	for (i = 0; i < G_N_ELEMENTS (items); i++) {
+		const char *name = items[i].name;
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
-		                    HMACAUTH_COL_NAME, name,
-		                    HMACAUTH_COL_VALUE, *item,
+		                    HMACAUTH_COL_NAME, _(items[i].pretty_name),
+		                    HMACAUTH_COL_VALUE, name,
 		                    HMACAUTH_COL_DEFAULT, FALSE, -1);
-		if (hmacauth && !g_ascii_strcasecmp (*item, hmacauth)) {
+		if (hmacauth && !g_ascii_strcasecmp (name, hmacauth)) {
 			gtk_combo_box_set_active_iter (box, &iter);
 			active_initialized = TRUE;
 		}
@@ -1060,7 +1012,7 @@ populate_tls_remote_mode_entry_combo (GtkEntry* entry, GtkComboBox *box,
 	                    TLS_REMOTE_MODE_COL_VALUE, TLS_REMOTE_MODE_LEGACY,
 	                    -1);
 
-	if (x509_name && strlen (x509_name)) {
+	if (x509_name && *x509_name) {
 		if (g_str_has_prefix (x509_name, "name:"))
 			gtk_combo_box_set_active (box, 2);
 		else if (g_str_has_prefix (x509_name, "name-prefix:"))
@@ -1073,7 +1025,7 @@ populate_tls_remote_mode_entry_combo (GtkEntry* entry, GtkComboBox *box,
 			subject_name++;
 		else
 			subject_name = x509_name;
-	} else if (tls_remote && strlen (tls_remote)) {
+	} else if (tls_remote && *tls_remote) {
 		gtk_combo_box_set_active (box, 4);
 
 		subject_name = tls_remote;
@@ -1333,10 +1285,8 @@ show_proxy_password_toggled_cb (GtkCheckButton *button, gpointer user_data)
 	GtkWidget *widget;
 	gboolean visible;
 
-	widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
-	g_assert (widget);
-
 	visible = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
 	gtk_entry_set_visibility (GTK_ENTRY (widget), visible);
 }
 
@@ -1498,9 +1448,10 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	const char *dev, *dev_type, *tap_dev;
 	GtkListStore *store;
 	GtkTreeIter iter;
+	int vint;
 	guint i;
 	guint32 active;
-	guint32 pw_flags = NM_SETTING_SECRET_FLAG_NONE;
+	NMSettingSecretFlags pw_flags;
 	GError *error = NULL;
 
 	g_return_val_if_fail (hash != NULL, NULL);
@@ -1547,18 +1498,14 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROXY_SERVER);
 	value2 = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROXY_PORT);
-	if (value && strlen (value) && value2 && strlen (value2)) {
-		long int tmp = 0;
-
+	if (   value && *value
+	    && value2 && *value2) {
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_server_entry"));
 		gtk_entry_set_text (GTK_ENTRY (widget), value);
 
-		errno = 0;
-		tmp = strtol (value2, NULL, 10);
-		if (errno != 0 || tmp < 0 || tmp > 65535)
-			tmp = 0;
+		vint = _nm_utils_ascii_str_to_int64 (value2, 10, 0, 65535, 0);
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_port_spinbutton"));
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) tmp);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), (gdouble) vint);
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_retry_checkbutton"));
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROXY_RETRY);
@@ -1566,26 +1513,23 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
-		if (value && strlen (value)) {
+		if (value && *value) {
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_username_entry"));
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 		}
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
-		if (value && strlen (value)) {
+		if (value && *value) {
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 		}
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags");
-		if (value && strlen (value)) {
-			errno = 0;
-			tmp = strtol (value, NULL, 10);
-			if (errno != 0 || tmp < 0 || tmp > 65535)
-				tmp = 0;
-			pw_flags = (guint32) tmp;
-		}
-	}
+		G_STATIC_ASSERT (((guint) (NMSettingSecretFlags) 0xFFFFu) == 0xFFFFu);
+		pw_flags = _nm_utils_ascii_str_to_int64 (value, 10, 0, 0xFFFF, NM_SETTING_SECRET_FLAG_NONE);
+	} else
+		pw_flags = NM_SETTING_SECRET_FLAG_NONE;
+
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
 	nma_utils_setup_password_storage (widget, pw_flags, NULL, NULL,
 	                                  TRUE, FALSE);
@@ -1708,7 +1652,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_checkbutton"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_REMOTE_CERT_TLS);
-	if (value && strlen (value))
+	if (value && *value)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (remote_tls_cert_toggled_cb), builder);
 	remote_tls_cert_toggled_cb (widget, builder);
@@ -1719,7 +1663,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_checkbutton"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_NS_CERT_TYPE);
-	if (value && strlen (value))
+	if (value && *value)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (ns_cert_type_toggled_cb), builder);
 	ns_cert_type_toggled_cb (widget, builder);
@@ -1732,8 +1676,6 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	                  NM_OPENVPN_CONTYPE_TLS,
 	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS,
 	                  NM_OPENVPN_CONTYPE_PASSWORD)) {
-		int direction = -1;
-
 		/* Initialize direction combo */
 		combo = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
 		store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
@@ -1755,15 +1697,12 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_CRYPT);
 			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value2);
 		} else if (value && value[0]) {
+			int direction;
+
 			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_AUTH);
 			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
 			value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA_DIR);
-			if (value && value[0]) {
-				direction = (int) strtol (value, NULL, 10);
-				/* If direction is not 0 or 1, use no direction */
-				if (direction != 0 && direction != 1)
-					direction = -1;
-			}
+			direction = _nm_utils_ascii_str_to_int64 (value, 10, 0, 1, -1);
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
 			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), direction + 1);
 		} else
@@ -1898,7 +1837,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	if (proxy_type != PROXY_TYPE_NONE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_server_entry"));
 		value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-		if (value && strlen (value)) {
+		if (value && *value) {
 			int proxy_port;
 
 			if (proxy_type == PROXY_TYPE_HTTP)
@@ -1924,7 +1863,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 
 				widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_username_entry"));
 				value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-				if (value && strlen (value)) {
+				if (value && *value) {
 					g_hash_table_insert (hash,
 					                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_USERNAME),
 					                     g_strdup (value));
@@ -1932,7 +1871,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 
 				widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
 				value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
-				if (value && strlen (value)) {
+				if (value && *value) {
 					g_hash_table_insert (hash,
 					                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD),
 					                     g_strdup (value));
@@ -2041,7 +1980,8 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		combo = GTK_WIDGET (gtk_builder_get_object (builder, "tls_remote_mode_combo"));
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
 
-		if (value && strlen (value) && gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter)) {
+		if (   value && *value
+		    && gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter)) {
 			gs_free char *tls_remote_mode = NULL;
 			gtk_tree_model_get (model, &iter, TLS_REMOTE_MODE_COL_VALUE, &tls_remote_mode, -1);
 
@@ -2289,15 +2229,11 @@ auth_combo_changed_cb (GtkWidget *combo, gpointer user_data)
 	GtkTreeIter iter;
 	gint new_page = 0;
 
-	auth_notebook = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_notebook"));
-	g_assert (auth_notebook);
-
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
-	g_assert (model);
 	g_assert (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter));
-
 	gtk_tree_model_get (model, &iter, COL_AUTH_PAGE, &new_page, -1);
 
+	auth_notebook = GTK_WIDGET (gtk_builder_get_object (priv->builder, "auth_notebook"));
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (auth_notebook), new_page);
 
 	stuff_changed_cb (combo, self);
@@ -2489,7 +2425,7 @@ hash_copy_advanced (gpointer key, gpointer data, gpointer user_data)
 	NMSettingVpn *s_vpn = NM_SETTING_VPN (user_data);
 	const char *value = (const char *) data;
 
-	g_return_if_fail (value && strlen (value));
+	g_return_if_fail (value && *value);
 
 	/* HTTP Proxy password is a secret, not a data item */
 	if (!strcmp (key, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
