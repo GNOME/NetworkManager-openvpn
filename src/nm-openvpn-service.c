@@ -1994,12 +1994,17 @@ real_disconnect (NMVpnServicePlugin *plugin,
 }
 
 static gboolean
-_connect_common (NMVpnServicePlugin   *plugin,
-                 NMConnection  *connection,
-                 GVariant      *details,
-                 GError       **error)
+_connect_common (NMVpnServicePlugin *plugin,
+                 NMConnection *connection,
+                 gboolean interactive,
+                 GVariant *details,
+                 GError **error)
 {
 	GError *local = NULL;
+
+	NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin)->interactive = interactive;
+
+	_LOGD ("connect (interactive=%d)", interactive);
 
 	if (!real_disconnect (plugin, &local)) {
 		_LOGW ("Could not clean up previous daemon run: %s", local->message);
@@ -2016,7 +2021,7 @@ real_connect (NMVpnServicePlugin   *plugin,
               NMConnection  *connection,
               GError       **error)
 {
-	return _connect_common (plugin, connection, NULL, error);
+	return _connect_common (plugin, connection, FALSE, NULL, error);
 }
 
 static gboolean
@@ -2025,11 +2030,7 @@ real_connect_interactive (NMVpnServicePlugin   *plugin,
                           GVariant      *details,
                           GError       **error)
 {
-	if (!_connect_common (plugin, connection, details, error))
-		return FALSE;
-
-	NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin)->interactive = TRUE;
-	return TRUE;
+	return _connect_common (plugin, connection, TRUE, details, error);
 }
 
 static gboolean
