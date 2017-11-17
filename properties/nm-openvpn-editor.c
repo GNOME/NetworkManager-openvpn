@@ -409,16 +409,6 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		if (!validate_tls (builder, "pw_tls", error))
 			return FALSE;
-
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "pw_tls_username_entry"));
-		str = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (!str || !*str) {
-			g_set_error (error,
-			             NMV_EDITOR_PLUGIN_ERROR,
-			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
-			             NM_OPENVPN_KEY_USERNAME);
-			return FALSE;
-		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)) {
 		if (!validate_cert_chooser (builder, "pw_ca_cert", &local)) {
 			g_set_error (error,
@@ -426,15 +416,6 @@ auth_widget_check_validity (GtkBuilder *builder, const char *contype, GError **e
 			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
 			             "%s: %s", NM_OPENVPN_KEY_CA, local->message);
 			g_error_free (local);
-			return FALSE;
-		}
-		widget = GTK_WIDGET (gtk_builder_get_object (builder, "pw_username_entry"));
-		str = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (!str || !*str) {
-			g_set_error (error,
-			             NMV_EDITOR_PLUGIN_ERROR,
-			             NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY,
-			             NM_OPENVPN_KEY_USERNAME);
 			return FALSE;
 		}
 	} else if (!strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
