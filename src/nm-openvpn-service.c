@@ -1132,41 +1132,34 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
                                  NMSettingVpn *s_vpn,
                                  const char *default_username)
 {
-	const char *tmp;
-
 	if (default_username) {
 		g_free (io_data->default_username);
 		io_data->default_username = g_strdup (default_username);
 	}
 
 	g_free (io_data->username);
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME);
-	io_data->username = tmp ? g_strdup (tmp) : NULL;
+	io_data->username = g_strdup (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME));
 
 	if (io_data->password) {
 		memset (io_data->password, 0, strlen (io_data->password));
 		g_free (io_data->password);
 	}
-	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD);
-	io_data->password = tmp ? g_strdup (tmp) : NULL;
+	io_data->password = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD));
 
 	if (io_data->priv_key_pass) {
 		memset (io_data->priv_key_pass, 0, strlen (io_data->priv_key_pass));
 		g_free (io_data->priv_key_pass);
 	}
-	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS);
-	io_data->priv_key_pass = tmp ? g_strdup (tmp) : NULL;
+	io_data->priv_key_pass = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS));
 
 	g_free (io_data->proxy_username);
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME);
-	io_data->proxy_username = tmp ? g_strdup (tmp) : NULL;
+	io_data->proxy_username = g_strdup (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME));
 
 	if (io_data->proxy_password) {
 		memset (io_data->proxy_password, 0, strlen (io_data->proxy_password));
 		g_free (io_data->proxy_password);
 	}
-	tmp = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
-	io_data->proxy_password = tmp ? g_strdup (tmp) : NULL;
+	io_data->proxy_password = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD));
 }
 
 static char *
