@@ -33,12 +33,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-#ifdef NM_VPN_OLD
-#include <nm-cert-chooser.h>
-#else
-#include <nma-cert-chooser.h>
-#endif
-
 #include "utils.h"
 #include "nm-utils/nm-shared-utils.h"
 
