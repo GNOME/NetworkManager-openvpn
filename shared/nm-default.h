@@ -90,7 +90,7 @@
 
 #define _nm_utils_is_valid_iface_name(n)            nm_utils_iface_valid_name(n)
 
-#else /* !NM_VPN_OLD */
+#else /* NM_VPN_OLD */
 
 #include <NetworkManager.h>
 
@@ -112,8 +112,10 @@
 
 #ifdef NM_VPN_OLD
 #include <nm-ui-utils.h>
+#include <nm-cert-chooser.h>
 #else /* NM_VPN_OLD */
 #include <nma-ui-utils.h>
+#include <nma-cert-chooser.h>
 #endif /* NM_VPN_OLD */
 
 #endif /* NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR */

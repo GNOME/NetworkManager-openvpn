@@ -26,6 +26,31 @@
 
 /*****************************************************************************/
 
+static inline char
+nm_utils_addr_family_to_char (int addr_family)
+{
+	switch (addr_family) {
+	case AF_INET:  return '4';
+	case AF_INET6: return '6';
+	}
+	g_return_val_if_reached ('?');
+}
+
+static inline gsize
+nm_utils_addr_family_to_size (int addr_family)
+{
+	switch (addr_family) {
+	case AF_INET:  return sizeof (in_addr_t);
+	case AF_INET6: return sizeof (struct in6_addr);
+	}
+	g_return_val_if_reached (0);
+}
+
+#define nm_assert_addr_family(addr_family) \
+	nm_assert (NM_IN_SET ((addr_family), AF_INET, AF_INET6))
+
+/*****************************************************************************/
+
 typedef struct {
 	union {
 		guint8 addr_ptr[1];
@@ -40,6 +65,19 @@ typedef struct {
 } NMIPAddr;
 
 extern const NMIPAddr nm_ip_addr_zero;
+
+static inline void
+nm_ip_addr_set (int addr_family, gpointer dst, const NMIPAddr *src)
+{
+	nm_assert_addr_family (addr_family);
+	nm_assert (dst);
+	nm_assert (src);
+
+	if (addr_family != AF_INET6)
+		*((in_addr_t *) dst) = src->addr4;
+	else
+		*((struct in6_addr *) dst) = src->addr6;
+}
 
 /*****************************************************************************/
 
@@ -151,6 +189,8 @@ void nm_utils_strbuf_append (char **buf, gsize *len, const char *format, ...) _n
 void nm_utils_strbuf_append_c (char **buf, gsize *len, char c);
 void nm_utils_strbuf_append_str (char **buf, gsize *len, const char *str);
 
+const char *nm_strquote (char *buf, gsize buf_len, const char *str);
+
 /*****************************************************************************/
 
 const char **nm_utils_strsplit_set (const char *str, const char *delimiters);
@@ -172,21 +212,21 @@ gboolean nm_utils_ip_is_site_local (int addr_family,
 
 /*****************************************************************************/
 
-gboolean nm_utils_parse_inaddr_bin  (const char *text,
-                                     int family,
+gboolean nm_utils_parse_inaddr_bin  (int addr_family,
+                                     const char *text,
                                      gpointer out_addr);
 
-gboolean nm_utils_parse_inaddr (const char *text,
-                                int family,
+gboolean nm_utils_parse_inaddr (int addr_family,
+                                const char *text,
                                 char **out_addr);
 
-gboolean nm_utils_parse_inaddr_prefix_bin (const char *text,
-                                           int family,
+gboolean nm_utils_parse_inaddr_prefix_bin (int addr_family,
+                                           const char *text,
                                            gpointer out_addr,
                                            int *out_prefix);
 
-gboolean nm_utils_parse_inaddr_prefix (const char *text,
-                                       int family,
+gboolean nm_utils_parse_inaddr_prefix (int addr_family,
+                                       const char *text,
                                        char **out_addr,
                                        int *out_prefix);
 
@@ -194,6 +234,74 @@ gint64 _nm_utils_ascii_str_to_int64 (const char *str, guint base, gint64 min, gi
 
 gint _nm_utils_ascii_str_to_bool (const char *str,
                                   gint default_value);
+
+/*****************************************************************************/
+
+extern char _nm_utils_to_string_buffer[2096];
+
+void     nm_utils_to_string_buffer_init (char **buf, gsize *len);
+gboolean nm_utils_to_string_buffer_init_null (gconstpointer obj, char **buf, gsize *len);
+
+/*****************************************************************************/
+
+typedef struct {
+	unsigned flag;
+	const char *name;
+} NMUtilsFlags2StrDesc;
+
+#define NM_UTILS_FLAGS2STR(f, n) { .flag = f, .name = ""n, }
+
+#define _NM_UTILS_FLAGS2STR_DEFINE(scope, fcn_name, flags_type, ...) \
+scope const char * \
+fcn_name (flags_type flags, char *buf, gsize len) \
+{ \
+	static const NMUtilsFlags2StrDesc descs[] = { \
+		__VA_ARGS__ \
+	}; \
+	G_STATIC_ASSERT (sizeof (flags_type) <= sizeof (unsigned)); \
+	return nm_utils_flags2str (descs, G_N_ELEMENTS (descs), flags, buf, len); \
+};
+
+#define NM_UTILS_FLAGS2STR_DEFINE(fcn_name, flags_type, ...) \
+	_NM_UTILS_FLAGS2STR_DEFINE (, fcn_name, flags_type, __VA_ARGS__)
+#define NM_UTILS_FLAGS2STR_DEFINE_STATIC(fcn_name, flags_type, ...) \
+	_NM_UTILS_FLAGS2STR_DEFINE (static, fcn_name, flags_type, __VA_ARGS__)
+
+const char *nm_utils_flags2str (const NMUtilsFlags2StrDesc *descs,
+                                gsize n_descs,
+                                unsigned flags,
+                                char *buf,
+                                gsize len);
+
+/*****************************************************************************/
+
+#define NM_UTILS_ENUM2STR(v, n)     (void) 0; case v: s = ""n""; break; (void) 0
+#define NM_UTILS_ENUM2STR_IGNORE(v) (void) 0; case v: break; (void) 0
+
+#define _NM_UTILS_ENUM2STR_DEFINE(scope, fcn_name, lookup_type, int_fmt, ...) \
+scope const char * \
+fcn_name (lookup_type val, char *buf, gsize len) \
+{ \
+	nm_utils_to_string_buffer_init (&buf, &len); \
+	if (len) { \
+		const char *s = NULL; \
+		switch (val) { \
+			(void) 0, \
+			__VA_ARGS__ \
+			(void) 0; \
+		}; \
+		if (s) \
+			g_strlcpy (buf, s, len); \
+		else \
+			g_snprintf (buf, len, "(%"int_fmt")", val); \
+	} \
+	return buf; \
+}
+
+#define NM_UTILS_ENUM2STR_DEFINE(fcn_name, lookup_type, ...) \
+	_NM_UTILS_ENUM2STR_DEFINE (, fcn_name, lookup_type, "d", __VA_ARGS__)
+#define NM_UTILS_ENUM2STR_DEFINE_STATIC(fcn_name, lookup_type, ...) \
+	_NM_UTILS_ENUM2STR_DEFINE (static, fcn_name, lookup_type, "d", __VA_ARGS__)
 
 /*****************************************************************************/
 
@@ -296,6 +404,18 @@ char *nm_utils_str_utf8safe_escape_cp   (const char *str, NMUtilsStrUtf8SafeFlag
 char *nm_utils_str_utf8safe_unescape_cp (const char *str);
 
 char *nm_utils_str_utf8safe_escape_take (char *str, NMUtilsStrUtf8SafeFlags flags);
+
+/*****************************************************************************/
+
+#define NM_UTILS_NS_PER_SECOND  ((gint64) 1000000000)
+#define NM_UTILS_NS_PER_MSEC    ((gint64) 1000000)
+#define NM_UTILS_NS_TO_MSEC_CEIL(nsec)      (((nsec) + (NM_UTILS_NS_PER_MSEC - 1)) / NM_UTILS_NS_PER_MSEC)
+
+/*****************************************************************************/
+
+int nm_utils_fd_wait_for_event (int fd, int event, gint64 timeout_ns);
+ssize_t nm_utils_fd_read_loop (int fd, void *buf, size_t nbytes, bool do_poll);
+int nm_utils_fd_read_loop_exact (int fd, void *buf, size_t nbytes, bool do_poll);
 
 /*****************************************************************************/
 
