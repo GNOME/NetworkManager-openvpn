@@ -8,24 +8,25 @@ AM_INIT_AUTOMAKE([1.9 tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
 
-AC_CONFIG_MACRO_DIR([m4])
-
 AC_CONFIG_HEADERS([config.h])
+
+dnl
+dnl Require programs
+dnl
+AC_PROG_CC
+AC_GNU_SOURCE
+AM_PROG_CC_C_O
+AC_PROG_INSTALL
+AC_PROG_LIBTOOL
+AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
+
+AC_CONFIG_MACRO_DIR([m4])
 
 dnl Prefer gcc-* variants; the ones libtool would choose don't work with LTO
 AC_CHECK_TOOLS(AR, [gcc-ar ar], false)
 AC_CHECK_TOOLS(RANLIB, [gcc-ranlib ranlib], :)
 
 LT_INIT([disable-static])
-
-dnl
-dnl Require programs
-dnl
-AC_PROG_CC
-AM_PROG_CC_C_O
-AC_PROG_INSTALL
-AC_PROG_LIBTOOL
-AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
 
 dnl
 dnl Required headers
