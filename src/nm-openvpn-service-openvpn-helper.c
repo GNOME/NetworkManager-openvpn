@@ -314,7 +314,7 @@ get_ip6_routes (void)
 		if (!tmp || !tmp[0])
 			break;
 
-		if (   !nm_utils_parse_inaddr_prefix (tmp, AF_INET6, &dst, &prefix)
+		if (   !nm_utils_parse_inaddr_prefix (AF_INET6, tmp, &dst, &prefix)
 		    || prefix == -1) {
 			_LOGW ("Ignoring invalid static route %s = \"%s\"", key_name, tmp);
 			continue;
