@@ -371,7 +371,7 @@ get_existing_passwords (GHashTable *vpn_data,
 
 static char *
 get_passwords_required (GHashTable *data,
-                        char **hints,
+                        const char *const*hints,
                         gboolean *out_need_password,
                         gboolean *out_need_certpass,
                         gboolean *out_need_proxypass)
@@ -379,10 +379,14 @@ get_passwords_required (GHashTable *data,
 	const char *ctype, *val;
 	NMSettingSecretFlags flags;
 	char *prompt = NULL;
-	char **iter;
+	const char *const*iter;
+
+	*out_need_password = FALSE;
+	*out_need_certpass = FALSE;
+	*out_need_proxypass = FALSE;
 
 	/* If hints are given, then always ask for what the hints require */
-	if (hints && g_strv_length (hints)) {
+	if (hints && hints[0]) {
 		for (iter = hints; iter && *iter; iter++) {
 			if (!prompt && g_str_has_prefix (*iter, VPN_MSG_TAG))
 				prompt = g_strdup (*iter + strlen (VPN_MSG_TAG));
@@ -429,33 +433,31 @@ get_passwords_required (GHashTable *data,
 	return NULL;
 }
 
-static void
-free_secret (char *p)
-{
-	if (p) {
-		memset (p, 0, strlen (p));
-		g_free (p);
-	}
-}
-
-int 
+int
 main (int argc, char *argv[])
 {
 	gboolean retry = FALSE, allow_interaction = FALSE;
 	gchar *vpn_name = NULL;
 	gchar *vpn_uuid = NULL;
 	gchar *vpn_service = NULL;
-	GHashTable *data = NULL, *secrets = NULL;
-	gboolean need_password = FALSE, need_certpass = FALSE, need_proxypass = FALSE;
-	char *existing_password = NULL, *existing_certpass = NULL, *existing_proxypass = NULL;
-	char *new_password = NULL, *new_certpass = NULL, *new_proxypass = NULL;
-	char **hints = NULL;
-	char *prompt = NULL;
-	gboolean external_ui_mode = FALSE, canceled = FALSE, ask_user = FALSE;
-
-	NoSecretsRequiredFunc no_secrets_required_func = NULL;
-	AskUserFunc ask_user_func = NULL;
-	FinishFunc finish_func = NULL;
+	gs_unref_hashtable GHashTable *data = NULL;
+	gs_unref_hashtable GHashTable *secrets = NULL;
+	gboolean need_password = FALSE;
+	gboolean need_certpass = FALSE;
+	gboolean need_proxypass = FALSE;
+	gs_strfreev char **hints = NULL;
+	gs_free char *prompt = NULL;
+	nm_auto_free_secret char *new_password = NULL;
+	nm_auto_free_secret char *new_certpass = NULL;
+	nm_auto_free_secret char *new_proxypass = NULL;
+	nm_auto_free_secret char *existing_password = NULL;
+	nm_auto_free_secret char *existing_certpass = NULL;
+	nm_auto_free_secret char *existing_proxypass = NULL;
+	gboolean external_ui_mode = FALSE;
+	gboolean ask_user;
+	NoSecretsRequiredFunc no_secrets_required_func;
+	AskUserFunc ask_user_func;
+	FinishFunc finish_func;
 
 	GOptionContext *context;
 	GOptionEntry entries[] = {
@@ -493,11 +495,12 @@ main (int argc, char *argv[])
 	if (!nm_vpn_service_plugin_read_vpn_details (0, &data, &secrets)) {
 		fprintf (stderr, "Failed to read '%s' (%s) data and secrets from stdin.\n",
 		         vpn_name, vpn_uuid);
-		return 1;
+		return EXIT_FAILURE;
 	}
 
 	if (external_ui_mode) {
 		no_secrets_required_func = eui_no_secrets_required;
+		ask_user_func = NULL;
 		finish_func = eui_finish;
 	} else {
 		no_secrets_required_func = std_no_secrets_required;
@@ -508,73 +511,62 @@ main (int argc, char *argv[])
 	/* Determine which passwords are actually required, either from hints or
 	 * from looking at the VPN configuration.
 	 */
-	prompt = get_passwords_required (data, hints, &need_password, &need_certpass, &need_proxypass);
+	prompt = get_passwords_required (data, (const char *const*) hints, &need_password, &need_certpass, &need_proxypass);
 	if (!prompt)
 		prompt = g_strdup_printf (_("You need to authenticate to access the Virtual Private Network “%s”."), vpn_name);
 
 	/* Exit early if we don't need any passwords */
-	if (!need_password && !need_certpass && !need_proxypass)
+	if (!need_password && !need_certpass && !need_proxypass) {
 		no_secrets_required_func ();
-	else {
-		get_existing_passwords (data,
-		                        secrets,
-		                        vpn_uuid,
-		                        need_password,
-		                        need_certpass,
-		                        need_proxypass,
-		                        &existing_password,
-		                        &existing_certpass,
-		                        &existing_proxypass);
-		if (need_password && !existing_password)
-			ask_user = TRUE;
-		if (need_certpass && !existing_certpass)
-			ask_user = TRUE;
-		if (need_proxypass && !existing_proxypass)
-			ask_user = TRUE;
-
-		/* If interaction is allowed then ask the user, otherwise pass back
-		 * whatever existing secrets we can find.
-		 */
-		if (ask_user_func && allow_interaction && (ask_user || retry)) {
-			canceled = !ask_user_func (vpn_name,
-			                           prompt,
-			                           need_password,
-			                           existing_password,
-			                           &new_password,
-			                           need_certpass,
-			                           existing_certpass,
-			                           &new_certpass,
-			                           need_proxypass,
-			                           existing_proxypass,
-			                           &new_proxypass);
-		}
-
-		if (!canceled) {
-			finish_func (vpn_name,
-			             prompt,
-			             allow_interaction,
-			             need_password,
-			             new_password ? new_password : existing_password,
-			             need_certpass,
-			             new_certpass ? new_certpass : existing_certpass,
-			             need_proxypass,
-			             new_proxypass ? new_proxypass : existing_proxypass);
-		}
-
-		free_secret (existing_password);
-		free_secret (existing_certpass);
-		free_secret (existing_proxypass);
-		free_secret (new_password);
-		free_secret (new_certpass);
-		free_secret (new_proxypass);
+		return EXIT_SUCCESS;
 	}
 
-	if (data)
-		g_hash_table_unref (data);
-	if (secrets)
-		g_hash_table_unref (secrets);
-	if (hints)
-		g_strfreev (hints);
-	g_free (prompt);
-	return canceled ? 1 : 0;
+	get_existing_passwords (data,
+	                        secrets,
+	                        vpn_uuid,
+	                        need_password,
+	                        need_certpass,
+	                        need_proxypass,
+	                        &existing_password,
+	                        &existing_certpass,
+	                        &existing_proxypass);
+	if (need_password && !existing_password)
+		ask_user = TRUE;
+	else if (need_certpass && !existing_certpass)
+		ask_user = TRUE;
+	else if (need_proxypass && !existing_proxypass)
+		ask_user = TRUE;
+	else
+		ask_user = FALSE;
+
+	/* If interaction is allowed then ask the user, otherwise pass back
+	 * whatever existing secrets we can find.
+	 */
+	if (   ask_user_func
+	    && allow_interaction
+	    && (ask_user || retry)) {
+		if (!ask_user_func (vpn_name,
+		                    prompt,
+		                    need_password,
+		                    existing_password,
+		                    &new_password,
+		                    need_certpass,
+		                    existing_certpass,
+		                    &new_certpass,
+		                    need_proxypass,
+		                    existing_proxypass,
+		                    &new_proxypass))
+			return EXIT_FAILURE;
+	}
+
+	finish_func (vpn_name,
+	             prompt,
+	             allow_interaction,
+	             need_password,
+	             new_password ? new_password : existing_password,
+	             need_certpass,
+	             new_certpass ? new_certpass : existing_certpass,
+	             need_proxypass,
+	             new_proxypass ? new_proxypass : existing_proxypass);
+	return EXIT_SUCCESS;
 }
