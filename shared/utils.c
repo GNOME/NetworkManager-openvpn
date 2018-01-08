@@ -116,7 +116,7 @@ _is_inet6_addr (const char *str, gboolean with_square_brackets)
  * nmovpn_remote_parse:
  * @str: the input string to be split. It is modified inplace.
  * @out_buf: an allocated string, to which the other arguments
- *   point to. Must be freeded by caller.
+ *   point to. Must be freed by caller.
  * @out_host: pointer to the host out argument.
  * @out_port: pointer to the port out argument.
  * @out_proto: pointer to the proto out argument.
@@ -192,7 +192,7 @@ nmovpn_remote_parse (const char *str,
 	if (!host[0]) {
 		g_set_error (error, NM_UTILS_ERROR, NM_UTILS_ERROR_UNKNOWN,
 		             _("empty host"));
-		idx_fail = host - str;
+		idx_fail = host - str_copy;
 		goto out_fail;
 	}
 	if (port) {
@@ -202,7 +202,7 @@ nmovpn_remote_parse (const char *str,
 		} else if (_nm_utils_ascii_str_to_int64 (port, 10, 1, 0xFFFF, 0) == 0) {
 			g_set_error (error, NM_UTILS_ERROR, NM_UTILS_ERROR_UNKNOWN,
 			             _("invalid port"));
-			idx_fail = port - str;
+			idx_fail = port - str_copy;
 			goto out_fail;
 		}
 	}
@@ -213,7 +213,7 @@ nmovpn_remote_parse (const char *str,
 		} else if (!NM_IN_STRSET (proto, NMOVPN_PROTCOL_TYPES)) {
 			g_set_error (error, NM_UTILS_ERROR, NM_UTILS_ERROR_UNKNOWN,
 			             _("invalid protocol"));
-			idx_fail = proto - str;
+			idx_fail = proto - str_copy;
 			goto out_fail;
 		}
 	}
