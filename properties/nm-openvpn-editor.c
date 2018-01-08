@@ -2145,13 +2145,14 @@ check_gateway_entry (const char *str)
 	str_clone = g_strdup (str);
 	str_iter = str_clone;
 	while ((tok = strsep (&str_iter, " \t,"))) {
-		if (   tok[0]
-		    && (nmovpn_remote_parse (tok,
-		                             NULL,
-		                             NULL,
-		                             NULL,
-		                             NULL,
-		                             NULL) != -1))
+		if (!tok[0])
+			continue;
+		if (nmovpn_remote_parse (tok,
+		                         NULL,
+		                         NULL,
+		                         NULL,
+		                         NULL,
+		                         NULL) != -1)
 		   return FALSE;
 		success = TRUE;
 	}
