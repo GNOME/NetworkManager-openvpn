@@ -99,6 +99,7 @@ typedef struct {
 	guint watch_id;
 	guint kill_id;
 	NMOpenvpnPlugin *plugin;
+	bool is_terminating:1;
 } PidsPendingData;
 
 typedef struct {
@@ -394,28 +395,61 @@ pids_pending_ensure_killed (gpointer user_data)
 }
 
 static void
-pids_pending_send_sigterm (GPid pid)
+pids_pending_send_sigterm (PidsPendingData *pid_data)
 {
-	PidsPendingData *pid_data;
-
-	pid_data = pids_pending_get (pid);
 	g_return_if_fail (pid_data);
+	nm_assert (pid_data == pids_pending_get (pid_data->pid));
 
-	_LOGI ("openvpn[%ld]: send SIGTERM", (long) pid);
+	if (pid_data->is_terminating) {
+		/* we already send a SIGTERM (maybe even SIGKILL). No need to
+		 * do anything further, just wait for the process to exit. */
+		return;
+	}
 
-	kill (pid, SIGTERM);
+	_LOGI ("openvpn[%ld]: send SIGTERM", (long) pid_data->pid);
+	pid_data->is_terminating = TRUE;
+	kill (pid_data->pid, SIGTERM);
 	pid_data->kill_id = g_timeout_add (2000, pids_pending_ensure_killed, pid_data);
 }
 
-static void
-pids_pending_wait_for_processes (GMainLoop *main_loop)
+static gboolean
+_pids_pending_wait_for_processes_timeout (gpointer user_data)
 {
-	if (gl.pids_pending_list) {
-		_LOGI ("wait for %u openvpn processes to terminate...", g_slist_length (gl.pids_pending_list));
+	*((gboolean *) user_data) = TRUE;
 
-		do {
-			g_main_context_iteration (g_main_loop_get_context (main_loop), TRUE);
-		} while (gl.pids_pending_list);
+	/* G_SOURCE_CONTINUE, because we have no convenient way to clear
+	 * the current source-id. Let the caller cancel the timeout. */
+	return G_SOURCE_CONTINUE;
+}
+
+static void
+pids_pending_wait_for_processes (void)
+{
+	GSList *iter;
+	gboolean timed_out = FALSE;
+	guint source_id;
+
+	if (!gl.pids_pending_list)
+		return;
+
+	_LOGI ("wait for %u openvpn processes to terminate...", g_slist_length (gl.pids_pending_list));
+	for (iter = gl.pids_pending_list; iter; iter = iter->next)
+		pids_pending_send_sigterm (iter->data);
+
+	source_id = g_timeout_add (3000, _pids_pending_wait_for_processes_timeout, &timed_out);
+
+	do {
+		g_main_context_iteration (NULL, TRUE);
+	} while (!timed_out && gl.pids_pending_list);
+
+	nm_clear_g_source (&source_id);
+
+	while (gl.pids_pending_list) {
+		PidsPendingData *pid_data = gl.pids_pending_list->data;
+
+		_LOGW ("openvpn[%ld]: didn't terminate in time", (long) pid_data->pid);
+		gl.pids_pending_list = g_slist_delete_link (gl.pids_pending_list, gl.pids_pending_list);
+		pids_pending_data_free (pid_data);
 	}
 }
 
@@ -1992,7 +2026,7 @@ real_disconnect (NMVpnServicePlugin *plugin,
 	}
 
 	if (priv->pid) {
-		pids_pending_send_sigterm (priv->pid);
+		pids_pending_send_sigterm (pids_pending_get (priv->pid));
 		priv->pid = 0;
 	}
 
@@ -2133,7 +2167,7 @@ dispose (GObject *object)
 	nm_clear_g_source (&priv->connect_timer);
 
 	if (priv->pid) {
-		pids_pending_send_sigterm (priv->pid);
+		pids_pending_send_sigterm (pids_pending_get (priv->pid));
 		priv->pid = 0;
 	}
 
@@ -2317,7 +2351,7 @@ main (int argc, char *argv[])
 	nm_clear_g_source (&source_id_sigint);
 	nm_clear_g_signal_handler (plugin, &handler_id_plugin);
 
-	pids_pending_wait_for_processes (loop);
+	pids_pending_wait_for_processes ();
 
 	g_main_loop_unref (loop);
 	return EXIT_SUCCESS;
