@@ -2351,6 +2351,8 @@ main (int argc, char *argv[])
 	nm_clear_g_source (&source_id_sigint);
 	nm_clear_g_signal_handler (plugin, &handler_id_plugin);
 
+	g_clear_object (&plugin);
+
 	pids_pending_wait_for_processes ();
 
 	g_main_loop_unref (loop);
