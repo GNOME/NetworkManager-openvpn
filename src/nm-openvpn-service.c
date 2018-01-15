@@ -2217,12 +2217,15 @@ quit_mainloop (NMVpnServicePlugin *plugin, gpointer user_data)
 int
 main (int argc, char *argv[])
 {
-	NMOpenvpnPlugin *plugin;
+	gs_unref_object NMOpenvpnPlugin *plugin = NULL;
 	gboolean persist = FALSE;
 	GOptionContext *opt_ctx = NULL;
 	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
 	GError *error = NULL;
 	GMainLoop *loop;
+	guint source_id_sigterm;
+	guint source_id_sigint;
+	gulong handler_id_plugin = 0;
 
 	GOptionEntry options[] = {
 		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don’t quit when VPN connection terminates"), NULL },
@@ -2260,7 +2263,7 @@ main (int argc, char *argv[])
 		g_printerr ("Error parsing the command line options: %s\n", error->message);
 		g_option_context_free (opt_ctx);
 		g_clear_error (&error);
-		exit (1);
+		return EXIT_FAILURE;
 	}
 	g_option_context_free (opt_ctx);
 
@@ -2293,26 +2296,29 @@ main (int argc, char *argv[])
 
 	if (   !g_file_test ("/sys/class/misc/tun", G_FILE_TEST_EXISTS)
 	    && (system ("/sbin/modprobe tun") == -1))
-		exit (EXIT_FAILURE);
+		return EXIT_FAILURE;
 
 	plugin = nm_openvpn_plugin_new (bus_name);
 	if (!plugin)
-		exit (EXIT_FAILURE);
+		return EXIT_FAILURE;
 
 	loop = g_main_loop_new (NULL, FALSE);
 
 	if (!persist)
-		g_signal_connect (plugin, "quit", G_CALLBACK (quit_mainloop), loop);
+		handler_id_plugin = g_signal_connect (plugin, "quit", G_CALLBACK (quit_mainloop), loop);
 
 	signal (SIGPIPE, SIG_IGN);
-	g_unix_signal_add (SIGTERM, signal_handler, loop);
-	g_unix_signal_add (SIGINT, signal_handler, loop);
+	source_id_sigterm = g_unix_signal_add (SIGTERM, signal_handler, loop);
+	source_id_sigint = g_unix_signal_add (SIGINT, signal_handler, loop);
 
 	g_main_loop_run (loop);
+
+	nm_clear_g_source (&source_id_sigterm);
+	nm_clear_g_source (&source_id_sigint);
+	nm_clear_g_signal_handler (plugin, &handler_id_plugin);
+
 	pids_pending_wait_for_processes (loop);
-	g_object_unref (plugin);
 
 	g_main_loop_unref (loop);
-
-	exit (EXIT_SUCCESS);
+	return EXIT_SUCCESS;
 }
