@@ -2309,9 +2309,8 @@ main (int argc, char *argv[])
 	g_unix_signal_add (SIGINT, signal_handler, loop);
 
 	g_main_loop_run (loop);
-	g_object_unref (plugin);
-
 	pids_pending_wait_for_processes (loop);
+	g_object_unref (plugin);
 
 	g_main_loop_unref (loop);
 
