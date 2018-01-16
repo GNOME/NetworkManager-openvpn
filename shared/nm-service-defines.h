@@ -71,6 +71,7 @@
 #define NM_OPENVPN_KEY_VERIFY_X509_NAME "verify-x509-name"
 #define NM_OPENVPN_KEY_REMOTE_CERT_TLS "remote-cert-tls"
 #define NM_OPENVPN_KEY_MAX_ROUTES "max-routes"
+#define NM_OPENVPN_KEY_CONNECT_TIMEOUT "connect-timeout"
 
 #define NM_OPENVPN_KEY_PASSWORD "password"
 #define NM_OPENVPN_KEY_CERTPASS "cert-pass"

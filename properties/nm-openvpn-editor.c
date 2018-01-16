@@ -715,6 +715,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_PING_RESTART,
 	NM_OPENVPN_KEY_MAX_ROUTES,
 	NM_OPENVPN_KEY_MTU_DISC,
+	NM_OPENVPN_KEY_CONNECT_TIMEOUT,
 	NULL
 };
 
@@ -1543,6 +1544,9 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	_builder_init_optional_spinbutton (builder, "tunmtu_checkbutton", "tunmtu_spinbutton", !!value,
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 1, 65535, 1500));
 
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CONNECT_TIMEOUT);
+	_builder_init_optional_spinbutton (builder, "connect_timeout_checkbutton", "connect_timeout_spinbutton", !!value,
+	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, G_MAXINT, 120));
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 	_builder_init_optional_spinbutton (builder, "fragment_checkbutton", "fragment_spinbutton", !!value,
@@ -1792,6 +1796,15 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tunmtu_spinbutton"));
 		tunmtu_size = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TUNNEL_MTU), g_strdup_printf ("%d", tunmtu_size));
+	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "connect_timeout_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		int timeout;
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "connect_timeout_spinbutton"));
+		timeout = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
+		g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CONNECT_TIMEOUT), g_strdup_printf ("%d", timeout));
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "fragment_checkbutton"));

@@ -959,6 +959,17 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0],
+		                  NMV_OVPN_TAG_CONNECT_TIMEOUT,
+		                  NMV_OVPN_TAG_SERVER_POLL_TIMEOUT)) {
+			if (!args_params_check_nargs_n (params, 1, &line_error))
+				goto handle_line_error;
+			if (!args_params_parse_int64 (params, 1, 0, G_MAXINT, &v_int64, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_CONNECT_TIMEOUT, v_int64);
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_FRAGMENT)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
@@ -1923,6 +1934,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	args_write_line_setting_value (f, NMV_OVPN_TAG_MTU_DISC, s_vpn, NM_OPENVPN_KEY_MTU_DISC);
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_TUN_MTU, s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU);
+
+	args_write_line_setting_value_int (f, NMV_OVPN_TAG_CONNECT_TIMEOUT, s_vpn, NM_OPENVPN_KEY_CONNECT_TIMEOUT);
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_FRAGMENT, s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
 

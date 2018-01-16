@@ -300,12 +300,14 @@ EXTRA_DIST += \
 	properties/tests/conf/proxy-socks.ovpn \
 	properties/tests/conf/proxy-http-with-auth.ovpn \
 	properties/tests/conf/keysize.ovpn \
+	properties/tests/conf/connect-timeout.ovpn \
 	properties/tests/conf/device.ovpn \
 	properties/tests/conf/device-notype.ovpn \
 	properties/tests/conf/keepalive.ovpn \
 	properties/tests/conf/ping-with-exit.ovpn \
 	properties/tests/conf/ping-with-restart.ovpn \
 	properties/tests/conf/route.ovpn \
+	properties/tests/conf/server-poll-timeout.ovpn \
 	properties/tests/conf/tls-inline.ovpn \
 	properties/tests/conf/tls-inline-ca.pem \
 	properties/tests/conf/tls-inline-cert.pem \

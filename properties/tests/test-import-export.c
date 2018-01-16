@@ -671,6 +671,34 @@ test_port_import (gconstpointer test_data)
 }
 
 static void
+test_connect_timeout_import (gconstpointer test_data)
+{
+	_CREATE_PLUGIN (plugin);
+	NMConnection *connection;
+	NMSettingConnection *s_con;
+	NMSettingVpn *s_vpn;
+	const char *file, *expected_timeout;
+
+	nmtst_test_data_unpack (test_data, &file, &expected_timeout);
+
+	connection = get_basic_connection (plugin, SRCDIR, file);
+	g_assert (connection);
+
+	/* Connection setting */
+	s_con = nm_connection_get_setting_connection (connection);
+	g_assert (s_con);
+
+	/* VPN setting */
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	g_assert (s_vpn);
+
+	/* Data items */
+	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECT_TIMEOUT, expected_timeout);
+
+	g_object_unref (connection);
+}
+
+static void
 test_ping_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
@@ -1187,6 +1215,10 @@ int main (int argc, char **argv)
 
 	_add_test_func ("rport-import", test_port_import, "rport.ovpn", "rport", "6789");
 	_add_test_func ("rport-export", test_export_compare, "rport.ovpn", "rport.ovpntest");
+
+	_add_test_func ("connect-timeout-import", test_connect_timeout_import, "connect-timeout.ovpn", "19");
+	_add_test_func ("server-poll-timeout-import", test_connect_timeout_import, "server-poll-timeout.ovpn", "23");
+	_add_test_func ("connect-timeout-export", test_export_compare, "connect-timeout.ovpn", "connect-timeout.ovpntest");
 
 	_add_test_func_simple (test_tun_opts_import);
 	_add_test_func ("tun-opts-export", test_export_compare, "tun-opts.conf", "tun-opts.ovpntest");
