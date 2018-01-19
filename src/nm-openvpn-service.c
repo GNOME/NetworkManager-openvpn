@@ -1300,6 +1300,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	gint64 v_int64;
 	char sbuf_64[65];
 	OpenvpnBinaryVersion openvpn_binary_version = OPENVPN_BINARY_VERSION_INVALID;
+	guint num_remotes = 0;
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -1381,6 +1382,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			if (eidx >= 0)
 				continue;
 
+			num_remotes++;
 			add_openvpn_arg (args, "--remote");
 			add_openvpn_arg (args, host);
 			if (port) {
@@ -1549,6 +1551,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			             tmp);
 			return FALSE;
 		}
+	} else if (num_remotes > 1) {
+		/* NM waits at most 60 seconds: lower the connect timeout if
+		 * there are multiple remotes, so that we try at least 3 of them.
+		 */
+		add_openvpn_arg (args, "--connect-timeout");
+		g_ptr_array_add (args,
+		                 g_strdup_printf ("%u", NM_MAX (60 / num_remotes, 20U)));
 	}
 
 	add_openvpn_arg (args, "--nobind");
