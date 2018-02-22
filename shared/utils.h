@@ -101,4 +101,10 @@ gssize nmovpn_remote_parse (const char *str,
                             const char **out_proto,
                             GError **error);
 
+static inline const char *
+nmovpn_arg_is_set (const char *value)
+{
+	return (value && value[0]) ? value : NULL;
+}
+
 #endif  /* UTILS_H */

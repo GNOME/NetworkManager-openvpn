@@ -51,12 +51,6 @@ const char *_nmovpn_test_temp_path = NULL;
 
 /*****************************************************************************/
 
-static const char *
-_arg_is_set (const char *value)
-{
-	return (value && value[0]) ? value : NULL;
-}
-
 static void
 _auto_free_gstring_p (GString **ptr)
 {
@@ -1756,7 +1750,7 @@ args_write_line_setting_value_int (GString *f,
 	nm_assert (setting_key && setting_key[0]);
 
 	value = nm_setting_vpn_get_data_item (s_vpn, setting_key);
-	if (!_arg_is_set (value))
+	if (!nmovpn_arg_is_set (value))
 		return;
 
 	v = _nm_utils_ascii_str_to_int64 (value, 10, G_MININT64, G_MAXINT64, 0);
@@ -1774,7 +1768,7 @@ args_write_line_setting_value (GString *f,
 	const char *value;
 
 	value = nm_setting_vpn_get_data_item (s_vpn, setting_key);
-	if (_arg_is_set (value))
+	if (nmovpn_arg_is_set (value))
 		args_write_line (f, tag_key, value);
 }
 
@@ -1814,7 +1808,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		return NULL;
 	}
 
-	gateways = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE));
+	gateways = nmovpn_arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE));
 	if (!gateways) {
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
@@ -1823,7 +1817,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		return NULL;
 	}
 
-	connection_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE));
+	connection_type = nmovpn_arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE));
 
 	f = g_string_sized_new (512);
 
@@ -1866,18 +1860,18 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		                                   NM_OPENVPN_CONTYPE_PASSWORD,
 		                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
-			if (_arg_is_set (value))
+			if (nmovpn_arg_is_set (value))
 				cacert = nm_utils_str_utf8safe_unescape (value, &cacert_free);
 		}
 
 		if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
 		                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
-			if (_arg_is_set (value))
+			if (nmovpn_arg_is_set (value))
 				user_cert = nm_utils_str_utf8safe_unescape (value, &user_cert_free);
 
 			value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-			if (_arg_is_set (value))
+			if (nmovpn_arg_is_set (value))
 				private_key = nm_utils_str_utf8safe_unescape (value, &private_key_free);
 		}
 
@@ -1901,13 +1895,13 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
-		if (_arg_is_set (value)) {
+		if (nmovpn_arg_is_set (value)) {
 			gs_free char *s_free = NULL;
 
 			args_write_line (f,
 			                 NMV_OVPN_TAG_SECRET,
 			                 nm_utils_str_utf8safe_unescape (value, &s_free),
-			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION)));
+			                 nmovpn_arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION)));
 		}
 	}
 
@@ -1949,8 +1943,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		gs_free char *device_free = NULL;
 		const char *device_type, *device;
 
-		device_type = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE));
-		device = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV));
+		device_type = nmovpn_arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE));
+		device = nmovpn_arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DEV));
 		device = nm_utils_str_utf8safe_unescape (device, &device_free);
 		args_write_line (f,
 		                 NMV_OVPN_TAG_DEV,
@@ -1975,8 +1969,8 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_PING_RESTART, s_vpn, NM_OPENVPN_KEY_PING_RESTART);
 
-	local_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP));
-	remote_ip = _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP));
+	local_ip = nmovpn_arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP));
+	remote_ip = nmovpn_arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP));
 	if (local_ip && remote_ip)
 		args_write_line (f, NMV_OVPN_TAG_IFCONFIG, local_ip, remote_ip);
 
@@ -1990,7 +1984,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		args_write_line_setting_value (f, NMV_OVPN_TAG_TLS_REMOTE, s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 
 		x509_name =  nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_VERIFY_X509_NAME);
-		if (_arg_is_set (x509_name)) {
+		if (nmovpn_arg_is_set (x509_name)) {
 			const char *name;
 			gs_free char *type = NULL;
 
@@ -2005,16 +1999,16 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		}
 
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
-		if (_arg_is_set (key)) {
+		if (nmovpn_arg_is_set (key)) {
 			gs_free char *s_free = NULL;
 			args_write_line (f,
 			                 NMV_OVPN_TAG_TLS_AUTH,
 			                 nm_utils_str_utf8safe_unescape (key, &s_free),
-			                 _arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR)));
+			                 nmovpn_arg_is_set (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR)));
 		}
 
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT);
-		if (_arg_is_set (key)) {
+		if (nmovpn_arg_is_set (key)) {
 			gs_free char *s_free = NULL;
 			args_write_line (f,
 			                 NMV_OVPN_TAG_TLS_CRYPT,
@@ -2022,7 +2016,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		}
 
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS);
-		if (_arg_is_set (key)) {
+		if (nmovpn_arg_is_set (key)) {
 			gs_free char *s_free = NULL;
 			args_write_line (f,
 			                 NMV_OVPN_TAG_EXTRA_CERTS,
@@ -2031,7 +2025,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	}
 
 	proxy_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE);
-	if (_arg_is_set (proxy_type)) {
+	if (nmovpn_arg_is_set (proxy_type)) {
 		const char *proxy_server;
 		const char *proxy_port;
 		const char *proxy_retry;
