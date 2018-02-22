@@ -38,13 +38,13 @@
 #include "nm-utils/nm-shared-utils.h"
 
 
-#define INLINE_BLOB_CA                  "ca"
-#define INLINE_BLOB_CERT                "cert"
-#define INLINE_BLOB_KEY                 "key"
-#define INLINE_BLOB_PKCS12              "pkcs12"
-#define INLINE_BLOB_SECRET              "secret"
-#define INLINE_BLOB_TLS_AUTH            "tls-auth"
-#define INLINE_BLOB_TLS_CRYPT           "tls-crypt"
+#define INLINE_BLOB_CA                  NMV_OVPN_TAG_CA
+#define INLINE_BLOB_CERT                NMV_OVPN_TAG_CERT
+#define INLINE_BLOB_KEY                 NMV_OVPN_TAG_KEY
+#define INLINE_BLOB_PKCS12              NMV_OVPN_TAG_PKCS12
+#define INLINE_BLOB_SECRET              NMV_OVPN_TAG_SECRET
+#define INLINE_BLOB_TLS_AUTH            NMV_OVPN_TAG_TLS_AUTH
+#define INLINE_BLOB_TLS_CRYPT           NMV_OVPN_TAG_TLS_CRYPT
 
 const char *_nmovpn_test_temp_path = NULL;
 
