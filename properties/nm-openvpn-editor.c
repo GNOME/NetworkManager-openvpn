@@ -688,6 +688,7 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_CONNECT_TIMEOUT,
 	NM_OPENVPN_KEY_DEV,
 	NM_OPENVPN_KEY_DEV_TYPE,
+	NM_OPENVPN_KEY_EXTRA_CERTS,
 	NM_OPENVPN_KEY_FLOAT,
 	NM_OPENVPN_KEY_FRAGMENT_SIZE,
 	NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,
@@ -1693,6 +1694,10 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		} else
 			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_NONE);
 
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "extra_certs_chooser"));
+		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_EXTRA_CERTS);
+		gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), nm_str_not_empty (value));
+
 		g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (tls_auth_toggled_cb), builder);
 		tls_auth_toggled_cb (combo, builder);
 	} else {
@@ -2050,6 +2055,12 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		case TLS_AUTH_MODE_NONE:
 			break;
 		}
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "extra_certs_chooser"));
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+		if (filename && filename[0])
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_EXTRA_CERTS), g_strdup (filename));
+		g_free (filename);
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));

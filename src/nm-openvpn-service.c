@@ -148,6 +148,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_COMP_LZO,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CONNECT_TIMEOUT,      G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_CONNECTION_TYPE,      G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_EXTRA_CERTS,          G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FLOAT,                G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FRAGMENT_SIZE,        G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_KEY,                  G_TYPE_STRING, 0, 0, FALSE },
@@ -1653,7 +1654,12 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		add_openvpn_arg_utf8safe (args, tmp);
 	}
 
-	
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS);
+	if (tmp && tmp[0]) {
+		add_openvpn_arg (args, "--extra-certs");
+		add_openvpn_arg_utf8safe (args, tmp);
+	}
+
 	/* tls-remote */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 	if (tmp && tmp[0]) {
