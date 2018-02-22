@@ -37,6 +37,7 @@
 #define NM_OPENVPN_KEY_CONNECT_TIMEOUT "connect-timeout"
 #define NM_OPENVPN_KEY_DEV "dev"
 #define NM_OPENVPN_KEY_DEV_TYPE "dev-type"
+#define NM_OPENVPN_KEY_EXTRA_CERTS "extra-certs"
 #define NM_OPENVPN_KEY_FLOAT "float"
 #define NM_OPENVPN_KEY_FRAGMENT_SIZE "fragment-size"
 #define NM_OPENVPN_KEY_HTTP_PROXY_USERNAME "http-proxy-username"

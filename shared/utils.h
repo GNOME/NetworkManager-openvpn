@@ -33,6 +33,7 @@
 #define NMV_OVPN_TAG_CONNECT_TIMEOUT    "connect-timeout"
 #define NMV_OVPN_TAG_DEV                "dev"
 #define NMV_OVPN_TAG_DEV_TYPE           "dev-type"
+#define NMV_OVPN_TAG_EXTRA_CERTS        "extra-certs"
 #define NMV_OVPN_TAG_FLOAT              "float"
 #define NMV_OVPN_TAG_FRAGMENT           "fragment"
 #define NMV_OVPN_TAG_GROUP              "group"

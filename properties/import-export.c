@@ -40,6 +40,7 @@
 
 #define INLINE_BLOB_CA                  NMV_OVPN_TAG_CA
 #define INLINE_BLOB_CERT                NMV_OVPN_TAG_CERT
+#define INLINE_BLOB_EXTRA_CERTS         NMV_OVPN_TAG_EXTRA_CERTS
 #define INLINE_BLOB_KEY                 NMV_OVPN_TAG_KEY
 #define INLINE_BLOB_PKCS12              NMV_OVPN_TAG_PKCS12
 #define INLINE_BLOB_SECRET              NMV_OVPN_TAG_SECRET
@@ -1190,6 +1191,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0],
 		                  NMV_OVPN_TAG_CA,
 		                  NMV_OVPN_TAG_CERT,
+		                  NMV_OVPN_TAG_EXTRA_CERTS,
 		                  NMV_OVPN_TAG_KEY,
 		                  NMV_OVPN_TAG_PKCS12,
 		                  NMV_OVPN_TAG_SECRET,
@@ -1225,6 +1227,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_KEY, file);
 			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CA))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CA, file);
+			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_EXTRA_CERTS))
+				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS, file);
 			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CERT))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CERT, file);
 			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEY))
@@ -1441,6 +1445,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				key = NM_OPENVPN_KEY_CERT;
 			else if (nm_streq (token, INLINE_BLOB_KEY))
 				key = NM_OPENVPN_KEY_KEY;
+			else if (nm_streq (token, INLINE_BLOB_EXTRA_CERTS))
+				key = NM_OPENVPN_KEY_EXTRA_CERTS;
 			else if (nm_streq (token, INLINE_BLOB_PKCS12)) {
 				is_base64 = TRUE;
 				key = NULL;
@@ -2015,6 +2021,13 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			                 nm_utils_str_utf8safe_unescape (key, &s_free));
 		}
 
+		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS);
+		if (_arg_is_set (key)) {
+			gs_free char *s_free = NULL;
+			args_write_line (f,
+			                 NMV_OVPN_TAG_EXTRA_CERTS,
+			                 nm_utils_str_utf8safe_unescape (key, &s_free));
+		}
 	}
 
 	proxy_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE);
