@@ -1188,10 +1188,10 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		}
 
 		if (NM_IN_STRSET (params[0],
-		                  NMV_OVPN_TAG_PKCS12,
 		                  NMV_OVPN_TAG_CA,
 		                  NMV_OVPN_TAG_CERT,
 		                  NMV_OVPN_TAG_KEY,
+		                  NMV_OVPN_TAG_PKCS12,
 		                  NMV_OVPN_TAG_SECRET,
 		                  NMV_OVPN_TAG_TLS_AUTH,
 		                  NMV_OVPN_TAG_TLS_CRYPT)) {
