@@ -1105,19 +1105,17 @@ add_openvpn_arg_utf8safe (GPtrArray *args, const char *arg)
 static gboolean
 add_openvpn_arg_int (GPtrArray *args, const char *arg)
 {
-	long int tmp_int;
+	gint64 v;
 
 	g_return_val_if_fail (args != NULL, FALSE);
 	g_return_val_if_fail (arg != NULL, FALSE);
 
-	/* Convert -> int and back to string for security's sake since
-	 * strtol() ignores some leading and trailing characters.
-	 */
-	errno = 0;
-	tmp_int = strtol (arg, NULL, 10);
-	if (errno != 0)
+	/* Convert to int and for security's sake and to normalize the value
+	 * and also to gracefully handle leading and trailing whitespace. */
+	v = _nm_utils_ascii_str_to_int64 (arg, 10, G_MININT64, G_MAXINT64, 0);
+	if (!v && errno)
 		return FALSE;
-	g_ptr_array_add (args, (gpointer) g_strdup_printf ("%d", (guint32) tmp_int));
+	g_ptr_array_add (args, g_strdup_printf ("%"G_GINT64_FORMAT, v));
 	return TRUE;
 }
 
