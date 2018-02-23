@@ -225,6 +225,299 @@ _LOGD_enabled (void)
 
 /*****************************************************************************/
 
+static gboolean
+validate_auth (const char *auth)
+{
+	return NM_IN_STRSET (auth, NM_OPENVPN_AUTH_NONE,
+	                           NM_OPENVPN_AUTH_RSA_MD4,
+	                           NM_OPENVPN_AUTH_MD5,
+	                           NM_OPENVPN_AUTH_SHA1,
+	                           NM_OPENVPN_AUTH_SHA224,
+	                           NM_OPENVPN_AUTH_SHA256,
+	                           NM_OPENVPN_AUTH_SHA384,
+	                           NM_OPENVPN_AUTH_SHA512,
+	                           NM_OPENVPN_AUTH_RIPEMD160);
+}
+
+static gboolean
+validate_connection_type (const char *ctype)
+{
+	return NM_IN_STRSET (ctype, NM_OPENVPN_CONTYPE_TLS,
+	                            NM_OPENVPN_CONTYPE_STATIC_KEY,
+	                            NM_OPENVPN_CONTYPE_PASSWORD,
+	                            NM_OPENVPN_CONTYPE_PASSWORD_TLS);
+}
+
+static gboolean
+connection_type_is_tls_mode (const char *connection_type)
+{
+	return NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
+	                                      NM_OPENVPN_CONTYPE_PASSWORD,
+	                                      NM_OPENVPN_CONTYPE_PASSWORD_TLS);
+}
+
+/*****************************************************************************/
+
+static void
+args_add_str_take (GPtrArray *args, char *arg)
+{
+	nm_assert (args);
+	nm_assert (arg);
+
+	g_ptr_array_add (args, arg);
+}
+
+static void
+_args_add_strv (GPtrArray *args, gboolean accept_optional, guint argn, ...)
+{
+	va_list ap;
+	guint i;
+	const char *arg;
+
+	nm_assert (args);
+	nm_assert (argn > 0);
+
+	va_start (ap, argn);
+	for (i = 0; i < argn; i++) {
+		arg = va_arg (ap, const char *);
+		if (!arg) {
+			/* for convenience for the caller, we allow to pass %NULL with the
+			 * meaning to skip the argument. */
+			nm_assert (accept_optional);
+			continue;
+		}
+		args_add_str_take (args, g_strdup (arg));
+	}
+	va_end (ap);
+}
+#define args_add_strv(args, ...)  _args_add_strv (args, FALSE, NM_NARG (__VA_ARGS__), __VA_ARGS__)
+#define args_add_strv0(args, ...) _args_add_strv (args, TRUE,  NM_NARG (__VA_ARGS__), __VA_ARGS__)
+
+static const char *
+args_add_utf8safe_str (GPtrArray *args, const char *arg)
+{
+	char *arg_unescaped;
+
+	nm_assert (args);
+	nm_assert (arg);
+
+	arg_unescaped = nm_utils_str_utf8safe_unescape_cp (arg);
+	args_add_str_take (args, arg_unescaped);
+	return arg_unescaped;
+}
+
+static void
+args_add_int64 (GPtrArray *args, gint64 v)
+{
+	nm_assert (args);
+
+	args_add_str_take (args, g_strdup_printf ("%"G_GINT64_FORMAT, v));
+}
+
+static gboolean
+args_add_numstr (GPtrArray *args, const char *arg)
+{
+	gint64 v;
+
+	nm_assert (args);
+	nm_assert (arg);
+
+	/* Convert to int and for security's sake and to normalize the value
+	 * and also to gracefully handle leading and trailing whitespace. */
+	v = _nm_utils_ascii_str_to_int64 (arg, 10, G_MININT64, G_MAXINT64, 0);
+	if (!v && errno)
+		return FALSE;
+	args_add_int64 (args, v);
+	return TRUE;
+}
+
+static void
+args_add_vpn_data (GPtrArray *args, NMSettingVpn *s_vpn, const char *s_key, const char *a_key)
+{
+	const char *arg;
+
+	nm_assert (args);
+	nm_assert (NM_IS_SETTING_VPN (s_vpn));
+	nm_assert (s_key && s_key[0]);
+	nm_assert (a_key && a_key[0]);
+
+	arg = nm_setting_vpn_get_data_item (s_vpn, s_key);
+	if (nmovpn_arg_is_set (arg))
+		args_add_strv (args, a_key, arg);
+}
+
+static void
+args_add_vpn_certs (GPtrArray *args, NMSettingVpn *s_vpn)
+{
+	const char *ca, *cert, *key;
+	gs_free char *ca_free = NULL, *cert_free = NULL, *key_free = NULL;
+
+	nm_assert (args);
+	nm_assert (NM_IS_SETTING_VPN (s_vpn));
+
+	ca   = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
+	cert = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
+	key  = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+
+	ca   = nm_utils_str_utf8safe_unescape (ca,   &ca_free);
+	cert = nm_utils_str_utf8safe_unescape (cert, &cert_free);
+	key  = nm_utils_str_utf8safe_unescape (key,  &key_free);
+
+	if (   nmovpn_arg_is_set (ca)
+	    && nmovpn_arg_is_set (cert)
+	    && nmovpn_arg_is_set (key)
+	    && nm_streq (ca, cert)
+	    && nm_streq (ca, key))
+		args_add_strv (args, "--pkcs12", ca);
+	else {
+		if (nmovpn_arg_is_set (ca))
+			args_add_strv (args, "--ca", ca);
+		if (nmovpn_arg_is_set (cert))
+			args_add_strv (args, "--cert", cert);
+		if (nmovpn_arg_is_set (key))
+			args_add_strv (args, "--key", key);
+	}
+}
+
+/*****************************************************************************/
+
+static gboolean
+validate_address (const char *address)
+{
+	const char *p = address;
+
+	if (!address || !address[0])
+		return FALSE;
+
+	/* Ensure it's a valid DNS name or IP address */
+	while (*p) {
+		if (!isalnum (*p) && (*p != '-') && (*p != '.'))
+			return FALSE;
+		p++;
+	}
+	return TRUE;
+}
+
+typedef struct ValidateInfo {
+	const ValidProperty *table;
+	GError **error;
+	gboolean have_items;
+} ValidateInfo;
+
+static void
+validate_one_property (const char *key, const char *value, gpointer user_data)
+{
+	ValidateInfo *info = (ValidateInfo *) user_data;
+	int i;
+
+	if (*(info->error))
+		return;
+
+	info->have_items = TRUE;
+
+	/* 'name' is the setting name; always allowed but unused */
+	if (nm_streq (key, NM_SETTING_NAME))
+		return;
+
+	for (i = 0; info->table[i].name; i++) {
+		const ValidProperty *prop = &info->table[i];
+		long int tmp;
+
+		if (!nm_streq (prop->name, key))
+			continue;
+
+		switch (prop->type) {
+		case G_TYPE_STRING:
+			if (!prop->address || validate_address (value))
+				return; /* valid */
+
+			g_set_error (info->error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("invalid address “%s”"),
+			             key);
+			break;
+		case G_TYPE_INT:
+			errno = 0;
+			tmp = strtol (value, NULL, 10);
+			if (errno == 0 && tmp >= prop->int_min && tmp <= prop->int_max)
+				return; /* valid */
+
+			g_set_error (info->error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("invalid integer property “%s” or out of range [%d -> %d]"),
+			             key, prop->int_min, prop->int_max);
+			break;
+		case G_TYPE_BOOLEAN:
+			if (NM_IN_STRSET (value, "yes", "no"))
+				return; /* valid */
+
+			g_set_error (info->error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             /* Translators: keep "yes" and "no" untranslated! */
+			             _("invalid boolean property “%s” (not yes or no)"),
+			             key);
+			break;
+		default:
+			g_set_error (info->error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+			             _("unhandled property “%s” type %s"),
+			             key, g_type_name (prop->type));
+			break;
+		}
+	}
+
+	/* Did not find the property from valid_properties or the type did not match */
+	if (!info->table[i].name) {
+		g_set_error (info->error,
+		             NM_VPN_PLUGIN_ERROR,
+		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		             _("property “%s” invalid or not supported"),
+		             key);
+	}
+}
+
+static gboolean
+nm_openvpn_properties_validate (NMSettingVpn *s_vpn, GError **error)
+{
+	GError *validate_error = NULL;
+	ValidateInfo info = { &valid_properties[0], &validate_error, FALSE };
+
+	nm_setting_vpn_foreach_data_item (s_vpn, validate_one_property, &info);
+	if (!info.have_items) {
+		g_set_error_literal (error,
+		                     NM_VPN_PLUGIN_ERROR,
+		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+		                     _("No VPN configuration options."));
+		return FALSE;
+	}
+
+	if (validate_error) {
+		*error = validate_error;
+		return FALSE;
+	}
+	return TRUE;
+}
+
+static gboolean
+nm_openvpn_secrets_validate (NMSettingVpn *s_vpn, GError **error)
+{
+	GError *validate_error = NULL;
+	ValidateInfo info = { &valid_secrets[0], &validate_error, FALSE };
+
+	nm_setting_vpn_foreach_secret (s_vpn, validate_one_property, &info);
+	if (validate_error) {
+		g_propagate_error (error, validate_error);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/*****************************************************************************/
+
 static const char *
 openvpn_binary_find_exepath (void)
 {
@@ -456,141 +749,6 @@ pids_pending_wait_for_processes (void)
 }
 
 /*****************************************************************************/
-
-static gboolean
-validate_address (const char *address)
-{
-	const char *p = address;
-
-	if (!address || !address[0])
-		return FALSE;
-
-	/* Ensure it's a valid DNS name or IP address */
-	while (*p) {
-		if (!isalnum (*p) && (*p != '-') && (*p != '.'))
-			return FALSE;
-		p++;
-	}
-	return TRUE;
-}
-
-typedef struct ValidateInfo {
-	const ValidProperty *table;
-	GError **error;
-	gboolean have_items;
-} ValidateInfo;
-
-static void
-validate_one_property (const char *key, const char *value, gpointer user_data)
-{
-	ValidateInfo *info = (ValidateInfo *) user_data;
-	int i;
-
-	if (*(info->error))
-		return;
-
-	info->have_items = TRUE;
-
-	/* 'name' is the setting name; always allowed but unused */
-	if (nm_streq (key, NM_SETTING_NAME))
-		return;
-
-	for (i = 0; info->table[i].name; i++) {
-		const ValidProperty *prop = &info->table[i];
-		long int tmp;
-
-		if (!nm_streq (prop->name, key))
-			continue;
-
-		switch (prop->type) {
-		case G_TYPE_STRING:
-			if (!prop->address || validate_address (value))
-				return; /* valid */
-
-			g_set_error (info->error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("invalid address “%s”"),
-			             key);
-			break;
-		case G_TYPE_INT:
-			errno = 0;
-			tmp = strtol (value, NULL, 10);
-			if (errno == 0 && tmp >= prop->int_min && tmp <= prop->int_max)
-				return; /* valid */
-
-			g_set_error (info->error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("invalid integer property “%s” or out of range [%d -> %d]"),
-			             key, prop->int_min, prop->int_max);
-			break;
-		case G_TYPE_BOOLEAN:
-			if (NM_IN_STRSET (value, "yes", "no"))
-				return; /* valid */
-
-			g_set_error (info->error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             /* Translators: keep "yes" and "no" untranslated! */
-			             _("invalid boolean property “%s” (not yes or no)"),
-			             key);
-			break;
-		default:
-			g_set_error (info->error,
-			             NM_VPN_PLUGIN_ERROR,
-			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			             _("unhandled property “%s” type %s"),
-			             key, g_type_name (prop->type));
-			break;
-		}
-	}
-
-	/* Did not find the property from valid_properties or the type did not match */
-	if (!info->table[i].name) {
-		g_set_error (info->error,
-		             NM_VPN_PLUGIN_ERROR,
-		             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		             _("property “%s” invalid or not supported"),
-		             key);
-	}
-}
-
-static gboolean
-nm_openvpn_properties_validate (NMSettingVpn *s_vpn, GError **error)
-{
-	GError *validate_error = NULL;
-	ValidateInfo info = { &valid_properties[0], &validate_error, FALSE };
-
-	nm_setting_vpn_foreach_data_item (s_vpn, validate_one_property, &info);
-	if (!info.have_items) {
-		g_set_error_literal (error,
-		                     NM_VPN_PLUGIN_ERROR,
-		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-		                     _("No VPN configuration options."));
-		return FALSE;
-	}
-
-	if (validate_error) {
-		*error = validate_error;
-		return FALSE;
-	}
-	return TRUE;
-}
-
-static gboolean
-nm_openvpn_secrets_validate (NMSettingVpn *s_vpn, GError **error)
-{
-	GError *validate_error = NULL;
-	ValidateInfo info = { &valid_secrets[0], &validate_error, FALSE };
-
-	nm_setting_vpn_foreach_secret (s_vpn, validate_one_property, &info);
-	if (validate_error) {
-		g_propagate_error (error, validate_error);
-		return FALSE;
-	}
-	return TRUE;
-}
 
 static void
 nm_openvpn_disconnect_management_socket (NMOpenvpnPlugin *plugin)
@@ -1045,162 +1203,6 @@ openvpn_child_terminated (NMOpenvpnPlugin *plugin, GPid pid, gint status)
 		nm_vpn_service_plugin_disconnect ((NMVpnServicePlugin *) plugin, NULL);
 	else
 		nm_vpn_service_plugin_failure ((NMVpnServicePlugin *) plugin, failure);
-}
-
-/*****************************************************************************/
-
-static gboolean
-validate_auth (const char *auth)
-{
-	return NM_IN_STRSET (auth, NM_OPENVPN_AUTH_NONE,
-	                           NM_OPENVPN_AUTH_RSA_MD4,
-	                           NM_OPENVPN_AUTH_MD5,
-	                           NM_OPENVPN_AUTH_SHA1,
-	                           NM_OPENVPN_AUTH_SHA224,
-	                           NM_OPENVPN_AUTH_SHA256,
-	                           NM_OPENVPN_AUTH_SHA384,
-	                           NM_OPENVPN_AUTH_SHA512,
-	                           NM_OPENVPN_AUTH_RIPEMD160);
-}
-
-static gboolean
-validate_connection_type (const char *ctype)
-{
-	return NM_IN_STRSET (ctype, NM_OPENVPN_CONTYPE_TLS,
-	                            NM_OPENVPN_CONTYPE_STATIC_KEY,
-	                            NM_OPENVPN_CONTYPE_PASSWORD,
-	                            NM_OPENVPN_CONTYPE_PASSWORD_TLS);
-}
-
-static gboolean
-connection_type_is_tls_mode (const char *connection_type)
-{
-	return NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
-	                                      NM_OPENVPN_CONTYPE_PASSWORD,
-	                                      NM_OPENVPN_CONTYPE_PASSWORD_TLS);
-}
-
-/*****************************************************************************/
-
-static void
-args_add_str_take (GPtrArray *args, char *arg)
-{
-	nm_assert (args);
-	nm_assert (arg);
-
-	g_ptr_array_add (args, arg);
-}
-
-static void
-_args_add_strv (GPtrArray *args, gboolean accept_optional, guint argn, ...)
-{
-	va_list ap;
-	guint i;
-	const char *arg;
-
-	nm_assert (args);
-	nm_assert (argn > 0);
-
-	va_start (ap, argn);
-	for (i = 0; i < argn; i++) {
-		arg = va_arg (ap, const char *);
-		if (!arg) {
-			/* for convenience for the caller, we allow to pass %NULL with the
-			 * meaning to skip the argument. */
-			nm_assert (accept_optional);
-			continue;
-		}
-		args_add_str_take (args, g_strdup (arg));
-	}
-	va_end (ap);
-}
-#define args_add_strv(args, ...)  _args_add_strv (args, FALSE, NM_NARG (__VA_ARGS__), __VA_ARGS__)
-#define args_add_strv0(args, ...) _args_add_strv (args, TRUE,  NM_NARG (__VA_ARGS__), __VA_ARGS__)
-
-static const char *
-args_add_utf8safe_str (GPtrArray *args, const char *arg)
-{
-	char *arg_unescaped;
-
-	nm_assert (args);
-	nm_assert (arg);
-
-	arg_unescaped = nm_utils_str_utf8safe_unescape_cp (arg);
-	args_add_str_take (args, arg_unescaped);
-	return arg_unescaped;
-}
-
-static void
-args_add_int64 (GPtrArray *args, gint64 v)
-{
-	nm_assert (args);
-
-	args_add_str_take (args, g_strdup_printf ("%"G_GINT64_FORMAT, v));
-}
-
-static gboolean
-args_add_numstr (GPtrArray *args, const char *arg)
-{
-	gint64 v;
-
-	nm_assert (args);
-	nm_assert (arg);
-
-	/* Convert to int and for security's sake and to normalize the value
-	 * and also to gracefully handle leading and trailing whitespace. */
-	v = _nm_utils_ascii_str_to_int64 (arg, 10, G_MININT64, G_MAXINT64, 0);
-	if (!v && errno)
-		return FALSE;
-	args_add_int64 (args, v);
-	return TRUE;
-}
-
-static void
-args_add_vpn_data (GPtrArray *args, NMSettingVpn *s_vpn, const char *s_key, const char *a_key)
-{
-	const char *arg;
-
-	nm_assert (args);
-	nm_assert (NM_IS_SETTING_VPN (s_vpn));
-	nm_assert (s_key && s_key[0]);
-	nm_assert (a_key && a_key[0]);
-
-	arg = nm_setting_vpn_get_data_item (s_vpn, s_key);
-	if (nmovpn_arg_is_set (arg))
-		args_add_strv (args, a_key, arg);
-}
-
-static void
-args_add_vpn_certs (GPtrArray *args, NMSettingVpn *s_vpn)
-{
-	const char *ca, *cert, *key;
-	gs_free char *ca_free = NULL, *cert_free = NULL, *key_free = NULL;
-
-	nm_assert (args);
-	nm_assert (NM_IS_SETTING_VPN (s_vpn));
-
-	ca   = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
-	cert = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
-	key  = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
-
-	ca   = nm_utils_str_utf8safe_unescape (ca,   &ca_free);
-	cert = nm_utils_str_utf8safe_unescape (cert, &cert_free);
-	key  = nm_utils_str_utf8safe_unescape (key,  &key_free);
-
-	if (   nmovpn_arg_is_set (ca)
-	    && nmovpn_arg_is_set (cert)
-	    && nmovpn_arg_is_set (key)
-	    && nm_streq (ca, cert)
-	    && nm_streq (ca, key))
-		args_add_strv (args, "--pkcs12", ca);
-	else {
-		if (nmovpn_arg_is_set (ca))
-			args_add_strv (args, "--ca", ca);
-		if (nmovpn_arg_is_set (cert))
-			args_add_strv (args, "--cert", cert);
-		if (nmovpn_arg_is_set (key))
-			args_add_strv (args, "--key", key);
-	}
 }
 
 /*****************************************************************************/
