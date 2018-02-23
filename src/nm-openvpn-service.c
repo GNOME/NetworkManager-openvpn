@@ -1063,15 +1063,13 @@ validate_auth (const char *auth)
 	                           NM_OPENVPN_AUTH_RIPEMD160);
 }
 
-static const char *
+static gboolean
 validate_connection_type (const char *ctype)
 {
-	if (!NM_IN_STRSET (ctype, NM_OPENVPN_CONTYPE_TLS,
-	                          NM_OPENVPN_CONTYPE_STATIC_KEY,
-	                          NM_OPENVPN_CONTYPE_PASSWORD,
-	                          NM_OPENVPN_CONTYPE_PASSWORD_TLS))
-		return NULL;
-	return ctype;
+	return NM_IN_STRSET (ctype, NM_OPENVPN_CONTYPE_TLS,
+	                            NM_OPENVPN_CONTYPE_STATIC_KEY,
+	                            NM_OPENVPN_CONTYPE_PASSWORD,
+	                            NM_OPENVPN_CONTYPE_PASSWORD_TLS);
 }
 
 static gboolean
@@ -1964,9 +1962,8 @@ check_need_secrets (NMSettingVpn *s_vpn, gboolean *need_secrets)
 
 	*need_secrets = FALSE;
 
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-	ctype = validate_connection_type (tmp);
-	if (!ctype)
+	ctype = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
+	if (!validate_connection_type (ctype))
 		return NULL;
 
 	if (nm_streq (ctype, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
