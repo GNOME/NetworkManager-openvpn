@@ -8,22 +8,23 @@
 # Christian Kirbach <Christian.Kirbach@googlemail.com>, 2008, 2009, 2010, 2012.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2012, 2016.
 # Bernd Homuth <dev@hmt.im>, 2015.
+# Tim Sabsch <tim@sabsch.com>, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2017-11-11 19:40+0000\n"
-"PO-Revision-Date: 2017-12-10 15:52+0100\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2017-12-18 11:37+0000\n"
+"PO-Revision-Date: 2018-02-27 11:11+0100\n"
+"Last-Translator: Tim Sabsch <tim@sabsch.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../appdata/network-manager-openvpn.metainfo.xml.in.h:1
@@ -347,12 +348,12 @@ msgstr "Ordner »%s« kann nicht angelegt werden"
 #: ../properties/import-export.c:749
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
-msgstr ""
+msgstr "Blob <%s> in Zeile %ld kann nicht in Datei geschrieben werden (%s)"
 
 #: ../properties/import-export.c:766
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file “%s”"
-msgstr ""
+msgstr "Blob <%s> in Zeile %ld kann nicht in Datei »%s« geschrieben werden"
 
 #: ../properties/import-export.c:933
 #, c-format
@@ -1186,6 +1187,11 @@ msgid ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 msgstr ""
+"Betreff oder gemeinsamer Name (»Common Name«) zur Überprüfung der "
+"Informationen im Server-Zertifikat.\n"
+"\n"
+"config: verify-x509-name subject-or-name [mode]\n"
+"config (veraltet): tls-remote subject-or-name"
 
 #: ../properties/nm-openvpn-dialog.ui.h:114
 msgid "Server _Certificate Check:"
@@ -1207,6 +1213,19 @@ msgid ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 msgstr ""
+"Identifikation des Server-Zertifikats überprüfen.\n"
+"\n"
+"Falls aktiviert, wird die Verbindung nur erfolgreich hergestellt, wenn das "
+"Server-Zertifikat mit einigen erwarteten Eigenschaften übereinstimmt.\n"
+"Eine Übereinstimmung kann entweder für den gesamten Zertifikatsbetreff "
+"gelten (alle Felder),\n"
+"oder nur für den gemeinsamen Namen (»Common Name«, CN-Feld).\n"
+"\n"
+"Die frühere Option »tls-remote« ist veraltet und ab OpenVPN 2.4 nicht mehr "
+"verfügbar. Bitten nutzen Sie sie nicht länger.\n"
+"\n"
+"config: verify-x509-name subject-or-name [mode]\n"
+"config (veraltet): tls-remote subject-or-name"
 
 #: ../properties/nm-openvpn-dialog.ui.h:125
 msgid "_Verify peer (server) certificate usage signature"
@@ -1237,45 +1256,30 @@ msgstr ""
 "config: remote-cert-tls client|server"
 
 #: ../properties/nm-openvpn-dialog.ui.h:130
-#, fuzzy
-#| msgid "_Verify peer (server) certificate usage signature"
 msgid "_Verify peer (server) certificate nsCertType designation"
-msgstr "Signatur über die Zertifikatsverwendung des Servers _prüfen"
+msgstr "Angabe von »nsCertType« im Server-Zertifikat _prüfen"
 
 #: ../properties/nm-openvpn-dialog.ui.h:131
-#, fuzzy
-#| msgid ""
-#| "Require that peer certificate was signed with an explicit key usage and "
-#| "extended key usage based on RFC3280 TLS rules."
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
 msgstr ""
-"Verlangen, dass das Zertifikat der Gegenstelle mit einem ausdrücklichen "
-"Verwendungsschlüssel sowie erweitertem Verwendungsschlüssel entsprechend "
-"RFC3280 TLS-Regeln signiert ist."
+"Verlangen, dass das Zertifikat der Gegenstelle mit einer ausdrücklichen "
+"Angabe von »nsCertType« signiert ist."
 
 #: ../properties/nm-openvpn-dialog.ui.h:132
-#, fuzzy
-#| msgid "_Remote peer certificate TLS type:"
 msgid "_Remote peer certificate nsCert designation:"
-msgstr "TLS-Typ des Zertifikats des _entfernten Kommunikationspartners:"
+msgstr "Angabe von »nsCert«im Zertifikat der G_egenstelle:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:133
-#, fuzzy
-#| msgid ""
-#| "Require that peer certificate was signed with an explicit key usage and "
-#| "extended key usage based on RFC3280 TLS rules.\n"
-#| "config: remote-cert-tls client|server"
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
 "config: ns-cert-type client|server"
 msgstr ""
-"Verlangen, dass das Zertifikat der Gegenstelle mit einem ausdrücklichen "
-"Verwendungsschlüssel sowie erweitertem Verwendungsschlüssel entsprechend "
-"RFC3280 TLS-Regeln signiert ist.\n"
-"config: remote-cert-tls client|server"
+"Verlangen, dass das Zertifikat der Gegenstelle mit einer ausdrücklichen "
+"Angabe von »nsCertType« signiert ist.\n"
+"config: ns-cert-type client|server"
 
 #: ../properties/nm-openvpn-dialog.ui.h:135
 msgid "Key _Direction:"
