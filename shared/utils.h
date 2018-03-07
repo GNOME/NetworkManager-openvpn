@@ -33,6 +33,7 @@
 #define NMV_OVPN_TAG_CONNECT_TIMEOUT    "connect-timeout"
 #define NMV_OVPN_TAG_DEV                "dev"
 #define NMV_OVPN_TAG_DEV_TYPE           "dev-type"
+#define NMV_OVPN_TAG_EXTRA_CERTS        "extra-certs"
 #define NMV_OVPN_TAG_FLOAT              "float"
 #define NMV_OVPN_TAG_FRAGMENT           "fragment"
 #define NMV_OVPN_TAG_GROUP              "group"
@@ -40,9 +41,9 @@
 #define NMV_OVPN_TAG_HTTP_PROXY_RETRY   "http-proxy-retry"
 #define NMV_OVPN_TAG_IFCONFIG           "ifconfig"
 #define NMV_OVPN_TAG_KEEPALIVE          "keepalive"
-#define NMV_OVPN_TAG_KEY_DIRECTION      "key-direction"
 #define NMV_OVPN_TAG_KEY                "key"
 #define NMV_OVPN_TAG_KEYSIZE            "keysize"
+#define NMV_OVPN_TAG_KEY_DIRECTION      "key-direction"
 #define NMV_OVPN_TAG_MAX_ROUTES         "max-routes"
 #define NMV_OVPN_TAG_MSSFIX             "mssfix"
 #define NMV_OVPN_TAG_MTU_DISC           "mtu-disc"
@@ -50,23 +51,23 @@
 #define NMV_OVPN_TAG_NS_CERT_TYPE       "ns-cert-type"
 #define NMV_OVPN_TAG_PERSIST_KEY        "persist-key"
 #define NMV_OVPN_TAG_PERSIST_TUN        "persist-tun"
-#define NMV_OVPN_TAG_PING_EXIT          "ping-exit"
 #define NMV_OVPN_TAG_PING               "ping"
+#define NMV_OVPN_TAG_PING_EXIT          "ping-exit"
 #define NMV_OVPN_TAG_PING_RESTART       "ping-restart"
 #define NMV_OVPN_TAG_PKCS12             "pkcs12"
 #define NMV_OVPN_TAG_PORT               "port"
 #define NMV_OVPN_TAG_PROTO              "proto"
+#define NMV_OVPN_TAG_REMOTE             "remote"
 #define NMV_OVPN_TAG_REMOTE_CERT_TLS    "remote-cert-tls"
 #define NMV_OVPN_TAG_REMOTE_RANDOM      "remote-random"
-#define NMV_OVPN_TAG_REMOTE             "remote"
 #define NMV_OVPN_TAG_RENEG_SEC          "reneg-sec"
 #define NMV_OVPN_TAG_ROUTE              "route"
 #define NMV_OVPN_TAG_RPORT              "rport"
 #define NMV_OVPN_TAG_SCRIPT_SECURITY    "script-security"
 #define NMV_OVPN_TAG_SECRET             "secret"
 #define NMV_OVPN_TAG_SERVER_POLL_TIMEOUT "server-poll-timeout"
-#define NMV_OVPN_TAG_SOCKS_PROXY_RETRY  "socks-proxy-retry"
 #define NMV_OVPN_TAG_SOCKS_PROXY        "socks-proxy"
+#define NMV_OVPN_TAG_SOCKS_PROXY_RETRY  "socks-proxy-retry"
 #define NMV_OVPN_TAG_TLS_AUTH           "tls-auth"
 #define NMV_OVPN_TAG_TLS_CIPHER         "tls-cipher"
 #define NMV_OVPN_TAG_TLS_CLIENT         "tls-client"
@@ -99,5 +100,11 @@ gssize nmovpn_remote_parse (const char *str,
                             const char **out_port,
                             const char **out_proto,
                             GError **error);
+
+static inline const char *
+nmovpn_arg_is_set (const char *value)
+{
+	return (value && value[0]) ? value : NULL;
+}
 
 #endif  /* UTILS_H */
