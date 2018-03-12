@@ -1508,7 +1508,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		}
 
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags");
-		G_STATIC_ASSERT (((guint) (NMSettingSecretFlags) 0xFFFFu) == 0xFFFFu);
+		G_STATIC_ASSERT_EXPR (((guint) (NMSettingSecretFlags) 0xFFFFu) == 0xFFFFu);
 		pw_flags = _nm_utils_ascii_str_to_int64 (value, 10, 0, 0xFFFF, NM_SETTING_SECRET_FLAG_NONE);
 	} else
 		pw_flags = NM_SETTING_SECRET_FLAG_NONE;
