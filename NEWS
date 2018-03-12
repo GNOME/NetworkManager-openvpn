@@ -1,4 +1,25 @@
 =======================================================
+NetworkManager-openvpn-1.8.2
+Overview of changes since NetworkManager-openvpn-1.8.0
+=======================================================
+
+This is a new stable release of NetworkManager-openvpn.  Notable changes include:
+
+* Handle more then 255 routes (bgo #788137)
+* Fix GUI for editing connection with static key (bgo #788226)
+* Fix parsing gateway in helper script (bgo #788514)
+* Fix parsing 2FA challenge for "PASSWORD:Verification Failed" (bgo #751842)
+* Fix parsing remote hosts from configuration (bgo #792252)
+* Fix assertion failure while quitting service (bgo #792252)
+* Add support for connect-timeout (bgo #792252)
+* Automatically lower connect-timeout if there are multiple remotes to try
+  at least 3 remotes (bgo #792252)
+* Add support for extra-certs (bgo #793746)
+* Various code cleanups
+* Updated Brazilian Portuguese, Czech, Danish, Finnish, German, Hungarian,
+  Indonesian, Italian, Lithuanian, Polish, Serbian, Spanish translations.
+
+=======================================================
 NetworkManager-openvpn-1.8.0
 Overview of changes since NetworkManager-openvpn-1.2.10
 =======================================================
