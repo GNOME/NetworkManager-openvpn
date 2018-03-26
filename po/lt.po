@@ -2,15 +2,15 @@
 # Copyright © 2008, 2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the NetworkManager package.
 # Žygimantas Beručka <zygis@gnome.org>, 2008, 2010.
-# Aurimas Černius <aurisc4@gmail.com>, 2010, 2013, 2015, 2016, 2017.
+# Aurimas Černius <aurisc4@gmail.com>, 2010, 2013, 2015, 2016, 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn HEAD\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2017-09-28 12:20+0000\n"
-"PO-Revision-Date: 2017-10-15 23:18+0300\n"
+"POT-Creation-Date: 2018-03-07 18:25+0000\n"
+"PO-Revision-Date: 2018-03-26 22:49+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -72,125 +72,14 @@ msgstr "Liudijimo slaptažo_dis:"
 msgid "_HTTP proxy password:"
 msgstr "_HTTP įgaliotojo serverio slaptažodis:"
 
-#: ../auth-dialog/main.c:513
+#: ../auth-dialog/main.c:516
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network “%s”."
 msgstr ""
 "Norint gauti prieigą prie Virtualiojo Privačiojo Tinklo „%s“, reikia "
 "nustatyti jūsų tapatybę."
 
-#: ../properties/auth-helpers.c:280
-msgid "Choose an OpenVPN static key…"
-msgstr "Pasirinkite OpenVPN statinį raktą…"
-
-#: ../properties/auth-helpers.c:304 ../properties/auth-helpers.c:967
-#: ../properties/auth-helpers.c:1732 ../properties/nm-openvpn-dialog.ui.h:1
-msgid "None"
-msgstr "Nėra"
-
-#: ../properties/auth-helpers.c:718
-msgid "OpenVPN Static Keys (*.key)"
-msgstr "OpenVPN statiniai raktai (*.key)"
-
-#: ../properties/auth-helpers.c:865 ../properties/auth-helpers.c:959
-msgid "Default"
-msgstr "Numatytasis"
-
-#: ../properties/auth-helpers.c:969
-msgid "RSA MD-4"
-msgstr "RSA MD-4"
-
-#: ../properties/auth-helpers.c:971
-msgid "MD-5"
-msgstr "MD-5"
-
-#: ../properties/auth-helpers.c:973
-msgid "SHA-1"
-msgstr "SHA-1"
-
-#: ../properties/auth-helpers.c:975
-msgid "SHA-224"
-msgstr "SHA-224"
-
-#: ../properties/auth-helpers.c:977
-msgid "SHA-256"
-msgstr "SHA-256"
-
-#: ../properties/auth-helpers.c:979
-msgid "SHA-384"
-msgstr "SHA-384"
-
-#: ../properties/auth-helpers.c:981
-msgid "SHA-512"
-msgstr "SHA-512"
-
-#: ../properties/auth-helpers.c:983
-msgid "RIPEMD-160"
-msgstr "RIPEMD-160"
-
-#: ../properties/auth-helpers.c:1026
-msgid "Don’t verify certificate identification"
-msgstr "Netikrinti liudijimo identifikavimo"
-
-#: ../properties/auth-helpers.c:1032
-msgid "Verify whole subject exactly"
-msgstr "Tiksliai patikrinti viską"
-
-#: ../properties/auth-helpers.c:1038
-msgid "Verify name exactly"
-msgstr "Tiksliai patikrinti pavadinimą"
-
-#: ../properties/auth-helpers.c:1044
-msgid "Verify name by prefix"
-msgstr "Patikrinti pavadinimą pagal priešdėlį"
-
-#: ../properties/auth-helpers.c:1050
-msgid "Verify subject partially (legacy mode, strongly discouraged)"
-msgstr ""
-"Dalinai patikrinti (pasenusi veiksena, primygtinai patariama nenaudoti)"
-
-#: ../properties/auth-helpers.c:1164 ../properties/auth-helpers.c:1235
-msgid "Server"
-msgstr "Serveris"
-
-#: ../properties/auth-helpers.c:1169 ../properties/auth-helpers.c:1240
-msgid "Client"
-msgstr "Klientas"
-
-#: ../properties/auth-helpers.c:1533 ../properties/nm-openvpn-dialog.ui.h:35
-msgid "Not required"
-msgstr "Nebūtina"
-
-#: ../properties/auth-helpers.c:1535
-msgid "HTTP"
-msgstr "HTTP"
-
-#: ../properties/auth-helpers.c:1537
-msgid "SOCKS"
-msgstr "SOCKS"
-
-#: ../properties/auth-helpers.c:1659
-msgid "TUN"
-msgstr "TUN"
-
-#: ../properties/auth-helpers.c:1661
-msgid "TAP"
-msgstr "TAP"
-
-#. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1668
-msgid "(automatic)"
-msgstr "(automatinis)"
-
-#: ../properties/auth-helpers.c:1792
-msgid "ping-exit"
-msgstr "ping-exit"
-
-#: ../properties/auth-helpers.c:1794
-msgid "ping-restart"
-msgstr "ping-restart"
-
-#: ../properties/import-export.c:186
+#: ../properties/import-export.c:181
 #, c-format
 msgid "option %s expects between %u and %u argument"
 msgid_plural "option %s expects between %u and %u arguments"
@@ -198,12 +87,12 @@ msgstr[0] "parametras %s tikisi nuo %u iki %u argumento"
 msgstr[1] "parametras %s tikisi nuo %u iki %u argumentų"
 msgstr[2] "parametras %s tikisi nuo %u iki %u argumentų"
 
-#: ../properties/import-export.c:191
+#: ../properties/import-export.c:186
 #, c-format
 msgid "option %s expects no arguments"
 msgstr "parametras %s nesitiki argumentų"
 
-#: ../properties/import-export.c:193
+#: ../properties/import-export.c:188
 #, c-format
 msgid "option %s expects exactly one argument"
 msgid_plural "option %s expects exactly %u arguments"
@@ -211,40 +100,40 @@ msgstr[0] "parametras %s tikisi lygiai %u argumento"
 msgstr[1] "parametras %s tikisi lygiai %u argumentų"
 msgstr[2] "parametras %s tikisi lygiai %u argumentų"
 
-#: ../properties/import-export.c:222
+#: ../properties/import-export.c:217
 #, c-format
 msgid "argument %s of “%s” can not be empty"
 msgstr "argumentas %s iš „%s“ negali būti tuščias"
 
-#: ../properties/import-export.c:224
+#: ../properties/import-export.c:219
 #, c-format
 msgid "argument of “%s” can not be empty"
 msgstr "„%s“ argumentas negali būti tuščias"
 
-#: ../properties/import-export.c:240
+#: ../properties/import-export.c:235
 #, c-format
 msgid "argument %s of “%s” must be UTF-8 encoded"
 msgstr "argumentas %s iš „%s“ privalo būti UTF-8 koduotės"
 
-#: ../properties/import-export.c:242
+#: ../properties/import-export.c:237
 #, c-format
 msgid "argument of “%s” must be UTF-8 encoded"
 msgstr "„%s“ argumentas privalo būti UTF-8 koduotės"
 
-#: ../properties/import-export.c:266
+#: ../properties/import-export.c:261
 #, c-format
 msgid "invalid %uth argument to “%s” where number expected"
 msgstr "netinkamas %u argumentas į „%s“, kur tikimasi skaičiaus"
 
 #. we don't support these special destinations, as they currently cannot be expressed
 #. * in a connection.
-#: ../properties/import-export.c:307
+#: ../properties/import-export.c:302
 #, c-format
 msgid "unsupported %uth argument %s to “%s”"
 msgstr "nepalaikomas %u argumentas %s į „%s“"
 
 #. we also don't support specifing a FQDN.
-#: ../properties/import-export.c:325
+#: ../properties/import-export.c:320
 #, c-format
 msgid ""
 "unsupported %uth argument to “%s” which looks like a FQDN but only IPv4 "
@@ -253,157 +142,157 @@ msgstr ""
 "nepalaikomas %u argumentas į „%s“, kuris yra panašus į FQDN, bet palaikomas "
 "tik IPv4 adresas"
 
-#: ../properties/import-export.c:332
+#: ../properties/import-export.c:327
 #, c-format
 msgid "invalid %uth argument to “%s” where IPv4 address expected"
 msgstr "netinkamas %u argumentas į „%s“, kur tikimasi IPv4 adreso"
 
-#: ../properties/import-export.c:357
+#: ../properties/import-export.c:352
 #, c-format
 msgid "invalid %uth key-direction argument to “%s”"
 msgstr "netinkamas %u rakto krypties argumentas į „%s“"
 
-#: ../properties/import-export.c:371
+#: ../properties/import-export.c:366
 #, c-format
 msgid "invalid %uth argument to “%s”"
 msgstr "netinkamas %u argumentas į „%s“"
 
-#: ../properties/import-export.c:486
+#: ../properties/import-export.c:481
 #, c-format
 msgid "unterminated %s at position %lld"
 msgstr "neužbaigtas %s pozicijoje %lld"
 
-#: ../properties/import-export.c:487
+#: ../properties/import-export.c:482
 msgid "double quote"
 msgstr "dviguba kabutė"
 
-#: ../properties/import-export.c:487
+#: ../properties/import-export.c:482
 msgid "single quote"
 msgstr "vienguba kabutė"
 
-#: ../properties/import-export.c:503
+#: ../properties/import-export.c:498
 #, c-format
 msgid "trailing escaping backslash at position %lld"
 msgstr "atgal pasviręs brūkšnelis pabaigoje pozicijoje %lld"
 
-#: ../properties/import-export.c:633
+#: ../properties/import-export.c:628
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr ""
 "nepavyksta perskaityti HTTP įgaliotojo serverio tapatybės nustatymo failo"
 
-#: ../properties/import-export.c:651
+#: ../properties/import-export.c:646
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr ""
 "nepavyksta perskaityti naudotojo/slaptažodžio iš HTTP įgaliotojo serverio "
 "tapatybės nustatymo failo"
 
-#: ../properties/import-export.c:659
+#: ../properties/import-export.c:654
 #, c-format
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr ""
 "naudotojas/slaptažodis HTTP įgaliotojo serverio tapatybės nustatymo faile "
 "turi būti UTF-8 koduote"
 
-#: ../properties/import-export.c:721
+#: ../properties/import-export.c:716
 #, c-format
 msgid "“%s” is not a directory"
 msgstr "„%s“ nėra katalogas"
 
-#: ../properties/import-export.c:729
+#: ../properties/import-export.c:724
 #, c-format
 msgid "cannot create “%s” directory"
 msgstr "nepavyksta sukurti katalogo „%s“"
 
-#: ../properties/import-export.c:749
+#: ../properties/import-export.c:744
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr "nepavyksta įrašyti <%s> bloko iš eilutės %ld į failą (%s)"
 
-#: ../properties/import-export.c:766
+#: ../properties/import-export.c:761
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file “%s”"
 msgstr "nepavyksta įrašyti <%s> bloko iš eilutės %ld į failą „%s“"
 
-#: ../properties/import-export.c:935
+#: ../properties/import-export.c:930
 #, c-format
 msgid "unsupported mtu-disc argument"
 msgstr "nepalaikomas mtu-disc argumentas"
 
-#: ../properties/import-export.c:946 ../properties/import-export.c:1319
+#: ../properties/import-export.c:941 ../properties/import-export.c:1328
 #, c-format
 msgid "invalid option"
 msgstr "netinkamas parametras"
 
-#: ../properties/import-export.c:985
+#: ../properties/import-export.c:991
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "nepalaikomas comp-lzo argumentas"
 
-#: ../properties/import-export.c:1083
+#: ../properties/import-export.c:1089
 #, c-format
 msgid "remote cannot contain space"
 msgstr "nutolęs negali turėti tarpo"
 
-#: ../properties/import-export.c:1087
+#: ../properties/import-export.c:1093
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "nutolęs negali turėti kablelio"
 
-#: ../properties/import-export.c:1098
+#: ../properties/import-export.c:1104
 #, c-format
 msgid "remote expects protocol type like “udp” or “tcp”"
 msgstr ""
 "nutolęs kompiuteris tikisi, kad protokolo tipas bus toks kaip „udp“ arba "
 "„tcp“"
 
-#: ../properties/import-export.c:1303
+#: ../properties/import-export.c:1312
 #, c-format
 msgid "invalid verify-x509-name type"
 msgstr "netinkamas verify-x509-name tipas"
 
-#: ../properties/import-export.c:1445
+#: ../properties/import-export.c:1456
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "nepalaikomas blokas/xml elementas"
 
-#: ../properties/import-export.c:1474
+#: ../properties/import-export.c:1485
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "neužbaigtas bloko elementas <%s>"
 
-#: ../properties/import-export.c:1530
+#: ../properties/import-export.c:1541
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "konfigūracijos klaida: %s (eilutė %ld)"
 
-#: ../properties/import-export.c:1531
+#: ../properties/import-export.c:1542
 msgid "unknown or unsupported option"
 msgstr "nežinomas arba nepalaikomas parametras"
 
-#: ../properties/import-export.c:1546
+#: ../properties/import-export.c:1557
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr "Importuojamas failas nebuvo tinkama OpenVPN kliento konfigūracija"
 
-#: ../properties/import-export.c:1554
+#: ../properties/import-export.c:1565
 msgid "The file to import wasn’t a valid OpenVPN configure (no remote)"
 msgstr ""
 "Importuojamas failas nebuvo tinkama OpenVPN konfigūracija (nėra nuotolinio)"
 
-#: ../properties/import-export.c:1786
+#: ../properties/import-export.c:1797
 msgid "missing path argument"
 msgstr "trūksta kelio argumento"
 
-#: ../properties/import-export.c:1796
+#: ../properties/import-export.c:1807
 msgid "connection is not a valid OpenVPN connection"
 msgstr "ryšys nėra tinkamas OpenVPN ryšys"
 
-#: ../properties/import-export.c:1805
+#: ../properties/import-export.c:1816
 msgid "connection was incomplete (missing gateway)"
 msgstr "ryšys nebuvo užbaigtas (trūksta tinklų sietuvo)"
 
-#: ../properties/import-export.c:2137
+#: ../properties/import-export.c:2157
 #, c-format
 msgid "failed to write file: %s"
 msgstr "nepavyko įrašyti failo: %s"
@@ -421,40 +310,155 @@ msgid "unknown OpenVPN file extension"
 msgstr "nežinomas OpenVPN failo plėtinys"
 
 #: ../properties/nm-openvpn-editor.c:278
+msgid "Choose an OpenVPN static key…"
+msgstr "Pasirinkite OpenVPN statinį raktą…"
+
+#: ../properties/nm-openvpn-editor.c:296 ../properties/nm-openvpn-editor.c:908
+#: ../properties/nm-openvpn-editor.c:1669
+#: ../properties/nm-openvpn-dialog.ui.h:1
+msgid "None"
+msgstr "Nėra"
+
+#: ../properties/nm-openvpn-editor.c:680
+msgid "OpenVPN Static Keys (*.key)"
+msgstr "OpenVPN statiniai raktai (*.key)"
+
+#: ../properties/nm-openvpn-editor.c:829 ../properties/nm-openvpn-editor.c:925
+msgid "Default"
+msgstr "Numatytasis"
+
+#: ../properties/nm-openvpn-editor.c:909
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../properties/nm-openvpn-editor.c:910
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/nm-openvpn-editor.c:911
+msgid "SHA-1"
+msgstr "SHA-1"
+
+#: ../properties/nm-openvpn-editor.c:912
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: ../properties/nm-openvpn-editor.c:913
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: ../properties/nm-openvpn-editor.c:914
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: ../properties/nm-openvpn-editor.c:915
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: ../properties/nm-openvpn-editor.c:916
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
+
+#: ../properties/nm-openvpn-editor.c:970
+msgid "Don’t verify certificate identification"
+msgstr "Netikrinti liudijimo identifikavimo"
+
+#: ../properties/nm-openvpn-editor.c:976
+msgid "Verify whole subject exactly"
+msgstr "Tiksliai patikrinti viską"
+
+#: ../properties/nm-openvpn-editor.c:982
+msgid "Verify name exactly"
+msgstr "Tiksliai patikrinti pavadinimą"
+
+#: ../properties/nm-openvpn-editor.c:988
+msgid "Verify name by prefix"
+msgstr "Patikrinti pavadinimą pagal priešdėlį"
+
+#: ../properties/nm-openvpn-editor.c:994
+msgid "Verify subject partially (legacy mode, strongly discouraged)"
+msgstr ""
+"Dalinai patikrinti (pasenusi veiksena, primygtinai patariama nenaudoti)"
+
+#: ../properties/nm-openvpn-editor.c:1108
+#: ../properties/nm-openvpn-editor.c:1179
+msgid "Server"
+msgstr "Serveris"
+
+#: ../properties/nm-openvpn-editor.c:1113
+#: ../properties/nm-openvpn-editor.c:1184
+msgid "Client"
+msgstr "Klientas"
+
+#: ../properties/nm-openvpn-editor.c:1476
+#: ../properties/nm-openvpn-dialog.ui.h:35
+msgid "Not required"
+msgstr "Nebūtina"
+
+#: ../properties/nm-openvpn-editor.c:1478
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/nm-openvpn-editor.c:1480
+msgid "SOCKS"
+msgstr "SOCKS"
+
+#: ../properties/nm-openvpn-editor.c:1598
+msgid "TUN"
+msgstr "TUN"
+
+#: ../properties/nm-openvpn-editor.c:1600
+msgid "TAP"
+msgstr "TAP"
+
+#. interface name is max 15 chars
+#: ../properties/nm-openvpn-editor.c:1607
+msgid "(automatic)"
+msgstr "(automatinis)"
+
+#: ../properties/nm-openvpn-editor.c:1730
+msgid "ping-exit"
+msgstr "ping-exit"
+
+#: ../properties/nm-openvpn-editor.c:1732
+msgid "ping-restart"
+msgstr "ping-restart"
+
+#: ../properties/nm-openvpn-editor.c:2365
 msgid "Certificates (TLS)"
 msgstr "Liudijimai (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:289
+#: ../properties/nm-openvpn-editor.c:2376
 msgid "Password"
 msgstr "Slaptažodis"
 
-#: ../properties/nm-openvpn-editor.c:302
+#: ../properties/nm-openvpn-editor.c:2389
 msgid "Password with Certificates (TLS)"
 msgstr "Slaptažodis su liudijimais (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:314
+#: ../properties/nm-openvpn-editor.c:2401
 msgid "Static Key"
 msgstr "Statinis raktas"
 
-#: ../properties/nm-openvpn-editor.c:468
+#: ../properties/nm-openvpn-editor.c:2555
 msgid "could not create openvpn object"
 msgstr "nepavyko sukurti openvpn objekto"
 
-#: ../properties/nm-openvpn-editor.c:485
+#: ../properties/nm-openvpn-editor.c:2572
 msgid "could not load UI widget"
 msgstr "nepavyko įkelti elemento UI"
 
-#: ../shared/nm-utils/nm-shared-utils.c:619
+#: ../shared/nm-utils/nm-shared-utils.c:794
 #, c-format
 msgid "object class '%s' has no property named '%s'"
 msgstr "objekto klasė „%s“ neturi savybės „%s“"
 
-#: ../shared/nm-utils/nm-shared-utils.c:626
+#: ../shared/nm-utils/nm-shared-utils.c:801
 #, c-format
 msgid "property '%s' of object class '%s' is not writable"
 msgstr "savybė „%s“ objekto klasėje „%s“ nėra rašoma"
 
-#: ../shared/nm-utils/nm-shared-utils.c:633
+#: ../shared/nm-utils/nm-shared-utils.c:808
 #, c-format
 msgid ""
 "construct property \"%s\" for object '%s' can't be set after construction"
@@ -462,17 +466,17 @@ msgstr ""
 "konstruktoriaus savybė „%s“ objekte „%s“ negali būti nustatyta po "
 "sukonstravimo"
 
-#: ../shared/nm-utils/nm-shared-utils.c:641
+#: ../shared/nm-utils/nm-shared-utils.c:816
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
 msgstr "„%s::%s“ nėra tinkamas savybės pavadinimas; „%s“ nėra GObject potipis"
 
-#: ../shared/nm-utils/nm-shared-utils.c:650
+#: ../shared/nm-utils/nm-shared-utils.c:825
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
 msgstr "nepavyksta nustatyti savybės „%s“ tipe „%s“ į „%s“ tipo vertę"
 
-#: ../shared/nm-utils/nm-shared-utils.c:661
+#: ../shared/nm-utils/nm-shared-utils.c:836
 #, c-format
 msgid ""
 "value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
@@ -525,181 +529,187 @@ msgstr "netinkamas prievadas"
 msgid "invalid protocol"
 msgstr "netinkamas protokolas"
 
-#: ../src/nm-openvpn-service.c:477
+#: ../src/nm-openvpn-service.c:437
 #, c-format
 msgid "invalid address “%s”"
 msgstr "netinkamas adresas „%s“"
 
-#: ../src/nm-openvpn-service.c:489
+#: ../src/nm-openvpn-service.c:449
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "netinkama sveikaskaitinė savybė „%s“ arba už ribų [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:500
+#: ../src/nm-openvpn-service.c:460
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "netinkama loginė savybė „%s“ (ne taip arba ne)"
 
-#: ../src/nm-openvpn-service.c:507
+#: ../src/nm-openvpn-service.c:467
 #, c-format
 msgid "unhandled property “%s” type %s"
 msgstr "neapdorotas savybės „%s“ tipas %s"
 
-#: ../src/nm-openvpn-service.c:518
+#: ../src/nm-openvpn-service.c:478
 #, c-format
 msgid "property “%s” invalid or not supported"
 msgstr "savybė „%s“ netinkama arba nepalaikoma"
 
-#: ../src/nm-openvpn-service.c:534
+#: ../src/nm-openvpn-service.c:494
 msgid "No VPN configuration options."
 msgstr "Nėra VPN konfigūracijos parametrų."
 
-#: ../src/nm-openvpn-service.c:739
+#: ../src/nm-openvpn-service.c:933
 msgid "A username is required."
 msgstr "Būtinas naudotojo vardas."
 
-#: ../src/nm-openvpn-service.c:743
+#: ../src/nm-openvpn-service.c:937
 msgid "A password is required."
 msgstr "Būtinas slaptažodis."
 
-#: ../src/nm-openvpn-service.c:746
+#: ../src/nm-openvpn-service.c:940
 msgid "A username and password are required."
 msgstr "Būtinas naudotojo vardas ir slaptažodis."
 
-#: ../src/nm-openvpn-service.c:768
+#: ../src/nm-openvpn-service.c:962
 msgid "A private key password is required."
 msgstr "Būtinas privačiojo rakto slaptažodis."
 
-#: ../src/nm-openvpn-service.c:781
+#: ../src/nm-openvpn-service.c:975
 msgid "An HTTP Proxy username is required."
 msgstr "Būtinas HTTP įgaliotojo serverio naudotojo vardas."
 
-#: ../src/nm-openvpn-service.c:785
+#: ../src/nm-openvpn-service.c:979
 msgid "An HTTP Proxy password is required."
 msgstr "Būtinas HTTP įgaliotojo serverio slaptažodis."
 
-#: ../src/nm-openvpn-service.c:788
+#: ../src/nm-openvpn-service.c:982
 msgid "An HTTP Proxy username and password are required."
 msgstr "Būtinas HTTP įgaliotojo serverio naudotojo vardas ir slaptažodis."
 
-#: ../src/nm-openvpn-service.c:1275 ../src/nm-openvpn-service.c:2065
-#: ../src/nm-openvpn-service.c:2099
+#: ../src/nm-openvpn-service.c:1348 ../src/nm-openvpn-service.c:2096
+#: ../src/nm-openvpn-service.c:2131
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr ""
 "Nepavyko apdoroti užklausos, nes VPN prisijungimo nustatymai buvo netinkami."
 
-#: ../src/nm-openvpn-service.c:1284 ../src/nm-openvpn-service.c:2074
+#: ../src/nm-openvpn-service.c:1357 ../src/nm-openvpn-service.c:2105
 msgid "Invalid connection type."
 msgstr "Netinkamas prisijungimo tipas."
 
-#: ../src/nm-openvpn-service.c:1302
+#: ../src/nm-openvpn-service.c:1375
 msgid "Could not find the openvpn binary."
 msgstr "Nepavyko rasti openvpn programos."
 
-#: ../src/nm-openvpn-service.c:1312
+#: ../src/nm-openvpn-service.c:1385
 msgid "Invalid HMAC auth."
 msgstr "Netinkama HMAC tapatybė."
 
-#: ../src/nm-openvpn-service.c:1357 ../src/nm-openvpn-service.c:1365
+#: ../src/nm-openvpn-service.c:1434
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "Netinkamas prievado numeris „%s“."
 
-#: ../src/nm-openvpn-service.c:1385
+#: ../src/nm-openvpn-service.c:1454
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "Netinkamas proto „%s“."
 
-#: ../src/nm-openvpn-service.c:1427
+#: ../src/nm-openvpn-service.c:1493
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "Netinkamas įgaliotojo serverio tipas „%s“."
 
-#: ../src/nm-openvpn-service.c:1475
+#: ../src/nm-openvpn-service.c:1539
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "Netinkama ping trukmė „%s“."
 
-#: ../src/nm-openvpn-service.c:1488
+#: ../src/nm-openvpn-service.c:1552
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "Netinkama ping-exit trukmė „%s“."
 
-#: ../src/nm-openvpn-service.c:1501
+#: ../src/nm-openvpn-service.c:1565
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "Netinkama ping-restart trukmė „%s“."
 
-#: ../src/nm-openvpn-service.c:1520
+#: ../src/nm-openvpn-service.c:1578
+#, c-format
+#| msgid "Invalid proto “%s”."
+msgid "Invalid connect timeout “%s”."
+msgstr "Netinkamas ryšio laiko limitas „%s“."
+
+#: ../src/nm-openvpn-service.c:1603
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "Netinkamas max-routes argumentas „%s“."
 
-#: ../src/nm-openvpn-service.c:1575
+#: ../src/nm-openvpn-service.c:1647
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "Netinkamas rakto dydis „%s“."
 
-#: ../src/nm-openvpn-service.c:1632
+#: ../src/nm-openvpn-service.c:1699
 #, c-format
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "Netinkama konfigūracija su tls-remote ir verify-x509-name."
 
-#: ../src/nm-openvpn-service.c:1646
+#: ../src/nm-openvpn-service.c:1712
 #, c-format
 msgid "Invalid verify-x509-name."
 msgstr "Netinkamas verify-x509-name."
 
-#: ../src/nm-openvpn-service.c:1680
+#: ../src/nm-openvpn-service.c:1735
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "Netinkamos persijungimo sekundės „%s“."
 
-#: ../src/nm-openvpn-service.c:1712
+#: ../src/nm-openvpn-service.c:1765
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "Netinkamas TUN MTU dydis „%s“."
 
-#: ../src/nm-openvpn-service.c:1726
+#: ../src/nm-openvpn-service.c:1778
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "Netinkamas fragmento dydis „%s“."
 
-#: ../src/nm-openvpn-service.c:1838
+#: ../src/nm-openvpn-service.c:1875
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "Nežinomas ryšio tipas „%s“."
 
-#: ../src/nm-openvpn-service.c:1857
+#: ../src/nm-openvpn-service.c:1893
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "Naudotojas „%s“ nerastas, patikrinkite NM_OPENVPN_USER."
 
-#: ../src/nm-openvpn-service.c:1870
+#: ../src/nm-openvpn-service.c:1905
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "Grupė „%s“ nerasta, patikrinkite NM_OPENVPN_GROUP."
 
-#: ../src/nm-openvpn-service.c:2112
+#: ../src/nm-openvpn-service.c:2144
 msgid "Unhandled pending authentication."
 msgstr "Neapdorotas laukiantis tapatybės nustatymas."
 
-#: ../src/nm-openvpn-service.c:2231
+#: ../src/nm-openvpn-service.c:2262
 msgid "Don’t quit when VPN connection terminates"
 msgstr "Neišeiti, kai nutrūksta VPN ryšys"
 
-#: ../src/nm-openvpn-service.c:2232
+#: ../src/nm-openvpn-service.c:2263
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Įjungti išsamų derinimo žurnalą (gali parodyti slaptažodžius)"
 
-#: ../src/nm-openvpn-service.c:2233
+#: ../src/nm-openvpn-service.c:2264
 msgid "D-Bus name to use for this instance"
 msgstr "D-Bus pavadinimas, kurį naudoti šiam egzemplioriui"
 
-#: ../src/nm-openvpn-service.c:2259
+#: ../src/nm-openvpn-service.c:2290
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
@@ -766,11 +776,16 @@ msgstr ""
 "konfig: auth-user-pass"
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
+#| msgid ""
+#| "Username passed to OpenVPN when prompted for it.\n"
+#| "config: auth-user-pass"
 msgid ""
-"Username passed to OpenVPN when prompted for it.\n"
+"Username passed to OpenVPN when prompted for it. If omitted, use the name of "
+"the system user that activates the connection.\n"
 "config: auth-user-pass"
 msgstr ""
-"Naudotojo vardas, perduodamas OpenVPN, kai jo prašoma.\n"
+"Naudotojo vardas, perduodamas OpenVPN, kai jo prašoma. Jei praleistas, "
+"naudojamas sistemos naudotojas, kuris suaktyvina ryšį.\n"
 "konfig: auth-user-pass"
 
 #: ../properties/nm-openvpn-dialog.ui.h:19
@@ -1224,13 +1239,19 @@ msgid "Key _Direction:"
 msgstr "Rakto kryptis:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:126
+#| msgid ""
+#| "Add an additional layer of HMAC authentication on top of the TLS control "
+#| "channel to protect against DoS attacks.\n"
+#| "config: tls-auth <file> [direction]"
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
-"channel to protect against DoS attacks.\n"
-"config: tls-auth <file> [direction]"
+"channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
+"control channel is also encrypted.\n"
+"config: tls-auth <file> [direction] | tls-crypt <file>"
 msgstr ""
-"Pridėti papildomą HMAC sluoksnį TSL valdymo kanalo tapatybės nustatymui "
-"apsaugai nuo DoS atakų.\n"
+"Pridėti papildomą HMAC sluoksnį TLS valdymo kanalo tapatybės nustatymui "
+"apsaugai nuo DoS atakų. Jei naudojama TLS-Crypt veiksena, valdymo kanalas "
+"taip pat yra šifruojamas.\n"
 "konfig.: tls-auth <failas> [kryptis]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:128
@@ -1253,22 +1274,38 @@ msgid "Key _File:"
 msgstr "Rakto failas:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:132
-msgid "Mode"
-msgstr "Veiksena"
+#| msgid "Mode"
+msgid "Mode:"
+msgstr "Veiksena:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:133
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr "Papildomas šifravimo sluoksnis ar HMAC tapatybės nustatymas."
 
 #: ../properties/nm-openvpn-dialog.ui.h:134
+#| msgid "User Certificate:"
+msgid "Extra Certificates:"
+msgstr "Papildomi liudijimai:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:135
+msgid ""
+"Specify a file containing one or more PEM certs (concatenated together) that "
+"complete the local certificate chain.\n"
+"config: extra-certs <file>"
+msgstr ""
+"Nurodykite failą su vienu ar daugiau PEM liudijimų (sutelktų kartu), kurie "
+"užbaigia vietinio liudijimo grandinę.\n"
+"kofic: extra-certs <file>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:137
 msgid "Additional TLS authentication or encryption"
 msgstr "Papildomas TLS tapatybės nustatymas ar šifravimas"
 
-#: ../properties/nm-openvpn-dialog.ui.h:135
+#: ../properties/nm-openvpn-dialog.ui.h:138
 msgid "TLS Authentication"
 msgstr "TLS tapatybės nustatymas"
 
-#: ../properties/nm-openvpn-dialog.ui.h:136
+#: ../properties/nm-openvpn-dialog.ui.h:139
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1276,11 +1313,11 @@ msgstr ""
 "Įgaliotojo serverio tipas: HTTP arba Socks.\n"
 "konfig.: http-proxy arba socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:138
+#: ../properties/nm-openvpn-dialog.ui.h:141
 msgid "Proxy _Type:"
 msgstr "Įgaliotojo serverio _tipas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:139
+#: ../properties/nm-openvpn-dialog.ui.h:142
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1288,11 +1325,11 @@ msgstr ""
 "<i>Pasirinkite šį parametrą, jei jūsų organizacija turi prieigą prie "
 "interneto per įgaliotąjį serverį.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:140
+#: ../properties/nm-openvpn-dialog.ui.h:143
 msgid "Server _Address:"
 msgstr "Serverio adresas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:141
+#: ../properties/nm-openvpn-dialog.ui.h:144
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1300,11 +1337,11 @@ msgstr ""
 "Jungtis prie nutolusio serverio per įgaliotąjį serverį su šiuo adresu.\n"
 "konfig.: http-proxy arba socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:143
+#: ../properties/nm-openvpn-dialog.ui.h:146
 msgid "_Port:"
 msgstr "Prievadas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:144
+#: ../properties/nm-openvpn-dialog.ui.h:147
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1312,11 +1349,11 @@ msgstr ""
 "Jungtis prie nutolusio serverio per įgaliotąjį serverį su šiuo prievadu.\n"
 "konfig.: http-proxy arba socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:146
+#: ../properties/nm-openvpn-dialog.ui.h:149
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Mėginti dar kartą neribotą laiką, kai įvyksta klaidų"
 
-#: ../properties/nm-openvpn-dialog.ui.h:147
+#: ../properties/nm-openvpn-dialog.ui.h:150
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1325,39 +1362,53 @@ msgstr ""
 "atstatymą.\n"
 "konfig.: http-proxy arba socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:149
+#: ../properties/nm-openvpn-dialog.ui.h:152
 msgid "Proxy _Username:"
 msgstr "Įgaliotojo serverio naudotojo vardas:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:150
+#: ../properties/nm-openvpn-dialog.ui.h:153
 msgid "Proxy Passwor_d:"
 msgstr "Įgaliotojo serverio slaptažodis:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:151
+#: ../properties/nm-openvpn-dialog.ui.h:154
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "HTTP/Socks įgaliotojo serverio naudotojo vardas, perduodamas OpenVPN, kai jo "
 "prašoma."
 
-#: ../properties/nm-openvpn-dialog.ui.h:152
+#: ../properties/nm-openvpn-dialog.ui.h:155
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "HTTP/Socks įgaliotojo serverio slaptažodis, perduodamas OpenVPN, kai jo "
 "prašoma."
 
-#: ../properties/nm-openvpn-dialog.ui.h:153
+#: ../properties/nm-openvpn-dialog.ui.h:156
 msgid "_Show password"
 msgstr "Rodyti slaptažodį"
 
-#: ../properties/nm-openvpn-dialog.ui.h:154
+#: ../properties/nm-openvpn-dialog.ui.h:157
 msgid "Proxies"
 msgstr "Įgaliotieji serveriai"
 
-#: ../properties/nm-openvpn-dialog.ui.h:155
+#: ../properties/nm-openvpn-dialog.ui.h:158
 msgid "Path mtu discovery"
 msgstr "Kelio mtu atradimas"
 
-#: ../properties/nm-openvpn-dialog.ui.h:156
+#: ../properties/nm-openvpn-dialog.ui.h:159
+msgid "Connect timeout"
+msgstr "Ryšio laiko limitas"
+
+#: ../properties/nm-openvpn-dialog.ui.h:160
+msgid ""
+"The timeout in seconds before trying the next server. This timeout includes "
+"proxy and TCP connect timeouts.\n"
+"config: connect-timeout <n> | server-poll-timeout <n>"
+msgstr ""
+"Laiko limitas sekundėmis prie bandant jungtis prie kito serverio. Šis laiko "
+"limitas įskaito tarpinio serverio bei TCP ryšio limitus.\n"
+"config: connect-timeout <n> | server-poll-timeout <n>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:162
 msgid "Misc"
 msgstr "Įvairūs"
 
@@ -1410,9 +1461,6 @@ msgstr "Įvairūs"
 
 #~ msgid "CA Certificate:"
 #~ msgstr "LĮ liudijimas:"
-
-#~ msgid "User Certificate:"
-#~ msgstr "Naudotojo liudijimas:"
 
 #~ msgid ""
 #~ "Local peer’s signed certificate in .pem format (signed by CA of CA "
