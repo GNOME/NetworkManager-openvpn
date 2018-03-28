@@ -31,6 +31,7 @@
 #define NMV_OVPN_TAG_CLIENT             "client"
 #define NMV_OVPN_TAG_COMP_LZO           "comp-lzo"
 #define NMV_OVPN_TAG_CONNECT_TIMEOUT    "connect-timeout"
+#define NMV_OVPN_TAG_CRL_VERIFY         "crl-verify"
 #define NMV_OVPN_TAG_DEV                "dev"
 #define NMV_OVPN_TAG_DEV_TYPE           "dev-type"
 #define NMV_OVPN_TAG_EXTRA_CERTS        "extra-certs"

@@ -980,6 +980,37 @@ test_mtu_disc_import (gconstpointer test_data)
 	g_object_unref (connection);
 }
 
+
+static void
+test_crl_verify_import (gconstpointer test_data)
+{
+	_CREATE_PLUGIN (plugin);
+	NMConnection *connection;
+	NMSettingVpn *s_vpn;
+	const char *file, *expected_val;
+	gpointer is_file;
+
+	nmtst_test_data_unpack (test_data, &file, &is_file, &expected_val);
+
+	connection = get_basic_connection (plugin, SRCDIR, file);
+	g_assert (connection);
+
+	/* VPN setting */
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	g_assert (s_vpn);
+
+	/* Data items */
+	if (GPOINTER_TO_INT (is_file)) {
+		_check_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE, expected_val);
+		_check_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_DIR, NULL);
+	} else {
+		_check_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_DIR, expected_val);
+		_check_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE, NULL);
+	}
+
+	g_object_unref (connection);
+}
+
 static void
 test_route_import (void)
 {
@@ -1251,6 +1282,12 @@ int main (int argc, char **argv)
 
 	_add_test_func ("mtu-disc-import", test_mtu_disc_import, "mtu-disc.ovpn", "yes");
 	_add_test_func ("mtu-disc-export", test_export_compare, "mtu-disc.ovpn", "mtu-disc.ovpntest");
+
+	_add_test_func ("crl-verify-file-import", test_crl_verify_import, "crl-file.ovpn", GINT_TO_POINTER (TRUE), "/home/user/.cert/crl.pem");
+	_add_test_func ("crl-verify-file-export", test_export_compare, "crl-file.ovpn", "crl-file.ovpntest");
+
+	_add_test_func ("crl-verify-dir-import", test_crl_verify_import, "crl-dir.ovpn", GINT_TO_POINTER (FALSE), "/home/user/.cert/crls/");
+	_add_test_func ("crl-verify-dir-export", test_export_compare, "crl-dir.ovpn", "crl-dir.ovpntest");
 
 	_add_test_func_simple (test_route_import);
 	_add_test_func ("route-export", test_export_compare, "route.ovpn", "route.ovpntest");

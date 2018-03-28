@@ -1614,6 +1614,59 @@ config: auth</property>
                         <property name="top_attach">2</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkCheckButton" id="crl_file_check">
+                        <property name="label" translatable="yes">Verify CRL from file</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Check peer certificate against the specified file in PEM format. A CRL (certificate revocation list) is used when a particular key is compromised but when the overall PKI is still intact.</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="crl_dir_check">
+                        <property name="label" translatable="yes">Verify CRL from directory</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Check peer certificate by looking at files in the specified directory. The directory must contain files named as revoked serial numbers (the files may be empty, the contents are never read).</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFileChooserButton" id="crl_file_chooser">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Check peer certificate against the specified file in PEM format. A CRL (certificate revocation list) is used when a particular key is compromised but when the overall PKI is still intact.</property>
+                        <property name="title" translatable="yes">Choose CRL file</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFileChooserButton" id="crl_dir_chooser">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Check peer certificate by looking at files in the specified directory. The directory must contain files named as revoked serial numbers (the files may be empty, the contents are never read).</property>
+                        <property name="action">select-folder</property>
+                        <property name="title" translatable="yes">Choose CRL directory</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">4</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -2369,9 +2422,9 @@ config: http-proxy-retry or socks-proxy-retry</property>
                         <property name="label" translatable="yes">Connect timeout</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes">The timeout in seconds before trying the next server. This timeout includes proxy and TCP connect timeouts.
 config: connect-timeout &lt;n&gt; | server-poll-timeout &lt;n&gt;</property>
-                        <property name="receives_default">False</property>
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>

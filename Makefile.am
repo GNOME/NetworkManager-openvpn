@@ -308,6 +308,8 @@ EXTRA_DIST += \
 	properties/tests/conf/ping-with-restart.ovpn \
 	properties/tests/conf/route.ovpn \
 	properties/tests/conf/server-poll-timeout.ovpn \
+	properties/tests/conf/crl-file.ovpn \
+	properties/tests/conf/crl-dir.ovpn \
 	properties/tests/conf/tls-inline.ovpn \
 	properties/tests/conf/tls-inline-ca.pem \
 	properties/tests/conf/tls-inline-cert.pem \

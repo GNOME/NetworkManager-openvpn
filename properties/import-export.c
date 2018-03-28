@@ -934,6 +934,29 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CRL_VERIFY)) {
+			const char *file;
+			gs_free char *file_free = NULL;
+
+			if (!args_params_check_nargs_minmax (params, 1, 2, &line_error))
+				goto handle_line_error;
+			if (!args_params_check_arg_nonempty (params, 1, NULL, &line_error))
+				goto handle_line_error;
+			if (params[2] && !nm_streq (params[2], "dir")) {
+				line_error = g_strdup_printf (_("unsupported crl-verify argument"));
+				goto handle_line_error;
+			}
+
+			file = params[1];
+			if (!g_path_is_absolute (file))
+				file = file_free = g_build_filename (default_path, file, NULL);
+
+			if (params[2])
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_DIR, file);
+			else
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE, file);
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_NS_CERT_TYPE)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
@@ -1938,6 +1961,15 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_CONNECT_TIMEOUT, s_vpn, NM_OPENVPN_KEY_CONNECT_TIMEOUT);
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_FRAGMENT, s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE);
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE);
+	if (value)
+		args_write_line (f, NMV_OVPN_TAG_CRL_VERIFY, value);
+	else {
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_DIR);
+		if (value)
+			args_write_line (f, NMV_OVPN_TAG_CRL_VERIFY, value, "dir");
+	}
 
 	{
 		gs_free char *device_free = NULL;

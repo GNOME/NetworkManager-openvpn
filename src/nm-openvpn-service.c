@@ -148,6 +148,8 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_COMP_LZO,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CONNECT_TIMEOUT,      G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_CONNECTION_TYPE,      G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CRL_VERIFY_FILE,      G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CRL_VERIFY_DIR,       G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_EXTRA_CERTS,          G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FLOAT,                G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FRAGMENT_SIZE,        G_TYPE_INT, 0, G_MAXINT, FALSE },
@@ -1794,6 +1796,15 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_MTU_DISC);
 	if (NM_IN_STRSET (tmp, "no", "maybe", "yes"))
 		args_add_strv (args, "--mtu-disc", tmp);
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE);
+	if (tmp)
+		args_add_strv (args, "--crl-verify", tmp);
+	else {
+		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_DIR);
+		if (tmp)
+			args_add_strv (args, "--crl-verify", tmp, "dir");
+	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
 	tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP);

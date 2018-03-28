@@ -35,6 +35,8 @@
 #define NM_OPENVPN_KEY_COMP_LZO "comp-lzo"
 #define NM_OPENVPN_KEY_CONNECTION_TYPE "connection-type"
 #define NM_OPENVPN_KEY_CONNECT_TIMEOUT "connect-timeout"
+#define NM_OPENVPN_KEY_CRL_VERIFY_FILE "crl-verify-file"
+#define NM_OPENVPN_KEY_CRL_VERIFY_DIR "crl-verify-dir"
 #define NM_OPENVPN_KEY_DEV "dev"
 #define NM_OPENVPN_KEY_DEV_TYPE "dev-type"
 #define NM_OPENVPN_KEY_EXTRA_CERTS "extra-certs"

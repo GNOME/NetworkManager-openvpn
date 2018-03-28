@@ -686,6 +686,8 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_CIPHER,
 	NM_OPENVPN_KEY_COMP_LZO,
 	NM_OPENVPN_KEY_CONNECT_TIMEOUT,
+	NM_OPENVPN_KEY_CRL_VERIFY_DIR,
+	NM_OPENVPN_KEY_CRL_VERIFY_FILE,
 	NM_OPENVPN_KEY_DEV,
 	NM_OPENVPN_KEY_DEV_TYPE,
 	NM_OPENVPN_KEY_EXTRA_CERTS,
@@ -1333,6 +1335,36 @@ device_name_changed_cb (GtkEntry *entry,
 }
 
 static void
+crl_file_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	GtkWidget *other, *combo;
+
+	other = GTK_WIDGET (gtk_builder_get_object (builder, "crl_dir_check"));
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "crl_file_chooser"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check))) {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (other), FALSE);
+		gtk_widget_set_sensitive (combo, TRUE);
+	} else
+		gtk_widget_set_sensitive (combo, FALSE);
+}
+
+static void
+crl_dir_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
+{
+	GtkBuilder *builder = (GtkBuilder *) user_data;
+	GtkWidget *other, *combo;
+
+	other = GTK_WIDGET (gtk_builder_get_object (builder, "crl_file_check"));
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "crl_dir_chooser"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check))) {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (other), FALSE);
+		gtk_widget_set_sensitive (combo, TRUE);
+	} else
+		gtk_widget_set_sensitive (combo, FALSE);
+}
+
+static void
 dev_checkbox_toggled_cb (GtkWidget *check, gpointer user_data)
 {
 	GtkBuilder *builder = (GtkBuilder *) user_data;
@@ -1756,6 +1788,29 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (mtu_disc_toggled_cb), builder);
 	mtu_disc_toggled_cb (widget, builder);
 
+	/* CRL */
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CRL_VERIFY_FILE);
+	if (value) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_file_check"));
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_file_chooser"));
+		gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
+	} else {
+		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CRL_VERIFY_DIR);
+		if (value) {
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_dir_check"));
+			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_dir_chooser"));
+			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
+		}
+	}
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_file_check"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (crl_file_checkbox_toggled_cb), builder);
+	crl_file_checkbox_toggled_cb (widget, builder);
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_dir_check"));
+	g_signal_connect (G_OBJECT (widget), "toggled", G_CALLBACK (crl_dir_checkbox_toggled_cb), builder);
+	crl_dir_checkbox_toggled_cb (widget, builder);
+
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_MAX_ROUTES);
 	_builder_init_optional_spinbutton (builder, "max_routes_checkbutton", "max_routes_spinbutton", !!value,
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 100000000, 100));
@@ -2123,6 +2178,29 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 			g_hash_table_insert (hash,
 			                     g_strdup (NM_OPENVPN_KEY_MTU_DISC),
 			                     g_strdup (val));
+		}
+	}
+
+	/* CRL */
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_file_check"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		char *filename;
+
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_file_chooser"));
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+		if (filename && filename[0])
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CRL_VERIFY_FILE), g_strdup (filename));
+		g_free (filename);
+	} else {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_dir_check"));
+		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+			char *filename;
+
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "crl_dir_chooser"));
+			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+			if (filename && filename[0])
+				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CRL_VERIFY_DIR), g_strdup (filename));
+			g_free (filename);
 		}
 	}
 
