@@ -667,9 +667,8 @@ pids_pending_add (GPid pid, NMOpenvpnPlugin *plugin)
 
 	_LOGI ("openvpn[%ld] started", (long) pid);
 
-	pid_data = g_slice_new (PidsPendingData);
+	pid_data = g_slice_new0 (PidsPendingData);
 	pid_data->pid = pid;
-	pid_data->kill_id = 0;
 	pid_data->watch_id = g_child_watch_add (pid, pids_pending_child_watch_cb, pid_data);
 	pid_data->plugin = plugin;
 	g_object_add_weak_pointer ((GObject *) plugin, (gpointer *) &pid_data->plugin);
