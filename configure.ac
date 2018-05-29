@@ -25,6 +25,11 @@ if test x$has_file = xno ; then
     AC_MSG_ERROR(["file" utility not found.])
 fi
 
+AC_CHECK_PROG([has_find], find, yes, no)
+if test x$has_find = xno ; then
+    AC_MSG_ERROR(["find" utility not found.])
+fi
+
 AC_CONFIG_MACRO_DIR([m4])
 
 dnl Prefer gcc-* variants; the ones libtool would choose don't work with LTO
