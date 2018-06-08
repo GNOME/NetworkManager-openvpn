@@ -237,8 +237,7 @@ remove_secrets (NMConnection *connection)
 	for (iter = keys; iter; iter = g_slist_next (iter))
 		nm_setting_vpn_remove_secret (s_vpn, (const char *) iter->data);
 
-	g_slist_foreach (keys, (GFunc) g_free, NULL);
-	g_slist_free (keys);
+	g_slist_free_full (keys, g_free);
 }
 
 static void
