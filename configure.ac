@@ -4,7 +4,7 @@ AC_INIT(NetworkManager-openvpn,
         1.8.5,
         https://bugzilla.gnome.org/enter_bug.cgi?product=NetworkManager,
         NetworkManager-openvpn)
-AM_INIT_AUTOMAKE([1.9 tar-ustar no-dist-gzip dist-xz])
+AM_INIT_AUTOMAKE([1.9 tar-ustar no-dist-gzip dist-xz -Wno-portability])
 AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
 
@@ -19,6 +19,16 @@ AM_PROG_CC_C_O
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
+
+AC_CHECK_PROG([has_file], file, yes, no)
+if test x$has_file = xno ; then
+    AC_MSG_ERROR(["file" utility not found.])
+fi
+
+AC_CHECK_PROG([has_find], find, yes, no)
+if test x$has_find = xno ; then
+    AC_MSG_ERROR(["find" utility not found.])
+fi
 
 AC_CONFIG_MACRO_DIR([m4])
 
