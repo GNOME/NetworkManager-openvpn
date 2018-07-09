@@ -35,6 +35,12 @@
 #define _nm_alignof(type)    __alignof (type)
 #define _nm_alignas(type)    _nm_align (_nm_alignof (type))
 
+#if __GNUC__ >= 7
+#define _nm_fallthrough      __attribute__ ((fallthrough))
+#else
+#define _nm_fallthrough
+#endif
+
 /*****************************************************************************/
 
 #ifdef thread_local
@@ -147,6 +153,14 @@ _nm_auto_protect_errno (int *p_saved_errno)
 }
 #define NM_AUTO_PROTECT_ERRNO(errsv_saved) nm_auto(_nm_auto_protect_errno) _nm_unused const int errsv_saved = (errno)
 
+static inline void
+_nm_auto_unref_gsource (GSource **ptr)
+{
+	if (*ptr)
+		g_source_unref (g_steal_pointer (ptr));
+}
+#define nm_auto_unref_gsource nm_auto(_nm_auto_unref_gsource)
+
 /*****************************************************************************/
 
 /* http://stackoverflow.com/a/11172679 */
@@ -214,6 +228,7 @@ _nm_auto_protect_errno (int *p_saved_errno)
 #elif defined (__clang__)
 #define NM_PRAGMA_WARNING_DISABLE(warning) \
         _Pragma("clang diagnostic push") \
+        _Pragma(_NM_PRAGMA_WARNING_DO("-Wunknown-warning-option")) \
         _Pragma(_NM_PRAGMA_WARNING_DO(warning))
 #else
 #define NM_PRAGMA_WARNING_DISABLE(warning)
@@ -264,7 +279,8 @@ NM_G_ERROR_MSG (GError *error)
 		gsize _n = 0; \
 		\
 		if (_array) { \
-			_nm_unused typeof (*(_array[0])) *_array_check = _array[0]; \
+			_nm_unused gconstpointer _type_check_is_pointer = _array[0]; \
+			\
 			while (_array[_n]) \
 				_n++; \
 		} \
@@ -382,6 +398,28 @@ NM_G_ERROR_MSG (GError *error)
 #define NM_CONSTCAST(type, obj, ...) \
 	NM_CONSTCAST_FULL(type, (obj), (obj), ##__VA_ARGS__)
 
+#if _NM_CC_SUPPORT_GENERIC
+#define NM_UNCONST_PTR(type, arg) \
+	_Generic ((arg), \
+	          const type *: ((type *) (arg)), \
+	                type *: ((type *) (arg)))
+#else
+#define NM_UNCONST_PTR(type, arg) \
+	((type *) (arg))
+#endif
+
+#if _NM_CC_SUPPORT_GENERIC
+#define NM_UNCONST_PPTR(type, arg) \
+	_Generic ((arg), \
+	          const type *     *: ((type **) (arg)), \
+	                type *     *: ((type **) (arg)), \
+	          const type *const*: ((type **) (arg)), \
+	                type *const*: ((type **) (arg)))
+#else
+#define NM_UNCONST_PPTR(type, arg) \
+	((type **) (arg))
+#endif
+
 #define NM_GOBJECT_CAST(type, obj, is_check, ...) \
 	({ \
 		const void *_obj = (obj); \
@@ -408,6 +446,41 @@ NM_G_ERROR_MSG (GError *error)
 #define _NM_ENSURE_TYPE(type, value) (_Generic ((value), type: (value)))
 #else
 #define _NM_ENSURE_TYPE(type, value) (value)
+#endif
+
+#if _NM_CC_SUPPORT_GENERIC
+/* these macros cast (value) to
+ *  - "const char **"      (for "MC", mutable-const)
+ *  - "const char *const*" (for "CC", const-const)
+ * The point is to do this cast, but only accepting pointers
+ * that are compatible already.
+ *
+ * The problem is, if you add a function like g_strdupv(), the input
+ * argument is not modified (CC), but you want to make it work also
+ * for "char **". C doesn't allow this form of casting (for good reasons),
+ * so the function makes a choice like g_strdupv(char**). That means,
+ * every time you want to call ith with a const argument, you need to
+ * explicitly cast it.
+ *
+ * These macros do the cast, but they only accept a compatible input
+ * type, otherwise they will fail compilation.
+ */
+#define NM_CAST_STRV_MC(value) \
+	(_Generic ((value), \
+	           const char *     *: (const char *     *) (value), \
+	                 char *     *: (const char *     *) (value), \
+	                       void *: (const char *     *) (value)))
+#define NM_CAST_STRV_CC(value) \
+	(_Generic ((value), \
+	           const char *const*: (const char *const*) (value), \
+	           const char *     *: (const char *const*) (value), \
+	                 char *const*: (const char *const*) (value), \
+	                 char *     *: (const char *const*) (value), \
+	                 const void *: (const char *const*) (value), \
+	                       void *: (const char *const*) (value)))
+#else
+#define NM_CAST_STRV_MC(value) ((const char *     *) (value))
+#define NM_CAST_STRV_CC(value) ((const char *const*) (value))
 #endif
 
 #if _NM_CC_SUPPORT_GENERIC
@@ -577,7 +650,7 @@ _NM_IN_STRSET_streq (const char *x, const char *s)
 
 /* NM_CACHED_QUARK_FCN() is essentially the same as G_DEFINE_QUARK
  * with two differences:
- * - @string must be a quited string-literal
+ * - @string must be a quoted string-literal
  * - @fcn must be the full function name, while G_DEFINE_QUARK() appends
  *   "_quark" to the function name.
  * Both properties of G_DEFINE_QUARK() are non favorable, because you can no
@@ -721,6 +794,7 @@ nm_g_object_ref (gpointer obj)
 		g_object_ref (obj);
 	return obj;
 }
+#define nm_g_object_ref(obj) ((typeof (obj)) nm_g_object_ref (obj))
 
 static inline void
 nm_g_object_unref (gpointer obj)
@@ -733,8 +807,8 @@ nm_g_object_unref (gpointer obj)
 		g_object_unref (obj);
 }
 
-/* Assigns GObject @obj to destination @pdst, and takes an additional ref.
- * The previous value of @pdst is unrefed.
+/* Assigns GObject @obj to destination @pp, and takes an additional ref.
+ * The previous value of @pp is unrefed.
  *
  * It makes sure to first increase the ref-count of @obj, and handles %NULL
  * @obj correctly.
@@ -742,22 +816,44 @@ nm_g_object_unref (gpointer obj)
 #define nm_g_object_ref_set(pp, obj) \
 	({ \
 		typeof (*(pp)) *const _pp = (pp); \
-		typeof (**_pp) *const _obj = (obj); \
-		typeof (**_pp) *_p; \
+		typeof (*_pp) const _obj = (obj); \
+		typeof (*_pp) _p; \
 		gboolean _changed = FALSE; \
+		\
+		nm_assert (!_pp || !*_pp || G_IS_OBJECT (*_pp)); \
+		nm_assert (!_obj || G_IS_OBJECT (_obj)); \
 		\
 		if (   _pp \
 		    && ((_p = *_pp) != _obj)) { \
-			if (_obj) { \
-				nm_assert (G_IS_OBJECT (_obj)); \
-				 g_object_ref (_obj); \
-			} \
-			if (_p) { \
-				nm_assert (G_IS_OBJECT (_p)); \
-				*_pp = NULL; \
-				g_object_unref (_p); \
-			} \
+			nm_g_object_ref (_obj); \
 			*_pp = _obj; \
+			nm_g_object_unref (_p); \
+			_changed = TRUE; \
+		} \
+		_changed; \
+	})
+
+#define nm_clear_pointer(pp, destroy) \
+	({ \
+		typeof (*(pp)) *_pp = (pp); \
+		typeof (*_pp) _p; \
+		gboolean _changed = FALSE; \
+		\
+		if (   _pp \
+		    && (_p = *_pp)) { \
+			_nm_unused gconstpointer _p_check_is_pointer = _p; \
+			\
+			*_pp = NULL; \
+			/* g_clear_pointer() assigns @destroy first to a local variable, so that
+			 * you can call "g_clear_pointer (pp, (GDestroyNotify) destroy);" without
+			 * gcc emitting a warning. We don't do that, hence, you cannot cast
+			 * "destroy" first.
+			 *
+			 * On the upside: you are not supposed to cast fcn, because the pointer
+			 * types are preserved. If you really need a cast, you should cast @pp.
+			 * But that is hardly ever necessary. */ \
+			(destroy) (_p); \
+			\
 			_changed = TRUE; \
 		} \
 		_changed; \
@@ -773,42 +869,20 @@ nm_g_object_unref (gpointer obj)
  * pointer or points to a const-pointer.
  */
 #define nm_clear_g_free(pp) \
-	({  \
-		typeof (*(pp)) *_pp = (pp); \
-		typeof (**_pp) *_p; \
-		gboolean _changed = FALSE; \
-		\
-		if (  _pp \
-		    && (_p = *_pp)) { \
-			*_pp = NULL; \
-			g_free (_p); \
-			_changed = TRUE; \
-		} \
-		_changed; \
-	})
+	nm_clear_pointer (pp, g_free)
 
 #define nm_clear_g_object(pp) \
-	({ \
-		typeof (*(pp)) *_pp = (pp); \
-		typeof (**_pp) *_p; \
-		gboolean _changed = FALSE; \
-		\
-		if (   _pp \
-		    && (_p = *_pp)) { \
-			nm_assert (G_IS_OBJECT (_p)); \
-			*_pp = NULL; \
-			g_object_unref (_p); \
-			_changed = TRUE; \
-		} \
-		_changed; \
-	})
+	nm_clear_pointer (pp, g_object_unref)
 
 static inline gboolean
 nm_clear_g_source (guint *id)
 {
-	if (id && *id) {
-		g_source_remove (*id);
+	guint v;
+
+	if (   id
+	    && (v = *id)) {
 		*id = 0;
+		g_source_remove (v);
 		return TRUE;
 	}
 	return FALSE;
@@ -817,9 +891,12 @@ nm_clear_g_source (guint *id)
 static inline gboolean
 nm_clear_g_signal_handler (gpointer self, gulong *id)
 {
-	if (id && *id) {
-		g_signal_handler_disconnect (self, *id);
+	gulong v;
+
+	if (   id
+	    && (v = *id)) {
 		*id = 0;
+		g_signal_handler_disconnect (self, v);
 		return TRUE;
 	}
 	return FALSE;
@@ -828,9 +905,12 @@ nm_clear_g_signal_handler (gpointer self, gulong *id)
 static inline gboolean
 nm_clear_g_variant (GVariant **variant)
 {
-	if (variant && *variant) {
-		g_variant_unref (*variant);
+	GVariant *v;
+
+	if (   variant
+	    && (v = *variant)) {
 		*variant = NULL;
+		g_variant_unref (v);
 		return TRUE;
 	}
 	return FALSE;
@@ -839,10 +919,13 @@ nm_clear_g_variant (GVariant **variant)
 static inline gboolean
 nm_clear_g_cancellable (GCancellable **cancellable)
 {
-	if (cancellable && *cancellable) {
-		g_cancellable_cancel (*cancellable);
-		g_object_unref (*cancellable);
+	GCancellable *v;
+
+	if (   cancellable
+	    && (v = *cancellable)) {
 		*cancellable = NULL;
+		g_cancellable_cancel (v);
+		g_object_unref (v);
 		return TRUE;
 	}
 	return FALSE;
@@ -1013,35 +1096,6 @@ nm_strcmp_p (gconstpointer a, gconstpointer b)
 	return strcmp (s1, s2);
 }
 
-/* like nm_strcmp_p(), suitable for g_ptr_array_sort_with_data().
- * g_ptr_array_sort() just casts nm_strcmp_p() to a function of different
- * signature. I guess, in glib there are knowledgeable people that ensure
- * that this additional argument doesn't cause problems due to different ABI
- * for every architecture that glib supports.
- * For NetworkManager, we'd rather avoid such stunts.
- **/
-static inline int
-nm_strcmp_p_with_data (gconstpointer a, gconstpointer b, gpointer user_data)
-{
-	const char *s1 = *((const char **) a);
-	const char *s2 = *((const char **) b);
-
-	return strcmp (s1, s2);
-}
-
-static inline int
-nm_cmp_uint32_p_with_data (gconstpointer p_a, gconstpointer p_b, gpointer user_data)
-{
-	const guint32 a = *((const guint32 *) p_a);
-	const guint32 b = *((const guint32 *) p_b);
-
-	if (a < b)
-		return -1;
-	if (a > b)
-		return 1;
-	return 0;
-}
-
 /*****************************************************************************/
 
 /* Taken from systemd's UNIQ_T and UNIQ macros. */
@@ -1172,6 +1226,28 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro)
 		_buf; \
 	})
 
+/* aims to alloca() a buffer and fill it with printf(format, name).
+ * Note that format must not contain any format specifier except
+ * "%s".
+ * If the resulting string would be too large for stack allocation,
+ * it allocates a buffer with g_malloc() and assigns it to *p_val_to_free. */
+#define nm_construct_name_a(format, name, p_val_to_free) \
+	({ \
+		const char *const _name = (name); \
+		char **const _p_val_to_free = (p_val_to_free); \
+		const gsize _name_len = strlen (_name); \
+		char *_buf2; \
+		\
+		nm_assert (_p_val_to_free && !*_p_val_to_free); \
+		if (NM_STRLEN (format) + _name_len < 200) \
+			_buf2 = nm_sprintf_bufa (NM_STRLEN (format) + _name_len, format, _name); \
+		else { \
+			_buf2 = g_strdup_printf (format, _name); \
+			*_p_val_to_free = _buf2; \
+		} \
+		(const char *) _buf2; \
+	})
+
 /*****************************************************************************/
 
 /**
@@ -1219,7 +1295,6 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro)
 #define false   0
 #endif
 
-
 #ifdef _G_BOOLEAN_EXPR
 /* g_assert() uses G_LIKELY(), which in turn uses _G_BOOLEAN_EXPR().
  * As glib's implementation uses a local variable _g_boolean_var_,
@@ -1246,6 +1321,25 @@ nm_decode_version (guint version, guint *major, guint *minor, guint *micro)
 #endif
 
 /*****************************************************************************/
+
+/**
+ * nm_steal_int:
+ * @p_val: pointer to an int type.
+ *
+ * Returns: *p_val and sets *p_val to zero the same time.
+ *   Accepts %NULL, in which case also numeric 0 will be returned.
+ */
+#define nm_steal_int(p_val) \
+	({ \
+		typeof (p_val) const _p_val = (p_val); \
+		typeof (*_p_val) _val = 0; \
+		\
+		if (   _p_val \
+		    && (_val = *_p_val)) { \
+			*_p_val = 0; \
+		} \
+		_val; \
+	})
 
 static inline int
 nm_steal_fd (int *p_fd)
@@ -1276,5 +1370,7 @@ nm_close (int fd)
 	nm_assert (r != -1 || fd < 0 || errno != EBADF);
 	return r;
 }
+
+#define NM_PID_T_INVAL ((pid_t) -1)
 
 #endif /* __NM_MACROS_INTERNAL_H__ */

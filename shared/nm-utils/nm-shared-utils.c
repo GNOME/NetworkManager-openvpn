@@ -499,6 +499,158 @@ _nm_utils_ascii_str_to_int64 (const char *str, guint base, gint64 min, gint64 ma
 
 /*****************************************************************************/
 
+/* like nm_strcmp_p(), suitable for g_ptr_array_sort_with_data().
+ * g_ptr_array_sort() just casts nm_strcmp_p() to a function of different
+ * signature. I guess, in glib there are knowledgeable people that ensure
+ * that this additional argument doesn't cause problems due to different ABI
+ * for every architecture that glib supports.
+ * For NetworkManager, we'd rather avoid such stunts.
+ **/
+int
+nm_strcmp_p_with_data (gconstpointer a, gconstpointer b, gpointer user_data)
+{
+	const char *s1 = *((const char **) a);
+	const char *s2 = *((const char **) b);
+
+	return strcmp (s1, s2);
+}
+
+int
+nm_cmp_uint32_p_with_data (gconstpointer p_a, gconstpointer p_b, gpointer user_data)
+{
+	const guint32 a = *((const guint32 *) p_a);
+	const guint32 b = *((const guint32 *) p_b);
+
+	if (a < b)
+		return -1;
+	if (a > b)
+		return 1;
+	return 0;
+}
+
+int
+nm_cmp_int2ptr_p_with_data (gconstpointer p_a, gconstpointer p_b, gpointer user_data)
+{
+	/* p_a and p_b are two pointers to a pointer, where the pointer is
+	 * interpreted as a integer using GPOINTER_TO_INT().
+	 *
+	 * That is the case of a hash-table that uses GINT_TO_POINTER() to
+	 * convert integers as pointers, and the resulting keys-as-array
+	 * array. */
+	const int a = GPOINTER_TO_INT (*((gconstpointer *) p_a));
+	const int b = GPOINTER_TO_INT (*((gconstpointer *) p_b));
+
+	if (a < b)
+		return -1;
+	if (a > b)
+		return 1;
+	return 0;
+}
+
+/*****************************************************************************/
+
+const char *
+nm_utils_dbus_path_get_last_component (const char *dbus_path)
+{
+	if (dbus_path) {
+		dbus_path = strrchr (dbus_path, '/');
+		if (dbus_path)
+			return dbus_path + 1;
+	}
+	return NULL;
+}
+
+static gint64
+_dbus_path_component_as_num (const char *p)
+{
+	gint64 n;
+
+	/* no odd stuff. No leading zeros, only a non-negative, decimal integer.
+	 *
+	 * Otherwise, there would be multiple ways to encode the same number "10"
+	 * and "010". That is just confusing. A number has no leading zeros,
+	 * if it has, it's not a number (as far as we are concerned here). */
+	if (p[0] == '0') {
+		if (p[1] != '\0')
+			return -1;
+		else
+			return 0;
+	}
+	if (!(p[0] >= '1' && p[0] <= '9'))
+		return -1;
+	if (!NM_STRCHAR_ALL (&p[1], ch, (ch >= '0' && ch <= '9')))
+		return -1;
+	n = _nm_utils_ascii_str_to_int64 (p, 10, 0, G_MAXINT64, -1);
+	nm_assert (n == -1 || nm_streq0 (p, nm_sprintf_bufa (100, "%"G_GINT64_FORMAT, n)));
+	return n;
+}
+
+int
+nm_utils_dbus_path_cmp (const char *dbus_path_a, const char *dbus_path_b)
+{
+	const char *l_a, *l_b;
+	gsize plen;
+	gint64 n_a, n_b;
+
+	/* compare function for two D-Bus paths. It behaves like
+	 * strcmp(), except, if both paths have the same prefix,
+	 * and both end in a (positive) number, then the paths
+	 * will be sorted by number. */
+
+	NM_CMP_SELF (dbus_path_a, dbus_path_b);
+
+	/* if one or both paths have no slash (and no last component)
+	 * compare the full paths directly. */
+	if (   !(l_a = nm_utils_dbus_path_get_last_component (dbus_path_a))
+	    || !(l_b = nm_utils_dbus_path_get_last_component (dbus_path_b)))
+		goto comp_full;
+
+	/* check if both paths have the same prefix (up to the last-component). */
+	plen = l_a - dbus_path_a;
+	if (plen != (l_b - dbus_path_b))
+		goto comp_full;
+	NM_CMP_RETURN (strncmp (dbus_path_a, dbus_path_b, plen));
+
+	n_a = _dbus_path_component_as_num (l_a);
+	n_b = _dbus_path_component_as_num (l_b);
+	if (n_a == -1 && n_b == -1)
+		goto comp_l;
+
+	/* both components must be convertiable to a number. If they are not,
+	 * (and only one of them is), then we must always strictly sort numeric parts
+	 * after non-numeric components. If we wouldn't, we wouldn't have
+	 * a total order.
+	 *
+	 * An example of a not total ordering would be:
+	 *   "8"   < "010"  (numeric)
+	 *   "0x"  < "8"    (lexical)
+	 *   "0x"  > "010"  (lexical)
+	 * We avoid this, by forcing that a non-numeric entry "0x" always sorts
+	 * before numeric entries.
+	 *
+	 * Additionally, _dbus_path_component_as_num() would also reject "010" as
+	 * not a valid number.
+	 */
+	if (n_a == -1)
+		return -1;
+	if (n_b == -1)
+		return 1;
+
+	NM_CMP_DIRECT (n_a, n_b);
+	nm_assert (nm_streq (dbus_path_a, dbus_path_b));
+	return 0;
+
+comp_full:
+	NM_CMP_DIRECT_STRCMP0 (dbus_path_a, dbus_path_b);
+	return 0;
+comp_l:
+	NM_CMP_DIRECT_STRCMP0 (l_a, l_b);
+	nm_assert (nm_streq (dbus_path_a, dbus_path_b));
+	return 0;
+}
+
+/*****************************************************************************/
+
 /**
  * nm_utils_strsplit_set:
  * @str: the string to split.
@@ -569,7 +721,7 @@ nm_utils_strsplit_set (const char *str, const char *delimiters)
 
 			/* reallocate the buffer. Note that for now the string
 			 * continues to be in ptr0/s0. We fix that at the end. */
-			alloc_size += 2;
+			alloc_size *= 2;
 			ptr = g_malloc ((sizeof (const char *) * (alloc_size + 1)) + str_len);
 			memcpy (ptr, ptr_old, sizeof (const char *) * plen);
 			if (ptr_old != ptr0)
@@ -845,6 +997,32 @@ nm_g_object_set_property (GObject *object,
 	return TRUE;
 }
 
+gboolean
+nm_g_object_set_property_boolean (GObject *object,
+                                  const gchar  *property_name,
+                                  gboolean value,
+                                  GError **error)
+{
+	nm_auto_unset_gvalue GValue gvalue = { 0 };
+
+	g_value_init (&gvalue, G_TYPE_BOOLEAN);
+	g_value_set_boolean (&gvalue, !!value);
+	return nm_g_object_set_property (object, property_name, &gvalue, error);
+}
+
+gboolean
+nm_g_object_set_property_uint (GObject *object,
+                               const gchar  *property_name,
+                               guint value,
+                               GError **error)
+{
+	nm_auto_unset_gvalue GValue gvalue = { 0 };
+
+	g_value_init (&gvalue, G_TYPE_UINT);
+	g_value_set_uint (&gvalue, value);
+	return nm_g_object_set_property (object, property_name, &gvalue, error);
+}
+
 GParamSpec *
 nm_g_object_class_find_property_from_gtype (GType gtype,
                                             const char *property_name)
@@ -1088,4 +1266,236 @@ nm_utils_fd_read_loop_exact (int fd, void *buf, size_t nbytes, bool do_poll)
 		return -EIO;
 
 	return 0;
+}
+
+NMUtilsNamedValue *
+nm_utils_named_values_from_str_dict (GHashTable *hash, guint *out_len)
+{
+	GHashTableIter iter;
+	NMUtilsNamedValue *values;
+	guint i, len;
+
+	if (   !hash
+	    || !(len = g_hash_table_size (hash))) {
+		NM_SET_OUT (out_len, 0);
+		return NULL;
+	}
+
+	i = 0;
+	values = g_new (NMUtilsNamedValue, len + 1);
+	g_hash_table_iter_init (&iter, hash);
+	while (g_hash_table_iter_next (&iter,
+	                               (gpointer *) &values[i].name,
+	                               (gpointer *) &values[i].value_ptr))
+		i++;
+	nm_assert (i == len);
+	values[i].name = NULL;
+	values[i].value_ptr = NULL;
+
+	if (len > 1) {
+		g_qsort_with_data (values, len, sizeof (values[0]),
+		                   nm_utils_named_entry_cmp_with_data, NULL);
+	}
+
+	NM_SET_OUT (out_len, len);
+	return values;
+}
+
+gpointer *
+nm_utils_hash_keys_to_array (GHashTable *hash,
+                             GCompareDataFunc compare_func,
+                             gpointer user_data,
+                             guint *out_len)
+{
+	guint len;
+	gpointer *keys;
+
+	/* by convention, we never return an empty array. In that
+	 * case, always %NULL. */
+	if (   !hash
+	    || g_hash_table_size (hash) == 0) {
+		NM_SET_OUT (out_len, 0);
+		return NULL;
+	}
+
+	keys = g_hash_table_get_keys_as_array (hash, &len);
+	if (   len > 1
+	    && compare_func) {
+		g_qsort_with_data (keys,
+		                   len,
+		                   sizeof (gpointer),
+		                   compare_func,
+		                   user_data);
+	}
+	NM_SET_OUT (out_len, len);
+	return keys;
+}
+
+char **
+nm_utils_strv_make_deep_copied (const char **strv)
+{
+	gsize i;
+
+	/* it takes a strv dictionary, and copies each
+	 * strings. Note that this updates @strv *in-place*
+	 * and returns it. */
+
+	if (!strv)
+		return NULL;
+	for (i = 0; strv[i]; i++)
+		strv[i] = g_strdup (strv[i]);
+
+	return (char **) strv;
+}
+
+/*****************************************************************************/
+
+/**
+ * nm_utils_get_start_time_for_pid:
+ * @pid: the process identifier
+ * @out_state: return the state character, like R, S, Z. See `man 5 proc`.
+ * @out_ppid: parent process id
+ *
+ * Originally copied from polkit source (src/polkit/polkitunixprocess.c)
+ * and adjusted.
+ *
+ * Returns: the timestamp when the process started (by parsing /proc/$PID/stat).
+ * If an error occurs (e.g. the process does not exist), 0 is returned.
+ *
+ * The returned start time counts since boot, in the unit HZ (with HZ usually being (1/100) seconds)
+ **/
+guint64
+nm_utils_get_start_time_for_pid (pid_t pid, char *out_state, pid_t *out_ppid)
+{
+	guint64 start_time;
+	char filename[256];
+	gs_free gchar *contents = NULL;
+	size_t length;
+	gs_free const char **tokens = NULL;
+	gchar *p;
+	char state = ' ';
+	gint64 ppid = 0;
+
+	start_time = 0;
+	contents = NULL;
+
+	g_return_val_if_fail (pid > 0, 0);
+
+	nm_sprintf_buf (filename, "/proc/%"G_GUINT64_FORMAT"/stat", (guint64) pid);
+
+	if (!g_file_get_contents (filename, &contents, &length, NULL))
+		goto fail;
+
+	/* start time is the token at index 19 after the '(process name)' entry - since only this
+	 * field can contain the ')' character, search backwards for this to avoid malicious
+	 * processes trying to fool us
+	 */
+	p = strrchr (contents, ')');
+	if (!p)
+		goto fail;
+	p += 2; /* skip ') ' */
+	if (p - contents >= (int) length)
+		goto fail;
+
+	state = p[0];
+
+	tokens = nm_utils_strsplit_set (p, " ");
+
+	if (NM_PTRARRAY_LEN (tokens) < 20)
+		goto fail;
+
+	if (out_ppid) {
+		ppid = _nm_utils_ascii_str_to_int64 (tokens[1], 10, 1, G_MAXINT, 0);
+		if (ppid == 0)
+			goto fail;
+	}
+
+	start_time = _nm_utils_ascii_str_to_int64 (tokens[19], 10, 1, G_MAXINT64, 0);
+	if (start_time == 0)
+		goto fail;
+
+	NM_SET_OUT (out_state, state);
+	NM_SET_OUT (out_ppid, ppid);
+	return start_time;
+
+fail:
+	NM_SET_OUT (out_state, ' ');
+	NM_SET_OUT (out_ppid, 0);
+	return 0;
+}
+
+/*****************************************************************************/
+
+/**
+ * _nm_utils_strv_sort:
+ * @strv: pointer containing strings that will be sorted
+ *   in-place, %NULL is allowed, unless @len indicates
+ *   that there are more elements.
+ * @len: the number of elements in strv. If negative,
+ *   strv must be a NULL terminated array and the length
+ *   will be calculated first. If @len is a positive
+ *   number, all first @len elements in @strv must be
+ *   non-NULL, valid strings.
+ *
+ * Ascending sort of the array @strv inplace, using plain strcmp() string
+ * comparison.
+ */
+void
+_nm_utils_strv_sort (const char **strv, gssize len)
+{
+	gsize l;
+
+	l = len < 0 ? (gsize) NM_PTRARRAY_LEN (strv) : (gsize) len;
+
+	if (l <= 1)
+		return;
+
+	nm_assert (l <= (gsize) G_MAXINT);
+
+	g_qsort_with_data (strv,
+	                   l,
+	                   sizeof (const char *),
+	                   nm_strcmp_p_with_data,
+	                   NULL);
+}
+
+/*****************************************************************************/
+
+gpointer
+_nm_utils_user_data_pack (int nargs, gconstpointer *args)
+{
+	int i;
+	gpointer *data;
+
+	nm_assert (nargs > 0);
+	nm_assert (args);
+
+	data = g_slice_alloc (((gsize) nargs) * sizeof (gconstpointer));
+	for (i = 0; i < nargs; i++)
+		data[i] = (gpointer) args[i];
+	return data;
+}
+
+void
+_nm_utils_user_data_unpack (gpointer user_data, int nargs, ...)
+{
+	gpointer *data = user_data;
+	va_list ap;
+	int i;
+
+	nm_assert (data);
+	nm_assert (nargs > 0);
+
+	va_start (ap, nargs);
+	for (i = 0; i < nargs; i++) {
+		gpointer *dst;
+
+		dst = va_arg (ap, gpointer *);
+		nm_assert (dst);
+
+		*dst = data[i];
+	}
+	va_end (ap);
+
+	g_slice_free1 (((gsize) nargs) * sizeof (gconstpointer), user_data);
 }

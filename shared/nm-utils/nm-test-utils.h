@@ -21,6 +21,10 @@
 #ifndef __NM_TEST_UTILS_H__
 #define __NM_TEST_UTILS_H__
 
+#if defined(NETWORKMANAGER_COMPILATION) && !defined(NETWORKMANAGER_COMPILATION_TEST)
+#error Need to mark the compilation with NETWORKMANAGER_COMPILATION_TEST.
+#endif
+
 /*******************************************************************************
  * HOWTO run tests.
  *
@@ -141,10 +145,16 @@
 		const gint64 nmtst_wait_start_us = g_get_monotonic_time (); \
 		const gint64 nmtst_wait_duration_us = (max_wait_ms) * 1000L; \
 		const gint64 nmtst_wait_end_us = nmtst_wait_start_us + nmtst_wait_duration_us; \
+		gint64 _nmtst_wait_remaining_us = nmtst_wait_duration_us; \
+		int _nmtst_wait_iteration = 0; \
 		\
 		while (TRUE) { \
+			_nm_unused const gint64 nmtst_wait_remaining_us = _nmtst_wait_remaining_us; \
+			_nm_unused int nmtst_wait_iteration = _nmtst_wait_iteration++; \
+			\
 			{ wait }; \
-			if (g_get_monotonic_time () > nmtst_wait_end_us) { \
+			_nmtst_wait_remaining_us = (nmtst_wait_end_us - g_get_monotonic_time ()); \
+			if (_nmtst_wait_remaining_us <= 0) { \
 				_not_expired = FALSE; \
 				break; \
 			} \
@@ -157,6 +167,14 @@
 		if (!(NMTST_WAIT (max_wait_ms, wait))) \
 			g_assert_not_reached (); \
 	} G_STMT_END
+
+#define nmtst_assert_nonnull(command) \
+	({ \
+		typeof (*(command)) *_ptr = (command); \
+		\
+		g_assert (_ptr && (TRUE || (command))); \
+		_ptr; \
+	 })
 
 #define nmtst_assert_success(success, error) \
 	G_STMT_START { \
@@ -198,7 +216,6 @@ _nmtst_exit (void) \
 	g_test_assert_expected_messages (); \
 	nmtst_free (); \
 }
-
 
 static inline gboolean
 nmtst_initialized (void)
@@ -263,7 +280,6 @@ BREAK_INNER_LOOPS:
 
 	return (char **) g_array_free (result, FALSE);
 }
-
 
 /* free instances allocated by nmtst (especially nmtst_init()) on shutdown
  * to release memory. After nmtst_free(), the test is uninitialized again. */
@@ -424,6 +440,11 @@ __nmtst_init (int *argc, char ***argv, gboolean assert_logging, const char *log_
 			g_array_append_val (debug_messages, msg);
 		}
 	} else {
+		/* We're intentionally assigning a value to static variables
+		 * s_tests_x and p_tests_x without using it afterwards, just
+		 * so that valgrind doesn't complain about the leak. */
+		NM_PRAGMA_WARNING_DISABLE("-Wunused-but-set-variable")
+
 		/* g_test_init() is a variadic function, so we cannot pass it
 		 * (variadic) arguments. If you need to pass additional parameters,
 		 * call nmtst_init() with argc==NULL and call g_test_init() yourself. */
@@ -497,6 +518,8 @@ __nmtst_init (int *argc, char ***argv, gboolean assert_logging, const char *log_
 				s_tests = NULL;
 			}
 		}
+
+		NM_PRAGMA_WARNING_REENABLE
 	}
 
 	if (test_quick_set)
@@ -659,6 +682,20 @@ nmtst_test_quick (void)
 	} G_STMT_END
 #endif
 
+#define NMTST_EXPECT(domain, level, msg)        g_test_expect_message (domain, level, msg)
+
+#if (NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL
+#define NMTST_EXPECT_LIBNM_U(level, msg)        NMTST_EXPECT ("libnm-util", level, msg)
+#define NMTST_EXPECT_LIBNM_G(level, msg)        NMTST_EXPECT ("libnm-glib", level, msg)
+
+#define NMTST_EXPECT_LIBNM_U_CRITICAL(msg)      NMTST_EXPECT_LIBNM_U (G_LOG_LEVEL_CRITICAL, msg)
+#define NMTST_EXPECT_LIBNM_G_CRITICAL(msg)      NMTST_EXPECT_LIBNM_G (G_LOG_LEVEL_CRITICAL, msg)
+#else
+#define NMTST_EXPECT_LIBNM(level, msg)          NMTST_EXPECT ("libnm", level, msg)
+
+#define NMTST_EXPECT_LIBNM_CRITICAL(msg)        NMTST_EXPECT_LIBNM (G_LOG_LEVEL_CRITICAL, msg)
+#endif
+
 /*****************************************************************************/
 
 typedef struct _NmtstTestData NmtstTestData;
@@ -801,6 +838,12 @@ nmtst_get_rand_int (void)
 	return g_rand_int (nmtst_get_rand ());
 }
 
+static inline gboolean
+nmtst_get_rand_bool (void)
+{
+	return nmtst_get_rand_int () % 2;
+}
+
 static inline gpointer
 nmtst_rand_buf (GRand *rand, gpointer buffer, gsize buffer_length)
 {
@@ -902,31 +945,27 @@ _nmtst_main_loop_run_timeout (gpointer user_data)
 {
 	GMainLoop **p_loop = user_data;
 
-	g_assert (p_loop);
-	g_assert (*p_loop);
-
-	g_main_loop_quit (*p_loop);
-	*p_loop = NULL;
-
+	g_assert (p_loop && *p_loop);
+	g_main_loop_quit (g_steal_pointer (p_loop));
 	return G_SOURCE_REMOVE;
 }
 
 static inline gboolean
-nmtst_main_loop_run (GMainLoop *loop, int timeout_ms)
+nmtst_main_loop_run (GMainLoop *loop, guint timeout_ms)
 {
-	GSource *source = NULL;
-	guint id = 0;
+	nm_auto_unref_gsource GSource *source = NULL;
 	GMainLoop *loopx = loop;
 
 	if (timeout_ms > 0) {
 		source = g_timeout_source_new (timeout_ms);
 		g_source_set_callback (source, _nmtst_main_loop_run_timeout, &loopx, NULL);
-		id = g_source_attach (source, g_main_loop_get_context (loop));
-		g_assert (id);
-		g_source_unref (source);
+		g_source_attach (source, g_main_loop_get_context (loop));
 	}
 
 	g_main_loop_run (loop);
+
+	if (source)
+		g_source_destroy (source);
 
 	/* if the timeout was reached, return FALSE. */
 	return loopx != NULL;
@@ -1116,7 +1155,7 @@ _nmtst_assert_ip4_address (const char *file, int line, in_addr_t addr, const cha
 		char buf[100];
 
 		g_error ("%s:%d: Unexpected IPv4 address: expected %s, got %s",
-		         file, line, str_expected ? str_expected : "0.0.0.0",
+		         file, line, str_expected ?: "0.0.0.0",
 		         inet_ntop (AF_INET, &addr, buf, sizeof (buf)));
 	}
 }
@@ -1134,7 +1173,7 @@ _nmtst_assert_ip6_address (const char *file, int line, const struct in6_addr *ad
 		char buf[100];
 
 		g_error ("%s:%d: Unexpected IPv6 address: expected %s, got %s",
-		         file, line, str_expected ? str_expected : "::",
+		         file, line, str_expected ?: "::",
 		         inet_ntop (AF_INET6, addr, buf, sizeof (buf)));
 	}
 }
@@ -1499,13 +1538,12 @@ _nmtst_connection_normalize (NMConnection *connection, ...)
 static inline NMConnection *
 _nmtst_connection_duplicate_and_normalize (NMConnection *connection, ...)
 {
-	gboolean was_modified;
 	va_list args;
 
 	connection = nmtst_clone_connection (connection);
 
 	va_start (args, connection);
-	was_modified = _nmtst_connection_normalize_v (connection, args);
+	_nmtst_connection_normalize_v (connection, args);
 	va_end (args);
 
 	return connection;
@@ -1807,7 +1845,6 @@ nmtst_assert_hwaddr_equals (gconstpointer hwaddr1, gssize hwaddr1_len, const cha
 #define nmtst_assert_hwaddr_equals(hwaddr1, hwaddr1_len, expected) \
     nmtst_assert_hwaddr_equals (hwaddr1, hwaddr1_len, expected, __FILE__, __LINE__)
 #endif
-
 
 #if defined(__NM_SIMPLE_CONNECTION_H__) && defined(__NM_SETTING_CONNECTION_H__) && defined(__NM_KEYFILE_INTERNAL_H__)
 

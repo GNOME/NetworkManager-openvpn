@@ -14,17 +14,26 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Copyright 2008 - 2011 Red Hat, Inc.
+ * Copyright 2008 - 2018 Red Hat, Inc.
  */
 
 #ifndef __NM_GLIB_H__
 #define __NM_GLIB_H__
 
+/*****************************************************************************/
+
+#ifndef __NM_MACROS_INTERNAL_H__
+#error "nm-glib.h requires nm-macros-internal.h. Do not include this directly"
+#endif
+
+/*****************************************************************************/
 
 #include <gio/gio.h>
 #include <string.h>
 
 #include "gsystem-local-alloc.h"
+
+/*****************************************************************************/
 
 #ifdef __clang__
 
@@ -40,6 +49,8 @@
 
 #endif
 
+/*****************************************************************************/
+
 static inline void
 __g_type_ensure (GType type)
 {
@@ -53,6 +64,8 @@ __g_type_ensure (GType type)
 #endif
 }
 #define g_type_ensure __g_type_ensure
+
+/*****************************************************************************/
 
 #if !GLIB_CHECK_VERSION(2,34,0)
 
@@ -72,6 +85,12 @@ __g_type_ensure (GType type)
             _destroy (_p);                                                         \
         }                                                                          \
     } G_STMT_END
+
+#endif
+
+/*****************************************************************************/
+
+#if !GLIB_CHECK_VERSION(2,34,0)
 
 /* These are used to clean up the output of test programs; we can just let
  * them no-op in older glib.
@@ -102,6 +121,7 @@ __g_type_ensure (GType type)
 
 #endif
 
+/*****************************************************************************/
 
 #if GLIB_CHECK_VERSION (2, 35, 0)
 /* For glib >= 2.36, g_type_init() is deprecated.
@@ -112,11 +132,14 @@ __g_type_ensure (GType type)
 #define nm_g_type_init()     G_STMT_START { g_type_init (); } G_STMT_END
 #endif
 
+/*****************************************************************************/
 
 /* g_test_initialized() is only available since glib 2.36. */
 #if !GLIB_CHECK_VERSION (2, 36, 0)
 #define g_test_initialized() (g_test_config_vars->test_initialized)
 #endif
+
+/*****************************************************************************/
 
 /* g_assert_cmpmem() is only available since glib 2.46. */
 #if !GLIB_CHECK_VERSION (2, 45, 7)
@@ -132,6 +155,8 @@ __g_type_ensure (GType type)
                                         } G_STMT_END
 #endif
 
+/*****************************************************************************/
+
 /* Rumtime check for glib version. First do a compile time check which
  * (if satisfied) shortcuts the runtime check. */
 static inline gboolean
@@ -145,6 +170,8 @@ nm_glib_check_version (guint major, guint minor, guint micro)
 	               && glib_minor_version == minor
 	               && glib_micro_version < micro));
 }
+
+/*****************************************************************************/
 
 /* g_test_skip() is only available since glib 2.38. Add a compatibility wrapper. */
 static inline void
@@ -160,6 +187,7 @@ __nmtst_g_test_skip (const gchar *msg)
 }
 #define g_test_skip __nmtst_g_test_skip
 
+/*****************************************************************************/
 
 /* g_test_add_data_func_full() is only available since glib 2.34. Add a compatibility wrapper. */
 static inline void
@@ -184,6 +212,7 @@ __g_test_add_data_func_full (const char     *testpath,
 }
 #define g_test_add_data_func_full __g_test_add_data_func_full
 
+/*****************************************************************************/
 
 #if !GLIB_CHECK_VERSION (2, 34, 0)
 #define G_DEFINE_QUARK(QN, q_n)               \
@@ -199,6 +228,7 @@ q_n##_quark (void)                            \
 }
 #endif
 
+/*****************************************************************************/
 
 static inline gboolean
 nm_g_hash_table_replace (GHashTable *hash, gpointer key, gpointer value)
@@ -245,6 +275,8 @@ nm_g_hash_table_add (GHashTable *hash, gpointer key)
 #endif
 }
 
+/*****************************************************************************/
+
 #if !GLIB_CHECK_VERSION(2, 40, 0) || defined (NM_GLIB_COMPAT_H_TEST)
 static inline void
 _nm_g_ptr_array_insert (GPtrArray *array,
@@ -265,6 +297,7 @@ _nm_g_ptr_array_insert (GPtrArray *array,
 	}
 }
 #endif
+
 #if !GLIB_CHECK_VERSION(2, 40, 0)
 #define g_ptr_array_insert(array, index, data) G_STMT_START { _nm_g_ptr_array_insert (array, index, data); } G_STMT_END
 #else
@@ -276,6 +309,7 @@ _nm_g_ptr_array_insert (GPtrArray *array,
 	} G_STMT_END
 #endif
 
+/*****************************************************************************/
 
 #if !GLIB_CHECK_VERSION (2, 40, 0)
 static inline gboolean
@@ -313,6 +347,7 @@ _g_key_file_save_to_file (GKeyFile     *key_file,
 	})
 #endif
 
+/*****************************************************************************/
 
 #if GLIB_CHECK_VERSION (2, 36, 0)
 #define g_credentials_get_unix_pid(creds, error) \
@@ -332,6 +367,7 @@ _g_key_file_save_to_file (GKeyFile     *key_file,
 	})
 #endif
 
+/*****************************************************************************/
 
 #if !GLIB_CHECK_VERSION(2, 40, 0) || defined (NM_GLIB_COMPAT_H_TEST)
 static inline gpointer *
@@ -372,12 +408,16 @@ _nm_g_hash_table_get_keys_as_array (GHashTable *hash_table,
 	})
 #endif
 
+/*****************************************************************************/
+
 #ifndef g_info
 /* g_info was only added with 2.39.2 */
 #define g_info(...)     g_log (G_LOG_DOMAIN,         \
                                G_LOG_LEVEL_INFO,     \
                                __VA_ARGS__)
 #endif
+
+/*****************************************************************************/
 
 #if !GLIB_CHECK_VERSION(2, 44, 0)
 static inline gpointer
@@ -397,6 +437,7 @@ g_steal_pointer (gpointer pp)
   (0 ? (*(pp)) : (g_steal_pointer) (pp))
 #endif
 
+/*****************************************************************************/
 
 static inline gboolean
 _nm_g_strv_contains (const gchar * const *strv,
@@ -419,6 +460,8 @@ _nm_g_strv_contains (const gchar * const *strv,
 #endif
 }
 #define g_strv_contains _nm_g_strv_contains
+
+/*****************************************************************************/
 
 static inline GVariant *
 _nm_g_variant_new_take_string (gchar *string)
@@ -452,6 +495,8 @@ _nm_g_variant_new_take_string (gchar *string)
 }
 #define g_variant_new_take_string _nm_g_variant_new_take_string
 
+/*****************************************************************************/
+
 #if !GLIB_CHECK_VERSION(2, 38, 0)
 _nm_printf (1, 2)
 static inline GVariant *
@@ -480,5 +525,24 @@ _nm_g_variant_new_printf (const char *format_string, ...)
 		_v; \
 	})
 #endif
+
+/*****************************************************************************/
+
+#if !GLIB_CHECK_VERSION (2, 56, 0)
+#define g_object_ref(Obj)      ((typeof(Obj)) g_object_ref (Obj))
+#define g_object_ref_sink(Obj) ((typeof(Obj)) g_object_ref_sink (Obj))
+#endif
+
+/*****************************************************************************/
+
+#ifndef g_autofree
+/* we still don't rely on recent glib to provide g_autofree. Hence, we continue
+ * to use our gs_* free macros that we took from libgsystem.
+ *
+ * To ease migration towards g_auto*, add a compat define for g_autofree. */
+#define g_autofree gs_free
+#endif
+
+/*****************************************************************************/
 
 #endif  /* __NM_GLIB_H__ */

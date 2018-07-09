@@ -113,6 +113,9 @@ nm_ip_addr_set (int addr_family, gpointer dst, const NMIPAddr *src)
 #define NM_CMP_DIRECT_MEMCMP(a, b, size) \
     NM_CMP_RETURN (memcmp ((a), (b), (size)))
 
+#define NM_CMP_DIRECT_STRCMP0(a, b) \
+    NM_CMP_RETURN (g_strcmp0 ((a), (b)))
+
 #define NM_CMP_DIRECT_IN6ADDR(a, b) \
     G_STMT_START { \
         const struct in6_addr *const _a = (a); \
@@ -190,6 +193,18 @@ void nm_utils_strbuf_append_c (char **buf, gsize *len, char c);
 void nm_utils_strbuf_append_str (char **buf, gsize *len, const char *str);
 
 const char *nm_strquote (char *buf, gsize buf_len, const char *str);
+
+static inline gboolean
+nm_utils_is_separator (const char c)
+{
+	return NM_IN_SET (c, ' ', '\t');
+}
+
+/*****************************************************************************/
+
+const char *nm_utils_dbus_path_get_last_component (const char *dbus_path);
+
+int nm_utils_dbus_path_cmp (const char *dbus_path_a, const char *dbus_path_b);
 
 /*****************************************************************************/
 
@@ -316,6 +331,7 @@ _nm_g_slice_free_fcn_define (1)
 _nm_g_slice_free_fcn_define (2)
 _nm_g_slice_free_fcn_define (4)
 _nm_g_slice_free_fcn_define (8)
+_nm_g_slice_free_fcn_define (10)
 _nm_g_slice_free_fcn_define (12)
 _nm_g_slice_free_fcn_define (16)
 
@@ -326,12 +342,20 @@ _nm_g_slice_free_fcn_define (16)
 		/* If mem_size is a compile time constant, the compiler
 		 * will be able to optimize this. Hence, you don't want
 		 * to call this with a non-constant size argument. */ \
-		switch (mem_size) { \
+		G_STATIC_ASSERT_EXPR (   ((mem_size) ==  1) \
+		                      || ((mem_size) ==  2) \
+		                      || ((mem_size) ==  4) \
+		                      || ((mem_size) ==  8) \
+		                      || ((mem_size) == 10) \
+		                      || ((mem_size) == 12) \
+		                      || ((mem_size) == 16)); \
+		switch ((mem_size)) { \
 		case  1: _fcn = _nm_g_slice_free_fcn_1;  break; \
 		case  2: _fcn = _nm_g_slice_free_fcn_2;  break; \
 		case  4: _fcn = _nm_g_slice_free_fcn_4;  break; \
 		case  8: _fcn = _nm_g_slice_free_fcn_8;  break; \
-		case 12: _fcn = _nm_g_slice_free_fcn_12;  break; \
+		case 10: _fcn = _nm_g_slice_free_fcn_10; break; \
+		case 12: _fcn = _nm_g_slice_free_fcn_12; break; \
 		case 16: _fcn = _nm_g_slice_free_fcn_16; break; \
 		default: g_assert_not_reached (); _fcn = NULL; break; \
 		} \
@@ -386,6 +410,16 @@ gboolean nm_g_object_set_property (GObject *object,
                                    const GValue *value,
                                    GError **error);
 
+gboolean nm_g_object_set_property_boolean (GObject *object,
+                                           const gchar  *property_name,
+                                           gboolean value,
+                                           GError **error);
+
+gboolean nm_g_object_set_property_uint (GObject *object,
+                                        const gchar  *property_name,
+                                        guint value,
+                                        GError **error);
+
 GParamSpec *nm_g_object_class_find_property_from_gtype (GType gtype,
                                                         const char *property_name);
 
@@ -405,10 +439,93 @@ char *nm_utils_str_utf8safe_unescape_cp (const char *str);
 
 char *nm_utils_str_utf8safe_escape_take (char *str, NMUtilsStrUtf8SafeFlags flags);
 
+static inline void
+nm_g_variant_unref_floating (GVariant *var)
+{
+	/* often a function wants to keep a reference to an input variant.
+	 * It uses g_variant_ref_sink() to either increase the ref-count,
+	 * or take ownership of a possibly floating reference.
+	 *
+	 * If the function doesn't actually want to do anything with the
+	 * input variant, it still must make sure that a passed in floating
+	 * reference is consumed. Hence, this helper which:
+	 *
+	 *   - does nothing if @var is not floating
+	 *   - unrefs (consumes) @var if it is floating. */
+	if (g_variant_is_floating (var))
+		g_variant_unref (var);
+}
+
 /*****************************************************************************/
 
-#define NM_UTILS_NS_PER_SECOND  ((gint64) 1000000000)
-#define NM_UTILS_NS_PER_MSEC    ((gint64) 1000000)
+static inline int
+nm_utf8_collate0 (const char *a, const char *b)
+{
+	if (!a)
+		return !b ? 0 : -1;
+	if (!b)
+		return 1;
+	return g_utf8_collate (a, b);
+}
+
+int nm_strcmp_p_with_data (gconstpointer a, gconstpointer b, gpointer user_data);
+int nm_cmp_uint32_p_with_data (gconstpointer p_a, gconstpointer p_b, gpointer user_data);
+int nm_cmp_int2ptr_p_with_data (gconstpointer p_a, gconstpointer p_b, gpointer user_data);
+
+/*****************************************************************************/
+
+typedef struct {
+	const char *name;
+} NMUtilsNamedEntry;
+
+typedef struct {
+	union {
+		NMUtilsNamedEntry named_entry;
+		const char *name;
+	};
+	union {
+		const char *value_str;
+		gconstpointer value_ptr;
+	};
+} NMUtilsNamedValue;
+
+#define nm_utils_named_entry_cmp           nm_strcmp_p
+#define nm_utils_named_entry_cmp_with_data nm_strcmp_p_with_data
+
+NMUtilsNamedValue *nm_utils_named_values_from_str_dict (GHashTable *hash, guint *out_len);
+
+gpointer *nm_utils_hash_keys_to_array (GHashTable *hash,
+                                       GCompareDataFunc compare_func,
+                                       gpointer user_data,
+                                       guint *out_len);
+
+static inline const char **
+nm_utils_strdict_get_keys (const GHashTable *hash,
+                           gboolean sorted,
+                           guint *out_length)
+{
+	return (const char **) nm_utils_hash_keys_to_array ((GHashTable *) hash,
+	                                                    sorted ? nm_strcmp_p_with_data : NULL,
+	                                                    NULL,
+	                                                    out_length);
+}
+
+char **nm_utils_strv_make_deep_copied (const char **strv);
+
+static inline char **
+nm_utils_strv_make_deep_copied_nonnull (const char **strv)
+{
+	return nm_utils_strv_make_deep_copied (strv) ?: g_new0 (char *, 1);
+}
+
+void _nm_utils_strv_sort (const char **strv, gssize len);
+#define nm_utils_strv_sort(strv, len) _nm_utils_strv_sort (NM_CAST_STRV_MC (strv), len)
+
+/*****************************************************************************/
+
+#define NM_UTILS_NS_PER_SECOND   ((gint64) 1000000000)
+#define NM_UTILS_NS_PER_MSEC     ((gint64) 1000000)
+#define NM_UTILS_MSEC_PER_SECOND ((gint64) 1000)
 #define NM_UTILS_NS_TO_MSEC_CEIL(nsec)      (((nsec) + (NM_UTILS_NS_PER_MSEC - 1)) / NM_UTILS_NS_PER_MSEC)
 
 /*****************************************************************************/
@@ -416,6 +533,122 @@ char *nm_utils_str_utf8safe_escape_take (char *str, NMUtilsStrUtf8SafeFlags flag
 int nm_utils_fd_wait_for_event (int fd, int event, gint64 timeout_ns);
 ssize_t nm_utils_fd_read_loop (int fd, void *buf, size_t nbytes, bool do_poll);
 int nm_utils_fd_read_loop_exact (int fd, void *buf, size_t nbytes, bool do_poll);
+
+/*****************************************************************************/
+
+static inline const char *
+nm_utils_dbus_normalize_object_path (const char *path)
+{
+	/* D-Bus does not allow an empty object path. Hence, whenever we mean NULL / no-object
+	 * on D-Bus, it's path is actually "/".
+	 *
+	 * Normalize that away, and return %NULL in that case. */
+	if (path && path[0] == '/' && path[1] == '\0')
+		return NULL;
+	return path;
+}
+
+#define NM_DEFINE_GDBUS_ARG_INFO_FULL(name_, ...) \
+	((GDBusArgInfo *) (&((const GDBusArgInfo) { \
+		.ref_count = -1, \
+		.name = name_, \
+		__VA_ARGS__ \
+	})))
+
+#define NM_DEFINE_GDBUS_ARG_INFO(name_, a_signature) \
+	NM_DEFINE_GDBUS_ARG_INFO_FULL ( \
+		name_, \
+		.signature = a_signature, \
+	)
+
+#define NM_DEFINE_GDBUS_ARG_INFOS(...) \
+	((GDBusArgInfo **) ((const GDBusArgInfo *[]) { \
+		__VA_ARGS__ \
+		NULL, \
+	}))
+
+#define NM_DEFINE_GDBUS_PROPERTY_INFO(name_, ...) \
+	((GDBusPropertyInfo *) (&((const GDBusPropertyInfo) { \
+		.ref_count = -1, \
+		.name = name_, \
+		__VA_ARGS__ \
+	})))
+
+#define NM_DEFINE_GDBUS_PROPERTY_INFO_READABLE(name_, m_signature) \
+	NM_DEFINE_GDBUS_PROPERTY_INFO ( \
+		name_, \
+		.signature = m_signature, \
+		.flags = G_DBUS_PROPERTY_INFO_FLAGS_READABLE, \
+	)
+
+#define NM_DEFINE_GDBUS_PROPERTY_INFOS(...) \
+	((GDBusPropertyInfo **) ((const GDBusPropertyInfo *[]) { \
+		__VA_ARGS__ \
+		NULL, \
+	}))
+
+#define NM_DEFINE_GDBUS_SIGNAL_INFO_INIT(name_, ...) \
+	{ \
+		.ref_count = -1, \
+		.name = name_, \
+		__VA_ARGS__ \
+	}
+
+#define NM_DEFINE_GDBUS_SIGNAL_INFO(name_, ...) \
+	((GDBusSignalInfo *) (&((const GDBusSignalInfo) NM_DEFINE_GDBUS_SIGNAL_INFO_INIT (name_, __VA_ARGS__))))
+
+#define NM_DEFINE_GDBUS_SIGNAL_INFOS(...) \
+	((GDBusSignalInfo **) ((const GDBusSignalInfo *[]) { \
+		__VA_ARGS__ \
+		NULL, \
+	}))
+
+#define NM_DEFINE_GDBUS_METHOD_INFO_INIT(name_, ...) \
+	{ \
+		.ref_count = -1, \
+		.name = name_, \
+		__VA_ARGS__ \
+	}
+
+#define NM_DEFINE_GDBUS_METHOD_INFO(name_, ...) \
+	((GDBusMethodInfo *) (&((const GDBusMethodInfo) NM_DEFINE_GDBUS_METHOD_INFO_INIT (name_, __VA_ARGS__))))
+
+#define NM_DEFINE_GDBUS_METHOD_INFOS(...) \
+	((GDBusMethodInfo **) ((const GDBusMethodInfo *[]) { \
+		__VA_ARGS__ \
+		NULL, \
+	}))
+
+#define NM_DEFINE_GDBUS_INTERFACE_INFO_INIT(name_, ...) \
+	{ \
+		.ref_count = -1, \
+		.name = name_, \
+		__VA_ARGS__ \
+	}
+
+#define NM_DEFINE_GDBUS_INTERFACE_INFO(name_, ...) \
+	((GDBusInterfaceInfo *) (&((const GDBusInterfaceInfo) NM_DEFINE_GDBUS_INTERFACE_INFO_INIT (name_, __VA_ARGS__))))
+
+#define NM_DEFINE_GDBUS_INTERFACE_VTABLE(...) \
+	((GDBusInterfaceVTable *) (&((const GDBusInterfaceVTable) { \
+		__VA_ARGS__ \
+	})))
+
+/*****************************************************************************/
+
+guint64 nm_utils_get_start_time_for_pid (pid_t pid, char *out_state, pid_t *out_ppid);
+
+/*****************************************************************************/
+
+gpointer _nm_utils_user_data_pack (int nargs, gconstpointer *args);
+
+#define nm_utils_user_data_pack(...) \
+	_nm_utils_user_data_pack(NM_NARG (__VA_ARGS__), (gconstpointer[]) { __VA_ARGS__ })
+
+void _nm_utils_user_data_unpack (gpointer user_data, int nargs, ...);
+
+#define nm_utils_user_data_unpack(user_data, ...) \
+	_nm_utils_user_data_unpack(user_data, NM_NARG (__VA_ARGS__), __VA_ARGS__)
 
 /*****************************************************************************/
 
