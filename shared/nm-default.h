@@ -29,12 +29,9 @@
 #define NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR          0x0004
 #define NM_NETWORKMANAGER_COMPILATION_LIB                 (0x0002 | 0x0004)
 
-#ifndef NETWORKMANAGER_COMPILATION
-/* For convenience, we don't require our Makefile.am to define
- * -DNETWORKMANAGER_COMPILATION. As we now include this internal header,
- *  we know we do a NETWORKMANAGER_COMPILATION. */
-#define NETWORKMANAGER_COMPILATION NM_NETWORKMANAGER_COMPILATION_DEFAULT
-#endif
+/* special flag, to indicate that we build a legacy library. That is, we link against
+ * deprecated libnm-util/libnm-glib instead against libnm. */
+#define NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL     0x0010
 
 /*****************************************************************************/
 
@@ -61,7 +58,7 @@
 
 /*****************************************************************************/
 
-#ifdef NM_VPN_OLD
+#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
 
 #define NM_VPN_LIBNM_COMPAT
 #include <nm-connection.h>
@@ -88,7 +85,7 @@
 
 #define _nm_utils_is_valid_iface_name(n)            nm_utils_iface_valid_name(n)
 
-#else /* NM_VPN_OLD */
+#else /* NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL */
 
 #include <NetworkManager.h>
 
@@ -102,19 +99,19 @@
 
 #define _nm_utils_is_valid_iface_name(n)            nm_utils_is_valid_iface_name(n, NULL)
 
-#endif /* NM_VPN_OLD */
+#endif /* NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL */
 
 /*****************************************************************************/
 
 #if (NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR
 
-#ifdef NM_VPN_OLD
+#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
 #include <nm-ui-utils.h>
 #include <nm-cert-chooser.h>
-#else /* NM_VPN_OLD */
+#else
 #include <nma-ui-utils.h>
 #include <nma-cert-chooser.h>
-#endif /* NM_VPN_OLD */
+#endif
 
 #endif /* NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR */
 

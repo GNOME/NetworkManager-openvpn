@@ -1424,7 +1424,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			}
 
 			{
-#ifdef NM_VPN_OLD
+#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
 				NMIP4Route *route;
 
 				route = nm_ip4_route_new ();
@@ -2111,7 +2111,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	if (s_ip4) {
-#ifdef NM_VPN_OLD
+#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
 		num = nm_setting_ip4_config_get_num_routes (s_ip4);
 #else
 		num = nm_setting_ip_config_get_num_routes (s_ip4);
@@ -2124,7 +2124,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			guint64 metric;
 			char metric_buf[50];
 
-#ifdef NM_VPN_OLD
+#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
 			char next_hop_str_buf[INET_ADDRSTRLEN] = { 0 };
 			char dest_str_buf[INET_ADDRSTRLEN] = { 0 };
 			in_addr_t dest, next_hop;

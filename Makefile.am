@@ -49,6 +49,7 @@ src_cppflags = \
 	-DDATADIR=\"$(datadir)\" \
 	-DNM_OPENVPN_LOCALEDIR=\"$(datadir)/locale\" \
 	-DG_LOG_DOMAIN=\"nm-openvpn\" \
+	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_DEFAULT \
 	-I$(srcdir)/shared \
 	$(GLIB_CFLAGS) \
 	$(LIBNM_CFLAGS)
@@ -202,8 +203,7 @@ properties_libnm_openvpn_properties_core_la_SOURCES = \
 	$(editor_sources)
 
 properties_libnm_openvpn_properties_core_la_CPPFLAGS = \
-	-DNM_VPN_OLD \
-	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB \
+	-DNETWORKMANAGER_COMPILATION='NM_NETWORKMANAGER_COMPILATION_LIB|NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL' \
 	$(properties_cppflags) \
 	$(GTK_CFLAGS) \
 	$(LIBNM_GLIB_CFLAGS) \
@@ -236,6 +236,7 @@ EXTRA_DIST += \
 ###############################################################################
 
 properties_tests_cppflags = \
+	-DNETWORKMANAGER_COMPILATION_TEST \
 	-DTEST_SRCDIR="\"$(abs_srcdir)/properties/tests\"" \
 	-DTEST_BUILDDIR="\"$(abs_builddir)/properties/tests\"" \
 	-I$(srcdir)/shared \
@@ -249,6 +250,7 @@ properties_tests_test_import_export_SOURCES = \
 	properties/tests/test-import-export.c
 
 properties_tests_test_import_export_CPPFLAGS = \
+	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_DEFAULT \
 	$(properties_tests_cppflags) \
 	$(LIBNM_CFLAGS) \
 	$(LIBNMA_CFLAGS)
@@ -268,7 +270,7 @@ properties_tests_test_import_export_glib_SOURCES = \
 	properties/tests/test-import-export.c
 
 properties_tests_test_import_export_glib_CPPFLAGS = \
-	-DNM_VPN_OLD \
+	-DNETWORKMANAGER_COMPILATION='NM_NETWORKMANAGER_COMPILATION_DEFAULT|NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL' \
 	$(properties_tests_cppflags) \
 	$(GTK_CFLAGS) \
 	$(LIBNM_GLIB_CFLAGS) \
@@ -329,6 +331,7 @@ auth_dialog_nm_openvpn_auth_dialog_CPPFLAGS = \
 	-DICONDIR=\""$(datadir)/pixmaps"\" \
 	-DBINDIR=\""$(bindir)"\" \
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\" \
+	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_DEFAULT \
 	-I$(srcdir)/shared \
 	$(GLIB_CFLAGS) \
 	$(GTK_CFLAGS) \
