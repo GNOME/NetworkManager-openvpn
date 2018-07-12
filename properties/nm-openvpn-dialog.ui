@@ -64,6 +64,29 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="compression">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">LZO</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LZ4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Automatic</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LZO disabled (legacy)</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LZO adaptive (legacy)</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkListStore" id="liststore1"/>
   <object class="GtkListStore" id="liststore2"/>
   <object class="GtkListStore" id="model1">
@@ -1011,8 +1034,8 @@ config: reneg-sec</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="lzo_checkbutton">
-                        <property name="label" translatable="yes">Use L_ZO data compression</property>
+                      <object class="GtkCheckButton" id="compress_checkbutton">
+                        <property name="label" translatable="yes">Data _compression:</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -1030,14 +1053,14 @@ config: comp-lzo</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="lzo_combo">
+                      <object class="GtkComboBox" id="compress_combo">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Select the LZO data compression mode.
-config: comp-lzo</property>
-                        <property name="model">model4</property>
+                        <property name="can_focus">False</property>
+                        <property name="model">compression</property>
+                        <property name="active">0</property>
+                        <property name="id_column">0</property>
                         <child>
-                          <object class="GtkCellRendererText" id="renderer13"/>
+                          <object class="GtkCellRendererText" id="renderer8"/>
                           <attributes>
                             <attribute name="text">0</attribute>
                           </attributes>
@@ -1045,7 +1068,7 @@ config: comp-lzo</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="fill">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
