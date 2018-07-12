@@ -144,6 +144,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_CIPHER,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_KEYSIZE,              G_TYPE_INT, 1, 65535, FALSE },
 	{ NM_OPENVPN_KEY_COMP_LZO,             G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_COMPRESS,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CONNECT_TIMEOUT,      G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_CONNECTION_TYPE,      G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CRL_VERIFY_FILE,      G_TYPE_STRING, 0, 0, FALSE },
@@ -1329,6 +1330,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	GPid pid;
 	gboolean dev_type_is_tap;
 	const char *defport, *proto_tcp;
+	const char *compress;
 	const char *tls_remote = NULL;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
 	gs_free char *bus_name = NULL;
@@ -1495,33 +1497,53 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 
+	/* New (2.4+) compress option ("lz4", "lzo", ...) */
+	compress = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS);
+	/* Legacy option ("yes", "adaptive", "no", ...) */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
-
-	/* openvpn understands 4 different modes for --comp-lzo, which have
-	 * different meaning:
-	 *  1) no --comp-lzo option
-	 *  2) --comp-lzo yes
-	 *  3) --comp-lzo [adaptive]
-	 *  4) --comp-lzo no
-	 *
-	 * In the past, nm-openvpn only supported 1) and 2) by having no
-	 * comp-lzo connection setting or "comp-lzo=yes", respectively.
-	 *
-	 * However, old plasma-nm would set "comp-lzo=no" in the connection
-	 * to mean 1). Thus, "comp-lzo=no" is spoiled to mean 4) in order
-	 * to preserve backward compatibily.
-	 * We use instead a special value "no-by-default" to express "no".
-	 *
-	 * See bgo#769177
-	 */
-	if (NM_IN_STRSET (tmp, "no")) {
-		/* means no --comp-lzo option. */
+	if (g_strcmp0 (tmp, "no") == 0) {
+		/*
+		 * Treat "no" as if the option was not present: old plasma-nm would
+		 * set "comp-lzo=no" in the connection if the option was not to be
+		 at all before we would treat it as an explicit disable.
+		 * To preserve backward compatibily, we instead used a special value
+		 * of "no-by-default" to express "no". See bgo#769177 (or not)
+		 */
 		tmp = NULL;
-	} else if (NM_IN_STRSET (tmp, "no-by-default"))
-		tmp = "no";
-
-	if (NM_IN_STRSET (tmp, "yes", "no", "adaptive"))
-		args_add_strv (args, "--comp-lzo", tmp);
+	}
+	if (compress && tmp) {
+		_LOGW ("ignoring the comp-lzo option as compress option is present");
+		tmp = NULL;
+	}
+	if (tmp) {
+		/* We only have the legacy option. Set the compression algorithm from it. */
+		if (strcmp (tmp, "yes") == 0) {
+			compress = "lzo";
+		} else if (strcmp (tmp, "no-by-default") == 0) {
+			compress = "no";
+		} else if (strcmp (tmp, "adaptive") == 0) {
+			compress = "yes";
+		}
+	}
+	if (openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) == OPENVPN_BINARY_VERSION_2_4_OR_NEWER) {
+		if (g_strcmp0 (compress, "yes") == 0)
+			g_ptr_array_add (args, "--compress");
+		else if (g_strcmp0 (compress, "no") != 0)
+			args_add_strv (args, "--compress", compress);
+	} else {
+		if (g_strcmp0 (compress, "yes") == 0)
+			args_add_strv (args, "--comp-lzo", "adaptive");
+		else if (g_strcmp0 (compress, "lzo") != 0)
+			args_add_strv (args, "--comp-lzo", "yes");
+		else if (g_strcmp0 (compress, "no") != 0)
+			args_add_strv (args, "--comp-lzo", "no");
+		else {
+			/* An option that has no --comp-lzo equivalent. Set the new one
+			 * and hope for the best. Perhaps the user is using some development
+			 * snapshot or something. */
+			args_add_strv (args, "--compress", compress);
+		}
+	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT);
 	if (nm_streq0 (tmp, "yes"))
