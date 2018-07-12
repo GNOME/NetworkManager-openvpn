@@ -1,8 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* nm-openvpn-service - openvpn integration with NetworkManager
- *
- * Copyright (C) 2005 - 2008 Tim Niemueller <tim@niemueller.de>
- * Copyright (C) 2005 - 2010 Dan Williams <dcbw@redhat.com>
+/*
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +15,9 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * $Id: nm-openvpn-service.c 4232 2008-10-29 09:13:40Z tambeti $
- *
+ * Copyright (C) 2005 - 2008 Tim Niemueller <tim@niemueller.de>
+ * Copyright (C) 2005 - 2010 Dan Williams <dcbw@redhat.com>
+ * Copyright (C) 2008 - 2018 Red Hat, Inc.
  */
 
 #include "nm-default.h"
