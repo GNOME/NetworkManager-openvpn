@@ -1,5 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* NetworkManager Wireless Applet -- Display wireless access points and allow user control
+/*
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
  *
  * Dan Williams <dcbw@redhat.com>
  * Tim Niemueller <tim@niemueller.de>
@@ -18,8 +18,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * (C) Copyright 2004 - 2008 Red Hat, Inc.
- *               2005 Tim Niemueller [www.niemueller.de]
+ * Copyright (C) 2005 Tim Niemueller [www.niemueller.de]
+ * Copyright (C) 2004 - 2018 Red Hat, Inc.
  */
 
 #include "nm-default.h"

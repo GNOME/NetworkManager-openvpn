@@ -1,5 +1,6 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /*
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
+ *
  * Dan Williams <dcbw@redhat.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * (C) Copyright 2010 Red Hat, Inc.
+ * Copyright (C) 2010 - 2018 Red Hat, Inc.
  */
 
 #ifndef UTILS_H

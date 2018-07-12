@@ -1,6 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* nm-openvpn-service-openvpn-helper - helper called after OpenVPN established
- * a connection, uses DBUS to send information back to nm-openvpn-service
+/*
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
  *
  * Tim Niemueller [www.niemueller.de]
  * Based on work by Dan Williams <dcbw@redhat.com>
@@ -19,10 +18,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * (C) Copyright 2005 Red Hat, Inc.
- * (C) Copyright 2005 Tim Niemueller
- *
- * $Id: nm-openvpn-service-openvpn-helper.c 4170 2008-10-11 14:44:45Z dcbw $
+ * Copyright (C) 2005 Tim Niemueller
+ * Copyright (C) 2005 - 2018 Red Hat, Inc.
  */
 
 #include "nm-default.h"
