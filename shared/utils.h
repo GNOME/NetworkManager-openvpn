@@ -84,6 +84,15 @@
 #define NMV_OVPN_TAG_USER               "user"
 #define NMV_OVPN_TAG_VERIFY_X509_NAME   "verify-x509-name"
 
+typedef enum {
+	NMOVPN_COMP_DISABLED,             /* no option */
+	NMOVPN_COMP_LZO,                  /* "--compress lzo" or "--comp-lzo yes" */
+	NMOVPN_COMP_LZ4,                  /* "--compress lz4" */
+	NMOVPN_COMP_AUTO,                 /* "--compress" */
+	NMOVPN_COMP_LEGACY_LZO_DISABLED,  /* "--comp-lzo no" */
+	NMOVPN_COMP_LEGACY_LZO_ADAPTIVE,  /* "--comp-lzo [adaptive]" */
+} NMOvpnComp;
+
 gboolean is_pkcs12 (const char *filepath);
 
 gboolean is_encrypted (const char *filename);
@@ -111,5 +120,11 @@ nmovpn_arg_is_set (const char *value)
 {
 	return (value && value[0]) ? value : NULL;
 }
+
+NMOvpnComp nmovpn_compression_from_options (const char *comp_lzo,
+                                            const char *compress);
+void nmovpn_compression_to_options (NMOvpnComp comp,
+                                    const char **comp_lzo,
+                                    const char **compress);
 
 #endif  /* UTILS_H */

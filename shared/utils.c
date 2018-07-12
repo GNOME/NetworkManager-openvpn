@@ -113,6 +113,55 @@ _is_inet6_addr (const char *str, gboolean with_square_brackets)
 	return inet_pton (AF_INET6, str, &a) == 1;
 }
 
+NMOvpnComp
+nmovpn_compression_from_options (const char *comp_lzo, const char *compress)
+{
+	if (nm_streq0 (compress, "lzo"))
+		return NMOVPN_COMP_LZO;
+	if (nm_streq0 (compress, "lz4"))
+		return NMOVPN_COMP_LZ4;
+	if (nm_streq0 (compress, "yes"))
+		return NMOVPN_COMP_AUTO;
+
+	if (nm_streq0 (comp_lzo, "yes"))
+		return NMOVPN_COMP_LZO;
+	if (nm_streq0 (comp_lzo, "no-by-default"))
+		return NMOVPN_COMP_LEGACY_LZO_DISABLED;
+	if (nm_streq0 (comp_lzo, "adaptive"))
+		return NMOVPN_COMP_LEGACY_LZO_ADAPTIVE;
+
+	return NMOVPN_COMP_DISABLED;
+}
+
+void
+nmovpn_compression_to_options (NMOvpnComp comp,
+                               const char **comp_lzo,
+                               const char **compress)
+{
+	NM_SET_OUT (comp_lzo, NULL);
+	NM_SET_OUT (compress, NULL);
+
+	switch (comp) {
+	case NMOVPN_COMP_DISABLED:
+		break;
+	case NMOVPN_COMP_LZO:
+		NM_SET_OUT (compress, "lzo");
+		break;
+	case NMOVPN_COMP_LZ4:
+		NM_SET_OUT (compress, "lz4");
+		break;
+	case NMOVPN_COMP_AUTO:
+		NM_SET_OUT (compress, "yes");
+		break;
+	case NMOVPN_COMP_LEGACY_LZO_DISABLED:
+		NM_SET_OUT (comp_lzo, "no-by-default");
+		break;
+	case NMOVPN_COMP_LEGACY_LZO_ADAPTIVE:
+		NM_SET_OUT (comp_lzo, "adaptive");
+		break;
+	}
+}
+
 /**
  * nmovpn_remote_parse:
  * @str: the input string to be split. It is modified inplace.
