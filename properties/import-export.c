@@ -1018,6 +1018,19 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_COMPRESS)) {
+			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
+				goto handle_line_error;
+			if (params[1]) {
+				if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
+					goto handle_line_error;
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS, params[1]);
+			} else {
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS, "yes");
+			}
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_FLOAT)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
@@ -1944,6 +1957,12 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			value = "no";
 		args_write_line (f, NMV_OVPN_TAG_COMP_LZO, value);
 	}
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS);
+	if (nm_streq0 (value, "yes"))
+		args_write_line (f, NMV_OVPN_TAG_COMPRESS);
+	else if (value)
+		args_write_line_setting_value (f, NMV_OVPN_TAG_COMPRESS, s_vpn, NM_OPENVPN_KEY_COMPRESS);
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_FLOAT);
