@@ -285,6 +285,7 @@ properties_tests_test_import_export_glib_LDADD = \
 
 
 EXTRA_DIST += \
+	properties/tests/conf/compress.ovpn \
 	properties/tests/conf/iso885915.ovpn \
 	properties/tests/conf/mtu-disc.ovpn \
 	properties/tests/conf/password.conf \
