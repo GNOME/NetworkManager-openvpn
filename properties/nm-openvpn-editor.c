@@ -1728,7 +1728,8 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "extra_certs_chooser"));
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_EXTRA_CERTS);
-		gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), nm_str_not_empty (value));
+		if (value && value[0])
+			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value);
 
 		g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (tls_auth_toggled_cb), builder);
 		tls_auth_toggled_cb (combo, builder);
