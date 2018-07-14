@@ -1675,7 +1675,7 @@ escape_arg (const char *value, char **buf)
 {
 	const char *s;
 	char *result, *i_result;
-	gboolean has_single_quote = FALSE;
+	gboolean needs_double_quotes = FALSE;
 	gboolean needs_quotation = FALSE;
 	gsize len;
 
@@ -1696,14 +1696,15 @@ escape_arg (const char *value, char **buf)
 		    || (c >= 'A' && c <= 'Z')
 		    || NM_IN_SET (c, '_', '-', ':', '/'))
 			continue;
+
 		needs_quotation = TRUE;
-		if (c == '\'')
-			has_single_quote = TRUE;
+		if (NM_IN_SET (c, '\'', '\n'))
+			needs_double_quotes = TRUE;
 	}
 	if (!needs_quotation)
 		return value;
 
-	if (!has_single_quote) {
+	if (!needs_double_quotes) {
 		result = g_malloc (len + 2 + 1);
 		result[0] = '\'';
 		memcpy (&result[1], value, len);
@@ -1713,9 +1714,19 @@ escape_arg (const char *value, char **buf)
 		i_result = result = g_malloc (len * 2 + 3);
 		*(i_result++) = '"';
 		for (s = value; s[0]; s++) {
-			if (NM_IN_SET (s[0], '\\', '"'))
+			if (s[0] == '\n') {
+				/* Openvpn does not support encoding '\n' in the ovpn configuration file.
+				 * This configuration cannot be expressed in an ovpn file.
+				 *
+				 * Still escape it as '\n', although openvpn's parser will warn
+				 * about the invalid escape sequence. */
 				*(i_result++) = '\\';
-			*(i_result++) = s[0];
+				*(i_result++) = 'n';
+			} else {
+				if (NM_IN_SET (s[0], '\\', '"'))
+					*(i_result++) = '\\';
+				*(i_result++) = s[0];
+			}
 		}
 		*(i_result++) = '"';
 		*(i_result++) = '\0';
