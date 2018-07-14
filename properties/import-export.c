@@ -1696,6 +1696,27 @@ escape_arg (const char *value, char **buf)
 		    || (c >= 'A' && c <= 'Z')
 		    || NM_IN_SET (c, '_', '-', ':', '/'))
 			continue;
+
+		if (G_UNLIKELY (c == '\n')) {
+			gs_free char *value2 = NULL;
+			char *buf2 = NULL;
+			char *s2;
+
+			/* @value contains a newline. Openvpn cannot escape/quote newlines in ovpn
+			 * files, so all we can do is replace the newline with spaces. The correct
+			 * configuration cannot be expressed in the ovpn file format, so silently
+			 * mangle it to something safe (but quite possibly wrong). */
+
+			value2 = g_strdup (value);
+			for (s2 = &value2[s - value]; s2[0]; s2++) {
+				if (s2[0] == '\n')
+					s2[0] = ' ';
+			}
+			s = escape_arg (value2, &buf2);
+			*buf = buf2 ?: g_steal_pointer (&value2);
+			return s;
+		}
+
 		needs_quotation = TRUE;
 		if (c == '\'')
 			has_single_quote = TRUE;
