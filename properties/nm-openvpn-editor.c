@@ -578,7 +578,7 @@ auth_widget_update_connection (GtkBuilder *builder,
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "sk_direction_combo"));
 		model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 		if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-			int direction = -1;
+			int direction;
 
 			gtk_tree_model_get (model, &iter, SK_DIR_COL_NUM, &direction, -1);
 			if (direction > -1) {
@@ -1046,12 +1046,11 @@ tls_remote_changed (GtkWidget *widget, gpointer user_data)
 		GtkTreeModel *combo_model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
 
 		gtk_tree_model_get (combo_model, &iter, TLS_REMOTE_MODE_COL_VALUE, &tls_remote_mode, -1);
-		g_return_if_fail (tls_remote_mode);
 
 		/* If a mode of 'none' is selected, disable the subject entry control.
 		   Otherwise, enable the entry, and set up it's error state based on
 		   whether it is empty or not (it should not be). */
-		if (!strcmp (tls_remote_mode, TLS_REMOTE_MODE_NONE)) {
+		if (nm_streq (tls_remote_mode, TLS_REMOTE_MODE_NONE)) {
 			entry_enabled = FALSE;
 		} else {
 			const char *subject = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -1992,14 +1991,15 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-		char *cipher = NULL;
-		gboolean is_default = TRUE;
+		gs_free char *cipher = NULL;
+		gboolean is_default;
 
 		gtk_tree_model_get (model, &iter,
 		                    TLS_CIPHER_COL_NAME, &cipher,
 		                    TLS_CIPHER_COL_DEFAULT, &is_default, -1);
 		if (!is_default && cipher) {
-			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CIPHER), g_strdup (cipher));
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_CIPHER),
+			                     g_steal_pointer (&cipher));
 		}
 	}
 
@@ -2039,15 +2039,16 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 		if (   value && *value
 		    && gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter)) {
 			gs_free char *tls_remote_mode = NULL;
-			gtk_tree_model_get (model, &iter, TLS_REMOTE_MODE_COL_VALUE, &tls_remote_mode, -1);
 
-			if (!g_strcmp0 (tls_remote_mode, TLS_REMOTE_MODE_NONE)) {
+			gtk_tree_model_get (model, &iter, TLS_REMOTE_MODE_COL_VALUE, &tls_remote_mode, -1);
+			if (nm_streq (tls_remote_mode, TLS_REMOTE_MODE_NONE)) {
 				// pass
-			} else if (!g_strcmp0 (tls_remote_mode, TLS_REMOTE_MODE_LEGACY)) {
-				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TLS_REMOTE), g_strdup(value));
+			} else if (nm_streq (tls_remote_mode, TLS_REMOTE_MODE_LEGACY)) {
+				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_TLS_REMOTE), g_strdup (value));
 			} else {
-				char *x509_name = g_strdup_printf ("%s:%s", tls_remote_mode, value);
-				g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_VERIFY_X509_NAME), x509_name);
+				g_hash_table_insert (hash,
+				                     g_strdup (NM_OPENVPN_KEY_VERIFY_X509_NAME),
+				                     g_strdup_printf ("%s:%s", tls_remote_mode, value));
 			}
 		}
 
@@ -2056,13 +2057,14 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_cert_tls_combo"));
 			model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 			if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-				char *remote_cert = NULL;
+				char *remote_cert;
 
 				gtk_tree_model_get (model, &iter, REMOTE_CERT_COL_VALUE, &remote_cert, -1);
-				if (remote_cert)
+				if (remote_cert) {
 					g_hash_table_insert (hash,
 					                     g_strdup (NM_OPENVPN_KEY_REMOTE_CERT_TLS),
 					                     remote_cert);
+				}
 			}
 		}
 
@@ -2071,13 +2073,14 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "ns_cert_type_combo"));
 			model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 			if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-				char *type = NULL;
+				char *type;
 
 				gtk_tree_model_get (model, &iter, NS_CERT_TYPE_COL_VALUE, &type, -1);
-				if (type)
+				if (type) {
 					g_hash_table_insert (hash,
 					                     g_strdup (NM_OPENVPN_KEY_NS_CERT_TYPE),
 					                     type);
+				}
 			}
 		}
 
@@ -2093,7 +2096,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 			widget = GTK_WIDGET (gtk_builder_get_object (builder, "direction_combo"));
 			model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 			if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-				int direction = -1;
+				int direction;
 
 				gtk_tree_model_get (model, &iter, TA_DIR_COL_NUM, &direction, -1);
 				if (direction >= 0) {
@@ -2271,7 +2274,7 @@ check_validity (OpenvpnEditor *self, GError **error)
 	const char *str;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	const char *contype = NULL;
+	gs_free char *contype = NULL;
 	gboolean success;
 
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "gateway_entry"));
@@ -2313,7 +2316,7 @@ auth_combo_changed_cb (GtkWidget *combo, gpointer user_data)
 	GtkWidget *auth_notebook;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	gint new_page = 0;
+	int new_page;
 
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
 	g_assert (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter));
@@ -2365,7 +2368,7 @@ advanced_button_clicked_cb (GtkWidget *button, gpointer user_data)
 	GtkWidget *dialog, *toplevel, *widget;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	const char *contype = NULL;
+	gs_free char *contype = NULL;
 	gboolean success;
 
 	toplevel = gtk_widget_get_toplevel (priv->widget);
@@ -2526,7 +2529,7 @@ get_auth_type (GtkBuilder *builder)
 	GtkComboBox *combo;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	char *auth_type = NULL;
+	char *auth_type;
 	gboolean success;
 
 	combo = GTK_COMBO_BOX (GTK_WIDGET (gtk_builder_get_object (builder, "auth_combo")));
@@ -2535,7 +2538,6 @@ get_auth_type (GtkBuilder *builder)
 	success = gtk_combo_box_get_active_iter (combo, &iter);
 	g_return_val_if_fail (success == TRUE, NULL);
 	gtk_tree_model_get (model, &iter, COL_AUTH_TYPE, &auth_type, -1);
-
 	return auth_type;
 }
 
@@ -2548,7 +2550,7 @@ update_connection (NMVpnEditor *iface,
 	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 	NMSettingVpn *s_vpn;
 	GtkWidget *widget;
-	char *auth_type;
+	gs_free char *auth_type = NULL;
 	const char *str;
 	gboolean valid = FALSE;
 
@@ -2567,7 +2569,6 @@ update_connection (NMVpnEditor *iface,
 	if (auth_type) {
 		nm_setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, auth_type);
 		auth_widget_update_connection (priv->builder, auth_type, s_vpn);
-		g_free (auth_type);
 	}
 
 	if (priv->advanced)
