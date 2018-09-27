@@ -756,11 +756,12 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 		                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD),
 		                     g_strdup (secret));
 	}
-	flags = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags");
-	if (flags)
+	flags = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS);
+	if (flags) {
 		g_hash_table_insert (hash,
-		                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags"),
+		                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS),
 		                     g_strdup (flags));
+	}
 
 	return hash;
 }
@@ -1541,7 +1542,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 			gtk_entry_set_text (GTK_ENTRY (widget), value);
 		}
 
-		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags");
+		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS);
 		G_STATIC_ASSERT_EXPR (((guint) (NMSettingSecretFlags) 0xFFFFu) == 0xFFFFu);
 		pw_flags = _nm_utils_ascii_str_to_int64 (value, 10, 0, 0xFFFF, NM_SETTING_SECRET_FLAG_NONE);
 	} else
@@ -1937,7 +1938,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 				pw_flags = nma_utils_menu_to_secret_flags (widget);
 				if (pw_flags != NM_SETTING_SECRET_FLAG_NONE) {
 					g_hash_table_insert (hash,
-					                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags"),
+					                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS),
 					                     g_strdup_printf ("%d", pw_flags));
 				}
 			}
@@ -2517,7 +2518,7 @@ hash_copy_advanced (gpointer key, gpointer data, gpointer user_data)
 	g_return_if_fail (value && *value);
 
 	/* HTTP Proxy password is a secret, not a data item */
-	if (!strcmp (key, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
+	if (NM_IN_SET (key, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
 		nm_setting_vpn_add_secret (s_vpn, (const char *) key, value);
 	else
 		nm_setting_vpn_add_data_item (s_vpn, (const char *) key, value);
