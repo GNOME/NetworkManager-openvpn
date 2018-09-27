@@ -681,7 +681,7 @@ sk_file_chooser_filter_new (void)
 	return filter;
 }
 
-static const char *advanced_keys[] = {
+static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_AUTH,
 	NM_OPENVPN_KEY_CIPHER,
 	NM_OPENVPN_KEY_COMP_LZO,
@@ -719,21 +719,17 @@ static const char *advanced_keys[] = {
 	NM_OPENVPN_KEY_TUNNEL_MTU,
 	NM_OPENVPN_KEY_TUN_IPV6,
 	NM_OPENVPN_KEY_VERIFY_X509_NAME,
-	NULL
 };
 
 static void
 copy_values (const char *key, const char *value, gpointer user_data)
 {
 	GHashTable *hash = (GHashTable *) user_data;
-	const char **i;
+	gssize idx;
 
-	for (i = &advanced_keys[0]; *i; i++) {
-		if (strcmp (key, *i))
-			continue;
-
-		g_hash_table_insert (hash, g_strdup (key), g_strdup (value));
-	}
+	idx = nm_utils_strv_find_first ((char **) advanced_keys, G_N_ELEMENTS (advanced_keys), key);
+	if (idx >= 0)
+		g_hash_table_insert (hash, (gpointer) advanced_keys[idx], g_strdup (value));
 }
 
 static GHashTable *
@@ -744,7 +740,7 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 	NMSettingVpn *s_vpn;
 	const char *secret, *flags;
 
-	hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+	hash = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	nm_setting_vpn_foreach_data_item (s_vpn, copy_values, hash);
@@ -753,13 +749,13 @@ advanced_dialog_new_hash_from_connection (NMConnection *connection,
 	secret = nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD);
 	if (secret) {
 		g_hash_table_insert (hash,
-		                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD),
+		                     NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
 		                     g_strdup (secret));
 	}
 	flags = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS);
 	if (flags) {
 		g_hash_table_insert (hash,
-		                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS),
+		                     NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS,
 		                     g_strdup (flags));
 	}
 
