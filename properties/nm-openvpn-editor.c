@@ -1893,7 +1893,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	proxy_type = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 	if (proxy_type != PROXY_TYPE_NONE) {
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_server_entry"));
-		value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+		value = gtk_entry_get_text (GTK_ENTRY (widget));
 		if (value && *value) {
 			int proxy_port;
 
@@ -1919,7 +1919,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 				guint32 pw_flags;
 
 				widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_username_entry"));
-				value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+				value = gtk_entry_get_text (GTK_ENTRY (widget));
 				if (value && *value) {
 					g_hash_table_insert (hash,
 					                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_USERNAME),
@@ -1927,7 +1927,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 				}
 
 				widget = GTK_WIDGET (gtk_builder_get_object (builder, "proxy_password_entry"));
-				value = (char *) gtk_entry_get_text (GTK_ENTRY (widget));
+				value = gtk_entry_get_text (GTK_ENTRY (widget));
 				if (value && *value) {
 					g_hash_table_insert (hash,
 					                     g_strdup (NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD),
@@ -1976,7 +1976,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "dev_entry"));
 		value = gtk_entry_get_text (GTK_ENTRY (widget));
-		if (value && value[0] != '\0')
+		if (value && *value)
 			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_DEV), g_strdup (value));
 	}
 
@@ -2512,7 +2512,7 @@ static void
 hash_copy_advanced (gpointer key, gpointer data, gpointer user_data)
 {
 	NMSettingVpn *s_vpn = NM_SETTING_VPN (user_data);
-	const char *value = (const char *) data;
+	const char *value = data;
 
 	g_return_if_fail (value && *value);
 
