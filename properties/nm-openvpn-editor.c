@@ -733,8 +733,7 @@ copy_values (const char *key, const char *value, gpointer user_data)
 }
 
 static GHashTable *
-advanced_dialog_new_hash_from_connection (NMConnection *connection,
-                                          GError **error)
+advanced_dialog_new_hash_from_connection (NMConnection *connection)
 {
 	GHashTable *hash;
 	NMSettingVpn *s_vpn;
@@ -1819,7 +1818,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 }
 
 static GHashTable *
-advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
+advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 {
 	GHashTable *hash;
 	GtkWidget *widget, *entry, *combo;
@@ -1832,7 +1831,6 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	GtkTreeIter iter;
 
 	g_return_val_if_fail (dialog, NULL);
-	g_return_val_if_fail (error || !*error, NULL);
 
 	builder = g_object_get_data (G_OBJECT (dialog), "builder");
 	g_return_val_if_fail (builder, NULL);
@@ -2329,20 +2327,14 @@ advanced_dialog_response_cb (GtkWidget *dialog, gint response, gpointer user_dat
 {
 	OpenvpnEditor *self = OPENVPN_EDITOR (user_data);
 	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
-	GError *error = NULL;
 
 	if (response != GTK_RESPONSE_OK) {
 		advanced_dialog_close_cb (dialog, self);
 		return;
 	}
 
-	if (priv->advanced)
-		g_hash_table_destroy (priv->advanced);
-	priv->advanced = advanced_dialog_new_hash_from_dialog (dialog, &error);
-	if (!priv->advanced) {
-		g_message ("%s: error reading advanced settings: %s", __func__, error->message);
-		g_error_free (error);
-	}
+	nm_clear_pointer (&priv->advanced, g_hash_table_destroy);
+	priv->advanced = advanced_dialog_new_hash_from_dialog (dialog);
 	advanced_dialog_close_cb (dialog, self);
 
 	stuff_changed_cb (NULL, self);
@@ -2388,7 +2380,7 @@ advanced_button_clicked_cb (GtkWidget *button, gpointer user_data)
 }
 
 static gboolean
-init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **error)
+init_editor_plugin (OpenvpnEditor *self, NMConnection *connection)
 {
 	OpenvpnEditorPrivate *priv = OPENVPN_EDITOR_GET_PRIVATE (self);
 	NMSettingVpn *s_vpn;
@@ -2611,19 +2603,15 @@ openvpn_editor_plugin_widget_init (OpenvpnEditor *plugin)
 NMVpnEditor *
 openvpn_editor_new (NMConnection *connection, GError **error)
 {
-	NMVpnEditor *object;
+	gs_unref_object NMVpnEditor *object = NULL;
 	OpenvpnEditorPrivate *priv;
 	gboolean new = TRUE;
 	NMSettingVpn *s_vpn;
 
-	if (error)
-		g_return_val_if_fail (*error == NULL, NULL);
+	g_return_val_if_fail (NM_IS_CONNECTION (connection), NULL);
+	g_return_val_if_fail (!error || !*error, NULL);
 
 	object = g_object_new (OPENVPN_TYPE_EDITOR, NULL);
-	if (!object) {
-		g_set_error_literal (error, NMV_EDITOR_PLUGIN_ERROR, 0, _("could not create openvpn object"));
-		return NULL;
-	}
 
 	priv = OPENVPN_EDITOR_GET_PRIVATE (object);
 
@@ -2631,15 +2619,12 @@ openvpn_editor_new (NMConnection *connection, GError **error)
 
 	gtk_builder_set_translation_domain (priv->builder, GETTEXT_PACKAGE);
 
-	if (!gtk_builder_add_from_resource (priv->builder, "/org/freedesktop/network-manager-openvpn/nm-openvpn-dialog.ui", error)) {
-		g_object_unref (object);
+	if (!gtk_builder_add_from_resource (priv->builder, "/org/freedesktop/network-manager-openvpn/nm-openvpn-dialog.ui", error))
 		g_return_val_if_reached (NULL);
-	}
 
 	priv->widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "openvpn-vbox"));
 	if (!priv->widget) {
 		g_set_error_literal (error, NMV_EDITOR_PLUGIN_ERROR, 0, _("could not load UI widget"));
-		g_object_unref (object);
 		g_return_val_if_reached (NULL);
 	}
 	g_object_ref_sink (priv->widget);
@@ -2651,18 +2636,12 @@ openvpn_editor_new (NMConnection *connection, GError **error)
 		nm_setting_vpn_foreach_data_item (s_vpn, is_new_func, &new);
 	priv->new_connection = new;
 
-	if (!init_editor_plugin (OPENVPN_EDITOR (object), connection, error)) {
-		g_object_unref (object);
-		return NULL;
-	}
+	if (!init_editor_plugin (OPENVPN_EDITOR (object), connection))
+		g_return_val_if_reached (NULL);
 
-	priv->advanced = advanced_dialog_new_hash_from_connection (connection, error);
-	if (!priv->advanced) {
-		g_object_unref (object);
-		return NULL;
-	}
+	priv->advanced = advanced_dialog_new_hash_from_connection (connection);
 
-	return object;
+	return g_steal_pointer (&object);
 }
 
 static void
@@ -2711,8 +2690,6 @@ nm_vpn_editor_factory_openvpn (NMVpnEditorPlugin *editor_plugin,
                                NMConnection *connection,
                                GError **error)
 {
-	g_return_val_if_fail (!error || !*error, NULL);
-
 	return openvpn_editor_new (connection, error);
 }
 #endif
