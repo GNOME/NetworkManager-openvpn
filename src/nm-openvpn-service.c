@@ -228,20 +228,6 @@ _LOGD_enabled (void)
 /*****************************************************************************/
 
 static gboolean
-validate_auth (const char *auth)
-{
-	return NM_IN_STRSET (auth, NM_OPENVPN_AUTH_NONE,
-	                           NM_OPENVPN_AUTH_RSA_MD4,
-	                           NM_OPENVPN_AUTH_MD5,
-	                           NM_OPENVPN_AUTH_SHA1,
-	                           NM_OPENVPN_AUTH_SHA224,
-	                           NM_OPENVPN_AUTH_SHA256,
-	                           NM_OPENVPN_AUTH_SHA384,
-	                           NM_OPENVPN_AUTH_SHA512,
-	                           NM_OPENVPN_AUTH_RIPEMD160);
-}
-
-static gboolean
 validate_connection_type (const char *ctype)
 {
 	return NM_IN_STRSET (ctype, NM_OPENVPN_CONTYPE_TLS,
@@ -1009,7 +995,8 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 	gboolean again = TRUE;
-	char *str = NULL, *auth = NULL;
+	char *str = NULL;
+	char *auth;
 	const char *message = NULL;
 
 	g_assert (out_failure);
@@ -1326,7 +1313,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  GError **error)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-	const char *openvpn_binary, *auth, *tmp, *tmp2, *tmp3, *tmp4;
+	const char *openvpn_binary, *tmp, *tmp2, *tmp3, *tmp4;
 	gs_unref_ptrarray GPtrArray *args = NULL;
 	GPid pid;
 	gboolean dev_type_is_tap;
@@ -1375,17 +1362,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		                     _("Could not find the openvpn binary."));
 		return FALSE;
-	}
-
-	auth = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
-	if (auth) {
-		if (!validate_auth (auth)) {
-			g_set_error_literal (error,
-			                     NM_VPN_PLUGIN_ERROR,
-			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			                     _("Invalid HMAC auth."));
-			return FALSE;
-		}
 	}
 
 	args = g_ptr_array_new_with_free_func (g_free);
@@ -1651,8 +1627,9 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 
-	if (auth)
-		args_add_strv (args, "--auth", auth);
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
+	if (tmp)
+		args_add_strv (args, "--auth", tmp);
 
 	args_add_strv (args, "--auth-nocache");
 
