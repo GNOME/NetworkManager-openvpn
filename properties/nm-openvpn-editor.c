@@ -2417,18 +2417,15 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 
 	if (s_vpn) {
 		contype = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
-		if (contype) {
-			if (   strcmp (contype, NM_OPENVPN_CONTYPE_TLS)
-			    && strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY)
-			    && strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD)
-			    && strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
-				contype = NM_OPENVPN_CONTYPE_TLS;
-		} else
+		if (!NM_IN_STRSET (contype, NM_OPENVPN_CONTYPE_TLS,
+		                            NM_OPENVPN_CONTYPE_STATIC_KEY,
+		                            NM_OPENVPN_CONTYPE_PASSWORD,
+		                            NM_OPENVPN_CONTYPE_PASSWORD_TLS))
 			contype = NM_OPENVPN_CONTYPE_TLS;
 	}
 
 	/* TLS auth widget */
-		tls_pw_init_auth_widget (priv->builder, s_vpn,
+	tls_pw_init_auth_widget (priv->builder, s_vpn,
 	                         NM_OPENVPN_CONTYPE_TLS, "tls",
 	                         stuff_changed_cb, self);
 	gtk_list_store_append (store, &iter);
@@ -2448,7 +2445,8 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 	                    COL_AUTH_PAGE, 1,
 	                    COL_AUTH_TYPE, NM_OPENVPN_CONTYPE_PASSWORD,
 	                    -1);
-	if ((active < 0) && !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD))
+	if (   active < 0
+	    && nm_streq (contype, NM_OPENVPN_CONTYPE_PASSWORD))
 		active = 1;
 
 	/* Password+TLS auth widget */
@@ -2461,7 +2459,8 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 	                    COL_AUTH_PAGE, 2,
 	                    COL_AUTH_TYPE, NM_OPENVPN_CONTYPE_PASSWORD_TLS,
 	                    -1);
-	if ((active < 0) && !strcmp (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
+	if (   active < 0
+	    && nm_streq (contype, NM_OPENVPN_CONTYPE_PASSWORD_TLS))
 		active = 2;
 
 	/* Static key auth widget */
@@ -2473,7 +2472,8 @@ init_editor_plugin (OpenvpnEditor *self, NMConnection *connection, GError **erro
 	                    COL_AUTH_PAGE, 3,
 	                    COL_AUTH_TYPE, NM_OPENVPN_CONTYPE_STATIC_KEY,
 	                    -1);
-	if ((active < 0) && !strcmp (contype, NM_OPENVPN_CONTYPE_STATIC_KEY))
+	if (   active < 0
+	    && nm_streq (contype, NM_OPENVPN_CONTYPE_STATIC_KEY))
 		active = 3;
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
