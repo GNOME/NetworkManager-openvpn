@@ -894,12 +894,11 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 
 #define HMACAUTH_COL_NAME 0
 #define HMACAUTH_COL_VALUE 1
-#define HMACAUTH_COL_DEFAULT 2
 
 static void
 populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 {
-	GtkListStore *store;
+	gs_unref_object GtkListStore *store = NULL;
 	GtkTreeIter iter;
 	gboolean active_initialized = FALSE;
 	int i;
@@ -925,7 +924,7 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
 	                    HMACAUTH_COL_NAME, _("Default"),
-	                    HMACAUTH_COL_DEFAULT, TRUE, -1);
+	                    -1);
 
 	for (i = 0; i < G_N_ELEMENTS (items); i++) {
 		const char *name = items[i].name;
@@ -934,17 +933,21 @@ populate_hmacauth_combo (GtkComboBox *box, const char *hmacauth)
 		gtk_list_store_set (store, &iter,
 		                    HMACAUTH_COL_NAME, _(items[i].pretty_name),
 		                    HMACAUTH_COL_VALUE, name,
-		                    HMACAUTH_COL_DEFAULT, FALSE, -1);
+		                    -1);
 		if (hmacauth && !g_ascii_strcasecmp (name, hmacauth)) {
 			gtk_combo_box_set_active_iter (box, &iter);
 			active_initialized = TRUE;
 		}
 	}
 
-	if (!active_initialized)
-		gtk_combo_box_set_active (box, 0);
-
-	g_object_unref (store);
+	if (!active_initialized) {
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+		                    HMACAUTH_COL_NAME, hmacauth,
+		                    HMACAUTH_COL_VALUE, hmacauth,
+		                    -1);
+		gtk_combo_box_set_active_iter (box, &iter);
+	}
 }
 
 #define TLS_REMOTE_MODE_NONE        "none"
@@ -2012,15 +2015,13 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog, GError **error)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "hmacauth_combo"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
-		char *hmacauth = NULL;
-		gboolean is_default = TRUE;
+		char *hmacauth;
 
 		gtk_tree_model_get (model, &iter,
 		                    HMACAUTH_COL_VALUE, &hmacauth,
-		                    HMACAUTH_COL_DEFAULT, &is_default, -1);
-		if (!is_default && hmacauth) {
-			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_AUTH), g_strdup (hmacauth));
-		}
+		                    -1);
+		if (hmacauth)
+			g_hash_table_insert (hash, g_strdup (NM_OPENVPN_KEY_AUTH), hmacauth);
 	}
 
 	contype = g_object_get_data (G_OBJECT (dialog), "connection-type");
