@@ -140,59 +140,59 @@ typedef struct {
 } ValidProperty;
 
 static const ValidProperty valid_properties[] = {
-	{ NM_OPENVPN_KEY_AUTH,                 G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_CA,                   G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_CERT,                 G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_CIPHER,               G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_KEYSIZE,              G_TYPE_INT, 1, 65535, FALSE },
-	{ NM_OPENVPN_KEY_COMP_LZO,             G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_CONNECT_TIMEOUT,      G_TYPE_INT, 0, G_MAXINT, FALSE },
-	{ NM_OPENVPN_KEY_CONNECTION_TYPE,      G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_CRL_VERIFY_FILE,      G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_CRL_VERIFY_DIR,       G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_EXTRA_CERTS,          G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_FLOAT,                G_TYPE_BOOLEAN, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_FRAGMENT_SIZE,        G_TYPE_INT, 0, G_MAXINT, FALSE },
-	{ NM_OPENVPN_KEY_KEY,                  G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_LOCAL_IP,             G_TYPE_STRING, 0, 0, TRUE },
-	{ NM_OPENVPN_KEY_MSSFIX,               G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_MTU_DISC,             G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_PING,                 G_TYPE_INT, 0, G_MAXINT, FALSE },
-	{ NM_OPENVPN_KEY_PING_EXIT,            G_TYPE_INT, 0, G_MAXINT, FALSE },
-	{ NM_OPENVPN_KEY_PING_RESTART,         G_TYPE_INT, 0, G_MAXINT, FALSE },
-	{ NM_OPENVPN_KEY_MAX_ROUTES,           G_TYPE_INT, 0, 100000000, FALSE },
-	{ NM_OPENVPN_KEY_PROTO_TCP,            G_TYPE_BOOLEAN, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_PORT,                 G_TYPE_INT, 1, 65535, FALSE },
-	{ NM_OPENVPN_KEY_PROXY_TYPE,           G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_PROXY_SERVER,         G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_PROXY_PORT,           G_TYPE_INT, 1, 65535, FALSE },
-	{ NM_OPENVPN_KEY_PROXY_RETRY,          G_TYPE_BOOLEAN, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,  G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_REMOTE,               G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_REMOTE_RANDOM,        G_TYPE_BOOLEAN, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_REMOTE_IP,            G_TYPE_STRING, 0, 0, TRUE },
-	{ NM_OPENVPN_KEY_RENEG_SECONDS,        G_TYPE_INT, 0, G_MAXINT, FALSE },
-	{ NM_OPENVPN_KEY_STATIC_KEY,           G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, G_TYPE_INT, 0, 1, FALSE },
-	{ NM_OPENVPN_KEY_TA,                   G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_TA_DIR,               G_TYPE_INT, 0, 1, FALSE },
-	{ NM_OPENVPN_KEY_TAP_DEV,              G_TYPE_BOOLEAN, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_DEV,                  G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_DEV_TYPE,             G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_TUN_IPV6,             G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_TLS_CIPHER,           G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_TLS_CRYPT,            G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_TLS_REMOTE,           G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_VERIFY_X509_NAME,     G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_REMOTE_CERT_TLS,      G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_NS_CERT_TYPE,         G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_TUNNEL_MTU,           G_TYPE_INT, 0, G_MAXINT, FALSE },
-	{ NM_OPENVPN_KEY_USERNAME,             G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_PASSWORD"-flags",     G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_CERTPASS"-flags",     G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_NOSECRET,             G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD"-flags", G_TYPE_STRING, 0, 0, FALSE },
-	{ NULL,                                G_TYPE_NONE, FALSE }
+	{ NM_OPENVPN_KEY_AUTH,                      G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CA,                        G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CERT,                      G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CIPHER,                    G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_KEYSIZE,                   G_TYPE_INT, 1, 65535, FALSE },
+	{ NM_OPENVPN_KEY_COMP_LZO,                  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CONNECT_TIMEOUT,           G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_CONNECTION_TYPE,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CRL_VERIFY_FILE,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CRL_VERIFY_DIR,            G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_EXTRA_CERTS,               G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_FLOAT,                     G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_FRAGMENT_SIZE,             G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_KEY,                       G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_LOCAL_IP,                  G_TYPE_STRING, 0, 0, TRUE },
+	{ NM_OPENVPN_KEY_MSSFIX,                    G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_MTU_DISC,                  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PING,                      G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_PING_EXIT,                 G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_PING_RESTART,              G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_MAX_ROUTES,                G_TYPE_INT, 0, 100000000, FALSE },
+	{ NM_OPENVPN_KEY_PROTO_TCP,                 G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PORT,                      G_TYPE_INT, 1, 65535, FALSE },
+	{ NM_OPENVPN_KEY_PROXY_TYPE,                G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PROXY_SERVER,              G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PROXY_PORT,                G_TYPE_INT, 1, 65535, FALSE },
+	{ NM_OPENVPN_KEY_PROXY_RETRY,               G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,       G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_REMOTE,                    G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_REMOTE_RANDOM,             G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_REMOTE_IP,                 G_TYPE_STRING, 0, 0, TRUE },
+	{ NM_OPENVPN_KEY_RENEG_SECONDS,             G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_STATIC_KEY,                G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_STATIC_KEY_DIRECTION,      G_TYPE_INT, 0, 1, FALSE },
+	{ NM_OPENVPN_KEY_TA,                        G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TA_DIR,                    G_TYPE_INT, 0, 1, FALSE },
+	{ NM_OPENVPN_KEY_TAP_DEV,                   G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_DEV,                       G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_DEV_TYPE,                  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TUN_IPV6,                  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TLS_CIPHER,                G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TLS_CRYPT,                 G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TLS_REMOTE,                G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_VERIFY_X509_NAME,          G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_REMOTE_CERT_TLS,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_NS_CERT_TYPE,              G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TUNNEL_MTU,                G_TYPE_INT, 0, G_MAXINT, FALSE },
+	{ NM_OPENVPN_KEY_USERNAME,                  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PASSWORD_FLAGS,            G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CERTPASS_FLAGS,            G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_NOSECRET,                  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, G_TYPE_STRING, 0, 0, FALSE },
+	{ NULL,                                     G_TYPE_NONE, FALSE }
 };
 
 static const ValidProperty valid_secrets[] = {
@@ -226,20 +226,6 @@ _LOGD_enabled (void)
 #define _LOGW(...) _NMLOG(LOG_WARNING, __VA_ARGS__)
 
 /*****************************************************************************/
-
-static gboolean
-validate_auth (const char *auth)
-{
-	return NM_IN_STRSET (auth, NM_OPENVPN_AUTH_NONE,
-	                           NM_OPENVPN_AUTH_RSA_MD4,
-	                           NM_OPENVPN_AUTH_MD5,
-	                           NM_OPENVPN_AUTH_SHA1,
-	                           NM_OPENVPN_AUTH_SHA224,
-	                           NM_OPENVPN_AUTH_SHA256,
-	                           NM_OPENVPN_AUTH_SHA384,
-	                           NM_OPENVPN_AUTH_SHA512,
-	                           NM_OPENVPN_AUTH_RIPEMD160);
-}
 
 static gboolean
 validate_connection_type (const char *ctype)
@@ -1009,7 +995,8 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
 	gboolean again = TRUE;
-	char *str = NULL, *auth = NULL;
+	char *str = NULL;
+	char *auth;
 	const char *message = NULL;
 
 	g_assert (out_failure);
@@ -1326,7 +1313,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  GError **error)
 {
 	NMOpenvpnPluginPrivate *priv = NM_OPENVPN_PLUGIN_GET_PRIVATE (plugin);
-	const char *openvpn_binary, *auth, *tmp, *tmp2, *tmp3, *tmp4;
+	const char *openvpn_binary, *tmp, *tmp2, *tmp3, *tmp4;
 	gs_unref_ptrarray GPtrArray *args = NULL;
 	GPid pid;
 	gboolean dev_type_is_tap;
@@ -1375,17 +1362,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 		                     _("Could not find the openvpn binary."));
 		return FALSE;
-	}
-
-	auth = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
-	if (auth) {
-		if (!validate_auth (auth)) {
-			g_set_error_literal (error,
-			                     NM_VPN_PLUGIN_ERROR,
-			                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-			                     _("Invalid HMAC auth."));
-			return FALSE;
-		}
 	}
 
 	args = g_ptr_array_new_with_free_func (g_free);
@@ -1651,8 +1627,9 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 
-	if (auth)
-		args_add_strv (args, "--auth", auth);
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH);
+	if (tmp)
+		args_add_strv (args, "--auth", tmp);
 
 	args_add_strv (args, "--auth-nocache");
 
