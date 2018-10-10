@@ -1488,7 +1488,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	g_object_set_data_full (G_OBJECT (dialog), "builder",
 	                        builder, (GDestroyNotify) g_object_unref);
-	g_object_set_data (G_OBJECT (dialog), "connection-type", GINT_TO_POINTER (contype));
+	g_object_set_data (G_OBJECT (dialog), "connection-type", g_strdup (contype));
 
 	ok_button = GTK_WIDGET (gtk_builder_get_object (builder, "ok_button"));
 
