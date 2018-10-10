@@ -204,6 +204,7 @@ std_ask_user (const char *vpn_name, const char *prompt, Field *fields)
 	Field *field;
 	NMAVpnPasswordDialog *dialog;
 	gboolean success = FALSE;
+	guint i;
 
 	g_return_val_if_fail (vpn_name, FALSE);
 	g_return_val_if_fail (prompt, FALSE);
@@ -211,36 +212,22 @@ std_ask_user (const char *vpn_name, const char *prompt, Field *fields)
 	dialog = NMA_VPN_PASSWORD_DIALOG (nma_vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
 
 	/* pre-fill dialog with existing passwords */
-	field = &fields[FIELD_TYPE_PASSWORD];
-	nma_vpn_password_dialog_set_show_password (dialog, field->needed);
-	if (field->needed) {
-		nma_vpn_password_dialog_set_password_label (dialog, _(field->label_acc));
-		nma_vpn_password_dialog_set_password (dialog, field->existing);
-	}
-
-	field = &fields[FIELD_TYPE_CERT_PASSWORD];
-	nma_vpn_password_dialog_set_show_password_secondary (dialog, field->needed);
-	if (field->needed) {
-		nma_vpn_password_dialog_set_password_secondary_label (dialog, _(field->label_acc) );
-		nma_vpn_password_dialog_set_password_secondary (dialog, field->existing);
-	}
-
-	field = &fields[FIELD_TYPE_PROXY_PASSWORD];
-	nma_vpn_password_dialog_set_show_password_ternary (dialog, field->needed);
-	if (field->needed) {
-		nma_vpn_password_dialog_set_password_ternary_label (dialog, _(field->label_acc));
-		nma_vpn_password_dialog_set_password_ternary (dialog, field->existing);
+	for (i = 0; i < _FIELD_TYPE_NUM; i++) {
+		field = &fields[i];
+		nma_vpn_password_dialog_field_set_visible (dialog, i, field->needed, TRUE);
+		if (field->needed) {
+			nma_vpn_password_dialog_field_set_label (dialog, i, _(field->label_acc));
+			nma_vpn_password_dialog_field_set_text (dialog, i, field->existing);
+		}
 	}
 
 	gtk_widget_show (GTK_WIDGET (dialog));
-	if (nma_vpn_password_dialog_run_and_block (dialog)) {
-		if (fields[FIELD_TYPE_PASSWORD].needed)
-			fields[FIELD_TYPE_PASSWORD].new = g_strdup (nma_vpn_password_dialog_get_password (dialog));
-		if (fields[FIELD_TYPE_CERT_PASSWORD].needed)
-			fields[FIELD_TYPE_CERT_PASSWORD].new = g_strdup (nma_vpn_password_dialog_get_password_secondary (dialog));
-		if (fields[FIELD_TYPE_PROXY_PASSWORD].needed)
-			fields[FIELD_TYPE_PROXY_PASSWORD].new = g_strdup (nma_vpn_password_dialog_get_password_ternary (dialog));
 
+	if (nma_vpn_password_dialog_run_and_block (dialog)) {
+		for (i = 0; i < _FIELD_TYPE_NUM; i++) {
+			if (fields[i].needed)
+				fields[i].new = g_strdup (nma_vpn_password_dialog_field_get_text (dialog, i));
+		}
 		success = TRUE;
 	}
 
