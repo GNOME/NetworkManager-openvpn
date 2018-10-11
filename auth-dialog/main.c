@@ -59,9 +59,11 @@ typedef struct {
 	char *existing;
 	char *new;
 	gboolean needed;
+	gboolean is_password;
 } Field;
 
 typedef enum {
+	FIELD_TYPE_USER_NAME,
 	FIELD_TYPE_PASSWORD,
 	FIELD_TYPE_CERT_PASSWORD,
 	FIELD_TYPE_PROXY_PASSWORD,
@@ -182,7 +184,7 @@ eui_finish (const char *vpn_name,
 		                        field->key,
 		                        field->existing ?: "",
 		                        _(field->label),
-		                        TRUE,
+		                        field->is_password,
 		                        field->needed && allow_interaction);
 	}
 
@@ -214,7 +216,7 @@ std_ask_user (const char *vpn_name, const char *prompt, Field *fields)
 	/* pre-fill dialog with existing passwords */
 	for (i = 0; i < _FIELD_TYPE_NUM; i++) {
 		field = &fields[i];
-		nma_vpn_password_dialog_field_set_visible (dialog, i, field->needed, TRUE);
+		nma_vpn_password_dialog_field_set_visible (dialog, i, field->needed, field->is_password);
 		if (field->needed) {
 			nma_vpn_password_dialog_field_set_label (dialog, i, _(field->label_acc));
 			nma_vpn_password_dialog_field_set_text (dialog, i, field->existing);
@@ -414,20 +416,29 @@ main (int argc, char *argv[])
 	AskUserFunc ask_user_func;
 	FinishFunc finish_func;
 	Field fields[] = {
+		[FIELD_TYPE_USER_NAME] = {
+			.key = "x-vpn-interactive-username",
+			.label = N_("Username:"),
+			.label_acc = N_("_Username:"),
+			.is_password = FALSE,
+		},
 		[FIELD_TYPE_PASSWORD] = {
 			.key = NM_OPENVPN_KEY_PASSWORD,
 			.label = N_("Password:"),
 			.label_acc = N_("_Password:"),
+			.is_password = TRUE,
 		},
 		[FIELD_TYPE_CERT_PASSWORD] = {
 			.key = NM_OPENVPN_KEY_CERTPASS,
 			.label = N_("Certificate password:"),
 			.label_acc = N_("Certificate pass_word:"),
+			.is_password = TRUE,
 		},
 		[FIELD_TYPE_PROXY_PASSWORD] = {
 			.key = NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
 			.label = N_("HTTP proxy password"),
 			.label_acc = N_("_HTTP proxy password:"),
+			.is_password = TRUE,
 		},
 	};
 	nm_auto(clear_secrets) Field *_fields = fields;
