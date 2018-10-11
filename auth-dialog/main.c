@@ -332,18 +332,15 @@ get_passwords_required (GHashTable *data,
 	guint i;
 
 	/* If hints are given, then always ask for what the hints require */
-	if (hints) {
-		for (iter = hints; iter && *iter; iter++) {
-			if (!*prompt && g_str_has_prefix (*iter, VPN_MSG_TAG))
-				*prompt = g_strdup (*iter + strlen (VPN_MSG_TAG));
-			else {
-				for (i = 0; i < _FIELD_TYPE_NUM; i++) {
-					if (nm_streq (*iter, fields[i].key))
-						fields[i].needed = TRUE;
-				}
+	for (iter = hints; iter && *iter; iter++) {
+		if (!*prompt && g_str_has_prefix (*iter, VPN_MSG_TAG))
+			*prompt = g_strdup (*iter + strlen (VPN_MSG_TAG));
+		else {
+			for (i = 0; i < _FIELD_TYPE_NUM; i++) {
+				if (nm_streq (*iter, fields[i].key))
+					fields[i].needed = TRUE;
 			}
 		}
-		goto done;
 	}
 
 	ctype = g_hash_table_lookup (data, NM_OPENVPN_KEY_CONNECTION_TYPE);
@@ -378,7 +375,6 @@ get_passwords_required (GHashTable *data,
 			fields[FIELD_TYPE_PROXY_PASSWORD].needed = TRUE;
 	}
 
-done:
 	for (i = 0; i < _FIELD_TYPE_NUM; i++) {
 		if (fields[i].needed)
 			return TRUE;
