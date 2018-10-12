@@ -918,8 +918,9 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 		} else {
 			hints = g_new0 (const char *, 3);
 
+			hints[i++] = "x-vpn-interactive-username";
 			hints[i++] = NM_OPENVPN_KEY_PASSWORD;
-			*out_message = _("A password is required.");
+			*out_message = _("Credentials are required.");
 
 			/* FIXME: this is wrong, we can't reuse the password
 			 * hint for the challenge. */
