@@ -103,7 +103,6 @@ typedef struct {
 } PidsPendingData;
 
 typedef struct {
-	char *default_username;
 	char *username;
 	char *password;
 	char *priv_key_pass;
@@ -879,7 +878,8 @@ static gboolean
 handle_auth (NMOpenvpnPluginIOData *io_data,
              const char *requested_auth,
              const char **out_message,
-             const char ***out_hints)
+             const char ***out_hints,
+             GError **error)
 {
 	gboolean handled = FALSE;
 	guint i = 0;
@@ -890,13 +890,15 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 	g_return_val_if_fail (out_hints && !*out_hints, FALSE);
 
 	if (nm_streq (requested_auth, "Auth")) {
-		const char *username = io_data->username;
+		if (!io_data->username) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION,
+			             "missing username");
+			return FALSE;
+		}
 
-		/* Fall back to the default username if it wasn't overridden by the user */
-		if (!username)
-			username = io_data->default_username;
-
-		if (username != NULL && io_data->password != NULL && io_data->challenge_state_id) {
+		if (io_data->password && io_data->challenge_state_id) {
 			gs_free char *response = NULL;
 
 			response = g_strdup_printf ("CRV1::%s::%s",
@@ -904,27 +906,23 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			                            io_data->password);
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
-			                 username,
+			                 io_data->username,
 			                 response);
 			nm_clear_g_free (&io_data->challenge_state_id);
 			nm_clear_g_free (&io_data->challenge_text);
-		} else if (username != NULL && io_data->password != NULL) {
+		} else if (io_data->password) {
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
-			                 username,
+			                 io_data->username,
 			                 io_data->password);
 		} else {
 			hints = g_new0 (const char *, 3);
-			if (!username) {
-				hints[i++] = NM_OPENVPN_KEY_USERNAME;
-				*out_message = _("A username is required.");
-			}
-			if (!io_data->password) {
-				hints[i++] = NM_OPENVPN_KEY_PASSWORD;
-				*out_message = _("A password is required.");
-			}
-			if (!username && !io_data->password)
-				*out_message = _("A username and password are required.");
+
+			hints[i++] = NM_OPENVPN_KEY_PASSWORD;
+			*out_message = _("A password is required.");
+
+			/* FIXME: this is wrong, we can't reuse the password
+			 * hint for the challenge. */
 			if (io_data->challenge_text)
 				*out_message = io_data->challenge_text;
 		}
@@ -950,23 +948,25 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 		}
 		handled = TRUE;
 	} else if (nm_streq (requested_auth, "HTTP Proxy")) {
-		if (io_data->proxy_username != NULL && io_data->proxy_password != NULL) {
+		if (!io_data->proxy_username) {
+			g_set_error (error,
+			             NM_VPN_PLUGIN_ERROR,
+			             NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION,
+			             "missing proxy username");
+			return FALSE;
+		}
+
+		if (io_data->proxy_password) {
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
 			                 io_data->proxy_username,
 			                 io_data->proxy_password);
 		} else {
-			hints = g_new0 (const char *, 3);
-			if (!io_data->proxy_username) {
-				hints[i++] = NM_OPENVPN_KEY_HTTP_PROXY_USERNAME;
-				*out_message = _("An HTTP Proxy username is required.");
-			}
+			hints = g_new0 (const char *, 2);
 			if (!io_data->proxy_password) {
 				hints[i++] = NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD;
 				*out_message = _("An HTTP Proxy password is required.");
 			}
-			if (!io_data->proxy_username && !io_data->proxy_password)
-				*out_message = _("An HTTP Proxy username and password are required.");
 		}
 		handled = TRUE;
 	}
@@ -1017,12 +1017,13 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 	auth = get_detail (str, ">PASSWORD:Need '");
 	if (auth) {
 		gs_free const char **hints = NULL;
+		gs_free_error GError *error = NULL;
 
 		if (priv->io_data->pending_auth)
 			g_free (priv->io_data->pending_auth);
 		priv->io_data->pending_auth = auth;
 
-		if (handle_auth (priv->io_data, auth, &message, &hints)) {
+		if (handle_auth (priv->io_data, auth, &message, &hints, &error)) {
 			/* Request new secrets if we need any */
 			if (message) {
 				if (priv->interactive)
@@ -1035,7 +1036,7 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 				}
 			}
 		} else {
-			_LOGW ("Unhandled management socket request '%s'", auth);
+			_LOGW ("Unhandled management socket request '%s': %s", auth, error->message);
 			*out_failure = NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED;
 			again = FALSE;
 		}
@@ -1197,16 +1198,12 @@ openvpn_child_terminated (NMOpenvpnPlugin *plugin, GPid pid, gint status)
 
 static void
 update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
-                                 NMSettingVpn *s_vpn,
-                                 const char *default_username)
+                                 NMSettingVpn *s_vpn)
 {
-	if (default_username) {
-		g_free (io_data->default_username);
-		io_data->default_username = g_strdup (default_username);
-	}
-
 	g_free (io_data->username);
 	io_data->username = g_strdup (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_USERNAME));
+	if (!io_data->username)
+		io_data->username = g_strdup (nm_setting_vpn_get_user_name (s_vpn));
 
 	if (io_data->password) {
 		memset (io_data->password, 0, strlen (io_data->password));
@@ -1931,8 +1928,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	    || nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME)) {
 
 		priv->io_data = g_malloc0 (sizeof (NMOpenvpnPluginIOData));
-		update_io_data_from_vpn_setting (priv->io_data, s_vpn,
-		                                 nm_setting_vpn_get_user_name (s_vpn));
+		update_io_data_from_vpn_setting (priv->io_data, s_vpn);
 		nm_openvpn_schedule_connect_timer (plugin);
 	}
 
@@ -2121,10 +2117,14 @@ real_new_secrets (NMVpnServicePlugin *base_plugin,
 
 	_LOGD ("VPN received new secrets; sending to management interface");
 
-	update_io_data_from_vpn_setting (priv->io_data, s_vpn, NULL);
+	update_io_data_from_vpn_setting (priv->io_data, s_vpn);
 
 	g_warn_if_fail (priv->io_data->pending_auth);
-	if (!handle_auth (priv->io_data, priv->io_data->pending_auth, &message, &hints)) {
+	if (!handle_auth (priv->io_data,
+	                  priv->io_data->pending_auth,
+	                  &message,
+	                  &hints,
+	                  NULL)) {
 		g_set_error_literal (error,
 		                     NM_VPN_PLUGIN_ERROR,
 		                     NM_VPN_PLUGIN_ERROR_FAILED,
