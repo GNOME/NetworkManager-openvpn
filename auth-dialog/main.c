@@ -67,6 +67,7 @@ typedef enum {
 	FIELD_TYPE_PASSWORD,
 	FIELD_TYPE_CERT_PASSWORD,
 	FIELD_TYPE_PROXY_PASSWORD,
+	FIELD_TYPE_DYNAMIC_CHALLENGE,
 	_FIELD_TYPE_NUM,
 } FieldType;
 
@@ -329,6 +330,7 @@ get_passwords_required (GHashTable *data,
 	const char *ctype, *val;
 	NMSettingSecretFlags flags;
 	const char *const *iter;
+	gboolean ask_from_setting = TRUE;
 	guint i;
 
 	/* If hints are given, then always ask for what the hints require */
@@ -337,11 +339,17 @@ get_passwords_required (GHashTable *data,
 			*prompt = g_strdup (*iter + strlen (VPN_MSG_TAG));
 		else {
 			for (i = 0; i < _FIELD_TYPE_NUM; i++) {
-				if (nm_streq (*iter, fields[i].key))
+				if (nm_streq (*iter, fields[i].key)) {
 					fields[i].needed = TRUE;
+					if (i != FIELD_TYPE_USER_NAME)
+						ask_from_setting = FALSE;
+				}
 			}
 		}
 	}
+
+	if (!ask_from_setting)
+		goto done;
 
 	ctype = g_hash_table_lookup (data, NM_OPENVPN_KEY_CONNECTION_TYPE);
 	g_return_val_if_fail (ctype, FALSE);
@@ -375,6 +383,7 @@ get_passwords_required (GHashTable *data,
 			fields[FIELD_TYPE_PROXY_PASSWORD].needed = TRUE;
 	}
 
+done:
 	for (i = 0; i < _FIELD_TYPE_NUM; i++) {
 		if (fields[i].needed)
 			return TRUE;
@@ -435,6 +444,12 @@ main (int argc, char *argv[])
 			.label = N_("HTTP proxy password"),
 			.label_acc = N_("_HTTP proxy password:"),
 			.is_password = TRUE,
+		},
+		[FIELD_TYPE_DYNAMIC_CHALLENGE] = {
+			.key = "x-vpn-interactive-dynamic-challenge",
+			.label = N_("Answer:"),
+			.label_acc = N_("_Answer:"),
+			.is_password = FALSE,
 		},
 	};
 	nm_auto(clear_secrets) Field *_fields = fields;

@@ -90,6 +90,8 @@
  */
 #define NM_OPENVPN_KEY_NOSECRET                  "no-secret"
 
+/* Hint indicating that a dynamic challenge is required */
+#define NM_OPENVPN_KEY_DYNAMIC_CHALLENGE         "x-vpn-interactive-dynamic-challenge"
 
 #define NM_OPENVPN_AUTH_MD5       "MD5"
 #define NM_OPENVPN_AUTH_NONE      "none"

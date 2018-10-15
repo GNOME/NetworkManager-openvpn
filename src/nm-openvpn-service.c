@@ -109,8 +109,12 @@ typedef struct {
 	char *proxy_username;
 	char *proxy_password;
 	char *pending_auth;
-	char *challenge_state_id;
-	char *challenge_text;
+	struct {
+		char *state_id;
+		char *text;
+		char *user;
+		char *response;
+	} challenge;
 	GIOChannel *socket_channel;
 	guint socket_channel_eventid;
 } NMOpenvpnPluginIOData;
@@ -769,8 +773,11 @@ nm_openvpn_disconnect_management_socket (NMOpenvpnPlugin *plugin)
 	if (io_data->proxy_password)
 		memset (io_data->proxy_password, 0, strlen (io_data->proxy_password));
 	g_free (io_data->proxy_password);
-	g_free (io_data->challenge_state_id);
-	g_free (io_data->challenge_text);
+
+	g_free (io_data->challenge.state_id);
+	g_free (io_data->challenge.text);
+	g_free (io_data->challenge.user);
+	g_free (io_data->challenge.response);
 
 	g_free (priv->io_data);
 	priv->io_data = NULL;
@@ -818,9 +825,13 @@ get_detail (const char *input, const char *prefix)
  * CRV1:flags:state_id:username:text
  */
 static gboolean
-parse_challenge (const char *failure_reason, char **challenge_state_id, char **challenge_text)
+parse_challenge (const char *failure_reason,
+                 char **challenge_state_id,
+                 char **challenge_text,
+                 char **challenge_user)
 {
 	const char *colon[4];
+	gsize out_len;
 
 	if (   !failure_reason
 	    || !g_str_has_prefix (failure_reason, "CRV1:"))
@@ -844,6 +855,10 @@ parse_challenge (const char *failure_reason, char **challenge_state_id, char **c
 
 	*challenge_state_id = g_strndup (colon[1] + 1, colon[2] - colon[1] - 1);
 	*challenge_text = g_strdup (colon[3] + 1);
+	*challenge_user = g_strndup (colon[2] + 1, colon[3] - colon[2] - 1);
+	g_base64_decode_inplace (*challenge_user, &out_len);
+	(*challenge_user)[out_len] = 0;
+
 	return TRUE;
 }
 
@@ -898,18 +913,23 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			return FALSE;
 		}
 
-		if (io_data->password && io_data->challenge_state_id) {
-			gs_free char *response = NULL;
+		if (io_data->challenge.response) {
+			gs_free char *password = NULL;
 
-			response = g_strdup_printf ("CRV1::%s::%s",
-			                            io_data->challenge_state_id,
-			                            io_data->password);
+			password = g_strdup_printf ("CRV1::%s::%s",
+			                            io_data->challenge.state_id,
+			                            io_data->challenge.response);
+
+			_LOGW (" ---------- sending answer for user '%s': %s", io_data->challenge.user, password);
+
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
-			                 io_data->username,
-			                 response);
-			nm_clear_g_free (&io_data->challenge_state_id);
-			nm_clear_g_free (&io_data->challenge_text);
+			                 io_data->challenge.user,
+			                 password);
+			nm_clear_g_free (&io_data->challenge.state_id);
+			nm_clear_g_free (&io_data->challenge.text);
+			nm_clear_g_free (&io_data->challenge.user);
+			nm_clear_g_free (&io_data->challenge.response);
 		} else if (io_data->password) {
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
@@ -918,14 +938,14 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 		} else {
 			hints = g_new0 (const char *, 3);
 
-			hints[i++] = "x-vpn-interactive-username";
-			hints[i++] = NM_OPENVPN_KEY_PASSWORD;
-			*out_message = _("Credentials are required.");
-
-			/* FIXME: this is wrong, we can't reuse the password
-			 * hint for the challenge. */
-			if (io_data->challenge_text)
-				*out_message = io_data->challenge_text;
+			if (io_data->challenge.text) {
+				hints[i++] = NM_OPENVPN_KEY_DYNAMIC_CHALLENGE;
+				*out_message = io_data->challenge.text;
+			} else {
+				hints[i++] = "x-vpn-interactive-username";
+				hints[i++] = NM_OPENVPN_KEY_PASSWORD;
+				*out_message = _("Credentials are required.");
+			}
 		}
 		handled = TRUE;
 	} else if (nm_streq (requested_auth, "Private Key")) {
@@ -1052,10 +1072,14 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 			gs_free char *failure_reason = NULL;
 
 			failure_reason = get_detail (str, ">PASSWORD:Verification Failed: 'Auth' ['");
-			if (parse_challenge (failure_reason, &priv->io_data->challenge_state_id, &priv->io_data->challenge_text)) {
-				_LOGD ("Received challenge '%s' for state '%s'",
-				       priv->io_data->challenge_state_id,
-				       priv->io_data->challenge_text);
+			if (parse_challenge (failure_reason,
+			                     &priv->io_data->challenge.state_id,
+			                     &priv->io_data->challenge.text,
+			                     &priv->io_data->challenge.user)) {
+				_LOGD ("Received challenge '%s' for user '%s' and state '%s'",
+				       priv->io_data->challenge.state_id,
+				       priv->io_data->challenge.user,
+				       priv->io_data->challenge.text);
 			} else
 				_LOGW ("Password verification failed");
 
@@ -1226,6 +1250,9 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 		g_free (io_data->proxy_password);
 	}
 	io_data->proxy_password = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD));
+
+	g_free (io_data->challenge.response);
+	io_data->challenge.response = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_DYNAMIC_CHALLENGE));
 }
 
 static char *
