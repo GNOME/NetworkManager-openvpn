@@ -6,6 +6,10 @@ Overview of changes since NetworkManager-openvpn-1.8.10
 * The auth helper in external UI mode can now be run without a display
   server. Future nmcli version will utilize this for handling the
   secrets without a graphical desktop.
+* libnm-glib compatibility (NetworkManager < 1.0) is disabled by default.
+  It can be enabled by passing --with-libnm-glib to configure script.
+  Nobody should need it by now. Users that still use this are encouraged
+  to let us know before the libnm-glib support is removed for good.
 
 =======================================================
 NetworkManager-openvpn-1.8.10
