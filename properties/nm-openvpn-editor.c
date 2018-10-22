@@ -2690,6 +2690,7 @@ nm_vpn_editor_factory_openvpn (NMVpnEditorPlugin *editor_plugin,
                                NMConnection *connection,
                                GError **error)
 {
+	g_type_ensure (NMA_TYPE_CERT_CHOOSER);
 	return openvpn_editor_new (connection, error);
 }
 #endif
