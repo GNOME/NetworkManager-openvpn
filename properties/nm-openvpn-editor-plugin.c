@@ -66,28 +66,13 @@ import (NMVpnEditorPlugin *iface, const char *path, GError **error)
 {
 	NMConnection *connection = NULL;
 	char *contents = NULL;
-	char *ext;
 	gsize contents_len;
-
-	ext = strrchr (path, '.');
-
-	if (!ext || (   !g_str_has_suffix (ext, ".ovpn")
-	             && !g_str_has_suffix (ext, ".conf")
-	             && !g_str_has_suffix (ext, ".cnf")
-	             && !g_str_has_suffix (ext, ".ovpntest"))) {   /* Special extension for testcases */
-		g_set_error_literal (error,
-		                     NMV_EDITOR_PLUGIN_ERROR,
-		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
-		                     _("unknown OpenVPN file extension"));
-		goto out;
-	}
 
 	if (!g_file_get_contents (path, &contents, &contents_len, error))
 		return NULL;
 
 	connection = do_import (path, contents, contents_len, error);
 
-out:
 	g_free (contents);
 	return connection;
 }
