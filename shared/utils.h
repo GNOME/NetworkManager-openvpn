@@ -24,6 +24,7 @@
 
 #define NMV_OVPN_TAG_AUTH               "auth"
 #define NMV_OVPN_TAG_AUTH_NOCACHE       "auth-nocache"
+#define NMV_OVPN_TAG_NCP_DISABLE        "ncp-disable"
 #define NMV_OVPN_TAG_AUTH_USER_PASS     "auth-user-pass"
 #define NMV_OVPN_TAG_CA                 "ca"
 #define NMV_OVPN_TAG_CERT               "cert"

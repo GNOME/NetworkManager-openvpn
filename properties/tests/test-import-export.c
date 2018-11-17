@@ -928,6 +928,7 @@ test_keysize_import (void)
 
 	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE, "512");
+	_check_item (s_vpn, NM_OPENVPN_KEY_NCP_DISABLE, NULL);
 
 	g_object_unref (connection);
 }

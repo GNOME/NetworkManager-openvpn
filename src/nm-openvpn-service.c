@@ -152,6 +152,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_CRL_VERIFY_DIR,            G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_EXTRA_CERTS,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FLOAT,                     G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_NCP_DISABLE,               G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FRAGMENT_SIZE,             G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_KEY,                       G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_LOCAL_IP,                  G_TYPE_STRING, 0, 0, TRUE },
@@ -1504,6 +1505,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT);
 	if (nm_streq0 (tmp, "yes"))
 		args_add_strv (args, "--float");
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_NCP_DISABLE);
+	if (nm_streq0 (tmp, "yes"))
+		args_add_strv (args, "--ncp-disable");
 
 	/* ping, ping-exit, ping-restart */
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PING);
