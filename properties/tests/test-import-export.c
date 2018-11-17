@@ -933,6 +933,26 @@ test_keysize_import (void)
 }
 
 static void
+test_ncp_disable_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	NMConnection *connection;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "keysize.ovpn");
+	g_assert (connection);
+
+	/* VPN setting */
+	s_vpn = nm_connection_get_setting_vpn (connection);
+	g_assert (s_vpn);
+
+	/* Data items */
+	_check_item (s_vpn, NM_OPENVPN_KEY_NCP_DISABLE, NULL);
+
+	g_object_unref (connection);
+}
+
+static void
 test_device_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
@@ -1272,6 +1292,8 @@ int main (int argc, char **argv)
 
 	_add_test_func_simple (test_keysize_import);
 	_add_test_func ("keysize-export", test_export_compare, "keysize.ovpn", "keysize.ovpntest");
+	
+	_add_test_func_simple (test_ncp_disable_import);
 
 	_add_test_func ("device-import-default", test_device_import, "device.ovpn", "company0", "tun");
 	_add_test_func ("device-export-default", test_export_compare, "device.ovpn", "device.ovpntest");

@@ -698,6 +698,7 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_MAX_ROUTES,
 	NM_OPENVPN_KEY_MSSFIX,
 	NM_OPENVPN_KEY_MTU_DISC,
+	NM_OPENVPN_KEY_NCP_DISABLE,
 	NM_OPENVPN_KEY_NS_CERT_TYPE,
 	NM_OPENVPN_KEY_PING,
 	NM_OPENVPN_KEY_PING_EXIT,
@@ -1605,6 +1606,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	_builder_init_toggle_button (builder, "mssfix_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_MSSFIX));
 	_builder_init_toggle_button (builder, "float_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_FLOAT));
 	_builder_init_toggle_button (builder, "tcp_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_PROTO_TCP));
+	_builder_init_toggle_button (builder, "ncp_disable_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_NCP_DISABLE));
 
 
 	/* Populate device-related widgets */
@@ -1951,6 +1953,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, NM_OPENVPN_KEY_PROTO_TCP, g_strdup ("yes"));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ncp_disable_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_NCP_DISABLE, g_strdup ("yes"));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "dev_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {

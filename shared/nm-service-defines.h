@@ -41,6 +41,7 @@
 #define NM_OPENVPN_KEY_DEV_TYPE                  "dev-type"
 #define NM_OPENVPN_KEY_EXTRA_CERTS               "extra-certs"
 #define NM_OPENVPN_KEY_FLOAT                     "float"
+#define NM_OPENVPN_KEY_NCP_DISABLE               "ncp-disable"
 #define NM_OPENVPN_KEY_FRAGMENT_SIZE             "fragment-size"
 #define NM_OPENVPN_KEY_HTTP_PROXY_USERNAME       "http-proxy-username"
 #define NM_OPENVPN_KEY_KEY                       "key"
