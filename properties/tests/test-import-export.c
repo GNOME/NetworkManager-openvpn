@@ -115,7 +115,7 @@ _create_plugin (void)
 	GError *error = NULL;
 
 	plugin = nm_vpn_editor_plugin_factory (&error);
-	g_assert_no_error (error);
+	nmtst_assert_success (plugin, error);
 	g_assert (OPENVPN_IS_EDITOR_PLUGIN (plugin));
 	return plugin;
 }
@@ -124,6 +124,53 @@ _create_plugin (void)
 
 /*****************************************************************************/
 
+#define _validate_connection(connection) \
+	({ \
+		NMConnection *const _connection = (connection); \
+		\
+		g_assert (NM_IS_CONNECTION (_connection)); \
+		_connection; \
+	})
+
+#define _validate_setting_connection(sett) \
+	({ \
+		NMSettingConnection *const _sett = (sett); \
+		\
+		g_assert (NM_IS_SETTING_CONNECTION (_sett)); \
+		_sett; \
+	})
+
+#define _validate_setting_vpn(sett) \
+	({ \
+		NMSettingVpn *const _sett = (sett); \
+		\
+		g_assert (NM_IS_SETTING_VPN (_sett)); \
+		_sett; \
+	})
+
+#define _validate_setting_ip4_config(sett) \
+	({ \
+		NMSettingIPConfig *const _sett = (sett); \
+		\
+		g_assert (NM_IS_SETTING_IP4_CONFIG (_sett)); \
+		_sett; \
+	})
+
+#define _get_setting_connection(connection) \
+	_validate_setting_connection (nm_connection_get_setting_connection (_validate_connection (connection)))
+
+#define _get_setting_vpn(connection) \
+	_validate_setting_vpn (nm_connection_get_setting_vpn (_validate_connection (connection)))
+
+#define _get_setting_ip4_config(connection) \
+	_validate_setting_ip4_config (nm_connection_get_setting_ip4_config (_validate_connection (connection)))
+
+#define _check_item(s_vpn, item, expected) \
+	g_assert_cmpstr (nm_setting_vpn_get_data_item (_validate_setting_vpn (s_vpn), (item)), ==, (expected))
+
+#define _check_secret(s_vpn, item, expected) \
+	g_assert_cmpstr (nm_setting_vpn_get_secret (_validate_setting_vpn (s_vpn), (item)), ==, (expected))
+
 static NMConnection *
 get_basic_connection (NMVpnEditorPlugin *plugin,
                       const char *dir,
@@ -131,34 +178,18 @@ get_basic_connection (NMVpnEditorPlugin *plugin,
 {
 	NMConnection *connection;
 	GError *error = NULL;
-	char *pcf;
+	gs_free char *pcf = NULL;
 
 	pcf = g_build_path ("/", dir, filename, NULL);
 	g_assert (pcf);
 
 	connection = nm_vpn_editor_plugin_import (plugin, pcf, &error);
-	g_assert_no_error (error);
-	g_assert (connection);
-
-	g_free (pcf);
+	nmtst_assert_success (connection, error);
+	_validate_connection (connection);
+	_get_setting_connection (connection);
+	_get_setting_vpn (connection);
 	return connection;
 }
-
-#define _check_item(s_vpn, item, expected) \
-	G_STMT_START { \
-		NMSettingVpn *_s_vpn = (s_vpn); \
-		\
-		g_assert (_s_vpn); \
-		g_assert_cmpstr (nm_setting_vpn_get_data_item (_s_vpn, (item)), ==, (expected)); \
-	} G_STMT_END
-
-#define _check_secret(s_vpn, item, expected) \
-	G_STMT_START { \
-		NMSettingVpn *_s_vpn = (s_vpn); \
-		\
-		g_assert (_s_vpn); \
-		g_assert_cmpstr (nm_setting_vpn_get_secret (_s_vpn, (item)), ==, (expected)); \
-	} G_STMT_END
 
 /*****************************************************************************/
 
@@ -166,25 +197,18 @@ static void
 test_password_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
-	char *expected_cacert;
 
 	connection = get_basic_connection (plugin, SRCDIR, "password.conf");
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_con = _get_setting_connection (connection);
 	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, "password");
 	g_assert (!nm_setting_connection_get_uuid (s_con));
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
@@ -204,15 +228,10 @@ test_password_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
 
-	expected_cacert = g_build_filename (SRCDIR, "cacert.pem", NULL);
-	_check_item (s_vpn, NM_OPENVPN_KEY_CA, expected_cacert);
-	g_free (expected_cacert);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CA, SRCDIR"/cacert.pem");
 
-	/* Secrets */
 	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
 	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
-
-	g_object_unref (connection);
 }
 
 static void
@@ -244,9 +263,9 @@ static void
 test_export_compare (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
+	gs_unref_object NMConnection *connection = NULL;
+	gs_unref_object NMConnection *reimported = NULL;
+	gs_free char *path = NULL;
 	gboolean success;
 	GError *error = NULL;
 	const char *file, *exported_name;
@@ -254,52 +273,38 @@ test_export_compare (gconstpointer test_data)
 	nmtst_test_data_unpack (test_data, &file, &exported_name);
 
 	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
 
 	path = g_build_path ("/", TMPDIR, exported_name, NULL);
 	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
+	nmtst_assert_success (success, error);
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection (plugin, TMPDIR, exported_name);
 	(void) unlink (path);
-	g_assert (reimported);
 
 	/* Clear secrets first, since they don't get exported, and thus would
 	 * make the connection comparison below fail.
 	 */
 	remove_secrets (connection);
 	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
-	g_free (path);
 }
 
 static void
 test_tls_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
-	char *expected_path;
 
 	connection = get_basic_connection (plugin, SRCDIR, "tls.ovpn");
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_con = _get_setting_connection (connection);
 	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, "tls");
 	g_assert (!nm_setting_connection_get_uuid (s_con));
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
@@ -319,53 +324,33 @@ test_tls_import (void)
 	             "subject:C=US, L=Cambridge, CN=GNOME, emailAddress=networkmanager-list@gnome.org");
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, "server");
 
-	expected_path = g_strdup_printf ("%s/keys/mg8.ca", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_CA, expected_path);
-	g_free (expected_path);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CA,   SRCDIR"/keys/mg8.ca");
+	_check_item (s_vpn, NM_OPENVPN_KEY_CERT, SRCDIR"/keys/clee.crt");
+	_check_item (s_vpn, NM_OPENVPN_KEY_KEY,  SRCDIR"/keys/clee.key");
+	_check_item (s_vpn, NM_OPENVPN_KEY_TA,   SRCDIR"/keys/46.key");
 
-	expected_path = g_strdup_printf ("%s/keys/clee.crt", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_CERT, expected_path);
-	g_free (expected_path);
-
-	expected_path = g_strdup_printf ("%s/keys/clee.key", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_KEY, expected_path);
-	g_free (expected_path);
-
-	expected_path = g_strdup_printf ("%s/keys/46.key", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_TA, expected_path);
-	g_free (expected_path);
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, "1");
 
-	/* Secrets */
 	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
 	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
-
-	g_object_unref (connection);
 }
 
 static void
 test_tls_import_2 (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
-	char *expected_path;
 
 	connection = get_basic_connection (plugin, SRCDIR, "tls2.ovpn");
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_con = _get_setting_connection (connection);
 	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, "tls2");
 	g_assert (!nm_setting_connection_get_uuid (s_con));
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
@@ -385,43 +370,26 @@ test_tls_import_2 (void)
 	             "subject:C=US, L=Cambridge, CN=GNOME, emailAddress=networkmanager-list@gnome.org");
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, "server");
 
-	expected_path = g_strdup_printf ("%s/keys/mg8.ca", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_CA, expected_path);
-	g_free (expected_path);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CA,        SRCDIR"/keys/mg8.ca");
+	_check_item (s_vpn, NM_OPENVPN_KEY_CERT,      SRCDIR"/keys/clee.crt");
+	_check_item (s_vpn, NM_OPENVPN_KEY_KEY,       SRCDIR"/keys/clee.key");
+	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT, SRCDIR"/keys/46.key");
 
-	expected_path = g_strdup_printf ("%s/keys/clee.crt", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_CERT, expected_path);
-	g_free (expected_path);
-
-	expected_path = g_strdup_printf ("%s/keys/clee.key", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_KEY, expected_path);
-	g_free (expected_path);
-
-	expected_path = g_strdup_printf ("%s/keys/46.key", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT, expected_path);
-	g_free (expected_path);
-
-	/* Secrets */
 	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
 	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
-
-	g_object_unref (connection);
 }
 
 static void
 test_file_contents (const char *id,
                     const char *dir,
                     NMSettingVpn *s_vpn,
-                    char *item) {
+                    const char *item) {
 	const char *path;
-	char *path2;
-	char *contents;
-	char *expected_contents;
+	gs_free char *path2 = NULL;
+	gs_free char *contents = NULL;
+	gs_free char *expected_contents = NULL;
 	gsize length;
 	gsize expected_length;
-	char *test;
-
-	test = g_strdup_printf("%s-%s", id, item);
 
 	path = nm_setting_vpn_get_data_item(s_vpn, item);
 	g_assert (g_file_get_contents (path, &contents, &length, NULL));
@@ -430,36 +398,25 @@ test_file_contents (const char *id,
 	g_assert (g_file_get_contents (path2, &expected_contents, &expected_length, NULL));
 
 	g_assert_cmpmem (contents, length, expected_contents, expected_length);
-
-	g_free (contents);
-	g_free (expected_contents);
-	g_free (path2);
-	g_free (test);
 }
 
 static void
 test_tls_inline_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
 	const char *expected_id = "tls-inline";
 
 	connection = get_basic_connection (plugin, SRCDIR, "tls-inline.ovpn");
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_con = _get_setting_connection (connection);
 	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, expected_id);
 	g_assert (!nm_setting_connection_get_uuid (s_con));
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
@@ -490,34 +447,25 @@ test_tls_inline_import (void)
 	g_assert (unlink (TMPDIR"/tls-inline-cert.pem") == 0);
 	g_assert (unlink (TMPDIR"/tls-inline-key.pem") == 0);
 	g_assert (unlink (TMPDIR"/tls-inline-tls-auth.pem") == 0);
-
-	g_object_unref (connection);
 }
 
 static void
 test_pkcs12_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
 	const char *expected_id = "pkcs12";
-	char *expected_path;
 
 	connection = get_basic_connection (plugin, SRCDIR, "pkcs12.ovpn");
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_con = _get_setting_connection (connection);
 	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, expected_id);
 	g_assert (!nm_setting_connection_get_uuid (s_con));
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
@@ -533,33 +481,21 @@ test_pkcs12_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
 
-	expected_path = g_strdup_printf ("%s/keys/mine.p12", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_CA, expected_path);
-	g_free (expected_path);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CA,   SRCDIR"/keys/mine.p12");
+	_check_item (s_vpn, NM_OPENVPN_KEY_CERT, SRCDIR"/keys/mine.p12");
+	_check_item (s_vpn, NM_OPENVPN_KEY_KEY,  SRCDIR"/keys/mine.p12");
 
-	expected_path = g_strdup_printf ("%s/keys/mine.p12", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_CERT, expected_path);
-	g_free (expected_path);
-
-	expected_path = g_strdup_printf ("%s/keys/mine.p12", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_KEY, expected_path);
-	g_free (expected_path);
-
-	/* Secrets */
 	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
 	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
-
-	g_object_unref (connection);
 }
 
 static void
 test_non_utf8_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
-	char *expected_path;
 	const char *charset = NULL;
 
 	/* Change charset to ISO-8859-15 to match iso885915.ovpn */
@@ -567,51 +503,35 @@ test_non_utf8_import (void)
 	setlocale (LC_ALL, "de_DE@euro");
 	connection = get_basic_connection (plugin, SRCDIR, "iso885915.ovpn");
 	setlocale (LC_ALL, charset);
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_con = _get_setting_connection (connection);
 	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, "iso885915");
 	g_assert (!nm_setting_connection_get_uuid (s_con));
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	expected_path = g_strdup_printf ("%s/%s", SRCDIR, "Att\\344taenko.pem");
-	_check_item (s_vpn, NM_OPENVPN_KEY_CA, expected_path);
-	g_free (expected_path);
-
-	g_object_unref (connection);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CA, SRCDIR"/Att\\344taenko.pem");
 }
 
 static void
 test_static_key_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
 	const char *file, *expected_id, *expected_dir;
-	char *expected_path;
 
 	nmtst_test_data_unpack (test_data, &file, &expected_id, &expected_dir);
 
 	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_con = _get_setting_connection (connection);
 	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, expected_id);
 	g_assert (!nm_setting_connection_get_uuid (s_con));
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_STATIC_KEY);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
@@ -628,22 +548,17 @@ test_static_key_import (gconstpointer test_data)
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, "10.8.0.1");
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
 
-	expected_path = g_strdup_printf ("%s/static.key", SRCDIR);
-	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, expected_path);
-	g_free (expected_path);
+	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, SRCDIR"/static.key");
 
-	/* Secrets */
 	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
 	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
-
-	g_object_unref (connection);
 }
 
 static void
 test_port_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingVpn *s_vpn;
 	const char *file, *expected_id, *expected_port;
@@ -651,119 +566,79 @@ test_port_import (gconstpointer test_data)
 	nmtst_test_data_unpack (test_data, &file, &expected_id, &expected_port);
 
 	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_con = _get_setting_connection (connection);
 	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, expected_id);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 	_check_item (s_vpn, NM_OPENVPN_KEY_PORT, expected_port);
-
-	g_object_unref (connection);
 }
 
 static void
 test_connect_timeout_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMSettingConnection *s_con;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 	const char *file, *expected_timeout;
 
 	nmtst_test_data_unpack (test_data, &file, &expected_timeout);
 
 	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
-
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECT_TIMEOUT, expected_timeout);
-
-	g_object_unref (connection);
 }
 
 static void
 test_ping_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMSettingConnection *s_con;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 	const char *file, *expected_ping, *expected_ping_exit, *expected_ping_restart;
 
 	nmtst_test_data_unpack (test_data, &file, &expected_ping, &expected_ping_exit, &expected_ping_restart);
 
 	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
-
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_PING, expected_ping);
 	_check_item (s_vpn, NM_OPENVPN_KEY_PING_EXIT, expected_ping_exit);
 	_check_item (s_vpn, NM_OPENVPN_KEY_PING_RESTART, expected_ping_restart);
-
-	g_object_unref (connection);
 }
 
 static void
 test_tun_opts_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (plugin, SRCDIR, "tun-opts.conf");
-	g_assert (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_MSSFIX, "yes");
 	_check_item (s_vpn, NM_OPENVPN_KEY_TUNNEL_MTU, "1300");
 	_check_item (s_vpn, NM_OPENVPN_KEY_FRAGMENT_SIZE, "1200");
-
-	g_object_unref (connection);
 }
 
 static void
 test_proxy_http_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (plugin, SRCDIR, "proxy-http.ovpn");
-	g_assert (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
@@ -788,8 +663,6 @@ test_proxy_http_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, "8080");
 	_check_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, "myusername");
 	_check_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, "mypassword");
-
-	g_object_unref (connection);
 }
 
 #define PROXY_HTTP_EXPORTED_NAME "proxy-http.ovpntest"
@@ -797,52 +670,38 @@ static void
 test_proxy_http_export (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMConnection *reimported;
-	char *path;
+	gs_unref_object NMConnection *connection = NULL;
+	gs_unref_object NMConnection *reimported = NULL;
 	gboolean success;
 	GError *error = NULL;
+	const char *path = TMPDIR"/"PROXY_HTTP_EXPORTED_NAME;
 
 	connection = get_basic_connection (plugin, SRCDIR, "proxy-http.ovpn");
-	g_assert (connection);
 
-	path = g_build_path ("/", TMPDIR, PROXY_HTTP_EXPORTED_NAME, NULL);
 	success = nm_vpn_editor_plugin_export (plugin, path, connection, &error);
-	g_assert_no_error (error);
-	g_assert (success);
+	nmtst_assert_success (success, error);
 
 	/* Now re-import it and compare the connections to ensure they are the same */
 	reimported = get_basic_connection (plugin, TMPDIR, PROXY_HTTP_EXPORTED_NAME);
 	(void) unlink (path);
-	g_free (path);
-	g_assert (reimported);
 
 	g_assert (nm_connection_compare (connection, reimported, NM_SETTING_COMPARE_FLAG_EXACT));
 
 	/* Unlink the proxy authfile */
-	path = g_strdup_printf ("%s/%s-httpauthfile", TMPDIR, PROXY_HTTP_EXPORTED_NAME);
-	(void) unlink (path);
-	g_free (path);
-
-	g_object_unref (reimported);
-	g_object_unref (connection);
+	(void) unlink (TMPDIR"/"PROXY_HTTP_EXPORTED_NAME"-httpauthfile");
 }
 
 static void
 test_proxy_http_with_auth_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (plugin, SRCDIR, "proxy-http-with-auth.ovpn");
-	g_assert (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
@@ -867,25 +726,19 @@ test_proxy_http_with_auth_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, "3128");
 	_check_item (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_USERNAME, "myusername");
 	_check_secret (s_vpn, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD, "mypassword");
-
-	g_object_unref (connection);
 }
 
 static void
 test_proxy_socks_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (plugin, SRCDIR, "proxy-socks.ovpn");
-	g_assert (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_PASSWORD);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
@@ -908,76 +761,56 @@ test_proxy_socks_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROXY_TYPE, "socks");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROXY_SERVER, "10.1.1.1");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROXY_PORT, "1080");
-
-	g_object_unref (connection);
 }
 
 static void
 test_keysize_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (plugin, SRCDIR, "keysize.ovpn");
-	g_assert (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE, "512");
 	_check_item (s_vpn, NM_OPENVPN_KEY_NCP_DISABLE, NULL);
-
-	g_object_unref (connection);
 }
 
 static void
 test_device_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 	const char *file, *expected_dev, *expected_devtype;
 
 	nmtst_test_data_unpack (test_data, &file, &expected_dev, &expected_devtype);
 
 	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, expected_dev);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV_TYPE, expected_devtype);
-
-	g_object_unref (connection);
 }
 
 static void
 test_mtu_disc_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 	const char *file, *expected_val;
 
 	nmtst_test_data_unpack (test_data, &file, &expected_val);
 
 	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_MTU_DISC, expected_val);
-
-	g_object_unref (connection);
 }
 
 
@@ -985,7 +818,7 @@ static void
 test_crl_verify_import (gconstpointer test_data)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 	const char *file, *expected_val;
 	gpointer is_file;
@@ -993,13 +826,9 @@ test_crl_verify_import (gconstpointer test_data)
 	nmtst_test_data_unpack (test_data, &file, &is_file, &expected_val);
 
 	connection = get_basic_connection (plugin, SRCDIR, file);
-	g_assert (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* Data items */
 	if (GPOINTER_TO_INT (is_file)) {
 		_check_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE, expected_val);
 		_check_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_DIR, NULL);
@@ -1007,16 +836,13 @@ test_crl_verify_import (gconstpointer test_data)
 		_check_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_DIR, expected_val);
 		_check_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE, NULL);
 	}
-
-	g_object_unref (connection);
 }
 
 static void
 test_route_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
-	NMSettingConnection *s_con;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
 	int num_routes;
@@ -1033,22 +859,13 @@ test_route_import (void)
 	gint64 expected_metric3    = -1;
 
 	connection = get_basic_connection (plugin, SRCDIR, "route.ovpn");
-	g_assert (connection);
 
-	/* Connection setting */
-	s_con = nm_connection_get_setting_connection (connection);
-	g_assert (s_con);
+	s_vpn = _get_setting_vpn (connection);
 
-	/* VPN setting */
-	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
-
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
 
-	/* IP4 setting */
-	s_ip4 = nm_connection_get_setting_ip4_config (connection);
-	g_assert (s_ip4);
+	s_ip4 = _get_setting_ip4_config (connection);
+
 #if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
 	{
 		NMIP4Route *route;
@@ -1059,21 +876,18 @@ test_route_import (void)
 		num_routes = nm_setting_ip4_config_get_num_routes (s_ip4);
 		g_assert_cmpint (num_routes, ==, 3);
 
-		/* route 1 */
 		route = nm_setting_ip4_config_get_route (s_ip4, 0);
 		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest1));
 		g_assert_cmpint (nm_ip4_route_get_prefix (route), ==, expected_prefix1);
 		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh1));
 		g_assert_cmpint (nm_ip4_route_get_metric (route), ==, METR (expected_metric1));
 
-		/* route 2 */
 		route = nm_setting_ip4_config_get_route (s_ip4, 1);
 		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest2));
 		g_assert_cmpint (nm_ip4_route_get_prefix (route), ==, expected_prefix2);
 		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh2));
 		g_assert_cmpint (nm_ip4_route_get_metric (route), ==, METR (expected_metric2));
 
-		/* route 3 */
 		route = nm_setting_ip4_config_get_route (s_ip4, 2);
 		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest3));
 		g_assert_cmpint (nm_ip4_route_get_prefix (route), ==, expected_prefix3);
@@ -1087,21 +901,18 @@ test_route_import (void)
 		num_routes = nm_setting_ip_config_get_num_routes (s_ip4);
 		g_assert_cmpint (num_routes, ==, 3);
 
-		/* route 1 */
 		route = nm_setting_ip_config_get_route (s_ip4, 0);
 		g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest1);
 		g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix1);
 		g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, expected_nh1);
 		g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric1);
 
-		/* route 2 */
 		route = nm_setting_ip_config_get_route (s_ip4, 1);
 		g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest2);
 		g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix2);
 		g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, NULL);
 		g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric2);
 
-		/* route 3 */
 		route = nm_setting_ip_config_get_route (s_ip4, 2);
 		g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest3);
 		g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix3);
@@ -1109,8 +920,6 @@ test_route_import (void)
 		g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric3);
 	}
 #endif
-
-	g_object_unref (connection);
 }
 
 /*****************************************************************************/
@@ -1305,4 +1114,3 @@ int main (int argc, char **argv)
 
 	return EXIT_SUCCESS;
 }
-
