@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
 "POT-Creation-Date: 2019-02-08 16:00+0000\n"
-"PO-Revision-Date: 2019-02-10 20:24+0100\n"
+"PO-Revision-Date: 2019-02-12 11:23+0100\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
 "MIME-Version: 1.0\n"
@@ -278,7 +278,6 @@ msgid "connection is not a valid OpenVPN connection"
 msgstr "la conession no je une conession OpenVPN valide"
 
 #: ../properties/import-export.c:1850
-#, fuzzy
 msgid "connection was incomplete (missing gateway)"
 msgstr "la conession e jere incomplete (al mancjave il gateway)"
 
@@ -427,7 +426,7 @@ msgstr "Clâf statiche"
 
 #: ../properties/nm-openvpn-editor.c:2633
 msgid "could not load UI widget"
-msgstr ""
+msgstr "impussibil cjariâ il widget de IU"
 
 #: ../shared/nm-utils/nm-shared-utils.c:946
 #, c-format
@@ -449,11 +448,13 @@ msgstr ""
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
 msgstr ""
+"'%s::%s' nol è un non di proprietât valit; '%s' nol è un sot-gjenar GObject"
 
 #: ../shared/nm-utils/nm-shared-utils.c:977
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
 msgstr ""
+"impussibil stabilî la proprietât '%s' di gjenar '%s' dal valôr di gjenar '%s'"
 
 #: ../shared/nm-utils/nm-shared-utils.c:988
 #, c-format
@@ -461,6 +462,8 @@ msgid ""
 "value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
 "type '%s'"
 msgstr ""
+"valôr \"%s\" di gjenar '%s' nol è valit o fûr dai limits pe proprietât '%s' "
+"di gjenar '%s'"
 
 #: ../shared/nm-utils/nm-vpn-plugin-utils.c:69
 #, c-format
@@ -489,7 +492,7 @@ msgstr "erôr no cognossût tal creâ la istance dal editôr"
 #: ../shared/utils.c:159
 #, c-format
 msgid "invalid delimiter character '%c'"
-msgstr ""
+msgstr "caratar di separazion '%c' no valit"
 
 #: ../shared/utils.c:166
 #, c-format
@@ -530,7 +533,7 @@ msgstr "proprietât “%s” dal boolean no valide (no je yes o no)"
 #: ../src/nm-openvpn-service.c:456
 #, c-format
 msgid "unhandled property “%s” type %s"
-msgstr ""
+msgstr "proprietât “%s” di gjenar %s no gjestide"
 
 #: ../src/nm-openvpn-service.c:467
 #, c-format
@@ -624,12 +627,12 @@ msgstr "Scjadence de conession “%s” no valide."
 #: ../src/nm-openvpn-service.c:1585
 #, c-format
 msgid "Invalid max-routes argument “%s”."
-msgstr "argoment “%s” di max-routes no valit."
+msgstr "Argoment “%s” di max-routes no valit."
 
 #: ../src/nm-openvpn-service.c:1629
 #, c-format
 msgid "Invalid keysize “%s”."
-msgstr "dimension de clâf “%s” no valide."
+msgstr "Dimension de clâf “%s” no valide."
 
 #: ../src/nm-openvpn-service.c:1682
 #, c-format
@@ -644,7 +647,7 @@ msgstr "verify-x509-name no valit."
 #: ../src/nm-openvpn-service.c:1718
 #, c-format
 msgid "Invalid reneg seconds “%s”."
-msgstr ""
+msgstr "Seconts di rinegoziazion “%s” no valits."
 
 #: ../src/nm-openvpn-service.c:1748
 #, c-format
@@ -654,7 +657,7 @@ msgstr "Dimension “%s” dal MTU TUN no valide."
 #: ../src/nm-openvpn-service.c:1761
 #, c-format
 msgid "Invalid fragment size “%s”."
-msgstr ""
+msgstr "Dimension dal frament “%s” no valide."
 
 #: ../src/nm-openvpn-service.c:1867
 #, c-format
@@ -728,6 +731,10 @@ msgid ""
 "delimiters).\n"
 "config: remote"
 msgstr ""
+"Gateway rimot(s), cun puarte opzionâl e protocol (p.e. ovpn.corp.com:1234:"
+"tcp). Si pues specificâ plui host par vê ridondance (doprâ virgulis o spazis "
+"par separâ).\n"
+"config:remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:10
 msgid "Authentication"
@@ -750,6 +757,8 @@ msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
 msgstr ""
+"Password passade a OpenVPN cuant che e je stade domandade.\n"
+"config: auth-user-pass"
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
 msgid ""
@@ -757,6 +766,9 @@ msgid ""
 "the system user that activates the connection.\n"
 "config: auth-user-pass"
 msgstr ""
+"Non utent passât a OpenVPN cuant che al è stât domandât. Se ometût, dopre il "
+"non dal utent di sisteme che al ative la conession.\n"
+"config: auth-user-pass"
 
 #: ../properties/nm-openvpn-dialog.ui.h:19
 msgid "Remote IP Address:"
@@ -779,18 +791,24 @@ msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
 msgstr ""
+"File pre-condividût pe modalitât di cifradure a clâf statiche (no-TLS).\n"
+"config: static <file>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:25
 msgid ""
 "IP address of the remote VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
 msgstr ""
+"Direzion IP dal servidôr VPN rimot.\n"
+"config: ifconfig <l> <rn>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:27
 msgid ""
 "IP address of the local VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
 msgstr ""
+"Direzion IP dal servidôr VPN locâl.\n"
+"config: ifconfig <l> <rn>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:29
 msgid ""
@@ -800,6 +818,12 @@ msgid ""
 "you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
+"Direzion pe modalitât di cifradure a clâf statiche (no-TLS).\n"
+"Se la direzion de clâf e je doprade, e scugne jessi il contrari di chê "
+"doprade sul grop VPN. Par esempli, se il grop al dopre “1”, cheste conession "
+"e scugne doprâ “0”. Se no si è sigûrs di ce valôr doprâ, contatâ "
+"l'aministradôr di sisteme.\n"
+"config: static <file> [direzion]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:32
 msgid "Type:"
@@ -827,16 +851,21 @@ msgid ""
 "gateway).\n"
 "config: port"
 msgstr ""
+"Numar de puarte TCP/UDP pal grop. (Il valôr predefinît cuant che no ven "
+"specificade nissune puarte pal gateway).\n"
+"config: port"
 
 #: ../properties/nm-openvpn-dialog.ui.h:40
 msgid "Use custom _renegotiation interval:"
-msgstr ""
+msgstr "Doprâ un interval di _rinegoziazion personalizât:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:41
 msgid ""
 "Renegotiate data channel key after the specified number of seconds.\n"
 "config: reneg-sec"
 msgstr ""
+"Domande la clâf dal canâl dai dâts passâts i seconts specificâts.\n"
+"config: reneg-sec"
 
 #: ../properties/nm-openvpn-dialog.ui.h:43
 msgid "Use L_ZO data compression"
@@ -855,6 +884,8 @@ msgid ""
 "Select the LZO data compression mode.\n"
 "config: comp-lzo"
 msgstr ""
+"Selezione la modalitât di compression dai dâts LZO.\n"
+"config: comp-lzo"
 
 #: ../properties/nm-openvpn-dialog.ui.h:48
 msgid "Use a _TCP connection"
@@ -867,6 +898,10 @@ msgid ""
 "gateway.)\n"
 "config: proto tcp-client | udp"
 msgstr ""
+"Dopre TCP par comunicâ cul host rimot.\n"
+"(Cheste e je dome une impostazion predefinide doprade cuant che nol ven "
+"specificât nissun protocol pal gateway.)\n"
+"config: proto tcp-client | udp"
 
 #: ../properties/nm-openvpn-dialog.ui.h:52
 msgid "Set virtual _device type:"
@@ -875,12 +910,15 @@ msgstr "Stabilìs gjenar di _dispositîf virtuâl:"
 #: ../properties/nm-openvpn-dialog.ui.h:53
 msgid "Explicitly set virtual device type and name (TUN/TAP)."
 msgstr ""
+"Stabilî in maniere esplicite il gjenar e il non dal dispositîf (TUN/TAP)."
 
 #: ../properties/nm-openvpn-dialog.ui.h:54
 msgid ""
 "Explicitly set virtual device type (TUN/TAP).\n"
 "config: dev-type tun | tap"
 msgstr ""
+"Stabilìs in maniere esplicite il gjenar di dispositîf virtuâl (TUN/TAP).\n"
+"config: dev-type tun | tap"
 
 #: ../properties/nm-openvpn-dialog.ui.h:56
 msgid " and _name:"
@@ -892,10 +930,14 @@ msgid ""
 "“tap”).\n"
 "config: dev <name>"
 msgstr ""
+"Dopre un non personalizât pal dispositîf virtuâl TUN/TAP (al puest di chel "
+"predefinît “tun” o “tap”).\n"
+"config: dev <non>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:59
 msgid "Use custom tunnel Maximum Transmission _Unit (MTU):"
 msgstr ""
+"Doprâ un MTU (_Unitât di Trasmission Massime) personalizade pal tunnel:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:60
 msgid ""
@@ -903,30 +945,37 @@ msgid ""
 "from it.\n"
 "config: tun-mtu"
 msgstr ""
+"Da il valôr specificât ae MTU dal dispositîf TUN e tire fûr di lì il "
+"colegament MTU.\n"
+"config: tun-mtu"
 
 #: ../properties/nm-openvpn-dialog.ui.h:62
 msgid "Use custom UDP _fragment size:"
-msgstr ""
+msgstr "Doprâ une dimension di _frament UDP personalizade:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:63
 msgid ""
 "Enable internal datagram fragmentation with this maximum size.\n"
 "config: fragment"
 msgstr ""
+"Abilite la framentazion interne dal datagram cun cheste dimension massime.\n"
+"config: fragment"
 
 #: ../properties/nm-openvpn-dialog.ui.h:65
 msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
-msgstr ""
+msgstr "Limitâ il MSS (dimension dal _segment massim) TCP dal tunnel"
 
 #: ../properties/nm-openvpn-dialog.ui.h:66
 msgid ""
 "Restrict tunnel TCP MSS.\n"
 "config: mssfix"
 msgstr ""
+"Limite il MSS TCP dal tunnel.\n"
+"config: mssfix"
 
 #: ../properties/nm-openvpn-dialog.ui.h:68
 msgid "Rando_mize remote hosts"
-msgstr ""
+msgstr "_Host rimots casuâi"
 
 #: ../properties/nm-openvpn-dialog.ui.h:69
 msgid ""
@@ -934,16 +983,21 @@ msgid ""
 "balancing measure.\n"
 "config: remote-random"
 msgstr ""
+"Come forme di belançament dal caric, gjenere un ordin casuâl de liste di "
+"gateway (rimote).\n"
+"config: remote-random"
 
 #: ../properties/nm-openvpn-dialog.ui.h:71
 msgid "IPv6 tun link"
-msgstr ""
+msgstr "Colegament tun IPV6"
 
 #: ../properties/nm-openvpn-dialog.ui.h:72
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
 msgstr ""
+"Costruìs un colegament tun che al rive a mandâ indenant il traffic IPV6\n"
+"config: tun-ipv6"
 
 #: ../properties/nm-openvpn-dialog.ui.h:74
 msgid "Specify _exit or restart ping:"
@@ -955,6 +1009,9 @@ msgid ""
 "packet from remote.\n"
 "config: ping-exit | ping-restart <n>"
 msgstr ""
+"Jes o torne invie daspò N seconts cence vê vût la ricezion di un ping o "
+"altris pachets dal rimot.\n"
+"config: ping-exit | ping-restart <N>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:77
 msgid "Specify pin_g interval:"
@@ -966,10 +1023,13 @@ msgid ""
 "for at least n seconds.\n"
 "config: ping <n>"
 msgstr ""
+"Invie ping al grop rimot sul canâl di control TCP/UDP se no son stâts "
+"inviâts pachets intai ultins N seconts.\n"
+"config: ping <N>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:80
 msgid "Accept authenticated packets from any address (F_loat)"
-msgstr ""
+msgstr "Acetâ i pachets autenticâts di cualsisei direzion (F_loat)"
 
 #: ../properties/nm-openvpn-dialog.ui.h:81
 msgid ""
@@ -1006,7 +1066,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:91
 msgid "Use custom _size of cipher key:"
-msgstr ""
+msgstr "Doprâ _dimension personalizade de clâf dal cifrari:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:92
 msgid ""
@@ -1014,6 +1074,9 @@ msgid ""
 "specific size.\n"
 "config: keysize <n>"
 msgstr ""
+"Stabilìs la clâf dal cifrari a un valôr personalizât. Se nol ven specificât, "
+"e ven doprade la dimension specificade dal cifrari.\n"
+"config: keysize <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:94
 msgid ""
@@ -1021,10 +1084,13 @@ msgid ""
 "is SHA1.\n"
 "config: auth"
 msgstr ""
+"Autentiche i pachets cun HMAC doprant l'algoritmi digest dal messaç. Il "
+"predefinît al è SHA1.\n"
+"config: auth"
 
 #: ../properties/nm-openvpn-dialog.ui.h:96
 msgid "Ci_pher:"
-msgstr ""
+msgstr "Ci_frari:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:97
 msgid "_HMAC Authentication:"
@@ -1032,17 +1098,19 @@ msgstr "Autenticazion _HMAC:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:98
 msgid "Disable cipher _negotiation"
-msgstr ""
+msgstr "Disabilitâ la _negoziazion dal cifrari"
 
 #: ../properties/nm-openvpn-dialog.ui.h:99
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
 msgstr ""
+"Disabilite la negoziazion tra client e servidôr.\n"
+"config: ncp-disable"
 
 #: ../properties/nm-openvpn-dialog.ui.h:101
 msgid "Verify CRL from file"
-msgstr ""
+msgstr "Verifiche CRL di file"
 
 #: ../properties/nm-openvpn-dialog.ui.h:102
 msgid ""
@@ -1050,10 +1118,13 @@ msgid ""
 "(certificate revocation list) is used when a particular key is compromised "
 "but when the overall PKI is still intact."
 msgstr ""
+"Controle il certificât dal grop cul file specificât in formât PEM. Un CRL "
+"(liste di revochis dai certificâts) al ven doprât cuant che une clâf "
+"particolâr e je comprometude ma il PKI al è ancjemò intat."
 
 #: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "Verify CRL from directory"
-msgstr ""
+msgstr "Verifiche CRL di cartele"
 
 #: ../properties/nm-openvpn-dialog.ui.h:104
 msgid ""
@@ -1061,14 +1132,17 @@ msgid ""
 "directory must contain files named as revoked serial numbers (the files may "
 "be empty, the contents are never read)."
 msgstr ""
+"Controle il certificât dal grop cirint tai file de cartele specificade. La "
+"cartele e scugne contignî file che par non a àn il numar seriâl revocât (i "
+"file a puedin jessi vueits, i contignûts no vignaran mai lets)."
 
 #: ../properties/nm-openvpn-dialog.ui.h:105
 msgid "Choose CRL file"
-msgstr ""
+msgstr "Sielç file CRL"
 
 #: ../properties/nm-openvpn-dialog.ui.h:106
 msgid "Choose CRL directory"
-msgstr ""
+msgstr "Sielç cartele CRL"
 
 #: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Security"
@@ -1076,7 +1150,7 @@ msgstr "Sigurece"
 
 #: ../properties/nm-openvpn-dialog.ui.h:108
 msgid "_Subject Match:"
-msgstr ""
+msgstr "Corispondence _ogjet:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:109
 msgid ""
@@ -1085,10 +1159,15 @@ msgid ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 msgstr ""
+"Ogjet o Non Comun che cun chel verificâ lis informazions dal certificât dal "
+"servidôr.\n"
+"\n"
+"config: verify-x509-name subject-or-name [modalitât]\n"
+"config (vecje maniere): tls-remote subject-or-name"
 
 #: ../properties/nm-openvpn-dialog.ui.h:113
 msgid "Server _Certificate Check:"
-msgstr ""
+msgstr "Verifiche _certificât servidôr:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:114
 msgid ""
@@ -1106,6 +1185,19 @@ msgid ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 msgstr ""
+"Verifiche la identificazion dal certificât dal servidôr.\n"
+"\n"
+"Cuant che al è abilitât, la conession e ven stabilide dome se il certificât "
+"dal servidôr al corispuint a determinadis proprietâts.\n"
+"La corispondence e pues jessi ancje sul intîr ogjet dal certificât (ducj i "
+"cjamps),\n"
+"o juste sul Non Comun (cjamp CN).\n"
+"\n"
+"La opzion vecje maniere tls-remote e je deplorade e gjavade di OpenVPN 2.4 e "
+"resints. No sta doprâle plui.\n"
+"\n"
+"config: verify-x509-name subject-or-name [modalitât]\n"
+"config (vecje maniere): tls-remote subject-or-name"
 
 #: ../properties/nm-openvpn-dialog.ui.h:124
 msgid "_Verify peer (server) certificate usage signature"
@@ -1269,7 +1361,7 @@ msgstr "_Mostre password"
 
 #: ../properties/nm-openvpn-dialog.ui.h:166
 msgid "Proxies"
-msgstr ""
+msgstr "Proxy"
 
 #: ../properties/nm-openvpn-dialog.ui.h:167
 msgid "Path mtu discovery"
@@ -1277,7 +1369,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:168
 msgid "Connect timeout"
-msgstr ""
+msgstr "Timp massim conession"
 
 #: ../properties/nm-openvpn-dialog.ui.h:169
 msgid ""
