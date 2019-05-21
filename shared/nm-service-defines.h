@@ -28,6 +28,7 @@
 #define NM_DBUS_INTERFACE_OPENVPN  "org.freedesktop.NetworkManager.openvpn"
 #define NM_DBUS_PATH_OPENVPN       "/org/freedesktop/NetworkManager/openvpn"
 
+#define NM_OPENVPN_KEY_ALLOW_PULL_FQDN           "allow-pull-fqdn"
 #define NM_OPENVPN_KEY_AUTH                      "auth"
 #define NM_OPENVPN_KEY_CA                        "ca"
 #define NM_OPENVPN_KEY_CERT                      "cert"
