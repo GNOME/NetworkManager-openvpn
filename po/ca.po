@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: NetworkManager VERSION\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2018-06-04 12:29+0000\n"
+"POT-Creation-Date: 2018-11-19 14:04+0000\n"
 "PO-Revision-Date: 2018-07-22 16:17+0200\n"
 "Last-Translator: Carles Ferrando Garcia <carles.ferrando@gmail.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
@@ -282,19 +282,19 @@ msgid "The file to import wasn’t a valid OpenVPN configure (no remote)"
 msgstr ""
 "El fitxer a importar no era una configuració vàlida d'OpenVPN (sense remot)"
 
-#: ../properties/import-export.c:1820
+#: ../properties/import-export.c:1831
 msgid "missing path argument"
 msgstr "no s'ha trobat l'argument de camí "
 
-#: ../properties/import-export.c:1830
+#: ../properties/import-export.c:1841
 msgid "connection is not a valid OpenVPN connection"
 msgstr "la connexió no és una connexió vàlida OpenVPN"
 
-#: ../properties/import-export.c:1839
+#: ../properties/import-export.c:1850
 msgid "connection was incomplete (missing gateway)"
 msgstr "la connexió era incompleta (falta la passarel·la)"
 
-#: ../properties/import-export.c:2189
+#: ../properties/import-export.c:2200
 #, c-format
 msgid "failed to write file: %s"
 msgstr "no s'ha pogut escriure el fitxer: %s"
@@ -307,15 +307,11 @@ msgstr "OpenVPN"
 msgid "Compatible with the OpenVPN server."
 msgstr "Compatible amb el servidor OpenVPN."
 
-#: ../properties/nm-openvpn-editor-plugin.c:81
-msgid "unknown OpenVPN file extension"
-msgstr "extensió desconeguda de fitxer OpenVPN"
-
 #: ../properties/nm-openvpn-editor.c:278
 msgid "Choose an OpenVPN static key…"
 msgstr "Trieu una clau estàtica OpenVPN..."
 
-#: ../properties/nm-openvpn-editor.c:296 ../properties/nm-openvpn-editor.c:910
+#: ../properties/nm-openvpn-editor.c:296 ../properties/nm-openvpn-editor.c:906
 #: ../properties/nm-openvpn-editor.c:1701
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid "None"
@@ -325,39 +321,39 @@ msgstr "Cap"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Claus estàtiques OpenVPN (*.key)"
 
-#: ../properties/nm-openvpn-editor.c:831 ../properties/nm-openvpn-editor.c:927
+#: ../properties/nm-openvpn-editor.c:828 ../properties/nm-openvpn-editor.c:923
 msgid "Default"
 msgstr "Predeterminat"
 
-#: ../properties/nm-openvpn-editor.c:911
+#: ../properties/nm-openvpn-editor.c:907
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/nm-openvpn-editor.c:912
+#: ../properties/nm-openvpn-editor.c:908
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/nm-openvpn-editor.c:913
+#: ../properties/nm-openvpn-editor.c:909
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/nm-openvpn-editor.c:914
+#: ../properties/nm-openvpn-editor.c:910
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/nm-openvpn-editor.c:915
+#: ../properties/nm-openvpn-editor.c:911
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/nm-openvpn-editor.c:916
+#: ../properties/nm-openvpn-editor.c:912
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/nm-openvpn-editor.c:917
+#: ../properties/nm-openvpn-editor.c:913
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/nm-openvpn-editor.c:918
+#: ../properties/nm-openvpn-editor.c:914
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
@@ -382,26 +378,26 @@ msgid "Verify subject partially (legacy mode, strongly discouraged)"
 msgstr ""
 "Verifica l'assumpte de forma parcial (mode antic, fortament desaconsellat)"
 
-#: ../properties/nm-openvpn-editor.c:1110
-#: ../properties/nm-openvpn-editor.c:1181
+#: ../properties/nm-openvpn-editor.c:1109
+#: ../properties/nm-openvpn-editor.c:1180
 msgid "Server"
 msgstr "Servidor"
 
-#: ../properties/nm-openvpn-editor.c:1115
-#: ../properties/nm-openvpn-editor.c:1186
+#: ../properties/nm-openvpn-editor.c:1114
+#: ../properties/nm-openvpn-editor.c:1185
 msgid "Client"
 msgstr "Client"
 
-#: ../properties/nm-openvpn-editor.c:1508
+#: ../properties/nm-openvpn-editor.c:1507
 #: ../properties/nm-openvpn-dialog.ui.h:35
 msgid "Not required"
 msgstr "No necessari"
 
-#: ../properties/nm-openvpn-editor.c:1510
+#: ../properties/nm-openvpn-editor.c:1509
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/nm-openvpn-editor.c:1512
+#: ../properties/nm-openvpn-editor.c:1511
 msgid "SOCKS"
 msgstr "SOCKS"
 
@@ -418,49 +414,45 @@ msgstr "TAP"
 msgid "(automatic)"
 msgstr "(automàtic)"
 
-#: ../properties/nm-openvpn-editor.c:1762
+#: ../properties/nm-openvpn-editor.c:1763
 msgid "ping-exit"
 msgstr "ping-surt"
 
-#: ../properties/nm-openvpn-editor.c:1764
+#: ../properties/nm-openvpn-editor.c:1765
 msgid "ping-restart"
 msgstr "ping-reinicia"
 
-#: ../properties/nm-openvpn-editor.c:2443
+#: ../properties/nm-openvpn-editor.c:2431
 msgid "Certificates (TLS)"
 msgstr "Certificats (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:2454
+#: ../properties/nm-openvpn-editor.c:2442
 msgid "Password"
 msgstr "Contrasenya"
 
-#: ../properties/nm-openvpn-editor.c:2467
+#: ../properties/nm-openvpn-editor.c:2456
 msgid "Password with Certificates (TLS)"
 msgstr "Contrasenya amb certificats (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:2479
+#: ../properties/nm-openvpn-editor.c:2469
 msgid "Static Key"
 msgstr "Clau estàtica"
 
 #: ../properties/nm-openvpn-editor.c:2633
-msgid "could not create openvpn object"
-msgstr "no s'ha pogut crear l'objecte openvpn"
-
-#: ../properties/nm-openvpn-editor.c:2650
 msgid "could not load UI widget"
 msgstr "no s'ha pogut carregar el giny IU"
 
-#: ../shared/nm-utils/nm-shared-utils.c:794
+#: ../shared/nm-utils/nm-shared-utils.c:946
 #, c-format
 msgid "object class '%s' has no property named '%s'"
 msgstr "la classe «%s» d'objecte no té una propietat anomenada «%s»"
 
-#: ../shared/nm-utils/nm-shared-utils.c:801
+#: ../shared/nm-utils/nm-shared-utils.c:953
 #, c-format
 msgid "property '%s' of object class '%s' is not writable"
 msgstr "la propietat «%s» de la classe «%s» d'objectes no es pot escriure"
 
-#: ../shared/nm-utils/nm-shared-utils.c:808
+#: ../shared/nm-utils/nm-shared-utils.c:960
 #, c-format
 msgid ""
 "construct property \"%s\" for object '%s' can't be set after construction"
@@ -468,19 +460,19 @@ msgstr ""
 "la propietat «%s» de construcció per a l'objecte «%s» no es pot establir "
 "després de la construcció"
 
-#: ../shared/nm-utils/nm-shared-utils.c:816
+#: ../shared/nm-utils/nm-shared-utils.c:968
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
 msgstr "«%s::%s» no és un nom vàlid de propietat; «%s» no un subtipus GObject"
 
-#: ../shared/nm-utils/nm-shared-utils.c:825
+#: ../shared/nm-utils/nm-shared-utils.c:977
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
 msgstr ""
 "no s'ha pogut establir la propietat «%s» de tipus «%s» a partir del valor de "
 "tipus «%s»"
 
-#: ../shared/nm-utils/nm-shared-utils.c:836
+#: ../shared/nm-utils/nm-shared-utils.c:988
 #, c-format
 msgid ""
 "value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
@@ -489,22 +481,27 @@ msgstr ""
 "el valor «%s» de tipus «%s» no és vàlid o està fora de rang per a la "
 "propietat «%s» de tipus «%s»"
 
-#: ../shared/nm-utils/nm-vpn-plugin-utils.c:80
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:69
+#, c-format
+msgid "unable to get editor plugin name: %s"
+msgstr "no es pot obtenir el nom del connector de l'editor: %s"
+
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:103
 #, c-format
 msgid "missing plugin file \"%s\""
 msgstr "No es troba el fitxer «%s» del connector"
 
-#: ../shared/nm-utils/nm-vpn-plugin-utils.c:86
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:109
 #, c-format
 msgid "cannot load editor plugin: %s"
 msgstr "no es pot carregar el connector de l'editor: %s"
 
-#: ../shared/nm-utils/nm-vpn-plugin-utils.c:95
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:118
 #, c-format
 msgid "cannot load factory %s from plugin: %s"
 msgstr "no es pot carregar la fàbrica %s del connector: %s"
 
-#: ../shared/nm-utils/nm-vpn-plugin-utils.c:121
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:144
 msgid "unknown error creating editor instance"
 msgstr "error desconegut al crear la instància de l'editor"
 
@@ -533,66 +530,66 @@ msgstr "port no vàlid"
 msgid "invalid protocol"
 msgstr "protocol no vàlid"
 
-#: ../src/nm-openvpn-service.c:439
+#: ../src/nm-openvpn-service.c:426
 #, c-format
 msgid "invalid address “%s”"
 msgstr "adreça no vàlida «%s»"
 
-#: ../src/nm-openvpn-service.c:451
+#: ../src/nm-openvpn-service.c:438
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "propietat no vàlida d'enter «%s» o fora de rang [%d-> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:462
+#: ../src/nm-openvpn-service.c:449
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "Propietat «%s» booleana no vàlida (no és sí o no)"
 
-#: ../src/nm-openvpn-service.c:469
+#: ../src/nm-openvpn-service.c:456
 #, c-format
 msgid "unhandled property “%s” type %s"
 msgstr "propietat no gestionada «%s» tipus %s"
 
-#: ../src/nm-openvpn-service.c:480
+#: ../src/nm-openvpn-service.c:467
 #, c-format
 msgid "property “%s” invalid or not supported"
 msgstr "propietat «%s» no vàlida o no suportada"
 
-#: ../src/nm-openvpn-service.c:496
+#: ../src/nm-openvpn-service.c:483
 msgid "No VPN configuration options."
 msgstr "No hi ha cap opció de configuració del VPN."
 
-#: ../src/nm-openvpn-service.c:934
+#: ../src/nm-openvpn-service.c:921
 msgid "A username is required."
 msgstr "Es requereix un nom d'usuari."
 
-#: ../src/nm-openvpn-service.c:938
+#: ../src/nm-openvpn-service.c:925
 msgid "A password is required."
 msgstr "Es requereix una contrasenya."
 
-#: ../src/nm-openvpn-service.c:941
+#: ../src/nm-openvpn-service.c:928
 msgid "A username and password are required."
 msgstr "Es requereix un nom d'usuari i una contrasenya."
 
-#: ../src/nm-openvpn-service.c:963
+#: ../src/nm-openvpn-service.c:950
 msgid "A private key password is required."
 msgstr "Es requereix una contrasenya de la clau privada."
 
-#: ../src/nm-openvpn-service.c:976
+#: ../src/nm-openvpn-service.c:963
 msgid "An HTTP Proxy username is required."
 msgstr "Es requereix un nom d'usuari de proxy HTTP."
 
-#: ../src/nm-openvpn-service.c:980
+#: ../src/nm-openvpn-service.c:967
 msgid "An HTTP Proxy password is required."
 msgstr "Es requereix una contrasenya de proxy HTTP."
 
-#: ../src/nm-openvpn-service.c:983
+#: ../src/nm-openvpn-service.c:970
 msgid "An HTTP Proxy username and password are required."
 msgstr "Es requereix un nom d'usuari i una contrasenya de proxy HTTP."
 
-#: ../src/nm-openvpn-service.c:1349 ../src/nm-openvpn-service.c:2106
-#: ../src/nm-openvpn-service.c:2141
+#: ../src/nm-openvpn-service.c:1337 ../src/nm-openvpn-service.c:2088
+#: ../src/nm-openvpn-service.c:2123
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -600,121 +597,117 @@ msgstr ""
 "No s'ha pogut processar la demanda perquè els paràmetres de configuració de "
 "la VPN eren erroni."
 
-#: ../src/nm-openvpn-service.c:1358 ../src/nm-openvpn-service.c:2115
+#: ../src/nm-openvpn-service.c:1346 ../src/nm-openvpn-service.c:2097
 msgid "Invalid connection type."
 msgstr "Tipus de connexió no vàlida."
 
-#: ../src/nm-openvpn-service.c:1376
+#: ../src/nm-openvpn-service.c:1364
 msgid "Could not find the openvpn binary."
 msgstr "No s'ha pogut trobar el binari de l'openvpn."
 
-#: ../src/nm-openvpn-service.c:1386
-msgid "Invalid HMAC auth."
-msgstr "Autenticació HMC no vàlida."
-
-#: ../src/nm-openvpn-service.c:1435
+#: ../src/nm-openvpn-service.c:1412
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "Número «%s» de port no vàlid."
 
-#: ../src/nm-openvpn-service.c:1455
+#: ../src/nm-openvpn-service.c:1432
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "Proto «%s» no vàlid."
 
-#: ../src/nm-openvpn-service.c:1494
+#: ../src/nm-openvpn-service.c:1471
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "Tipus «%s» de proxy no vàlid."
 
-#: ../src/nm-openvpn-service.c:1540
+#: ../src/nm-openvpn-service.c:1521
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "Duració «%s» de ping no vàlida."
 
-#: ../src/nm-openvpn-service.c:1553
+#: ../src/nm-openvpn-service.c:1534
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "Duració «%s» de ping-exit no vàlida."
 
-#: ../src/nm-openvpn-service.c:1566
+#: ../src/nm-openvpn-service.c:1547
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "Duració «%s» de ping-restar no vàlida."
 
-#: ../src/nm-openvpn-service.c:1579
+#: ../src/nm-openvpn-service.c:1560
 #, c-format
 msgid "Invalid connect timeout “%s”."
 msgstr "Temps d'expiració de la connexió «%s» no vàlid."
 
-#: ../src/nm-openvpn-service.c:1604
+#: ../src/nm-openvpn-service.c:1585
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "argument «%s» max-routes no vàlid."
 
-#: ../src/nm-openvpn-service.c:1648
+#: ../src/nm-openvpn-service.c:1629
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "Mida de clau «%s» no vàlida."
 
-#: ../src/nm-openvpn-service.c:1700
+#: ../src/nm-openvpn-service.c:1682
 #, c-format
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "configuració  no vàlida amb  tls-remote i verify-x509-name."
 
-#: ../src/nm-openvpn-service.c:1713
+#: ../src/nm-openvpn-service.c:1695
 #, c-format
 msgid "Invalid verify-x509-name."
 msgstr "verify-x509-name no vàlid."
 
-#: ../src/nm-openvpn-service.c:1736
+#: ../src/nm-openvpn-service.c:1718
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "Segons «%s» de renegociació no vàlids."
 
-#: ../src/nm-openvpn-service.c:1766
+#: ../src/nm-openvpn-service.c:1748
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "Mida «%s» de TUN MTU no vàlida."
 
-#: ../src/nm-openvpn-service.c:1779
+#: ../src/nm-openvpn-service.c:1761
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "Mida «%s» de fragment no vàlida."
 
-#: ../src/nm-openvpn-service.c:1885
+#: ../src/nm-openvpn-service.c:1867
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "Tipus de connexió desconeguda «%s»."
 
-#: ../src/nm-openvpn-service.c:1903
+#: ../src/nm-openvpn-service.c:1885
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "Usuari «%s» no trobat, verifiqueu NM_OPENVPN_USER."
 
-#: ../src/nm-openvpn-service.c:1915
+#: ../src/nm-openvpn-service.c:1897
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "Grup «%s» no trobat, verifiqueu NM_OPENVPN_GROUP."
 
-#: ../src/nm-openvpn-service.c:2154
+#: ../src/nm-openvpn-service.c:2136
 msgid "Unhandled pending authentication."
 msgstr "Autenticació pendent sense gestionar."
 
-#: ../src/nm-openvpn-service.c:2272
+#: ../src/nm-openvpn-service.c:2254
 msgid "Don’t quit when VPN connection terminates"
 msgstr "No surtis quan la connexió VPN acabi"
 
-#: ../src/nm-openvpn-service.c:2273
+#: ../src/nm-openvpn-service.c:2255
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 "Habilita el registre de depuració de la sessió (pot exposar contrasenyes)"
 
-#: ../src/nm-openvpn-service.c:2274
+#: ../src/nm-openvpn-service.c:2256
 msgid "D-Bus name to use for this instance"
 msgstr "Nom D-Bus a usar per a aquesta instància"
 
-#: ../src/nm-openvpn-service.c:2300
+#: ../src/nm-openvpn-service.c:2282
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
@@ -1078,8 +1071,8 @@ msgstr ""
 "Això és útil quan esteu connectant a un parell que té una adreça dinàmica "
 "com ara un usuari de connexió telefònica o un client DHCP.\n"
 "\n"
-"Essencialment, --float li diu a l'OpenVPN que accepti paquets autenticats des "
-"de qualsevol adreça, no sols l'adreça que es va especificar a l'opció --"
+"Essencialment, --float li diu a l'OpenVPN que accepti paquets autenticats "
+"des de qualsevol adreça, no sols l'adreça que es va especificar a l'opció --"
 "remote.\n"
 "\n"
 "config: float"
@@ -1133,17 +1126,29 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:96
 msgid "Ci_pher:"
-msgstr "C_riptògraf:"
+msgstr "_Xifrat:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:97
 msgid "_HMAC Authentication:"
 msgstr "_Autenticació HMAC:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:98
+msgid "Disable cipher _negotiation"
+msgstr "Inhabilita la _negociació del xifrat"
+
+#: ../properties/nm-openvpn-dialog.ui.h:99
+msgid ""
+"Disable cipher negotiation between client and server.\n"
+"config: ncp-disable"
+msgstr ""
+"Inhabilita la negociació del xifrat entre client i servidor.\n"
+"config: ncp-disable"
+
+#: ../properties/nm-openvpn-dialog.ui.h:101
 msgid "Verify CRL from file"
 msgstr "Verifica la CRL des del fitxer"
 
-#: ../properties/nm-openvpn-dialog.ui.h:99
+#: ../properties/nm-openvpn-dialog.ui.h:102
 msgid ""
 "Check peer certificate against the specified file in PEM format. A CRL "
 "(certificate revocation list) is used when a particular key is compromised "
@@ -1154,11 +1159,11 @@ msgstr ""
 "clau concreta està compromesa però quan la PKI en general encara està "
 "intacta."
 
-#: ../properties/nm-openvpn-dialog.ui.h:100
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "Verify CRL from directory"
 msgstr "Verifica la CRL des del directori"
 
-#: ../properties/nm-openvpn-dialog.ui.h:101
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid ""
 "Check peer certificate by looking at files in the specified directory. The "
 "directory must contain files named as revoked serial numbers (the files may "
@@ -1168,23 +1173,23 @@ msgstr ""
 "especificat. El directori ha de contenir fitxers anomenats com els números "
 "de sèrie revocats (els fitxers poden ser buits, el contingut no es llegirà)."
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid "Choose CRL file"
 msgstr "Tria el fitxer de la CRL"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:106
 msgid "Choose CRL directory"
 msgstr "Tria el directori de la CRL"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Security"
 msgstr "Seguretat"
 
-#: ../properties/nm-openvpn-dialog.ui.h:105
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid "_Subject Match:"
 msgstr "_Assumpte que ha de coincidir:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid ""
 "Subject or Common Name to verify server certificate information against.\n"
 "\n"
@@ -1197,11 +1202,11 @@ msgstr ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 
-#: ../properties/nm-openvpn-dialog.ui.h:110
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid "Server _Certificate Check:"
 msgstr "Comprova el _certificat del servidor:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:114
 msgid ""
 "Verify server certificate identification.\n"
 "\n"
@@ -1231,11 +1236,11 @@ msgstr ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:124
 msgid "_Verify peer (server) certificate usage signature"
 msgstr "_Verifica la signatura d'ús de certificat (de servidor) del parell"
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:125
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -1243,11 +1248,11 @@ msgstr ""
 "Requereix que el certificat del parell hagi estat signat amb un ús explícit "
 "de clau i un ús estès de clau basat en regles RFC3280 TLS."
 
-#: ../properties/nm-openvpn-dialog.ui.h:123
+#: ../properties/nm-openvpn-dialog.ui.h:126
 msgid "_Remote peer certificate TLS type:"
 msgstr "Tipus TLS del certificat del parell _remot:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:124
+#: ../properties/nm-openvpn-dialog.ui.h:127
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -1257,12 +1262,12 @@ msgstr ""
 "de clau i un ús estès de clau basat en regles RFC3280.\n"
 "config: remote-cert-tls client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:126
+#: ../properties/nm-openvpn-dialog.ui.h:129
 msgid "_Verify peer (server) certificate nsCertType designation"
 msgstr ""
 "_Verifica la designació nsCertType del certificat del parell (servidor)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:127
+#: ../properties/nm-openvpn-dialog.ui.h:130
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
@@ -1270,11 +1275,11 @@ msgstr ""
 "Requereix que el certificat del parell hagi estat signat amb una designació "
 "nsCertType explícita."
 
-#: ../properties/nm-openvpn-dialog.ui.h:128
+#: ../properties/nm-openvpn-dialog.ui.h:131
 msgid "_Remote peer certificate nsCert designation:"
 msgstr "Designació _remota nsCert del certificat del parell:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:129
+#: ../properties/nm-openvpn-dialog.ui.h:132
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
@@ -1284,11 +1289,11 @@ msgstr ""
 "nsCertType explícita\n"
 "config: ns-cert-type client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:131
+#: ../properties/nm-openvpn-dialog.ui.h:134
 msgid "Key _Direction:"
 msgstr "_Direcció de la clau:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:132
+#: ../properties/nm-openvpn-dialog.ui.h:135
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
@@ -1300,7 +1305,7 @@ msgstr ""
 "control també es xifra.\n"
 "config: tls-auth <file> [direcció] | tls-crypt <file>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:134
+#: ../properties/nm-openvpn-dialog.ui.h:137
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -1315,23 +1320,23 @@ msgstr ""
 "amb l'administrador del sistema.\n"
 "config: tls-auth <fitxer> [direcció]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:137
+#: ../properties/nm-openvpn-dialog.ui.h:140
 msgid "Key _File:"
 msgstr "_Fitxer de clau:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:138
+#: ../properties/nm-openvpn-dialog.ui.h:141
 msgid "Mode:"
 msgstr "Mode:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:139
+#: ../properties/nm-openvpn-dialog.ui.h:142
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr "Afegeix una capa addicional de xifrat o d'autenticació HMAC."
 
-#: ../properties/nm-openvpn-dialog.ui.h:140
+#: ../properties/nm-openvpn-dialog.ui.h:143
 msgid "Extra Certificates:"
 msgstr "Certificats extra:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:141
+#: ../properties/nm-openvpn-dialog.ui.h:144
 msgid ""
 "Specify a file containing one or more PEM certs (concatenated together) that "
 "complete the local certificate chain.\n"
@@ -1341,15 +1346,15 @@ msgstr ""
 "que completa la cadena de certificat local.\n"
 "config: extra-certs <file>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:143
+#: ../properties/nm-openvpn-dialog.ui.h:146
 msgid "Additional TLS authentication or encryption"
 msgstr "Autenticació TLS addicional o xifrat"
 
-#: ../properties/nm-openvpn-dialog.ui.h:144
+#: ../properties/nm-openvpn-dialog.ui.h:147
 msgid "TLS Authentication"
 msgstr "Autenticació TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:145
+#: ../properties/nm-openvpn-dialog.ui.h:148
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1357,11 +1362,11 @@ msgstr ""
 "Tipus de proxy: HTTP o Socks.\n"
 "config: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:147
+#: ../properties/nm-openvpn-dialog.ui.h:150
 msgid "Proxy _Type:"
 msgstr "_Tipus de servidor intermediari:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:148
+#: ../properties/nm-openvpn-dialog.ui.h:151
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1369,11 +1374,11 @@ msgstr ""
 "<i>Seleccioneu aquesta opció si la vostra organització requereix l'ús d'un "
 "servidor intermediari per accedir a Internet.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:149
+#: ../properties/nm-openvpn-dialog.ui.h:152
 msgid "Server _Address:"
 msgstr "_Adreça del servidor:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:150
+#: ../properties/nm-openvpn-dialog.ui.h:153
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1381,11 +1386,11 @@ msgstr ""
 "Connecta't a l'amfitrió remot mitjançant un proxy amb aquesta adreça.\n"
 "config: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:152
+#: ../properties/nm-openvpn-dialog.ui.h:155
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:153
+#: ../properties/nm-openvpn-dialog.ui.h:156
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1393,11 +1398,11 @@ msgstr ""
 "Connecta a l'amfitrió remot mitjançant un proxy amb aquest port.\n"
 "config: http-proxy or socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:155
+#: ../properties/nm-openvpn-dialog.ui.h:158
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Reintenta-ho indefinidament quan es produeixin errors"
 
-#: ../properties/nm-openvpn-dialog.ui.h:156
+#: ../properties/nm-openvpn-dialog.ui.h:159
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1406,43 +1411,43 @@ msgstr ""
 "SIGUSR1.\n"
 "config: http-proxy-retry or socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:158
+#: ../properties/nm-openvpn-dialog.ui.h:161
 msgid "Proxy _Username:"
 msgstr "_Nom d'usuari del servidor intermediari:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:159
+#: ../properties/nm-openvpn-dialog.ui.h:162
 msgid "Proxy Passwor_d:"
 msgstr "C_ontrasenya del servidor intermediari:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:160
+#: ../properties/nm-openvpn-dialog.ui.h:163
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "El nom d'usuari del proxy HTTP/Socks que s'ha passat a l'OpenVPN quan es va "
 "demanar."
 
-#: ../properties/nm-openvpn-dialog.ui.h:161
+#: ../properties/nm-openvpn-dialog.ui.h:164
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "La contrasenya del proxy HTTP/Socks que s'ha passat a l'OpenVPN quan es va "
 "demanar."
 
-#: ../properties/nm-openvpn-dialog.ui.h:162
+#: ../properties/nm-openvpn-dialog.ui.h:165
 msgid "_Show password"
 msgstr "Mo_stra la contrasenya"
 
-#: ../properties/nm-openvpn-dialog.ui.h:163
+#: ../properties/nm-openvpn-dialog.ui.h:166
 msgid "Proxies"
 msgstr "Servidors intermediaris"
 
-#: ../properties/nm-openvpn-dialog.ui.h:164
+#: ../properties/nm-openvpn-dialog.ui.h:167
 msgid "Path mtu discovery"
 msgstr "Camí a la descoberta mtu"
 
-#: ../properties/nm-openvpn-dialog.ui.h:165
+#: ../properties/nm-openvpn-dialog.ui.h:168
 msgid "Connect timeout"
 msgstr "Temps d'expiració de la connexió"
 
-#: ../properties/nm-openvpn-dialog.ui.h:166
+#: ../properties/nm-openvpn-dialog.ui.h:169
 msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
@@ -1452,359 +1457,7 @@ msgstr ""
 "els temps d'expiració de les connexions TCP i al servidor intermediari.\n"
 "config: connect-timeout <n> | server-poll-timeout <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:168
+#: ../properties/nm-openvpn-dialog.ui.h:171
 msgid "Misc"
 msgstr "Miscel·lània"
 
-#~ msgid "Choose your personal certificate..."
-#~ msgstr "Trieu el vostre certificat personal..."
-
-#~ msgid "Choose your private key..."
-#~ msgstr "Trieu la vostra clau privada..."
-
-#~ msgid "Choose a Certificate Authority certificate..."
-#~ msgstr "Trieu un certificat d'autoritat de certificació..."
-
-#~ msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
-#~ msgstr "Certificats PEM o PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
-
-#~ msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
-#~ msgstr "Certificats PEM (*.pem, *.crt, *.key, *.cer)"
-
-#~ msgid "cannot write <%s> blob from line %ld to file '%s'"
-#~ msgstr ""
-#~ "no es pot escriure la bombolla <%s> des de la línia %ld al fiter «%s»"
-
-#~ msgid "Missing required local IP address for static key mode."
-#~ msgstr "Falta l'adreça IP local requerida per al mode de clau estàtica."
-
-#~ msgid "Missing required remote IP address for static key mode."
-#~ msgstr "Falta l'adreça IP remota requerida per al mode de clau estàtica."
-
-#~ msgid ""
-#~ "Could not process the request because the openvpn connection type was "
-#~ "invalid."
-#~ msgstr ""
-#~ "No s'ha pogut trobar la demanda perquè el tipus de la connexió openvpn no "
-#~ "era vàlid."
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "<b>General</b>"
-#~ msgstr "<b>General</b>"
-
-#~ msgid "<b>Authentication</b>"
-#~ msgstr "<b>Autenticació</b>"
-
-#~ msgid "_Show passwords"
-#~ msgstr "_Mostra les contrasenyes"
-
-#~ msgid "Password for private key"
-#~ msgstr "Contrasenya per a la clau privada..."
-
-#~ msgid "Private Key Password:"
-#~ msgstr "Contrasenya de la clau privada:"
-
-#~ msgid ""
-#~ "Local peer's private key in .pem format.\n"
-#~ "config: key"
-#~ msgstr ""
-#~ "Clau privada del parell local en format .pem.\n"
-#~ "config: key"
-
-#~ msgid "Private Key:"
-#~ msgstr "Clau privada:"
-
-#~ msgid ""
-#~ "Certificate authority (CA) file in .pem format.\n"
-#~ "config: ca"
-#~ msgstr ""
-#~ "Fitxer d'autoritat de certificats (CA) en format .pem.\n"
-#~ "config: ca"
-
-#~ msgid ""
-#~ "Local peer's signed certificate in .pem format (signed by CA of CA "
-#~ "Certificate).\n"
-#~ "config: cert"
-#~ msgstr ""
-#~ "Certificat signat pel parell local en format .pem (signat pel ca del "
-#~ "certificat CD).\n"
-#~ "config: cert"
-
-#~ msgid ""
-#~ "<i>Connect only to servers whose certificate matches the given subject.\n"
-#~ "Example: /CN=myvpn.company.com</i>"
-#~ msgstr ""
-#~ "<i>Connecta només als servidors on el certificat d'aquests coincideixi "
-#~ "amb l'assumpte proporcionat.\n"
-#~ "Per exemple: /CN=elmeuvpn.companyia.com</i>"
-
-#~ msgid ""
-#~ "Accept connections only from a host with X509 name or common name equal "
-#~ "to the specified one.\n"
-#~ "config: tls-remote"
-#~ msgstr ""
-#~ "Accepta connexions sols des d'un amfitrió amb nom X509 o nom comú igual "
-#~ "al que s'ha especificat.\n"
-#~ "config: tls-remote"
-
-#~ msgid "could not open file for writing"
-#~ msgstr "no s'ha pogut obrir el fitxer per escriure"
-
-#, fuzzy
-#~ msgid "Not Required"
-#~ msgstr "No necessari"
-
-#~ msgid "VPN Connection Manager (OpenVPN)"
-#~ msgstr "Gestor de connexions VPN (OpenVPN)"
-
-#~ msgid "Add, Remove, and Edit VPN Connections"
-#~ msgstr "Afegiu, suprimiu, i editeu connexions VPN"
-
-#~ msgid "_Password:"
-#~ msgstr "_Contrasenya:"
-
-#~ msgid "_Secondary Password:"
-#~ msgstr "Contrasenya _secundària:"
-
-#~ msgid "_Username:"
-#~ msgstr "Nom d'_usuari:"
-
-#~ msgid "_Domain:"
-#~ msgstr "_Domini:"
-
-#~ msgid "Connect as _user:"
-#~ msgstr "Connecta com a _usuari:"
-
-#~ msgid "_Remember password for this session"
-#~ msgstr "_Recorda la contrasenya per aquesta sessió"
-
-#~ msgid "_Save password in keyring"
-#~ msgstr "_Desa la contrasenya a l'anell de claus"
-
-#~ msgid "Use a TA_P device"
-#~ msgstr "Utilitza un dispositiu TA_P"
-
-#~ msgid "The following OpenVPN connection will be created:"
-#~ msgstr "Es crearà la següent connexió OpenVPN:"
-
-#~ msgid "Name:  %s"
-#~ msgstr "Nom:  %s"
-
-#~ msgid "Connection Type: X.509 Certificates"
-#~ msgstr "Tipus de connexió: Certifcats X.509"
-
-#~ msgid "CA:  %s"
-#~ msgstr "CA:  %s"
-
-#~ msgid "Cert:  %s"
-#~ msgstr "Certificat:  %s"
-
-#~ msgid "Key:  %s"
-#~ msgstr "Clau:  %s"
-
-#~ msgid "Connection Type: Shared Key"
-#~ msgstr "Tipus de connexió: Clau compartida"
-
-#~ msgid "Shared Key:  %s"
-#~ msgstr "Clau compartida:  %s"
-
-#~ msgid "Remote IP:  %s"
-#~ msgstr "IP remota:  %s"
-
-#~ msgid "Connection Type: Password"
-#~ msgstr "Tipus de connexió: Contrasenya"
-
-#~ msgid "Username:  %s"
-#~ msgstr "Nom d'usuari:  %s"
-
-#~ msgid "Connection Type: X.509 with Password Authentication"
-#~ msgstr "Tipus de connexió: X.509 amb autenticació de contrasenya"
-
-#~ msgid "Remote:  %s"
-#~ msgstr "Remot:  %s"
-
-#~ msgid "Device: %s"
-#~ msgstr "Dispositiu: %s"
-
-#~ msgid "Protocol: %s"
-#~ msgstr "Protocol: %s"
-
-#~ msgid "TCP"
-#~ msgstr "TCP"
-
-#~ msgid "UDP"
-#~ msgstr "UDP"
-
-#~ msgid "Routes:  %s"
-#~ msgstr "Rutes:  %s"
-
-#~ msgid "TLS auth:  %s %s"
-#~ msgstr "Autenticació TLS:  %s %s"
-
-#~ msgid "The connection details can be changed using the \"Edit\" button."
-#~ msgstr "Els detalls de la connexió es poden canviar amb el botó «Edita»."
-
-#~ msgid "Cannot import settings"
-#~ msgstr "No s'han pogut importar els paràmetres"
-
-#~ msgid "The VPN settings file '%s' does not contain valid data."
-#~ msgstr "El fitxer de paràmetres VPN «%s», no conté dades vàlides."
-
-#~ msgid "Select file to import"
-#~ msgstr "Seleccioneu el fitxer a importar"
-
-#~ msgid "Select CA to use"
-#~ msgstr "Seleccioneu la CA a utilitzar"
-
-#~ msgid "Select certificate to use"
-#~ msgstr "Seleccioneu el certificat a utilitzar"
-
-#~ msgid "Select key to use"
-#~ msgstr "Seleccioneu la clau a utilitzar"
-
-#~ msgid "Select shared key to use"
-#~ msgstr "Seleccioneu la clau compartida a utilitzar"
-
-#~ msgid "Select TA to use"
-#~ msgstr "Seleccioneu la TA a utilitzar"
-
-#~ msgid "Save as..."
-#~ msgstr "Anomena i desa..."
-
-#~ msgid "A file named \"%s\" already exists."
-#~ msgstr "Ja existeix un fitxer anomenat «%s»."
-
-#~ msgid "Do you want to replace it with the one you are saving?"
-#~ msgstr "Voleu reemplaçar-lo pel que voleu desar?"
-
-#~ msgid "Failed to export configuration"
-#~ msgstr "No s'ha pogut exportar la configuració"
-
-#~ msgid "65536"
-#~ msgstr "65536"
-
-#~ msgid "<i>example: 172.16.0.0/16 10.11.12.0/24</i>"
-#~ msgstr "<i>exemple: 172.16.0.0/16 10.11.12.0/24</i>"
-
-#~ msgid "C_A file:"
-#~ msgstr "Fitxer C_A:"
-
-#~ msgid "Connection na_me:"
-#~ msgstr "No_m de la connexió:"
-
-#~ msgid "Import _Saved Configuration..."
-#~ msgstr "Importa una configuració de_sada..."
-
-#~ msgid ""
-#~ "Name used to identify the connection to the private network, e.g. "
-#~ "\"Campus VPN\" or \"Corporate Network\""
-#~ msgstr ""
-#~ "_Nom utilitzat per identificar la connexió a la xarxa privada, per "
-#~ "exemple «VPN del Campus» o «Xarxa Corporativa»"
-
-#~ msgid "Network"
-#~ msgstr "Xarxa"
-
-#~ msgid "Only use _VPN connection for these addresses:"
-#~ msgstr "_Fes servir només la connexió VPN per a aquestes adreces:"
-
-#~ msgid ""
-#~ "Please enter the information provided by your system administrator below. "
-#~ "Do not enter your password here as you will be prompted when connecting."
-#~ msgstr ""
-#~ "Entreu la informació proporcionada pel vostre administrador de sistema. "
-#~ "No hi entreu la vostra contrasenya, ja es demanarà en connectar."
-
-#~ msgid ""
-#~ "Please note that the file you import is not an OpenVPN configuration "
-#~ "file. Ask your administrator for the file."
-#~ msgstr ""
-#~ "El fitxer que heu importat no és un fitxer de configuració OpenVPN. "
-#~ "Demaneu-li el fitxer a l'administrador."
-
-#~ msgid "Shared _key:"
-#~ msgstr "_Clau compartida:"
-
-#~ msgid "Use _TLS auth:"
-#~ msgstr "Utilitza autenticació _TLS:"
-
-#~ msgid "Use cip_her:"
-#~ msgstr "Utilitza _xifratge:"
-
-#~ msgid ""
-#~ "X.509 Certificates\n"
-#~ "Pre-shared key\n"
-#~ "Password Authentication\n"
-#~ "X.509 with Password Authentication"
-#~ msgstr ""
-#~ "Certificats X.509\n"
-#~ "Clau pre-compartida\n"
-#~ "Autenticació de contrasenya\n"
-#~ "X.509 amb autenticació de contrasenya"
-
-#~ msgid "_0"
-#~ msgstr "_0"
-
-#~ msgid "_1"
-#~ msgstr "_1"
-
-#~ msgid "_Gateway address:"
-#~ msgstr "A_dreça de la passarel·la:"
-
-#~ msgid "_Key:"
-#~ msgstr "_Clau:"
-
-#~ msgid "_Local IP:"
-#~ msgstr "IP _local:"
-
-#~ msgid "_Remote IP:"
-#~ msgstr "IP _remota:"
-
-#~ msgid "_none"
-#~ msgstr "_cap"
-
-#~ msgid ""
-#~ "The VPN login failed because the user name and password were not accepted "
-#~ "or the certificate password was wrong."
-#~ msgstr ""
-#~ "No s'ha pogut connectar a la VPN perquè no s'han acceptat el nom "
-#~ "d'usuari, o la contrasenya o la contrasenya certificada és errònia.\""
-
-#~ msgid "The VPN login failed because the VPN program could not be started."
-#~ msgstr ""
-#~ "No s'ha pogut connectar a la VPN perquè no s'ha pogut iniciar l'aplicació "
-#~ "VPN."
-
-#~ msgid ""
-#~ "The VPN login failed because the VPN program could not connect to the VPN "
-#~ "server."
-#~ msgstr ""
-#~ "No s'ha pogut connectar a la VPN perquè l'aplicació VPN no s'ha pogut "
-#~ "connectar al servidor VPN."
-
-#~ msgid ""
-#~ "The VPN login failed because the VPN program received an invalid "
-#~ "configuration from the VPN server."
-#~ msgstr ""
-#~ "No s'ha pogut connectar a la VPN perquè l'aplicació VPN ha rebut una "
-#~ "configuració errònia del servidor VPN."
-
-#~ msgid "VPN connection failed"
-#~ msgstr "Ha fallat la connexió VPN"
-
-#~ msgid "<b>Connection Information</b>"
-#~ msgstr "<b>Informació de la connexió</b>"
-
-#~ msgid "X.509"
-#~ msgstr "X.509"
-
-#~ msgid "X.509/Pass"
-#~ msgstr "X.509/Contrasenya"
-
-#~ msgid "CA  file:"
-#~ msgstr "Fitxer CA:"
-
-#~ msgid "Optional"
-#~ msgstr "Opcional"
