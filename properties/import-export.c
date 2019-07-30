@@ -1220,7 +1220,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			gs_free char *file_free = NULL;
 			gboolean can_have_direction;
 			const char *s_direction = NULL;
-			
+
 			if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_VERSION_MIN)){
 				if (!args_params_check_nargs_n (params, 1, &line_error))
 					goto handle_line_error;
