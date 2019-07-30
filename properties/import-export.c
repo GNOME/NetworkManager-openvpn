@@ -1213,11 +1213,32 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		                  NMV_OVPN_TAG_PKCS12,
 		                  NMV_OVPN_TAG_SECRET,
 		                  NMV_OVPN_TAG_TLS_AUTH,
-		                  NMV_OVPN_TAG_TLS_CRYPT)) {
+		                  NMV_OVPN_TAG_TLS_CRYPT,
+						  NMV_OVPN_TAG_TLS_VERSION_MIN,
+						  NMV_OVPN_TAG_TLS_VERSION_MAX)) {
 			const char *file;
 			gs_free char *file_free = NULL;
 			gboolean can_have_direction;
 			const char *s_direction = NULL;
+
+			if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_VERSION_MIN)){
+				if (!args_params_check_nargs_n (params, 1, &line_error))
+					goto handle_line_error;
+				if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
+					goto handle_line_error;
+				setting_vpn_add_data_item(s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN, params[1]);
+				continue;
+			}
+
+			if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_VERSION_MAX)){
+				if (!args_params_check_nargs_n (params, 1, &line_error))
+					goto handle_line_error;
+				if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
+					goto handle_line_error;
+				setting_vpn_add_data_item(s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MAX, params[1]);
+				continue;
+			}
+
 
 			can_have_direction = NM_IN_STRSET (params[0],
 			                                   NMV_OVPN_TAG_SECRET,
@@ -2057,6 +2078,14 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			                 NMV_OVPN_TAG_TLS_CRYPT,
 			                 nm_utils_str_utf8safe_unescape (key, &s_free));
 		}
+
+		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN);
+		if (nmovpn_arg_is_set (key))
+			args_write_line (f, NMV_OVPN_TAG_TLS_VERSION_MIN, key);
+
+		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MAX);
+		if (nmovpn_arg_is_set (key))
+			args_write_line (f, NMV_OVPN_TAG_TLS_VERSION_MAX, key);
 
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS);
 		if (nmovpn_arg_is_set (key)) {
