@@ -717,6 +717,8 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_TA_DIR,
 	NM_OPENVPN_KEY_TLS_CRYPT,
 	NM_OPENVPN_KEY_TLS_REMOTE,
+	NM_OPENVPN_KEY_TLS_VERSION_MIN,
+	NM_OPENVPN_KEY_TLS_VERSION_MAX,
 	NM_OPENVPN_KEY_TUNNEL_MTU,
 	NM_OPENVPN_KEY_TUN_IPV6,
 	NM_OPENVPN_KEY_VERIFY_X509_NAME,
@@ -1816,6 +1818,17 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	_builder_init_optional_spinbutton (builder, "max_routes_checkbutton", "max_routes_spinbutton", !!value,
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 100000000, 100));
 
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_VERSION_MIN);
+	if (value && *value) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_min"));
+		gtk_entry_set_text (GTK_ENTRY (widget), value);
+	}
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_VERSION_MAX);
+	if (value && *value) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_max"));
+		gtk_entry_set_text (GTK_ENTRY (widget), value);
+	}
+
 	return dialog;
 }
 
@@ -2016,6 +2029,17 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 		                    -1);
 		if (hmacauth)
 			g_hash_table_insert (hash, NM_OPENVPN_KEY_AUTH, hmacauth);
+	}
+	entry = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_min"));
+	value = gtk_entry_get_text (GTK_ENTRY (entry));
+	if (  value && *value){
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_TLS_VERSION_MIN, g_strdup (value));
+	}
+
+	entry = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_max"));
+	value = gtk_entry_get_text (GTK_ENTRY (entry));
+	if (  value && *value){
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_TLS_VERSION_MAX, g_strdup (value));
 	}
 
 	contype = g_object_get_data (G_OBJECT (dialog), "connection-type");
