@@ -380,6 +380,54 @@ test_tls_import_2 (void)
 }
 
 static void
+test_tls_import_3 (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingConnection *s_con;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "tls3.ovpn");
+
+	s_con = _get_setting_connection (connection);
+	g_assert_cmpstr (nm_setting_connection_get_id (s_con), ==, "tls3");
+	g_assert (!nm_setting_connection_get_uuid (s_con));
+
+	s_vpn = _get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE, NM_OPENVPN_CONTYPE_TLS);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "adaptive");
+	_check_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
+	_check_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "173.8.149.245:1194");
+	_check_item (s_vpn, NM_OPENVPN_KEY_PORT, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE, "/CN=myvpn.company.com");
+	_check_item (s_vpn, NM_OPENVPN_KEY_VERIFY_X509_NAME,
+	             "subject:C=US, L=Cambridge, CN=GNOME, emailAddress=networkmanager-list@gnome.org");
+	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_CERT_TLS, "server");
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_CA,        SRCDIR"/keys/mg8.ca");
+	_check_item (s_vpn, NM_OPENVPN_KEY_CERT,      SRCDIR"/keys/clee.crt");
+	_check_item (s_vpn, NM_OPENVPN_KEY_KEY,       SRCDIR"/keys/clee.key");
+	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT, SRCDIR"/keys/46.key");
+
+	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
+	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN, "1.0");
+	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MAX, "1.2");
+
+}
+
+static void
 test_file_contents (const char *id,
                     const char *dir,
                     NMSettingVpn *s_vpn,
@@ -1042,6 +1090,9 @@ int main (int argc, char **argv)
 
 	_add_test_func_simple (test_tls_import_2);
 	_add_test_func ("tls2-export", test_export_compare, "tls2.ovpn", "tls2.ovpntest");
+
+	_add_test_func_simple (test_tls_import_3);
+	_add_test_func ("tls3-export", test_export_compare, "tls3.ovpn", "tls3.ovpntest");
 
 	_add_test_func_simple (test_pkcs12_import);
 	_add_test_func ("pkcs12-export", test_export_compare, "pkcs12.ovpn", "pkcs12.ovpntest");

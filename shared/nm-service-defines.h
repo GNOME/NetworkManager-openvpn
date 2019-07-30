@@ -73,6 +73,8 @@
 #define NM_OPENVPN_KEY_TLS_CIPHER                "tls-cipher"
 #define NM_OPENVPN_KEY_TLS_CRYPT                 "tls-crypt"
 #define NM_OPENVPN_KEY_TLS_REMOTE                "tls-remote"
+#define NM_OPENVPN_KEY_TLS_VERSION_MIN           "tls-version-min"
+#define NM_OPENVPN_KEY_TLS_VERSION_MAX           "tls-version-max"
 #define NM_OPENVPN_KEY_TUNNEL_MTU                "tunnel-mtu"
 #define NM_OPENVPN_KEY_TUN_IPV6                  "tun-ipv6"
 #define NM_OPENVPN_KEY_USERNAME                  "username"
