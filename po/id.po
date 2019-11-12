@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2018-11-19 14:04+0000\n"
-"PO-Revision-Date: 2018-04-10 10:48+0700\n"
-"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
+"POT-Creation-Date: 2019-11-10 03:04+0000\n"
+"PO-Revision-Date: 2019-11-12 23:35+0700\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: ../appdata/network-manager-openvpn.metainfo.xml.in.h:1
 msgid "OpenVPN client"
@@ -81,6 +81,7 @@ msgstr ""
 msgid "option %s expects between %u and %u argument"
 msgid_plural "option %s expects between %u and %u arguments"
 msgstr[0] "opsi %s mengharapkan antara %u dan %u argumen"
+msgstr[1] "opsi %s mengharapkan antara %u dan %u argumen"
 
 #: ../properties/import-export.c:186
 #, c-format
@@ -92,6 +93,7 @@ msgstr "opsi %s tidak memerlukan argumen"
 msgid "option %s expects exactly one argument"
 msgid_plural "option %s expects exactly %u arguments"
 msgstr[0] "opsi %s mengharapkan tepat %u argumen"
+msgstr[1] "opsi %s mengharapkan tepat %u argumen"
 
 #: ../properties/import-export.c:217
 #, c-format
@@ -471,10 +473,9 @@ msgstr ""
 "'%s' bertipe '%s'"
 
 #: ../shared/nm-utils/nm-vpn-plugin-utils.c:69
-#, fuzzy, c-format
-#| msgid "cannot load editor plugin: %s"
+#, c-format
 msgid "unable to get editor plugin name: %s"
-msgstr "tak bisa memuat plugin penyunting: %s"
+msgstr "tidak bisa memperoleh nama pengaya penyunting: %s"
 
 #: ../shared/nm-utils/nm-vpn-plugin-utils.c:103
 #, c-format
@@ -1115,13 +1116,15 @@ msgstr "Autentikasi HMAC:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:98
 msgid "Disable cipher _negotiation"
-msgstr ""
+msgstr "Nonaktifkan _negosiasi cipher"
 
 #: ../properties/nm-openvpn-dialog.ui.h:99
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
 msgstr ""
+"Nonaktifkan negosiasi cipher antara klien dan server.\n"
+"config: ncp-disable"
 
 #: ../properties/nm-openvpn-dialog.ui.h:101
 msgid "Verify CRL from file"
