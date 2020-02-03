@@ -438,6 +438,7 @@ test_tls_inline_import (void)
 	test_file_contents (expected_id, SRCDIR, s_vpn, NM_OPENVPN_KEY_CERT);
 	test_file_contents (expected_id, SRCDIR, s_vpn, NM_OPENVPN_KEY_KEY);
 	test_file_contents (expected_id, SRCDIR, s_vpn, NM_OPENVPN_KEY_TA);
+	test_file_contents (expected_id, SRCDIR, s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE);
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, "1");
 
 	_check_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD, NULL);
@@ -447,6 +448,7 @@ test_tls_inline_import (void)
 	g_assert (unlink (TMPDIR"/tls-inline-cert.pem") == 0);
 	g_assert (unlink (TMPDIR"/tls-inline-key.pem") == 0);
 	g_assert (unlink (TMPDIR"/tls-inline-tls-auth.pem") == 0);
+	g_assert (unlink (TMPDIR"/tls-inline-crl-verify.pem") == 0);
 }
 
 static void

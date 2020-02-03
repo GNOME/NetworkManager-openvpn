@@ -41,6 +41,7 @@
 #define INLINE_BLOB_CA                  NMV_OVPN_TAG_CA
 #define INLINE_BLOB_CERT                NMV_OVPN_TAG_CERT
 #define INLINE_BLOB_EXTRA_CERTS         NMV_OVPN_TAG_EXTRA_CERTS
+#define INLINE_BLOB_CRL_VERIFY          NMV_OVPN_TAG_CRL_VERIFY
 #define INLINE_BLOB_KEY                 NMV_OVPN_TAG_KEY
 #define INLINE_BLOB_PKCS12              NMV_OVPN_TAG_PKCS12
 #define INLINE_BLOB_SECRET              NMV_OVPN_TAG_SECRET
@@ -1464,6 +1465,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				key = NM_OPENVPN_KEY_KEY;
 			else if (nm_streq (token, INLINE_BLOB_EXTRA_CERTS))
 				key = NM_OPENVPN_KEY_EXTRA_CERTS;
+			else if (nm_streq (token, INLINE_BLOB_CRL_VERIFY))
+				key = NM_OPENVPN_KEY_CRL_VERIFY_FILE;
 			else if (nm_streq (token, INLINE_BLOB_PKCS12)) {
 				is_base64 = TRUE;
 				key = NULL;
