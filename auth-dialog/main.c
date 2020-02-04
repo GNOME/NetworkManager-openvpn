@@ -172,7 +172,7 @@ eui_finish (const char *vpn_name,
 	g_key_file_set_integer (keyfile, UI_KEYFILE_GROUP, "Version", 2);
 	g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Description", prompt);
 
-	title = g_strdup_printf (_("Authenticate VPN %s"), vpn_name);
+	title = g_strdup_printf (_("Authentication required"));
 	g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Title", title);
 	g_free (title);
 
