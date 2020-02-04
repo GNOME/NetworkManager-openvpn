@@ -172,28 +172,28 @@ eui_finish (const char *vpn_name,
 	g_key_file_set_integer (keyfile, UI_KEYFILE_GROUP, "Version", 2);
 	g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Description", prompt);
 
-	title = g_strdup_printf (_("Authenticate VPN %s"), vpn_name);
+	title = g_strdup_printf (_("Authentication required"));
 	g_key_file_set_string (keyfile, UI_KEYFILE_GROUP, "Title", title);
 	g_free (title);
 
 	keyfile_add_entry_info (keyfile,
 	                        NM_OPENVPN_KEY_PASSWORD,
 	                        existing_password ? existing_password : "",
-	                        _("Password:"),
+	                        _("Password…"),
 	                        TRUE,
 	                        need_password && allow_interaction);
 
 	keyfile_add_entry_info (keyfile,
 	                        NM_OPENVPN_KEY_CERTPASS,
 	                        existing_certpass ? existing_certpass : "",
-	                        _("Certificate password:"),
+	                        _("Certificate password…"),
 	                        TRUE,
 	                        need_certpass && allow_interaction);
 
 	keyfile_add_entry_info (keyfile,
 	                        NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
 	                        existing_proxypass ? existing_proxypass : "",
-	                        _("HTTP proxy password:"),
+	                        _("HTTP proxy password…"),
 	                        TRUE,
 	                        need_proxypass && allow_interaction);
 
