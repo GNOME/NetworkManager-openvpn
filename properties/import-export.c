@@ -776,8 +776,7 @@ inline_blob_write_out (const InlineBlobData *data, GError **error)
 NMConnection *
 do_import (const char *path, const char *contents, gsize contents_len, GError **error)
 {
-	gs_unref_object NMConnection *connection_free = NULL;
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingConnection *s_con;
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
@@ -799,7 +798,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	g_return_val_if_fail (!error || !*error, NULL);
 
 	connection = nm_simple_connection_new ();
-	connection_free = connection;
+
 	s_con = NM_SETTING_CONNECTION (nm_setting_connection_new ());
 	nm_connection_add_setting (connection, NM_SETTING (s_con));
 	s_ip4 = NM_SETTING_IP_CONFIG (nm_setting_ip4_config_new ());
@@ -1685,9 +1684,8 @@ handle_line_error:
 
 	g_slist_free_full (inline_blobs, (GDestroyNotify) inline_blob_data_free);
 
-	connection_free = NULL;
 	g_return_val_if_fail (!error || !*error, connection);
-	return connection;
+	return g_steal_pointer (&connection);
 
 out_error:
 	g_slist_free_full (inline_blobs, (GDestroyNotify) inline_blob_data_free);
