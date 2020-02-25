@@ -793,7 +793,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	const char *ta_direction = NULL, *secret_direction = NULL;
 	gboolean allow_ta_direction = FALSE, allow_secret_direction = FALSE;
 	gboolean have_certs, have_ca;
-	GSList *inline_blobs = NULL, *sl_iter;
+	GSList *inline_blobs = NULL;
+	GSList *sl_iter;
 
 	g_return_val_if_fail (!error || !*error, NULL);
 
@@ -1642,23 +1643,46 @@ handle_line_error:
 		}
 	}
 
-	inline_blobs = g_slist_reverse (inline_blobs);
-	for (sl_iter = inline_blobs; sl_iter; sl_iter = sl_iter->next) {
-		const InlineBlobData *data = sl_iter->data;
+	if (inline_blobs) {
+		GSList *tmp_list = NULL;
 
-		/* Check whether the setting was not overwritten by a later entry in the config-file. */
-		if (nm_streq (data->token, INLINE_BLOB_PKCS12)) {
-			if (   !setting_vpn_eq_data_item_utf8safe (s_vpn, NM_OPENVPN_KEY_CA, data->path)
-			    && !setting_vpn_eq_data_item_utf8safe (s_vpn, NM_OPENVPN_KEY_CERT, data->path)
-			    && !setting_vpn_eq_data_item_utf8safe (s_vpn, NM_OPENVPN_KEY_KEY, data->path))
+		/* filter out blobs that are shadowed and not used. */
+		while ((sl_iter = inline_blobs)) {
+			InlineBlobData *data = sl_iter->data;
+			gboolean is_good = TRUE;
+
+			inline_blobs = inline_blobs->next;
+
+			/* Check whether the setting was not overwritten by a later entry in the config-file. */
+			if (nm_streq (data->token, INLINE_BLOB_PKCS12)) {
+				if (   !setting_vpn_eq_data_item_utf8safe (s_vpn, NM_OPENVPN_KEY_CA, data->path)
+				    && !setting_vpn_eq_data_item_utf8safe (s_vpn, NM_OPENVPN_KEY_CERT, data->path)
+				    && !setting_vpn_eq_data_item_utf8safe (s_vpn, NM_OPENVPN_KEY_KEY, data->path))
+					is_good = FALSE;
+			} else {
+				if (!setting_vpn_eq_data_item_utf8safe (s_vpn, data->key, data->path))
+					is_good = FALSE;
+			}
+			if (!is_good) {
+				g_slist_free_1 (sl_iter);
+				inline_blob_data_free (data);
 				continue;
-		} else {
-			if (!setting_vpn_eq_data_item_utf8safe (s_vpn, data->key, data->path))
-				continue;
+			}
+
+			/* we prepend the element to a new, temporary list. That means, we
+			 * reverse the order here. That is just what we need, because the
+			 * list was previously constructed in reverse order. */
+			sl_iter->next = tmp_list;
+			tmp_list = sl_iter;
 		}
+		inline_blobs = tmp_list;
+	}
+
+	for (sl_iter = inline_blobs; sl_iter; sl_iter = sl_iter->next) {
 		if (!inline_blob_write_out (sl_iter->data, error))
 			goto out_error;
 	}
+
 	g_slist_free_full (inline_blobs, (GDestroyNotify) inline_blob_data_free);
 
 	connection_free = NULL;
