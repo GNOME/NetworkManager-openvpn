@@ -1023,7 +1023,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
 				goto handle_line_error;
 			if (params[1]) {
-				if (!NM_IN_STRSET (params[1], "lzo", "lz4")) {
+				if (!NM_IN_STRSET (params[1], "lzo", "lz4", "lz4-v2")) {
 					line_error = g_strdup_printf (_("unsupported compress argument"));
 					goto handle_line_error;
 				}

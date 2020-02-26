@@ -1516,12 +1516,15 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			args_add_strv (args, "--comp-lzo", "yes");
 		break;
 	case NMOVPN_COMP_LZ4:
+	case NMOVPN_COMP_LZ4_V2:
 	case NMOVPN_COMP_AUTO:
 		if (openvpn_binary_version != OPENVPN_BINARY_VERSION_2_4_OR_NEWER)
 			_LOGW ("\"compress\" option supported only by OpenVPN >= 2.4");
 
 		if (comp == NMOVPN_COMP_LZ4)
 			args_add_strv (args, "--compress", "lz4");
+		else if (comp == NMOVPN_COMP_LZ4_V2)
+			args_add_strv (args, "--compress", "lz4-v2");
 		else
 			args_add_strv (args, "--compress");
 		break;

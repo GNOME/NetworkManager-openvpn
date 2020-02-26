@@ -89,6 +89,7 @@ typedef enum {
 	NMOVPN_COMP_DISABLED,             /* no option */
 	NMOVPN_COMP_LZO,                  /* "--compress lzo" or "--comp-lzo yes" */
 	NMOVPN_COMP_LZ4,                  /* "--compress lz4" */
+	NMOVPN_COMP_LZ4_V2,               /* "--compress lz4-v2" */
 	NMOVPN_COMP_AUTO,                 /* "--compress" */
 	NMOVPN_COMP_LEGACY_LZO_DISABLED,  /* "--comp-lzo no" */
 	NMOVPN_COMP_LEGACY_LZO_ADAPTIVE,  /* "--comp-lzo [adaptive]" */
