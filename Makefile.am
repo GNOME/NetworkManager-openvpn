@@ -315,6 +315,7 @@ EXTRA_DIST += \
 	properties/tests/conf/tls-inline.ovpn \
 	properties/tests/conf/tls-inline-ca.pem \
 	properties/tests/conf/tls-inline-cert.pem \
+	properties/tests/conf/tls-inline-crl-verify-file.pem \
 	properties/tests/conf/tls-inline-key.pem \
 	properties/tests/conf/tls-inline-ta.pem
 
