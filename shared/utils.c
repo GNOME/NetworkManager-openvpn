@@ -120,6 +120,8 @@ nmovpn_compression_from_options (const char *comp_lzo, const char *compress)
 		return NMOVPN_COMP_LZO;
 	if (nm_streq0 (compress, "lz4"))
 		return NMOVPN_COMP_LZ4;
+	if (nm_streq0 (compress, "lz4-v2"))
+		return NMOVPN_COMP_LZ4_V2;
 	if (nm_streq0 (compress, "yes"))
 		return NMOVPN_COMP_AUTO;
 
@@ -149,6 +151,9 @@ nmovpn_compression_to_options (NMOvpnComp comp,
 		break;
 	case NMOVPN_COMP_LZ4:
 		NM_SET_OUT (compress, "lz4");
+		break;
+	case NMOVPN_COMP_LZ4_V2:
+		NM_SET_OUT (compress, "lz4-v2");
 		break;
 	case NMOVPN_COMP_AUTO:
 		NM_SET_OUT (compress, "yes");

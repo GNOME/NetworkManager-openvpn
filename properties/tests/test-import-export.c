@@ -473,7 +473,7 @@ test_tls_inline_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_DEV, "tun");
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, NULL);
-	_check_item (s_vpn, NM_OPENVPN_KEY_COMPRESS, "yes");
+	_check_item (s_vpn, NM_OPENVPN_KEY_COMPRESS, "lz4-v2");
 	_check_item (s_vpn, NM_OPENVPN_KEY_FLOAT, "yes");
 	_check_item (s_vpn, NM_OPENVPN_KEY_RENEG_SECONDS, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE, "173.8.149.245:1194");
