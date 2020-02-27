@@ -1,5 +1,6 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /*
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
+ *
  * Dan Williams <dcbw@redhat.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * (C) Copyright 2010 Red Hat, Inc.
+ * Copyright (C) 2010 - 2018 Red Hat, Inc.
  */
 
 #ifndef UTILS_H
@@ -31,6 +32,7 @@
 #define NMV_OVPN_TAG_CIPHER             "cipher"
 #define NMV_OVPN_TAG_CLIENT             "client"
 #define NMV_OVPN_TAG_COMP_LZO           "comp-lzo"
+#define NMV_OVPN_TAG_COMPRESS           "compress"
 #define NMV_OVPN_TAG_CONNECT_TIMEOUT    "connect-timeout"
 #define NMV_OVPN_TAG_CRL_VERIFY         "crl-verify"
 #define NMV_OVPN_TAG_DEV                "dev"
@@ -83,6 +85,16 @@
 #define NMV_OVPN_TAG_USER               "user"
 #define NMV_OVPN_TAG_VERIFY_X509_NAME   "verify-x509-name"
 
+typedef enum {
+	NMOVPN_COMP_DISABLED,             /* no option */
+	NMOVPN_COMP_LZO,                  /* "--compress lzo" or "--comp-lzo yes" */
+	NMOVPN_COMP_LZ4,                  /* "--compress lz4" */
+	NMOVPN_COMP_LZ4_V2,               /* "--compress lz4-v2" */
+	NMOVPN_COMP_AUTO,                 /* "--compress" */
+	NMOVPN_COMP_LEGACY_LZO_DISABLED,  /* "--comp-lzo no" */
+	NMOVPN_COMP_LEGACY_LZO_ADAPTIVE,  /* "--comp-lzo [adaptive]" */
+} NMOvpnComp;
+
 gboolean is_pkcs12 (const char *filepath);
 
 gboolean is_encrypted (const char *filename);
@@ -110,5 +122,11 @@ nmovpn_arg_is_set (const char *value)
 {
 	return (value && value[0]) ? value : NULL;
 }
+
+NMOvpnComp nmovpn_compression_from_options (const char *comp_lzo,
+                                            const char *compress);
+void nmovpn_compression_to_options (NMOvpnComp comp,
+                                    const char **comp_lzo,
+                                    const char **compress);
 
 #endif  /* UTILS_H */

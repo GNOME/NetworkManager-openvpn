@@ -1,8 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/* nm-openvpn-service - openvpn integration with NetworkManager
- *
- * Copyright (C) 2005 - 2008 Tim Niemueller <tim@niemueller.de>
- * Copyright (C) 2005 - 2010 Dan Williams <dcbw@redhat.com>
+/*
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +15,9 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * $Id: nm-openvpn-service.c 4232 2008-10-29 09:13:40Z tambeti $
- *
+ * Copyright (C) 2005 - 2008 Tim Niemueller <tim@niemueller.de>
+ * Copyright (C) 2005 - 2010 Dan Williams <dcbw@redhat.com>
+ * Copyright (C) 2008 - 2018 Red Hat, Inc.
  */
 
 #include "nm-default.h"
@@ -145,6 +143,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_CERT,                      G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CIPHER,                    G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_KEYSIZE,                   G_TYPE_INT, 1, 65535, FALSE },
+	{ NM_OPENVPN_KEY_COMPRESS,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_COMP_LZO,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CONNECT_TIMEOUT,           G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_CONNECTION_TYPE,           G_TYPE_STRING, 0, 0, FALSE },
@@ -1321,6 +1320,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	GPid pid;
 	gboolean dev_type_is_tap;
 	const char *defport, *proto_tcp;
+	const char *compress;
 	const char *tls_remote = NULL;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
 	gs_free char *bus_name = NULL;
@@ -1330,6 +1330,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	OpenvpnBinaryVersion openvpn_binary_version = OPENVPN_BINARY_VERSION_INVALID;
 	guint num_remotes = 0;
 	gs_free char *cmd_log = NULL;
+	NMOvpnComp comp;
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -1476,8 +1477,6 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		}
 	}
 
-	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
-
 	/* openvpn understands 4 different modes for --comp-lzo, which have
 	 * different meaning:
 	 *  1) no --comp-lzo option
@@ -1495,14 +1494,51 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	 *
 	 * See bgo#769177
 	 */
-	if (NM_IN_STRSET (tmp, "no")) {
-		/* means no --comp-lzo option. */
-		tmp = NULL;
-	} else if (NM_IN_STRSET (tmp, "no-by-default"))
-		tmp = "no";
 
-	if (NM_IN_STRSET (tmp, "yes", "no", "adaptive"))
-		args_add_strv (args, "--comp-lzo", tmp);
+	/* New (2.4+) compress option ("lz4", "lzo", ...) */
+	compress = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS);
+	/* Legacy option ("yes", "adaptive", "no", ...) */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
+
+	if (compress && tmp)
+		_LOGW ("'compress' option overrides 'comp-lzo'");
+
+	comp = nmovpn_compression_from_options (tmp, compress);
+	openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version);
+
+	switch (comp) {
+	case NMOVPN_COMP_DISABLED:
+		break;
+	case NMOVPN_COMP_LZO:
+		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_4_OR_NEWER)
+			args_add_strv (args, "--compress", "lzo");
+		else
+			args_add_strv (args, "--comp-lzo", "yes");
+		break;
+	case NMOVPN_COMP_LZ4:
+	case NMOVPN_COMP_LZ4_V2:
+	case NMOVPN_COMP_AUTO:
+		if (openvpn_binary_version != OPENVPN_BINARY_VERSION_2_4_OR_NEWER)
+			_LOGW ("\"compress\" option supported only by OpenVPN >= 2.4");
+
+		if (comp == NMOVPN_COMP_LZ4)
+			args_add_strv (args, "--compress", "lz4");
+		else if (comp == NMOVPN_COMP_LZ4_V2)
+			args_add_strv (args, "--compress", "lz4-v2");
+		else
+			args_add_strv (args, "--compress");
+		break;
+	case NMOVPN_COMP_LEGACY_LZO_DISABLED:
+	case NMOVPN_COMP_LEGACY_LZO_ADAPTIVE:
+		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_4_OR_NEWER)
+			_LOGW ("\"comp-lzo\" is deprecated and will be removed in future OpenVPN releases");
+
+		args_add_strv (args, "--comp-lzo",
+		                  comp == NMOVPN_COMP_LEGACY_LZO_DISABLED
+		               ? "no"
+		               : "adaptive");
+		break;
+	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT);
 	if (nm_streq0 (tmp, "yes"))

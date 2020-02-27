@@ -1,8 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/***************************************************************************
- * nm-openvpn-editor.h : GNOME UI dialogs for configuring openvpn VPN connections
- *
- * Copyright (C) 2008 Dan Williams, <dcbw@redhat.com>
+/*
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +15,9 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- **************************************************************************/
+ * Copyright (C) 2008 Dan Williams, <dcbw@redhat.com>
+ * Copyright (C) 2008 - 2018 Red Hat, Inc.
+ */
 
 #ifndef __NM_OPENVPN_EDITOR_H__
 #define __NM_OPENVPN_EDITOR_H__

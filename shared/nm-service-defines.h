@@ -1,7 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 /*
- * Copyright (C) 2005 - 2008 Tim Niemueller <tim@niemueller.de>
- * Copyright (C) 2005 - 2008 Dan Williams <dcbw@redhat.com>
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +15,9 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
+ * Copyright (C) 2005 - 2008 Tim Niemueller <tim@niemueller.de>
+ * Copyright (C) 2005 - 2008 Dan Williams <dcbw@redhat.com>
+ * Copyright (C) 2010 - 2018 Red Hat, Inc.
  */
 
 #ifndef __NM_SERVICE_DEFINES_H__
@@ -32,6 +33,7 @@
 #define NM_OPENVPN_KEY_CA                        "ca"
 #define NM_OPENVPN_KEY_CERT                      "cert"
 #define NM_OPENVPN_KEY_CIPHER                    "cipher"
+#define NM_OPENVPN_KEY_COMPRESS                  "compress"
 #define NM_OPENVPN_KEY_COMP_LZO                  "comp-lzo"
 #define NM_OPENVPN_KEY_CONNECTION_TYPE           "connection-type"
 #define NM_OPENVPN_KEY_CONNECT_TIMEOUT           "connect-timeout"
@@ -87,6 +89,7 @@
 #define NM_OPENVPN_KEY_PASSWORD_FLAGS            "password-flags"
 #define NM_OPENVPN_KEY_CERTPASS_FLAGS            "cert-pass-flags"
 #define NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS "http-proxy-password-flags"
+
 
 /* Internal auth-dialog -> service token indicating that no secrets are
  * required for the connection.

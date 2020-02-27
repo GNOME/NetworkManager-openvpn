@@ -1,5 +1,5 @@
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-/***************************************************************************
+/*
+ * network-manager-openvpn - OpenVPN integration with NetworkManager
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,9 +15,9 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Copyright (C) 2008 - 2013 Dan Williams <dcbw@redhat.com> and Red Hat, Inc.
- *
- **************************************************************************/
+ * Copyright (C) 2008 - 2013 Dan Williams <dcbw@redhat.com>
+ * Copyright (C) 2008 - 2018 Red Hat, Inc.
+ */
 
 #include "nm-default.h"
 
@@ -1008,7 +1008,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 
 			if (nm_streq (v, "no")) {
 				/* old plasma-nm used to set "comp-lzo=no" to mean unset, thus it spoiled
-				 * to "no" option to be used in the connection. Workaround that, by instead
+				 * the "no" option to be used in the connection. Workaround that, by instead
 				 * using "no-by-default" (bgo#769177). */
 				v = "no-by-default";
 			} else if (!NM_IN_STRSET (v, "yes", "adaptive")) {
@@ -1016,6 +1016,21 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				goto handle_line_error;
 			}
 			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, v);
+			continue;
+		}
+
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_COMPRESS)) {
+			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
+				goto handle_line_error;
+			if (params[1]) {
+				if (!NM_IN_STRSET (params[1], "lzo", "lz4", "lz4-v2")) {
+					line_error = g_strdup_printf (_("unsupported compress argument"));
+					goto handle_line_error;
+				}
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS, params[1]);
+			} else {
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS, "yes");
+			}
 			continue;
 		}
 
@@ -1998,6 +2013,12 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			value = "no";
 		args_write_line (f, NMV_OVPN_TAG_COMP_LZO, value);
 	}
+
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS);
+	if (nm_streq0 (value, "yes"))
+		args_write_line (f, NMV_OVPN_TAG_COMPRESS);
+	else if (value)
+		args_write_line_setting_value (f, NMV_OVPN_TAG_COMPRESS, s_vpn, NM_OPENVPN_KEY_COMPRESS);
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_FLOAT);
