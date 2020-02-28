@@ -1816,7 +1816,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (tmp) {
 		if (nm_streq (tmp, "yes"))
 			args_add_strv (args, "--mssfix");
-		else if ((v_int64 = _nm_utils_ascii_str_to_int64 (tmp, 10, 1, G_MAXINT32, 0))) {
+		else if ((v_int64 = _nm_utils_ascii_str_to_int64 (tmp, 10, 0, G_MAXINT32, -1)) != -1) {
 			args_add_strv (args, "--mssfix");
 			args_add_int64 (args, v_int64);
 		}
