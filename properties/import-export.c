@@ -916,7 +916,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			if (!args_params_check_nargs_minmax (params, 0, 1, &line_error))
 				goto handle_line_error;
 			if (params[1]) {
-				if (!args_params_parse_int64 (params, 1, 1, G_MAXINT32, &v_int64, &line_error))
+				if (!args_params_parse_int64 (params, 1, 0, G_MAXINT32, &v_int64, &line_error))
 					goto handle_line_error;
 				setting_vpn_add_data_item_int64 (s_vpn, NM_OPENVPN_KEY_MSSFIX, v_int64);
 			} else
