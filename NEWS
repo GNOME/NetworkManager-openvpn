@@ -1,5 +1,5 @@
 =======================================================
-NetworkManager-openvpn-1.8.12 (not released yet)
+NetworkManager-openvpn-1.8.12
 Overview of changes since NetworkManager-openvpn-1.8.10
 =======================================================
 
@@ -10,6 +10,13 @@ Overview of changes since NetworkManager-openvpn-1.8.10
   It can be enabled by passing --with-libnm-glib to configure script.
   Nobody should need it by now. Users that still use this are encouraged
   to let us know before the libnm-glib support is removed for good.
+* Add support for the following OpenVPN options: tls-version-min,
+  tls-version-max, compress.
+* Support inline CRL blobs during import.
+* Allow option mssfix to be set to zero.
+* Update Catalan, Czech, Danish, Dutch, Friulian, Hungarian,
+  Indonesian, Italian, Polish, Serbian, Spanish, Swedish and Ukrainian
+  translations.
 
 =======================================================
 NetworkManager-openvpn-1.8.10
