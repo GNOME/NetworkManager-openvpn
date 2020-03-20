@@ -168,6 +168,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_PROXY_PORT,                G_TYPE_INT, 1, 65535, FALSE },
 	{ NM_OPENVPN_KEY_PROXY_RETRY,               G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,       G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PULL_FILTER,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE,                    G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_RANDOM,             G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_IP,                 G_TYPE_STRING, 0, 0, TRUE },
@@ -1915,6 +1916,43 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		             _("Unknown connection type “%s”."),
 		             connection_type);
 		return FALSE;
+	}
+
+	/*
+	 * Allow to specify pull filters
+	 *
+	 * The 'pull-filter' property is an URL-encoded string of coma-separated filter definitions.
+	 */
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PULL_FILTER);
+	if (tmp) {
+		char *unescaped, **filters, **filter;
+
+		unescaped = g_uri_unescape_string(tmp, NULL);
+		filters = g_strsplit(unescaped, ",", -1);
+		g_free(unescaped);
+
+		for (filter = filters; *filter; filter++) {
+			const char *action;
+
+			switch (**filter) {
+			case '+': action = "accept"; break;
+			case '-': action = "reject"; break;
+			case 'x': action = "ignore"; break;
+			default:
+				g_set_error (error,
+							 NM_VPN_PLUGIN_ERROR,
+							 NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+							 _("Bad format for pull-filter value '%s'. Expected: uri_encode({'+'|'-'|'x'}<filter-string>[,...]) with '+'=accept '-'=reject 'x'=ignore"),
+							 *filter);
+				return FALSE;
+			}
+
+			args_add_strv (args, "--pull-filter");
+			args_add_strv (args, action);
+			args_add_strv (args, (*filter) + 1);
+		}
+
+		g_strfreev(filters);
 	}
 
 	/* Allow openvpn to be run as a specified user:group.
