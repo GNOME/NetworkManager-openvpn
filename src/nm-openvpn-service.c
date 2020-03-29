@@ -167,6 +167,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_PROXY_SERVER,              G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PROXY_PORT,                G_TYPE_INT, 1, 65535, FALSE },
 	{ NM_OPENVPN_KEY_PROXY_RETRY,               G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_PUSH_PEER_INFO,            G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,       G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE,                    G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_RANDOM,             G_TYPE_BOOLEAN, 0, 0, FALSE },
@@ -1878,6 +1879,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* do not let openvpn setup routes or addresses, NM will handle it */
 	args_add_strv (args, "--route-noexec");
 	args_add_strv (args, "--ifconfig-noexec");
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PUSH_PEER_INFO);
+	if (nm_streq0 (tmp, "yes"))
+		args_add_strv (args, "--push-peer-info");
 
 	/* Now append configuration options which are dependent on the configuration type */
 	if (nm_streq (connection_type, NM_OPENVPN_CONTYPE_TLS)) {
