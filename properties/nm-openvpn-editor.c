@@ -674,6 +674,7 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_PROXY_RETRY,
 	NM_OPENVPN_KEY_PROXY_SERVER,
 	NM_OPENVPN_KEY_PROXY_TYPE,
+	NM_OPENVPN_KEY_PUSH_PEER_INFO,
 	NM_OPENVPN_KEY_REMOTE_CERT_TLS,
 	NM_OPENVPN_KEY_REMOTE_RANDOM,
 	NM_OPENVPN_KEY_RENEG_SECONDS,
@@ -1565,7 +1566,6 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	_builder_init_toggle_button (builder, "tcp_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_PROTO_TCP));
 	_builder_init_toggle_button (builder, "ncp_disable_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_NCP_DISABLE));
 
-
 	/* Populate device-related widgets */
 	dev =      g_hash_table_lookup (hash, NM_OPENVPN_KEY_DEV);
 	dev_type = g_hash_table_lookup (hash, NM_OPENVPN_KEY_DEV_TYPE);
@@ -1783,6 +1783,9 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_max"));
 		gtk_entry_set_text (GTK_ENTRY (widget), value);
 	}
+
+	_builder_init_toggle_button (builder, "push_peer_info_checkbutton",
+				     _hash_get_boolean (hash, NM_OPENVPN_KEY_PUSH_PEER_INFO));
 
 	return dialog;
 }
@@ -2183,6 +2186,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 				g_hash_table_insert (hash, NM_OPENVPN_KEY_CRL_VERIFY_DIR, g_steal_pointer (&filename));
 		}
 	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "push_peer_info_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_PUSH_PEER_INFO, g_strdup ("yes"));
 
 	return hash;
 }

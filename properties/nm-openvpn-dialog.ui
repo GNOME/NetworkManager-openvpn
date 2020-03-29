@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.4"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">65535</property>
     <property name="value">1194</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment10">
+    <property name="upper">65535</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -56,11 +61,6 @@
   <object class="GtkAdjustment" id="adjustment9">
     <property name="upper">100000000</property>
     <property name="value">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustment10">
-    <property name="upper">65535</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -876,6 +876,9 @@ config: static &lt;file&gt; [direction]</property>
     <property name="icon_name">stock-preferences</property>
     <property name="type_hint">dialog</property>
     <property name="skip_pager_hint">True</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -1662,8 +1665,6 @@ config: ncp-disable</property>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">7</property>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                       </packing>
                     </child>
                     <child>
@@ -1718,6 +1719,21 @@ config: ncp-disable</property>
                         <property name="left_attach">1</property>
                         <property name="top_attach">4</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -2153,11 +2169,11 @@ config: extra-certs &lt;file&gt;</property>
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
                             <property name="valign">start</property>
                             <property name="margin_left">24</property>
                             <property name="hexpand">True</property>
+                            <property name="row_spacing">6</property>
+                            <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="tls_version_min_lbl">
                                 <property name="visible">True</property>
@@ -2594,6 +2610,25 @@ config: connect-timeout &lt;n&gt; | server-poll-timeout &lt;n&gt;</property>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="push_peer_info_checkbutton">
+                    <property name="label" translatable="yes">Push peer info</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Push additional information about the client to server.
+config: push-peer-info</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
