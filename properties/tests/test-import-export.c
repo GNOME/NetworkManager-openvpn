@@ -1003,6 +1003,20 @@ test_compress_import (void)
 	g_object_unref (connection);
 }
 
+static void
+test_push_peer_info_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "push-peer-info.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PUSH_PEER_INFO, "yes");
+}
+
 /*****************************************************************************/
 
 static void
@@ -1187,6 +1201,9 @@ int main (int argc, char **argv)
 
 	_add_test_func_simple (test_compress_import);
 	_add_test_func ("compress-export", test_export_compare, "compress.ovpn", "compress.ovpntest");
+
+	_add_test_func_simple (test_push_peer_info_import);
+	_add_test_func ("push-peer-info-export", test_export_compare, "push-peer-info.ovpn", "push-peer-info.ovpntest");
 
 	_add_test_func_simple (test_args_parse_line);
 
