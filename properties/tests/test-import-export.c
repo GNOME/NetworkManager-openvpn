@@ -986,21 +986,15 @@ static void
 test_compress_import (void)
 {
 	_CREATE_PLUGIN (plugin);
-	NMConnection *connection;
+	gs_unref_object NMConnection *connection = NULL;
 	NMSettingVpn *s_vpn;
 
 	connection = get_basic_connection (plugin, SRCDIR, "compress.ovpn");
-	g_assert (connection);
 
-	/* VPN setting */
 	s_vpn = nm_connection_get_setting_vpn (connection);
-	g_assert (s_vpn);
 
-	/* Data items */
 	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "adaptive");
 	_check_item (s_vpn, NM_OPENVPN_KEY_COMPRESS, "lzo");
-
-	g_object_unref (connection);
 }
 
 /*****************************************************************************/
