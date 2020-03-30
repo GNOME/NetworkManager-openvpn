@@ -1011,6 +1011,20 @@ test_push_peer_info_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_PUSH_PEER_INFO, "yes");
 }
 
+static void
+test_push_peer_info_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "push-peer-info.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PUSH_PEER_INFO, "yes");
+}
+
 /*****************************************************************************/
 
 static void
