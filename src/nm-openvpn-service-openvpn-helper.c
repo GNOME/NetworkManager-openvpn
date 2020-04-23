@@ -213,7 +213,12 @@ parse_addr_list (GPtrArray *array4, GPtrArray *array6, const char *str)
 static inline gboolean
 is_domain_valid (const char *str)
 {
-	return (str && (strlen(str) >= 1) && (strlen(str) <= 255));
+	gsize l;
+
+	if (!str)
+		return FALSE;
+	l = strlen (str);
+	return (l >= 1 && l <= 255);
 }
 
 static GVariant *
@@ -673,27 +678,29 @@ main (int argc, char *argv[])
 	dns6_list = g_ptr_array_new ();
 	nbns_list = g_ptr_array_new ();
 
-	for (i = 1; i < 256; i++) {
-		char *env_name;
+	for (i = 1; TRUE; i++) {
+		char env_name[NM_STRLEN ("foreign_option_") + 1 + 40];
 
-		env_name = g_strdup_printf ("foreign_option_%d", i);
+		nm_sprintf_buf (env_name, "foreign_option_%d", i);
+
 		tmp = getenv (env_name);
-		g_free (env_name);
 
-		if (!tmp || strlen (tmp) < 1)
+		if (   !tmp
+		    || !tmp[0])
 			break;
 
 		if (!g_str_has_prefix (tmp, "dhcp-option "))
 			continue;
 
-		tmp += 12; /* strlen ("dhcp-option ") */
+		tmp += NM_STRLEN ("dhcp-option ");
 
 		if (g_str_has_prefix (tmp, "DNS "))
-			parse_addr_list (dns4_list, dns6_list, tmp + 4);
+			parse_addr_list (dns4_list, dns6_list, &tmp[NM_STRLEN ("DNS ")]);
 		else if (g_str_has_prefix (tmp, "WINS "))
-			parse_addr_list (nbns_list, NULL, tmp + 5);
-		else if (g_str_has_prefix (tmp, "DOMAIN ") && is_domain_valid (tmp + 7))
-			g_ptr_array_add (dns_domains, tmp + 7);
+			parse_addr_list (nbns_list, NULL, &tmp[NM_STRLEN ("WINS ")]);
+		else if (   g_str_has_prefix (tmp, "DOMAIN ")
+		         && is_domain_valid (&tmp[NM_STRLEN ("DOMAIN ")]))
+			g_ptr_array_add (dns_domains, &tmp[NM_STRLEN ("DOMAIN ")]);
 	}
 
 	if (dns4_list->len) {
