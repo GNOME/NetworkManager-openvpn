@@ -65,6 +65,7 @@
 #define NMV_OVPN_TAG_REMOTE             "remote"
 #define NMV_OVPN_TAG_REMOTE_CERT_TLS    "remote-cert-tls"
 #define NMV_OVPN_TAG_REMOTE_RANDOM      "remote-random"
+#define NMV_OVPN_TAG_REMOTE_RANDOM_HOSTNAME "remote-random-hostname"
 #define NMV_OVPN_TAG_RENEG_SEC          "reneg-sec"
 #define NMV_OVPN_TAG_ROUTE              "route"
 #define NMV_OVPN_TAG_RPORT              "rport"

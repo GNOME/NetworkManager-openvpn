@@ -67,6 +67,7 @@
 #define NM_OPENVPN_KEY_REMOTE_CERT_TLS           "remote-cert-tls"
 #define NM_OPENVPN_KEY_REMOTE_IP                 "remote-ip"
 #define NM_OPENVPN_KEY_REMOTE_RANDOM             "remote-random"
+#define NM_OPENVPN_KEY_REMOTE_RANDOM_HOSTNAME    "remote-random-hostname"
 #define NM_OPENVPN_KEY_RENEG_SECONDS             "reneg-seconds"
 #define NM_OPENVPN_KEY_STATIC_KEY                "static-key"
 #define NM_OPENVPN_KEY_STATIC_KEY_DIRECTION      "static-key-direction"

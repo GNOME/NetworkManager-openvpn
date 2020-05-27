@@ -1317,6 +1317,25 @@ config: remote-random</property>
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="remote_random_hostname_checkbutton">
+                    <property name="label" translatable="yes">_Prefix remote DNS name with random string</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Adds a random string to remote DNS name to avoid DNS caching.
+config: remote-random-hostname</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">9</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="tun_ipv6_checkbutton">
                     <property name="label" translatable="yes">IPv6 tun link</property>
                     <property name="use_action_appearance">False</property>
@@ -1332,7 +1351,7 @@ config: tun-ipv6</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">9</property>
+                    <property name="position">10</property>
                   </packing>
                 </child>
                 <child>
@@ -1379,7 +1398,7 @@ config: ping &lt;n&gt;</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">10</property>
+                    <property name="position">11</property>
                   </packing>
                 </child>
                 <child>
@@ -1446,7 +1465,7 @@ config: ping-exit | ping-restart &lt;n&gt;</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">10</property>
+                    <property name="position">12</property>
                   </packing>
                 </child>
                 <child>
@@ -1468,7 +1487,7 @@ config: float</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">11</property>
+                    <property name="position">13</property>
                   </packing>
                 </child>
                 <child>
@@ -1515,7 +1534,7 @@ config: max-routes &lt;n&gt;</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">12</property>
+                    <property name="position">14</property>
                   </packing>
                 </child>
               </object>
