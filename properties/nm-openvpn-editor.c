@@ -687,6 +687,7 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_TLS_VERSION_MAX,
 	NM_OPENVPN_KEY_TUNNEL_MTU,
 	NM_OPENVPN_KEY_TUN_IPV6,
+	NM_OPENVPN_KEY_AUTH_NOCACHE,
 	NM_OPENVPN_KEY_VERIFY_X509_NAME,
 };
 
@@ -1601,6 +1602,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	_builder_init_toggle_button (builder, "remote_random_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_REMOTE_RANDOM));
 	_builder_init_toggle_button (builder, "tun_ipv6_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_TUN_IPV6));
+	_builder_init_toggle_button (builder, "auth_nocache_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_AUTH_NOCACHE));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
@@ -1959,6 +1961,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, NM_OPENVPN_KEY_TUN_IPV6, g_strdup ("yes"));
 
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "auth_nocache_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_AUTH_NOCACHE, g_strdup ("yes"));
+
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
 	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
@@ -2131,6 +2137,7 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 		                       : NM_OPENVPN_KEY_PING_RESTART,
 		                     g_strdup_printf ("%d", ping_val));
 	}
+
 
 	/* max routes */
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "max_routes_checkbutton"));

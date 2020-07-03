@@ -80,6 +80,7 @@
 #define NM_OPENVPN_KEY_TLS_VERSION_MAX           "tls-version-max"
 #define NM_OPENVPN_KEY_TUNNEL_MTU                "tunnel-mtu"
 #define NM_OPENVPN_KEY_TUN_IPV6                  "tun-ipv6"
+#define NM_OPENVPN_KEY_AUTH_NOCACHE              "auth-nocache"
 #define NM_OPENVPN_KEY_USERNAME                  "username"
 #define NM_OPENVPN_KEY_VERIFY_X509_NAME          "verify-x509-name"
 

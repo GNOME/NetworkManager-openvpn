@@ -24,7 +24,6 @@
 #define UTILS_H
 
 #define NMV_OVPN_TAG_AUTH               "auth"
-#define NMV_OVPN_TAG_AUTH_NOCACHE       "auth-nocache"
 #define NMV_OVPN_TAG_NCP_DISABLE        "ncp-disable"
 #define NMV_OVPN_TAG_AUTH_USER_PASS     "auth-user-pass"
 #define NMV_OVPN_TAG_CA                 "ca"
@@ -82,6 +81,7 @@
 #define NMV_OVPN_TAG_TLS_VERSION_MAX    "tls-version-max"
 #define NMV_OVPN_TAG_TOPOLOGY           "topology"
 #define NMV_OVPN_TAG_TUN_IPV6           "tun-ipv6"
+#define NMV_OVPN_TAG_AUTH_NOCACHE       "auth-nocache"
 #define NMV_OVPN_TAG_TUN_MTU            "tun-mtu"
 #define NMV_OVPN_TAG_USER               "user"
 #define NMV_OVPN_TAG_VERIFY_X509_NAME   "verify-x509-name"

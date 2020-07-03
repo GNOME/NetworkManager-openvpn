@@ -181,6 +181,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_DEV,                       G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_DEV_TYPE,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TUN_IPV6,                  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_AUTH_NOCACHE,              G_TYPE_STRING, 0, 0, TRUE },
 	{ NM_OPENVPN_KEY_TLS_CIPHER,                G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_CRYPT,                 G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_REMOTE,                G_TYPE_STRING, 0, 0, FALSE },
@@ -1675,7 +1676,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (tmp)
 		args_add_strv (args, "--auth", tmp);
 
-	args_add_strv (args, "--auth-nocache");
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH_NOCACHE);
+	if (nm_streq0 (tmp, "yes"))
+		args_add_strv (args, "--auth-nocache");
+
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
 	if (nmovpn_arg_is_set (tmp)) {

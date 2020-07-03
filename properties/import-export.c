@@ -1193,6 +1193,13 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_AUTH_NOCACHE)) {
+			if (!args_params_check_nargs_n (params, 0, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_AUTH_NOCACHE, "yes");
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PUSH_PEER_INFO)) {
 			if (!args_params_check_nargs_n (params, 0, &line_error))
 				goto handle_line_error;
@@ -1948,6 +1955,9 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_REMOTE_RANDOM);
 
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_AUTH_NOCACHE), "yes"))
+		args_write_line (f, NMV_OVPN_TAG_AUTH_NOCACHE);
+
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_TUN_IPV6);
 
@@ -2255,7 +2265,6 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	/* Add hard-coded stuff */
 	args_write_line (f, NMV_OVPN_TAG_NOBIND);
-	args_write_line (f, NMV_OVPN_TAG_AUTH_NOCACHE);
 	args_write_line (f, NMV_OVPN_TAG_SCRIPT_SECURITY, "2");
 	args_write_line (f, NMV_OVPN_TAG_PERSIST_KEY);
 	args_write_line (f, NMV_OVPN_TAG_PERSIST_TUN);
