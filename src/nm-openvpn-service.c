@@ -149,6 +149,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_CONNECTION_TYPE,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CRL_VERIFY_FILE,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CRL_VERIFY_DIR,            G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_EXPLICIT_EXIT_NOTIFY,      G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_EXTRA_CERTS,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FLOAT,                     G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NCP_DISABLE,               G_TYPE_BOOLEAN, 0, 0, FALSE },
@@ -1883,6 +1884,12 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PUSH_PEER_INFO);
 	if (nm_streq0 (tmp, "yes"))
 		args_add_strv (args, "--push-peer-info");
+
+	/* set explicit-exit-notify only if using proto udp */
+	tmp  = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_EXPLICIT_EXIT_NOTIFY);
+	tmp2 = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
+	if (!nmovpn_arg_is_set (tmp2) && nm_streq0 (tmp, "yes"))
+		args_add_strv (args, "--explicit-exit-notify");
 
 	/* Now append configuration options which are dependent on the configuration type */
 	if (nm_streq (connection_type, NM_OPENVPN_CONTYPE_TLS)) {

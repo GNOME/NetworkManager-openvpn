@@ -1200,6 +1200,13 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_EXPLICIT_EXIT_NOTIFY)) {
+			if (!args_params_check_nargs_n (params, 0, &line_error))
+				goto handle_line_error;
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_EXPLICIT_EXIT_NOTIFY, "yes");
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PORT, NMV_OVPN_TAG_RPORT)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
@@ -1953,6 +1960,9 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PUSH_PEER_INFO), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_PUSH_PEER_INFO);
+
+	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_EXPLICIT_EXIT_NOTIFY), "yes"))
+		args_write_line (f, NMV_OVPN_TAG_EXPLICIT_EXIT_NOTIFY);
 
 	{
 		gs_free char *cacert_free = NULL, *user_cert_free = NULL, *private_key_free = NULL;

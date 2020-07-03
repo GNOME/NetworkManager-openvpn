@@ -655,6 +655,7 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_CRL_VERIFY_FILE,
 	NM_OPENVPN_KEY_DEV,
 	NM_OPENVPN_KEY_DEV_TYPE,
+	NM_OPENVPN_KEY_EXPLICIT_EXIT_NOTIFY,
 	NM_OPENVPN_KEY_EXTRA_CERTS,
 	NM_OPENVPN_KEY_FLOAT,
 	NM_OPENVPN_KEY_FRAGMENT_SIZE,
@@ -1787,6 +1788,9 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	_builder_init_toggle_button (builder, "push_peer_info_checkbutton",
 	                             _hash_get_boolean (hash, NM_OPENVPN_KEY_PUSH_PEER_INFO));
 
+	_builder_init_toggle_button (builder, "explicit_exit_notify_checkbutton",
+	                             _hash_get_boolean (hash, NM_OPENVPN_KEY_EXPLICIT_EXIT_NOTIFY));
+
 	return dialog;
 }
 
@@ -2190,6 +2194,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "push_peer_info_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, NM_OPENVPN_KEY_PUSH_PEER_INFO, g_strdup ("yes"));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "explicit_exit_notify_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_EXPLICIT_EXIT_NOTIFY, g_strdup ("yes"));
 
 	return hash;
 }

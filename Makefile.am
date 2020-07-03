@@ -307,6 +307,7 @@ EXTRA_DIST += \
 	properties/tests/conf/connect-timeout.ovpn \
 	properties/tests/conf/device.ovpn \
 	properties/tests/conf/device-notype.ovpn \
+	properties/tests/conf/explicit-exit-notify.ovpn \
 	properties/tests/conf/keepalive.ovpn \
 	properties/tests/conf/ping-with-exit.ovpn \
 	properties/tests/conf/ping-with-restart.ovpn \

@@ -41,6 +41,7 @@
 #define NM_OPENVPN_KEY_CRL_VERIFY_DIR            "crl-verify-dir"
 #define NM_OPENVPN_KEY_DEV                       "dev"
 #define NM_OPENVPN_KEY_DEV_TYPE                  "dev-type"
+#define NM_OPENVPN_KEY_EXPLICIT_EXIT_NOTIFY      "explicit-exit-notify"
 #define NM_OPENVPN_KEY_EXTRA_CERTS               "extra-certs"
 #define NM_OPENVPN_KEY_FLOAT                     "float"
 #define NM_OPENVPN_KEY_NCP_DISABLE               "ncp-disable"
