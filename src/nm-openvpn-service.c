@@ -171,6 +171,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_HTTP_PROXY_USERNAME,       G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE,                    G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_RANDOM,             G_TYPE_BOOLEAN, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_REMOTE_RANDOM_HOSTNAME,    G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_IP,                 G_TYPE_STRING, 0, 0, TRUE },
 	{ NM_OPENVPN_KEY_RENEG_SECONDS,             G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_STATIC_KEY,                G_TYPE_STRING, 0, 0, FALSE },
@@ -1446,6 +1447,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM);
 	if (nm_streq0 (tmp, "yes"))
 		args_add_strv (args, "--remote-random");
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE_RANDOM_HOSTNAME);
+	if (nm_streq0 (tmp, "yes"))
+		args_add_strv (args, "--remote-random-hostname");
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TUN_IPV6);
 	if (nm_streq0 (tmp, "yes"))
