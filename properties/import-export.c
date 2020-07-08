@@ -791,7 +791,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	char *tmp, *tmp2;
 	const char *ta_direction = NULL, *secret_direction = NULL;
 	gboolean allow_ta_direction = FALSE, allow_secret_direction = FALSE;
-	gboolean have_certs, have_ca;
+	gboolean have_cert = FALSE, have_key = FALSE, have_ca = FALSE, have_pkcs12 = FALSE;
+	const char *cert_path = NULL, *key_path = NULL, *ca_path = NULL;
 	GSList *inline_blobs = NULL;
 	GSList *sl_iter;
 
@@ -1241,7 +1242,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_VERSION_MIN)){
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_VERSION_MIN)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
@@ -1250,7 +1251,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
-		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_VERSION_MAX)){
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_VERSION_MAX)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
 			if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
@@ -1293,18 +1294,24 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				file = file_free = g_build_filename (default_path, file, NULL);
 
 			if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PKCS12)) {
-				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CA, file);
+				 /* OpenVPN allows --pkcs12 with external (PEM) --ca. Don't overwrite it with the PKCS#12 file. */
+				if (!have_ca) {
+					setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CA, file);
+					have_ca = TRUE;
+				}
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CERT, file);
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_KEY, file);
-			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CA))
+				have_pkcs12 = TRUE;
+			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CA)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CA, file);
-			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_EXTRA_CERTS))
-				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS, file);
-			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CERT))
+				have_ca = TRUE;
+			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_CERT)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CERT, file);
-			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEY))
+				have_cert = TRUE;
+			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_KEY)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_KEY, file);
-			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_SECRET)) {
+				have_key = TRUE;
+			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_SECRET)) {
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_STATIC_KEY, file);
 				if (s_direction)
 					secret_direction = s_direction;
@@ -1317,6 +1324,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				allow_ta_direction = TRUE;
 			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_CRYPT))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT, file);
+			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_EXTRA_CERTS))
+				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS, file);
 			else
 				g_assert_not_reached ();
 			continue;
@@ -1510,20 +1519,24 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			GString *blob_data;
 			InlineBlobData *inline_blob_data;
 
-			if (nm_streq (token, INLINE_BLOB_CA))
+			if (nm_streq (token, INLINE_BLOB_CA)) {
 				key = NM_OPENVPN_KEY_CA;
-			else if (nm_streq (token, INLINE_BLOB_CERT))
+				have_ca = TRUE;
+			} else if (nm_streq (token, INLINE_BLOB_CERT)) {
 				key = NM_OPENVPN_KEY_CERT;
-			else if (nm_streq (token, INLINE_BLOB_KEY))
+				have_cert = TRUE;
+			} else if (nm_streq (token, INLINE_BLOB_KEY)) {
 				key = NM_OPENVPN_KEY_KEY;
-			else if (nm_streq (token, INLINE_BLOB_EXTRA_CERTS))
+				have_key = TRUE;
+			} else if (nm_streq (token, INLINE_BLOB_PKCS12)) {
+				is_base64 = TRUE;
+				key = NULL;
+				have_pkcs12 = TRUE;
+			} else if (nm_streq (token, INLINE_BLOB_EXTRA_CERTS))
 				key = NM_OPENVPN_KEY_EXTRA_CERTS;
 			else if (nm_streq (token, INLINE_BLOB_CRL_VERIFY))
 				key = NM_OPENVPN_KEY_CRL_VERIFY_FILE;
-			else if (nm_streq (token, INLINE_BLOB_PKCS12)) {
-				is_base64 = TRUE;
-				key = NULL;
-			} else if (nm_streq (token, INLINE_BLOB_TLS_CRYPT))
+			else if (nm_streq (token, INLINE_BLOB_TLS_CRYPT))
 				key = NM_OPENVPN_KEY_TLS_CRYPT;
 			else if (nm_streq (token, INLINE_BLOB_TLS_AUTH)) {
 				key = NM_OPENVPN_KEY_TA;
@@ -1641,28 +1654,77 @@ handle_line_error:
 		g_set_error_literal (error,
 		                     NMV_EDITOR_PLUGIN_ERROR,
 		                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
-		                     _("The file to import wasn’t a valid OpenVPN configure (no remote)"));
+		                     _("The file to import wasn’t a valid OpenVPN configuration (no remote)"));
 		goto out_error;
 	}
 
-	have_certs = FALSE;
-	have_ca = FALSE;
+	/* Validate PKCS#12/PEM/CA settings. PKCS#12 and PEM cannot be mixed,
+	 * with the exception of PKCS#12 cert + PEM CA. */
+	if (have_client && have_pkcs12) {
+		if (have_cert || have_key) {
+			g_set_error_literal (error,
+			                     NMV_EDITOR_PLUGIN_ERROR,
+			                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
+			                     _("The file to import wasn’t a valid OpenVPN configuration (--pkcs12 can not be used with --cert or --key)"));
+			goto out_error;
+		}
 
-	if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA))
-		have_ca = TRUE;
+		if (have_ca) {
+			ca_path = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
+			if (is_pkcs12 (ca_path)) {
+				g_set_error_literal (error,
+				                     NMV_EDITOR_PLUGIN_ERROR,
+				                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
+				                     _("The file to import wasn’t a valid OpenVPN configuration (--ca can not be PKCS#12 format)"));
+				goto out_error;
+			}
+		}
+	} else if (have_client && !have_pkcs12) {
+		if (!have_ca) {
+			g_set_error_literal (error,
+			                     NMV_EDITOR_PLUGIN_ERROR,
+			                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
+			                     _("The file to import wasn’t a valid OpenVPN configuration (missing --ca)"));
+			goto out_error;
+		}
 
-	if (   have_ca
-	    && nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT)
-	    && nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY))
-		have_certs = TRUE;
+		ca_path = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
+
+		if ((have_cert || have_key) && !(have_cert && have_key)) {
+			g_set_error_literal (error,
+			                     NMV_EDITOR_PLUGIN_ERROR,
+			                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
+			                     _("The file to import wasn’t a valid OpenVPN configuration (if you use one of --cert or --key, you must use them both)"));
+			goto out_error;
+		}
+
+		cert_path = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CERT);
+		key_path = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
+
+		if (cert_path && is_pkcs12 (cert_path)) {
+			g_set_error_literal (error,
+			                     NMV_EDITOR_PLUGIN_ERROR,
+			                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
+			                     _("The file to import wasn’t a valid OpenVPN configuration (--cert can not be PKCS#12 format.)"));
+			goto out_error;
+		}
+
+		if (key_path && is_pkcs12 (key_path)) {
+			g_set_error_literal (error,
+			                     NMV_EDITOR_PLUGIN_ERROR,
+			                     NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN,
+			                     _("The file to import wasn’t a valid OpenVPN configuration (--key can not be PKCS#12 format.)"));
+			goto out_error;
+		}
+	}
 
 	/* Determine connection type */
 	if (have_pass) {
-		if (have_certs)
+		if (have_cert || have_pkcs12)
 			ctype = NM_OPENVPN_CONTYPE_PASSWORD_TLS;
 		else if (have_ca)
 			ctype = NM_OPENVPN_CONTYPE_PASSWORD;
-	} else if (have_certs) {
+	} else if (have_cert || have_pkcs12) {
 		ctype = NM_OPENVPN_CONTYPE_TLS;
 	} else if (have_sk)
 		ctype = NM_OPENVPN_CONTYPE_STATIC_KEY;
@@ -1679,15 +1741,12 @@ handle_line_error:
 		                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
 		                             NULL);
 	}
-	if (have_certs) {
+	if (have_key || have_pkcs12) {
 		gs_free char *key_path_free = NULL;
-		const char *key_path;
 
-		key_path = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEY);
 		if (is_encrypted (nm_utils_str_utf8safe_unescape (key_path, &key_path_free))) {
 			/* If there should be a private key password, default it to
-			 * being agent-owned.
-			 */
+			 * being agent-owned. */
 			nm_setting_set_secret_flags (NM_SETTING (s_vpn),
 			                             NM_OPENVPN_KEY_CERTPASS,
 			                             NM_SETTING_SECRET_FLAG_AGENT_OWNED,
@@ -1933,7 +1992,10 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	f = g_string_sized_new (512);
 
-	args_write_line (f, NMV_OVPN_TAG_CLIENT);
+	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_TLS,
+	                                   NM_OPENVPN_CONTYPE_PASSWORD,
+	                                   NM_OPENVPN_CONTYPE_PASSWORD_TLS))
+		args_write_line (f, NMV_OVPN_TAG_CLIENT);
 
 	/* 'remote' */
 	gw_list = g_strsplit_set (gateways, " \t,", 0);
@@ -1996,18 +2058,21 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 				private_key = nm_utils_str_utf8safe_unescape (value, &private_key_free);
 		}
 
-		if (   cacert && user_cert && private_key
-		    && nm_streq (cacert, user_cert) && nm_streq (cacert, private_key)) {
-			/* Handle PKCS#12 (all certs are the same file) */
-			args_write_line (f, NMV_OVPN_TAG_PKCS12, cacert);
-		} else {
-			if (cacert)
-				args_write_line (f, NMV_OVPN_TAG_CA, cacert);
-			if (user_cert)
+		if (user_cert && private_key) {
+			if (   nm_streq (user_cert, private_key)
+			    && is_pkcs12 (user_cert))
+				args_write_line (f, NMV_OVPN_TAG_PKCS12, user_cert);
+			else {
 				args_write_line (f, NMV_OVPN_TAG_CERT, user_cert);
-			if (private_key)
 				args_write_line (f, NMV_OVPN_TAG_KEY, private_key);
+			}
 		}
+
+		/* The CA can be included in a PKCS#12 file above, or a separate file (PEM format).
+		 * If it's pkcs12 we can't use --ca as it only accepts PEM format. */
+		if (   cacert
+		    && !is_pkcs12 (cacert))
+			args_write_line (f, NMV_OVPN_TAG_CA, cacert);
 	}
 
 	if (NM_IN_STRSET (connection_type, NM_OPENVPN_CONTYPE_PASSWORD,

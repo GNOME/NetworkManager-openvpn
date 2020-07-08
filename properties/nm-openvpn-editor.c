@@ -73,28 +73,57 @@ widget_unset_error (GtkWidget *widget)
 /*****************************************************************************/
 
 static void
+tls_ca_changed_cb (NMACertChooser *this, gpointer user_data)
+{
+	NMACertChooser *other = user_data;
+	NMSetting8021xCKScheme scheme;
+	gs_free char *ca_cert = NULL;
+	gs_free char *client_cert = NULL;
+	gs_free char *client_key = NULL;
+
+	client_key = nma_cert_chooser_get_key (other, &scheme);
+	client_cert = nma_cert_chooser_get_cert (other, &scheme);
+	ca_cert = nma_cert_chooser_get_cert (this, &scheme);
+
+	/* OpenVPN allows --pkcs12 with --ca, but if the provided CA is a PKCS#12 file,
+	 * we have to also set the cert/key to the same file - since OpenVPN does not
+	 * allow mixing of --pkcs12 and --cert/--key. */
+	if (   scheme == NM_SETTING_802_1X_CK_SCHEME_PATH
+	    && is_pkcs12 (ca_cert)) {
+		nma_cert_chooser_set_cert (other, ca_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
+		nma_cert_chooser_set_key (other, ca_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
+	}
+}
+
+static void
 tls_cert_changed_cb (NMACertChooser *this, gpointer user_data)
 {
 	NMACertChooser *other = user_data;
 	NMSetting8021xCKScheme scheme;
-	gs_free char *this_cert = NULL;
-	gs_free char *other_cert = NULL;
-	gs_free char *this_key = NULL;
-	gs_free char *other_key = NULL;
+	gs_free char *ca_cert = NULL;
+	gs_free char *client_cert = NULL;
+	gs_free char *client_key = NULL;
 
-	other_key = nma_cert_chooser_get_key (other, &scheme);
-	this_key = nma_cert_chooser_get_key (this, &scheme);
-	other_cert = nma_cert_chooser_get_cert (other, &scheme);
-	this_cert = nma_cert_chooser_get_cert (this, &scheme);
-	if (   scheme == NM_SETTING_802_1X_CK_SCHEME_PATH
-	    && is_pkcs12 (this_cert)) {
-		if (!this_key)
-			nma_cert_chooser_set_key (this, this_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
-		if (!other_cert) {
-			nma_cert_chooser_set_cert (other, this_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
-			if (!other_key)
-				nma_cert_chooser_set_key (other, this_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
+	ca_cert = nma_cert_chooser_get_cert (other, &scheme);
+	client_key = nma_cert_chooser_get_key (this, &scheme);
+	client_cert = nma_cert_chooser_get_cert (this, &scheme);
+
+	/* OpenVPN does not allow a combination of --cert/--key and --pkcs12; however,
+	 * it does allow --pkcs12 with --ca. */
+	if (client_cert && is_pkcs12 (client_cert)) {
+		if (!ca_cert)
+			nma_cert_chooser_set_cert (other, client_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
+		if (   ca_cert
+		    && is_pkcs12 (ca_cert)
+		    && !nm_streq (client_cert, ca_cert))
+			nma_cert_chooser_set_cert (other, client_cert, NM_SETTING_802_1X_CK_SCHEME_PATH);
+	} else if (client_cert && !is_pkcs12 (client_cert)) {
+		if (client_key && is_pkcs12 (client_key)) {
+			nma_cert_chooser_set_key (this, NULL, NM_SETTING_802_1X_CK_SCHEME_UNKNOWN);
+			nma_cert_chooser_set_cert_password (this, "");
 		}
+		if (ca_cert && is_pkcs12 (ca_cert))
+			nma_cert_chooser_set_cert (other, NULL, NM_SETTING_802_1X_CK_SCHEME_UNKNOWN);
 	}
 }
 
@@ -132,8 +161,8 @@ tls_setup (GtkBuilder *builder,
 	nma_cert_chooser_setup_key_password_storage (cert, 0, (NMSetting *) s_vpn,
 	                                             NM_OPENVPN_KEY_CERTPASS, TRUE, FALSE);
 
-	/* Link choosers to the PKCS#12 changer callback */
-	g_signal_connect_object (ca_chooser, "changed", G_CALLBACK (tls_cert_changed_cb), cert, 0);
+	/* Link choosers to the PKCS#12 changer callbacks */
+	g_signal_connect_object (ca_chooser, "changed", G_CALLBACK (tls_ca_changed_cb), cert, 0);
 	g_signal_connect_object (cert, "changed", G_CALLBACK (tls_cert_changed_cb), ca_chooser, 0);
 }
 
@@ -815,8 +844,7 @@ populate_cipher_combo (GtkComboBox *box, const char *user_cipher)
 
 		/* Don't add anything until after the first blank line. Also,
 		 * any blank line indicates the start of a comment, ended by
-		 * another blank line.
-		 */
+		 * another blank line. */
 		if (!strlen (*item)) {
 			ignore_lines = !ignore_lines;
 			continue;
@@ -1224,8 +1252,7 @@ proxy_type_changed (GtkComboBox *combo, gpointer user_data)
 	}
 
 	/* Proxy options require TCP; but don't reset the TCP checkbutton
-	 * to false when the user disables HTTP proxy; leave it checked.
-	 */
+	 * to false when the user disables HTTP proxy; leave it checked. */
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
 	if (sensitive == TRUE)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);

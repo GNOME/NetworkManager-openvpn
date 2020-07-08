@@ -290,6 +290,7 @@ EXTRA_DIST += \
 	properties/tests/conf/mtu-disc.ovpn \
 	properties/tests/conf/password.conf \
 	properties/tests/conf/pkcs12.ovpn \
+	properties/tests/conf/pkcs12-with-ca.ovpn \
 	properties/tests/conf/port.ovpn \
 	properties/tests/conf/rport.ovpn \
 	properties/tests/conf/static.key \
