@@ -311,7 +311,9 @@ EXTRA_DIST += \
 	properties/tests/conf/ping-with-exit.ovpn \
 	properties/tests/conf/ping-with-restart.ovpn \
 	properties/tests/conf/push-peer-info.ovpn \
+	properties/tests/conf/redirect-gateway.ovpn \
 	properties/tests/conf/route.ovpn \
+	properties/tests/conf/route-defgw.ovpn \
 	properties/tests/conf/server-poll-timeout.ovpn \
 	properties/tests/conf/crl-file.ovpn \
 	properties/tests/conf/crl-dir.ovpn \

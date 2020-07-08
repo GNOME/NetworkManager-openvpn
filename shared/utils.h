@@ -62,6 +62,7 @@
 #define NMV_OVPN_TAG_PORT                   "port"
 #define NMV_OVPN_TAG_PROTO                  "proto"
 #define NMV_OVPN_TAG_PUSH_PEER_INFO         "push-peer-info"
+#define NMV_OVPN_TAG_REDIRECT_GATEWAY       "redirect-gateway"
 #define NMV_OVPN_TAG_REMOTE                 "remote"
 #define NMV_OVPN_TAG_REMOTE_CERT_TLS        "remote-cert-tls"
 #define NMV_OVPN_TAG_REMOTE_RANDOM          "remote-random"

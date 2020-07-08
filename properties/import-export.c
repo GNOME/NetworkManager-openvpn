@@ -794,6 +794,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 	gboolean have_certs, have_ca;
 	GSList *inline_blobs = NULL;
 	GSList *sl_iter;
+	/* like openvpn, default to not redirecting the default gateway unless asked */
+	gboolean never_default = TRUE;
 
 	g_return_val_if_fail (!error || !*error, NULL);
 
@@ -1431,6 +1433,11 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		/* if redirect-gateway is set, set never_default=false (i.e. redirect all traffic) */
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_REDIRECT_GATEWAY)){
+			never_default = FALSE;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_ROUTE)) {
 			in_addr_t network;
 			in_addr_t gateway = 0;
@@ -1463,11 +1470,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 
 			if (prefix == 0 && network == 0) {
 				/* the default-route cannot be specified as normal route in NMSettingIPConfig.
-				 * Just set never-default=FALSE (which is already the default). */
-				g_object_set (s_ip4,
-				              NM_SETTING_IP_CONFIG_NEVER_DEFAULT,
-				              FALSE,
-				              NULL);
+				 * Just set never-default=FALSE to redirect the default gateway */
+				never_default = FALSE;
 				continue;
 			}
 
@@ -1617,6 +1621,12 @@ handle_line_error:
 		g_free (line_error);
 		goto out_error;
 	}
+
+	/* write the final agreed upon never_default value */
+	g_object_set (s_ip4,
+	              NM_SETTING_IP_CONFIG_NEVER_DEFAULT,
+	              never_default,
+	              NULL);
 
 	if (allow_secret_direction && secret_direction)
 		setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, secret_direction);
