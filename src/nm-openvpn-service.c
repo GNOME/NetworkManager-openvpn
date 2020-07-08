@@ -1439,8 +1439,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 				}
 			} else if (nm_streq0 (proto_tcp, "yes"))
 				args_add_strv (args, "tcp-client");
-			else
+			else {
 				args_add_strv (args, "udp");
+				args_add_strv (args, "--explicit-exit-notify");
+			}
 		}
 	}
 
