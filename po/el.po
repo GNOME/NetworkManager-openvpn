@@ -7,9 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn.HEAD\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
-"product=NetworkManager&keywords=I18N+L10N&component=VPN: openvpn\n"
-"POT-Creation-Date: 2016-04-14 10:36+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-08 02:17-0700\n"
 "PO-Revision-Date: 2016-04-17 21:54+0300\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
@@ -20,576 +19,566 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: ../appdata/network-manager-openvpn.appdata.xml.in.h:1
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:1
 msgid "OpenVPN client"
 msgstr "Πελάτης OpenVPN"
 
-#: ../appdata/network-manager-openvpn.appdata.xml.in.h:2
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:2
 msgid "Client for OpenVPN virtual private networks"
 msgstr ""
 
-#: ../appdata/network-manager-openvpn.appdata.xml.in.h:3
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:3
 msgid "Support for configuring OpenVPN virtual private network connections."
 msgstr ""
 
-#: ../appdata/network-manager-openvpn.appdata.xml.in.h:4
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:4
 msgid "OpenVPN is a popular and flexible free-software VPN solution."
 msgstr ""
 
-#: ../appdata/network-manager-openvpn.appdata.xml.in.h:5
+#: ../appdata/network-manager-openvpn.metainfo.xml.in.h:5
 msgid "The NetworkManager Developers"
 msgstr "Οι προγραμματιστές του NetworkManager"
 
-#: ../auth-dialog/main.c:180
-#, c-format
-msgid "Authenticate VPN %s"
-msgstr "Πιστοποίηση VPN %s"
+#: ../auth-dialog/main.c:175
+#, fuzzy, c-format
+msgid "Authentication required"
+msgstr "Πιστοποίηση TLS:"
 
-#: ../auth-dialog/main.c:187 ../properties/nm-openvpn-dialog.ui.h:21
-msgid "Password:"
-msgstr "Κωδικός πρόσβασης:"
+#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2438
+msgid "Password"
+msgstr "Κωδικός πρόσβασης"
 
-#: ../auth-dialog/main.c:194
-msgid "Certificate password:"
+#: ../auth-dialog/main.c:189
+#, fuzzy
+msgid "Certificate password"
 msgstr "Κωδικός πρόσβασης πιστοποιητικού:"
 
-#: ../auth-dialog/main.c:201
-msgid "HTTP proxy password:"
+#: ../auth-dialog/main.c:196
+#, fuzzy
+msgid "HTTP proxy password"
 msgstr "Κωδικός πρόσβασης διαμεσολαβητή HTTP:"
 
-#: ../auth-dialog/main.c:239
+#: ../auth-dialog/main.c:236
 msgid "Authenticate VPN"
 msgstr "Πιστοποίηση VPN"
 
-#: ../auth-dialog/main.c:248
+#: ../auth-dialog/main.c:245
 msgid "Certificate pass_word:"
 msgstr "_Κωδικός πρόσβασης πιστοποιητικού:"
 
-#: ../auth-dialog/main.c:254
+#: ../auth-dialog/main.c:251
 msgid "_HTTP proxy password:"
 msgstr "Κ_ωδικός πρόσβασης διαμεσολαβητή _HTTP:"
 
-#: ../auth-dialog/main.c:518
-#, c-format
-msgid "You need to authenticate to access the Virtual Private Network '%s'."
+#: ../auth-dialog/main.c:517
+#, fuzzy, c-format
+msgid "You need to authenticate to access the Virtual Private Network “%s”."
 msgstr ""
 "Χρειάζεστε πιστοποίηση για να αποκτήσετε πρόσβαση στο Ιδιωτικό Εικονικό "
 "Δίκτυο (VPN) '%s'."
 
-#: ../properties/auth-helpers.c:167
-msgid "Choose your personal certificate..."
-msgstr "Επιλέξτε το προσωπικό σας πιστοποιητικό..."
-
-#: ../properties/auth-helpers.c:185
-msgid "Choose your private key..."
-msgstr "Επιλέξτε το ιδιωτικό σας κλειδί..."
-
-#: ../properties/auth-helpers.c:301
-msgid "Choose a Certificate Authority certificate..."
-msgstr "Επιλέξτε πιστοποιητικό Αρχής Πιστοποίησης..."
-
-#: ../properties/auth-helpers.c:345
-msgid "Choose an OpenVPN static key..."
-msgstr "Επιλέξτε στατικό κλειδί OpenVPN..."
-
-#: ../properties/auth-helpers.c:369 ../properties/auth-helpers.c:1111
-#: ../properties/auth-helpers.c:1800
-msgid "None"
-msgstr "Χωρίς"
-
-#: ../properties/auth-helpers.c:811
-msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
-msgstr "Πιστοποιητικά PEM ή PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
-
-#: ../properties/auth-helpers.c:812
-msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
-msgstr "Πιστοποιητικά PEM (*.pem, *.crt, *.key, *.cer)"
-
-#: ../properties/auth-helpers.c:872
-msgid "OpenVPN Static Keys (*.key)"
-msgstr "Στατικά κλειδιά OpenVPN (*.key)"
-
-#: ../properties/auth-helpers.c:1015 ../properties/auth-helpers.c:1103
-msgid "Default"
-msgstr "Προεπιλεγμένο"
-
-#: ../properties/auth-helpers.c:1113
-msgid "RSA MD-4"
-msgstr "RSA MD-4"
-
-#: ../properties/auth-helpers.c:1115
-msgid "MD-5"
-msgstr "MD-5"
-
-#: ../properties/auth-helpers.c:1117
-msgid "SHA-1"
-msgstr "SHA-1"
-
-#: ../properties/auth-helpers.c:1119
-msgid "SHA-224"
-msgstr "SHA-224"
-
-#: ../properties/auth-helpers.c:1121
-msgid "SHA-256"
-msgstr "SHA-256"
-
-#: ../properties/auth-helpers.c:1123
-msgid "SHA-384"
-msgstr "SHA-384"
-
-#: ../properties/auth-helpers.c:1125
-msgid "SHA-512"
-msgstr "SHA-512"
-
-#: ../properties/auth-helpers.c:1127
-msgid "RIPEMD-160"
-msgstr "RIPEMD-160"
-
-#: ../properties/auth-helpers.c:1178 ../properties/auth-helpers.c:1244
-msgid "Server"
-msgstr "Διακομιστής"
-
-#: ../properties/auth-helpers.c:1183 ../properties/auth-helpers.c:1249
-msgid "Client"
-msgstr "Πελάτης"
-
-#: ../properties/auth-helpers.c:1498 ../properties/nm-openvpn-dialog.ui.h:41
-msgid "Not required"
-msgstr "Δεν απαιτείται"
-
-#: ../properties/auth-helpers.c:1500
-msgid "HTTP"
-msgstr "HTTP"
-
-#: ../properties/auth-helpers.c:1502
-msgid "SOCKS"
-msgstr "SOCKS"
-
-#: ../properties/auth-helpers.c:1686
-msgid "TUN"
-msgstr "TUN"
-
-#: ../properties/auth-helpers.c:1688
-msgid "TAP"
-msgstr "TAP"
-
-#. interface name is max 15 chars
-#: ../properties/auth-helpers.c:1695
-msgid "(automatic)"
-msgstr "(αυτόματο)"
-
-#: ../properties/auth-helpers.c:1867
-msgid "ping-exit"
-msgstr "ping-exit"
-
-#: ../properties/auth-helpers.c:1869
-msgid "ping-restart"
-msgstr "ping-restart"
-
-#: ../properties/import-export.c:189
+#: ../properties/import-export.c:182
 #, fuzzy, c-format
-#| msgid "option %s expects between %u and %u arguments"
 msgid "option %s expects between %u and %u argument"
 msgid_plural "option %s expects between %u and %u arguments"
 msgstr[0] "η επιλογή %s αναμένει μεταξύ %u και %u ορίσματα"
 msgstr[1] "η επιλογή %s αναμένει μεταξύ %u και %u ορίσματα"
 
-#: ../properties/import-export.c:194
+#: ../properties/import-export.c:187
 #, c-format
 msgid "option %s expects no arguments"
 msgstr "η επιλογή %s δεν αναμένει ορίσματα"
 
-#: ../properties/import-export.c:196
+#: ../properties/import-export.c:189
 #, fuzzy, c-format
-#| msgid "option %s expects exactly one argument"
 msgid "option %s expects exactly one argument"
 msgid_plural "option %s expects exactly %u arguments"
 msgstr[0] "η επιλογή %s αναμένει ακριβώς ένα όρισμα"
 msgstr[1] "η επιλογή %s αναμένει ακριβώς ένα όρισμα"
 
-#: ../properties/import-export.c:225
-#, c-format
-msgid "argument %s of \"%s\" can not be empty"
+#: ../properties/import-export.c:218
+#, fuzzy, c-format
+msgid "argument %s of “%s” can not be empty"
 msgstr "το όρισμα %s του \"%s\" δεν μπορεί να είναι κενό"
 
-#: ../properties/import-export.c:227
-#, c-format
-msgid "argument of \"%s\" can not be empty"
+#: ../properties/import-export.c:220
+#, fuzzy, c-format
+msgid "argument of “%s” can not be empty"
 msgstr "το όρισμα του \"%s\" δεν μπορεί να είναι κενό"
 
-#: ../properties/import-export.c:243
-#, c-format
-msgid "argument %s of \"%s\" must be UTF-8 encoded"
+#: ../properties/import-export.c:236
+#, fuzzy, c-format
+msgid "argument %s of “%s” must be UTF-8 encoded"
 msgstr "το όρισμα %s του \"%s\" πρέπει να έχει κωδικοποίηση UTF-8"
 
-#: ../properties/import-export.c:245
-#, c-format
-msgid "argument of \"%s\" must be UTF-8 encoded"
+#: ../properties/import-export.c:238
+#, fuzzy, c-format
+msgid "argument of “%s” must be UTF-8 encoded"
 msgstr "το όρισμα του\"%s\" πρέπει να έχει κωδικοποίηση UTF-8"
 
-#: ../properties/import-export.c:269
-#, c-format
-msgid "invalid %uth argument to '%s' where number expected"
+#: ../properties/import-export.c:262
+#, fuzzy, c-format
+msgid "invalid %uth argument to “%s” where number expected"
 msgstr "μη έγκυρο όρισμα %uth στο '%s' όπου αναμενόταν ένας αριθμός"
 
-#: ../properties/import-export.c:300
-#, c-format
-msgid "invalid %uth argument to '%s' where IPv4 address expected"
-msgstr "μη έγκυρο όρισμα %uth στο '%s' όπου αναμενόταν διεύθυνση IPv4"
-
-#: ../properties/import-export.c:328
-#, c-format
-msgid "invalid %uth key-direction argument to '%s'"
-msgstr "μη έγκυρο όρισμα key-direction %uth στο '%s'"
-
-#: ../properties/import-export.c:342
-#, c-format
-msgid "invalid %uth argument to '%s'"
+#. we don't support these special destinations, as they currently cannot be expressed
+#. * in a connection.
+#: ../properties/import-export.c:303
+#, fuzzy, c-format
+msgid "unsupported %uth argument %s to “%s”"
 msgstr "μη έγκυρο όρισμα %uth στο '%s'"
 
-#: ../properties/import-export.c:458
+#. we also don't support specifing a FQDN.
+#: ../properties/import-export.c:321
+#, c-format
+msgid ""
+"unsupported %uth argument to “%s” which looks like a FQDN but only IPv4 "
+"address supported"
+msgstr ""
+
+#: ../properties/import-export.c:328
+#, fuzzy, c-format
+msgid "invalid %uth argument to “%s” where IPv4 address expected"
+msgstr "μη έγκυρο όρισμα %uth στο '%s' όπου αναμενόταν διεύθυνση IPv4"
+
+#: ../properties/import-export.c:353
+#, fuzzy, c-format
+msgid "invalid %uth key-direction argument to “%s”"
+msgstr "μη έγκυρο όρισμα key-direction %uth στο '%s'"
+
+#: ../properties/import-export.c:367
+#, fuzzy, c-format
+msgid "invalid %uth argument to “%s”"
+msgstr "μη έγκυρο όρισμα %uth στο '%s'"
+
+#: ../properties/import-export.c:482
 #, c-format
 msgid "unterminated %s at position %lld"
 msgstr ""
 
-#: ../properties/import-export.c:459
+#: ../properties/import-export.c:483
 msgid "double quote"
 msgstr "διπλό εισαγωγικό"
 
-#: ../properties/import-export.c:459
+#: ../properties/import-export.c:483
 msgid "single quote"
 msgstr "απλό εισαγωγικό"
 
-#: ../properties/import-export.c:468
+#: ../properties/import-export.c:499
 #, c-format
 msgid "trailing escaping backslash at position %lld"
 msgstr ""
 
-#: ../properties/import-export.c:589
+#: ../properties/import-export.c:629
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr "αδυναμία ανάγνωσης του αρχείου πιστοποίησης του διαμεσολαβητή HTTP"
 
-#: ../properties/import-export.c:607
+#: ../properties/import-export.c:647
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr ""
 "αδυναμία ανάγνωσης χρήστη/κωδικού πρόσβασης από το αρχείο πιστοποίηση του "
 "διαμεσολαβητή HTTP"
 
-#: ../properties/import-export.c:615
+#: ../properties/import-export.c:655
 #, c-format
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr ""
 "ο χρήστης/κωδικός πρόσβασης του αρχείου πιστοποίησης του διαμεσολαβητή HTTP "
 "πρέπει να έχουν κωδικοποίηση UTF-8"
 
-#: ../properties/import-export.c:677
-#, c-format
-msgid "'%s' is not a directory"
+#: ../properties/import-export.c:717
+#, fuzzy, c-format
+msgid "“%s” is not a directory"
 msgstr "Το '%s' δεν είναι κατάλογος"
 
-#: ../properties/import-export.c:685
-#, c-format
-msgid "cannot create '%s' directory"
+#: ../properties/import-export.c:725
+#, fuzzy, c-format
+msgid "cannot create “%s” directory"
 msgstr "αδυναμία δημιουργίας του καταλόγου '%s'"
 
-#: ../properties/import-export.c:705
+#: ../properties/import-export.c:745
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr "αδυναμία εγγραφής του <%s> blob από τη γραμμή %ld στο αρχείο (%s)"
 
-#: ../properties/import-export.c:722
-#, c-format
-msgid "cannot write <%s> blob from line %ld to file '%s'"
-msgstr "αδυναμία εγγραφής του <%s> blob από τη γραμμή %ld στο αρχείο '%s'"
+#: ../properties/import-export.c:762
+#, fuzzy, c-format
+msgid "cannot write <%s> blob from line %ld to file “%s”"
+msgstr "αδυναμία εγγραφής του <%s> blob από τη γραμμή %ld στο αρχείο (%s)"
 
-#: ../properties/import-export.c:885 ../properties/import-export.c:1191
+#: ../properties/import-export.c:931
+#, fuzzy, c-format
+msgid "unsupported mtu-disc argument"
+msgstr "μη υποστηριζόμενο όρισμα του comp-lzo"
+
+#: ../properties/import-export.c:947
+#, fuzzy, c-format
+msgid "unsupported crl-verify argument"
+msgstr "μη υποστηριζόμενο όρισμα του comp-lzo"
+
+#: ../properties/import-export.c:965 ../properties/import-export.c:1399
 #, c-format
 msgid "invalid option"
 msgstr "άκυρη επιλογή"
 
-#: ../properties/import-export.c:917
+#: ../properties/import-export.c:1015
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "μη υποστηριζόμενο όρισμα του comp-lzo"
 
-#: ../properties/import-export.c:1005
+#: ../properties/import-export.c:1027
+#, fuzzy, c-format
+msgid "unsupported compress argument"
+msgstr "μη υποστηριζόμενο όρισμα του comp-lzo"
+
+#: ../properties/import-export.c:1128
 #, c-format
 msgid "remote cannot contain space"
 msgstr "το απομακρυσμένο δε μπορεί να περιέχει κενό χαρακτήρα"
 
-#: ../properties/import-export.c:1009
+#: ../properties/import-export.c:1132
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "το απομακρυσμένο δε μπορεί να περιέχει κόμμα"
 
-#: ../properties/import-export.c:1020
+#: ../properties/import-export.c:1143
 #, c-format
-msgid "remote expects protocol either udp or remote"
-msgstr ""
-
-#: ../properties/import-export.c:1304
-#, c-format
-msgid "unsupported blob/xml element"
-msgstr "μη υποστηριζόμενο στοιχείο blob/xml"
-
-#: ../properties/import-export.c:1333
-#, c-format
-msgid "unterminated blob element <%s>"
+msgid "remote expects protocol type like “udp” or “tcp”"
 msgstr ""
 
 #: ../properties/import-export.c:1383
 #, c-format
+msgid "invalid verify-x509-name type"
+msgstr ""
+
+#: ../properties/import-export.c:1529
+#, c-format
+msgid "unsupported blob/xml element"
+msgstr "μη υποστηριζόμενο στοιχείο blob/xml"
+
+#: ../properties/import-export.c:1558
+#, c-format
+msgid "unterminated blob element <%s>"
+msgstr ""
+
+#: ../properties/import-export.c:1614
+#, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "σφάλμα διαμόρφωσης: %s (γραμμή %ld)"
 
-#: ../properties/import-export.c:1384
+#: ../properties/import-export.c:1615
 msgid "unknown or unsupported option"
 msgstr "άγνωστη ή μη υποστηριζόμενη επιλογή"
 
-#: ../properties/import-export.c:1394
-msgid "The file to import wasn't a valid OpenVPN client configuration"
+#: ../properties/import-export.c:1630
+msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr ""
 
-#: ../properties/import-export.c:1402
-msgid "The file to import wasn't a valid OpenVPN configure (no remote)"
+#: ../properties/import-export.c:1638
+msgid "The file to import wasn’t a valid OpenVPN configure (no remote)"
 msgstr ""
 
-#: ../properties/import-export.c:1635
+#: ../properties/import-export.c:1903
 msgid "missing path argument"
 msgstr ""
 
-#: ../properties/import-export.c:1645
+#: ../properties/import-export.c:1913
 msgid "connection is not a valid OpenVPN connection"
 msgstr ""
 
-#: ../properties/import-export.c:1654
+#: ../properties/import-export.c:1922
 msgid "connection was incomplete (missing gateway)"
 msgstr "η σύνδεση ήταν ελλιπής (λείπει η πύλη δικτύου)"
 
-#: ../properties/import-export.c:1955
+#: ../properties/import-export.c:2292
 #, c-format
 msgid "failed to write file: %s"
 msgstr "αδύνατη η εγγραφή του αρχείου: %s"
 
-#: ../properties/nm-openvpn.c:44
+#: ../properties/nm-openvpn-editor-plugin.c:42
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../properties/nm-openvpn.c:45
+#: ../properties/nm-openvpn-editor-plugin.c:43
 msgid "Compatible with the OpenVPN server."
 msgstr "Συμβατό με τον διακομιστή OpenVPN."
 
-#: ../properties/nm-openvpn.c:329
+#: ../properties/nm-openvpn-editor.c:242
+#, fuzzy
+msgid "Choose an OpenVPN static key…"
+msgstr "Επιλέξτε στατικό κλειδί OpenVPN..."
+
+#: ../properties/nm-openvpn-editor.c:260 ../properties/nm-openvpn-editor.c:875
+#: ../properties/nm-openvpn-editor.c:1660
+#: ../properties/nm-openvpn-dialog.ui.h:7
+msgid "None"
+msgstr "Χωρίς"
+
+#: ../properties/nm-openvpn-editor.c:644
+msgid "OpenVPN Static Keys (*.key)"
+msgstr "Στατικά κλειδιά OpenVPN (*.key)"
+
+#: ../properties/nm-openvpn-editor.c:797 ../properties/nm-openvpn-editor.c:892
+msgid "Default"
+msgstr "Προεπιλεγμένο"
+
+#: ../properties/nm-openvpn-editor.c:876
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: ../properties/nm-openvpn-editor.c:877
+msgid "MD-5"
+msgstr "MD-5"
+
+#: ../properties/nm-openvpn-editor.c:878
+msgid "SHA-1"
+msgstr "SHA-1"
+
+#: ../properties/nm-openvpn-editor.c:879
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: ../properties/nm-openvpn-editor.c:880
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: ../properties/nm-openvpn-editor.c:881
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: ../properties/nm-openvpn-editor.c:882
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: ../properties/nm-openvpn-editor.c:883
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
+
+#: ../properties/nm-openvpn-editor.c:941
+#, fuzzy
+msgid "Don’t verify certificate identification"
+msgstr "Α_πομακρυσμένο πιστοποιητικό ομότιμου, τύπου TLS:"
+
+#: ../properties/nm-openvpn-editor.c:947
+msgid "Verify whole subject exactly"
+msgstr ""
+
+#: ../properties/nm-openvpn-editor.c:953
+msgid "Verify name exactly"
+msgstr ""
+
+#: ../properties/nm-openvpn-editor.c:959
+msgid "Verify name by prefix"
+msgstr ""
+
+#: ../properties/nm-openvpn-editor.c:965
+msgid "Verify subject partially (legacy mode, strongly discouraged)"
+msgstr ""
+
+#: ../properties/nm-openvpn-editor.c:1078
+#: ../properties/nm-openvpn-editor.c:1149
+msgid "Server"
+msgstr "Διακομιστής"
+
+#: ../properties/nm-openvpn-editor.c:1083
+#: ../properties/nm-openvpn-editor.c:1154
+msgid "Client"
+msgstr "Πελάτης"
+
+#: ../properties/nm-openvpn-editor.c:1476
+#: ../properties/nm-openvpn-dialog.ui.h:41
+msgid "Not required"
+msgstr "Δεν απαιτείται"
+
+#: ../properties/nm-openvpn-editor.c:1478
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../properties/nm-openvpn-editor.c:1480
+msgid "SOCKS"
+msgstr "SOCKS"
+
+#: ../properties/nm-openvpn-editor.c:1588
+msgid "TUN"
+msgstr "TUN"
+
+#: ../properties/nm-openvpn-editor.c:1590
+msgid "TAP"
+msgstr "TAP"
+
+#. interface name is max 15 chars
+#: ../properties/nm-openvpn-editor.c:1597
+msgid "(automatic)"
+msgstr "(αυτόματο)"
+
+#: ../properties/nm-openvpn-editor.c:1722
+msgid "ping-exit"
+msgstr "ping-exit"
+
+#: ../properties/nm-openvpn-editor.c:1724
+msgid "ping-restart"
+msgstr "ping-restart"
+
+#: ../properties/nm-openvpn-editor.c:2427
 msgid "Certificates (TLS)"
 msgstr "Πιστοποιητικά (TLS)"
 
-#: ../properties/nm-openvpn.c:340
-msgid "Password"
-msgstr "Κωδικός πρόσβασης"
-
-#: ../properties/nm-openvpn.c:353
+#: ../properties/nm-openvpn-editor.c:2452
 msgid "Password with Certificates (TLS)"
 msgstr "Κωδικός πρόσβασης με πιστοποιητικά (TLS)"
 
-#: ../properties/nm-openvpn.c:365
+#: ../properties/nm-openvpn-editor.c:2465
 msgid "Static Key"
 msgstr "Στατικό Κλειδί"
 
-#: ../properties/nm-openvpn.c:513
-msgid "could not create openvpn object"
-msgstr "αδυναμία δημιουργίας αντικειμένου openvpn"
-
-#: ../properties/nm-openvpn.c:539
+#: ../properties/nm-openvpn-editor.c:2629
 msgid "could not load UI widget"
 msgstr "αδυναμία φόρτωσης γραφικού στοιχείου του περιβάλλοντος"
 
-#: ../properties/nm-openvpn.c:630
-msgid "unknown OpenVPN file extension"
-msgstr "άγνωστη επέκταση αρχείου του OpenVPN"
-
-#: ../shared/nm-shared-utils.c:174
+#: ../shared/nm-utils/nm-shared-utils.c:946
 #, c-format
 msgid "object class '%s' has no property named '%s'"
 msgstr ""
 
-#: ../shared/nm-shared-utils.c:181
+#: ../shared/nm-utils/nm-shared-utils.c:953
 #, c-format
 msgid "property '%s' of object class '%s' is not writable"
 msgstr ""
 
-#: ../shared/nm-shared-utils.c:188
+#: ../shared/nm-utils/nm-shared-utils.c:960
 #, c-format
 msgid ""
 "construct property \"%s\" for object '%s' can't be set after construction"
 msgstr ""
 
-#: ../shared/nm-shared-utils.c:196
+#: ../shared/nm-utils/nm-shared-utils.c:968
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
 msgstr ""
 
-#: ../shared/nm-shared-utils.c:205
+#: ../shared/nm-utils/nm-shared-utils.c:977
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
 msgstr ""
 
-#: ../shared/nm-shared-utils.c:216
+#: ../shared/nm-utils/nm-shared-utils.c:988
 #, c-format
 msgid ""
 "value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
 "type '%s'"
 msgstr ""
 
-#: ../src/nm-openvpn-service.c:359
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:69
 #, c-format
-msgid "invalid address '%s'"
+msgid "unable to get editor plugin name: %s"
+msgstr ""
+
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:103
+#, c-format
+msgid "missing plugin file \"%s\""
+msgstr ""
+
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:109
+#, c-format
+msgid "cannot load editor plugin: %s"
+msgstr ""
+
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:118
+#, c-format
+msgid "cannot load factory %s from plugin: %s"
+msgstr ""
+
+#: ../shared/nm-utils/nm-vpn-plugin-utils.c:144
+msgid "unknown error creating editor instance"
+msgstr ""
+
+#: ../shared/utils.c:214
+#, c-format
+msgid "invalid delimiter character '%c'"
+msgstr ""
+
+#: ../shared/utils.c:221
+#, c-format
+msgid "invalid non-utf-8 character"
+msgstr ""
+
+#: ../shared/utils.c:249
+#, c-format
+msgid "empty host"
+msgstr ""
+
+#: ../shared/utils.c:259
+#, fuzzy, c-format
+msgid "invalid port"
+msgstr "άκυρη επιλογή"
+
+#: ../shared/utils.c:270
+#, fuzzy, c-format
+msgid "invalid protocol"
+msgstr "άκυρη επιλογή"
+
+#: ../src/nm-openvpn-service.c:429
+#, fuzzy, c-format
+msgid "invalid address “%s”"
 msgstr "άκυρη διεύθυνση '%s'"
 
-#: ../src/nm-openvpn-service.c:371
-#, c-format
-msgid "invalid integer property '%s' or out of range [%d -> %d]"
+#: ../src/nm-openvpn-service.c:441
+#, fuzzy, c-format
+msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "άκυρη ακέραια ιδιότητα '%s' ή εκτός ορίου [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:382
-#, c-format
-msgid "invalid boolean property '%s' (not yes or no)"
+#: ../src/nm-openvpn-service.c:452
+#, fuzzy, c-format
+msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "άκυρη ιδιότητα λογικής τιμής '%s' (ούτε ναι ούτε όχι)"
 
-#: ../src/nm-openvpn-service.c:389
-#, c-format
-msgid "unhandled property '%s' type %s"
+#: ../src/nm-openvpn-service.c:459
+#, fuzzy, c-format
+msgid "unhandled property “%s” type %s"
 msgstr "ανεπίλυτη ιδιότητα '%s' τύπου %s"
 
-#: ../src/nm-openvpn-service.c:400
-#, c-format
-msgid "property '%s' invalid or not supported"
+#: ../src/nm-openvpn-service.c:470
+#, fuzzy, c-format
+msgid "property “%s” invalid or not supported"
 msgstr "άκυρη ή ανυποστήρικτη ιδιότητα '%s'"
 
-#: ../src/nm-openvpn-service.c:416
+#: ../src/nm-openvpn-service.c:486
 msgid "No VPN configuration options."
 msgstr "Χωρίς επιλογές διαμόρφωσης VPN."
 
-#: ../src/nm-openvpn-service.c:585
+#: ../src/nm-openvpn-service.c:924
 msgid "A username is required."
 msgstr "Απαιτείται όνομα χρήστη."
 
-#: ../src/nm-openvpn-service.c:589
+#: ../src/nm-openvpn-service.c:928
 msgid "A password is required."
 msgstr "Απαιτείται κωδικός πρόσβασης."
 
-#: ../src/nm-openvpn-service.c:592
+#: ../src/nm-openvpn-service.c:931
 msgid "A username and password are required."
 msgstr "Απαιτείται όνομα χρήστη και κωδικός πρόσβασης."
 
-#: ../src/nm-openvpn-service.c:612
+#: ../src/nm-openvpn-service.c:953
 msgid "A private key password is required."
 msgstr "Απαιτείται κωδικός πρόσβασης ιδιωτικού κλειδιού."
 
-#: ../src/nm-openvpn-service.c:625
+#: ../src/nm-openvpn-service.c:966
 msgid "An HTTP Proxy username is required."
 msgstr "Απαιτείται όνομα χρήστη διαμεσολαβητή HTTP."
 
-#: ../src/nm-openvpn-service.c:629
+#: ../src/nm-openvpn-service.c:970
 msgid "An HTTP Proxy password is required."
 msgstr "Απαιτείται κωδικός πρόσβασης διαμεσολαβητή HTTP."
 
-#: ../src/nm-openvpn-service.c:632
+#: ../src/nm-openvpn-service.c:973
 msgid "An HTTP Proxy username and password are required."
 msgstr "Απαιτείται όνομα χρήστη και κωδικός πρόσβασης διαμεσολαβητή HTTP."
 
-#: ../src/nm-openvpn-service.c:1114
-msgid "Could not find the openvpn binary."
-msgstr "Αδυναμία εύρεσης του εκτελέσιμου openvpn."
-
-#: ../src/nm-openvpn-service.c:1124
-msgid "Invalid HMAC auth."
-msgstr "Άκυρη πιστοποίηση HMAC."
-
-#: ../src/nm-openvpn-service.c:1134 ../src/nm-openvpn-service.c:1834
-msgid "Invalid connection type."
-msgstr "Άκυρος τύπος σύνδεσης."
-
-#: ../src/nm-openvpn-service.c:1169 ../src/nm-openvpn-service.c:1179
-#, c-format
-msgid "Invalid port number '%s'."
-msgstr "Άκυρος αριθμός θύρας '%s'."
-
-#: ../src/nm-openvpn-service.c:1196
-#, c-format
-msgid "Invalid proto '%s'."
-msgstr "Άκυρος τύπος πρωτοκόλλου '%s'."
-
-#: ../src/nm-openvpn-service.c:1242
-#, c-format
-msgid "Invalid proxy type '%s'."
-msgstr "Άκυρος τύπος διαμεσολαβητή '%s'."
-
-#: ../src/nm-openvpn-service.c:1265
-#, c-format
-msgid "Invalid ping duration '%s'."
-msgstr "Μη έγκυρη διάρκεια του ping '%s'."
-
-#: ../src/nm-openvpn-service.c:1279
-#, c-format
-msgid "Invalid ping-exit duration '%s'."
-msgstr "Μη έγκυρη διάρκεια του ping-exit '%s'."
-
-#: ../src/nm-openvpn-service.c:1293
-#, c-format
-msgid "Invalid ping-restart duration '%s'."
-msgstr "Μη έγκυρη διάρκεια του ping-restart '%s'."
-
-#: ../src/nm-openvpn-service.c:1345
-#, c-format
-msgid "Invalid keysize '%s'."
-msgstr "Άκυρο μέγεθος κλειδιού '%s'."
-
-#: ../src/nm-openvpn-service.c:1402
-#, c-format
-msgid "Invalid reneg seconds '%s'."
-msgstr "Άκυρα δευτερόλεπτα επαναδιαπραγμάτευσης '%s'."
-
-#: ../src/nm-openvpn-service.c:1434
-#, c-format
-msgid "Invalid TUN MTU size '%s'."
-msgstr "Άκυρο μέγεθος MTU TUN '%s'."
-
-#: ../src/nm-openvpn-service.c:1449
-#, c-format
-msgid "Invalid fragment size '%s'."
-msgstr "Άκυρο μέγεθος αποκόμματος '%s'."
-
-#: ../src/nm-openvpn-service.c:1525
-msgid "Missing required local IP address for static key mode."
-msgstr ""
-"Λείπει η απαιτούμενη τοπική διεύθυνση IP για λειτουργία στατικού κλειδιού."
-
-#: ../src/nm-openvpn-service.c:1537
-msgid "Missing required remote IP address for static key mode."
-msgstr ""
-"Λείπει η απαιτούμενη απομακρυσμένη διεύθυνση IP για λειτουργία στατικού "
-"κλειδιού."
-
-#: ../src/nm-openvpn-service.c:1562
-#, c-format
-msgid "Unknown connection type '%s'."
-msgstr "Άγνωστος τύπος σύνδεσης '%s'."
-
-#: ../src/nm-openvpn-service.c:1587
-#, c-format
-msgid "User '%s' not found, check NM_OPENVPN_USER."
-msgstr "Δεν βρέθηκε ο χρήστης '%s', ελέγξτε το NM_OPENVPN_USER."
-
-#: ../src/nm-openvpn-service.c:1601
-#, c-format
-msgid "Group '%s' not found, check NM_OPENVPN_GROUP."
-msgstr "Δεν βρέθηκε η ομάδα '%s', ελέγξτε το NM_OPENVPN_GROUP."
-
-#: ../src/nm-openvpn-service.c:1748 ../src/nm-openvpn-service.c:1825
-#: ../src/nm-openvpn-service.c:1859
+#: ../src/nm-openvpn-service.c:1342 ../src/nm-openvpn-service.c:2148
+#: ../src/nm-openvpn-service.c:2183
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -597,33 +586,119 @@ msgstr ""
 "Αδύνατη η επεξεργασία του αιτήματος, επειδή οι ρυθμίσεις της σύνδεσης VPN "
 "ήταν άκυρες."
 
-#: ../src/nm-openvpn-service.c:1757
-msgid ""
-"Could not process the request because the openvpn connection type was "
-"invalid."
-msgstr ""
-"Αδύνατη η επεξεργασία του αιτήματος, επειδή ο τύπος σύνδεσης του openvpn "
-"ήταν άκυρος."
+#: ../src/nm-openvpn-service.c:1351 ../src/nm-openvpn-service.c:2157
+msgid "Invalid connection type."
+msgstr "Άκυρος τύπος σύνδεσης."
 
-#: ../src/nm-openvpn-service.c:1872
+#: ../src/nm-openvpn-service.c:1369
+msgid "Could not find the openvpn binary."
+msgstr "Αδυναμία εύρεσης του εκτελέσιμου openvpn."
+
+#: ../src/nm-openvpn-service.c:1417
+#, fuzzy, c-format
+msgid "Invalid port number “%s”."
+msgstr "Άκυρος αριθμός θύρας '%s'."
+
+#: ../src/nm-openvpn-service.c:1437
+#, fuzzy, c-format
+msgid "Invalid proto “%s”."
+msgstr "Άκυρος τύπος πρωτοκόλλου '%s'."
+
+#: ../src/nm-openvpn-service.c:1482
+#, fuzzy, c-format
+msgid "Invalid proxy type “%s”."
+msgstr "Άκυρος τύπος διαμεσολαβητή '%s'."
+
+#: ../src/nm-openvpn-service.c:1567
+#, fuzzy, c-format
+msgid "Invalid ping duration “%s”."
+msgstr "Μη έγκυρη διάρκεια του ping '%s'."
+
+#: ../src/nm-openvpn-service.c:1580
+#, fuzzy, c-format
+msgid "Invalid ping-exit duration “%s”."
+msgstr "Μη έγκυρη διάρκεια του ping-exit '%s'."
+
+#: ../src/nm-openvpn-service.c:1593
+#, fuzzy, c-format
+msgid "Invalid ping-restart duration “%s”."
+msgstr "Μη έγκυρη διάρκεια του ping-restart '%s'."
+
+#: ../src/nm-openvpn-service.c:1606
+#, fuzzy, c-format
+msgid "Invalid connect timeout “%s”."
+msgstr "Άκυρος τύπος σύνδεσης."
+
+#: ../src/nm-openvpn-service.c:1631
+#, fuzzy, c-format
+msgid "Invalid max-routes argument “%s”."
+msgstr "μη έγκυρο όρισμα %uth στο '%s'"
+
+#: ../src/nm-openvpn-service.c:1675
+#, fuzzy, c-format
+msgid "Invalid keysize “%s”."
+msgstr "Άκυρο μέγεθος κλειδιού '%s'."
+
+#: ../src/nm-openvpn-service.c:1738
+#, c-format
+msgid "Invalid configuration with tls-remote and verify-x509-name."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:1751
+#, c-format
+msgid "Invalid verify-x509-name."
+msgstr ""
+
+#: ../src/nm-openvpn-service.c:1774
+#, fuzzy, c-format
+msgid "Invalid reneg seconds “%s”."
+msgstr "Άκυρα δευτερόλεπτα επαναδιαπραγμάτευσης '%s'."
+
+#: ../src/nm-openvpn-service.c:1804
+#, fuzzy, c-format
+msgid "Invalid TUN MTU size “%s”."
+msgstr "Άκυρο μέγεθος MTU TUN '%s'."
+
+#: ../src/nm-openvpn-service.c:1817
+#, fuzzy, c-format
+msgid "Invalid fragment size “%s”."
+msgstr "Άκυρο μέγεθος αποκόμματος '%s'."
+
+#: ../src/nm-openvpn-service.c:1927
+#, fuzzy, c-format
+msgid "Unknown connection type “%s”."
+msgstr "Άγνωστος τύπος σύνδεσης '%s'."
+
+#: ../src/nm-openvpn-service.c:1945
+#, fuzzy, c-format
+msgid "User “%s” not found, check NM_OPENVPN_USER."
+msgstr "Δεν βρέθηκε ο χρήστης '%s', ελέγξτε το NM_OPENVPN_USER."
+
+#: ../src/nm-openvpn-service.c:1957
+#, fuzzy, c-format
+msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
+msgstr "Δεν βρέθηκε η ομάδα '%s', ελέγξτε το NM_OPENVPN_GROUP."
+
+#: ../src/nm-openvpn-service.c:2196
 msgid "Unhandled pending authentication."
 msgstr "Ανεπίλυτη αναμονή πιστοποίησης."
 
-#: ../src/nm-openvpn-service.c:1990
-msgid "Don't quit when VPN connection terminates"
+#: ../src/nm-openvpn-service.c:2314
+#, fuzzy
+msgid "Don’t quit when VPN connection terminates"
 msgstr "Να μην γίνει έξοδος όταν η σύνδεση VPN τερματίζει"
 
-#: ../src/nm-openvpn-service.c:1991
+#: ../src/nm-openvpn-service.c:2315
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr ""
 "Ενεργοποίηση αναλυτικής καταγραφής αποσφαλμάτωσης (μπορεί να εκθέτει τους "
 "κωδικούς πρόσβασης)"
 
-#: ../src/nm-openvpn-service.c:1992
+#: ../src/nm-openvpn-service.c:2316
 msgid "D-Bus name to use for this instance"
 msgstr "Ονομασία D-Bus που θα χρησιμοποιηθεί για αυτή τη συνεδρία"
 
-#: ../src/nm-openvpn-service.c:2018
+#: ../src/nm-openvpn-service.c:2342
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
@@ -631,18 +706,55 @@ msgstr ""
 "NetworkManager."
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
-msgid " "
-msgstr " "
+msgid "LZO"
+msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:2
-msgid "<b>General</b>"
-msgstr "<b>Γενικά</b>"
+msgid "LZ4"
+msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:3
+msgid "LZ4 v2"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:4
+#, fuzzy
+msgid "Automatic"
+msgstr "(αυτόματο)"
+
+#: ../properties/nm-openvpn-dialog.ui.h:5
+msgid "LZO disabled (legacy)"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:6
+msgid "LZO adaptive (legacy)"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:8
+msgid "TLS-Auth"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:9
+msgid "TLS-Crypt"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:10
+msgid "Maybe"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:11
+msgid "Yes"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:12
+msgid "General"
+msgstr "Γενικά"
+
+#: ../properties/nm-openvpn-dialog.ui.h:13
 msgid "_Gateway:"
 msgstr "Πύ_λη δικτύου:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:4
+#: ../properties/nm-openvpn-dialog.ui.h:14
 msgid ""
 "Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
 "tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
@@ -654,61 +766,28 @@ msgstr ""
 "(χρησιμοποιήστε κόμματα για διάκριση των καταχωρίσεων).\n"
 "config: remote"
 
-#: ../properties/nm-openvpn-dialog.ui.h:6
-msgid "<b>Authentication</b>"
-msgstr "<b>Πιστοποίηση</b>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:7
-msgid "_Show passwords"
-msgstr "Ε_μφάνιση κωδικών πρόσβασης"
-
-#: ../properties/nm-openvpn-dialog.ui.h:8
-msgid "Password for private key"
-msgstr "Κωδικός πρόσβασης για το ιδιωτικό κλειδί"
-
-#: ../properties/nm-openvpn-dialog.ui.h:9
-msgid "Private Key Password:"
-msgstr "Κωδικός πρόσβασης ιδιωτικού κλειδιού:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:10
-msgid ""
-"Local peer's private key in .pem format.\n"
-"config: key"
-msgstr ""
-"Το ιδιωτικό κλειδί του τοπικού ομότιμου σε μορφή .pem.\n"
-"config: key"
-
-#: ../properties/nm-openvpn-dialog.ui.h:12
-msgid "Private Key:"
-msgstr "Ιδιωτικό κλειδί:"
-
-#: ../properties/nm-openvpn-dialog.ui.h:13
-msgid ""
-"Certificate authority (CA) file in .pem format.\n"
-"config: ca"
-msgstr ""
-"Αρχείο πιστοποιητικού αρχής (CA) σε μορφή .pem.\n"
-"config: ca"
-
-#: ../properties/nm-openvpn-dialog.ui.h:15
-msgid "CA Certificate:"
-msgstr "Πι_στοποιητικό CA:"
-
 #: ../properties/nm-openvpn-dialog.ui.h:16
-msgid "User Certificate:"
-msgstr "Πιστοποιητικό χρήστη:"
+#, fuzzy
+msgid "Authentication"
+msgstr "Πιστοποίηση TLS:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
-msgid ""
-"Local peer's signed certificate in .pem format (signed by CA of CA "
-"Certificate).\n"
-"config: cert"
+msgid "CA"
 msgstr ""
-"Υπογεραμμένο πιστοποιητικό του τοπικού ομότιμου σε μορφή .pem (υπογραμμένο "
-"από CA πιστοποιητικό).\n"
-"config: cert"
+
+#: ../properties/nm-openvpn-dialog.ui.h:18
+msgid "User"
+msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:19
+msgid "Password:"
+msgstr "Κωδικός πρόσβασης:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:20
+msgid "User name:"
+msgstr "Όνομα χρήστη:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:21
 msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -716,51 +795,33 @@ msgstr ""
 "Ο κωδικός πρόσβασης πέρασε στο OpenVPN όταν του ζητήθηκε.\n"
 "config: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:22
-msgid "User name:"
-msgstr "Όνομα χρήστη:"
-
 #: ../properties/nm-openvpn-dialog.ui.h:23
+#, fuzzy
 msgid ""
-"Username passed to OpenVPN when prompted for it.\n"
+"Username passed to OpenVPN when prompted for it. If omitted, use the name of "
+"the system user that activates the connection.\n"
 "config: auth-user-pass"
 msgstr ""
 "Το όνομα χρήστη πέρασε στο OpenVPN όταν του ζητήθηκε.\n"
 "config: auth-user-pass"
 
 #: ../properties/nm-openvpn-dialog.ui.h:25
-msgid ""
-"IP address of the local VPN endpoint.\n"
-"config: ifconfig <l> <rn>"
-msgstr ""
-"Διεύθυνση IP του τοπικού τελικού σημείου VPN.\n"
-"config: ifconfig <l> <rn>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:27
 msgid "Remote IP Address:"
 msgstr "Απομακρυσμένη διεύθυνση IP:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:28
+#: ../properties/nm-openvpn-dialog.ui.h:26
 msgid "Local IP Address:"
 msgstr "Τοπική διεύθυνση IP:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:29
-msgid ""
-"IP address of the remote VPN endpoint.\n"
-"config: ifconfig <l> <rn>"
-msgstr ""
-"Διεύθυνση IP του απομακρυσμένου τελικού σημείου VPN.\n"
-"config: ifconfig <l> <rn>"
-
-#: ../properties/nm-openvpn-dialog.ui.h:31
+#: ../properties/nm-openvpn-dialog.ui.h:27
 msgid "Key Direction:"
 msgstr "Κατεύθυνση κλειδιού:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:32
+#: ../properties/nm-openvpn-dialog.ui.h:28
 msgid "Static Key:"
 msgstr "Στατικό Κλειδί:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:33
+#: ../properties/nm-openvpn-dialog.ui.h:29
 msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
@@ -769,11 +830,28 @@ msgstr ""
 "TLS).\n"
 "config: static <file>"
 
+#: ../properties/nm-openvpn-dialog.ui.h:31
+msgid ""
+"IP address of the remote VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
+msgstr ""
+"Διεύθυνση IP του απομακρυσμένου τελικού σημείου VPN.\n"
+"config: ifconfig <l> <rn>"
+
+#: ../properties/nm-openvpn-dialog.ui.h:33
+msgid ""
+"IP address of the local VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
+msgstr ""
+"Διεύθυνση IP του τοπικού τελικού σημείου VPN.\n"
+"config: ifconfig <l> <rn>"
+
 #: ../properties/nm-openvpn-dialog.ui.h:35
+#, fuzzy
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"peer. For example, if the peer uses “1”, this connection must use “0”. If "
 "you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
@@ -794,7 +872,8 @@ msgid "Select an authentication mode."
 msgstr "Επιλέξτε λειτουργία πιστοποίησης."
 
 #: ../properties/nm-openvpn-dialog.ui.h:40
-msgid "Ad_vanced..."
+#, fuzzy
+msgid "Ad_vanced…"
 msgstr "Για προ_χωρημένους..."
 
 #: ../properties/nm-openvpn-dialog.ui.h:42
@@ -829,7 +908,8 @@ msgstr ""
 "config: reneg-sec"
 
 #: ../properties/nm-openvpn-dialog.ui.h:49
-msgid "Use L_ZO data compression"
+#, fuzzy
+msgid "Data _compression:"
 msgstr "Χρήση συμπίεσης δεδομένων L_ZO"
 
 #: ../properties/nm-openvpn-dialog.ui.h:50
@@ -877,9 +957,10 @@ msgid " and _name:"
 msgstr "και ο_νόματος:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:61
+#, fuzzy
 msgid ""
-"Use custom name for TUN/TAP virtual device (instead of default \"tun\" or "
-"\"tap\").\n"
+"Use custom name for TUN/TAP virtual device (instead of default “tun” or "
+"“tap”).\n"
 "config: dev <name>"
 msgstr ""
 "Χρήση προσαρμοσμένου ονόματος για εικονική συσκευή TUN/TAP (αντί των "
@@ -940,27 +1021,59 @@ msgstr ""
 "config: remote-random"
 
 #: ../properties/nm-openvpn-dialog.ui.h:75
+msgid "_Prefix remote DNS name with random string"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:76
+msgid ""
+"Adds a random string to remote DNS name to avoid DNS caching.\n"
+"config: remote-random-hostname"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:78
 msgid "IPv6 tun link"
 msgstr "Σύνδεσμος IPv6 tun"
 
-#: ../properties/nm-openvpn-dialog.ui.h:76
+#: ../properties/nm-openvpn-dialog.ui.h:79
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:78
+#: ../properties/nm-openvpn-dialog.ui.h:81
+msgid "Specify pin_g interval:"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:82
+msgid ""
+"Ping remote over the TCP/UDP control channel if no packets have been sent "
+"for at least n seconds.\n"
+"config: ping <n>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:84
+msgid "Specify _exit or restart ping:"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:85
+msgid ""
+"Exit or restart after n seconds pass without reception of a ping or other "
+"packet from remote.\n"
+"config: ping-exit | ping-restart <n>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:87
 msgid "Accept authenticated packets from any address (F_loat)"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:79
+#: ../properties/nm-openvpn-dialog.ui.h:88
 msgid ""
 "Allow remote peer to change its IP address and/or port number, such as due "
-"to DHCP (this is the default if --remote is not used).  --float when "
-"specified with --remote allows an OpenVPN session to initially connect to a  "
-"peer  at  a  known  address, however if packets arrive from a new address "
-"and pass all authentication tests, the new address will take control of the "
-"session.  This is useful when you are connecting to a peer which holds a "
+"to DHCP (this is the default if --remote is not used). --float when "
+"specified with --remote allows an OpenVPN session to initially connect to a "
+"peer at a known address, however if packets arrive from a new address and "
+"pass all authentication tests, the new address will take control of the "
+"session. This is useful when you are connecting to a peer which holds a "
 "dynamic address such as a dial-in user or DHCP client.\n"
 "\n"
 "Essentially, --float tells OpenVPN to accept authenticated packets from any "
@@ -969,33 +1082,17 @@ msgid ""
 "config: float"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:84
-msgid "Specify pin_g interval:"
+#: ../properties/nm-openvpn-dialog.ui.h:93
+msgid "Specify max routes:"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:85
+#: ../properties/nm-openvpn-dialog.ui.h:94
 msgid ""
-"Ping remote over the TCP/UDP control channel if no packets have been sent "
-"for at least n seconds.\n"
-"config: ping <n>"
+"Specify the maximum number of routes the server is allowed to specify.\n"
+"config: max-routes <n>"
 msgstr ""
 
-#: ../properties/nm-openvpn-dialog.ui.h:87
-msgid "Specify _exit or restart ping:"
-msgstr ""
-
-#: ../properties/nm-openvpn-dialog.ui.h:88
-msgid ""
-"Exit or restart after n seconds pass without reception of a ping or other "
-"packet from remote.\n"
-"config: ping-exit | ping-restart <n>"
-msgstr ""
-
-#: ../properties/nm-openvpn-dialog.ui.h:90
-msgid "General"
-msgstr "Γενικά"
-
-#: ../properties/nm-openvpn-dialog.ui.h:91
+#: ../properties/nm-openvpn-dialog.ui.h:96
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
 "Cipher Block Chaining mode).\n"
@@ -1005,11 +1102,11 @@ msgstr ""
 "(Blowfish σε λειτουργία Cipher Block Chaining).\n"
 "config: cipher"
 
-#: ../properties/nm-openvpn-dialog.ui.h:93
+#: ../properties/nm-openvpn-dialog.ui.h:98
 msgid "Use custom _size of cipher key:"
 msgstr "Χρήση προσαρμοσμένου _μεγέθους κλειδιού κρυπτογράφισης:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:94
+#: ../properties/nm-openvpn-dialog.ui.h:99
 msgid ""
 "Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
 "specific size.\n"
@@ -1020,7 +1117,7 @@ msgstr ""
 "κρυπτογράφισης.\n"
 "config: keysize <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:96
+#: ../properties/nm-openvpn-dialog.ui.h:101
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
 "is SHA1.\n"
@@ -1030,46 +1127,97 @@ msgstr ""
 "προεπιλογή είναι SHA1.\n"
 "config: auth"
 
-#: ../properties/nm-openvpn-dialog.ui.h:98
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid "Ci_pher:"
 msgstr "Αλγόριθμος κρυπτογράφησης:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:99
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid "_HMAC Authentication:"
 msgstr "Πιστοποίηση HMAC:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:100
+#: ../properties/nm-openvpn-dialog.ui.h:105
+msgid "Disable cipher _negotiation"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:106
+msgid ""
+"Disable cipher negotiation between client and server.\n"
+"config: ncp-disable"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:108
+msgid "Verify CRL from file"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:109
+msgid ""
+"Check peer certificate against the specified file in PEM format. A CRL "
+"(certificate revocation list) is used when a particular key is compromised "
+"but when the overall PKI is still intact."
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:110
+msgid "Verify CRL from directory"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:111
+msgid ""
+"Check peer certificate by looking at files in the specified directory. The "
+"directory must contain files named as revoked serial numbers (the files may "
+"be empty, the contents are never read)."
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:112
+msgid "Choose CRL file"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:113
+msgid "Choose CRL directory"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:114
 msgid "Security"
 msgstr "Ασφάλεια"
 
-#: ../properties/nm-openvpn-dialog.ui.h:101
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "_Subject Match:"
 msgstr "Συμφωνία _θέματος:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid ""
-"<i>Connect only to servers whose certificate matches the given subject.\n"
-"Example: /CN=myvpn.company.com</i>"
+"Subject or Common Name to verify server certificate information against.\n"
+"\n"
+"config: verify-x509-name subject-or-name [mode]\n"
+"config (legacy mode): tls-remote subject-or-name"
 msgstr ""
-"<i>Σύνδεση σε διακομιστές μόνο όταν το πιστοποιητικό τους ταιριάζει με το "
-"δοθέν θέμα.\n"
-"Παράδειγμα: /CN=myvpn.company.com</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:120
+#, fuzzy
+msgid "Server _Certificate Check:"
+msgstr "Πιστοποιητικό χρήστη:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid ""
-"Accept connections only from a host with X509 name or common name equal to "
-"the specified one.\n"
-"config: tls-remote"
+"Verify server certificate identification.\n"
+"\n"
+"When enabled, connection will only succeed if the server certificate matches "
+"some expected properties.\n"
+"Matching can either apply to the whole certificate subject (all the "
+"fields),\n"
+"or just the Common Name (CN field).\n"
+"\n"
+"The legacy option tls-remote is deprecated and removed from OpenVPN 2.4 and "
+"newer. Do not use it anymore.\n"
+"\n"
+"config: verify-x509-name subject-or-name [mode]\n"
+"config (legacy mode): tls-remote subject-or-name"
 msgstr ""
-"Αποδοχή συνδέσεων μόνο από έναν κεντρικό υπολογιστή με όνομα X509 ή κοινό "
-"όνομα ισοδύναμο με το καθορισμένο.\n"
-"config: tls-remote"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:131
 msgid "_Verify peer (server) certificate usage signature"
 msgstr "_Επιβεβαίωση υπογραφής χρήσης πιστοποιητικού ομότιμου (διακομιστή)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:132
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -1077,11 +1225,11 @@ msgstr ""
 "Απαιτείται αυτό το πιστοποιητικό ομότιμου να έχει υπογραφεί με χρήση ρητού "
 "κλειδιού και επεκταμένη χρήση κλειδιού με βάση τους κανόνες TLS RFC3280."
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:133
 msgid "_Remote peer certificate TLS type:"
 msgstr "Α_πομακρυσμένο πιστοποιητικό ομότιμου, τύπου TLS:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:134
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -1091,17 +1239,13 @@ msgstr ""
 "κλειδιού και επεκταμένη χρήση κλειδιού με βάση τους κανόνες TLS RFC3280.\n"
 "config: remote-cert-tls client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:136
 #, fuzzy
-#| msgid "_Verify peer (server) certificate usage signature"
 msgid "_Verify peer (server) certificate nsCertType designation"
 msgstr "_Επιβεβαίωση υπογραφής χρήσης πιστοποιητικού ομότιμου (διακομιστή)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:137
 #, fuzzy
-#| msgid ""
-#| "Require that peer certificate was signed with an explicit key usage and "
-#| "extended key usage based on RFC3280 TLS rules."
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
@@ -1109,18 +1253,13 @@ msgstr ""
 "Απαιτείται αυτό το πιστοποιητικό ομότιμου να έχει υπογραφεί με χρήση ρητού "
 "κλειδιού και επεκταμένη χρήση κλειδιού με βάση τους κανόνες TLS RFC3280."
 
-#: ../properties/nm-openvpn-dialog.ui.h:113
+#: ../properties/nm-openvpn-dialog.ui.h:138
 #, fuzzy
-#| msgid "_Remote peer certificate TLS type:"
 msgid "_Remote peer certificate nsCert designation:"
 msgstr "Α_πομακρυσμένο πιστοποιητικό ομότιμου, τύπου TLS:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:139
 #, fuzzy
-#| msgid ""
-#| "Require that peer certificate was signed with an explicit key usage and "
-#| "extended key usage based on RFC3280 TLS rules.\n"
-#| "config: remote-cert-tls client|server"
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
@@ -1130,33 +1269,28 @@ msgstr ""
 "κλειδιού και επεκταμένη χρήση κλειδιού με βάση τους κανόνες TLS RFC3280.\n"
 "config: remote-cert-tls client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:116
-msgid "Use additional _TLS authentication"
-msgstr "Χρήση πρόσθετης πιστοποίησης _TLS"
-
-#: ../properties/nm-openvpn-dialog.ui.h:117
-msgid "Add an additional layer of HMAC authentication."
-msgstr "Προσθήκη πρόσθετης στρώσης πιστοποίησης HMAC."
-
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:141
 msgid "Key _Direction:"
 msgstr "_Κατεύθυνση κλειδιού:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:142
+#, fuzzy
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
-"channel to protect against DoS attacks.\n"
-"config: tls-auth <file> [direction]"
+"channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
+"control channel is also encrypted.\n"
+"config: tls-auth <file> [direction] | tls-crypt <file>"
 msgstr ""
 "Προσθήκη πρόσθετης στρώσης πιστοποίησης HMAC στην κορυφή του καναλιού "
 "ελέγχου TLS για προστασία κατά επιθέσεων DoS.\n"
 "config: tls-auth <file> [direction]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:144
+#, fuzzy
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
-"peer.  For example, if the peer uses '1', this connection must use '0'.  If "
+"peer. For example, if the peer uses “1”, this connection must use “0”. If "
 "you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
@@ -1168,15 +1302,71 @@ msgstr ""
 "επικοινωνήστε με το διαχειριστή του συστήματος.\n"
 "ρύθμιση: tls-auth <file> [κατεύθυνση]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:124
+#: ../properties/nm-openvpn-dialog.ui.h:147
 msgid "Key _File:"
 msgstr "_Αρχείο κλειδιού:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:125
+#: ../properties/nm-openvpn-dialog.ui.h:148
+msgid "Mode:"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:149
+#, fuzzy
+msgid "Add an additional layer of encryption or HMAC authentication."
+msgstr "Προσθήκη πρόσθετης στρώσης πιστοποίησης HMAC."
+
+#: ../properties/nm-openvpn-dialog.ui.h:150
+#, fuzzy
+msgid "Extra Certificates:"
+msgstr "Πιστοποιητικό χρήστη:"
+
+#: ../properties/nm-openvpn-dialog.ui.h:151
+msgid ""
+"Specify a file containing one or more PEM certs (concatenated together) that "
+"complete the local certificate chain.\n"
+"config: extra-certs <file>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:153
+#, fuzzy
+msgid "Additional TLS authentication or encryption"
+msgstr "Χρήση πρόσθετης πιστοποίησης _TLS"
+
+#: ../properties/nm-openvpn-dialog.ui.h:154
+msgid "Controls min and max version allowed for TLS."
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:155
+msgid "TLS version control"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:156
+msgid "TLS _min version: "
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:157
+msgid ""
+" Sets the minimum TLS version we will accept from the peer (default is "
+"\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\".  If "
+"'or-highest' is specified and version is not recognized, we will only accept "
+"the highest TLS version supported by the local SSL implementation."
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:158
+msgid "TLS ma_x version: "
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:159
+msgid ""
+"Set the maximum TLS version we will use (default is the highest version "
+"supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:160
 msgid "TLS Authentication"
 msgstr "Πιστοποίηση TLS:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:126
+#: ../properties/nm-openvpn-dialog.ui.h:161
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1184,11 +1374,11 @@ msgstr ""
 "Τύπος διαμεσολαβητή: HTTP ή Socks.\n"
 "config: http-proxy ή socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:128
+#: ../properties/nm-openvpn-dialog.ui.h:163
 msgid "Proxy _Type:"
 msgstr "_Τύπος διαμεσολαβητή:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:129
+#: ../properties/nm-openvpn-dialog.ui.h:164
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1196,11 +1386,11 @@ msgstr ""
 "<i>Επιλέξτε αν ο οργανισμός σας απαιτεί τη χρήση διακομιστή διαμεσολάβησης "
 "για πρόσβαση στο διαδίκτυο.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:130
+#: ../properties/nm-openvpn-dialog.ui.h:165
 msgid "Server _Address:"
 msgstr "_Διεύθυνση διακομιστή:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:131
+#: ../properties/nm-openvpn-dialog.ui.h:166
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1209,11 +1399,11 @@ msgstr ""
 "αυτή τη διεύθυνση.\n"
 "config: http-proxy ή socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:133
+#: ../properties/nm-openvpn-dialog.ui.h:168
 msgid "_Port:"
 msgstr "_Θύρα:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:134
+#: ../properties/nm-openvpn-dialog.ui.h:169
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1222,11 +1412,11 @@ msgstr ""
 "αυτή τη θύρα.\n"
 "config: http-proxy ή socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:136
+#: ../properties/nm-openvpn-dialog.ui.h:171
 msgid "_Retry indefinitely when errors occur"
 msgstr "Επανάλη_ψη επ' άπειρον όταν προκύπτουν σφάλματα"
 
-#: ../properties/nm-openvpn-dialog.ui.h:137
+#: ../properties/nm-openvpn-dialog.ui.h:172
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1235,33 +1425,179 @@ msgstr ""
 "SIGUSR1.\n"
 "config: http-proxy-retry ή socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:139
+#: ../properties/nm-openvpn-dialog.ui.h:174
 msgid "Proxy _Username:"
 msgstr "Ό_νομα χρήστη διαμεσολαβητή:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:140
+#: ../properties/nm-openvpn-dialog.ui.h:175
 msgid "Proxy Passwor_d:"
 msgstr "Κ_ωδικός πρόσβασης διαμεσολαβητή:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:141
+#: ../properties/nm-openvpn-dialog.ui.h:176
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Το όνομα χρήστη διαμεσολαβητή HTTP/Socks πέρασε στο OpenVPN όταν του "
 "ζητήθηκε."
 
-#: ../properties/nm-openvpn-dialog.ui.h:142
+#: ../properties/nm-openvpn-dialog.ui.h:177
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "Ο κωδικός πρόσβασης διαμεσολαβητή HTTP/Socks πέρασε στο OpenVPN όταν του "
 "ζητήθηκε."
 
-#: ../properties/nm-openvpn-dialog.ui.h:143
+#: ../properties/nm-openvpn-dialog.ui.h:178
 msgid "_Show password"
 msgstr "Ε_μφάνιση κωδικού πρόσβασης"
 
-#: ../properties/nm-openvpn-dialog.ui.h:144
+#: ../properties/nm-openvpn-dialog.ui.h:179
 msgid "Proxies"
 msgstr "Διαμεσολαβητές"
+
+#: ../properties/nm-openvpn-dialog.ui.h:180
+msgid "Path mtu discovery"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:181
+#, fuzzy
+msgid "Connect timeout"
+msgstr "_Ανώνυμη σύνδεση"
+
+#: ../properties/nm-openvpn-dialog.ui.h:182
+msgid ""
+"The timeout in seconds before trying the next server. This timeout includes "
+"proxy and TCP connect timeouts.\n"
+"config: connect-timeout <n> | server-poll-timeout <n>"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:184
+msgid "0"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:185
+msgid "Push peer info"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:186
+msgid ""
+"Push additional information about the client to server.\n"
+"config: push-peer-info"
+msgstr ""
+
+#: ../properties/nm-openvpn-dialog.ui.h:188
+msgid "Misc"
+msgstr ""
+
+#, c-format
+#~ msgid "Authenticate VPN %s"
+#~ msgstr "Πιστοποίηση VPN %s"
+
+#~ msgid "Choose your personal certificate..."
+#~ msgstr "Επιλέξτε το προσωπικό σας πιστοποιητικό..."
+
+#~ msgid "Choose your private key..."
+#~ msgstr "Επιλέξτε το ιδιωτικό σας κλειδί..."
+
+#~ msgid "Choose a Certificate Authority certificate..."
+#~ msgstr "Επιλέξτε πιστοποιητικό Αρχής Πιστοποίησης..."
+
+#~ msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
+#~ msgstr "Πιστοποιητικά PEM ή PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
+
+#~ msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
+#~ msgstr "Πιστοποιητικά PEM (*.pem, *.crt, *.key, *.cer)"
+
+#, c-format
+#~ msgid "cannot write <%s> blob from line %ld to file '%s'"
+#~ msgstr "αδυναμία εγγραφής του <%s> blob από τη γραμμή %ld στο αρχείο '%s'"
+
+#~ msgid "could not create openvpn object"
+#~ msgstr "αδυναμία δημιουργίας αντικειμένου openvpn"
+
+#~ msgid "unknown OpenVPN file extension"
+#~ msgstr "άγνωστη επέκταση αρχείου του OpenVPN"
+
+#~ msgid "Invalid HMAC auth."
+#~ msgstr "Άκυρη πιστοποίηση HMAC."
+
+#~ msgid "Missing required local IP address for static key mode."
+#~ msgstr ""
+#~ "Λείπει η απαιτούμενη τοπική διεύθυνση IP για λειτουργία στατικού κλειδιού."
+
+#~ msgid "Missing required remote IP address for static key mode."
+#~ msgstr ""
+#~ "Λείπει η απαιτούμενη απομακρυσμένη διεύθυνση IP για λειτουργία στατικού "
+#~ "κλειδιού."
+
+#~ msgid ""
+#~ "Could not process the request because the openvpn connection type was "
+#~ "invalid."
+#~ msgstr ""
+#~ "Αδύνατη η επεξεργασία του αιτήματος, επειδή ο τύπος σύνδεσης του openvpn "
+#~ "ήταν άκυρος."
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "<b>General</b>"
+#~ msgstr "<b>Γενικά</b>"
+
+#~ msgid "<b>Authentication</b>"
+#~ msgstr "<b>Πιστοποίηση</b>"
+
+#~ msgid "_Show passwords"
+#~ msgstr "Ε_μφάνιση κωδικών πρόσβασης"
+
+#~ msgid "Password for private key"
+#~ msgstr "Κωδικός πρόσβασης για το ιδιωτικό κλειδί"
+
+#~ msgid "Private Key Password:"
+#~ msgstr "Κωδικός πρόσβασης ιδιωτικού κλειδιού:"
+
+#~ msgid ""
+#~ "Local peer's private key in .pem format.\n"
+#~ "config: key"
+#~ msgstr ""
+#~ "Το ιδιωτικό κλειδί του τοπικού ομότιμου σε μορφή .pem.\n"
+#~ "config: key"
+
+#~ msgid "Private Key:"
+#~ msgstr "Ιδιωτικό κλειδί:"
+
+#~ msgid ""
+#~ "Certificate authority (CA) file in .pem format.\n"
+#~ "config: ca"
+#~ msgstr ""
+#~ "Αρχείο πιστοποιητικού αρχής (CA) σε μορφή .pem.\n"
+#~ "config: ca"
+
+#~ msgid "CA Certificate:"
+#~ msgstr "Πι_στοποιητικό CA:"
+
+#~ msgid ""
+#~ "Local peer's signed certificate in .pem format (signed by CA of CA "
+#~ "Certificate).\n"
+#~ "config: cert"
+#~ msgstr ""
+#~ "Υπογεραμμένο πιστοποιητικό του τοπικού ομότιμου σε μορφή .pem "
+#~ "(υπογραμμένο από CA πιστοποιητικό).\n"
+#~ "config: cert"
+
+#~ msgid ""
+#~ "<i>Connect only to servers whose certificate matches the given subject.\n"
+#~ "Example: /CN=myvpn.company.com</i>"
+#~ msgstr ""
+#~ "<i>Σύνδεση σε διακομιστές μόνο όταν το πιστοποιητικό τους ταιριάζει με το "
+#~ "δοθέν θέμα.\n"
+#~ "Παράδειγμα: /CN=myvpn.company.com</i>"
+
+#~ msgid ""
+#~ "Accept connections only from a host with X509 name or common name equal "
+#~ "to the specified one.\n"
+#~ "config: tls-remote"
+#~ msgstr ""
+#~ "Αποδοχή συνδέσεων μόνο από έναν κεντρικό υπολογιστή με όνομα X509 ή κοινό "
+#~ "όνομα ισοδύναμο με το καθορισμένο.\n"
+#~ "config: tls-remote"
 
 #~ msgid "option %s expects exactly %u arguments"
 #~ msgstr "η επιλογή %s αναμένει ακριβώς %u ορίσματα"
@@ -1309,9 +1645,6 @@ msgstr "Διαμεσολαβητές"
 
 #~ msgid "_Domain:"
 #~ msgstr "_Τομέας:"
-
-#~ msgid "Connect _anonymously"
-#~ msgstr "_Ανώνυμη σύνδεση"
 
 #~ msgid "Connect as _user:"
 #~ msgstr "Σύνδεση ως _χρήστης:"
