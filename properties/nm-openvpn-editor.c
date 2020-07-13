@@ -646,6 +646,7 @@ sk_file_chooser_filter_new (void)
 }
 
 static const char *const advanced_keys[] = {
+	NM_OPENVPN_KEY_ALLOW_PULL_FQDN,
 	NM_OPENVPN_KEY_AUTH,
 	NM_OPENVPN_KEY_CIPHER,
 	NM_OPENVPN_KEY_COMPRESS,
@@ -1602,6 +1603,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	_builder_init_toggle_button (builder, "remote_random_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_REMOTE_RANDOM));
 	_builder_init_toggle_button (builder, "remote_random_hostname_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_REMOTE_RANDOM_HOSTNAME));
+	_builder_init_toggle_button (builder, "allow_pull_fqdn_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_ALLOW_PULL_FQDN));
 	_builder_init_toggle_button (builder, "tun_ipv6_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_TUN_IPV6));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "cipher_combo"));
@@ -1960,6 +1962,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "remote_random_hostname_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 		g_hash_table_insert (hash, NM_OPENVPN_KEY_REMOTE_RANDOM_HOSTNAME, g_strdup ("yes"));
+
+    widget = GTK_WIDGET (gtk_builder_get_object (builder, "allow_pull_fqdn_checkbutton"));
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_ALLOW_PULL_FQDN, g_strdup ("yes"));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tun_ipv6_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
