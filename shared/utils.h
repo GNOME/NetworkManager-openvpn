@@ -23,6 +23,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#define NMV_OVPN_TAG_ALLOW_PULL_FQDN		"allow-pull-fqdn"
 #define NMV_OVPN_TAG_AUTH                   "auth"
 #define NMV_OVPN_TAG_AUTH_NOCACHE           "auth-nocache"
 #define NMV_OVPN_TAG_NCP_DISABLE            "ncp-disable"
