@@ -953,6 +953,8 @@ test_route_import (void)
 		g_assert_cmpint (nm_ip4_route_get_prefix (route), ==, expected_prefix3);
 		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh3));
 		g_assert_cmpint (nm_ip4_route_get_metric (route), ==, METR (expected_metric3));
+
+		g_assert_true (nm_setting_ip4_config_get_never_default (s_ip4) == TRUE);
 	}
 #else
 	{
@@ -978,7 +980,26 @@ test_route_import (void)
 		g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix3);
 		g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, expected_nh3);
 		g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric3);
+
+		g_assert_true (nm_setting_ip_config_get_never_default (s_ip4) == TRUE);
 	}
+#endif
+}
+
+static void
+test_route_defgw_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingIPConfig *s_ip4;
+	connection = get_basic_connection (plugin, SRCDIR, "route-defgw.ovpn");
+
+	s_ip4 = _get_setting_ip4_config (connection);
+
+#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
+	g_assert_true (nm_setting_ip4_config_get_never_default (s_ip4) == FALSE);
+#else
+	g_assert_true (nm_setting_ip_config_get_never_default (s_ip4) == FALSE);
 #endif
 }
 
@@ -1009,6 +1030,23 @@ test_push_peer_info_import (void)
 	s_vpn = nm_connection_get_setting_vpn (connection);
 
 	_check_item (s_vpn, NM_OPENVPN_KEY_PUSH_PEER_INFO, "yes");
+}
+
+static void
+test_redirect_gateway_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingIPConfig *s_ip4;
+	connection = get_basic_connection (plugin, SRCDIR, "redirect-gateway.ovpn");
+
+	s_ip4 = _get_setting_ip4_config (connection);
+
+#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
+	g_assert_true (nm_setting_ip4_config_get_never_default (s_ip4) == FALSE);
+#else
+	g_assert_true (nm_setting_ip_config_get_never_default (s_ip4) == FALSE);
+#endif
 }
 
 /*****************************************************************************/
@@ -1193,11 +1231,15 @@ int main (int argc, char **argv)
 	_add_test_func_simple (test_route_import);
 	_add_test_func ("route-export", test_export_compare, "route.ovpn", "route.ovpntest");
 
+	_add_test_func_simple (test_route_defgw_import);
+
 	_add_test_func_simple (test_compress_import);
 	_add_test_func ("compress-export", test_export_compare, "compress.ovpn", "compress.ovpntest");
 
 	_add_test_func_simple (test_push_peer_info_import);
 	_add_test_func ("push-peer-info-export", test_export_compare, "push-peer-info.ovpn", "push-peer-info.ovpntest");
+
+	_add_test_func_simple (test_redirect_gateway_import);
 
 	_add_test_func_simple (test_args_parse_line);
 
