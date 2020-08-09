@@ -13,8 +13,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 02:05-0700\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/issues\n"
+"POT-Creation-Date: 2020-07-08 18:36+0000\n"
 "PO-Revision-Date: 2020-03-28 05:01+0100\n"
 "Last-Translator: Carles Ferrando Garcia <carles.ferrando@gmail.com>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
@@ -46,23 +46,21 @@ msgid "The NetworkManager Developers"
 msgstr "Els desenvolupadors del NetworkManager"
 
 #: ../auth-dialog/main.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication required"
-msgstr "Autenticació"
+msgstr "Cal autenticació"
 
 #: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2438
 msgid "Password"
 msgstr "Contrasenya"
 
 #: ../auth-dialog/main.c:189
-#, fuzzy
 msgid "Certificate password"
-msgstr "Contrasenya del certificat:"
+msgstr "Contrasenya del certificat"
 
 #: ../auth-dialog/main.c:196
-#, fuzzy
 msgid "HTTP proxy password"
-msgstr "Contrasenya del servidor intermediari HTTP:"
+msgstr "Contrasenya del servidor intermediari HTTP"
 
 #: ../auth-dialog/main.c:236
 msgid "Authenticate VPN"
@@ -79,7 +77,8 @@ msgstr "C_ontrasenya del servidor intermediari HTTP:"
 #: ../auth-dialog/main.c:517
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network “%s”."
-msgstr "Us heu d'autenticar per poder accedir a la xarxa privada virtual «%s»."
+msgstr ""
+"Us heu d'autenticar per poder accedir a la xarxa privada virtual «%s»."
 
 #: ../properties/import-export.c:182
 #, c-format
@@ -125,7 +124,8 @@ msgstr "l'argument de «%s» ha de ser codificat en UTF-8"
 msgid "invalid %uth argument to “%s” where number expected"
 msgstr "argument %uth no vàlida per a «%s» quan s'esperava un número"
 
-#. we don't support these special destinations, as they currently cannot be expressed
+#. we don't support these special destinations, as they currently cannot be
+#. expressed
 #. * in a connection.
 #: ../properties/import-export.c:303
 #, c-format
@@ -208,12 +208,14 @@ msgstr "no s'ha pogut crear el directori «%s»"
 #: ../properties/import-export.c:745
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
-msgstr "no es pot escriure la bombolla <%s> des de la línia %ld al fitxer (%s)"
+msgstr ""
+"no es pot escriure la bombolla <%s> des de la línia %ld al fitxer (%s)"
 
 #: ../properties/import-export.c:762
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file “%s”"
-msgstr "no es pot escriure la bombolla <%s> des de la línia %ld al fitxer (%s)"
+msgstr ""
+"no es pot escriure la bombolla <%s> des de la línia %ld al fitxer (%s)"
 
 #: ../properties/import-export.c:931
 #, c-format
@@ -233,12 +235,12 @@ msgstr "opció no vàlida"
 #: ../properties/import-export.c:1015
 #, c-format
 msgid "unsupported comp-lzo argument"
-msgstr "argumento comp-lzo no suportat"
+msgstr "argument del «comp-lzo» no suportat"
 
 #: ../properties/import-export.c:1027
-#, fuzzy, c-format
+#, c-format
 msgid "unsupported compress argument"
-msgstr "argumento comp-lzo no suportat"
+msgstr "argument del «compress» no suportat"
 
 #: ../properties/import-export.c:1128
 #, c-format
@@ -456,8 +458,7 @@ msgstr "la propietat «%s» de la classe «%s» d'objectes no es pot escriure"
 
 #: ../shared/nm-utils/nm-shared-utils.c:960
 #, c-format
-msgid ""
-"construct property \"%s\" for object '%s' can't be set after construction"
+msgid "construct property \"%s\" for object '%s' can't be set after construction"
 msgstr ""
 "la propietat «%s» de construcció per a l'objecte «%s» no es pot establir "
 "després de la construcció"
@@ -471,8 +472,8 @@ msgstr "«%s::%s» no és un nom vàlid de propietat; «%s» no un subtipus GObj
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
 msgstr ""
-"no s'ha pogut establir la propietat «%s» de tipus «%s» a partir del valor de "
-"tipus «%s»"
+"no s'ha pogut establir la propietat «%s» de tipus «%s» a partir del valor de"
+" tipus «%s»"
 
 #: ../shared/nm-utils/nm-shared-utils.c:988
 #, c-format
@@ -718,28 +719,27 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid "LZO"
-msgstr ""
+msgstr "LZO"
 
 #: ../properties/nm-openvpn-dialog.ui.h:2
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #: ../properties/nm-openvpn-dialog.ui.h:3
 msgid "LZ4 v2"
-msgstr ""
+msgstr "LZ4 v2"
 
 #: ../properties/nm-openvpn-dialog.ui.h:4
-#, fuzzy
 msgid "Automatic"
-msgstr "(automàtic)"
+msgstr "Automàtic"
 
 #: ../properties/nm-openvpn-dialog.ui.h:5
 msgid "LZO disabled (legacy)"
-msgstr ""
+msgstr "LZO desactivat (antic)"
 
 #: ../properties/nm-openvpn-dialog.ui.h:6
 msgid "LZO adaptive (legacy)"
-msgstr ""
+msgstr "LZO automàtic (antic)"
 
 #: ../properties/nm-openvpn-dialog.ui.h:8
 msgid "TLS-Auth"
@@ -767,14 +767,10 @@ msgstr "Pas_sarel·la:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:14
 msgid ""
-"Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
-"tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
-"delimiters).\n"
+"Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:tcp). You can specify multiple hosts for redundancy (use commas or spaces as delimiters).\n"
 "config: remote"
 msgstr ""
-"Passarel·la (passarel·les) remota(es), amb port i protocol opcionals (per "
-"exemple ovpn.corp.com:1234:tcp). Podeu especificar múltiples amfitrions per "
-"a redundància (useu comes o espais com delimitadors).\n"
+"Passarel·la (passarel·les) remota(es), amb port i protocol opcionals (per exemple ovpn.corp.com:1234:tcp). Podeu especificar múltiples amfitrions per a redundància (useu comes o espais com delimitadors).\n"
 "config: remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:16
@@ -807,12 +803,10 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:23
 msgid ""
-"Username passed to OpenVPN when prompted for it. If omitted, use the name of "
-"the system user that activates the connection.\n"
+"Username passed to OpenVPN when prompted for it. If omitted, use the name of the system user that activates the connection.\n"
 "config: auth-user-pass"
 msgstr ""
-"Es passa el nom d'usuari a l'OpenVPN quan és demanat. Si s'omet, utilitza el "
-"nom de l'usuari del sistema que activa la connexió.\n"
+"Es passa el nom d'usuari a l'OpenVPN quan és demanat. Si s'omet, utilitza el nom de l'usuari del sistema que activa la connexió.\n"
 "confi: auth-user-pass"
 
 #: ../properties/nm-openvpn-dialog.ui.h:25
@@ -836,8 +830,7 @@ msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
 msgstr ""
-"Fitxer compartit prèviament per al mode d'encriptat de clau estàtica (no "
-"TLS).\n"
+"Fitxer compartit prèviament per al mode d'encriptat de clau estàtica (no TLS).\n"
 "config: static <fitxer>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:31
@@ -859,16 +852,11 @@ msgstr ""
 #: ../properties/nm-openvpn-dialog.ui.h:35
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
-"If key direction is used, it must be the opposite of that used on the VPN "
-"peer. For example, if the peer uses “1”, this connection must use “0”. If "
-"you are unsure what value to use, contact your system administrator.\n"
+"If key direction is used, it must be the opposite of that used on the VPN peer. For example, if the peer uses “1”, this connection must use “0”. If you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
 "Direcció per al mode d'encriptat de clau estàtica (no-TLS).\n"
-"Si s'utilitza una direcció de clau, ha de ser l'oposada que la de l'homòleg "
-"de la VPN. Per exemple, si l'homòleg utilitza «1», aquesta connexió ha "
-"d'utilitzar «0». Si no esteu segurs de quin valor heu d'utilitzar, contacteu "
-"amb l'administrador del sistema.<\n"
+"Si s'utilitza una direcció de clau, ha de ser l'oposada que la de l'homòleg de la VPN. Per exemple, si l'homòleg utilitza «1», aquesta connexió ha d'utilitzar «0». Si no esteu segurs de quin valor heu d'utilitzar, contacteu amb l'administrador del sistema.<\n"
 "config: static <fitxer> [direcció]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:38
@@ -893,12 +881,10 @@ msgstr "Utilitza un _port de passarel·la personalitzat:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:44
 msgid ""
-"TCP/UDP port number for peer. (Default value when there is no port for "
-"gateway).\n"
+"TCP/UDP port number for peer. (Default value when there is no port for gateway).\n"
 "config: port"
 msgstr ""
-"Número de port TCP/UDP per al parell. (Valor predeterminat quan no hi ha cap "
-"port per a la passarel·la).\n"
+"Número de port TCP/UDP per al parell. (Valor predeterminat quan no hi ha cap port per a la passarel·la).\n"
 "config: port"
 
 #: ../properties/nm-openvpn-dialog.ui.h:46
@@ -910,14 +896,12 @@ msgid ""
 "Renegotiate data channel key after the specified number of seconds.\n"
 "config: reneg-sec"
 msgstr ""
-"Renegocia la clau del canal de dades després d'un nombre determinat de "
-"segons.\n"
+"Renegocia la clau del canal de dades després d'un nombre determinat de segons.\n"
 "config: reneg-sec"
 
 #: ../properties/nm-openvpn-dialog.ui.h:49
-#, fuzzy
 msgid "Data _compression:"
-msgstr "Utilitza la compressió de dades L_ZO"
+msgstr "_Compressió de dades:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:50
 msgid ""
@@ -934,13 +918,11 @@ msgstr "Utilitza una connexió _TCP"
 #: ../properties/nm-openvpn-dialog.ui.h:53
 msgid ""
 "Use TCP for communicating with remote host.\n"
-"(This is a default setting only used when no protocol is specified for the "
-"gateway.)\n"
+"(This is a default setting only used when no protocol is specified for the gateway.)\n"
 "config: proto tcp-client | udp"
 msgstr ""
 "Usa TCP per comunicar amb l'amfitrió remot.\n"
-"(Això és una configuració predeterminada que sols s'usa quan no s'especifica "
-"cap protocol per a la passarel·la.)\n"
+"(Això és una configuració predeterminada que sols s'usa quan no s'especifica cap protocol per a la passarel·la.)\n"
 "config: proto tcp-client | udp"
 
 #: ../properties/nm-openvpn-dialog.ui.h:56
@@ -966,12 +948,10 @@ msgstr " i el _nom:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:61
 msgid ""
-"Use custom name for TUN/TAP virtual device (instead of default “tun” or "
-"“tap”).\n"
+"Use custom name for TUN/TAP virtual device (instead of default “tun” or “tap”).\n"
 "config: dev <name>"
 msgstr ""
-"Usa un nom personalitzat per al dispositiu virtual TUN/TAP (en comptes del "
-"predeterminat «tun» o «tap»).\n"
+"Usa un nom personalitzat per al dispositiu virtual TUN/TAP (en comptes del predeterminat «tun» o «tap»).\n"
 "config: dev <nom>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:63
@@ -981,12 +961,10 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:64
 msgid ""
-"Take the TUN device MTU to be the specified value and derive the link MTU "
-"from it.\n"
+"Take the TUN device MTU to be the specified value and derive the link MTU from it.\n"
 "config: tun-mtu"
 msgstr ""
-"Agafa el MTU del dispositiu TUN perquè sigui el valor especificat i deriva "
-"l'enllaç MTU a partir d'ell.\n"
+"Agafa el MTU del dispositiu TUN perquè sigui el valor especificat i deriva l'enllaç MTU a partir d'ell.\n"
 "config: tun-mtu"
 
 #: ../properties/nm-openvpn-dialog.ui.h:66
@@ -1019,23 +997,23 @@ msgstr "Aleatoritza ela a_mfitrions remots"
 
 #: ../properties/nm-openvpn-dialog.ui.h:73
 msgid ""
-"Randomize the order of gateways list (remote) as a kind of basic load-"
-"balancing measure.\n"
+"Randomize the order of gateways list (remote) as a kind of basic load-balancing measure.\n"
 "config: remote-random"
 msgstr ""
-"Aleatoritza l'ordre de la llista (remota) de passarel·les com un tipus de "
-"mesura bàsica de balancejat de la càrrega.\n"
+"Aleatoritza l'ordre de la llista (remota) de passarel·les com un tipus de mesura bàsica de balancejat de la càrrega.\n"
 "config: remote-random"
 
 #: ../properties/nm-openvpn-dialog.ui.h:75
 msgid "_Prefix remote DNS name with random string"
-msgstr ""
+msgstr "_Prefix del nom DNS remot amb cadena aleatòria"
 
 #: ../properties/nm-openvpn-dialog.ui.h:76
 msgid ""
 "Adds a random string to remote DNS name to avoid DNS caching.\n"
 "config: remote-random-hostname"
 msgstr ""
+"Afegeix una cadena aleatòria al nom DNS remot per evitar la memòria cau del DNS.\n"
+"config: remote-random-hostname"
 
 #: ../properties/nm-openvpn-dialog.ui.h:78
 msgid "IPv6 tun link"
@@ -1055,12 +1033,10 @@ msgstr "Especifiqueu l'interval de pin_g:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:82
 msgid ""
-"Ping remote over the TCP/UDP control channel if no packets have been sent "
-"for at least n seconds.\n"
+"Ping remote over the TCP/UDP control channel if no packets have been sent for at least n seconds.\n"
 "config: ping <n>"
 msgstr ""
-"Fes un ping al remot sobre un canal de control TCP/UDP si no s'ha enviat cap "
-"paquet per almenys n segons.\n"
+"Fes un ping al remot sobre un canal de control TCP/UDP si no s'ha enviat cap paquet per almenys n segons.\n"
 "config: ping <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:84
@@ -1069,12 +1045,10 @@ msgstr "Especifiqueu _exit o reinicieu el ping:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:85
 msgid ""
-"Exit or restart after n seconds pass without reception of a ping or other "
-"packet from remote.\n"
+"Exit or restart after n seconds pass without reception of a ping or other packet from remote.\n"
 "config: ping-exit | ping-restart <n>"
 msgstr ""
-"Surt o reinicia després d'una passada de n segons sense recepció d'un ping o "
-"algun altre paquet del remot.\n"
+"Surt o reinicia després d'una passada de n segons sense recepció d'un ping o algun altre paquet del remot.\n"
 "config: ping-exit | ping-restart <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:87
@@ -1083,31 +1057,15 @@ msgstr "Accepta paquets autenticats de qualsevol adreça (F_loat)"
 
 #: ../properties/nm-openvpn-dialog.ui.h:88
 msgid ""
-"Allow remote peer to change its IP address and/or port number, such as due "
-"to DHCP (this is the default if --remote is not used). --float when "
-"specified with --remote allows an OpenVPN session to initially connect to a "
-"peer at a known address, however if packets arrive from a new address and "
-"pass all authentication tests, the new address will take control of the "
-"session. This is useful when you are connecting to a peer which holds a "
-"dynamic address such as a dial-in user or DHCP client.\n"
+"Allow remote peer to change its IP address and/or port number, such as due to DHCP (this is the default if --remote is not used). --float when specified with --remote allows an OpenVPN session to initially connect to a peer at a known address, however if packets arrive from a new address and pass all authentication tests, the new address will take control of the session. This is useful when you are connecting to a peer which holds a dynamic address such as a dial-in user or DHCP client.\n"
 "\n"
-"Essentially, --float tells OpenVPN to accept authenticated packets from any "
-"address, not only the address which was specified in the --remote option.\n"
+"Essentially, --float tells OpenVPN to accept authenticated packets from any address, not only the address which was specified in the --remote option.\n"
 "\n"
 "config: float"
 msgstr ""
-"Permet al parell remot canviar la seva adreça IP i/o el seu número de port, "
-"com ara el que es deu al DHCP (això és el comportament predeterminat si no "
-"es fa servir --remote). --float quan s'especifica amb --remote permet la "
-"sessió OpenVPN connectar-se inicialment amb un parell a una adreça coneguda, "
-"però si arriben paquets des d'una adreça nova i passen totes les "
-"verificacions d'autenticació, la nova adreça prendrà control de la sessió. "
-"Això és útil quan esteu connectant a un parell que té una adreça dinàmica "
-"com ara un usuari de connexió telefònica o un client DHCP.\n"
+"Permet al parell remot canviar la seva adreça IP i/o el seu número de port, com ara el que es deu al DHCP (això és el comportament predeterminat si no es fa servir --remote). --float quan s'especifica amb --remote permet la sessió OpenVPN connectar-se inicialment amb un parell a una adreça coneguda, però si arriben paquets des d'una adreça nova i passen totes les verificacions d'autenticació, la nova adreça prendrà control de la sessió. Això és útil quan esteu connectant a un parell que té una adreça dinàmica com ara un usuari de connexió telefònica o un client DHCP.\n"
 "\n"
-"Essencialment, --float li diu a l'OpenVPN que accepti paquets autenticats "
-"des de qualsevol adreça, no sols l'adreça que es va especificar a l'opció --"
-"remote.\n"
+"Essencialment, --float li diu a l'OpenVPN que accepti paquets autenticats des de qualsevol adreça, no sols l'adreça que es va especificar a l'opció --remote.\n"
 "\n"
 "config: float"
 
@@ -1125,12 +1083,10 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:96
 msgid ""
-"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
-"Cipher Block Chaining mode).\n"
+"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in Cipher Block Chaining mode).\n"
 "config: cipher"
 msgstr ""
-"Encripta els paquets amb un algoritme de xifrat. Per defecte és BF-CBC "
-"(Blowfish in Cipher Block Chaining mode).\n"
+"Encripta els paquets amb un algoritme de xifrat. Per defecte és BF-CBC (Blowfish in Cipher Block Chaining mode).\n"
 "config: cipher"
 
 #: ../properties/nm-openvpn-dialog.ui.h:98
@@ -1139,23 +1095,18 @@ msgstr "U_sa una mida personalitzada per a la clau de xifrat:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:99
 msgid ""
-"Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
-"specific size.\n"
+"Set cipher key size to a custom value. If unspecified, it defaults to cipher-specific size.\n"
 "config: keysize <n>"
 msgstr ""
-"Estableix la mida de la clau de xifrat a un valor personalitzat. Si no "
-"s'especifica agafa el valor predeterminat de la mida específica per al "
-"xifrat.\n"
+"Estableix la mida de la clau de xifrat a un valor personalitzat. Si no s'especifica agafa el valor predeterminat de la mida específica per al xifrat.\n"
 "config: keysize <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:101
 msgid ""
-"Authenticate packets with HMAC using message digest algorithm. The default "
-"is SHA1.\n"
+"Authenticate packets with HMAC using message digest algorithm. The default is SHA1.\n"
 "config: auth"
 msgstr ""
-"Autentica els paquets amb HMAC usant l'algoritme de resum de missatges. Per "
-"defecte és SHA1.\n"
+"Autentica els paquets amb HMAC usant l'algoritme de resum de missatges. Per defecte és SHA1.\n"
 "config: auth"
 
 #: ../properties/nm-openvpn-dialog.ui.h:103
@@ -1230,8 +1181,7 @@ msgid ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 msgstr ""
-"Assumpte o nom comú a verificar contra la informació del certificat del "
-"servidor.\n"
+"Assumpte o nom comú a verificar contra la informació del certificat del servidor.\n"
 "\n"
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
@@ -1244,28 +1194,22 @@ msgstr "Comprova el _certificat del servidor:"
 msgid ""
 "Verify server certificate identification.\n"
 "\n"
-"When enabled, connection will only succeed if the server certificate matches "
-"some expected properties.\n"
-"Matching can either apply to the whole certificate subject (all the "
-"fields),\n"
+"When enabled, connection will only succeed if the server certificate matches some expected properties.\n"
+"Matching can either apply to the whole certificate subject (all the fields),\n"
 "or just the Common Name (CN field).\n"
 "\n"
-"The legacy option tls-remote is deprecated and removed from OpenVPN 2.4 and "
-"newer. Do not use it anymore.\n"
+"The legacy option tls-remote is deprecated and removed from OpenVPN 2.4 and newer. Do not use it anymore.\n"
 "\n"
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 msgstr ""
 "Verifica la identificació del certificat del servidor.\n"
 "\n"
-"Quan està habilitat, la connexió només tindrà èxit si el certificat del "
-"servidor coincideix amb algunes propietats esperades.\n"
-"La coincidència pot aplicar-se a tot l'assumpte del certificat (tots els "
-"camps),\n"
+"Quan està habilitat, la connexió només tindrà èxit si el certificat del servidor coincideix amb algunes propietats esperades.\n"
+"La coincidència pot aplicar-se a tot l'assumpte del certificat (tots els camps),\n"
 "o sols el nom comú (camp CN).\n"
 "\n"
-"L'opció antiga tls-remote està desaconsellada i suprimida d'OpenVPN 2.4 i "
-"més recents. No la useu més.\n"
+"L'opció antiga tls-remote està desaconsellada i suprimida d'OpenVPN 2.4 i més recents. No la useu més.\n"
 "\n"
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
@@ -1288,12 +1232,10 @@ msgstr "Tipus TLS del certificat del parell _remot:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:134
 msgid ""
-"Require that peer certificate was signed with an explicit key usage and "
-"extended key usage based on RFC3280 TLS rules.\n"
+"Require that peer certificate was signed with an explicit key usage and extended key usage based on RFC3280 TLS rules.\n"
 "config: remote-cert-tls client|server"
 msgstr ""
-"Requereix que el certificat del parell hagi estat signat amb un ús explícit "
-"de clau i un ús estès de clau basat en regles RFC3280.\n"
+"Requereix que el certificat del parell hagi estat signat amb un ús explícit de clau i un ús estès de clau basat en regles RFC3280.\n"
 "config: remote-cert-tls client|server"
 
 #: ../properties/nm-openvpn-dialog.ui.h:136
@@ -1315,12 +1257,10 @@ msgstr "Designació _remota nsCert del certificat del parell:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:139
 msgid ""
-"Require that peer certificate was signed with an explicit nsCertType "
-"designation.\n"
+"Require that peer certificate was signed with an explicit nsCertType designation.\n"
 "config: ns-cert-type client|server"
 msgstr ""
-"Requereix que el certificat del parell hagi estat signat amb una designació "
-"nsCertType explícita\n"
+"Requereix que el certificat del parell hagi estat signat amb una designació nsCertType explícita\n"
 "config: ns-cert-type client|server"
 
 #: ../properties/nm-openvpn-dialog.ui.h:141
@@ -1329,29 +1269,20 @@ msgstr "_Direcció de la clau:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:142
 msgid ""
-"Add an additional layer of HMAC authentication on top of the TLS control "
-"channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
-"control channel is also encrypted.\n"
+"Add an additional layer of HMAC authentication on top of the TLS control channel to protect against DoS attacks. In case of TLS-Crypt mode, the control channel is also encrypted.\n"
 "config: tls-auth <file> [direction] | tls-crypt <file>"
 msgstr ""
-"Afegeix una cap addicional d'autenticació HMAC a sobre del canal de control "
-"TLS per protegir contra atacs DoS. En cas de mode TLS-Crypt, el canal de "
-"control també es xifra.\n"
+"Afegeix una cap addicional d'autenticació HMAC a sobre del canal de control TLS per protegir contra atacs DoS. En cas de mode TLS-Crypt, el canal de control també es xifra.\n"
 "config: tls-auth <file> [direcció] | tls-crypt <file>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:144
 msgid ""
 "Direction parameter for static key mode.\n"
-"If key direction is used, it must be the opposite of that used on the VPN "
-"peer. For example, if the peer uses “1”, this connection must use “0”. If "
-"you are unsure what value to use, contact your system administrator.\n"
+"If key direction is used, it must be the opposite of that used on the VPN peer. For example, if the peer uses “1”, this connection must use “0”. If you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
 "Paràmetre de direcció per al mode de clau estàtica.\n"
-"Si s'utilitza una direcció de clau, ha de ser l'oposada que la de l'homòleg "
-"de la VPN. Per exemple, si l'homòleg utilitza «1», aquesta connexió ha "
-"d'utilitzar «0». Si no esteu segurs de quin valor heu d'utilitzar, contacteu "
-"amb l'administrador del sistema.\n"
+"Si s'utilitza una direcció de clau, ha de ser l'oposada que la de l'homòleg de la VPN. Per exemple, si l'homòleg utilitza «1», aquesta connexió ha d'utilitzar «0». Si no esteu segurs de quin valor heu d'utilitzar, contacteu amb l'administrador del sistema.\n"
 "config: tls-auth <fitxer> [direcció]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:147
@@ -1372,12 +1303,10 @@ msgstr "Certificats extra:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:151
 msgid ""
-"Specify a file containing one or more PEM certs (concatenated together) that "
-"complete the local certificate chain.\n"
+"Specify a file containing one or more PEM certs (concatenated together) that complete the local certificate chain.\n"
 "config: extra-certs <file>"
 msgstr ""
-"Especifica un fitxer que conté un o més certificats PEM (concatenats junts) "
-"que completa la cadena de certificat local.\n"
+"Especifica un fitxer que conté un o més certificats PEM (concatenats junts) que completa la cadena de certificat local.\n"
 "config: extra-certs <file>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:153
@@ -1386,33 +1315,39 @@ msgstr "Autenticació TLS addicional o xifrat"
 
 #: ../properties/nm-openvpn-dialog.ui.h:154
 msgid "Controls min and max version allowed for TLS."
-msgstr ""
+msgstr "Controla la versió mínima i màxima permesa per TLS."
 
 #: ../properties/nm-openvpn-dialog.ui.h:155
 msgid "TLS version control"
-msgstr ""
+msgstr "Control de versió TLS"
 
 #: ../properties/nm-openvpn-dialog.ui.h:156
 msgid "TLS _min version: "
-msgstr ""
+msgstr "_Versió mínima TLS: "
 
 #: ../properties/nm-openvpn-dialog.ui.h:157
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\".  If "
-"'or-highest' is specified and version is not recognized, we will only accept "
-"the highest TLS version supported by the local SSL implementation."
+"'or-highest' is specified and version is not recognized, we will only accept"
+" the highest TLS version supported by the local SSL implementation."
 msgstr ""
+"Estableix la versió mínima TLS que s'acceptarà del parell (per defecte és"
+" «1.0»). Els exemples per a la versió inclouen «1.0» «1.1» o «1.2». "
+"Si s'especifica «or-highest» i no es reconeix la versió només "
+"acceptarem la versió TLS més alta suportada per la implementació SSL local."
 
 #: ../properties/nm-openvpn-dialog.ui.h:158
 msgid "TLS ma_x version: "
-msgstr ""
+msgstr "V_ersió màxima TLS: "
 
 #: ../properties/nm-openvpn-dialog.ui.h:159
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
 msgstr ""
+"Estableix la versió màxima de TLS que utilitzarem (per defecte és la versió "
+"més alta admesa). Exemples per a la versió inclouen «1.0» «1.1» o «1.2»."
 
 #: ../properties/nm-openvpn-dialog.ui.h:160
 msgid "TLS Authentication"
@@ -1471,8 +1406,7 @@ msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
 msgstr ""
-"Torna a provar indefinidament si hi ha errors de proxy. Simula un reinici "
-"SIGUSR1.\n"
+"Torna a provar indefinidament si hi ha errors de proxy. Simula un reinici SIGUSR1.\n"
 "config: http-proxy-retry or socks-proxy-retry"
 
 #: ../properties/nm-openvpn-dialog.ui.h:174
@@ -1513,399 +1447,28 @@ msgstr "Temps d'expiració de la connexió"
 
 #: ../properties/nm-openvpn-dialog.ui.h:182
 msgid ""
-"The timeout in seconds before trying the next server. This timeout includes "
-"proxy and TCP connect timeouts.\n"
+"The timeout in seconds before trying the next server. This timeout includes proxy and TCP connect timeouts.\n"
 "config: connect-timeout <n> | server-poll-timeout <n>"
 msgstr ""
-"El temps d'expiració en segons abans de provar el següent servidor. Inclou "
-"els temps d'expiració de les connexions TCP i al servidor intermediari.\n"
+"El temps d'expiració en segons abans de provar el següent servidor. Inclou els temps d'expiració de les connexions TCP i al servidor intermediari.\n"
 "config: connect-timeout <n> | server-poll-timeout <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:184
-#, fuzzy
 msgid "0"
-msgstr "_0"
+msgstr "0"
 
 #: ../properties/nm-openvpn-dialog.ui.h:185
 msgid "Push peer info"
-msgstr ""
+msgstr "Envia la informació del parell"
 
 #: ../properties/nm-openvpn-dialog.ui.h:186
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
 msgstr ""
+"Envia informació addicional sobre el client al servidor.\n"
+"config: push-peer-info"
 
 #: ../properties/nm-openvpn-dialog.ui.h:188
 msgid "Misc"
 msgstr "Miscel·lània"
-
-#, c-format
-#~ msgid "Authenticate VPN %s"
-#~ msgstr "Autentica la VPN %s"
-
-#~ msgid ""
-#~ "Select the LZO data compression mode.\n"
-#~ "config: comp-lzo"
-#~ msgstr ""
-#~ "Selecciona el mode de compressió de dades LZO.\n"
-#~ "config: comp-lzo"
-
-#~ msgid "unknown OpenVPN file extension"
-#~ msgstr "extensió desconeguda de fitxer OpenVPN"
-
-#~ msgid "could not create openvpn object"
-#~ msgstr "no s'ha pogut crear l'objecte openvpn"
-
-#~ msgid "Invalid HMAC auth."
-#~ msgstr "Autenticació HMC no vàlida."
-
-#~ msgid "Choose your personal certificate..."
-#~ msgstr "Trieu el vostre certificat personal..."
-
-#~ msgid "Choose your private key..."
-#~ msgstr "Trieu la vostra clau privada..."
-
-#~ msgid "Choose a Certificate Authority certificate..."
-#~ msgstr "Trieu un certificat d'autoritat de certificació..."
-
-#~ msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
-#~ msgstr "Certificats PEM o PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
-
-#~ msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
-#~ msgstr "Certificats PEM (*.pem, *.crt, *.key, *.cer)"
-
-#~ msgid "cannot write <%s> blob from line %ld to file '%s'"
-#~ msgstr ""
-#~ "no es pot escriure la bombolla <%s> des de la línia %ld al fiter «%s»"
-
-#~ msgid "Missing required local IP address for static key mode."
-#~ msgstr "Falta l'adreça IP local requerida per al mode de clau estàtica."
-
-#~ msgid "Missing required remote IP address for static key mode."
-#~ msgstr "Falta l'adreça IP remota requerida per al mode de clau estàtica."
-
-#~ msgid ""
-#~ "Could not process the request because the openvpn connection type was "
-#~ "invalid."
-#~ msgstr ""
-#~ "No s'ha pogut trobar la demanda perquè el tipus de la connexió openvpn no "
-#~ "era vàlid."
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "<b>General</b>"
-#~ msgstr "<b>General</b>"
-
-#~ msgid "<b>Authentication</b>"
-#~ msgstr "<b>Autenticació</b>"
-
-#~ msgid "_Show passwords"
-#~ msgstr "_Mostra les contrasenyes"
-
-#~ msgid "Password for private key"
-#~ msgstr "Contrasenya per a la clau privada..."
-
-#~ msgid "Private Key Password:"
-#~ msgstr "Contrasenya de la clau privada:"
-
-#~ msgid ""
-#~ "Local peer's private key in .pem format.\n"
-#~ "config: key"
-#~ msgstr ""
-#~ "Clau privada del parell local en format .pem.\n"
-#~ "config: key"
-
-#~ msgid "Private Key:"
-#~ msgstr "Clau privada:"
-
-#~ msgid ""
-#~ "Certificate authority (CA) file in .pem format.\n"
-#~ "config: ca"
-#~ msgstr ""
-#~ "Fitxer d'autoritat de certificats (CA) en format .pem.\n"
-#~ "config: ca"
-
-#~ msgid ""
-#~ "Local peer's signed certificate in .pem format (signed by CA of CA "
-#~ "Certificate).\n"
-#~ "config: cert"
-#~ msgstr ""
-#~ "Certificat signat pel parell local en format .pem (signat pel ca del "
-#~ "certificat CD).\n"
-#~ "config: cert"
-
-#~ msgid ""
-#~ "<i>Connect only to servers whose certificate matches the given subject.\n"
-#~ "Example: /CN=myvpn.company.com</i>"
-#~ msgstr ""
-#~ "<i>Connecta només als servidors on el certificat d'aquests coincideixi "
-#~ "amb l'assumpte proporcionat.\n"
-#~ "Per exemple: /CN=elmeuvpn.companyia.com</i>"
-
-#~ msgid ""
-#~ "Accept connections only from a host with X509 name or common name equal "
-#~ "to the specified one.\n"
-#~ "config: tls-remote"
-#~ msgstr ""
-#~ "Accepta connexions sols des d'un amfitrió amb nom X509 o nom comú igual "
-#~ "al que s'ha especificat.\n"
-#~ "config: tls-remote"
-
-#~ msgid "could not open file for writing"
-#~ msgstr "no s'ha pogut obrir el fitxer per escriure"
-
-#, fuzzy
-#~ msgid "Not Required"
-#~ msgstr "No necessari"
-
-#~ msgid "VPN Connection Manager (OpenVPN)"
-#~ msgstr "Gestor de connexions VPN (OpenVPN)"
-
-#~ msgid "Add, Remove, and Edit VPN Connections"
-#~ msgstr "Afegiu, suprimiu, i editeu connexions VPN"
-
-#~ msgid "_Password:"
-#~ msgstr "_Contrasenya:"
-
-#~ msgid "_Secondary Password:"
-#~ msgstr "Contrasenya _secundària:"
-
-#~ msgid "_Username:"
-#~ msgstr "Nom d'_usuari:"
-
-#~ msgid "_Domain:"
-#~ msgstr "_Domini:"
-
-#~ msgid "Connect as _user:"
-#~ msgstr "Connecta com a _usuari:"
-
-#~ msgid "_Remember password for this session"
-#~ msgstr "_Recorda la contrasenya per aquesta sessió"
-
-#~ msgid "_Save password in keyring"
-#~ msgstr "_Desa la contrasenya a l'anell de claus"
-
-#~ msgid "Use a TA_P device"
-#~ msgstr "Utilitza un dispositiu TA_P"
-
-#~ msgid "The following OpenVPN connection will be created:"
-#~ msgstr "Es crearà la següent connexió OpenVPN:"
-
-#~ msgid "Name:  %s"
-#~ msgstr "Nom:  %s"
-
-#~ msgid "Connection Type: X.509 Certificates"
-#~ msgstr "Tipus de connexió: Certifcats X.509"
-
-#~ msgid "CA:  %s"
-#~ msgstr "CA:  %s"
-
-#~ msgid "Cert:  %s"
-#~ msgstr "Certificat:  %s"
-
-#~ msgid "Key:  %s"
-#~ msgstr "Clau:  %s"
-
-#~ msgid "Connection Type: Shared Key"
-#~ msgstr "Tipus de connexió: Clau compartida"
-
-#~ msgid "Shared Key:  %s"
-#~ msgstr "Clau compartida:  %s"
-
-#~ msgid "Remote IP:  %s"
-#~ msgstr "IP remota:  %s"
-
-#~ msgid "Connection Type: Password"
-#~ msgstr "Tipus de connexió: Contrasenya"
-
-#~ msgid "Username:  %s"
-#~ msgstr "Nom d'usuari:  %s"
-
-#~ msgid "Connection Type: X.509 with Password Authentication"
-#~ msgstr "Tipus de connexió: X.509 amb autenticació de contrasenya"
-
-#~ msgid "Remote:  %s"
-#~ msgstr "Remot:  %s"
-
-#~ msgid "Device: %s"
-#~ msgstr "Dispositiu: %s"
-
-#~ msgid "Protocol: %s"
-#~ msgstr "Protocol: %s"
-
-#~ msgid "TCP"
-#~ msgstr "TCP"
-
-#~ msgid "UDP"
-#~ msgstr "UDP"
-
-#~ msgid "Routes:  %s"
-#~ msgstr "Rutes:  %s"
-
-#~ msgid "TLS auth:  %s %s"
-#~ msgstr "Autenticació TLS:  %s %s"
-
-#~ msgid "The connection details can be changed using the \"Edit\" button."
-#~ msgstr "Els detalls de la connexió es poden canviar amb el botó «Edita»."
-
-#~ msgid "Cannot import settings"
-#~ msgstr "No s'han pogut importar els paràmetres"
-
-#~ msgid "The VPN settings file '%s' does not contain valid data."
-#~ msgstr "El fitxer de paràmetres VPN «%s», no conté dades vàlides."
-
-#~ msgid "Select file to import"
-#~ msgstr "Seleccioneu el fitxer a importar"
-
-#~ msgid "Select CA to use"
-#~ msgstr "Seleccioneu la CA a utilitzar"
-
-#~ msgid "Select certificate to use"
-#~ msgstr "Seleccioneu el certificat a utilitzar"
-
-#~ msgid "Select key to use"
-#~ msgstr "Seleccioneu la clau a utilitzar"
-
-#~ msgid "Select shared key to use"
-#~ msgstr "Seleccioneu la clau compartida a utilitzar"
-
-#~ msgid "Select TA to use"
-#~ msgstr "Seleccioneu la TA a utilitzar"
-
-#~ msgid "Save as..."
-#~ msgstr "Anomena i desa..."
-
-#~ msgid "A file named \"%s\" already exists."
-#~ msgstr "Ja existeix un fitxer anomenat «%s»."
-
-#~ msgid "Do you want to replace it with the one you are saving?"
-#~ msgstr "Voleu reemplaçar-lo pel que voleu desar?"
-
-#~ msgid "Failed to export configuration"
-#~ msgstr "No s'ha pogut exportar la configuració"
-
-#~ msgid "65536"
-#~ msgstr "65536"
-
-#~ msgid "<i>example: 172.16.0.0/16 10.11.12.0/24</i>"
-#~ msgstr "<i>exemple: 172.16.0.0/16 10.11.12.0/24</i>"
-
-#~ msgid "C_A file:"
-#~ msgstr "Fitxer C_A:"
-
-#~ msgid "Connection na_me:"
-#~ msgstr "No_m de la connexió:"
-
-#~ msgid "Import _Saved Configuration..."
-#~ msgstr "Importa una configuració de_sada..."
-
-#~ msgid ""
-#~ "Name used to identify the connection to the private network, e.g. "
-#~ "\"Campus VPN\" or \"Corporate Network\""
-#~ msgstr ""
-#~ "_Nom utilitzat per identificar la connexió a la xarxa privada, per "
-#~ "exemple «VPN del Campus» o «Xarxa Corporativa»"
-
-#~ msgid "Network"
-#~ msgstr "Xarxa"
-
-#~ msgid "Only use _VPN connection for these addresses:"
-#~ msgstr "_Fes servir només la connexió VPN per a aquestes adreces:"
-
-#~ msgid ""
-#~ "Please enter the information provided by your system administrator below. "
-#~ "Do not enter your password here as you will be prompted when connecting."
-#~ msgstr ""
-#~ "Entreu la informació proporcionada pel vostre administrador de sistema. "
-#~ "No hi entreu la vostra contrasenya, ja es demanarà en connectar."
-
-#~ msgid ""
-#~ "Please note that the file you import is not an OpenVPN configuration "
-#~ "file. Ask your administrator for the file."
-#~ msgstr ""
-#~ "El fitxer que heu importat no és un fitxer de configuració OpenVPN. "
-#~ "Demaneu-li el fitxer a l'administrador."
-
-#~ msgid "Shared _key:"
-#~ msgstr "_Clau compartida:"
-
-#~ msgid "Use _TLS auth:"
-#~ msgstr "Utilitza autenticació _TLS:"
-
-#~ msgid "Use cip_her:"
-#~ msgstr "Utilitza _xifratge:"
-
-#~ msgid ""
-#~ "X.509 Certificates\n"
-#~ "Pre-shared key\n"
-#~ "Password Authentication\n"
-#~ "X.509 with Password Authentication"
-#~ msgstr ""
-#~ "Certificats X.509\n"
-#~ "Clau pre-compartida\n"
-#~ "Autenticació de contrasenya\n"
-#~ "X.509 amb autenticació de contrasenya"
-
-#~ msgid "_1"
-#~ msgstr "_1"
-
-#~ msgid "_Gateway address:"
-#~ msgstr "A_dreça de la passarel·la:"
-
-#~ msgid "_Key:"
-#~ msgstr "_Clau:"
-
-#~ msgid "_Local IP:"
-#~ msgstr "IP _local:"
-
-#~ msgid "_Remote IP:"
-#~ msgstr "IP _remota:"
-
-#~ msgid "_none"
-#~ msgstr "_cap"
-
-#~ msgid ""
-#~ "The VPN login failed because the user name and password were not accepted "
-#~ "or the certificate password was wrong."
-#~ msgstr ""
-#~ "No s'ha pogut connectar a la VPN perquè no s'han acceptat el nom "
-#~ "d'usuari, o la contrasenya o la contrasenya certificada és errònia.\""
-
-#~ msgid "The VPN login failed because the VPN program could not be started."
-#~ msgstr ""
-#~ "No s'ha pogut connectar a la VPN perquè no s'ha pogut iniciar l'aplicació "
-#~ "VPN."
-
-#~ msgid ""
-#~ "The VPN login failed because the VPN program could not connect to the VPN "
-#~ "server."
-#~ msgstr ""
-#~ "No s'ha pogut connectar a la VPN perquè l'aplicació VPN no s'ha pogut "
-#~ "connectar al servidor VPN."
-
-#~ msgid ""
-#~ "The VPN login failed because the VPN program received an invalid "
-#~ "configuration from the VPN server."
-#~ msgstr ""
-#~ "No s'ha pogut connectar a la VPN perquè l'aplicació VPN ha rebut una "
-#~ "configuració errònia del servidor VPN."
-
-#~ msgid "VPN connection failed"
-#~ msgstr "Ha fallat la connexió VPN"
-
-#~ msgid "<b>Connection Information</b>"
-#~ msgstr "<b>Informació de la connexió</b>"
-
-#~ msgid "X.509"
-#~ msgstr "X.509"
-
-#~ msgid "X.509/Pass"
-#~ msgstr "X.509/Contrasenya"
-
-#~ msgid "CA  file:"
-#~ msgstr "Fitxer CA:"
-
-#~ msgid "Optional"
-#~ msgstr "Opcional"
