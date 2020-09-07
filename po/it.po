@@ -1,17 +1,18 @@
 # Italian translation of network-manager-openvpn
 # Copyright (C) 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2015, 2017, 2018 the network-manager-openvpnS COPYRIGHT HOLDER
-# Copyright (C) 2019 the network-manager-openvpnS COPYRIGHT HOLDER
+# Copyright (C) 2019, 2020 the network-manager-openvpnS COPYRIGHT HOLDER
 # This file is distributed under the same license as the network-manager-openvpn package.
 # Francesco Marletta <francesco.marletta@tiscali.it>, 2006, 2007, 2008, 2009, 2010.
 # Luca Ferretti <elle.uca@libero.it>, 2010.
-# Milo Casagrande <milo@milo.name>, 2012, 2013, 2015, 2017, 2018, 2019.
+# Milo Casagrande <milo@milo.name>, 2012, 2013, 2015, 2017, 2018, 2019, 2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: network-manager-openvpn\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 02:05-0700\n"
-"PO-Revision-Date: 2019-02-15 13:50+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
+"issues\n"
+"POT-Creation-Date: 2020-07-08 18:36+0000\n"
+"PO-Revision-Date: 2020-09-07 09:59+0200\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: ../appdata/network-manager-openvpn.metainfo.xml.in.h:1
 msgid "OpenVPN client"
@@ -43,23 +44,21 @@ msgid "The NetworkManager Developers"
 msgstr "Gli sviluppatori di NetworkManager"
 
 #: ../auth-dialog/main.c:175
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication required"
-msgstr "Autenticazione"
+msgstr "Richiesta autenticazione"
 
 #: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2438
 msgid "Password"
 msgstr "Password"
 
 #: ../auth-dialog/main.c:189
-#, fuzzy
 msgid "Certificate password"
-msgstr "Password del certificato:"
+msgstr "Password del certificato"
 
 #: ../auth-dialog/main.c:196
-#, fuzzy
 msgid "HTTP proxy password"
-msgstr "Password proxy HTTP:"
+msgstr "Password proxy HTTP"
 
 #: ../auth-dialog/main.c:236
 msgid "Authenticate VPN"
@@ -232,9 +231,9 @@ msgid "unsupported comp-lzo argument"
 msgstr "argomento comp-lzo non supportato"
 
 #: ../properties/import-export.c:1027
-#, fuzzy, c-format
+#, c-format
 msgid "unsupported compress argument"
-msgstr "argomento comp-lzo non supportato"
+msgstr "argomento compressione non supportato"
 
 #: ../properties/import-export.c:1128
 #, c-format
@@ -712,28 +711,27 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid "LZO"
-msgstr ""
+msgstr "LZO"
 
 #: ../properties/nm-openvpn-dialog.ui.h:2
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #: ../properties/nm-openvpn-dialog.ui.h:3
 msgid "LZ4 v2"
-msgstr ""
+msgstr "LZ4 v2"
 
 #: ../properties/nm-openvpn-dialog.ui.h:4
-#, fuzzy
 msgid "Automatic"
-msgstr "(automatica)"
+msgstr "Automatica"
 
 #: ../properties/nm-openvpn-dialog.ui.h:5
 msgid "LZO disabled (legacy)"
-msgstr ""
+msgstr "LZO disabilitato (legacy)"
 
 #: ../properties/nm-openvpn-dialog.ui.h:6
 msgid "LZO adaptive (legacy)"
-msgstr ""
+msgstr "LZO adattivo (legacy)"
 
 #: ../properties/nm-openvpn-dialog.ui.h:8
 msgid "TLS-Auth"
@@ -907,9 +905,8 @@ msgstr ""
 "config: reneg-sec"
 
 #: ../properties/nm-openvpn-dialog.ui.h:49
-#, fuzzy
 msgid "Data _compression:"
-msgstr "Usare la compressione L_ZO"
+msgstr "Compressione _dati:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:50
 msgid ""
@@ -1021,13 +1018,16 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:75
 msgid "_Prefix remote DNS name with random string"
-msgstr ""
+msgstr "_Prefissare il nome del DNS remoto con una stringa casuale"
 
 #: ../properties/nm-openvpn-dialog.ui.h:76
 msgid ""
 "Adds a random string to remote DNS name to avoid DNS caching.\n"
 "config: remote-random-hostname"
 msgstr ""
+"Aggiunge una stringa casuale al nome del DNS remoto per evitare il "
+"salvataggio in cache DNS.\n"
+"config: remote-random-hostname"
 
 #: ../properties/nm-openvpn-dialog.ui.h:78
 msgid "IPv6 tun link"
@@ -1373,15 +1373,15 @@ msgstr "Autenticazione TLS aggiuntiva o cifratura"
 
 #: ../properties/nm-openvpn-dialog.ui.h:154
 msgid "Controls min and max version allowed for TLS."
-msgstr ""
+msgstr "Controlla la versione min/max consentita per TLS"
 
 #: ../properties/nm-openvpn-dialog.ui.h:155
 msgid "TLS version control"
-msgstr ""
+msgstr "Controllo versione TLS"
 
 #: ../properties/nm-openvpn-dialog.ui.h:156
 msgid "TLS _min version: "
-msgstr ""
+msgstr "Versione mi_nima TLS"
 
 #: ../properties/nm-openvpn-dialog.ui.h:157
 msgid ""
@@ -1390,16 +1390,22 @@ msgid ""
 "'or-highest' is specified and version is not recognized, we will only accept "
 "the highest TLS version supported by the local SSL implementation."
 msgstr ""
+"Imposta la versione minima di TLS accettabile da un nodo (predefinito è "
+"«1.0»), valori possibili sono «1.0», «1.1» o «1.2»; se viene specificato «or-"
+"highest» e la versione non è riconosciuta, viene accettata solo la versione "
+"TLS più alta supportata dall'implementazione locale"
 
 #: ../properties/nm-openvpn-dialog.ui.h:158
 msgid "TLS ma_x version: "
-msgstr ""
+msgstr "Versione _massima TLS:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:159
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
 msgstr ""
+"Imposta la versione massima di TLS utilizzabile (viene usata quella più "
+"elevata in modo predefinito), valori possibili sono «1.0», «1.1» o «1.2»"
 
 #: ../properties/nm-openvpn-dialog.ui.h:160
 msgid "TLS Authentication"
@@ -1506,29 +1512,20 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:184
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../properties/nm-openvpn-dialog.ui.h:185
 msgid "Push peer info"
-msgstr ""
+msgstr "Invia informazioni nodo"
 
 #: ../properties/nm-openvpn-dialog.ui.h:186
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
 msgstr ""
+"Invia informazioni aggiuntive riguardo al client al server.\n"
+"config: push-peer-info"
 
 #: ../properties/nm-openvpn-dialog.ui.h:188
 msgid "Misc"
 msgstr "Varie"
-
-#, c-format
-#~ msgid "Authenticate VPN %s"
-#~ msgstr "Autenticazione VPN %s"
-
-#~ msgid ""
-#~ "Select the LZO data compression mode.\n"
-#~ "config: comp-lzo"
-#~ msgstr ""
-#~ "Seleziona la modalità di compressione LZO.\n"
-#~ "config: comp-lzo"
