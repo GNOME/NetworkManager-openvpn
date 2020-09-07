@@ -6,20 +6,22 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 02:05-0700\n"
-"PO-Revision-Date: 2006-06-17 22:54+0200\n"
-"Last-Translator: Marcel Telka <marcel@telka.sk>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
+"issues\n"
+"POT-Creation-Date: 2020-07-08 18:36+0000\n"
+"PO-Revision-Date: 2020-09-07 16:03+0200\n"
+"Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: ../appdata/network-manager-openvpn.metainfo.xml.in.h:1
-#, fuzzy
 msgid "OpenVPN client"
-msgstr "OpenVPN klient"
+msgstr "Klient OpenVPN"
 
 #: ../appdata/network-manager-openvpn.metainfo.xml.in.h:2
 msgid "Client for OpenVPN virtual private networks"
@@ -43,19 +45,16 @@ msgid "Authentication required"
 msgstr "Overenie totožnosti:"
 
 #: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2438
-#, fuzzy
 msgid "Password"
-msgstr "Heslo:"
+msgstr "Heslo"
 
 #: ../auth-dialog/main.c:189
-#, fuzzy
 msgid "Certificate password"
-msgstr "Heslo certifikátu:"
+msgstr "Heslo certifikátu"
 
 #: ../auth-dialog/main.c:196
-#, fuzzy
 msgid "HTTP proxy password"
-msgstr "_Heslo:"
+msgstr "Heslo proxy HTTP"
 
 #: ../auth-dialog/main.c:236
 #, fuzzy
@@ -63,14 +62,12 @@ msgid "Authenticate VPN"
 msgstr "Overenie totožnosti:"
 
 #: ../auth-dialog/main.c:245
-#, fuzzy
 msgid "Certificate pass_word:"
-msgstr "Heslo certifikátu:"
+msgstr "Hes_lo certifikátu:"
 
 #: ../auth-dialog/main.c:251
-#, fuzzy
 msgid "_HTTP proxy password:"
-msgstr "_Heslo:"
+msgstr "Heslo proxy _HTTP:"
 
 #: ../auth-dialog/main.c:517
 #, c-format
@@ -83,6 +80,7 @@ msgid "option %s expects between %u and %u argument"
 msgid_plural "option %s expects between %u and %u arguments"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../properties/import-export.c:187
 #, c-format
@@ -95,6 +93,7 @@ msgid "option %s expects exactly one argument"
 msgid_plural "option %s expects exactly %u arguments"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: ../properties/import-export.c:218
 #, c-format
@@ -215,9 +214,9 @@ msgid "unsupported crl-verify argument"
 msgstr ""
 
 #: ../properties/import-export.c:965 ../properties/import-export.c:1399
-#, fuzzy, c-format
+#, c-format
 msgid "invalid option"
-msgstr "Pripojiť k:"
+msgstr "neplatná voľba"
 
 #: ../properties/import-export.c:1015
 #, c-format
@@ -291,16 +290,15 @@ msgstr ""
 #: ../properties/import-export.c:2292
 #, c-format
 msgid "failed to write file: %s"
-msgstr ""
+msgstr "zlyhal zápis súboru: %s"
 
 #: ../properties/nm-openvpn-editor-plugin.c:42
-#, fuzzy
 msgid "OpenVPN"
-msgstr "OpenVPN klient"
+msgstr "OpenVPN"
 
 #: ../properties/nm-openvpn-editor-plugin.c:43
 msgid "Compatible with the OpenVPN server."
-msgstr ""
+msgstr "Kompatibilná so serverom OpenVPN."
 
 #: ../properties/nm-openvpn-editor.c:242
 msgid "Choose an OpenVPN static key…"
@@ -314,7 +312,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-editor.c:644
 msgid "OpenVPN Static Keys (*.key)"
-msgstr ""
+msgstr "Statické kľúče OpenVPN (*.key)"
 
 #: ../properties/nm-openvpn-editor.c:797 ../properties/nm-openvpn-editor.c:892
 msgid "Default"
@@ -322,35 +320,35 @@ msgstr ""
 
 #: ../properties/nm-openvpn-editor.c:876
 msgid "RSA MD-4"
-msgstr ""
+msgstr "RSA MD-4"
 
 #: ../properties/nm-openvpn-editor.c:877
 msgid "MD-5"
-msgstr ""
+msgstr "MD-5"
 
 #: ../properties/nm-openvpn-editor.c:878
 msgid "SHA-1"
-msgstr ""
+msgstr "SHA-1"
 
 #: ../properties/nm-openvpn-editor.c:879
 msgid "SHA-224"
-msgstr ""
+msgstr "SHA-224"
 
 #: ../properties/nm-openvpn-editor.c:880
 msgid "SHA-256"
-msgstr ""
+msgstr "SHA-256"
 
 #: ../properties/nm-openvpn-editor.c:881
 msgid "SHA-384"
-msgstr ""
+msgstr "SHA-384"
 
 #: ../properties/nm-openvpn-editor.c:882
 msgid "SHA-512"
-msgstr ""
+msgstr "SHA-512"
 
 #: ../properties/nm-openvpn-editor.c:883
 msgid "RIPEMD-160"
-msgstr ""
+msgstr "RIPEMD-160"
 
 #: ../properties/nm-openvpn-editor.c:941
 msgid "Don’t verify certificate identification"
@@ -375,26 +373,25 @@ msgstr ""
 #: ../properties/nm-openvpn-editor.c:1078
 #: ../properties/nm-openvpn-editor.c:1149
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: ../properties/nm-openvpn-editor.c:1083
 #: ../properties/nm-openvpn-editor.c:1154
-#, fuzzy
 msgid "Client"
-msgstr "OpenVPN klient"
+msgstr "Klient"
 
 #: ../properties/nm-openvpn-editor.c:1476
 #: ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
-msgstr ""
+msgstr "Nevyžadované"
 
 #: ../properties/nm-openvpn-editor.c:1478
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: ../properties/nm-openvpn-editor.c:1480
 msgid "SOCKS"
-msgstr ""
+msgstr "SOCKS"
 
 #: ../properties/nm-openvpn-editor.c:1588
 msgid "TUN"
@@ -418,17 +415,16 @@ msgid "ping-restart"
 msgstr ""
 
 #: ../properties/nm-openvpn-editor.c:2427
-#, fuzzy
 msgid "Certificates (TLS)"
-msgstr "Heslo certifikátu:"
+msgstr "Certifikáty (TLS)"
 
 #: ../properties/nm-openvpn-editor.c:2452
 msgid "Password with Certificates (TLS)"
-msgstr ""
+msgstr "Heslo s certifikátmi (TLS)"
 
 #: ../properties/nm-openvpn-editor.c:2465
 msgid "Static Key"
-msgstr ""
+msgstr "Statický kľúč"
 
 #: ../properties/nm-openvpn-editor.c:2629
 msgid "could not load UI widget"
@@ -475,7 +471,7 @@ msgstr ""
 #: ../shared/nm-utils/nm-vpn-plugin-utils.c:103
 #, c-format
 msgid "missing plugin file \"%s\""
-msgstr ""
+msgstr "chýba súbor „%s“ zásuvného modulu"
 
 #: ../shared/nm-utils/nm-vpn-plugin-utils.c:109
 #, c-format
@@ -504,22 +500,22 @@ msgstr ""
 #: ../shared/utils.c:249
 #, c-format
 msgid "empty host"
-msgstr ""
+msgstr "prázdny hostiteľ"
 
 #: ../shared/utils.c:259
 #, c-format
 msgid "invalid port"
-msgstr ""
+msgstr "neplatný port"
 
 #: ../shared/utils.c:270
 #, c-format
 msgid "invalid protocol"
-msgstr ""
+msgstr "neplatný protokol"
 
 #: ../src/nm-openvpn-service.c:429
 #, c-format
 msgid "invalid address “%s”"
-msgstr ""
+msgstr "neplatná adresa „%s“"
 
 #: ../src/nm-openvpn-service.c:441
 #, c-format
@@ -548,19 +544,19 @@ msgstr ""
 
 #: ../src/nm-openvpn-service.c:924
 msgid "A username is required."
-msgstr ""
+msgstr "Vyžaduje sa používateľské meno."
 
 #: ../src/nm-openvpn-service.c:928
 msgid "A password is required."
-msgstr ""
+msgstr "Vyžaduje sa heslo."
 
 #: ../src/nm-openvpn-service.c:931
 msgid "A username and password are required."
-msgstr ""
+msgstr "Vyžaduje sa používateľské meno a heslo."
 
 #: ../src/nm-openvpn-service.c:953
 msgid "A private key password is required."
-msgstr ""
+msgstr "Vyžaduje sa heslo k súkromnému kľúču."
 
 #: ../src/nm-openvpn-service.c:966
 msgid "An HTTP Proxy username is required."
@@ -582,9 +578,8 @@ msgid ""
 msgstr ""
 
 #: ../src/nm-openvpn-service.c:1351 ../src/nm-openvpn-service.c:2157
-#, fuzzy
 msgid "Invalid connection type."
-msgstr "Pripojiť k:"
+msgstr "Neplatný typ pripojenia."
 
 #: ../src/nm-openvpn-service.c:1369
 msgid "Could not find the openvpn binary."
@@ -593,7 +588,7 @@ msgstr ""
 #: ../src/nm-openvpn-service.c:1417
 #, c-format
 msgid "Invalid port number “%s”."
-msgstr ""
+msgstr "Neplatné číslo portu „%s“."
 
 #: ../src/nm-openvpn-service.c:1437
 #, c-format
@@ -661,9 +656,9 @@ msgid "Invalid fragment size “%s”."
 msgstr ""
 
 #: ../src/nm-openvpn-service.c:1927
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown connection type “%s”."
-msgstr "Pripojiť k:"
+msgstr "Neznámy typ pripojenia „%s“."
 
 #: ../src/nm-openvpn-service.c:1945
 #, c-format
@@ -698,15 +693,15 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:1
 msgid "LZO"
-msgstr ""
+msgstr "LZO"
 
 #: ../properties/nm-openvpn-dialog.ui.h:2
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #: ../properties/nm-openvpn-dialog.ui.h:3
 msgid "LZ4 v2"
-msgstr ""
+msgstr "LZ4 v2"
 
 #: ../properties/nm-openvpn-dialog.ui.h:4
 msgid "Automatic"
@@ -738,11 +733,11 @@ msgstr "Áno"
 
 #: ../properties/nm-openvpn-dialog.ui.h:12
 msgid "General"
-msgstr ""
+msgstr "Všeobecné"
 
 #: ../properties/nm-openvpn-dialog.ui.h:13
 msgid "_Gateway:"
-msgstr ""
+msgstr "_Brána:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:14
 msgid ""
@@ -753,25 +748,22 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:16
-#, fuzzy
 msgid "Authentication"
-msgstr "Overenie totožnosti:"
+msgstr "Overenie totožnosti"
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
 msgid "CA"
-msgstr ""
+msgstr "CA"
 
 #: ../properties/nm-openvpn-dialog.ui.h:18
 msgid "User"
-msgstr ""
+msgstr "Používateľský"
 
 #: ../properties/nm-openvpn-dialog.ui.h:19
-#, fuzzy
 msgid "Password:"
-msgstr "_Heslo:"
+msgstr "Heslo:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:20
-#, fuzzy
 msgid "User name:"
 msgstr "Meno používateľa:"
 
@@ -789,23 +781,20 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:25
-#, fuzzy
 msgid "Remote IP Address:"
-msgstr "Vzdialené IP:  %s"
+msgstr "Vzdialená adresa IP:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:26
-#, fuzzy
 msgid "Local IP Address:"
-msgstr "Miestne IP:  %s"
+msgstr "Miestna adresa IP:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:27
 msgid "Key Direction:"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:28
-#, fuzzy
 msgid "Static Key:"
-msgstr "Zdieľaný kľúč"
+msgstr "Statický kľúč:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:29
 msgid ""
@@ -844,11 +833,11 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:40
 msgid "Ad_vanced…"
-msgstr ""
+msgstr "_Rozšírené…"
 
 #: ../properties/nm-openvpn-dialog.ui.h:42
 msgid "OpenVPN Advanced Options"
-msgstr ""
+msgstr "Rozšírené voľby OpenVPN"
 
 #: ../properties/nm-openvpn-dialog.ui.h:43
 msgid "Use custom gateway p_ort:"
@@ -872,9 +861,8 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:49
-#, fuzzy
 msgid "Data _compression:"
-msgstr "Použiť kompresiu LZO: %s"
+msgstr "_Kompresia údajov:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:50
 #, fuzzy
@@ -884,9 +872,8 @@ msgid ""
 msgstr "Použiť kompresiu LZO: %s"
 
 #: ../properties/nm-openvpn-dialog.ui.h:52
-#, fuzzy
 msgid "Use a _TCP connection"
-msgstr "VPN spojenia"
+msgstr "Použiť pripojenie _TCP"
 
 #: ../properties/nm-openvpn-dialog.ui.h:53
 msgid ""
@@ -1061,13 +1048,12 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:103
-#, fuzzy
 msgid "Ci_pher:"
-msgstr "Šifra:  %s"
+msgstr "Ci_fra:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:104
 msgid "_HMAC Authentication:"
-msgstr ""
+msgstr "Overenie totožnosti _HMAC:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:105
 msgid "Disable cipher _negotiation"
@@ -1111,7 +1097,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:114
 msgid "Security"
-msgstr ""
+msgstr "Zabezpečenie"
 
 #: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "_Subject Match:"
@@ -1126,9 +1112,8 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:120
-#, fuzzy
 msgid "Server _Certificate Check:"
-msgstr "Heslo certifikátu:"
+msgstr "Kontrola _certifikátu servera:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:121
 msgid ""
@@ -1212,20 +1197,19 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:147
 msgid "Key _File:"
-msgstr ""
+msgstr "Súbor _kľúča:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:148
 msgid "Mode:"
-msgstr ""
+msgstr "Režim:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:149
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:150
-#, fuzzy
 msgid "Extra Certificates:"
-msgstr "Heslo certifikátu:"
+msgstr "Certifikáty navyše:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:151
 msgid ""
@@ -1248,7 +1232,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:156
 msgid "TLS _min version: "
-msgstr ""
+msgstr "_Min. verzia TLS: "
 
 #: ../properties/nm-openvpn-dialog.ui.h:157
 msgid ""
@@ -1269,9 +1253,8 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:160
-#, fuzzy
 msgid "TLS Authentication"
-msgstr "Overenie totožnosti:"
+msgstr "Overenie totožnosti TLS"
 
 #: ../properties/nm-openvpn-dialog.ui.h:161
 msgid ""
@@ -1281,17 +1264,19 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:163
 msgid "Proxy _Type:"
-msgstr ""
+msgstr "_Typ proxy:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:164
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
 msgstr ""
+"<i>Túto voľbu vyberte, ak vaša spoločnosť vyžaduje na prístup k internetu "
+"server proxy.</i>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:165
 msgid "Server _Address:"
-msgstr ""
+msgstr "_Adresa servera:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:166
 msgid ""
@@ -1301,7 +1286,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:168
 msgid "_Port:"
-msgstr ""
+msgstr "_Port:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:169
 msgid ""
@@ -1320,14 +1305,12 @@ msgid ""
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:174
-#, fuzzy
 msgid "Proxy _Username:"
-msgstr "Meno po_užívateľa:"
+msgstr "Meno po_užívateľa proxy:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:175
-#, fuzzy
 msgid "Proxy Passwor_d:"
-msgstr "_Heslo:"
+msgstr "_Heslo proxy:"
 
 #: ../properties/nm-openvpn-dialog.ui.h:176
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
@@ -1338,22 +1321,20 @@ msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:178
-#, fuzzy
 msgid "_Show password"
-msgstr "_Heslo:"
+msgstr "_Zobraziť heslo"
 
 #: ../properties/nm-openvpn-dialog.ui.h:179
 msgid "Proxies"
-msgstr ""
+msgstr "Proxy"
 
 #: ../properties/nm-openvpn-dialog.ui.h:180
 msgid "Path mtu discovery"
 msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:181
-#, fuzzy
 msgid "Connect timeout"
-msgstr "Pripojiť sa _anonymne"
+msgstr "Čas pripojenia vypršal"
 
 #: ../properties/nm-openvpn-dialog.ui.h:182
 msgid ""
@@ -1364,7 +1345,7 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:184
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: ../properties/nm-openvpn-dialog.ui.h:185
 msgid "Push peer info"
@@ -1378,9 +1359,9 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:188
 msgid "Misc"
-msgstr ""
+msgstr "Rôzne"
 
-#, fuzzy, c-format
+#, fuzzy
 #~ msgid "Authenticate VPN %s"
 #~ msgstr "Overenie totožnosti:"
 
