@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2020-07-08 18:36+0000\n"
-"PO-Revision-Date: 2020-08-16 14:41+0700\n"
+"POT-Creation-Date: 2020-09-14 11:54+0000\n"
+"PO-Revision-Date: 2020-10-04 17:13+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
 "Language: id\n"
@@ -46,7 +46,7 @@ msgstr "Para Pengembang NetworkManager"
 msgid "Authentication required"
 msgstr "Autentikasi diperlukan"
 
-#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2438
+#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2444
 msgid "Password"
 msgstr "Kata Sandi"
 
@@ -215,7 +215,7 @@ msgstr "argumen mtu-disc tak didukung"
 msgid "unsupported crl-verify argument"
 msgstr "argumen crl-verify tidak didukung"
 
-#: ../properties/import-export.c:965 ../properties/import-export.c:1399
+#: ../properties/import-export.c:965 ../properties/import-export.c:1406
 #, c-format
 msgid "invalid option"
 msgstr "opsi tak valid"
@@ -245,53 +245,53 @@ msgstr "remote tak boleh memuat koma"
 msgid "remote expects protocol type like “udp” or “tcp”"
 msgstr "remote mengharapkan tipe protokol seperti \"udp\" atau \"tcp\""
 
-#: ../properties/import-export.c:1383
+#: ../properties/import-export.c:1390
 #, c-format
 msgid "invalid verify-x509-name type"
 msgstr "tipe verify-x509-name tidak valid"
 
-#: ../properties/import-export.c:1529
+#: ../properties/import-export.c:1536
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "elemen blob/xml yang tak didukung"
 
-#: ../properties/import-export.c:1558
+#: ../properties/import-export.c:1565
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "elemen blob tak diterminasi <%s>"
 
-#: ../properties/import-export.c:1614
+#: ../properties/import-export.c:1621
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "galat konfigurasi: %s (baris %ld)"
 
-#: ../properties/import-export.c:1615
+#: ../properties/import-export.c:1622
 msgid "unknown or unsupported option"
 msgstr "opsi tak dikenal atau tak didukung"
 
-#: ../properties/import-export.c:1630
+#: ../properties/import-export.c:1637
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr "Berkas yang akan diimpor bukan konfigurasi klien OpenVPN yang valid"
 
-#: ../properties/import-export.c:1638
+#: ../properties/import-export.c:1645
 msgid "The file to import wasn’t a valid OpenVPN configure (no remote)"
 msgstr ""
 "Berkas yang akan diimpor bukan suatu konfigurasi OpenVPN yang valid (tidak "
 "ada remote)"
 
-#: ../properties/import-export.c:1903
+#: ../properties/import-export.c:1910
 msgid "missing path argument"
 msgstr "argumen path kurang"
 
-#: ../properties/import-export.c:1913
+#: ../properties/import-export.c:1920
 msgid "connection is not a valid OpenVPN connection"
 msgstr "koneksi bukan koneksi OpenVPN yang valid"
 
-#: ../properties/import-export.c:1922
+#: ../properties/import-export.c:1929
 msgid "connection was incomplete (missing gateway)"
 msgstr "koneksi tak lengkap (kurang gateway)"
 
-#: ../properties/import-export.c:2292
+#: ../properties/import-export.c:2302
 #, c-format
 msgid "failed to write file: %s"
 msgstr "gagal menulis berkas: %s"
@@ -308,8 +308,8 @@ msgstr "Kompatibel dengan server OpenVPN."
 msgid "Choose an OpenVPN static key…"
 msgstr "Pilih kunci statik OpenVPN…"
 
-#: ../properties/nm-openvpn-editor.c:260 ../properties/nm-openvpn-editor.c:875
-#: ../properties/nm-openvpn-editor.c:1660
+#: ../properties/nm-openvpn-editor.c:260 ../properties/nm-openvpn-editor.c:876
+#: ../properties/nm-openvpn-editor.c:1662
 #: ../properties/nm-openvpn-dialog.ui.h:7
 msgid "None"
 msgstr "Tak ada"
@@ -318,120 +318,120 @@ msgstr "Tak ada"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Kunci Statik OpenVPN (*.key)"
 
-#: ../properties/nm-openvpn-editor.c:797 ../properties/nm-openvpn-editor.c:892
+#: ../properties/nm-openvpn-editor.c:798 ../properties/nm-openvpn-editor.c:893
 msgid "Default"
 msgstr "Baku"
 
-#: ../properties/nm-openvpn-editor.c:876
+#: ../properties/nm-openvpn-editor.c:877
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/nm-openvpn-editor.c:877
+#: ../properties/nm-openvpn-editor.c:878
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/nm-openvpn-editor.c:878
+#: ../properties/nm-openvpn-editor.c:879
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/nm-openvpn-editor.c:879
+#: ../properties/nm-openvpn-editor.c:880
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/nm-openvpn-editor.c:880
+#: ../properties/nm-openvpn-editor.c:881
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/nm-openvpn-editor.c:881
+#: ../properties/nm-openvpn-editor.c:882
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/nm-openvpn-editor.c:882
+#: ../properties/nm-openvpn-editor.c:883
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/nm-openvpn-editor.c:883
+#: ../properties/nm-openvpn-editor.c:884
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/nm-openvpn-editor.c:941
+#: ../properties/nm-openvpn-editor.c:942
 msgid "Don’t verify certificate identification"
 msgstr "Jangan verifikasi identifikasi sertifikat"
 
-#: ../properties/nm-openvpn-editor.c:947
+#: ../properties/nm-openvpn-editor.c:948
 msgid "Verify whole subject exactly"
 msgstr "Verifikasikan seluruh subjek secara eksak"
 
-#: ../properties/nm-openvpn-editor.c:953
+#: ../properties/nm-openvpn-editor.c:954
 msgid "Verify name exactly"
 msgstr "Verifikasikan nama secara eksak"
 
-#: ../properties/nm-openvpn-editor.c:959
+#: ../properties/nm-openvpn-editor.c:960
 msgid "Verify name by prefix"
 msgstr "Verifikasikan nama menurut prefiks"
 
-#: ../properties/nm-openvpn-editor.c:965
+#: ../properties/nm-openvpn-editor.c:966
 msgid "Verify subject partially (legacy mode, strongly discouraged)"
 msgstr ""
 "Verifikasikan subjek secara parsial (mode warisan, sangat tidak dianjurkan)"
 
-#: ../properties/nm-openvpn-editor.c:1078
-#: ../properties/nm-openvpn-editor.c:1149
+#: ../properties/nm-openvpn-editor.c:1079
+#: ../properties/nm-openvpn-editor.c:1150
 msgid "Server"
 msgstr "Server"
 
-#: ../properties/nm-openvpn-editor.c:1083
-#: ../properties/nm-openvpn-editor.c:1154
+#: ../properties/nm-openvpn-editor.c:1084
+#: ../properties/nm-openvpn-editor.c:1155
 msgid "Client"
 msgstr "Klien"
 
-#: ../properties/nm-openvpn-editor.c:1476
+#: ../properties/nm-openvpn-editor.c:1477
 #: ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Not required"
 msgstr "Tak diperlukan"
 
-#: ../properties/nm-openvpn-editor.c:1478
+#: ../properties/nm-openvpn-editor.c:1479
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/nm-openvpn-editor.c:1480
+#: ../properties/nm-openvpn-editor.c:1481
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn-editor.c:1588
+#: ../properties/nm-openvpn-editor.c:1589
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/nm-openvpn-editor.c:1590
+#: ../properties/nm-openvpn-editor.c:1591
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/nm-openvpn-editor.c:1597
+#: ../properties/nm-openvpn-editor.c:1598
 msgid "(automatic)"
 msgstr "(otomatis)"
 
-#: ../properties/nm-openvpn-editor.c:1722
+#: ../properties/nm-openvpn-editor.c:1724
 msgid "ping-exit"
 msgstr "ping-exit"
 
-#: ../properties/nm-openvpn-editor.c:1724
+#: ../properties/nm-openvpn-editor.c:1726
 msgid "ping-restart"
 msgstr "ping-restart"
 
-#: ../properties/nm-openvpn-editor.c:2427
+#: ../properties/nm-openvpn-editor.c:2433
 msgid "Certificates (TLS)"
 msgstr "Sertifikat (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:2452
+#: ../properties/nm-openvpn-editor.c:2458
 msgid "Password with Certificates (TLS)"
 msgstr "Kata Sandi dengan Sertifikat (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:2465
+#: ../properties/nm-openvpn-editor.c:2471
 msgid "Static Key"
 msgstr "Kunci Statik"
 
-#: ../properties/nm-openvpn-editor.c:2629
+#: ../properties/nm-openvpn-editor.c:2635
 msgid "could not load UI widget"
 msgstr "tidak bisa memuat widget UI"
 
@@ -522,181 +522,181 @@ msgstr "port tak valid"
 msgid "invalid protocol"
 msgstr "protokol tak valid"
 
-#: ../src/nm-openvpn-service.c:429
+#: ../src/nm-openvpn-service.c:430
 #, c-format
 msgid "invalid address “%s”"
 msgstr "alamat \"%s\" tidak valid"
 
-#: ../src/nm-openvpn-service.c:441
+#: ../src/nm-openvpn-service.c:442
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "properti integer \"%s\" tidak valid atau diluar jangkauan [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:452
+#: ../src/nm-openvpn-service.c:453
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "properti bool \"%s\" tidak valid (bukan yes atau no)"
 
-#: ../src/nm-openvpn-service.c:459
+#: ../src/nm-openvpn-service.c:460
 #, c-format
 msgid "unhandled property “%s” type %s"
 msgstr "properti \"%s\" tipe %s tidak ditangani"
 
-#: ../src/nm-openvpn-service.c:470
+#: ../src/nm-openvpn-service.c:471
 #, c-format
 msgid "property “%s” invalid or not supported"
 msgstr "properti \"%s\" tidak valid atau tak didukung"
 
-#: ../src/nm-openvpn-service.c:486
+#: ../src/nm-openvpn-service.c:487
 msgid "No VPN configuration options."
 msgstr "Tak ada opsi konfigurasi VPN."
 
-#: ../src/nm-openvpn-service.c:924
+#: ../src/nm-openvpn-service.c:925
 msgid "A username is required."
 msgstr "Perlu nama pengguna."
 
-#: ../src/nm-openvpn-service.c:928
+#: ../src/nm-openvpn-service.c:929
 msgid "A password is required."
 msgstr "Perlu sandi."
 
-#: ../src/nm-openvpn-service.c:931
+#: ../src/nm-openvpn-service.c:932
 msgid "A username and password are required."
 msgstr "Perlu nama pengguna dan sandi."
 
-#: ../src/nm-openvpn-service.c:953
+#: ../src/nm-openvpn-service.c:954
 msgid "A private key password is required."
 msgstr "Perlu sandi kunci privat."
 
-#: ../src/nm-openvpn-service.c:966
+#: ../src/nm-openvpn-service.c:967
 msgid "An HTTP Proxy username is required."
 msgstr "Perlu nama pengguna Proksi HTTP."
 
-#: ../src/nm-openvpn-service.c:970
+#: ../src/nm-openvpn-service.c:971
 msgid "An HTTP Proxy password is required."
 msgstr "Perlu sandi Proksi HTTP."
 
-#: ../src/nm-openvpn-service.c:973
+#: ../src/nm-openvpn-service.c:974
 msgid "An HTTP Proxy username and password are required."
 msgstr "Perlu nama pengguna dan sandi Proksi HTTP."
 
-#: ../src/nm-openvpn-service.c:1342 ../src/nm-openvpn-service.c:2148
-#: ../src/nm-openvpn-service.c:2183
+#: ../src/nm-openvpn-service.c:1343 ../src/nm-openvpn-service.c:2153
+#: ../src/nm-openvpn-service.c:2188
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr "Tak bisa memroses permintaan karena pengaturan koneksi VPN tak valid."
 
-#: ../src/nm-openvpn-service.c:1351 ../src/nm-openvpn-service.c:2157
+#: ../src/nm-openvpn-service.c:1352 ../src/nm-openvpn-service.c:2162
 msgid "Invalid connection type."
 msgstr "Tipe sambungan tak valid."
 
-#: ../src/nm-openvpn-service.c:1369
+#: ../src/nm-openvpn-service.c:1370
 msgid "Could not find the openvpn binary."
 msgstr "Tak bisa temukan biner openvpn."
 
-#: ../src/nm-openvpn-service.c:1417
+#: ../src/nm-openvpn-service.c:1418
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "Nomor port \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1437
+#: ../src/nm-openvpn-service.c:1438
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "Proto \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1482
+#: ../src/nm-openvpn-service.c:1487
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "Tipe proksi \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1567
+#: ../src/nm-openvpn-service.c:1572
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "Durasi ping \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1580
+#: ../src/nm-openvpn-service.c:1585
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "Durasi ping-exit \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1593
+#: ../src/nm-openvpn-service.c:1598
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "Durasi ping-restart \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1606
+#: ../src/nm-openvpn-service.c:1611
 #, c-format
 msgid "Invalid connect timeout “%s”."
 msgstr "Waktu tunggu koneksi tidak valid \"%s\"."
 
-#: ../src/nm-openvpn-service.c:1631
+#: ../src/nm-openvpn-service.c:1636
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "Argumen max-routes \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1675
+#: ../src/nm-openvpn-service.c:1680
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "Ukuran kunci \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1738
+#: ../src/nm-openvpn-service.c:1743
 #, c-format
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "Konfigurasi tidak valid dengan tls-remote dan verify-x509-name."
 
-#: ../src/nm-openvpn-service.c:1751
+#: ../src/nm-openvpn-service.c:1756
 #, c-format
 msgid "Invalid verify-x509-name."
 msgstr "verify-x509-name tidak valid."
 
-#: ../src/nm-openvpn-service.c:1774
+#: ../src/nm-openvpn-service.c:1779
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "Reneg detik \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1804
+#: ../src/nm-openvpn-service.c:1809
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "Ukuran MTU TUN \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1817
+#: ../src/nm-openvpn-service.c:1822
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "Ukuran fragmen \"%s\" tidak valid."
 
-#: ../src/nm-openvpn-service.c:1927
+#: ../src/nm-openvpn-service.c:1932
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "Tipe sambungan \"%s\" tidak dikenal."
 
-#: ../src/nm-openvpn-service.c:1945
+#: ../src/nm-openvpn-service.c:1950
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "Pengguna \"%s\" tidak ditemukan, periksa NM_OPENVPN_USER."
 
-#: ../src/nm-openvpn-service.c:1957
+#: ../src/nm-openvpn-service.c:1962
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "Grup \"%s\" tidak ditemukan, periksa NM_OPENVPN_GROUP."
 
-#: ../src/nm-openvpn-service.c:2196
+#: ../src/nm-openvpn-service.c:2201
 msgid "Unhandled pending authentication."
 msgstr "Autentikasi tertunda yang tak tertangani."
 
-#: ../src/nm-openvpn-service.c:2314
+#: ../src/nm-openvpn-service.c:2319
 msgid "Don’t quit when VPN connection terminates"
 msgstr "Jangan keluar ketika koneksi VPN berakhir"
 
-#: ../src/nm-openvpn-service.c:2315
+#: ../src/nm-openvpn-service.c:2320
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Aktifkan log pengawakutuan verbose (mungkin mengungkap sandi)"
 
-#: ../src/nm-openvpn-service.c:2316
+#: ../src/nm-openvpn-service.c:2321
 msgid "D-Bus name to use for this instance"
 msgstr "Nama D-Bus untuk dipakai bagi instansi ini"
 
-#: ../src/nm-openvpn-service.c:2342
+#: ../src/nm-openvpn-service.c:2347
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
@@ -1009,10 +1009,22 @@ msgstr ""
 "config: remote-random"
 
 #: ../properties/nm-openvpn-dialog.ui.h:75
+msgid "Allow Pull FQDN"
+msgstr "Izinkan Pull FQDN"
+
+#: ../properties/nm-openvpn-dialog.ui.h:76
+msgid ""
+"Allow client to pull DNS names from server\n"
+"config: allow-pull-fqdn"
+msgstr ""
+"Mengizinkan klien menarik nama-nama DNS dari server\n"
+"config: allow-pull-fqdn"
+
+#: ../properties/nm-openvpn-dialog.ui.h:78
 msgid "_Prefix remote DNS name with random string"
 msgstr "Tambahkan awalan nama DNS remote dengan string acak"
 
-#: ../properties/nm-openvpn-dialog.ui.h:76
+#: ../properties/nm-openvpn-dialog.ui.h:79
 msgid ""
 "Adds a random string to remote DNS name to avoid DNS caching.\n"
 "config: remote-random-hostname"
@@ -1020,11 +1032,11 @@ msgstr ""
 "Menambahkan string acak ke nama DNS remote untuk menghindari caching DNS.\n"
 "config: remote-random-hostname"
 
-#: ../properties/nm-openvpn-dialog.ui.h:78
+#: ../properties/nm-openvpn-dialog.ui.h:81
 msgid "IPv6 tun link"
 msgstr "Link tun IPv6"
 
-#: ../properties/nm-openvpn-dialog.ui.h:79
+#: ../properties/nm-openvpn-dialog.ui.h:82
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
@@ -1032,11 +1044,11 @@ msgstr ""
 "Bangun suatu saluran tun yang mampu meneruskan trafik IPv6\n"
 "config: tun-ipv6"
 
-#: ../properties/nm-openvpn-dialog.ui.h:81
+#: ../properties/nm-openvpn-dialog.ui.h:84
 msgid "Specify pin_g interval:"
 msgstr "Nyatakan interval pin_g:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:82
+#: ../properties/nm-openvpn-dialog.ui.h:85
 msgid ""
 "Ping remote over the TCP/UDP control channel if no packets have been sent "
 "for at least n seconds.\n"
@@ -1046,11 +1058,11 @@ msgstr ""
 "paling tidak selama n detik.\n"
 "config: ping <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:84
+#: ../properties/nm-openvpn-dialog.ui.h:87
 msgid "Specify _exit or restart ping:"
 msgstr "Nyatakan ping _exit atau restart:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:85
+#: ../properties/nm-openvpn-dialog.ui.h:88
 msgid ""
 "Exit or restart after n seconds pass without reception of a ping or other "
 "packet from remote.\n"
@@ -1060,11 +1072,11 @@ msgstr ""
 "paket lain dari remote.\n"
 "config: ping-exit | ping-restart <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:87
+#: ../properties/nm-openvpn-dialog.ui.h:90
 msgid "Accept authenticated packets from any address (F_loat)"
 msgstr "Terima paket autentikasi dari sebarang alamat (F_loat)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:88
+#: ../properties/nm-openvpn-dialog.ui.h:91
 msgid ""
 "Allow remote peer to change its IP address and/or port number, such as due "
 "to DHCP (this is the default if --remote is not used). --float when "
@@ -1093,11 +1105,11 @@ msgstr ""
 "\n"
 "config: float"
 
-#: ../properties/nm-openvpn-dialog.ui.h:93
+#: ../properties/nm-openvpn-dialog.ui.h:96
 msgid "Specify max routes:"
 msgstr "Nyatakan rute maksimum:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:94
+#: ../properties/nm-openvpn-dialog.ui.h:97
 msgid ""
 "Specify the maximum number of routes the server is allowed to specify.\n"
 "config: max-routes <n>"
@@ -1105,7 +1117,7 @@ msgstr ""
 "Nyatakan banyaknya route yang diizinkan untuk diperoleh dari server.\n"
 "config: max-routes <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:96
+#: ../properties/nm-openvpn-dialog.ui.h:99
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
 "Cipher Block Chaining mode).\n"
@@ -1115,11 +1127,11 @@ msgstr ""
 "Cipher Block Chaining mode).\n"
 "config: cipher"
 
-#: ../properties/nm-openvpn-dialog.ui.h:98
+#: ../properties/nm-openvpn-dialog.ui.h:101
 msgid "Use custom _size of cipher key:"
 msgstr "Gunakan uku_ran gubahan kunci cipher:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:99
+#: ../properties/nm-openvpn-dialog.ui.h:102
 msgid ""
 "Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
 "specific size.\n"
@@ -1129,7 +1141,7 @@ msgstr ""
 "ukuran spesifik cipher.\n"
 "config: keysize <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:101
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
 "is SHA1.\n"
@@ -1139,19 +1151,19 @@ msgstr ""
 "adalah SHA1.\n"
 "config: auth"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:106
 msgid "Ci_pher:"
 msgstr "Cipher:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "_HMAC Authentication:"
 msgstr "Autentikasi HMAC:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:105
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid "Disable cipher _negotiation"
 msgstr "Nonaktifkan _negosiasi cipher"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
@@ -1159,11 +1171,11 @@ msgstr ""
 "Nonaktifkan negosiasi cipher antara klien dan server.\n"
 "config: ncp-disable"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:111
 msgid "Verify CRL from file"
 msgstr "Verifikasi CRL dari berkas"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid ""
 "Check peer certificate against the specified file in PEM format. A CRL "
 "(certificate revocation list) is used when a particular key is compromised "
@@ -1174,11 +1186,11 @@ msgstr ""
 "digunakan ketika kunci tertentu dikompromikan (compromised) tetapi ketika "
 "keseluruhan IKP (Infrastruktur Kunci Publik) masih utuh."
 
-#: ../properties/nm-openvpn-dialog.ui.h:110
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid "Verify CRL from directory"
 msgstr "Verifikasi CRL dari direktori"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:114
 msgid ""
 "Check peer certificate by looking at files in the specified directory. The "
 "directory must contain files named as revoked serial numbers (the files may "
@@ -1188,23 +1200,23 @@ msgstr ""
 "ditentukan. Direktori harus berisi berkas yang dinamakan sebagai nomor seri "
 "yang dicabut (berkas mungkin kosong, isinya tidak pernah dibaca)."
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "Choose CRL file"
 msgstr "Pilih berkas CRL"
 
-#: ../properties/nm-openvpn-dialog.ui.h:113
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid "Choose CRL directory"
 msgstr "Pilih direktori CRL"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:117
 msgid "Security"
 msgstr "Keamanan"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "_Subject Match:"
 msgstr "Cocok Subjek:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:116
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid ""
 "Subject or Common Name to verify server certificate information against.\n"
 "\n"
@@ -1217,11 +1229,11 @@ msgstr ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (mode warisan): tls-remote subject-or-name"
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:123
 msgid "Server _Certificate Check:"
 msgstr "Pemeriksaan _Sertifikat Server:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:124
 msgid ""
 "Verify server certificate identification.\n"
 "\n"
@@ -1250,11 +1262,11 @@ msgstr ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (mode warisan): tls-remote subject-or-name"
 
-#: ../properties/nm-openvpn-dialog.ui.h:131
+#: ../properties/nm-openvpn-dialog.ui.h:134
 msgid "_Verify peer (server) certificate usage signature"
 msgstr "_Verifikasi tanda tangan penggunaan sertifikat peer (server)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:132
+#: ../properties/nm-openvpn-dialog.ui.h:135
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -1262,11 +1274,11 @@ msgstr ""
 "Mempersyaratkan sertifikat peer ditandatangani dengan penggunaan kunci yang "
 "eksplisit dan penggunaan kunci yang diperluas berbasis aturan TLS RFC3280."
 
-#: ../properties/nm-openvpn-dialog.ui.h:133
+#: ../properties/nm-openvpn-dialog.ui.h:136
 msgid "_Remote peer certificate TLS type:"
 msgstr "Tipe TLS sertifikat peer _remote:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:134
+#: ../properties/nm-openvpn-dialog.ui.h:137
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -1276,11 +1288,11 @@ msgstr ""
 "eksplisit dan penggunaan kunci yang diperluas berbasis aturan TLS RFC3280.\n"
 "config: remote-cert-tls client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:136
+#: ../properties/nm-openvpn-dialog.ui.h:139
 msgid "_Verify peer (server) certificate nsCertType designation"
 msgstr "_Verifikasi penugasan nsCertType sertifikat peer (server)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:137
+#: ../properties/nm-openvpn-dialog.ui.h:140
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
@@ -1288,11 +1300,11 @@ msgstr ""
 "Mempersyaratkan sertifikat peer ditandatangani dengan penugasan nsCertType "
 "yang eksplisit."
 
-#: ../properties/nm-openvpn-dialog.ui.h:138
+#: ../properties/nm-openvpn-dialog.ui.h:141
 msgid "_Remote peer certificate nsCert designation:"
 msgstr "Penugasan nsCert sertifikat peer _remote:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:139
+#: ../properties/nm-openvpn-dialog.ui.h:142
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
@@ -1302,11 +1314,11 @@ msgstr ""
 "yang eksplisit.\n"
 "config: ns-cert-type client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:141
+#: ../properties/nm-openvpn-dialog.ui.h:144
 msgid "Key _Direction:"
 msgstr "Arah Kunci:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:142
+#: ../properties/nm-openvpn-dialog.ui.h:145
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
@@ -1318,7 +1330,7 @@ msgstr ""
 "dienkripsi.\n"
 "config: tls-auth <berkas> [arah] | tls-crypt <file>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:144
+#: ../properties/nm-openvpn-dialog.ui.h:147
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -1333,23 +1345,23 @@ msgstr ""
 "administrator sistem Anda.\n"
 "config: tls-auth <berkas> [arah]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:147
+#: ../properties/nm-openvpn-dialog.ui.h:150
 msgid "Key _File:"
 msgstr "Berkas Kunci:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:148
+#: ../properties/nm-openvpn-dialog.ui.h:151
 msgid "Mode:"
 msgstr "Mode:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:149
+#: ../properties/nm-openvpn-dialog.ui.h:152
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr "Tambahkan lapisan tambahan enkripsi atau autentikasi HMAC."
 
-#: ../properties/nm-openvpn-dialog.ui.h:150
+#: ../properties/nm-openvpn-dialog.ui.h:153
 msgid "Extra Certificates:"
 msgstr "Sertifikat Ekstra:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:151
+#: ../properties/nm-openvpn-dialog.ui.h:154
 msgid ""
 "Specify a file containing one or more PEM certs (concatenated together) that "
 "complete the local certificate chain.\n"
@@ -1359,23 +1371,23 @@ msgstr ""
 "sama lain) yang melengkapi rantai sertifikat lokal.\n"
 "config: extra-certs <file>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:153
+#: ../properties/nm-openvpn-dialog.ui.h:156
 msgid "Additional TLS authentication or encryption"
 msgstr "Tambahan autentikasi atau enkripsi TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:154
+#: ../properties/nm-openvpn-dialog.ui.h:157
 msgid "Controls min and max version allowed for TLS."
 msgstr "Mengontrol versi min dan maks yang diizinkan untuk TLS."
 
-#: ../properties/nm-openvpn-dialog.ui.h:155
+#: ../properties/nm-openvpn-dialog.ui.h:158
 msgid "TLS version control"
 msgstr "Kontrol versi TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:156
+#: ../properties/nm-openvpn-dialog.ui.h:159
 msgid "TLS _min version: "
 msgstr "Versi _min TLS: "
 
-#: ../properties/nm-openvpn-dialog.ui.h:157
+#: ../properties/nm-openvpn-dialog.ui.h:160
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\".  If "
@@ -1387,11 +1399,11 @@ msgstr ""
 "\"1,2\".  Jika 'or-highest' dinyatakan dan versi tidak dikenali, kita hanya "
 "akan menerima versi TLS tertinggi yang didukung oleh implementasi SSL lokal."
 
-#: ../properties/nm-openvpn-dialog.ui.h:158
+#: ../properties/nm-openvpn-dialog.ui.h:161
 msgid "TLS ma_x version: "
 msgstr "Versi ma_ks TLS: "
 
-#: ../properties/nm-openvpn-dialog.ui.h:159
+#: ../properties/nm-openvpn-dialog.ui.h:162
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1400,11 +1412,11 @@ msgstr ""
 "tertinggi yang didukung).  Contoh untuk versi termasuk \"1,0\", \"1,1\", "
 "atau \"1,2\"."
 
-#: ../properties/nm-openvpn-dialog.ui.h:160
+#: ../properties/nm-openvpn-dialog.ui.h:163
 msgid "TLS Authentication"
 msgstr "Autentikasi TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:161
+#: ../properties/nm-openvpn-dialog.ui.h:164
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1412,11 +1424,11 @@ msgstr ""
 "Jenis proksi: HTTP atau Socks.\n"
 "config: http-proxy atau socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:163
+#: ../properties/nm-openvpn-dialog.ui.h:166
 msgid "Proxy _Type:"
 msgstr "Jenis Proksi:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:164
+#: ../properties/nm-openvpn-dialog.ui.h:167
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1424,11 +1436,11 @@ msgstr ""
 "<i>Pilih opsi ini bila organisasi Anda memerlukan penggunaan server proksi "
 "untuk mengakses Internet.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:165
+#: ../properties/nm-openvpn-dialog.ui.h:168
 msgid "Server _Address:"
 msgstr "Alamat Server:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:166
+#: ../properties/nm-openvpn-dialog.ui.h:169
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1436,11 +1448,11 @@ msgstr ""
 "Menyambung ke host jauh melalui suatu proksi dengan alamat ini.\n"
 "config: http-proxy atau socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:168
+#: ../properties/nm-openvpn-dialog.ui.h:171
 msgid "_Port:"
 msgstr "Port:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:169
+#: ../properties/nm-openvpn-dialog.ui.h:172
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1448,11 +1460,11 @@ msgstr ""
 "Menyambung ke host jauh melalui suatu proksi dengan port ini.\n"
 "config: http-proxy atau socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:171
+#: ../properties/nm-openvpn-dialog.ui.h:174
 msgid "_Retry indefinitely when errors occur"
 msgstr "Coba lagi sete_rusnya ketika terjadi galat"
 
-#: ../properties/nm-openvpn-dialog.ui.h:172
+#: ../properties/nm-openvpn-dialog.ui.h:175
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1461,40 +1473,40 @@ msgstr ""
 "SIGUSR1.\n"
 "config: http-proxy-retry atau socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:174
+#: ../properties/nm-openvpn-dialog.ui.h:177
 msgid "Proxy _Username:"
 msgstr "Nama Pengguna Proksi:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:175
+#: ../properties/nm-openvpn-dialog.ui.h:178
 msgid "Proxy Passwor_d:"
 msgstr "Sandi Proksi:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:176
+#: ../properties/nm-openvpn-dialog.ui.h:179
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Nama pengguna proksi HTTP/Socks yang dilewatkan ke OpenVPN ketika diminta."
 
-#: ../properties/nm-openvpn-dialog.ui.h:177
+#: ../properties/nm-openvpn-dialog.ui.h:180
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr "Sandi proksi HTTP/Socks yang dilewatkan ke OpenVPN ketika diminta."
 
-#: ../properties/nm-openvpn-dialog.ui.h:178
+#: ../properties/nm-openvpn-dialog.ui.h:181
 msgid "_Show password"
 msgstr "Tampilkan sandi"
 
-#: ../properties/nm-openvpn-dialog.ui.h:179
+#: ../properties/nm-openvpn-dialog.ui.h:182
 msgid "Proxies"
 msgstr "Proksi"
 
-#: ../properties/nm-openvpn-dialog.ui.h:180
+#: ../properties/nm-openvpn-dialog.ui.h:183
 msgid "Path mtu discovery"
 msgstr "Deteksi path mtu"
 
-#: ../properties/nm-openvpn-dialog.ui.h:181
+#: ../properties/nm-openvpn-dialog.ui.h:184
 msgid "Connect timeout"
 msgstr "Waktu tunggu sambungan"
 
-#: ../properties/nm-openvpn-dialog.ui.h:182
+#: ../properties/nm-openvpn-dialog.ui.h:185
 msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
@@ -1504,15 +1516,15 @@ msgstr ""
 "tunggu ini mencakup waktu tunggu koneksi proxy dan TCP.\n"
 "konfigurasi: connect-timeout <n> | server-poll-timeout <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:184
+#: ../properties/nm-openvpn-dialog.ui.h:187
 msgid "0"
 msgstr "0"
 
-#: ../properties/nm-openvpn-dialog.ui.h:185
+#: ../properties/nm-openvpn-dialog.ui.h:188
 msgid "Push peer info"
 msgstr "Dorong info peer"
 
-#: ../properties/nm-openvpn-dialog.ui.h:186
+#: ../properties/nm-openvpn-dialog.ui.h:189
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
@@ -1520,6 +1532,6 @@ msgstr ""
 "Dorong informasi tambahan tentang klien ke server.\n"
 "config: push-peer-info"
 
-#: ../properties/nm-openvpn-dialog.ui.h:188
+#: ../properties/nm-openvpn-dialog.ui.h:191
 msgid "Misc"
 msgstr "Rupa-rupa"
