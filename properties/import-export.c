@@ -897,17 +897,16 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PROTO)) {
 			if (!args_params_check_nargs_n (params, 1, &line_error))
 				goto handle_line_error;
-			/* Valid parameters are "udp", "tcp-client" and "tcp-server".
+			/* Valid parameters are defined in shared/utils.h
 			 * 'tcp' isn't technically valid, but it used to be accepted so
 			 * we'll handle it here anyway.
 			 */
-			if (nm_streq (params[1], "udp")) {
-				/* ignore; udp is default */
-			} else if (NM_IN_STRSET (params[1], "tcp-client", "tcp-server", "tcp"))
-				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
-			else {
-				line_error = args_params_error_message_invalid_arg (params, 1);
+			if (!NM_IN_STRSET (params[1], NMOVPN_PROTCOL_TYPES)) {
+				line_error = g_strdup_printf (_("proto expects protocol type like “udp” or “tcp”"));
 				goto handle_line_error;
+			}
+			if (!NM_IN_STRSET (params[1], "udp", "udp4", "udp6")) {
+				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
 			}
 			continue;
 		}

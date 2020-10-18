@@ -1011,6 +1011,118 @@ test_push_peer_info_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_PUSH_PEER_INFO, "yes");
 }
 
+static void
+test_proto_udp_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "proto-udp.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
+}
+
+static void
+test_proto_udp4_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "proto-udp4.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
+}
+
+static void
+test_proto_udp6_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "proto-udp6.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, NULL);
+}
+
+static void
+test_proto_tcp_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "proto-tcp.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+}
+
+static void
+test_proto_tcp4_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "proto-tcp4.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+}
+
+static void
+test_proto_tcp6_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "proto-tcp6.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+}
+
+static void
+test_proto_tcp4_client_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "proto-tcp4-client.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+}
+
+static void
+test_proto_tcp6_client_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "proto-tcp6-client.ovpn");
+
+	s_vpn = nm_connection_get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+}
+
 /*****************************************************************************/
 
 static void
@@ -1198,6 +1310,30 @@ int main (int argc, char **argv)
 
 	_add_test_func_simple (test_push_peer_info_import);
 	_add_test_func ("push-peer-info-export", test_export_compare, "push-peer-info.ovpn", "push-peer-info.ovpntest");
+
+	_add_test_func_simple (test_proto_udp_import);
+	_add_test_func ("proto-udp-export", test_export_compare, "proto-udp.ovpn", "proto-udp.ovpntest");
+
+	_add_test_func_simple (test_proto_udp4_import);
+	_add_test_func ("proto-udp4-export", test_export_compare, "proto-udp4.ovpn", "proto-udp4.ovpntest");
+
+	_add_test_func_simple (test_proto_udp6_import);
+	_add_test_func ("proto-udp6-export", test_export_compare, "proto-udp6.ovpn", "proto-udp6.ovpntest");
+
+	_add_test_func_simple (test_proto_tcp_import);
+	_add_test_func ("proto-tcp-export", test_export_compare, "proto-tcp.ovpn", "proto-tcp.ovpntest");
+
+	_add_test_func_simple (test_proto_tcp4_import);
+	_add_test_func ("proto-tcp4-export", test_export_compare, "proto-tcp4.ovpn", "proto-tcp4.ovpntest");
+
+	_add_test_func_simple (test_proto_tcp6_import);
+	_add_test_func ("proto-tcp6-export", test_export_compare, "proto-tcp6.ovpn", "proto-tcp6.ovpntest");
+
+	_add_test_func_simple (test_proto_tcp4_client_import);
+	_add_test_func ("proto-tcp4-client-export", test_export_compare, "proto-tcp4-client.ovpn", "proto-tcp4-client.ovpntest");
+
+	_add_test_func_simple (test_proto_tcp6_client_import);
+	_add_test_func ("proto-tcp6-client-export", test_export_compare, "proto-tcp6-client.ovpn", "proto-tcp6-client.ovpntest");
 
 	_add_test_func_simple (test_args_parse_line);
 
