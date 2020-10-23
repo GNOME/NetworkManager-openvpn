@@ -2505,7 +2505,7 @@ hash_copy_advanced (gpointer key, gpointer data, gpointer user_data)
 	g_return_if_fail (value && *value);
 
 	/* HTTP Proxy password is a secret, not a data item */
-	if (NM_IN_SET (key, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
+	if (nm_streq0 (key, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD))
 		nm_setting_vpn_add_secret (s_vpn, (const char *) key, value);
 	else
 		nm_setting_vpn_add_data_item (s_vpn, (const char *) key, value);
