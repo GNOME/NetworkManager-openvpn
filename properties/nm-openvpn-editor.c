@@ -670,6 +670,7 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_PING_EXIT,
 	NM_OPENVPN_KEY_PING_RESTART,
 	NM_OPENVPN_KEY_PORT,
+	NM_OPENVPN_KEY_PROTO,
 	NM_OPENVPN_KEY_PROTO_TCP,
 	NM_OPENVPN_KEY_PROXY_PORT,
 	NM_OPENVPN_KEY_PROXY_RETRY,
@@ -1433,6 +1434,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	GtkListStore *store;
 	GtkTreeIter iter;
 	int vint;
+	gboolean vbool;
 	guint32 active;
 	NMSettingSecretFlags pw_flags;
 	GError *error = NULL;
@@ -1565,8 +1567,14 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 
 	_builder_init_toggle_button (builder, "mssfix_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_MSSFIX));
 	_builder_init_toggle_button (builder, "float_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_FLOAT));
-	_builder_init_toggle_button (builder, "tcp_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_PROTO_TCP));
 	_builder_init_toggle_button (builder, "ncp_disable_checkbutton", _hash_get_boolean (hash, NM_OPENVPN_KEY_NCP_DISABLE));
+
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PROTO);
+	if (value)
+		vbool = !NM_IN_STRSET (value, NMOVPN_PROTCOL_TYPES_UDP);
+	else
+		vbool = _hash_get_boolean (hash, NM_OPENVPN_KEY_PROTO_TCP);
+	_builder_init_toggle_button (builder, "tcp_checkbutton", vbool);
 
 	/* Populate device-related widgets */
 	dev =      g_hash_table_lookup (hash, NM_OPENVPN_KEY_DEV);
@@ -1932,8 +1940,10 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 		g_hash_table_insert (hash, NM_OPENVPN_KEY_FLOAT, g_strdup ("yes"));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tcp_checkbutton"));
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) {
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_PROTO, g_strdup ("tcp-client"));
 		g_hash_table_insert (hash, NM_OPENVPN_KEY_PROTO_TCP, g_strdup ("yes"));
+	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ncp_disable_checkbutton"));
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))

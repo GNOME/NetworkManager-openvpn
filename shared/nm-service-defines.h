@@ -58,6 +58,7 @@
 #define NM_OPENVPN_KEY_PING_EXIT                 "ping-exit"
 #define NM_OPENVPN_KEY_PING_RESTART              "ping-restart"
 #define NM_OPENVPN_KEY_PORT                      "port"
+#define NM_OPENVPN_KEY_PROTO                     "proto"
 #define NM_OPENVPN_KEY_PROTO_TCP                 "proto-tcp"
 #define NM_OPENVPN_KEY_PROXY_PORT                "proxy-port"
 #define NM_OPENVPN_KEY_PROXY_RETRY               "proxy-retry"

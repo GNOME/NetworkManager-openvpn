@@ -162,6 +162,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_PING_EXIT,                 G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_PING_RESTART,              G_TYPE_INT, 0, G_MAXINT, FALSE },
 	{ NM_OPENVPN_KEY_MAX_ROUTES,                G_TYPE_INT, 0, 100000000, FALSE },
+	{ NM_OPENVPN_KEY_PROTO,                     G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PROTO_TCP,                 G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_PORT,                      G_TYPE_INT, 1, 65535, FALSE },
 	{ NM_OPENVPN_KEY_PROXY_TYPE,                G_TYPE_STRING, 0, 0, FALSE },
@@ -1322,7 +1323,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	gs_unref_ptrarray GPtrArray *args = NULL;
 	GPid pid;
 	gboolean dev_type_is_tap;
-	const char *defport, *proto_tcp;
+	const char *defport;
+	const char *proto_global;
 	const char *compress;
 	const char *tls_remote = NULL;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
@@ -1379,9 +1381,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (!nmovpn_arg_is_set (defport))
 		defport = NULL;
 
-	proto_tcp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
-	if (!nmovpn_arg_is_set (proto_tcp))
-		proto_tcp = NULL;
+	proto_global = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO);
+	if (!proto_global) {
+		proto_global = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP);
+		if (nm_streq0 (proto_global, "yes"))
+			proto_global = "tcp-client";
+		else
+			proto_global = "udp";
+	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_REMOTE);
 	if (tmp && *tmp) {
@@ -1392,7 +1399,9 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		tmp_remaining = tmp_clone = g_strdup (tmp);
 		while ((tok = strsep (&tmp_remaining, " \t,")) != NULL) {
 			gs_free char *str_free = NULL;
-			const char *host, *port, *proto;
+			const char *host;
+			const char *port;
+			const char *proto;
 			gssize eidx;
 
 			eidx = nmovpn_remote_parse (tok,
@@ -1422,27 +1431,19 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			} else
 				args_add_strv (args, "1194"); /* default IANA port */
 
-			if (proto) {
-				if (nm_streq (proto, "tcp"))
-					args_add_strv (args, "tcp-client");
-				else if (nm_streq (proto, "tcp4"))
-					args_add_strv (args, "tcp4-client");
-				else if (nm_streq (proto, "tcp6"))
-					args_add_strv (args, "tcp6-client");
-				else if (NM_IN_STRSET (proto, NMOVPN_PROTCOL_TYPES))
-					args_add_strv (args, proto);
-				else {
-					g_set_error (error,
-					             NM_VPN_PLUGIN_ERROR,
-					             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
-					             _("Invalid proto “%s”."), proto);
-					return FALSE;
-				}
-			} else if (nm_streq0 (proto_tcp, "yes"))
+			if (!proto)
+				proto = proto_global;
+
+			if (nm_streq (proto, "tcp"))
 				args_add_strv (args, "tcp-client");
+			else if (nm_streq (proto, "tcp4"))
+				args_add_strv (args, "tcp4-client");
+			else if (nm_streq (proto, "tcp6"))
+				args_add_strv (args, "tcp6-client");
 			else {
-				args_add_strv (args, "udp");
-				args_add_strv (args, "--explicit-exit-notify");
+				args_add_strv (args, proto);
+				if (NM_IN_STRSET (proto, NMOVPN_PROTCOL_TYPES_UDP))
+					args_add_strv (args, "--explicit-exit-notify");
 			}
 		}
 	}

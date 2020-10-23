@@ -924,9 +924,16 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				line_error = g_strdup_printf (_("proto expects protocol type like “udp” or “tcp”"));
 				goto handle_line_error;
 			}
-			if (!NM_IN_STRSET (params[1], "udp", "udp4", "udp6")) {
-				setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
-			}
+			setting_vpn_add_data_item_or_remove (s_vpn,
+			                                     NM_OPENVPN_KEY_PROTO,
+			                                       NM_IN_STRSET (params[1], "udp")
+			                                     ? NULL
+			                                     : params[1]);
+			setting_vpn_add_data_item_or_remove (s_vpn,
+			                                     NM_OPENVPN_KEY_PROTO_TCP,
+			                                       NM_IN_STRSET (params[1], NMOVPN_PROTCOL_TYPES_UDP)
+			                                     ? NULL
+			                                     : "yes");
 			continue;
 		}
 
@@ -2111,10 +2118,10 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			args_write_line (f, NMV_OVPN_TAG_DEV_TYPE, device_type);
 	}
 
-	args_write_line (f,
-	                 NMV_OVPN_TAG_PROTO,
-	                 nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP), "yes")
-	                     ? "tcp" : "udp");
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO);
+	if (!value)
+		value = nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP), "yes") ? "tcp" : "udp";
+	args_write_line (f, NMV_OVPN_TAG_PROTO, value);
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_PORT, s_vpn, NM_OPENVPN_KEY_PORT);
 

@@ -102,10 +102,13 @@ gboolean is_pkcs12 (const char *filepath);
 
 gboolean is_encrypted (const char *filename);
 
-#define NMOVPN_PROTCOL_TYPES \
+#define NMOVPN_PROTCOL_TYPES_UDP \
 	"udp", \
 	"udp4", \
-	"udp6", \
+	"udp6"
+
+#define NMOVPN_PROTCOL_TYPES \
+	NMOVPN_PROTCOL_TYPES_UDP, \
 	"tcp", \
 	"tcp4", \
 	"tcp6", \
