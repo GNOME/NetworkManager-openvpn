@@ -125,6 +125,25 @@ setting_vpn_add_data_item (NMSettingVpn *setting,
 }
 
 static void
+setting_vpn_add_data_item_or_remove (NMSettingVpn *setting,
+                                     const char *key,
+                                     const char *value)
+{
+	g_return_if_fail (NM_IS_SETTING_VPN (setting));
+	g_return_if_fail (key && key[0]);
+
+	if (!value) {
+		nm_setting_vpn_remove_data_item (setting, key);
+		return;
+	}
+
+	g_return_if_fail (value && value[0]);
+	g_return_if_fail (_is_utf8 (value));
+
+	nm_setting_vpn_add_data_item (setting, key, value);
+}
+
+static void
 setting_vpn_add_data_item_utf8safe (NMSettingVpn *setting,
                                     const char *key,
                                     const char *value)
