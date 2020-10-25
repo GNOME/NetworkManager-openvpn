@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 10:11+0200\n"
-"PO-Revision-Date: 2020-09-20 10:12+0200\n"
+"POT-Creation-Date: 2020-10-25 09:35+0100\n"
+"PO-Revision-Date: 2020-10-25 09:38+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -211,92 +211,97 @@ msgstr "nie można zapisać „blob” <%s> z wiersza %ld do pliku (%s)"
 msgid "cannot write <%s> blob from line %ld to file “%s”"
 msgstr "nie można zapisać „blob” <%s> z wiersza %ld do pliku „%s”"
 
-#: ../properties/import-export.c:931
+#: ../properties/import-export.c:905
+#, c-format
+msgid "proto expects protocol type like “udp” or “tcp”"
+msgstr "parametr „proto” oczekuje typu protokołu, takiego jak „udp” lub „tcp”"
+
+#: ../properties/import-export.c:930
 #, c-format
 msgid "unsupported mtu-disc argument"
 msgstr "nieobsługiwany parametr „mtu-disc”"
 
-#: ../properties/import-export.c:947
+#: ../properties/import-export.c:946
 #, c-format
 msgid "unsupported crl-verify argument"
 msgstr "nieobsługiwany parametr „crl-verify”"
 
-#: ../properties/import-export.c:965 ../properties/import-export.c:1406
+#: ../properties/import-export.c:964 ../properties/import-export.c:1405
 #, c-format
 msgid "invalid option"
 msgstr "nieprawidłowa opcja"
 
-#: ../properties/import-export.c:1015
+#: ../properties/import-export.c:1014
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "nieobsługiwany parametr „comp-lzo”"
 
-#: ../properties/import-export.c:1027
+#: ../properties/import-export.c:1026
 #, c-format
 msgid "unsupported compress argument"
 msgstr "nieobsługiwany parametr „compress”"
 
-#: ../properties/import-export.c:1128
+#: ../properties/import-export.c:1127
 #, c-format
 msgid "remote cannot contain space"
 msgstr "parametr „remote” nie może zawierać spacji"
 
-#: ../properties/import-export.c:1132
+#: ../properties/import-export.c:1131
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "parametr „remote” nie może zawierać przecinków"
 
-#: ../properties/import-export.c:1143
+#: ../properties/import-export.c:1142
 #, c-format
 msgid "remote expects protocol type like “udp” or “tcp”"
 msgstr "parametr „remote” oczekuje typu protokołu, takiego jak „udp” lub „tcp”"
 
-#: ../properties/import-export.c:1390
+#: ../properties/import-export.c:1389
 #, c-format
 msgid "invalid verify-x509-name type"
 msgstr "nieprawidłowy typ „verify-x509-name”"
 
-#: ../properties/import-export.c:1536
+#: ../properties/import-export.c:1535
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "nieobsługiwany element „blob/xml”"
 
-#: ../properties/import-export.c:1565
+#: ../properties/import-export.c:1564
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "niezakończony element „blob” <%s>"
 
-#: ../properties/import-export.c:1621
+#: ../properties/import-export.c:1620
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "błąd konfiguracji: %s (wiersz %ld)"
 
-#: ../properties/import-export.c:1622
+#: ../properties/import-export.c:1621
 msgid "unknown or unsupported option"
 msgstr "nieznana lub nieobsługiwana opcja"
 
-#: ../properties/import-export.c:1637
+#: ../properties/import-export.c:1636
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr "Importowany plik nie jest prawidłową konfiguracją klienta OpenVPN"
 
-#: ../properties/import-export.c:1645
+#: ../properties/import-export.c:1644
 msgid "The file to import wasn’t a valid OpenVPN configure (no remote)"
 msgstr ""
 "Importowany plik nie jest prawidłową konfiguracją OpenVPN (brak „remote”)"
 
-#: ../properties/import-export.c:1910
+#: ../properties/import-export.c:1909
 msgid "missing path argument"
 msgstr "brak parametru ścieżki"
 
-#: ../properties/import-export.c:1920
+#: ../properties/import-export.c:1919
 msgid "connection is not a valid OpenVPN connection"
 msgstr "połączenie nie jest prawidłowym połączeniem OpenVPN"
 
-#: ../properties/import-export.c:1929
+#: ../properties/import-export.c:1928
 msgid "connection was incomplete (missing gateway)"
 msgstr "niepełne połączenie (brak bramy)"
 
-#: ../properties/import-export.c:2302
+#: ../properties/import-export.c:2301
 #, c-format
 msgid "failed to write file: %s"
 msgstr "zapisanie pliku się nie powiodło: %s"
