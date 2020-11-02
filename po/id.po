@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2020-09-14 11:54+0000\n"
-"PO-Revision-Date: 2020-10-04 17:13+0700\n"
+"POT-Creation-Date: 2020-10-23 13:32+0000\n"
+"PO-Revision-Date: 2020-11-02 08:43+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
 "Language: id\n"
@@ -205,93 +205,98 @@ msgstr "tak bisa menulis blob <%s> dari baris %ld ke berkas (%s)"
 msgid "cannot write <%s> blob from line %ld to file “%s”"
 msgstr "tidak bisa menulis blob <%s> dari baris %ld ke berkas \"%s\""
 
-#: ../properties/import-export.c:931
+#: ../properties/import-export.c:905
+#, c-format
+msgid "proto expects protocol type like “udp” or “tcp”"
+msgstr "proto mengharapkan tipe protokol seperti \"udp\" atau \"tcp\""
+
+#: ../properties/import-export.c:930
 #, c-format
 msgid "unsupported mtu-disc argument"
 msgstr "argumen mtu-disc tak didukung"
 
-#: ../properties/import-export.c:947
+#: ../properties/import-export.c:946
 #, c-format
 msgid "unsupported crl-verify argument"
 msgstr "argumen crl-verify tidak didukung"
 
-#: ../properties/import-export.c:965 ../properties/import-export.c:1406
+#: ../properties/import-export.c:964 ../properties/import-export.c:1405
 #, c-format
 msgid "invalid option"
 msgstr "opsi tak valid"
 
-#: ../properties/import-export.c:1015
+#: ../properties/import-export.c:1014
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "argumen comp-lzo tak didukung"
 
-#: ../properties/import-export.c:1027
+#: ../properties/import-export.c:1026
 #, c-format
 msgid "unsupported compress argument"
 msgstr "argumen kompresi tidak didukung"
 
-#: ../properties/import-export.c:1128
+#: ../properties/import-export.c:1127
 #, c-format
 msgid "remote cannot contain space"
 msgstr "remote tak boleh memuat spasi"
 
-#: ../properties/import-export.c:1132
+#: ../properties/import-export.c:1131
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "remote tak boleh memuat koma"
 
-#: ../properties/import-export.c:1143
+#: ../properties/import-export.c:1142
 #, c-format
 msgid "remote expects protocol type like “udp” or “tcp”"
 msgstr "remote mengharapkan tipe protokol seperti \"udp\" atau \"tcp\""
 
-#: ../properties/import-export.c:1390
+#: ../properties/import-export.c:1389
 #, c-format
 msgid "invalid verify-x509-name type"
 msgstr "tipe verify-x509-name tidak valid"
 
-#: ../properties/import-export.c:1536
+#: ../properties/import-export.c:1535
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "elemen blob/xml yang tak didukung"
 
-#: ../properties/import-export.c:1565
+#: ../properties/import-export.c:1564
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "elemen blob tak diterminasi <%s>"
 
-#: ../properties/import-export.c:1621
+#: ../properties/import-export.c:1620
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "galat konfigurasi: %s (baris %ld)"
 
-#: ../properties/import-export.c:1622
+#: ../properties/import-export.c:1621
 msgid "unknown or unsupported option"
 msgstr "opsi tak dikenal atau tak didukung"
 
-#: ../properties/import-export.c:1637
+#: ../properties/import-export.c:1636
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr "Berkas yang akan diimpor bukan konfigurasi klien OpenVPN yang valid"
 
-#: ../properties/import-export.c:1645
+#: ../properties/import-export.c:1644
 msgid "The file to import wasn’t a valid OpenVPN configure (no remote)"
 msgstr ""
 "Berkas yang akan diimpor bukan suatu konfigurasi OpenVPN yang valid (tidak "
 "ada remote)"
 
-#: ../properties/import-export.c:1910
+#: ../properties/import-export.c:1909
 msgid "missing path argument"
 msgstr "argumen path kurang"
 
-#: ../properties/import-export.c:1920
+#: ../properties/import-export.c:1919
 msgid "connection is not a valid OpenVPN connection"
 msgstr "koneksi bukan koneksi OpenVPN yang valid"
 
-#: ../properties/import-export.c:1929
+#: ../properties/import-export.c:1928
 msgid "connection was incomplete (missing gateway)"
 msgstr "koneksi tak lengkap (kurang gateway)"
 
-#: ../properties/import-export.c:2302
+#: ../properties/import-export.c:2301
 #, c-format
 msgid "failed to write file: %s"
 msgstr "gagal menulis berkas: %s"
