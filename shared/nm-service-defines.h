@@ -77,6 +77,7 @@
 #define NM_OPENVPN_KEY_TA_DIR                    "ta-dir"
 #define NM_OPENVPN_KEY_TLS_CIPHER                "tls-cipher"
 #define NM_OPENVPN_KEY_TLS_CRYPT                 "tls-crypt"
+#define NM_OPENVPN_KEY_TLS_CRYPT_V2              "tls-crypt-v2"
 #define NM_OPENVPN_KEY_TLS_REMOTE                "tls-remote"
 #define NM_OPENVPN_KEY_TLS_VERSION_MIN           "tls-version-min"
 #define NM_OPENVPN_KEY_TLS_VERSION_MAX           "tls-version-max"

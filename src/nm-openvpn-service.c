@@ -185,6 +185,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_TUN_IPV6,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_CIPHER,                G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_CRYPT,                 G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TLS_CRYPT_V2,              G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_REMOTE,                G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_VERIFY_X509_NAME,          G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_REMOTE_CERT_TLS,           G_TYPE_STRING, 0, 0, FALSE },
@@ -1697,6 +1698,12 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT);
 	if (nmovpn_arg_is_set (tmp)) {
 		args_add_strv (args, "--tls-crypt");
+		args_add_utf8safe_str (args, tmp);
+	}
+
+	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT_V2);
+	if (nmovpn_arg_is_set (tmp)) {
+		args_add_strv (args, "--tls-crypt-v2");
 		args_add_utf8safe_str (args, tmp);
 	}
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN);

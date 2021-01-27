@@ -47,6 +47,7 @@
 #define INLINE_BLOB_SECRET              NMV_OVPN_TAG_SECRET
 #define INLINE_BLOB_TLS_AUTH            NMV_OVPN_TAG_TLS_AUTH
 #define INLINE_BLOB_TLS_CRYPT           NMV_OVPN_TAG_TLS_CRYPT
+#define INLINE_BLOB_TLS_CRYPT_V2        NMV_OVPN_TAG_TLS_CRYPT_V2
 
 const char *_nmovpn_test_temp_path = NULL;
 
@@ -1268,7 +1269,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		                  NMV_OVPN_TAG_PKCS12,
 		                  NMV_OVPN_TAG_SECRET,
 		                  NMV_OVPN_TAG_TLS_AUTH,
-		                  NMV_OVPN_TAG_TLS_CRYPT)) {
+		                  NMV_OVPN_TAG_TLS_CRYPT,
+		                  NMV_OVPN_TAG_TLS_CRYPT_V2)) {
 			const char *file;
 			gs_free char *file_free = NULL;
 			gboolean can_have_direction;
@@ -1324,6 +1326,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				allow_ta_direction = TRUE;
 			} else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_CRYPT))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT, file);
+			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_CRYPT_V2))
+				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT_V2, file);
 			else if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_EXTRA_CERTS))
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS, file);
 			else
@@ -1538,6 +1542,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				key = NM_OPENVPN_KEY_CRL_VERIFY_FILE;
 			else if (nm_streq (token, INLINE_BLOB_TLS_CRYPT))
 				key = NM_OPENVPN_KEY_TLS_CRYPT;
+			else if (nm_streq (token, INLINE_BLOB_TLS_CRYPT_V2))
+				key = NM_OPENVPN_KEY_TLS_CRYPT_V2;
 			else if (nm_streq (token, INLINE_BLOB_TLS_AUTH)) {
 				key = NM_OPENVPN_KEY_TA;
 				allow_ta_direction = TRUE;
@@ -2213,6 +2219,14 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			gs_free char *s_free = NULL;
 			args_write_line (f,
 			                 NMV_OVPN_TAG_TLS_CRYPT,
+			                 nm_utils_str_utf8safe_unescape (key, &s_free));
+		}
+
+		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT_V2);
+		if (nmovpn_arg_is_set (key)) {
+			gs_free char *s_free = NULL;
+			args_write_line (f,
+			                 NMV_OVPN_TAG_TLS_CRYPT_V2,
 			                 nm_utils_str_utf8safe_unescape (key, &s_free));
 		}
 

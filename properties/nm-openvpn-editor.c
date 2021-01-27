@@ -713,6 +713,7 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_TAP_DEV,
 	NM_OPENVPN_KEY_TA_DIR,
 	NM_OPENVPN_KEY_TLS_CRYPT,
+	NM_OPENVPN_KEY_TLS_CRYPT_V2,
 	NM_OPENVPN_KEY_TLS_REMOTE,
 	NM_OPENVPN_KEY_TLS_VERSION_MIN,
 	NM_OPENVPN_KEY_TLS_VERSION_MAX,
@@ -1121,9 +1122,10 @@ populate_remote_cert_tls_combo (GtkComboBox *box, const char *remote_cert)
 	g_object_unref (store);
 }
 
-#define TLS_AUTH_MODE_NONE  0
-#define TLS_AUTH_MODE_AUTH  1
-#define TLS_AUTH_MODE_CRYPT 2
+#define TLS_AUTH_MODE_NONE     0
+#define TLS_AUTH_MODE_AUTH     1
+#define TLS_AUTH_MODE_CRYPT    2
+#define TLS_AUTH_MODE_CRYPT_V2 3
 
 static void
 tls_auth_toggled_cb (GtkWidget *widget, gpointer user_data)
@@ -1455,7 +1457,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	GtkBuilder *builder;
 	GtkWidget *dialog = NULL;
 	GtkWidget *widget, *combo, *spin, *entry, *ok_button;
-	const char *value, *value2;
+	const char *value, *value2, *value3;
 	const char *dev, *dev_type, *tap_dev;
 	GtkListStore *store;
 	GtkTreeIter iter;
@@ -1699,7 +1701,11 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TA);
 		value2 = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_CRYPT);
-		if (value2 && value2[0]) {
+		value3 = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_CRYPT_V2);
+		if (value3 && value3[0]) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_CRYPT_V2);
+			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value3);
+		} else if (value2 && value2[0]) {
 			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_CRYPT);
 			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), value2);
 		} else if (value && value[0]) {
@@ -2129,6 +2135,13 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
 			if (filename && filename[0])
 				g_hash_table_insert (hash, NM_OPENVPN_KEY_TLS_CRYPT, g_strdup (filename));
+			g_free (filename);
+			break;
+		case TLS_AUTH_MODE_CRYPT_V2:
+			widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_auth_chooser"));
+			filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+			if (filename && filename[0])
+				g_hash_table_insert (hash, NM_OPENVPN_KEY_TLS_CRYPT_V2, g_strdup (filename));
 			g_free (filename);
 			break;
 		case TLS_AUTH_MODE_NONE:

@@ -79,6 +79,7 @@
 #define NMV_OVPN_TAG_TLS_CIPHER             "tls-cipher"
 #define NMV_OVPN_TAG_TLS_CLIENT             "tls-client"
 #define NMV_OVPN_TAG_TLS_CRYPT              "tls-crypt"
+#define NMV_OVPN_TAG_TLS_CRYPT_V2           "tls-crypt-v2"
 #define NMV_OVPN_TAG_TLS_REMOTE             "tls-remote"
 #define NMV_OVPN_TAG_TLS_VERSION_MIN        "tls-version-min"
 #define NMV_OVPN_TAG_TLS_VERSION_MAX        "tls-version-max"
