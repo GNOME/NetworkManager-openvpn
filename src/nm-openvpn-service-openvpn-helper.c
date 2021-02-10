@@ -453,6 +453,7 @@ main (int argc, char *argv[])
 	gboolean has_ip4_address = FALSE;
 	gboolean has_ip6_address = FALSE;
 	gchar *bus_name = NM_DBUS_SERVICE_OPENVPN;
+	gsize size;
 
 #if !GLIB_CHECK_VERSION (2, 35, 0)
 	g_type_init ();
@@ -761,12 +762,15 @@ main (int argc, char *argv[])
 
 	ip6config = g_variant_builder_end (&ip6builder);
 
-	if (g_variant_n_children (ip6config)) {
-		val = g_variant_new_boolean (TRUE);
-		g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CONFIG_HAS_IP6, val);
-	} else {
+	size = g_variant_n_children (ip6config);
+	if (size == 0 || !has_ip6_address) {
+		if (size > 0)
+			_LOGW ("Ignoring IPv6 configuration without an address");
 		g_variant_unref (ip6config);
 		ip6config = NULL;
+	} else {
+		val = g_variant_new_boolean (TRUE);
+		g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CONFIG_HAS_IP6, val);
 	}
 
 	if (!ip4config && !ip6config)
