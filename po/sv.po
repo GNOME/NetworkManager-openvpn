@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2020-12-25 14:05+0000\n"
-"PO-Revision-Date: 2021-01-11 17:46+0100\n"
+"POT-Creation-Date: 2021-01-27 15:00+0000\n"
+"PO-Revision-Date: 2021-02-13 12:44+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -47,7 +47,7 @@ msgstr "Utvecklarna av Nätverkshanteraren"
 msgid "Authentication required"
 msgstr "Autentisering krävs"
 
-#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2471
+#: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2484
 msgid "Password"
 msgstr "Lösenord"
 
@@ -78,60 +78,60 @@ msgstr ""
 "Du måste autentisera dig för att komma åt det virtuella privata nätverket "
 "”%s”."
 
-#: ../properties/import-export.c:182
+#: ../properties/import-export.c:183
 #, c-format
 msgid "option %s expects between %u and %u argument"
 msgid_plural "option %s expects between %u and %u arguments"
 msgstr[0] "flaggan %s förväntar sig mellan %u och %u argument"
 msgstr[1] "flaggan %s förväntar sig mellan %u och %u argument"
 
-#: ../properties/import-export.c:187
+#: ../properties/import-export.c:188
 #, c-format
 msgid "option %s expects no arguments"
 msgstr "flaggan %s förväntar sig inga argument"
 
-#: ../properties/import-export.c:189
+#: ../properties/import-export.c:190
 #, c-format
 msgid "option %s expects exactly one argument"
 msgid_plural "option %s expects exactly %u arguments"
 msgstr[0] "flaggan %s förväntar sig precis ett argument"
 msgstr[1] "flaggan %s förväntar sig precis %u argument"
 
-#: ../properties/import-export.c:218
+#: ../properties/import-export.c:219
 #, c-format
 msgid "argument %s of “%s” can not be empty"
 msgstr "argumentet %s för ”%s” kan inte vara tomt"
 
-#: ../properties/import-export.c:220
+#: ../properties/import-export.c:221
 #, c-format
 msgid "argument of “%s” can not be empty"
 msgstr "argumentet för ”%s” kan inte vara tomt"
 
-#: ../properties/import-export.c:236
+#: ../properties/import-export.c:237
 #, c-format
 msgid "argument %s of “%s” must be UTF-8 encoded"
 msgstr "argumentet %s för ”%s” måste vara UTF-8-kodat"
 
-#: ../properties/import-export.c:238
+#: ../properties/import-export.c:239
 #, c-format
 msgid "argument of “%s” must be UTF-8 encoded"
 msgstr "argumentet för ”%s” måste vara UTF-8-kodat"
 
 # TODO: ev felrapport. Vad om u motsvarar ett tal som slutar på 1 eller 2?
-#: ../properties/import-export.c:262
+#: ../properties/import-export.c:263
 #, c-format
 msgid "invalid %uth argument to “%s” where number expected"
 msgstr "ogiltigt %u:e argument till ”%s” där tal förväntas"
 
 #. we don't support these special destinations, as they currently cannot be expressed
 #. * in a connection.
-#: ../properties/import-export.c:303
+#: ../properties/import-export.c:304
 #, c-format
 msgid "unsupported %uth argument %s to “%s”"
 msgstr "ogiltigt %u:e argument %s till ”%s”"
 
 #. we also don't support specifing a FQDN.
-#: ../properties/import-export.c:321
+#: ../properties/import-export.c:322
 #, c-format
 msgid ""
 "unsupported %uth argument to “%s” which looks like a FQDN but only IPv4 "
@@ -140,152 +140,152 @@ msgstr ""
 "%u:e argument till ”%s” som ej stöds vilket ser ut som en FQDN men endast "
 "IPv4-adresser stöds"
 
-#: ../properties/import-export.c:328
+#: ../properties/import-export.c:329
 #, c-format
 msgid "invalid %uth argument to “%s” where IPv4 address expected"
 msgstr "ogiltigt %u:e argument till ”%s” där IPv4-adress förväntas"
 
-#: ../properties/import-export.c:353
+#: ../properties/import-export.c:354
 #, c-format
 msgid "invalid %uth key-direction argument to “%s”"
 msgstr "ogiltigt %u:e key-direction-argument till ”%s”"
 
-#: ../properties/import-export.c:367
+#: ../properties/import-export.c:368
 #, c-format
 msgid "invalid %uth argument to “%s”"
 msgstr "ogiltigt %u:e argument till ”%s”"
 
-#: ../properties/import-export.c:482
+#: ../properties/import-export.c:483
 #, c-format
 msgid "unterminated %s at position %lld"
 msgstr "ej avslutat %s vid position %lld"
 
-#: ../properties/import-export.c:483
+#: ../properties/import-export.c:484
 msgid "double quote"
 msgstr "dubbelt citattecken"
 
-#: ../properties/import-export.c:483
+#: ../properties/import-export.c:484
 msgid "single quote"
 msgstr "enkelt citattecken"
 
-#: ../properties/import-export.c:499
+#: ../properties/import-export.c:500
 #, c-format
 msgid "trailing escaping backslash at position %lld"
 msgstr "eftersläpande bakstreck vid positionen %lld"
 
-#: ../properties/import-export.c:629
+#: ../properties/import-export.c:630
 #, c-format
 msgid "unable to read HTTP proxy auth file"
 msgstr "kunde inte läsa HTTP-proxy auth-fil"
 
-#: ../properties/import-export.c:647
+#: ../properties/import-export.c:648
 #, c-format
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr "kan inte läsa användare/lösenord från HTTP-proxy auth-fil"
 
-#: ../properties/import-export.c:655
+#: ../properties/import-export.c:656
 #, c-format
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr "användarnamn/lösenord från HTTP-proxy auth-fil måste vara UTF-8-kodat"
 
-#: ../properties/import-export.c:717
+#: ../properties/import-export.c:718
 #, c-format
 msgid "“%s” is not a directory"
 msgstr "”%s” är inte en katalog"
 
-#: ../properties/import-export.c:725
+#: ../properties/import-export.c:726
 #, c-format
 msgid "cannot create “%s” directory"
 msgstr "kan inte skapa katalogen ”%s”"
 
-#: ../properties/import-export.c:745
+#: ../properties/import-export.c:746
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr "kan inte skriva <%s>-blob från raden %ld till filen (%s)"
 
-#: ../properties/import-export.c:762
+#: ../properties/import-export.c:763
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file “%s”"
 msgstr "kan inte skriva <%s>-blob från raden %ld till filen ”%s”"
 
-#: ../properties/import-export.c:906
+#: ../properties/import-export.c:907
 #, c-format
 msgid "proto expects protocol type like “udp” or “tcp”"
 msgstr "proto förväntar sig ett protokoll som ”udp” eller ”tcp”"
 
-#: ../properties/import-export.c:931
+#: ../properties/import-export.c:932
 #, c-format
 msgid "unsupported mtu-disc argument"
 msgstr "argument till mtu-disc som ej stöds"
 
-#: ../properties/import-export.c:947
+#: ../properties/import-export.c:948
 #, c-format
 msgid "unsupported crl-verify argument"
 msgstr "argument till crl-verify som ej stöds"
 
-#: ../properties/import-export.c:965 ../properties/import-export.c:1414
+#: ../properties/import-export.c:966 ../properties/import-export.c:1418
 #, c-format
 msgid "invalid option"
 msgstr "ogiltig flagga"
 
-#: ../properties/import-export.c:1015
+#: ../properties/import-export.c:1016
 #, c-format
 msgid "unsupported comp-lzo argument"
 msgstr "argument till comp-lzo som ej stöds"
 
-#: ../properties/import-export.c:1027
+#: ../properties/import-export.c:1028
 #, c-format
 msgid "unsupported compress argument"
 msgstr "komprimeringsargument som ej stöds"
 
-#: ../properties/import-export.c:1128
+#: ../properties/import-export.c:1129
 #, c-format
 msgid "remote cannot contain space"
 msgstr "fjärr kan inte innehålla blanksteg"
 
-#: ../properties/import-export.c:1132
+#: ../properties/import-export.c:1133
 #, c-format
 msgid "remote cannot contain comma"
 msgstr "fjärr kan inte innehålla komma"
 
-#: ../properties/import-export.c:1143
+#: ../properties/import-export.c:1144
 #, c-format
 msgid "remote expects protocol type like “udp” or “tcp”"
 msgstr "fjärr förväntar sig ett protokoll som ”udp” eller ”tcp”"
 
-#: ../properties/import-export.c:1398
+#: ../properties/import-export.c:1402
 #, c-format
 msgid "invalid verify-x509-name type"
 msgstr "ogiltig verify-x509-name-typ"
 
-#: ../properties/import-export.c:1548
+#: ../properties/import-export.c:1554
 #, c-format
 msgid "unsupported blob/xml element"
 msgstr "blob/xml-element stöds ej"
 
-#: ../properties/import-export.c:1577
+#: ../properties/import-export.c:1583
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "oavslutat blob-element <%s>"
 
-#: ../properties/import-export.c:1633
+#: ../properties/import-export.c:1639
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "konfigurationsfel: %s (rad %ld)"
 
-#: ../properties/import-export.c:1634
+#: ../properties/import-export.c:1640
 msgid "unknown or unsupported option"
 msgstr "flaggan stöds ej eller är okänd"
 
-#: ../properties/import-export.c:1649
+#: ../properties/import-export.c:1655
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr "Importfilen var inte en giltig OpenVPN-klientkonfiguration"
 
-#: ../properties/import-export.c:1657
+#: ../properties/import-export.c:1663
 msgid "The file to import wasn’t a valid OpenVPN configuration (no remote)"
 msgstr "Importfilen var inte en giltig OpenVPN-konfiguration (ingen fjärr)"
 
-#: ../properties/import-export.c:1668
+#: ../properties/import-export.c:1674
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--pkcs12 can not be "
 "used with --cert or --key)"
@@ -293,7 +293,7 @@ msgstr ""
 "Importfilen var inte en giltig OpenVPN-konfiguration (--pkcs12 kan inte "
 "användas med --cert eller --key)"
 
-#: ../properties/import-export.c:1678
+#: ../properties/import-export.c:1684
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--ca can not be "
 "PKCS#12 format)"
@@ -301,11 +301,11 @@ msgstr ""
 "Importfilen var inte en giltig OpenVPN-konfiguration (--ca kan inte vara i "
 "PKCS#12-format)"
 
-#: ../properties/import-export.c:1687
+#: ../properties/import-export.c:1693
 msgid "The file to import wasn’t a valid OpenVPN configuration (missing --ca)"
 msgstr "Importfilen var inte en giltig OpenVPN-konfiguration (saknar --ca)"
 
-#: ../properties/import-export.c:1697
+#: ../properties/import-export.c:1703
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (if you use one of --"
 "cert or --key, you must use them both)"
@@ -313,7 +313,7 @@ msgstr ""
 "Importfilen var inte en giltig OpenVPN-konfiguration (om du använder en av --"
 "cert eller --key så måste du använda båda av dem)"
 
-#: ../properties/import-export.c:1708
+#: ../properties/import-export.c:1714
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--cert can not be "
 "PKCS#12 format.)"
@@ -321,7 +321,7 @@ msgstr ""
 "Importfilen var inte en giltig OpenVPN-konfiguration (--cert kan inte vara i "
 "PKCS#12-format.)"
 
-#: ../properties/import-export.c:1716
+#: ../properties/import-export.c:1722
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--key can not be "
 "PKCS#12 format.)"
@@ -329,19 +329,19 @@ msgstr ""
 "Importfilen var inte en giltig OpenVPN-konfiguration (--key kan inte vara i "
 "PKCS#12-format.)"
 
-#: ../properties/import-export.c:1968
+#: ../properties/import-export.c:1974
 msgid "missing path argument"
 msgstr "sökvägsargument saknas"
 
-#: ../properties/import-export.c:1978
+#: ../properties/import-export.c:1984
 msgid "connection is not a valid OpenVPN connection"
 msgstr "anslutningen är inte en giltig OpenVPN-anslutning"
 
-#: ../properties/import-export.c:1987
+#: ../properties/import-export.c:1993
 msgid "connection was incomplete (missing gateway)"
 msgstr "anslutningen var ofullständig (saknar gateway)"
 
-#: ../properties/import-export.c:2366
+#: ../properties/import-export.c:2380
 #, c-format
 msgid "failed to write file: %s"
 msgstr "misslyckades med att skriva fil: %s"
@@ -358,8 +358,8 @@ msgstr "Kompatibel med OpenVPN-servern."
 msgid "Choose an OpenVPN static key…"
 msgstr "Välj en statisk OpenVPN-nyckel…"
 
-#: ../properties/nm-openvpn-editor.c:289 ../properties/nm-openvpn-editor.c:904
-#: ../properties/nm-openvpn-editor.c:1689
+#: ../properties/nm-openvpn-editor.c:289 ../properties/nm-openvpn-editor.c:905
+#: ../properties/nm-openvpn-editor.c:1691
 #: ../properties/nm-openvpn-dialog.ui.h:7
 msgid "None"
 msgstr "Ingen"
@@ -368,119 +368,119 @@ msgstr "Ingen"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Statiska OpenVPN-nycklar (*.key)"
 
-#: ../properties/nm-openvpn-editor.c:827 ../properties/nm-openvpn-editor.c:921
+#: ../properties/nm-openvpn-editor.c:828 ../properties/nm-openvpn-editor.c:922
 msgid "Default"
 msgstr "Standard"
 
-#: ../properties/nm-openvpn-editor.c:905
+#: ../properties/nm-openvpn-editor.c:906
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../properties/nm-openvpn-editor.c:906
+#: ../properties/nm-openvpn-editor.c:907
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../properties/nm-openvpn-editor.c:907
+#: ../properties/nm-openvpn-editor.c:908
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../properties/nm-openvpn-editor.c:908
+#: ../properties/nm-openvpn-editor.c:909
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../properties/nm-openvpn-editor.c:909
+#: ../properties/nm-openvpn-editor.c:910
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../properties/nm-openvpn-editor.c:910
+#: ../properties/nm-openvpn-editor.c:911
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../properties/nm-openvpn-editor.c:911
+#: ../properties/nm-openvpn-editor.c:912
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../properties/nm-openvpn-editor.c:912
+#: ../properties/nm-openvpn-editor.c:913
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../properties/nm-openvpn-editor.c:970
+#: ../properties/nm-openvpn-editor.c:971
 msgid "Don’t verify certificate identification"
 msgstr "Verifiera inte certifikatsidentifiering"
 
-#: ../properties/nm-openvpn-editor.c:976
+#: ../properties/nm-openvpn-editor.c:977
 msgid "Verify whole subject exactly"
 msgstr "Verifiera hela ämnet exakt"
 
-#: ../properties/nm-openvpn-editor.c:982
+#: ../properties/nm-openvpn-editor.c:983
 msgid "Verify name exactly"
 msgstr "Verifiera namnet exakt"
 
-#: ../properties/nm-openvpn-editor.c:988
+#: ../properties/nm-openvpn-editor.c:989
 msgid "Verify name by prefix"
 msgstr "Verifiera namnet efter prefix"
 
-#: ../properties/nm-openvpn-editor.c:994
+#: ../properties/nm-openvpn-editor.c:995
 msgid "Verify subject partially (legacy mode, strongly discouraged)"
 msgstr "Verifiera ämnet delvis (föråldrat läge, avrådes starkt)"
 
-#: ../properties/nm-openvpn-editor.c:1107
-#: ../properties/nm-openvpn-editor.c:1178
+#: ../properties/nm-openvpn-editor.c:1108
+#: ../properties/nm-openvpn-editor.c:1180
 msgid "Server"
 msgstr "Server"
 
-#: ../properties/nm-openvpn-editor.c:1112
-#: ../properties/nm-openvpn-editor.c:1183
+#: ../properties/nm-openvpn-editor.c:1113
+#: ../properties/nm-openvpn-editor.c:1185
 msgid "Client"
 msgstr "Klient"
 
-#: ../properties/nm-openvpn-editor.c:1504
-#: ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/nm-openvpn-editor.c:1506
+#: ../properties/nm-openvpn-dialog.ui.h:42
 msgid "Not required"
 msgstr "Krävs inte"
 
-#: ../properties/nm-openvpn-editor.c:1506
+#: ../properties/nm-openvpn-editor.c:1508
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../properties/nm-openvpn-editor.c:1508
+#: ../properties/nm-openvpn-editor.c:1510
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../properties/nm-openvpn-editor.c:1616
+#: ../properties/nm-openvpn-editor.c:1618
 msgid "TUN"
 msgstr "TUN"
 
-#: ../properties/nm-openvpn-editor.c:1618
+#: ../properties/nm-openvpn-editor.c:1620
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: ../properties/nm-openvpn-editor.c:1625
+#: ../properties/nm-openvpn-editor.c:1627
 msgid "(automatic)"
 msgstr "(automatisk)"
 
-#: ../properties/nm-openvpn-editor.c:1751
+#: ../properties/nm-openvpn-editor.c:1757
 msgid "ping-exit"
 msgstr "ping-exit"
 
-#: ../properties/nm-openvpn-editor.c:1753
+#: ../properties/nm-openvpn-editor.c:1759
 msgid "ping-restart"
 msgstr "ping-restart"
 
-#: ../properties/nm-openvpn-editor.c:2460
+#: ../properties/nm-openvpn-editor.c:2473
 msgid "Certificates (TLS)"
 msgstr "Certifikat (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:2485
+#: ../properties/nm-openvpn-editor.c:2498
 msgid "Password with Certificates (TLS)"
 msgstr "Lösenord med certifikat (TLS)"
 
-#: ../properties/nm-openvpn-editor.c:2498
+#: ../properties/nm-openvpn-editor.c:2511
 msgid "Static Key"
 msgstr "Statisk nyckel"
 
-#: ../properties/nm-openvpn-editor.c:2662
+#: ../properties/nm-openvpn-editor.c:2675
 msgid "could not load UI widget"
 msgstr "kunde inte läsa in UI-komponent"
 
@@ -572,66 +572,66 @@ msgstr "ogiltig port"
 msgid "invalid protocol"
 msgstr "ogiltigt protokoll"
 
-#: ../src/nm-openvpn-service.c:426
+#: ../src/nm-openvpn-service.c:427
 #, c-format
 msgid "invalid address “%s”"
 msgstr "ogiltig adress ”%s”"
 
-#: ../src/nm-openvpn-service.c:438
+#: ../src/nm-openvpn-service.c:439
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "ogiltig heltalsegenskap ”%s” eller utanför intervallet [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: ../src/nm-openvpn-service.c:449
+#: ../src/nm-openvpn-service.c:450
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "ogiltig boolesk egenskap ”%s” (inte yes eller no)"
 
-#: ../src/nm-openvpn-service.c:456
+#: ../src/nm-openvpn-service.c:457
 #, c-format
 msgid "unhandled property “%s” type %s"
 msgstr "ej hanterad egenskap ”%s” typ %s"
 
-#: ../src/nm-openvpn-service.c:467
+#: ../src/nm-openvpn-service.c:468
 #, c-format
 msgid "property “%s” invalid or not supported"
 msgstr "egenskapen ”%s” är ogiltig eller stöds inte"
 
-#: ../src/nm-openvpn-service.c:483
+#: ../src/nm-openvpn-service.c:484
 msgid "No VPN configuration options."
 msgstr "Inga VPN-konfigurationsalternativ."
 
-#: ../src/nm-openvpn-service.c:921
+#: ../src/nm-openvpn-service.c:922
 msgid "A username is required."
 msgstr "Ett användarnamn krävs."
 
-#: ../src/nm-openvpn-service.c:925
+#: ../src/nm-openvpn-service.c:926
 msgid "A password is required."
 msgstr "Ett lösenord krävs."
 
-#: ../src/nm-openvpn-service.c:928
+#: ../src/nm-openvpn-service.c:929
 msgid "A username and password are required."
 msgstr "Användarnamn och lösenord krävs."
 
-#: ../src/nm-openvpn-service.c:950
+#: ../src/nm-openvpn-service.c:951
 msgid "A private key password is required."
 msgstr "Ett lösenord för privat nyckel krävs."
 
-#: ../src/nm-openvpn-service.c:963
+#: ../src/nm-openvpn-service.c:964
 msgid "An HTTP Proxy username is required."
 msgstr "Användarnamn för HTTP-proxy krävs."
 
-#: ../src/nm-openvpn-service.c:967
+#: ../src/nm-openvpn-service.c:968
 msgid "An HTTP Proxy password is required."
 msgstr "Lösenord för HTTP-proxy krävs."
 
-#: ../src/nm-openvpn-service.c:970
+#: ../src/nm-openvpn-service.c:971
 msgid "An HTTP Proxy username and password are required."
 msgstr "Användarnamn och lösenord för HTTP-proxy krävs."
 
-#: ../src/nm-openvpn-service.c:1339 ../src/nm-openvpn-service.c:2149
-#: ../src/nm-openvpn-service.c:2184
+#: ../src/nm-openvpn-service.c:1340 ../src/nm-openvpn-service.c:2156
+#: ../src/nm-openvpn-service.c:2191
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
@@ -639,116 +639,116 @@ msgstr ""
 "Kunde inte behandla begäran eftersom inställningar i VPN-konfigurationen var "
 "ogiltiga."
 
-#: ../src/nm-openvpn-service.c:1348 ../src/nm-openvpn-service.c:2158
+#: ../src/nm-openvpn-service.c:1349 ../src/nm-openvpn-service.c:2165
 msgid "Invalid connection type."
 msgstr "Ogiltig anslutningstyp."
 
-#: ../src/nm-openvpn-service.c:1366
+#: ../src/nm-openvpn-service.c:1367
 msgid "Could not find the openvpn binary."
 msgstr "Kunde inte hitta binärfilen openvpn."
 
-#: ../src/nm-openvpn-service.c:1414
+#: ../src/nm-openvpn-service.c:1415
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "Ogiltigt portnummer ”%s”."
 
-#: ../src/nm-openvpn-service.c:1434
+#: ../src/nm-openvpn-service.c:1435
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "Ogiltigt proto ”%s”."
 
-#: ../src/nm-openvpn-service.c:1483
+#: ../src/nm-openvpn-service.c:1484
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "Ogiltig proxytyp ”%s”."
 
-#: ../src/nm-openvpn-service.c:1568
+#: ../src/nm-openvpn-service.c:1569
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "Ogiltig ping-längd ”%s”."
 
-#: ../src/nm-openvpn-service.c:1581
+#: ../src/nm-openvpn-service.c:1582
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "Ogiltig ping-exit-längd ”%s”."
 
-#: ../src/nm-openvpn-service.c:1594
+#: ../src/nm-openvpn-service.c:1595
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "Ogiltig ping-restart-längd ”%s”."
 
-#: ../src/nm-openvpn-service.c:1607
+#: ../src/nm-openvpn-service.c:1608
 #, c-format
 msgid "Invalid connect timeout “%s”."
 msgstr "Ogiltig anslutningstidsgräns ”%s”."
 
-#: ../src/nm-openvpn-service.c:1632
+#: ../src/nm-openvpn-service.c:1633
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "Ogiltigt max-routes-argument ”%s”."
 
-#: ../src/nm-openvpn-service.c:1676
+#: ../src/nm-openvpn-service.c:1677
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "Ogiltig nyckelstorlek ”%s”."
 
-#: ../src/nm-openvpn-service.c:1739
+#: ../src/nm-openvpn-service.c:1746
 #, c-format
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "Ogiltig konfiguration med tls-remote och verify-x509-name."
 
-#: ../src/nm-openvpn-service.c:1752
+#: ../src/nm-openvpn-service.c:1759
 #, c-format
 msgid "Invalid verify-x509-name."
 msgstr "Ogiltigt verify-x509-name."
 
-#: ../src/nm-openvpn-service.c:1775
+#: ../src/nm-openvpn-service.c:1782
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "Ogiltigt antal sekunder för omförhandling ”%s”."
 
-#: ../src/nm-openvpn-service.c:1805
+#: ../src/nm-openvpn-service.c:1812
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "Ogiltig TUN MTU-storlek ”%s”."
 
-#: ../src/nm-openvpn-service.c:1818
+#: ../src/nm-openvpn-service.c:1825
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "Ogiltig fragmenteringsstorlek ”%s”."
 
-#: ../src/nm-openvpn-service.c:1928
+#: ../src/nm-openvpn-service.c:1935
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "Okänd anslutningstyp ”%s”."
 
-#: ../src/nm-openvpn-service.c:1946
+#: ../src/nm-openvpn-service.c:1953
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "Användaren ”%s” inte funnen, kontrollera NM_OPENVPN_USER."
 
-#: ../src/nm-openvpn-service.c:1958
+#: ../src/nm-openvpn-service.c:1965
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "Gruppen ”%s” inte funnen, kontrollera NM_OPENVPN_GROUP."
 
-#: ../src/nm-openvpn-service.c:2197
+#: ../src/nm-openvpn-service.c:2204
 msgid "Unhandled pending authentication."
 msgstr "Ej hanterad väntande autentisering."
 
-#: ../src/nm-openvpn-service.c:2315
+#: ../src/nm-openvpn-service.c:2322
 msgid "Don’t quit when VPN connection terminates"
 msgstr "Avsluta inte när VPN-anslutningen avslutas"
 
-#: ../src/nm-openvpn-service.c:2316
+#: ../src/nm-openvpn-service.c:2323
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Aktivera informativ felsökningsloggning (kan exponera lösenord)"
 
-#: ../src/nm-openvpn-service.c:2317
+#: ../src/nm-openvpn-service.c:2324
 msgid "D-Bus name to use for this instance"
 msgstr "D-Bus-namn att använda för denna instans"
 
-#: ../src/nm-openvpn-service.c:2343
+#: ../src/nm-openvpn-service.c:2350
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
@@ -788,22 +788,27 @@ msgid "TLS-Crypt"
 msgstr "TLS-Crypt"
 
 #: ../properties/nm-openvpn-dialog.ui.h:10
+#| msgid "TLS-Crypt"
+msgid "TLS-Crypt v2"
+msgstr "TLS-Crypt v2"
+
+#: ../properties/nm-openvpn-dialog.ui.h:11
 msgid "Maybe"
 msgstr "Kanske"
 
-#: ../properties/nm-openvpn-dialog.ui.h:11
+#: ../properties/nm-openvpn-dialog.ui.h:12
 msgid "Yes"
 msgstr "Ja"
 
-#: ../properties/nm-openvpn-dialog.ui.h:12
+#: ../properties/nm-openvpn-dialog.ui.h:13
 msgid "General"
 msgstr "Allmänt"
 
-#: ../properties/nm-openvpn-dialog.ui.h:13
+#: ../properties/nm-openvpn-dialog.ui.h:14
 msgid "_Gateway:"
 msgstr "_Gateway:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:14
+#: ../properties/nm-openvpn-dialog.ui.h:15
 msgid ""
 "Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
 "tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
@@ -815,27 +820,27 @@ msgstr ""
 "som avgränsare).\n"
 "config: remote"
 
-#: ../properties/nm-openvpn-dialog.ui.h:16
+#: ../properties/nm-openvpn-dialog.ui.h:17
 msgid "Authentication"
 msgstr "Autentisering"
 
-#: ../properties/nm-openvpn-dialog.ui.h:17
+#: ../properties/nm-openvpn-dialog.ui.h:18
 msgid "CA"
 msgstr "CA"
 
-#: ../properties/nm-openvpn-dialog.ui.h:18
+#: ../properties/nm-openvpn-dialog.ui.h:19
 msgid "User"
 msgstr "Användare"
 
-#: ../properties/nm-openvpn-dialog.ui.h:19
+#: ../properties/nm-openvpn-dialog.ui.h:20
 msgid "Password:"
 msgstr "Lösenord:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:20
+#: ../properties/nm-openvpn-dialog.ui.h:21
 msgid "User name:"
 msgstr "Användarnamn:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:21
+#: ../properties/nm-openvpn-dialog.ui.h:22
 msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -843,7 +848,7 @@ msgstr ""
 "Lösenord skickas till OpenVPN när det efterfrågas.\n"
 "config: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:23
+#: ../properties/nm-openvpn-dialog.ui.h:24
 msgid ""
 "Username passed to OpenVPN when prompted for it. If omitted, use the name of "
 "the system user that activates the connection.\n"
@@ -853,23 +858,23 @@ msgstr ""
 "används namnet för systemanvändaren som aktiverar anslutningen.\n"
 "config: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:25
+#: ../properties/nm-openvpn-dialog.ui.h:26
 msgid "Remote IP Address:"
 msgstr "Fjärr-IP-adress:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:26
+#: ../properties/nm-openvpn-dialog.ui.h:27
 msgid "Local IP Address:"
 msgstr "Lokal IP-adress:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:27
+#: ../properties/nm-openvpn-dialog.ui.h:28
 msgid "Key Direction:"
 msgstr "Nyckelriktning:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:28
+#: ../properties/nm-openvpn-dialog.ui.h:29
 msgid "Static Key:"
 msgstr "Statisk nyckel:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:29
+#: ../properties/nm-openvpn-dialog.ui.h:30
 msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
@@ -877,7 +882,7 @@ msgstr ""
 "Förutdelad fil för krypteringsläge med statisk nyckel (icke-TLS).\n"
 "config: static <fil>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:31
+#: ../properties/nm-openvpn-dialog.ui.h:32
 msgid ""
 "IP address of the remote VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -885,7 +890,7 @@ msgstr ""
 "IP-adress för fjärr-VPN-ändpunkten.\n"
 "config: ifconfig <l> <rn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:33
+#: ../properties/nm-openvpn-dialog.ui.h:34
 msgid ""
 "IP address of the local VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -893,7 +898,7 @@ msgstr ""
 "IP-adress för den lokala VPN-ändpunkten.\n"
 "config: ifconfig <l> <rn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:35
+#: ../properties/nm-openvpn-dialog.ui.h:36
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -908,27 +913,27 @@ msgstr ""
 "kontakta din systemadministratör.\n"
 "config: static <fil> [riktning]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:38
+#: ../properties/nm-openvpn-dialog.ui.h:39
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:39
+#: ../properties/nm-openvpn-dialog.ui.h:40
 msgid "Select an authentication mode."
 msgstr "Välj ett autentiseringsläge."
 
-#: ../properties/nm-openvpn-dialog.ui.h:40
+#: ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Ad_vanced…"
 msgstr "A_vancerat…"
 
-#: ../properties/nm-openvpn-dialog.ui.h:42
+#: ../properties/nm-openvpn-dialog.ui.h:43
 msgid "OpenVPN Advanced Options"
 msgstr "Avancerade alternativ för OpenVPN"
 
-#: ../properties/nm-openvpn-dialog.ui.h:43
+#: ../properties/nm-openvpn-dialog.ui.h:44
 msgid "Use custom gateway p_ort:"
 msgstr "Använd anpassad gatewayp_ort:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:44
+#: ../properties/nm-openvpn-dialog.ui.h:45
 msgid ""
 "TCP/UDP port number for peer. (Default value when there is no port for "
 "gateway).\n"
@@ -938,11 +943,11 @@ msgstr ""
 "port för gateway).\n"
 "config: port"
 
-#: ../properties/nm-openvpn-dialog.ui.h:46
+#: ../properties/nm-openvpn-dialog.ui.h:47
 msgid "Use custom _renegotiation interval:"
 msgstr "Använd anpassat intervall för _omförhandling:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:47
+#: ../properties/nm-openvpn-dialog.ui.h:48
 msgid ""
 "Renegotiate data channel key after the specified number of seconds.\n"
 "config: reneg-sec"
@@ -950,11 +955,11 @@ msgstr ""
 "Omförhandla nyckel för datakanal efter angivet antal sekunder.\n"
 "config: reneg-sec"
 
-#: ../properties/nm-openvpn-dialog.ui.h:49
+#: ../properties/nm-openvpn-dialog.ui.h:50
 msgid "Data _compression:"
 msgstr "Data_komprimering:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:50
+#: ../properties/nm-openvpn-dialog.ui.h:51
 msgid ""
 "Use fast LZO compression.\n"
 "config: comp-lzo"
@@ -962,11 +967,11 @@ msgstr ""
 "Använd snabb LZO-komprimering.\n"
 "config: comp-lzo"
 
-#: ../properties/nm-openvpn-dialog.ui.h:52
+#: ../properties/nm-openvpn-dialog.ui.h:53
 msgid "Use a _TCP connection"
 msgstr "Använd en _TCP-anslutning"
 
-#: ../properties/nm-openvpn-dialog.ui.h:53
+#: ../properties/nm-openvpn-dialog.ui.h:54
 msgid ""
 "Use TCP for communicating with remote host.\n"
 "(This is a default setting only used when no protocol is specified for the "
@@ -978,15 +983,15 @@ msgstr ""
 "gateway.)\n"
 "config: proto tcp-client | udp"
 
-#: ../properties/nm-openvpn-dialog.ui.h:56
+#: ../properties/nm-openvpn-dialog.ui.h:57
 msgid "Set virtual _device type:"
 msgstr "Sätt virtuell _enhetstyp:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:57
+#: ../properties/nm-openvpn-dialog.ui.h:58
 msgid "Explicitly set virtual device type and name (TUN/TAP)."
 msgstr "Sätt explicit virtuell enhetstyp och namn (TUN/TAP)."
 
-#: ../properties/nm-openvpn-dialog.ui.h:58
+#: ../properties/nm-openvpn-dialog.ui.h:59
 msgid ""
 "Explicitly set virtual device type (TUN/TAP).\n"
 "config: dev-type tun | tap"
@@ -994,11 +999,11 @@ msgstr ""
 "Sätt explicit virtuell enhetstyp (TUN/TAP).\n"
 "config: dev-type tun | tap"
 
-#: ../properties/nm-openvpn-dialog.ui.h:60
+#: ../properties/nm-openvpn-dialog.ui.h:61
 msgid " and _name:"
 msgstr " och _namn:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:61
+#: ../properties/nm-openvpn-dialog.ui.h:62
 msgid ""
 "Use custom name for TUN/TAP virtual device (instead of default “tun” or "
 "“tap”).\n"
@@ -1008,11 +1013,11 @@ msgstr ""
 "eller ”tap”).\n"
 "config: dev <namn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:63
+#: ../properties/nm-openvpn-dialog.ui.h:64
 msgid "Use custom tunnel Maximum Transmission _Unit (MTU):"
 msgstr "Använd anpassad Maximum Transmission Unit (MTU) för _tunneln:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:64
+#: ../properties/nm-openvpn-dialog.ui.h:65
 msgid ""
 "Take the TUN device MTU to be the specified value and derive the link MTU "
 "from it.\n"
@@ -1022,11 +1027,11 @@ msgstr ""
 "det.\n"
 "config: tun-mtu"
 
-#: ../properties/nm-openvpn-dialog.ui.h:66
+#: ../properties/nm-openvpn-dialog.ui.h:67
 msgid "Use custom UDP _fragment size:"
 msgstr "Använd anpassad storlek på UDP-_fragment:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:67
+#: ../properties/nm-openvpn-dialog.ui.h:68
 msgid ""
 "Enable internal datagram fragmentation with this maximum size.\n"
 "config: fragment"
@@ -1034,11 +1039,11 @@ msgstr ""
 "Aktivera intern datagramfragmentering med denna maximala storlek.\n"
 "config: fragment"
 
-#: ../properties/nm-openvpn-dialog.ui.h:69
+#: ../properties/nm-openvpn-dialog.ui.h:70
 msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
 msgstr "Begränsa TCP Maximum _Segment Size (MSS) för tunneln"
 
-#: ../properties/nm-openvpn-dialog.ui.h:70
+#: ../properties/nm-openvpn-dialog.ui.h:71
 msgid ""
 "Restrict tunnel TCP MSS.\n"
 "config: mssfix"
@@ -1046,11 +1051,11 @@ msgstr ""
 "Begränsa tunnel TCP MSS.\n"
 "config: mssfix"
 
-#: ../properties/nm-openvpn-dialog.ui.h:72
+#: ../properties/nm-openvpn-dialog.ui.h:73
 msgid "Rando_mize remote hosts"
 msgstr "Slump_a fjärrvärdar"
 
-#: ../properties/nm-openvpn-dialog.ui.h:73
+#: ../properties/nm-openvpn-dialog.ui.h:74
 msgid ""
 "Randomize the order of gateways list (remote) as a kind of basic load-"
 "balancing measure.\n"
@@ -1060,11 +1065,11 @@ msgstr ""
 "grundläggande lastbalanseringsåtgärd.\n"
 "config: remote-random"
 
-#: ../properties/nm-openvpn-dialog.ui.h:75
+#: ../properties/nm-openvpn-dialog.ui.h:76
 msgid "Allow Pull FQDN"
 msgstr "Tillåt dragning av FQDN"
 
-#: ../properties/nm-openvpn-dialog.ui.h:76
+#: ../properties/nm-openvpn-dialog.ui.h:77
 msgid ""
 "Allow client to pull DNS names from server\n"
 "config: allow-pull-fqdn"
@@ -1072,11 +1077,11 @@ msgstr ""
 "Tillåt klient att dra DNS-namn från server\n"
 "config: allow-pull-fqdn"
 
-#: ../properties/nm-openvpn-dialog.ui.h:78
+#: ../properties/nm-openvpn-dialog.ui.h:79
 msgid "_Prefix remote DNS name with random string"
 msgstr "Sätt slum_pmässig sträng som prefix till fjärr-DNS-namn"
 
-#: ../properties/nm-openvpn-dialog.ui.h:79
+#: ../properties/nm-openvpn-dialog.ui.h:80
 msgid ""
 "Adds a random string to remote DNS name to avoid DNS caching.\n"
 "config: remote-random-hostname"
@@ -1085,11 +1090,11 @@ msgstr ""
 "cachning.\n"
 "config: remote-random-hostname"
 
-#: ../properties/nm-openvpn-dialog.ui.h:81
+#: ../properties/nm-openvpn-dialog.ui.h:82
 msgid "IPv6 tun link"
 msgstr "IPv6-tun-länk"
 
-#: ../properties/nm-openvpn-dialog.ui.h:82
+#: ../properties/nm-openvpn-dialog.ui.h:83
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
@@ -1097,11 +1102,11 @@ msgstr ""
 "Bygg en tun-länk kapabel att vidarebefordra IPv6-trafik\n"
 "config: tun-ipv6"
 
-#: ../properties/nm-openvpn-dialog.ui.h:84
+#: ../properties/nm-openvpn-dialog.ui.h:85
 msgid "Specify pin_g interval:"
 msgstr "Ange pin_g-intervall:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:85
+#: ../properties/nm-openvpn-dialog.ui.h:86
 msgid ""
 "Ping remote over the TCP/UDP control channel if no packets have been sent "
 "for at least n seconds.\n"
@@ -1111,11 +1116,11 @@ msgstr ""
 "skickats under minst de senaste n sekunderna.\n"
 "config: ping <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:87
+#: ../properties/nm-openvpn-dialog.ui.h:88
 msgid "Specify _exit or restart ping:"
 msgstr "Ange _exit eller starta om ping:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:88
+#: ../properties/nm-openvpn-dialog.ui.h:89
 msgid ""
 "Exit or restart after n seconds pass without reception of a ping or other "
 "packet from remote.\n"
@@ -1125,11 +1130,11 @@ msgstr ""
 "en ping eller ett annat paket från fjärr.\n"
 "config: ping-exit | ping-restart <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:90
+#: ../properties/nm-openvpn-dialog.ui.h:91
 msgid "Accept authenticated packets from any address (F_loat)"
 msgstr "Acceptera autentiserade paket från alla adresser (F_loat)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:91
+#: ../properties/nm-openvpn-dialog.ui.h:92
 msgid ""
 "Allow remote peer to change its IP address and/or port number, such as due "
 "to DHCP (this is the default if --remote is not used). --float when "
@@ -1157,11 +1162,11 @@ msgstr ""
 "\n"
 "config: float"
 
-#: ../properties/nm-openvpn-dialog.ui.h:96
+#: ../properties/nm-openvpn-dialog.ui.h:97
 msgid "Specify max routes:"
 msgstr "Ange högsta antal rutter:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:97
+#: ../properties/nm-openvpn-dialog.ui.h:98
 msgid ""
 "Specify the maximum number of routes the server is allowed to specify.\n"
 "config: max-routes <n>"
@@ -1169,7 +1174,7 @@ msgstr ""
 "Ange högsta antal rutter servern får specificera.\n"
 "config: max-routes <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:99
+#: ../properties/nm-openvpn-dialog.ui.h:100
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
 "Cipher Block Chaining mode).\n"
@@ -1179,11 +1184,11 @@ msgstr ""
 "Block Chaining-läge).\n"
 "config: cipher"
 
-#: ../properties/nm-openvpn-dialog.ui.h:101
+#: ../properties/nm-openvpn-dialog.ui.h:102
 msgid "Use custom _size of cipher key:"
 msgstr "Använd anpassad _storlek på chiffernyckel:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:102
+#: ../properties/nm-openvpn-dialog.ui.h:103
 msgid ""
 "Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
 "specific size.\n"
@@ -1193,7 +1198,7 @@ msgstr ""
 "chifferspecifik storlek\n"
 "config: keysize <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:104
+#: ../properties/nm-openvpn-dialog.ui.h:105
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
 "is SHA1.\n"
@@ -1203,19 +1208,19 @@ msgstr ""
 "är SHA1.\n"
 "config: auth"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid "Ci_pher:"
 msgstr "Chi_ffer:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:107
+#: ../properties/nm-openvpn-dialog.ui.h:108
 msgid "_HMAC Authentication:"
 msgstr "_HMAC-autentisering:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid "Disable cipher _negotiation"
 msgstr "Inaktivera chiffer_förhandling"
 
-#: ../properties/nm-openvpn-dialog.ui.h:109
+#: ../properties/nm-openvpn-dialog.ui.h:110
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
@@ -1223,11 +1228,11 @@ msgstr ""
 "Inaktivera chifferförhandling mellan klient och server.\n"
 "config: ncp-disable"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid "Verify CRL from file"
 msgstr "Verifiera CRL från fil"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid ""
 "Check peer certificate against the specified file in PEM format. A CRL "
 "(certificate revocation list) is used when a particular key is compromised "
@@ -1237,11 +1242,11 @@ msgstr ""
 "CRL (certificate revocation list) används när en specifik nyckel är "
 "komprometterad men när PKI fortfarande är intakt."
 
-#: ../properties/nm-openvpn-dialog.ui.h:113
+#: ../properties/nm-openvpn-dialog.ui.h:114
 msgid "Verify CRL from directory"
 msgstr "Verifiera CRL från katalog"
 
-#: ../properties/nm-openvpn-dialog.ui.h:114
+#: ../properties/nm-openvpn-dialog.ui.h:115
 msgid ""
 "Check peer certificate by looking at files in the specified directory. The "
 "directory must contain files named as revoked serial numbers (the files may "
@@ -1251,24 +1256,24 @@ msgstr ""
 "katalogen. Katalogen måste innehålla filer namngivna som indragna "
 "serienummer (filerna kan vara tomma, innehållet läses aldrig)."
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid "Choose CRL file"
 msgstr "Välj CRL-fil"
 
-#: ../properties/nm-openvpn-dialog.ui.h:116
+#: ../properties/nm-openvpn-dialog.ui.h:117
 msgid "Choose CRL directory"
 msgstr "Välj CRL-katalog"
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Security"
 msgstr "Säkerhet"
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid "_Subject Match:"
 msgstr "Matc_ha följande:"
 
 # TODO: ev. <> kring ämne-eller-namn
-#: ../properties/nm-openvpn-dialog.ui.h:119
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid ""
 "Subject or Common Name to verify server certificate information against.\n"
 "\n"
@@ -1280,12 +1285,12 @@ msgstr ""
 "config: verify-x509-name ämne-eller-namn [läge]\n"
 "config (föråldrat läge): tls-remote ämne-eller-namn"
 
-#: ../properties/nm-openvpn-dialog.ui.h:123
+#: ../properties/nm-openvpn-dialog.ui.h:124
 msgid "Server _Certificate Check:"
 msgstr "Server_certifikatkontroll:"
 
 # TODO: ev. <> kring ämne-eller-namn
-#: ../properties/nm-openvpn-dialog.ui.h:124
+#: ../properties/nm-openvpn-dialog.ui.h:125
 msgid ""
 "Verify server certificate identification.\n"
 "\n"
@@ -1314,11 +1319,11 @@ msgstr ""
 "config: verify-x509-name ämne-eller-namn [läge]\n"
 "config (föråldrat läge): tls-remote ämne-eller-namn"
 
-#: ../properties/nm-openvpn-dialog.ui.h:134
+#: ../properties/nm-openvpn-dialog.ui.h:135
 msgid "_Verify peer (server) certificate usage signature"
 msgstr "_Verifiera certifikatanvändningssignatur för motpart (server)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:135
+#: ../properties/nm-openvpn-dialog.ui.h:136
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -1326,11 +1331,11 @@ msgstr ""
 "Begär att motpartscertifikatet var signerat med en explicit nyckelanvändning "
 "och en utökad nyckelanvändning baserad på regler för RFC3280 TLS."
 
-#: ../properties/nm-openvpn-dialog.ui.h:136
+#: ../properties/nm-openvpn-dialog.ui.h:137
 msgid "_Remote peer certificate TLS type:"
 msgstr "_Avlägsen TLS-typ för motpartscertifikat:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:137
+#: ../properties/nm-openvpn-dialog.ui.h:138
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -1340,11 +1345,11 @@ msgstr ""
 "och en utökad nyckel baserade på RFC3280 TLS-regler.\n"
 "config: remote-cert-tls client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:139
+#: ../properties/nm-openvpn-dialog.ui.h:140
 msgid "_Verify peer (server) certificate nsCertType designation"
 msgstr "_Verifiera nsCertType-angivning för certifikat för motpart (server)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:140
+#: ../properties/nm-openvpn-dialog.ui.h:141
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
@@ -1352,11 +1357,11 @@ msgstr ""
 "Begär att motpartscertifikatet var signerat med en explicit nsCertType-"
 "angivning."
 
-#: ../properties/nm-openvpn-dialog.ui.h:141
+#: ../properties/nm-openvpn-dialog.ui.h:142
 msgid "_Remote peer certificate nsCert designation:"
 msgstr "nsCert-angivning fö_r avlägset motpartscertifikat:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:142
+#: ../properties/nm-openvpn-dialog.ui.h:143
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
@@ -1366,11 +1371,11 @@ msgstr ""
 "angivning.\n"
 "config: ns-cert-type client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:144
+#: ../properties/nm-openvpn-dialog.ui.h:145
 msgid "Key _Direction:"
 msgstr "Nyckel_riktning:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:145
+#: ../properties/nm-openvpn-dialog.ui.h:146
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
@@ -1382,7 +1387,7 @@ msgstr ""
 "krypteras också kontrollkanalen.\n"
 "config: tls-auth <fil> [riktning] | tls-crypt <fil>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:147
+#: ../properties/nm-openvpn-dialog.ui.h:148
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -1397,24 +1402,24 @@ msgstr ""
 "kontakta din systemadministratör.\n"
 "config: tls-auth <fil> [direction]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:150
+#: ../properties/nm-openvpn-dialog.ui.h:151
 msgid "Key _File:"
 msgstr "Nyckel_fil:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:151
+#: ../properties/nm-openvpn-dialog.ui.h:152
 msgid "Mode:"
 msgstr "Läge:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:152
+#: ../properties/nm-openvpn-dialog.ui.h:153
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr ""
 "Lägg till ett ytterligare lager av kryptering eller HMAC-autentisering."
 
-#: ../properties/nm-openvpn-dialog.ui.h:153
+#: ../properties/nm-openvpn-dialog.ui.h:154
 msgid "Extra Certificates:"
 msgstr "Extracertifikat:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:154
+#: ../properties/nm-openvpn-dialog.ui.h:155
 msgid ""
 "Specify a file containing one or more PEM certs (concatenated together) that "
 "complete the local certificate chain.\n"
@@ -1425,23 +1430,23 @@ msgstr ""
 "certifikatskedjan.\n"
 "config: extra-certs <fil>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:156
+#: ../properties/nm-openvpn-dialog.ui.h:157
 msgid "Additional TLS authentication or encryption"
 msgstr "Använd ytterligare TLS-autentisering eller kryptering"
 
-#: ../properties/nm-openvpn-dialog.ui.h:157
+#: ../properties/nm-openvpn-dialog.ui.h:158
 msgid "Controls min and max version allowed for TLS."
 msgstr "Styr lägsta och högsta version som tillåts för TLS."
 
-#: ../properties/nm-openvpn-dialog.ui.h:158
+#: ../properties/nm-openvpn-dialog.ui.h:159
 msgid "TLS version control"
 msgstr "TLS-versionskontroll"
 
-#: ../properties/nm-openvpn-dialog.ui.h:159
+#: ../properties/nm-openvpn-dialog.ui.h:160
 msgid "TLS _min version: "
 msgstr "_Lägsta TLS-version: "
 
-#: ../properties/nm-openvpn-dialog.ui.h:160
+#: ../properties/nm-openvpn-dialog.ui.h:161
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\".  If "
@@ -1453,11 +1458,11 @@ msgstr ""
 "Om ”or-highest” anges och versionen inte känns igen kommer vi bara acceptera "
 "den högsta TLS-versionen som stöds av den lokala SSL-implementationen."
 
-#: ../properties/nm-openvpn-dialog.ui.h:161
+#: ../properties/nm-openvpn-dialog.ui.h:162
 msgid "TLS ma_x version: "
 msgstr "_Högsta TLS-version: "
 
-#: ../properties/nm-openvpn-dialog.ui.h:162
+#: ../properties/nm-openvpn-dialog.ui.h:163
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1466,11 +1471,11 @@ msgstr ""
 "högsta versionen som stöds). Version kan exempelvis vara ”1.0”, ”1.1” eller "
 "”1.2”."
 
-#: ../properties/nm-openvpn-dialog.ui.h:163
+#: ../properties/nm-openvpn-dialog.ui.h:164
 msgid "TLS Authentication"
 msgstr "TLS-autentisering"
 
-#: ../properties/nm-openvpn-dialog.ui.h:164
+#: ../properties/nm-openvpn-dialog.ui.h:165
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1478,11 +1483,11 @@ msgstr ""
 "Proxytyp: HTTP eller Socks.\n"
 "config: http-proxy eller socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:166
+#: ../properties/nm-openvpn-dialog.ui.h:167
 msgid "Proxy _Type:"
 msgstr "Proxy_typ:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:167
+#: ../properties/nm-openvpn-dialog.ui.h:168
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1490,11 +1495,11 @@ msgstr ""
 "<i>Välj detta alternativ om din organisation kräver att en proxyserver "
 "används för att komma åt internet.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:168
+#: ../properties/nm-openvpn-dialog.ui.h:169
 msgid "Server _Address:"
 msgstr "Server_adress:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:169
+#: ../properties/nm-openvpn-dialog.ui.h:170
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1502,11 +1507,11 @@ msgstr ""
 "Anslut till fjärrvärd genom en proxy med denna adress.\n"
 "config: http-proxy eller socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:171
+#: ../properties/nm-openvpn-dialog.ui.h:172
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:172
+#: ../properties/nm-openvpn-dialog.ui.h:173
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1514,11 +1519,11 @@ msgstr ""
 "Anslut till fjärrvärd genom en proxy med denna port.\n"
 "config: http-proxy eller socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:174
+#: ../properties/nm-openvpn-dialog.ui.h:175
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Försök oändligt antal gånger när fel uppstår"
 
-#: ../properties/nm-openvpn-dialog.ui.h:175
+#: ../properties/nm-openvpn-dialog.ui.h:176
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1527,41 +1532,41 @@ msgstr ""
 "återställning.\n"
 "config: http-proxy-retry eller socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:177
+#: ../properties/nm-openvpn-dialog.ui.h:178
 msgid "Proxy _Username:"
 msgstr "Använda_rnamn för proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:178
+#: ../properties/nm-openvpn-dialog.ui.h:179
 msgid "Proxy Passwor_d:"
 msgstr "Lösenor_d för proxy:"
 
-#: ../properties/nm-openvpn-dialog.ui.h:179
+#: ../properties/nm-openvpn-dialog.ui.h:180
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Användarnamn för HTTP/Socks-proxy skickas till OpenVPN när det efterfrågas."
 
-#: ../properties/nm-openvpn-dialog.ui.h:180
+#: ../properties/nm-openvpn-dialog.ui.h:181
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "Lösenord för HTTP/Socks-proxy skickas till OpenVPN när det efterfrågas."
 
-#: ../properties/nm-openvpn-dialog.ui.h:181
+#: ../properties/nm-openvpn-dialog.ui.h:182
 msgid "_Show password"
 msgstr "Vi_sa lösenord"
 
-#: ../properties/nm-openvpn-dialog.ui.h:182
+#: ../properties/nm-openvpn-dialog.ui.h:183
 msgid "Proxies"
 msgstr "Proxyservrar"
 
-#: ../properties/nm-openvpn-dialog.ui.h:183
+#: ../properties/nm-openvpn-dialog.ui.h:184
 msgid "Path mtu discovery"
 msgstr "Path mtu discovery"
 
-#: ../properties/nm-openvpn-dialog.ui.h:184
+#: ../properties/nm-openvpn-dialog.ui.h:185
 msgid "Connect timeout"
 msgstr "Anslutningstidsgräns överskriden"
 
-#: ../properties/nm-openvpn-dialog.ui.h:185
+#: ../properties/nm-openvpn-dialog.ui.h:186
 msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
@@ -1571,15 +1576,15 @@ msgstr ""
 "tidsgränserna för proxy och TCP-anslutning.\n"
 "config: connect-timeout <n> | server-poll-timeout <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:187
+#: ../properties/nm-openvpn-dialog.ui.h:188
 msgid "0"
 msgstr "0"
 
-#: ../properties/nm-openvpn-dialog.ui.h:188
+#: ../properties/nm-openvpn-dialog.ui.h:189
 msgid "Push peer info"
 msgstr "Sänd motpartsinfo"
 
-#: ../properties/nm-openvpn-dialog.ui.h:189
+#: ../properties/nm-openvpn-dialog.ui.h:190
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
@@ -1587,7 +1592,7 @@ msgstr ""
 "Sänd ytterligare information om klienten till servern.\n"
 "config: push-peer-info"
 
-#: ../properties/nm-openvpn-dialog.ui.h:191
+#: ../properties/nm-openvpn-dialog.ui.h:192
 msgid "Misc"
 msgstr "Övrigt"
 
