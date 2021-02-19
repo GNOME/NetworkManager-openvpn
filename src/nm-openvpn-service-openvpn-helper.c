@@ -752,12 +752,15 @@ main (int argc, char *argv[])
 
 	ip4config = g_variant_builder_end (&ip4builder);
 
-	if (g_variant_n_children (ip4config)) {
-		val = g_variant_new_boolean (TRUE);
-		g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CONFIG_HAS_IP4, val);
-	} else {
+	size = g_variant_n_children (ip4config);
+	if (size == 0 || !has_ip4_address) {
+		if (size > 0)
+			_LOGW ("Ignoring IPv4 configuration without an address");
 		g_variant_unref (ip4config);
 		ip4config = NULL;
+	} else {
+		val = g_variant_new_boolean (TRUE);
+		g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CONFIG_HAS_IP4, val);
 	}
 
 	ip6config = g_variant_builder_end (&ip6builder);
