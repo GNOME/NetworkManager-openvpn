@@ -1536,15 +1536,15 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	case NMOVPN_COMP_DISABLED:
 		break;
 	case NMOVPN_COMP_LZO:
-		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_4_OR_NEWER)
-			args_add_strv (args, "--compress", "lzo");
-		else
+		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
 			args_add_strv (args, "--comp-lzo", "yes");
+		else
+			args_add_strv (args, "--compress", "lzo");
 		break;
 	case NMOVPN_COMP_LZ4:
 	case NMOVPN_COMP_LZ4_V2:
 	case NMOVPN_COMP_AUTO:
-		if (openvpn_binary_version != OPENVPN_BINARY_VERSION_2_4_OR_NEWER)
+		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
 			_LOGW ("\"compress\" option supported only by OpenVPN >= 2.4");
 
 		if (comp == NMOVPN_COMP_LZ4)
@@ -1556,7 +1556,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		break;
 	case NMOVPN_COMP_LEGACY_LZO_DISABLED:
 	case NMOVPN_COMP_LEGACY_LZO_ADAPTIVE:
-		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_4_OR_NEWER)
+		if (openvpn_binary_version != OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
 			_LOGW ("\"comp-lzo\" is deprecated and will be removed in future OpenVPN releases");
 
 		args_add_strv (args, "--comp-lzo",
@@ -1741,7 +1741,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 	if (nmovpn_arg_is_set (tmp)) {
-		if (openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) != OPENVPN_BINARY_VERSION_2_4_OR_NEWER) {
+		if (openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) == OPENVPN_BINARY_VERSION_2_3_OR_OLDER) {
 			_LOGW ("the tls-remote option is deprecated and removed from OpenVPN 2.4. Update your connection to use verify-x509-name (for example, \"verify-x509-name=name:%s\")", tmp);
 			args_add_strv (args, "--tls-remote", tmp);
 		} else {
