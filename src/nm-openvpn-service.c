@@ -579,8 +579,23 @@ openvpn_binary_detect_version (const char *exepath)
 static OpenvpnBinaryVersion
 openvpn_binary_detect_version_cached (const char *exepath, OpenvpnBinaryVersion *cached)
 {
-	if (G_UNLIKELY (*cached == OPENVPN_BINARY_VERSION_INVALID))
+	if (G_UNLIKELY (*cached == OPENVPN_BINARY_VERSION_INVALID)) {
+		const char *str;
+
 		*cached = openvpn_binary_detect_version (exepath);
+		switch (*cached) {
+		case OPENVPN_BINARY_VERSION_2_3_OR_OLDER:
+			str = "2.3 or older";
+			break;
+		case OPENVPN_BINARY_VERSION_2_4_OR_NEWER:
+			str = "2.4 or newer";
+			break;
+		default:
+			str = "unknown";
+			break;
+		}
+		_LOGI ("detected openvpn version %s", str);
+	}
 	return *cached;
 }
 
