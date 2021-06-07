@@ -1742,10 +1742,10 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 	if (nmovpn_arg_is_set (tmp)) {
 		if (openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) != OPENVPN_BINARY_VERSION_2_4_OR_NEWER) {
-			_LOGW ("the tls-remote option is deprecated and removed from OpenVPN 2.4. Update your connection to use verify-x509-name");
+			_LOGW ("the tls-remote option is deprecated and removed from OpenVPN 2.4. Update your connection to use verify-x509-name (for example, \"verify-x509-name=name:%s\")", tmp);
 			args_add_strv (args, "--tls-remote", tmp);
 		} else {
-			_LOGW ("the tls-remote option is deprecated and removed from OpenVPN 2.4. For compatibility, the plugin uses \"verify-x509-name\" \"%s\" \"name\" instead. Update your connection to use verify-x509-name", tmp);
+			_LOGW ("the tls-remote option is deprecated and removed from OpenVPN 2.4. For compatibility, the plugin uses \"verify-x509-name\" \"%s\" \"name\" instead. Update your connection to use for example \"verify-x509-name=name:%s\")", tmp, tmp);
 			args_add_strv (args, "--verify-x509-name", tmp, "name");
 		}
 		tls_remote = tmp;
