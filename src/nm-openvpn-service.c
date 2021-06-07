@@ -548,8 +548,9 @@ openvpn_binary_detect_version (const char *exepath)
 		return OPENVPN_BINARY_VERSION_UNKNOWN;
 
 	if (   !WIFEXITED (exit_code)
-	    || WEXITSTATUS (exit_code) != 1) {
-		/* expect return code 1 (OPENVPN_EXIT_STATUS_USAGE) */
+	    || !NM_IN_SET(WEXITSTATUS (exit_code), 0, 1)) {
+		/* expect return code 1 (OPENVPN_EXIT_STATUS_USAGE).
+		 * Since 2.5.0, it returns 0. */
 		return OPENVPN_BINARY_VERSION_UNKNOWN;
 	}
 
