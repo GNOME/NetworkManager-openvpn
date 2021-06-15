@@ -364,8 +364,10 @@ args_add_vpn_certs (GPtrArray *args, NMSettingVpn *s_vpn)
 	if (nmovpn_arg_is_set (cert) && is_pkcs12 (cert))
 		args_add_strv (args, "--pkcs12", cert);
 	else {
-		args_add_strv (args, "--cert", cert);
-		args_add_strv (args, "--key", key);
+		if (nmovpn_arg_is_set (cert))
+			args_add_strv (args, "--cert", cert);
+		if (nmovpn_arg_is_set (key))
+			args_add_strv (args, "--key", key);
 	}
 }
 
