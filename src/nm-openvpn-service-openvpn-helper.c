@@ -553,6 +553,10 @@ main (int argc, char *argv[])
 			g_variant_builder_add (&ip6builder, "{sv}", NM_VPN_PLUGIN_IP6_CONFIG_INT_GATEWAY, val);
 	}
 
+	/* tell Network Manager that openvpn can persist */
+	val = g_variant_new_boolean (TRUE);
+	g_variant_builder_add (&builder, "{sv}", NM_VPN_PLUGIN_CAN_PERSIST, val);
+
 	/* VPN device */
 	tmp = getenv ("dev");
 	val = str_to_gvariant (tmp, FALSE);
