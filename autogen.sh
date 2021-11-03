@@ -17,7 +17,7 @@ PKG_NAME=NetworkManager-openvpn
     autoreconf --install --symlink &&
     intltoolize --force &&
     autoreconf &&
-    ./configure --enable-maintainer-mode $@
+    ./configure --enable-maintainer-mode --enable-more-warnings=error $@
 )
 
 
