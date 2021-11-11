@@ -164,6 +164,7 @@ AC_OUTPUT
 
 echo ""
 echo "Build configuration: "
+echo "  --with-dist-version=$ac_distver"
 echo "  --with-gnome=$with_gnome"
 echo "  --with-libnm-glib=$with_libnm_glib"
 echo "  --enable-absolute-paths=$enable_absolute_paths"
