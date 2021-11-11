@@ -134,7 +134,7 @@ get_editor (NMVpnEditorPlugin *iface, NMConnection *connection, GError **error)
 #if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
 		return openvpn_editor_new (connection, error);
 #else
-		return nm_vpn_plugin_utils_load_editor (NM_PLUGIN_DIR"/libnm-vpn-plugin-openvpn-editor.so",
+		return nm_vpn_plugin_utils_load_editor ("libnm-vpn-plugin-openvpn-editor.so",
 		                                        "nm_vpn_editor_factory_openvpn",
 		                                        _call_editor_factory,
 		                                        iface,
