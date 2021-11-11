@@ -126,7 +126,6 @@ properties_libnm_vpn_plugin_openvpn_utils_la_SOURCES = \
 
 properties_libnm_vpn_plugin_openvpn_utils_la_CPPFLAGS = \
 	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB_BASE \
-	-DNM_PLUGIN_DIR=\"$(NM_PLUGIN_DIR)\" \
 	$(properties_cppflags) \
 	$(LIBNM_CFLAGS)
 
@@ -144,7 +143,6 @@ properties_libnm_vpn_plugin_openvpn_core_la_SOURCES = \
 
 properties_libnm_vpn_plugin_openvpn_core_la_CPPFLAGS = \
 	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB_BASE \
-	-DNM_PLUGIN_DIR=\"$(NM_PLUGIN_DIR)\" \
 	$(properties_cppflags) \
 	$(LIBNM_CFLAGS)
 
