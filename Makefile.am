@@ -1,7 +1,8 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
 DISTCHECK_CONFIGURE_FLAGS = \
-	--enable-more-warnings=yes
+	--enable-more-warnings=yes \
+	--with-gtk4
 
 libexec_PROGRAMS =
 
@@ -94,7 +95,17 @@ properties/resources.h: properties/gresource.xml
 properties/resources.c: properties/gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/properties --generate-dependencies $(srcdir)/properties/gresource.xml)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ --sourcedir=$(srcdir)/properties --generate-source --internal
 
+gtk4/resources.c: properties/gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies $(srcdir)/properties/gresource.xml |sed "s,^,$(builddir)/gtk4/,")
+	@mkdir -p $(builddir)/gtk4
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ --sourcedir=$(srcdir)/gtk4 --sourcedir=$(builddir)/gtk4 --generate-source --internal
+
+gtk4/%.ui: properties/%.ui
+	@mkdir -p $(builddir)/gtk4
+	gtk4-builder-tool simplify --3to4 $< |grep -v can-default >$@
+
 CLEANFILES += \
+	gtk4/nm-openvpn-dialog.ui \
+	gtk4/resources.c \
 	properties/resources.c \
 	properties/resources.h
 
@@ -188,6 +199,37 @@ properties_libnm_vpn_plugin_openvpn_editor_la_LIBADD = \
 	$(LIBNMA_LIBS)
 
 properties_libnm_vpn_plugin_openvpn_editor_la_LDFLAGS = \
+	-avoid-version \
+	-Wl,--version-script=$(srcdir)/properties/libnm-vpn-plugin-openvpn-editor.ver
+
+###############################################################################
+
+if WITH_GTK4
+plugin_LTLIBRARIES += properties/libnm-gtk4-vpn-plugin-openvpn-editor.la
+endif
+
+properties_libnm_gtk4_vpn_plugin_openvpn_editor_la_SOURCES = \
+	$(editor_sources)
+
+nodist_properties_libnm_gtk4_vpn_plugin_openvpn_editor_la_SOURCES = \
+	gtk4/resources.c \
+	properties/resources.h
+
+properties_libnm_gtk4_vpn_plugin_openvpn_editor_la_CPPFLAGS = \
+	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR \
+	$(properties_cppflags) \
+	$(GTK4_CFLAGS) \
+	$(LIBNM_CFLAGS) \
+	$(LIBNMA_GTK4_CFLAGS)
+
+properties_libnm_gtk4_vpn_plugin_openvpn_editor_la_LIBADD = \
+	properties/libnm-vpn-plugin-openvpn-utils.la \
+	$(GLIB_LIBS) \
+	$(GTK4_LIBS) \
+	$(LIBNM_LIBS) \
+	$(LIBNMA_GTK4_LIBS)
+
+properties_libnm_gtk4_vpn_plugin_openvpn_editor_la_LDFLAGS = \
 	-avoid-version \
 	-Wl,--version-script=$(srcdir)/properties/libnm-vpn-plugin-openvpn-editor.ver
 

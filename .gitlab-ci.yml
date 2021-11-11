@@ -44,8 +44,13 @@ fedora_dist:
       /usr/bin/autopoint
       autoconf automake make
       NetworkManager-libnm-devel
+      libnma-gtk4-devel
+      xorg-x11-server-Xvfb xorg-x11-xinit
     - sh autogen.sh
-    - make -j distcheck
+    # The Xvfb dance below is because of
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4415
+    - xinit /bin/sh -c 'make -j distcheck && touch .success' -- /usr/bin/Xvfb :5
+    - test -e .success
   artifacts:
     paths:
       - "*.xz"

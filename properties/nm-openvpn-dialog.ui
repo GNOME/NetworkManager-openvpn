@@ -575,11 +575,42 @@ config: auth-user-pass</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFileChooserButton" id="sk_key_chooser">
+                      <object class="GtkButton" id="sk_key_chooser_button">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Pre-shared file for Static Key encryption mode (non-TLS).
 config: static &lt;file&gt;</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <child>
+                              <object class="GtkLabel" id="sk_key_chooser_label">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="use-underline">True</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">document-open-symbolic</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -904,6 +935,22 @@ config: static &lt;file&gt; [direction]</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkBox" id="dialog-action_area1">
+            <property name="can_focus">False</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkNotebook" id="options_notebook">
             <property name="visible">True</property>
@@ -1669,11 +1716,42 @@ config: ncp-disable</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFileChooserButton" id="crl_file_chooser">
+                  <object class="GtkButton" id="crl_file_chooser_button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Check peer certificate against the specified file in PEM format. A CRL (certificate revocation list) is used when a particular key is compromised but when the overall PKI is still intact.</property>
-                    <property name="title" translatable="yes">Choose CRL file</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="crl_file_chooser_label">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">(None)</property>
+                            <property name="use-underline">True</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">document-open-symbolic</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1681,12 +1759,41 @@ config: ncp-disable</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFileChooserButton" id="crl_dir_chooser">
+                  <object class="GtkButton" id="crl_dir_chooser_button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Check peer certificate by looking at files in the specified directory. The directory must contain files named as revoked serial numbers (the files may be empty, the contents are never read).</property>
-                    <property name="action">select-folder</property>
-                    <property name="title" translatable="yes">Choose CRL directory</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="crl_dir_chooser_label">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">document-open-symbolic</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -1977,12 +2084,43 @@ config: ns-cert-type client|server</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkFileChooserButton" id="tls_auth_chooser">
+                          <object class="GtkButton" id="tls_auth_chooser_button">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes">Add an additional layer of HMAC authentication on top of the TLS control channel to protect against DoS attacks. In case of TLS-Crypt mode, the control channel is also encrypted.
 config: tls-auth &lt;file&gt; [direction] | tls-crypt &lt;file&gt;</property>
                             <property name="hexpand">True</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="tls_auth_chooser_label">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">document-open-symbolic</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -2069,11 +2207,42 @@ config: tls-auth &lt;file&gt; [direction]</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkFileChooserButton" id="extra_certs_chooser">
+                          <object class="GtkButton" id="extra_certs_chooser_button">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes">Specify a file containing one or more PEM certs (concatenated together) that complete the local certificate chain.
 config: extra-certs &lt;file&gt;</property>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <child>
+                                  <object class="GtkLabel" id="extra_certs_chooser_label">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">document-open-symbolic</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -2567,6 +2736,271 @@ config: push-peer-info</property>
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkFileChooserDialog" id="sk_key_chooser">
+    <property name="can-focus">False</property>
+    <property name="modal">True</property>
+    <action-widgets>
+      <action-widget response="-6">sk_key_chooser_cancel</action-widget>
+      <action-widget response="-3">sk_key_chooser_accept</action-widget>
+    </action-widgets>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="show-close-button">False</property>
+        <child type="title">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Choose an OpenVPN static key…</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="sk_key_chooser_cancel">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="sk_key_chooser_accept">
+            <property name="label" translatable="yes">_Select</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">True</property>
+            <property name="use-underline">True</property>
+            <property name="can-default">True</property>
+            <style>
+              <class name="default"/>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkFileChooserDialog" id="crl_file_chooser">
+    <property name="can-focus">False</property>
+    <property name="modal">True</property>
+    <property name="transient-for">openvpn-advanced-dialog</property>
+    <action-widgets>
+      <action-widget response="-6">crl_file_chooser_cancel</action-widget>
+      <action-widget response="-3">crl_file_chooser_accept</action-widget>
+    </action-widgets>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="show-close-button">False</property>
+        <child type="title">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Choose CRL file</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="crl_file_chooser_cancel">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="crl_file_chooser_accept">
+            <property name="label" translatable="yes">_Select</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">True</property>
+            <property name="use-underline">True</property>
+            <property name="can-default">True</property>
+            <style>
+              <class name="default"/>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkFileChooserDialog" id="crl_dir_chooser">
+    <property name="action">select-folder</property>
+    <property name="can-focus">False</property>
+    <property name="transient-for">openvpn-advanced-dialog</property>
+    <property name="modal">True</property>
+    <action-widgets>
+      <action-widget response="-6">crl_dir_chooser_cancel</action-widget>
+      <action-widget response="-3">crl_dir_chooser_accept</action-widget>
+    </action-widgets>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="show-close-button">False</property>
+        <child type="title">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Choose CRL directory</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="crl_dir_chooser_cancel">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="crl_dir_chooser_accept">
+            <property name="label" translatable="yes">_Select</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">True</property>
+            <property name="use-underline">True</property>
+            <property name="can-default">True</property>
+            <style>
+              <class name="default"/>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkFileChooserDialog" id="tls_auth_chooser">
+    <property name="can-focus">False</property>
+    <property name="transient-for">openvpn-advanced-dialog</property>
+    <property name="modal">True</property>
+    <action-widgets>
+      <action-widget response="-6">tls_auth_chooser_cancel</action-widget>
+      <action-widget response="-3">tls_auth_chooser_accept</action-widget>
+    </action-widgets>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="show-close-button">False</property>
+        <child type="title">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Choose a key file</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="tls_auth_chooser_cancel">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="tls_auth_chooser_accept">
+            <property name="label" translatable="yes">_Select</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">True</property>
+            <property name="use-underline">True</property>
+            <property name="can-default">True</property>
+            <style>
+              <class name="default"/>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkFileChooserDialog" id="extra_certs_chooser">
+    <property name="can-focus">False</property>
+    <property name="transient-for">openvpn-advanced-dialog</property>
+    <property name="modal">True</property>
+    <action-widgets>
+      <action-widget response="-6">extra_certs_chooser_cancel</action-widget>
+      <action-widget response="-3">extra_certs_chooser_accept</action-widget>
+    </action-widgets>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="show-close-button">False</property>
+        <child type="title">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Choose extra certificate file</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="extra_certs_chooser_cancel">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">False</property>
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="extra_certs_chooser_accept">
+            <property name="label" translatable="yes">_Select</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="receives-default">True</property>
+            <property name="use-underline">True</property>
+            <property name="can-default">True</property>
+            <style>
+              <class name="default"/>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="pack-type">end</property>
           </packing>
         </child>
       </object>
