@@ -108,8 +108,6 @@ plugin_sources = \
 	properties/import-export.h
 
 editor_sources = \
-	properties/resources.c \
-	properties/resources.h \
 	properties/nm-openvpn-editor.c \
 	properties/nm-openvpn-editor.h
 
@@ -173,6 +171,10 @@ endif
 properties_libnm_vpn_plugin_openvpn_editor_la_SOURCES = \
 	$(editor_sources)
 
+nodist_properties_libnm_vpn_plugin_openvpn_editor_la_SOURCES = \
+	properties/resources.c \
+	properties/resources.h
+
 properties_libnm_vpn_plugin_openvpn_editor_la_CPPFLAGS = \
 	-DNETWORKMANAGER_COMPILATION=NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR \
 	$(properties_cppflags) \
@@ -201,6 +203,10 @@ properties_libnm_openvpn_properties_core_la_SOURCES = \
 	$(shared_sources) \
 	$(plugin_sources) \
 	$(editor_sources)
+
+nodist_properties_libnm_openvpn_properties_core_la_SOURCES = \
+	properties/resources.c \
+	properties/resources.h
 
 properties_libnm_openvpn_properties_core_la_CPPFLAGS = \
 	-DNETWORKMANAGER_COMPILATION='NM_NETWORKMANAGER_COMPILATION_LIB|NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL' \
