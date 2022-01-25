@@ -15,6 +15,7 @@ stages:
       file
       findutils
       gcc
+      make
       gettext-devel
       glib2-devel
       gtk3-devel
@@ -29,45 +30,64 @@ stages:
 .dist: &dist
   stage: test
   dependencies:
-    - fedora28_dist
+    - fedora_dist
   variables:
     GIT_STRATEGY: none
 
-.fedora_from_dist: &fedora_from_dist
-  <<: *fedora_deps
-  <<: *dist
-  script:
-    - dnf -y install make
-    - tar xJf NetworkManager-openvpn-*.tar.xz
-    - cd NetworkManager-openvpn-*/
-    - ./configure
-      --disable-silent-rules
-      --without-libnm-glib
-    - make -j
-    - make -j check
-    - make -j install
-    - make -j uninstall
-
 # Roll the distribution tarball
-fedora28_dist:
+# The Xvfb dance below is because of
+# https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4415
+fedora_dist:
   <<: *fedora_deps
-  image: fedora:28
+  image: fedora:36
   stage: build
   script:
     - dnf -y install
       /usr/bin/autopoint
       autoconf automake make
-      NetworkManager-devel
-      NetworkManager-glib-devel
-      libnm-gtk-devel
+      NetworkManager-libnm-devel
+      libnma-gtk4-devel
+      xorg-x11-server-Xvfb xorg-x11-xinit
     - sh autogen.sh
-    - make -j dist
+    - xinit /bin/sh -c 'make -j distcheck && touch .success' -- /usr/bin/Xvfb :5
+    - test -e .success
   artifacts:
     paths:
       - "*.xz"
 
+# This one has libnm-glib
+fedora28_from_dist:
+  <<: *dist
+  <<: *fedora_deps
+  script:
+    - tar xJf NetworkManager-openvpn-*.tar.xz
+    - cd NetworkManager-openvpn-*/
+    - dnf -y install
+      NetworkManager-devel
+      NetworkManager-glib-devel
+      libnm-gtk-devel
+    - ./configure
+      --disable-silent-rules
+      --with-libnm-glib
+    - make -j
+    - make -j check
+    - make -j install
+    - make -j uninstall
+  image: fedora:28
+
+# A regular build on recent Fedora
 fedora_from_dist:
-  <<: *fedora_from_dist
+  <<: *dist
+  <<: *fedora_deps
+  script:
+    - tar xJf NetworkManager-openvpn-*.tar.xz
+    - cd NetworkManager-openvpn-*/
+    - ./configure
+      --disable-silent-rules
+    - make -j
+    - make -j check
+    - make -j install
+    - make -j uninstall
   image: fedora:latest
 
 triage:issues:
