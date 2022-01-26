@@ -35,8 +35,6 @@ stages:
     GIT_STRATEGY: none
 
 # Roll the distribution tarball
-# The Xvfb dance below is because of
-# https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4415
 fedora_dist:
   <<: *fedora_deps
   image: fedora:36
@@ -49,6 +47,8 @@ fedora_dist:
       libnma-gtk4-devel
       xorg-x11-server-Xvfb xorg-x11-xinit
     - sh autogen.sh
+    # The Xvfb dance below is because of
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4415
     - xinit /bin/sh -c 'make -j distcheck && touch .success' -- /usr/bin/Xvfb :5
     - test -e .success
   artifacts:
@@ -62,6 +62,9 @@ fedora28_from_dist:
   script:
     - tar xJf NetworkManager-openvpn-*.tar.xz
     - cd NetworkManager-openvpn-*/
+    # Sometimes the CI builder clocks are skewed.
+    # Make sure the dst files are not from future.
+    - find |xargs touch
     - dnf -y install
       NetworkManager-devel
       NetworkManager-glib-devel
@@ -82,6 +85,9 @@ fedora_from_dist:
   script:
     - tar xJf NetworkManager-openvpn-*.tar.xz
     - cd NetworkManager-openvpn-*/
+    # Sometimes the CI builder clocks are skewed.
+    # Make sure the dst files are not from future.
+    - find |xargs touch
     - ./configure
       --disable-silent-rules
     - make -j
