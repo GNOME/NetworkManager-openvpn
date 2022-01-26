@@ -57,6 +57,9 @@ fedora28_from_dist:
   script:
     - tar xJf NetworkManager-openvpn-*.tar.xz
     - cd NetworkManager-openvpn-*/
+    # Sometimes the CI builder clocks are skewed.
+    # Make sure the dst files are not from future.
+    - find |xargs touch
     - dnf -y install
       NetworkManager-devel
       NetworkManager-glib-devel
@@ -77,6 +80,9 @@ fedora_from_dist:
   script:
     - tar xJf NetworkManager-openvpn-*.tar.xz
     - cd NetworkManager-openvpn-*/
+    # Sometimes the CI builder clocks are skewed.
+    # Make sure the dst files are not from future.
+    - find |xargs touch
     - ./configure
       --disable-silent-rules
     - make -j
