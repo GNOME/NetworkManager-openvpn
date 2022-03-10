@@ -103,6 +103,11 @@ gtk4/%.ui: properties/%.ui
 	@mkdir -p $(builddir)/gtk4
 	gtk4-builder-tool simplify --3to4 $< |grep -v can-default >$@
 
+# Include a prebuilt file in tarball, to avoid hitting
+# https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4415
+EXTRA_DIST += \
+	gtk4/nm-openvpn-dialog.ui
+
 CLEANFILES += \
 	gtk4/nm-openvpn-dialog.ui \
 	gtk4/resources.c \
