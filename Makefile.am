@@ -164,6 +164,7 @@ properties_libnm_vpn_plugin_openvpn_core_la_CPPFLAGS = \
 
 properties_libnm_vpn_plugin_openvpn_core_la_LIBADD = \
 	properties/libnm-vpn-plugin-openvpn-utils.la \
+	$(GLIB_LIBS) \
 	$(LIBNM_LIBS) \
 	$(DL_LIBS)
 
