@@ -9,8 +9,8 @@
 msgid ""
 msgstr "Project-Id-Version: network-manager-openvpn master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/issues\n"
-"POT-Creation-Date: 2022-03-13 12:27+0000\n"
-"PO-Revision-Date: 2022-04-03 18:58+0100\n"
+"POT-Creation-Date: 2022-05-13 08:09+0000\n"
+"PO-Revision-Date: 2022-05-13 18:58+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -97,34 +97,34 @@ msgstr[1] "%s aukerak %u argumentu espero ditu"
 #: ../properties/import-export.c:219
 #, c-format
 msgid "argument %s of “%s” can not be empty"
-msgstr "%s / “%s” argumentuak ezin du hutsik egon"
+msgstr "%s argumentuak, “%s” sarekoak, ezin du hutsik egon"
 
 #: ../properties/import-export.c:221
 #, c-format
 msgid "argument of “%s” can not be empty"
-msgstr "“%s” argumentuak ezin du hutsik egon"
+msgstr "“%s” sareko argumentuak ezin du hutsik egon"
 
 #: ../properties/import-export.c:237
 #, c-format
 msgid "argument %s of “%s” must be UTF-8 encoded"
-msgstr ""
+msgstr "%s argumentuak, “%s” sarekoak, UTF-8 kodeketa izan behar du"
 
 #: ../properties/import-export.c:239
 #, c-format
 msgid "argument of “%s” must be UTF-8 encoded"
-msgstr ""
+msgstr "“%s” sareko argumentuak UTF-8 kodeketa izan behar du"
 
 #: ../properties/import-export.c:263
 #, c-format
 msgid "invalid %uth argument to “%s” where number expected"
-msgstr ""
+msgstr "baliogabeko %u. argumentua “%s” sarerako, zenbakia espero da"
 
 #. we don't support these special destinations, as they currently cannot be expressed
 #. * in a connection.
 #: ../properties/import-export.c:304
 #, c-format
 msgid "unsupported %uth argument %s to “%s”"
-msgstr ""
+msgstr "ez da onartzen %u. argumentua “%s” sarerako %s"
 
 #. we also don't support specifing a FQDN.
 #: ../properties/import-export.c:322
@@ -132,27 +132,27 @@ msgstr ""
 msgid ""
 "unsupported %uth argument to “%s” which looks like a FQDN but only IPv4 "
 "address supported"
-msgstr ""
+msgstr "ez da onartzen %u. argumentua “%s” sarerako, FQDN dirudi baina IPv4 helbidea soilik onartzen du"
 
 #: ../properties/import-export.c:329
 #, c-format
 msgid "invalid %uth argument to “%s” where IPv4 address expected"
-msgstr ""
+msgstr "%u. argumentu baliogabea “%s” sarerako, IPv4 helbidea espero da"
 
 #: ../properties/import-export.c:354
 #, c-format
 msgid "invalid %uth key-direction argument to “%s”"
-msgstr ""
+msgstr "%u. gako-helbide argumentu baliogabea “%s” sarerako"
 
 #: ../properties/import-export.c:368
 #, c-format
 msgid "invalid %uth argument to “%s”"
-msgstr ""
+msgstr "%u. argumentu baliogabea “%s” sarerako"
 
 #: ../properties/import-export.c:483
 #, c-format
 msgid "unterminated %s at position %lld"
-msgstr ""
+msgstr "amaitu gabeko %s %lld posizioan"
 
 #: ../properties/import-export.c:484
 msgid "double quote"
@@ -165,7 +165,7 @@ msgstr "komatxo bakuna"
 #: ../properties/import-export.c:500
 #, c-format
 msgid "trailing escaping backslash at position %lld"
-msgstr ""
+msgstr "amaierako ihes egiteko atzerako barra %lld posizioan"
 
 #: ../properties/import-export.c:630
 #, c-format
@@ -195,17 +195,17 @@ msgstr "ezin da “%s” direktorioa sortu"
 #: ../properties/import-export.c:746
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
-msgstr ""
+msgstr "ezin da <%s> blob elementua (%ld lerrokoa) fitxategian idatzi (%s)"
 
 #: ../properties/import-export.c:763
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file “%s”"
-msgstr ""
+msgstr "ezin da <%s> blob elementua (%ld lerrokoa) “%s” fitxategian idatzi"
 
 #: ../properties/import-export.c:907
 #, c-format
 msgid "proto expects protocol type like “udp” or “tcp”"
-msgstr ""
+msgstr "proto-k “udp” edo “tcp” motako protokoloa espero du"
 
 #: ../properties/import-export.c:932
 #, c-format
@@ -245,7 +245,7 @@ msgstr "urrunekoak ezin du komarik eduki"
 #: ../properties/import-export.c:1144
 #, c-format
 msgid "remote expects protocol type like “udp” or “tcp”"
-msgstr ""
+msgstr "urrunekoak “udp” edo “tcp” motako protokoloa espero du"
 
 #: ../properties/import-export.c:1402
 #, c-format
@@ -260,7 +260,7 @@ msgstr "onartzen ez den blob/xml elementua"
 #: ../properties/import-export.c:1583
 #, c-format
 msgid "unterminated blob element <%s>"
-msgstr ""
+msgstr "amaitu gabeko <%s> blob elementua"
 
 #: ../properties/import-export.c:1639
 #, c-format
@@ -484,29 +484,29 @@ msgstr "'%s' propietatea ez da idazgarria '%s' klaseko objektuan"
 #, c-format
 msgid ""
 "construct property \"%s\" for object '%s' can't be set after construction"
-msgstr ""
+msgstr "\"%s\" eraikuntza-propietatea, '%s' objektukoa, ezin da ezarri eraikuntzaren ondoren"
 
 #: ../shared/nm-utils/nm-shared-utils.c:968
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
-msgstr ""
+msgstr "'%s::%s' ez da baliozko propietate-izena; '%s' ez da GObject azpimota bat"
 
 #: ../shared/nm-utils/nm-shared-utils.c:977
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
-msgstr ""
+msgstr "ezin ezarri '%s' propietatea, '%s' motakoa, '%s' motako baliotik"
 
 #: ../shared/nm-utils/nm-shared-utils.c:988
 #, c-format
 msgid ""
 "value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
 "type '%s'"
-msgstr ""
+msgstr "“%s” balioa, '%s' motakoa, ez da baliozkoa edo tartetik kanpo dago '%s' propietaterako '%s' motakoa"
 
 #: ../shared/nm-utils/nm-vpn-plugin-utils.c:69
 #, c-format
 msgid "unable to get editor plugin name: %s"
-msgstr ""
+msgstr "ezin izan da editore-pluginaren izena lortu: %s"
 
 #: ../shared/nm-utils/nm-vpn-plugin-utils.c:103
 #, c-format
@@ -633,7 +633,7 @@ msgstr "Ataka-zenbaki baliogabea: “%s”."
 #: ../src/nm-openvpn-service.c:1453
 #, c-format
 msgid "Invalid proto “%s”."
-msgstr ""
+msgstr "proto baliogabea: “%s”."
 
 #: ../src/nm-openvpn-service.c:1502
 #, c-format
@@ -673,7 +673,7 @@ msgstr "Gako-tamaina baliogabea:“%s”."
 #: ../src/nm-openvpn-service.c:1764
 #, c-format
 msgid "Invalid configuration with tls-remote and verify-x509-name."
-msgstr ""
+msgstr "Konfigurazio baliogabea tls-remote eta verify-x509-name aukerekin."
 
 #: ../src/nm-openvpn-service.c:1777
 #, c-format
@@ -683,7 +683,7 @@ msgstr "verify-x509-name baliogabea."
 #: ../src/nm-openvpn-service.c:1800
 #, c-format
 msgid "Invalid reneg seconds “%s”."
-msgstr ""
+msgstr "Birnegoziazio-segungo baliogabeak: “%s”."
 
 #: ../src/nm-openvpn-service.c:1830
 #, c-format
@@ -789,7 +789,8 @@ msgid ""
 "tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
 "delimiters).\n"
 "config: remote"
-msgstr ""
+msgstr "Urruneko atebidea(k), aukeran ataka eta protokoloa gehituta (abididez, ovpn.corp.com:1234:tcp). Ostalari anitz zehaztu daitezke erredundantziarako (erabili komak edo zuriuneak mugatzaile gisa).\n"
+"konfigurazioa: remote"
 
 #: ../properties/nm-openvpn-dialog.ui.h:17
 msgid "Authentication"
@@ -862,7 +863,9 @@ msgid ""
 "peer. For example, if the peer uses “1”, this connection must use “0”. If "
 "you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
-msgstr ""
+msgstr "Gako estatikoen zifratze-modurako helbidea (ez TLS).\n"
+"Gako-helbidea erabiltzen bada, VPN parekoan erabilitakoaren aurkakoa izan behar du. Adibidez, parekoak “1” badarabil, konexio honek “0” erabili behar du. Zein balio erabili ez badakizu, hitz egin zure sistemaren administratzailearekin.\n"
+"konfigurazioa: static <fitxategia> [helbidea]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:39
 msgid "Type"
@@ -901,7 +904,8 @@ msgid ""
 "TCP/UDP port number for peer. (Default value when there is no port for "
 "gateway).\n"
 "config: port"
-msgstr ""
+msgstr "TCP/UDP ataka-zenbakia parekorako. (Balio lehenetsia atebiderako atakarik ez dagoenean).\n"
+"konfigurazioa: port"
 
 #: ../properties/nm-openvpn-dialog.ui.h:50
 msgid "Use custom _renegotiation interval"
@@ -935,7 +939,9 @@ msgid ""
 "(This is a default setting only used when no protocol is specified for the "
 "gateway.)\n"
 "config: proto tcp-client | udp"
-msgstr ""
+msgstr "Erabili TCP urruneko ostalariarekin komunikatzeko.\n"
+"(Ezarpen lehenetsia, atebiderako protokolorik zehazten ez denean soilik erabiltzen dena.)\n"
+"konfigurazioa: proto tcp-client | udp"
 
 #: ../properties/nm-openvpn-dialog.ui.h:60
 msgid "Set virtual _device type"
@@ -961,7 +967,8 @@ msgid ""
 "Use custom name for TUN/TAP virtual device (instead of default “tun” or "
 "“tap”).\n"
 "config: dev <name>"
-msgstr ""
+msgstr "Erabili izen pertsonalizatua TUN/TAP gailu birtualerako (“tun” edo “tap” lehenetsiaren ordez).\n"
+"konfigurazioa: dev <name>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:67
 msgid "Use custom tunnel Maximum Transmission _Unit (MTU)"
@@ -1011,23 +1018,25 @@ msgstr "Ausaz nahasi (urruneko) atebideen zerrendaren ordena oinarrizko kargen b
 
 #: ../properties/nm-openvpn-dialog.ui.h:79
 msgid "Allow Pull FQDN"
-msgstr ""
+msgstr "Onartu FQDN deskargatzea"
 
 #: ../properties/nm-openvpn-dialog.ui.h:80
 msgid ""
 "Allow client to pull DNS names from server\n"
 "config: allow-pull-fqdn"
-msgstr ""
+msgstr "Onartu bezeroak DNS izenak zerbitzaritik deskargatu ditzan\n"
+"konfigurazioa: allow-pull-fqdn"
 
 #: ../properties/nm-openvpn-dialog.ui.h:82
 msgid "_Prefix remote DNS name with random string"
-msgstr ""
+msgstr "_Erantsi ausazko kate bat aurrizki gisa urruneko DNS izenari"
 
 #: ../properties/nm-openvpn-dialog.ui.h:83
 msgid ""
 "Adds a random string to remote DNS name to avoid DNS caching.\n"
 "config: remote-random-hostname"
-msgstr ""
+msgstr "Ausazko kate bat eransten dio urruneko DNS izenari, DNSa cachean sartzea saihesteko.\n"
+"konfigurazioa: remote-random-hostname"
 
 #: ../properties/nm-openvpn-dialog.ui.h:85
 msgid "IPv6 tun link"
@@ -1037,7 +1046,8 @@ msgstr "IPv6 tun esteka"
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
-msgstr ""
+msgstr "Eraiki IPv6 trafikoa birbidaltzeko gai den tun esteka bat\n"
+"konfigurazioa: tun-ipv6"
 
 #: ../properties/nm-openvpn-dialog.ui.h:88
 msgid "Specify pin_g interval"
@@ -1048,22 +1058,24 @@ msgid ""
 "Ping remote over the TCP/UDP control channel if no packets have been sent "
 "for at least n seconds.\n"
 "config: ping <n>"
-msgstr ""
+msgstr "Egin ping urrunekoari TCP/UDP kontrol-kanalaren gainean, paketerik bidali ez bada gutxienez n segundotan.\n"
+"konfigurazioa: ping <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:91
 msgid "Specify _exit or restart ping"
-msgstr ""
+msgstr "Zehaztu i_rteera edo berrabiarazi ping-a"
 
 #: ../properties/nm-openvpn-dialog.ui.h:92
 msgid ""
 "Exit or restart after n seconds pass without reception of a ping or other "
 "packet from remote.\n"
 "config: ping-exit | ping-restart <n>"
-msgstr ""
+msgstr "Irten edo berrabiarazi, urrunekotik ping bat edo beste pakete bat jaso gabe n segundo igaro ondoren.\n"
+"konfigurazioa: ping-exit | ping-restart <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:94
 msgid "Accept authenticated packets from any address (F_loat)"
-msgstr ""
+msgstr "Onartu edozein helbidetako pakete autentifikatuak (M_ugikorra)"
 
 #: ../properties/nm-openvpn-dialog.ui.h:95
 msgid ""
@@ -1083,13 +1095,14 @@ msgstr ""
 
 #: ../properties/nm-openvpn-dialog.ui.h:100
 msgid "Specify max routes"
-msgstr ""
+msgstr "Zehaztu gehieneko ibilbideak"
 
 #: ../properties/nm-openvpn-dialog.ui.h:101
 msgid ""
 "Specify the maximum number of routes the server is allowed to specify.\n"
 "config: max-routes <n>"
-msgstr ""
+msgstr "Zehaztu zerbitzariari gehienez zenbat ibilbide zehaztea ahalbidetzen zaion.\n"
+"konfigurazioa: max-routes <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:103
 msgid ""
@@ -1129,13 +1142,14 @@ msgstr "HMAC autentifikazioa"
 
 #: ../properties/nm-openvpn-dialog.ui.h:112
 msgid "Disable cipher _negotiation"
-msgstr ""
+msgstr "Desgaitu zifraketa-_negoziazioa"
 
 #: ../properties/nm-openvpn-dialog.ui.h:113
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
-msgstr ""
+msgstr "Desgaitu bezeroaren eta zerbitzariaren arteko zifraketa-negoziazioa.\n"
+"konfigurazioa: ncp-disable"
 
 #: ../properties/nm-openvpn-dialog.ui.h:115
 msgid "Verify CRL from file"
@@ -1146,7 +1160,7 @@ msgid ""
 "Check peer certificate against the specified file in PEM format. A CRL "
 "(certificate revocation list) is used when a particular key is compromised "
 "but when the overall PKI is still intact."
-msgstr ""
+msgstr "Begiratu parekoaren ziurtagiria egokia den PEM formatuko zehaztutako fitxategiaren arabera. CRL bat (ziurtagiri-errebokazioko zerrenda) erabiltzen da gako jakin bat arriskuan jarri denean baina PKIa bere osotasunean ukitu gabe dagoenean."
 
 #: ../properties/nm-openvpn-dialog.ui.h:117
 msgid "Verify CRL from directory"
@@ -1157,7 +1171,7 @@ msgid ""
 "Check peer certificate by looking at files in the specified directory. The "
 "directory must contain files named as revoked serial numbers (the files may "
 "be empty, the contents are never read)."
-msgstr ""
+msgstr "Begiratu parekoaren ziurtagiria egokia dela zehaztutako direktorioko fitxategiak begiratuta. Direktorioak serieko zenbaki errebokatuen izenak dituzten  fitxategiak izan behar ditu (fitxategiak hutsik egon daitezke, edukiak ez dira inoiz irakurtzen)."
 
 #: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "Security"
@@ -1173,11 +1187,14 @@ msgid ""
 "\n"
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
-msgstr ""
+msgstr "Zerbitzariaren ziurtagiri-informazioa egiaztatzek oerabiliko den gaia edo izen arrunta.\n"
+"\n"
+"konfigurazioa: verify-x509-name subject-or-name [modua]\n"
+"konfigurazioa (zaharkitua): tls-remote subject-or-name"
 
 #: ../properties/nm-openvpn-dialog.ui.h:126
 msgid "Server _Certificate Check"
-msgstr ""
+msgstr "Zerbitzari-zi_urtagiriaren egiaztatzea"
 
 #: ../properties/nm-openvpn-dialog.ui.h:127
 msgid ""
@@ -1220,24 +1237,25 @@ msgstr "Parekoaren ziurtagiria gako zehatz baten erabilerarekin sinatuta eta gak
 
 #: ../properties/nm-openvpn-dialog.ui.h:142
 msgid "_Verify peer (server) certificate nsCertType designation"
-msgstr ""
+msgstr "_Egiaztatu parekoaren (zerbitzaria) ziurtagiriaren nsCertType izendapena"
 
 #: ../properties/nm-openvpn-dialog.ui.h:143
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
-msgstr ""
+msgstr "Behartu parekoaren ziurtagiria nsCertType izendapen esplizitu batekin izendatuta egotera."
 
 #: ../properties/nm-openvpn-dialog.ui.h:144
 msgid "_Remote peer certificate nsCert designation"
-msgstr ""
+msgstr "_Urruneko parekoaren ziurtagiriaren nsCert izendapena"
 
 #: ../properties/nm-openvpn-dialog.ui.h:145
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
 "config: ns-cert-type client|server"
-msgstr ""
+msgstr "Behartu parekoaren ziurtagiria nsCertType izendapen esplizitu batekin izendatuta egotera.\n"
+"konfigurazioa: ns-cert-type client|server"
 
 #: ../properties/nm-openvpn-dialog.ui.h:147
 msgid "Key _Direction"
@@ -1249,7 +1267,8 @@ msgid ""
 "channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
 "control channel is also encrypted.\n"
 "config: tls-auth <file> [direction] | tls-crypt <file>"
-msgstr ""
+msgstr "Gehitu HMAC autentifikazio-geruza bat TLS kontrol-kanalaren gainean, DoS erasoen aurreko babesa izateko. TLS-Crypt moduaren kasuan, kontrol-kanala ere zifratuta egongo da.\n"
+"konfigurazioa: tls-auth <fitxategia> [helbidea] | tls-crypt <fitxategia>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:150
 msgid ""
@@ -1258,11 +1277,13 @@ msgid ""
 "peer. For example, if the peer uses “1”, this connection must use “0”. If "
 "you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
-msgstr ""
+msgstr "Gako estatikoen zifratze-modurako helbidea.\n"
+"Gako-helbidea erabiltzen bada, VPN parekoan erabilitakoaren aurkakoa izan behar du. Adibidez, parekoak “1” badarabil, konexio honek “0” erabili behar du. Zein balio erabili ez badakizu, hitz egin zure sistemaren administratzailearekin.\n"
+"konfigurazioa: tls-auth <fitxategia> [helbidea]"
 
 #: ../properties/nm-openvpn-dialog.ui.h:153
 msgid "Key _File"
-msgstr "Gakoaren fitxategia"
+msgstr "Gako-_fitxategia"
 
 #: ../properties/nm-openvpn-dialog.ui.h:154
 msgid "Mode"
@@ -1281,7 +1302,8 @@ msgid ""
 "Specify a file containing one or more PEM certs (concatenated together) that "
 "complete the local certificate chain.\n"
 "config: extra-certs <file>"
-msgstr ""
+msgstr "Zehaztu PEM ziurtagiri bat edo gehiago (elkarrekin kateatuta) dituen fitxategi bat, ziurtagiri-kate lokala osatzen duena.\n"
+"konfigurazioa: extra-certs <fitxategia>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:159
 msgid "Additional TLS authentication or encryption"
@@ -1289,7 +1311,7 @@ msgstr "TLS autentifikazioa edo zifratze gehigarria"
 
 #: ../properties/nm-openvpn-dialog.ui.h:160
 msgid "Controls min and max version allowed for TLS."
-msgstr ""
+msgstr "TLSrako bertsio berriena eta zaharrena kontrolatzen ditu."
 
 #: ../properties/nm-openvpn-dialog.ui.h:161
 msgid "TLS version control"
@@ -1305,7 +1327,7 @@ msgid ""
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\".  If "
 "'or-highest' is specified and version is not recognized, we will only accept "
 "the highest TLS version supported by the local SSL implementation."
-msgstr ""
+msgstr " Parekorako onartuko den gutxieneko TLS bertsioa (lehenetsia \"1.0\" da).  Adibideak: \"1.0\", \"1.1\", edo \"1.2\".  Zehazten bada 'or-highest' eta bertsioa ezagutzen ez bada, SSL inplementazio lokalak onartutako TLS bertsio berriena soilik onartuko da."
 
 #: ../properties/nm-openvpn-dialog.ui.h:164
 msgid "TLS ma_x version"
@@ -1315,7 +1337,7 @@ msgstr "TLS bertsio ma_x"
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
-msgstr ""
+msgstr "Erabiliko den TLS bertsio berriena (balio lehenetsia, onartutako bertsiorik berriena da).  Adibideak: \"1.0\", \"1.1\", edo \"1.2\". "
 
 #: ../properties/nm-openvpn-dialog.ui.h:166
 msgid "TLS Authentication"
@@ -1393,11 +1415,11 @@ msgstr "_Erakutsi pasahitza"
 
 #: ../properties/nm-openvpn-dialog.ui.h:185
 msgid "Proxies"
-msgstr "Proxy-ak"
+msgstr "Proxyak"
 
 #: ../properties/nm-openvpn-dialog.ui.h:186
 msgid "Path mtu discovery"
-msgstr ""
+msgstr "Path mtu discovery"
 
 #: ../properties/nm-openvpn-dialog.ui.h:187
 msgid "Connect timeout"
@@ -1408,7 +1430,8 @@ msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
 "config: connect-timeout <n> | server-poll-timeout <n>"
-msgstr ""
+msgstr "Hurrengo zerbitzaria probatu arte igaroko den denbora-muga, segundotan. Proxyaren eta TCP konexioaren denbora-mugak ere barneratuta ditu.\n"
+"konfigurazioa: connect-timeout <n> | server-poll-timeout <n>"
 
 #: ../properties/nm-openvpn-dialog.ui.h:190
 msgid "0"
@@ -1416,13 +1439,14 @@ msgstr "0"
 
 #: ../properties/nm-openvpn-dialog.ui.h:191
 msgid "Push peer info"
-msgstr ""
+msgstr "Kargatu parekoaren informazioa"
 
 #: ../properties/nm-openvpn-dialog.ui.h:192
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
-msgstr ""
+msgstr "Kargatu bezeroari buruzko informazio gehigarria zerbitzarian.\n"
+"konfigurazioa: push-peer-info"
 
 #: ../properties/nm-openvpn-dialog.ui.h:194
 msgid "Misc"
