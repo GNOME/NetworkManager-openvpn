@@ -144,6 +144,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_CONNECTION_TYPE,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CRL_VERIFY_FILE,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CRL_VERIFY_DIR,            G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_DATA_CIPHERS,              G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_EXTRA_CERTS,               G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_FLOAT,                     G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NCP_DISABLE,               G_TYPE_BOOLEAN, 0, 0, FALSE },
@@ -1672,6 +1673,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 
 	args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_CIPHER, "--cipher");
+
+	args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, "--data-ciphers");
 
 	args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_TLS_CIPHER, "--tls-cipher");
 
