@@ -7,16 +7,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager openvpn\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/issues\n"
-"POT-Creation-Date: 2022-03-13 12:27+0000\n"
-"PO-Revision-Date: 2022-03-14 11:22+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/is"
+"sues\n"
+"POT-Creation-Date: 2022-06-21 10:43+0000\n"
+"PO-Revision-Date: 2022-06-21 18:28+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 20.12.0\n"
 
 #: ../appdata/network-manager-openvpn.metainfo.xml.in.h:1
@@ -47,7 +49,7 @@ msgid "Authentication required"
 msgstr "Слід пройти розпізнавання"
 
 #: ../auth-dialog/main.c:182 ../properties/nm-openvpn-editor.c:2674
-#: ../properties/nm-openvpn-dialog.ui.h:20
+#: ../properties/nm-openvpn-dialog.ui.h:21
 msgid "Password"
 msgstr "Пароль"
 
@@ -366,8 +368,7 @@ msgid "Compatible with the OpenVPN server."
 msgstr "Сумісний з сервером OpenVPN."
 
 #: ../properties/nm-openvpn-editor.c:103
-#: ../properties/nm-openvpn-dialog.ui.h:119
-#| msgid "None"
+#: ../properties/nm-openvpn-dialog.ui.h:120
 msgid "(None)"
 msgstr "(Немає)"
 
@@ -450,7 +451,7 @@ msgid "Client"
 msgstr "Клієнт"
 
 #: ../properties/nm-openvpn-editor.c:1604
-#: ../properties/nm-openvpn-dialog.ui.h:42
+#: ../properties/nm-openvpn-dialog.ui.h:43
 msgid "Not required"
 msgstr "Не потрібно"
 
@@ -492,7 +493,7 @@ msgid "Password with Certificates (TLS)"
 msgstr "Пароль з сертифікатами (TLS)"
 
 #: ../properties/nm-openvpn-editor.c:2701
-#: ../properties/nm-openvpn-dialog.ui.h:29
+#: ../properties/nm-openvpn-dialog.ui.h:30
 msgid "Static Key"
 msgstr "Статичний ключ"
 
@@ -810,22 +811,27 @@ msgid "TLS-Crypt v2"
 msgstr "TLS-Crypt v2"
 
 #: ../properties/nm-openvpn-dialog.ui.h:11
+#| msgid "None"
+msgid "No"
+msgstr "Ні"
+
+#: ../properties/nm-openvpn-dialog.ui.h:12
 msgid "Maybe"
 msgstr "Можливо"
 
-#: ../properties/nm-openvpn-dialog.ui.h:12
+#: ../properties/nm-openvpn-dialog.ui.h:13
 msgid "Yes"
 msgstr "Так"
 
-#: ../properties/nm-openvpn-dialog.ui.h:13
+#: ../properties/nm-openvpn-dialog.ui.h:14
 msgid "General"
 msgstr "Загальне"
 
-#: ../properties/nm-openvpn-dialog.ui.h:14
+#: ../properties/nm-openvpn-dialog.ui.h:15
 msgid "_Gateway"
 msgstr "_Шлюз"
 
-#: ../properties/nm-openvpn-dialog.ui.h:15
+#: ../properties/nm-openvpn-dialog.ui.h:16
 msgid ""
 "Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
 "tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
@@ -837,23 +843,23 @@ msgstr ""
 "(відокремлювати записи вузлів можна комами або пробілами).\n"
 "Файл налаштувань: remote"
 
-#: ../properties/nm-openvpn-dialog.ui.h:17
+#: ../properties/nm-openvpn-dialog.ui.h:18
 msgid "Authentication"
 msgstr "Розпізнавання"
 
-#: ../properties/nm-openvpn-dialog.ui.h:18
+#: ../properties/nm-openvpn-dialog.ui.h:19
 msgid "CA"
 msgstr "CA"
 
-#: ../properties/nm-openvpn-dialog.ui.h:19
+#: ../properties/nm-openvpn-dialog.ui.h:20
 msgid "User"
 msgstr "Користувач"
 
-#: ../properties/nm-openvpn-dialog.ui.h:21
+#: ../properties/nm-openvpn-dialog.ui.h:22
 msgid "User name"
 msgstr "Користувач"
 
-#: ../properties/nm-openvpn-dialog.ui.h:22
+#: ../properties/nm-openvpn-dialog.ui.h:23
 msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -861,7 +867,7 @@ msgstr ""
 "Пароль, який буде передано до OpenVPN, якщо надійде запит щодо пароля.\n"
 "Файл налаштувань: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:24
+#: ../properties/nm-openvpn-dialog.ui.h:25
 msgid ""
 "Username passed to OpenVPN when prompted for it. If omitted, use the name of "
 "the system user that activates the connection.\n"
@@ -872,19 +878,19 @@ msgstr ""
 "активує з'єднання.\n"
 "Файл налаштувань: auth-user-pass"
 
-#: ../properties/nm-openvpn-dialog.ui.h:26
+#: ../properties/nm-openvpn-dialog.ui.h:27
 msgid "Remote IP Address"
 msgstr "Віддалена адреса IP"
 
-#: ../properties/nm-openvpn-dialog.ui.h:27
+#: ../properties/nm-openvpn-dialog.ui.h:28
 msgid "Local IP Address"
 msgstr "Локальна адреса IP"
 
-#: ../properties/nm-openvpn-dialog.ui.h:28
+#: ../properties/nm-openvpn-dialog.ui.h:29
 msgid "Key Direction"
 msgstr "Напрям ключа"
 
-#: ../properties/nm-openvpn-dialog.ui.h:30
+#: ../properties/nm-openvpn-dialog.ui.h:31
 msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
@@ -892,7 +898,7 @@ msgstr ""
 "Попередньо розповсюджений файл режиму шифрування статичним ключем (не-TLS).\n"
 "Файл налаштувань: static <file>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:32
+#: ../properties/nm-openvpn-dialog.ui.h:33
 msgid ""
 "IP address of the remote VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -900,7 +906,7 @@ msgstr ""
 "IP-адреса віддаленої кінцевої точки VPN.\n"
 "Файл налаштувань: ifconfig <l> <rn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:34
+#: ../properties/nm-openvpn-dialog.ui.h:35
 msgid ""
 "IP address of the local VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -908,7 +914,7 @@ msgstr ""
 "IP-адреса локальної кінцевої точки VPN.\n"
 "Файл налаштувань: ifconfig <l> <rn>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:36
+#: ../properties/nm-openvpn-dialog.ui.h:37
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -924,40 +930,39 @@ msgstr ""
 "адміністратора вашої системи.\n"
 "Файл налаштувань: static <file> [напрямок]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:39
+#: ../properties/nm-openvpn-dialog.ui.h:40
 msgid "Type"
 msgstr "Тип"
 
-#: ../properties/nm-openvpn-dialog.ui.h:40
+#: ../properties/nm-openvpn-dialog.ui.h:41
 msgid "Select an authentication mode."
 msgstr "Вибрати режим розпізнавання."
 
-#: ../properties/nm-openvpn-dialog.ui.h:41
+#: ../properties/nm-openvpn-dialog.ui.h:42
 msgid "Ad_vanced…"
 msgstr "Д_одатково…"
 
-#: ../properties/nm-openvpn-dialog.ui.h:43
+#: ../properties/nm-openvpn-dialog.ui.h:44
 msgid "OpenVPN Advanced Options"
 msgstr "Додаткові параметри OpenVPN"
 
-#: ../properties/nm-openvpn-dialog.ui.h:44
-#| msgid "OpenVPN Advanced Options"
+#: ../properties/nm-openvpn-dialog.ui.h:45
 msgid "Advanced Properties"
 msgstr "Додаткові властивості"
 
-#: ../properties/nm-openvpn-dialog.ui.h:45
+#: ../properties/nm-openvpn-dialog.ui.h:46
 msgid "_Cancel"
 msgstr "_Скасувати"
 
-#: ../properties/nm-openvpn-dialog.ui.h:46
+#: ../properties/nm-openvpn-dialog.ui.h:47
 msgid "_Apply"
 msgstr "_Застосувати"
 
-#: ../properties/nm-openvpn-dialog.ui.h:47
+#: ../properties/nm-openvpn-dialog.ui.h:48
 msgid "Use custom gateway p_ort"
 msgstr "Використовувати інший _порт шлюзу"
 
-#: ../properties/nm-openvpn-dialog.ui.h:48
+#: ../properties/nm-openvpn-dialog.ui.h:49
 msgid ""
 "TCP/UDP port number for peer. (Default value when there is no port for "
 "gateway).\n"
@@ -967,11 +972,11 @@ msgstr ""
 "порту.)\n"
 "Файл налаштувань: port"
 
-#: ../properties/nm-openvpn-dialog.ui.h:50
+#: ../properties/nm-openvpn-dialog.ui.h:51
 msgid "Use custom _renegotiation interval"
 msgstr "Використовувати власний _повторних переговорів інтервал"
 
-#: ../properties/nm-openvpn-dialog.ui.h:51
+#: ../properties/nm-openvpn-dialog.ui.h:52
 msgid ""
 "Renegotiate data channel key after the specified number of seconds.\n"
 "config: reneg-sec"
@@ -979,11 +984,11 @@ msgstr ""
 "Повторно узгоджувати ключ каналу обміну даними за вказану кількість секунд.\n"
 "Файл налаштувань: reneg-sec"
 
-#: ../properties/nm-openvpn-dialog.ui.h:53
+#: ../properties/nm-openvpn-dialog.ui.h:54
 msgid "Data _compression"
 msgstr "С_тискання даних"
 
-#: ../properties/nm-openvpn-dialog.ui.h:54
+#: ../properties/nm-openvpn-dialog.ui.h:55
 msgid ""
 "Use fast LZO compression.\n"
 "config: comp-lzo"
@@ -991,11 +996,11 @@ msgstr ""
 "Використовувати швидке стискання LZO.\n"
 "Файл налаштувань: comp-lzo"
 
-#: ../properties/nm-openvpn-dialog.ui.h:56
+#: ../properties/nm-openvpn-dialog.ui.h:57
 msgid "Use a _TCP connection"
 msgstr "Використовувати з'єднання _TCP"
 
-#: ../properties/nm-openvpn-dialog.ui.h:57
+#: ../properties/nm-openvpn-dialog.ui.h:58
 msgid ""
 "Use TCP for communicating with remote host.\n"
 "(This is a default setting only used when no protocol is specified for the "
@@ -1007,15 +1012,15 @@ msgstr ""
 "протоколу.)\n"
 "Файл налаштувань: proto tcp-client | udp"
 
-#: ../properties/nm-openvpn-dialog.ui.h:60
+#: ../properties/nm-openvpn-dialog.ui.h:61
 msgid "Set virtual _device type"
 msgstr "Встановити тип ві_ртуального пристрою"
 
-#: ../properties/nm-openvpn-dialog.ui.h:61
+#: ../properties/nm-openvpn-dialog.ui.h:62
 msgid "Explicitly set virtual device type and name (TUN/TAP)."
 msgstr "Явним чином встановити тип і назву віртуального пристрою (TUN/TAP)."
 
-#: ../properties/nm-openvpn-dialog.ui.h:62
+#: ../properties/nm-openvpn-dialog.ui.h:63
 msgid ""
 "Explicitly set virtual device type (TUN/TAP).\n"
 "config: dev-type tun | tap"
@@ -1023,11 +1028,11 @@ msgstr ""
 "Явним чином вказати тип віртуального пристрою (TUN/TAP).\n"
 "Файл налаштувань: dev-type tun | tap"
 
-#: ../properties/nm-openvpn-dialog.ui.h:64
+#: ../properties/nm-openvpn-dialog.ui.h:65
 msgid " and _name"
 msgstr " і _назва"
 
-#: ../properties/nm-openvpn-dialog.ui.h:65
+#: ../properties/nm-openvpn-dialog.ui.h:66
 msgid ""
 "Use custom name for TUN/TAP virtual device (instead of default “tun” or "
 "“tap”).\n"
@@ -1037,12 +1042,12 @@ msgstr ""
 "типової «tun» або «tap»).\n"
 "Файл налаштувань: dev <name>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:67
+#: ../properties/nm-openvpn-dialog.ui.h:68
 msgid "Use custom tunnel Maximum Transmission _Unit (MTU)"
 msgstr ""
 "Використовувати нестандартний максимальний _розмір елементу передачі (MTU):"
 
-#: ../properties/nm-openvpn-dialog.ui.h:68
+#: ../properties/nm-openvpn-dialog.ui.h:69
 msgid ""
 "Take the TUN device MTU to be the specified value and derive the link MTU "
 "from it.\n"
@@ -1052,11 +1057,11 @@ msgstr ""
 "похідним від цього значення.\n"
 "Файл налаштувань: tun-mtu"
 
-#: ../properties/nm-openvpn-dialog.ui.h:70
+#: ../properties/nm-openvpn-dialog.ui.h:71
 msgid "Use custom UDP _fragment size"
 msgstr "Використовувати нестандартний розмір _фрагменту UDP"
 
-#: ../properties/nm-openvpn-dialog.ui.h:71
+#: ../properties/nm-openvpn-dialog.ui.h:72
 msgid ""
 "Enable internal datagram fragmentation with this maximum size.\n"
 "config: fragment"
@@ -1065,11 +1070,11 @@ msgstr ""
 "розміром.\n"
 "Файл налаштувань: fragment"
 
-#: ../properties/nm-openvpn-dialog.ui.h:73
+#: ../properties/nm-openvpn-dialog.ui.h:74
 msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
 msgstr "Обмежувати максимальний розмір сегменту TCP (MSS) тунелю"
 
-#: ../properties/nm-openvpn-dialog.ui.h:74
+#: ../properties/nm-openvpn-dialog.ui.h:75
 msgid ""
 "Restrict tunnel TCP MSS.\n"
 "config: mssfix"
@@ -1077,11 +1082,11 @@ msgstr ""
 "Обмежити тунелювання MSS TCP.\n"
 "Файл налаштувань: mssfix"
 
-#: ../properties/nm-openvpn-dialog.ui.h:76
+#: ../properties/nm-openvpn-dialog.ui.h:77
 msgid "Rando_mize remote hosts"
 msgstr "Вип_адковий порядок віддалених вузлів"
 
-#: ../properties/nm-openvpn-dialog.ui.h:77
+#: ../properties/nm-openvpn-dialog.ui.h:78
 msgid ""
 "Randomize the order of gateways list (remote) as a kind of basic load-"
 "balancing measure.\n"
@@ -1091,11 +1096,11 @@ msgstr ""
 "збалансовування навантаження.\n"
 "Файл налаштувань: remote-random"
 
-#: ../properties/nm-openvpn-dialog.ui.h:79
+#: ../properties/nm-openvpn-dialog.ui.h:80
 msgid "Allow Pull FQDN"
 msgstr "Дозволити отримання FQDN"
 
-#: ../properties/nm-openvpn-dialog.ui.h:80
+#: ../properties/nm-openvpn-dialog.ui.h:81
 msgid ""
 "Allow client to pull DNS names from server\n"
 "config: allow-pull-fqdn"
@@ -1103,11 +1108,11 @@ msgstr ""
 "Дозволити клієнту отримання назв DNS з сервера\n"
 "Файл налаштувань: allow-pull-fqdn"
 
-#: ../properties/nm-openvpn-dialog.ui.h:82
+#: ../properties/nm-openvpn-dialog.ui.h:83
 msgid "_Prefix remote DNS name with random string"
 msgstr "Додати випадковий рядок _префікса до назви віддаленого DNS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:83
+#: ../properties/nm-openvpn-dialog.ui.h:84
 msgid ""
 "Adds a random string to remote DNS name to avoid DNS caching.\n"
 "config: remote-random-hostname"
@@ -1115,11 +1120,11 @@ msgstr ""
 "Додає випадковий рядок до назви віддаленої DNS, щоб уникнути кешування DNS.\n"
 "Файл налаштувань: remote-random-hostname"
 
-#: ../properties/nm-openvpn-dialog.ui.h:85
+#: ../properties/nm-openvpn-dialog.ui.h:86
 msgid "IPv6 tun link"
 msgstr "Зв'язок tun IPv6"
 
-#: ../properties/nm-openvpn-dialog.ui.h:86
+#: ../properties/nm-openvpn-dialog.ui.h:87
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
@@ -1128,11 +1133,11 @@ msgstr ""
 "IPv6\n"
 "Файл налаштувань: tun-ipv6"
 
-#: ../properties/nm-openvpn-dialog.ui.h:88
+#: ../properties/nm-openvpn-dialog.ui.h:89
 msgid "Specify pin_g interval"
 msgstr "Вказати інтервал між і_мпульсами"
 
-#: ../properties/nm-openvpn-dialog.ui.h:89
+#: ../properties/nm-openvpn-dialog.ui.h:90
 msgid ""
 "Ping remote over the TCP/UDP control channel if no packets have been sent "
 "for at least n seconds.\n"
@@ -1142,11 +1147,11 @@ msgstr ""
 "якщо не було надіслано жодного пакета принаймні n секунд.\n"
 "Файл налаштувань: ping <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:91
+#: ../properties/nm-openvpn-dialog.ui.h:92
 msgid "Specify _exit or restart ping"
 msgstr "Вказати імпульс ви_ходу або перезапуску"
 
-#: ../properties/nm-openvpn-dialog.ui.h:92
+#: ../properties/nm-openvpn-dialog.ui.h:93
 msgid ""
 "Exit or restart after n seconds pass without reception of a ping or other "
 "packet from remote.\n"
@@ -1155,11 +1160,11 @@ msgstr ""
 "Вихід або перезапуск за n секунд, якщо не отримано луна-імпульсу або іншого "
 "пакета від віддаленого вузла.nФайл налаштувань: ping-exit | ping-restart <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:94
+#: ../properties/nm-openvpn-dialog.ui.h:95
 msgid "Accept authenticated packets from any address (F_loat)"
 msgstr "Приймати па_кети розпізнавання з будь-яких адрес (Float)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:95
+#: ../properties/nm-openvpn-dialog.ui.h:96
 msgid ""
 "Allow remote peer to change its IP address and/or port number, such as due "
 "to DHCP (this is the default if --remote is not used). --float when "
@@ -1192,11 +1197,11 @@ msgstr ""
 "\n"
 "Файл налаштувань: float"
 
-#: ../properties/nm-openvpn-dialog.ui.h:100
+#: ../properties/nm-openvpn-dialog.ui.h:101
 msgid "Specify max routes"
 msgstr "Вказати макс. к-ть маршрутів"
 
-#: ../properties/nm-openvpn-dialog.ui.h:101
+#: ../properties/nm-openvpn-dialog.ui.h:102
 msgid ""
 "Specify the maximum number of routes the server is allowed to specify.\n"
 "config: max-routes <n>"
@@ -1204,7 +1209,7 @@ msgstr ""
 "Вказати максимальну кількість маршрутів, які може визначати сервер.\n"
 "Файл налаштувань: max-routes <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:103
+#: ../properties/nm-openvpn-dialog.ui.h:104
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
 "Cipher Block Chaining mode).\n"
@@ -1214,11 +1219,11 @@ msgstr ""
 "(режим Blowfish in Cipher Block Chaining).\n"
 "Файл налаштувань: cipher"
 
-#: ../properties/nm-openvpn-dialog.ui.h:105
+#: ../properties/nm-openvpn-dialog.ui.h:106
 msgid "Use custom _size of cipher key"
 msgstr "Нетиповий _розмір ключа шифрування"
 
-#: ../properties/nm-openvpn-dialog.ui.h:106
+#: ../properties/nm-openvpn-dialog.ui.h:107
 msgid ""
 "Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
 "specific size.\n"
@@ -1228,7 +1233,7 @@ msgstr ""
 "типово використовуватиметься специфічне для шифру значення.\n"
 "Файл налаштувань: keysize <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:108
+#: ../properties/nm-openvpn-dialog.ui.h:109
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
 "is SHA1.\n"
@@ -1238,19 +1243,19 @@ msgstr ""
 "HMAC. Типово, використовується алгоритм SHA1.\n"
 "Файл налаштувань: auth"
 
-#: ../properties/nm-openvpn-dialog.ui.h:110
+#: ../properties/nm-openvpn-dialog.ui.h:111
 msgid "Ci_pher"
 msgstr "Шифр"
 
-#: ../properties/nm-openvpn-dialog.ui.h:111
+#: ../properties/nm-openvpn-dialog.ui.h:112
 msgid "_HMAC Authentication"
 msgstr "_Розпізнавання HMAC"
 
-#: ../properties/nm-openvpn-dialog.ui.h:112
+#: ../properties/nm-openvpn-dialog.ui.h:113
 msgid "Disable cipher _negotiation"
 msgstr "Вимкнути _узгодження шифрування"
 
-#: ../properties/nm-openvpn-dialog.ui.h:113
+#: ../properties/nm-openvpn-dialog.ui.h:114
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
@@ -1258,11 +1263,11 @@ msgstr ""
 "Вимкнути узгодження шифрування між клієнтом і сервером.\n"
 "Файл налаштувань: ncp-disable"
 
-#: ../properties/nm-openvpn-dialog.ui.h:115
+#: ../properties/nm-openvpn-dialog.ui.h:116
 msgid "Verify CRL from file"
 msgstr "Перевірити CRL з файла"
 
-#: ../properties/nm-openvpn-dialog.ui.h:116
+#: ../properties/nm-openvpn-dialog.ui.h:117
 msgid ""
 "Check peer certificate against the specified file in PEM format. A CRL "
 "(certificate revocation list) is used when a particular key is compromised "
@@ -1272,11 +1277,11 @@ msgstr ""
 "виявиться скомпрометованим, але загальне PKI лишається незмінним, буде "
 "використано CRL (список відкликання сертифікатів)."
 
-#: ../properties/nm-openvpn-dialog.ui.h:117
+#: ../properties/nm-openvpn-dialog.ui.h:118
 msgid "Verify CRL from directory"
 msgstr "Перевірити CRL з каталогу"
 
-#: ../properties/nm-openvpn-dialog.ui.h:118
+#: ../properties/nm-openvpn-dialog.ui.h:119
 msgid ""
 "Check peer certificate by looking at files in the specified directory. The "
 "directory must contain files named as revoked serial numbers (the files may "
@@ -1286,15 +1291,15 @@ msgstr ""
 "містити файли, які названо з використанням відкликаних серійних номерів "
 "(файли можуть бути порожніми, вміст файлів прочитано не буде)."
 
-#: ../properties/nm-openvpn-dialog.ui.h:120
+#: ../properties/nm-openvpn-dialog.ui.h:121
 msgid "Security"
 msgstr "Безпека"
 
-#: ../properties/nm-openvpn-dialog.ui.h:121
+#: ../properties/nm-openvpn-dialog.ui.h:122
 msgid "_Subject Match"
 msgstr "Об'єкт збігу"
 
-#: ../properties/nm-openvpn-dialog.ui.h:122
+#: ../properties/nm-openvpn-dialog.ui.h:123
 msgid ""
 "Subject or Common Name to verify server certificate information against.\n"
 "\n"
@@ -1306,11 +1311,11 @@ msgstr ""
 "Файл налаштувань: verify-x509-name subject-or-name [режим]\n"
 "Файл налаштувань (режим застарілого коду): tls-remote subject-or-name"
 
-#: ../properties/nm-openvpn-dialog.ui.h:126
+#: ../properties/nm-openvpn-dialog.ui.h:127
 msgid "Server _Certificate Check"
 msgstr "Пере_вірка сертифіката сервера"
 
-#: ../properties/nm-openvpn-dialog.ui.h:127
+#: ../properties/nm-openvpn-dialog.ui.h:128
 msgid ""
 "Verify server certificate identification.\n"
 "\n"
@@ -1340,11 +1345,11 @@ msgstr ""
 "Файл налаштувань: verify-x509-name subject-or-name [режим]\n"
 "Файл налаштувань (режим застарілих параметрів): tls-remote subject-or-name"
 
-#: ../properties/nm-openvpn-dialog.ui.h:137
+#: ../properties/nm-openvpn-dialog.ui.h:138
 msgid "_Verify peer (server) certificate usage signature"
 msgstr "Перевір_яти підпис щодо використання сертифіката сервера"
 
-#: ../properties/nm-openvpn-dialog.ui.h:138
+#: ../properties/nm-openvpn-dialog.ui.h:139
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -1353,11 +1358,11 @@ msgstr ""
 "використання ключа та розширеного використання ключа на основі правил TLS з "
 "RFC3280."
 
-#: ../properties/nm-openvpn-dialog.ui.h:139
+#: ../properties/nm-openvpn-dialog.ui.h:140
 msgid "_Remote peer certificate TLS type"
 msgstr "Тип TLS сертифіката в_іддаленого сервера"
 
-#: ../properties/nm-openvpn-dialog.ui.h:140
+#: ../properties/nm-openvpn-dialog.ui.h:141
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -1368,11 +1373,11 @@ msgstr ""
 "RFC3280.\n"
 "Файл налаштувань: remote-cert-tls client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:142
+#: ../properties/nm-openvpn-dialog.ui.h:143
 msgid "_Verify peer (server) certificate nsCertType designation"
 msgstr "П_еревіряти підпис nsCertType сертифіката вузла (сервера)"
 
-#: ../properties/nm-openvpn-dialog.ui.h:143
+#: ../properties/nm-openvpn-dialog.ui.h:144
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
@@ -1380,11 +1385,11 @@ msgstr ""
 "Вимагати, щоб сертифікат вузла було явно підписано за допомогою підпису "
 "nsCertType»"
 
-#: ../properties/nm-openvpn-dialog.ui.h:144
+#: ../properties/nm-openvpn-dialog.ui.h:145
 msgid "_Remote peer certificate nsCert designation"
 msgstr "Пі_дпис nsCert сертифіката віддаленого вузла"
 
-#: ../properties/nm-openvpn-dialog.ui.h:145
+#: ../properties/nm-openvpn-dialog.ui.h:146
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
@@ -1394,11 +1399,11 @@ msgstr ""
 "nsCertType.\n"
 "Файл налаштувань: ns-cert-type client|server"
 
-#: ../properties/nm-openvpn-dialog.ui.h:147
+#: ../properties/nm-openvpn-dialog.ui.h:148
 msgid "Key _Direction"
 msgstr "Напрямок ключа"
 
-#: ../properties/nm-openvpn-dialog.ui.h:148
+#: ../properties/nm-openvpn-dialog.ui.h:149
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
@@ -1410,7 +1415,7 @@ msgstr ""
 "використано режим TLS-Crypt, канал керування також шифрується.\n"
 "Файл налаштувань: tls-auth <file> [напрямок] | tls-crypt <file>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:150
+#: ../properties/nm-openvpn-dialog.ui.h:151
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -1426,23 +1431,23 @@ msgstr ""
 "адміністратора вашої системи.\n"
 "Файл налаштувань: tls-auth <file> [напрямок]"
 
-#: ../properties/nm-openvpn-dialog.ui.h:153
+#: ../properties/nm-openvpn-dialog.ui.h:154
 msgid "Key _File"
 msgstr "Файл ключа"
 
-#: ../properties/nm-openvpn-dialog.ui.h:154
+#: ../properties/nm-openvpn-dialog.ui.h:155
 msgid "Mode"
 msgstr "Режим"
 
-#: ../properties/nm-openvpn-dialog.ui.h:155
+#: ../properties/nm-openvpn-dialog.ui.h:156
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr "Додати шар шифрування або розпізнавання HMAC."
 
-#: ../properties/nm-openvpn-dialog.ui.h:156
+#: ../properties/nm-openvpn-dialog.ui.h:157
 msgid "Extra Certificates"
 msgstr "Додаткові сертифікати"
 
-#: ../properties/nm-openvpn-dialog.ui.h:157
+#: ../properties/nm-openvpn-dialog.ui.h:158
 msgid ""
 "Specify a file containing one or more PEM certs (concatenated together) that "
 "complete the local certificate chain.\n"
@@ -1452,24 +1457,24 @@ msgstr ""
 "який завершує ланцюжок локальної сертифікації.\n"
 "Файл налаштувань: extra-certs <file>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:159
+#: ../properties/nm-openvpn-dialog.ui.h:160
 msgid "Additional TLS authentication or encryption"
 msgstr "Додаткове розпізнавання або шифрування TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:160
+#: ../properties/nm-openvpn-dialog.ui.h:161
 msgid "Controls min and max version allowed for TLS."
 msgstr ""
 "Керує значеннями мінімальної і максимальної версій, які дозволено для TLS."
 
-#: ../properties/nm-openvpn-dialog.ui.h:161
+#: ../properties/nm-openvpn-dialog.ui.h:162
 msgid "TLS version control"
 msgstr "Керування версією TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:162
+#: ../properties/nm-openvpn-dialog.ui.h:163
 msgid "TLS _min version"
 msgstr "_Мін. версія TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:163
+#: ../properties/nm-openvpn-dialog.ui.h:164
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\".  If "
@@ -1482,11 +1487,11 @@ msgstr ""
 "прийматимемо лише найвищу підтримувану версією TLS у локальній реалізації "
 "SSL."
 
-#: ../properties/nm-openvpn-dialog.ui.h:164
+#: ../properties/nm-openvpn-dialog.ui.h:165
 msgid "TLS ma_x version"
 msgstr "М_акс. версія TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:165
+#: ../properties/nm-openvpn-dialog.ui.h:166
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1495,11 +1500,11 @@ msgstr ""
 "найвища підтримувана версія). Приклади записів версії: «1.0», «1.1» або "
 "«1.2»."
 
-#: ../properties/nm-openvpn-dialog.ui.h:166
+#: ../properties/nm-openvpn-dialog.ui.h:167
 msgid "TLS Authentication"
 msgstr "Розпізнавання TLS"
 
-#: ../properties/nm-openvpn-dialog.ui.h:167
+#: ../properties/nm-openvpn-dialog.ui.h:168
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1507,11 +1512,11 @@ msgstr ""
 "Тип проксі-сервера: HTTP або Socks.\n"
 "Файл налаштувань: http-proxy або socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:169
+#: ../properties/nm-openvpn-dialog.ui.h:170
 msgid "Proxy _Type"
 msgstr "Тип проксі-сервера"
 
-#: ../properties/nm-openvpn-dialog.ui.h:170
+#: ../properties/nm-openvpn-dialog.ui.h:171
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1519,11 +1524,11 @@ msgstr ""
 "<i>Виберіть цей параметр, якщо для доступу до інтернет у вашій організації "
 "використовується проксі-сервер.</i>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:171
+#: ../properties/nm-openvpn-dialog.ui.h:172
 msgid "Server _Address"
 msgstr "Адреса сервера"
 
-#: ../properties/nm-openvpn-dialog.ui.h:172
+#: ../properties/nm-openvpn-dialog.ui.h:173
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1531,11 +1536,11 @@ msgstr ""
 "Встановити з'єднання з віддаленим вузлом через проксі із вказаною адресою.\n"
 "Файл налаштувань: http-proxy або socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:174
+#: ../properties/nm-openvpn-dialog.ui.h:175
 msgid "_Port"
 msgstr "Порт"
 
-#: ../properties/nm-openvpn-dialog.ui.h:175
+#: ../properties/nm-openvpn-dialog.ui.h:176
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1543,11 +1548,11 @@ msgstr ""
 "Встановити з'єднання з віддаленим вузлом через проксі із вказаним портом.\n"
 "Файл налаштувань: http-proxy або socks-proxy"
 
-#: ../properties/nm-openvpn-dialog.ui.h:177
+#: ../properties/nm-openvpn-dialog.ui.h:178
 msgid "_Retry indefinitely when errors occur"
 msgstr "Пов_торити незалежно від того, чи станеться помилка"
 
-#: ../properties/nm-openvpn-dialog.ui.h:178
+#: ../properties/nm-openvpn-dialog.ui.h:179
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1556,43 +1561,43 @@ msgstr ""
 "проксі-сервером. Імітує скидання за SIGUSR1.\n"
 "Файл налаштувань: http-proxy-retry або socks-proxy-retry"
 
-#: ../properties/nm-openvpn-dialog.ui.h:180
+#: ../properties/nm-openvpn-dialog.ui.h:181
 msgid "Proxy _Username"
 msgstr "Користувач на проксі-сервері"
 
-#: ../properties/nm-openvpn-dialog.ui.h:181
+#: ../properties/nm-openvpn-dialog.ui.h:182
 msgid "Proxy Passwor_d"
 msgstr "Пароль проксі-сервера"
 
-#: ../properties/nm-openvpn-dialog.ui.h:182
+#: ../properties/nm-openvpn-dialog.ui.h:183
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Ім'я користувача HTTP/Socks-проксі, яке буде передано до OpenVPN, якщо "
 "надійде запит щодо імені."
 
-#: ../properties/nm-openvpn-dialog.ui.h:183
+#: ../properties/nm-openvpn-dialog.ui.h:184
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "Пароль до HTTP/Socks-проксі, який буде передано до OpenVPN, якщо надійде "
 "запит щодо пароля."
 
-#: ../properties/nm-openvpn-dialog.ui.h:184
+#: ../properties/nm-openvpn-dialog.ui.h:185
 msgid "_Show password"
 msgstr "Показати пароль"
 
-#: ../properties/nm-openvpn-dialog.ui.h:185
+#: ../properties/nm-openvpn-dialog.ui.h:186
 msgid "Proxies"
 msgstr "Проксі-сервери"
 
-#: ../properties/nm-openvpn-dialog.ui.h:186
+#: ../properties/nm-openvpn-dialog.ui.h:187
 msgid "Path mtu discovery"
 msgstr "Визначення шляхів MTU"
 
-#: ../properties/nm-openvpn-dialog.ui.h:187
+#: ../properties/nm-openvpn-dialog.ui.h:188
 msgid "Connect timeout"
 msgstr "Час очікування на з'єднання"
 
-#: ../properties/nm-openvpn-dialog.ui.h:188
+#: ../properties/nm-openvpn-dialog.ui.h:189
 msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
@@ -1603,15 +1608,15 @@ msgstr ""
 "на зв'язок із проксі-сервером та встановлення з'єднання TCP.\n"
 "Файл налаштувань: connect-timeout <n> | server-poll-timeout <n>"
 
-#: ../properties/nm-openvpn-dialog.ui.h:190
+#: ../properties/nm-openvpn-dialog.ui.h:191
 msgid "0"
 msgstr "0"
 
-#: ../properties/nm-openvpn-dialog.ui.h:191
+#: ../properties/nm-openvpn-dialog.ui.h:192
 msgid "Push peer info"
 msgstr "Надіслати дані щодо вузла"
 
-#: ../properties/nm-openvpn-dialog.ui.h:192
+#: ../properties/nm-openvpn-dialog.ui.h:193
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
@@ -1619,33 +1624,31 @@ msgstr ""
 "Надіслати додаткові відомості щодо клієнта на сервер.\n"
 "налаштування: push-peer-info"
 
-#: ../properties/nm-openvpn-dialog.ui.h:194
+#: ../properties/nm-openvpn-dialog.ui.h:195
 msgid "Misc"
 msgstr "Інше"
 
-#: ../properties/nm-openvpn-dialog.ui.h:195
+#: ../properties/nm-openvpn-dialog.ui.h:196
 msgid "Choose an OpenVPN static key…"
 msgstr "Виберіть статичний ключ OpenVPN…"
 
-#: ../properties/nm-openvpn-dialog.ui.h:196
+#: ../properties/nm-openvpn-dialog.ui.h:197
 msgid "_Select"
 msgstr "_Вибрати"
 
-#: ../properties/nm-openvpn-dialog.ui.h:197
+#: ../properties/nm-openvpn-dialog.ui.h:198
 msgid "Choose CRL file"
 msgstr "Виберіть файл CRL"
 
-#: ../properties/nm-openvpn-dialog.ui.h:198
+#: ../properties/nm-openvpn-dialog.ui.h:199
 msgid "Choose CRL directory"
 msgstr "Виберіть каталог CRL"
 
-#: ../properties/nm-openvpn-dialog.ui.h:199
-#| msgid "Choose CRL file"
+#: ../properties/nm-openvpn-dialog.ui.h:200
 msgid "Choose a key file"
 msgstr "Виберіть файл ключа"
 
-#: ../properties/nm-openvpn-dialog.ui.h:200
-#| msgid "Extra Certificates"
+#: ../properties/nm-openvpn-dialog.ui.h:201
 msgid "Choose extra certificate file"
 msgstr "Виберіть додатковий файл сертифіката"
 
