@@ -10,6 +10,8 @@ AM_SILENT_RULES([yes])
 
 AC_CONFIG_HEADERS([config.h])
 
+AC_USE_SYSTEM_EXTENSIONS
+
 dnl
 dnl Require programs
 dnl
@@ -17,7 +19,7 @@ AC_PROG_CC
 AC_GNU_SOURCE
 AM_PROG_CC_C_O
 AC_PROG_INSTALL
-AC_PROG_LIBTOOL
+LT_INIT([disable-static])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
 
 AC_CHECK_PROG([has_file], file, yes, no)
@@ -41,7 +43,6 @@ LT_INIT([disable-static])
 dnl
 dnl Required headers
 dnl
-AC_HEADER_STDC
 AC_CHECK_HEADERS(fcntl.h paths.h sys/ioctl.h sys/time.h syslog.h unistd.h)
 
 dnl
@@ -49,7 +50,6 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 dnl
 AC_TYPE_MODE_T
 AC_TYPE_PID_T
-AC_HEADER_TIME
 
 dnl
 dnl Checks for library functions.
