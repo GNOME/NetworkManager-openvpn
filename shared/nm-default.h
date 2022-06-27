@@ -29,10 +29,6 @@
 #define NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR          0x0004
 #define NM_NETWORKMANAGER_COMPILATION_LIB                 (0x0002 | 0x0004)
 
-/* special flag, to indicate that we build a legacy library. That is, we link against
- * deprecated libnm-util/libnm-glib instead against libnm. */
-#define NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL     0x0010
-
 /*****************************************************************************/
 
 #include <config.h>
@@ -58,35 +54,6 @@
 
 /*****************************************************************************/
 
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-
-#define NM_VPN_LIBNM_COMPAT
-#include <nm-connection.h>
-#include <nm-setting-connection.h>
-#include <nm-setting-8021x.h>
-#include <nm-setting-ip4-config.h>
-#include <nm-setting-vpn.h>
-#include <nm-utils.h>
-#include <nm-vpn-plugin-ui-interface.h>
-
-#define nm_simple_connection_new nm_connection_new
-#define NM_SETTING_IP_CONFIG NM_SETTING_IP4_CONFIG
-#define NM_SETTING_IP_CONFIG_METHOD NM_SETTING_IP4_CONFIG_METHOD
-#define NM_SETTING_IP_CONFIG_NEVER_DEFAULT NM_SETTING_IP4_CONFIG_NEVER_DEFAULT
-#define NMSettingIPConfig NMSettingIP4Config
-
-#define NMV_EDITOR_PLUGIN_ERROR                     NM_SETTING_VPN_ERROR
-#define NMV_EDITOR_PLUGIN_ERROR_FAILED              NM_SETTING_VPN_ERROR_UNKNOWN
-#define NMV_EDITOR_PLUGIN_ERROR_INVALID_PROPERTY    NM_SETTING_VPN_ERROR_INVALID_PROPERTY
-#define NMV_EDITOR_PLUGIN_ERROR_MISSING_PROPERTY    NM_SETTING_VPN_ERROR_MISSING_PROPERTY
-#define NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_VPN        NM_SETTING_VPN_ERROR_UNKNOWN
-#define NMV_EDITOR_PLUGIN_ERROR_FILE_NOT_READABLE   NM_SETTING_VPN_ERROR_UNKNOWN
-#define NMV_EDITOR_PLUGIN_ERROR_FILE_INVALID        NM_SETTING_VPN_ERROR_UNKNOWN
-
-#define _nm_utils_is_valid_iface_name(n)            nm_utils_iface_valid_name(n)
-
-#else /* NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL */
-
 #include <NetworkManager.h>
 
 #define NMV_EDITOR_PLUGIN_ERROR                     NM_CONNECTION_ERROR
@@ -99,19 +66,12 @@
 
 #define _nm_utils_is_valid_iface_name(n)            nm_utils_is_valid_iface_name(n, NULL)
 
-#endif /* NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL */
-
 /*****************************************************************************/
 
 #if (NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR
 
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-#include <nm-ui-utils.h>
-#include <nm-cert-chooser.h>
-#else
 #include <nma-ui-utils.h>
 #include <nma-cert-chooser.h>
-#endif
 
 #endif /* NM_NETWORKMANAGER_COMPILATION_LIB_EDITOR */
 

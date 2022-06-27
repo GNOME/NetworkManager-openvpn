@@ -241,48 +241,9 @@ properties_libnm_gtk4_vpn_plugin_openvpn_editor_la_LDFLAGS = \
 
 ###############################################################################
 
-if WITH_LIBNM_GLIB
-noinst_LTLIBRARIES += properties/libnm-openvpn-properties-core.la
-endif
-
-properties_libnm_openvpn_properties_core_la_SOURCES = \
-	$(shared_sources) \
-	$(plugin_sources) \
-	$(editor_sources)
-
-nodist_properties_libnm_openvpn_properties_core_la_SOURCES = \
-	properties/resources.c \
-	properties/resources.h
-
-properties_libnm_openvpn_properties_core_la_CPPFLAGS = \
-	-DNETWORKMANAGER_COMPILATION='NM_NETWORKMANAGER_COMPILATION_LIB|NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL' \
-	$(properties_cppflags) \
-	$(GTK_CFLAGS) \
-	$(LIBNM_GLIB_CFLAGS) \
-	$(LIBNM_GTK_CFLAGS)
-
-properties_libnm_openvpn_properties_core_la_LIBADD = \
-	$(GLIB_LIBS) \
-	$(GTK_LIBS) \
-	$(LIBNM_GLIB_LIBS) \
-	$(LIBNM_GTK_LIBS)
-
-
-if WITH_LIBNM_GLIB
-plugin_LTLIBRARIES += properties/libnm-openvpn-properties.la
-endif
-
-properties_libnm_openvpn_properties_la_SOURCES =
-properties_libnm_openvpn_properties_la_LIBADD = \
-	properties/libnm-openvpn-properties-core.la
-properties_libnm_openvpn_properties_la_LDFLAGS = \
-	-avoid-version \
-	-Wl,--version-script=$(srcdir)/properties/libnm-openvpn-properties.ver
-
 EXTRA_DIST += \
 	properties/libnm-vpn-plugin-openvpn.ver \
 	properties/libnm-vpn-plugin-openvpn-editor.ver \
-	properties/libnm-openvpn-properties.ver \
 	properties/nm-openvpn-dialog.ui
 
 ###############################################################################
@@ -294,7 +255,6 @@ properties_tests_cppflags = \
 	-I$(srcdir)/shared \
 	-I$(srcdir)/properties \
 	$(GLIB_CFLAGS)
-
 
 check_programs += properties/tests/test-import-export
 
@@ -312,29 +272,6 @@ properties_tests_test_import_export_LDADD = \
 	$(GLIB_LIBS) \
 	$(LIBNM_LIBS) \
 	$(LIBNMA_LIBS)
-
-
-if WITH_LIBNM_GLIB
-check_programs += properties/tests/test-import-export-glib
-endif
-
-properties_tests_test_import_export_glib_SOURCES = \
-	properties/tests/test-import-export.c
-
-properties_tests_test_import_export_glib_CPPFLAGS = \
-	-DNETWORKMANAGER_COMPILATION='NM_NETWORKMANAGER_COMPILATION_DEFAULT|NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL' \
-	$(properties_tests_cppflags) \
-	$(GTK_CFLAGS) \
-	$(LIBNM_GLIB_CFLAGS) \
-	$(LIBNM_GTK_CFLAGS)
-
-properties_tests_test_import_export_glib_LDADD = \
-	properties/libnm-openvpn-properties-core.la \
-	$(GLIB_LIBS) \
-	$(GTK_LIBS) \
-	$(LIBNM_GLIB_LIBS) \
-	$(LIBNM_GTK_LIBS)
-
 
 EXTRA_DIST += \
 	properties/tests/conf/compress.ovpn \
@@ -416,21 +353,6 @@ EXTRA_auth_dialog_nm_openvpn_auth_dialog_DEPENDENCIES = \
 	linker-script-binary.ver
 
 ###############################################################################
-
-if WITH_LIBNM_GLIB
-# Install a file with full path to plugins for an old gnome-shell
-# https://bugzilla.gnome.org/show_bug.cgi?id=693590
-install-data-hook:
-	mkdir -p $(DESTDIR)$(sysconfdir)/NetworkManager/VPN
-	sed -e "1s|^|# This file is obsoleted by a file in $(NM_VPN_SERVICE_DIR)\n\n|" \
-	    -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
-	    -e 's|[@]PLUGINDIR[@]|@NM_PLUGIN_DIR@|g' \
-	    <$(srcdir)/nm-openvpn-service.name.in \
-	    >$(DESTDIR)$(sysconfdir)/NetworkManager/VPN/nm-openvpn-service.name
-
-uninstall-hook:
-	 rm -f $(DESTDIR)$(sysconfdir)/NetworkManager/VPN/nm-openvpn-service.name
-endif
 
 appdatadir = $(datadir)/metainfo
 appdata_files = $(appdata_in_files:.xml.in=.xml)

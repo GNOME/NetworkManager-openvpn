@@ -2930,8 +2930,6 @@ openvpn_editor_plugin_widget_class_init (OpenvpnEditorClass *req_class)
 
 /*****************************************************************************/
 
-#if !((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-
 #include "nm-openvpn-editor-plugin.h"
 
 G_MODULE_EXPORT NMVpnEditor *
@@ -2942,5 +2940,3 @@ nm_vpn_editor_factory_openvpn (NMVpnEditorPlugin *editor_plugin,
 	g_type_ensure (NMA_TYPE_CERT_CHOOSER);
 	return openvpn_editor_new (connection, error);
 }
-#endif
-

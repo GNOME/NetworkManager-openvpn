@@ -55,7 +55,6 @@ fedora_dist:
     paths:
       - "*.xz"
 
-# This one has libnm-glib
 fedora28_from_dist:
   <<: *dist
   <<: *fedora_deps
@@ -65,13 +64,8 @@ fedora28_from_dist:
     # Sometimes the CI builder clocks are skewed.
     # Make sure the dst files are not from future.
     - find |xargs touch
-    - dnf -y install
-      NetworkManager-devel
-      NetworkManager-glib-devel
-      libnm-gtk-devel
     - ./configure
       --disable-silent-rules
-      --with-libnm-glib
     - make -j
     - make -j check
     - make -j install
