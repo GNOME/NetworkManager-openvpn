@@ -438,7 +438,9 @@ if WITH_GNOME
 appdata_DATA = $(appdata_files)
 endif
 appdata_in_files = appdata/network-manager-openvpn.metainfo.xml.in
-@INTLTOOL_XML_RULE@
+
+appdata/network-manager-openvpn.metainfo.xml: appdata/network-manager-openvpn.metainfo.xml.in
+	$(AM_V_GEN)$(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 	$(AM_V_GEN) sed -e 's|[@]LIBEXECDIR[@]|$(libexecdir)|g' \
@@ -456,9 +458,6 @@ EXTRA_DIST += \
 	$(dbusservice_DATA) \
 	$(appdata_in_files) \
 	$(appdata_files) \
-	intltool-extract.in \
-	intltool-merge.in \
-	intltool-update.in \
 	\
 	shared/README \
 	shared/nm-utils/gsystem-local-alloc.h \
@@ -476,10 +475,5 @@ EXTRA_DIST += \
 CLEANFILES += \
 	$(nmvpnservice_DATA) \
 	$(appdata_files)
-
-DISTCLEANFILES = \
-	intltool-extract \
-	intltool-merge \
-	intltool-update
 
 ACLOCAL_AMFLAGS = -I m4
