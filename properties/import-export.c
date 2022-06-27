@@ -1455,6 +1455,7 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			in_addr_t gateway = 0;
 			guint32 prefix = 32;
 			gint64 metric = -1;
+			NMIPRoute *route;
 
 			if (!args_params_check_nargs_minmax (params, 1, 4, &line_error))
 				goto handle_line_error;
@@ -1490,26 +1491,9 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 				continue;
 			}
 
-			{
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-				NMIP4Route *route;
-
-				route = nm_ip4_route_new ();
-				nm_ip4_route_set_dest (route, network);
-				nm_ip4_route_set_prefix (route, prefix);
-				nm_ip4_route_set_next_hop (route, gateway);
-				if (metric >= 0)
-					nm_ip4_route_set_metric (route, metric);
-				nm_setting_ip4_config_add_route (s_ip4, route);
-				nm_ip4_route_unref (route);
-#else
-				NMIPRoute *route;
-
-				route = nm_ip_route_new_binary (AF_INET, &network, prefix, params[3] ? &gateway : NULL, metric, NULL);
-				nm_setting_ip_config_add_route (s_ip4, route);
-				nm_ip_route_unref (route);
-#endif
-			}
+			route = nm_ip_route_new_binary (AF_INET, &network, prefix, params[3] ? &gateway : NULL, metric, NULL);
+			nm_setting_ip_config_add_route (s_ip4, route);
+			nm_ip_route_unref (route);
 		}
 
 		if (params[0][0] == '<' && params[0][strlen (params[0]) - 1] == '>') {
@@ -2302,11 +2286,7 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	s_ip4 = nm_connection_get_setting_ip4_config (connection);
 	if (s_ip4) {
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-		num = nm_setting_ip4_config_get_num_routes (s_ip4);
-#else
 		num = nm_setting_ip_config_get_num_routes (s_ip4);
-#endif
 		for (i = 0; i < num; i++) {
 			char netmask_str[INET_ADDRSTRLEN] = { 0 };
 			const char *next_hop_str, *dest_str;
@@ -2314,31 +2294,13 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 			guint prefix;
 			guint64 metric;
 			char metric_buf[50];
+			NMIPRoute *route;
 
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-			char next_hop_str_buf[INET_ADDRSTRLEN] = { 0 };
-			char dest_str_buf[INET_ADDRSTRLEN] = { 0 };
-			in_addr_t dest, next_hop;
-			NMIP4Route *route = nm_setting_ip4_config_get_route (s_ip4, i);
-
-			dest = nm_ip4_route_get_dest (route);
-			inet_ntop (AF_INET, (const void *) &dest, dest_str_buf, sizeof (dest_str_buf));
-			dest_str = dest_str_buf;
-
-			next_hop = nm_ip4_route_get_next_hop (route);
-			inet_ntop (AF_INET, (const void *) &next_hop, next_hop_str_buf, sizeof (next_hop_str_buf));
-			next_hop_str = next_hop_str_buf;
-
-			prefix = nm_ip4_route_get_prefix (route);
-			metric = nm_ip4_route_get_metric (route);
-#else
-			NMIPRoute *route = nm_setting_ip_config_get_route (s_ip4, i);
-
+			route = nm_setting_ip_config_get_route (s_ip4, i);
 			dest_str = nm_ip_route_get_dest (route);
 			next_hop_str = nm_ip_route_get_next_hop (route) ? : "0.0.0.0",
 			prefix = nm_ip_route_get_prefix (route);
 			metric = nm_ip_route_get_metric (route);
-#endif
 			netmask = nm_utils_ip4_prefix_to_netmask (prefix);
 			inet_ntop (AF_INET, (const void *) &netmask, netmask_str, sizeof (netmask_str));
 
