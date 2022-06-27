@@ -4,7 +4,7 @@ AC_INIT(NetworkManager-openvpn,
         1.8.19,
         https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/issues,
         NetworkManager-openvpn)
-AM_INIT_AUTOMAKE([1.9 tar-ustar no-dist-gzip dist-xz -Wno-portability])
+AM_INIT_AUTOMAKE([1.9 foreign tar-ustar no-dist-gzip dist-xz -Wno-portability])
 AM_MAINTAINER_MODE
 AM_SILENT_RULES([yes])
 
