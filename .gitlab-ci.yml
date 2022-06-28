@@ -6,7 +6,7 @@
 
 .fedora_deps: &fedora_deps
   before_script:
-    - dnf -y install
+    - dnf -y install $EXTRA_PACKAGES
       file
       findutils
       gcc
@@ -25,62 +25,48 @@
 .dist: &dist
   stage: test
   dependencies:
-    - fedora_dist
+    - fedora36_dist
   variables:
     GIT_STRATEGY: none
 
+.fedora_from_dist: &fedora_from_dist
+  <<: *fedora_deps
+  <<: *dist
+  script:
+    - tar xJf NetworkManager-openvpn-*.tar.xz
+    - cd NetworkManager-openvpn-*/
+    - ./configure $EXTRA_CONFIGURE_FLAGS
+      --disable-silent-rules
+    - make -j
+    - make -j check
+    - make -j install
+    - make -j uninstall
+
 # Roll the distribution tarball
-fedora_dist:
+fedora36_dist:
   <<: *fedora_deps
   image: fedora:36
   stage: build
   script:
     - dnf -y install
       /usr/bin/autopoint
-      autoconf automake make
-      NetworkManager-libnm-devel
-      libnma-gtk4-devel
-      xorg-x11-server-Xvfb xorg-x11-xinit
+      autoconf automake appstream
+      gtk4-devel
     - sh autogen.sh
-    # The Xvfb dance below is because of
-    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4415
-    - xinit /bin/sh -c 'make -j distcheck && touch .success' -- /usr/bin/Xvfb :5
-    - test -e .success
+    - make -j dist
   artifacts:
     paths:
       - "*.xz"
 
-fedora28_from_dist:
-  <<: *dist
-  <<: *fedora_deps
-  script:
-    - tar xJf NetworkManager-openvpn-*.tar.xz
-    - cd NetworkManager-openvpn-*/
-    # Sometimes the CI builder clocks are skewed.
-    # Make sure the dst files are not from future.
-    - find |xargs touch
-    - ./configure
-      --disable-silent-rules
-    - make -j
-    - make -j check
-    - make -j install
-    - make -j uninstall
+# Test on a vintage distro without Gtk4
+fedora_28_from_dist:
+  <<: *fedora_from_dist
   image: fedora:28
 
-# A regular build on recent Fedora
-fedora_from_dist:
-  <<: *dist
-  <<: *fedora_deps
-  script:
-    - tar xJf NetworkManager-openvpn-*.tar.xz
-    - cd NetworkManager-openvpn-*/
-    # Sometimes the CI builder clocks are skewed.
-    # Make sure the dst files are not from future.
-    - find |xargs touch
-    - ./configure
-      --disable-silent-rules
-    - make -j
-    - make -j check
-    - make -j install
-    - make -j uninstall
+# Test on a recent distro
+fedora_latest_from_dist:
+  <<: *fedora_from_dist
+  variables:
+    EXTRA_PACKAGES: libnma-gtk4-devel
+    EXTRA_CONFIGURE_FLAGS: --with-gtk4
   image: fedora:latest
