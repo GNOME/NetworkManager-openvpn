@@ -4,11 +4,6 @@
 # If things don't seem to work, this can help:
 # https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/ci/lint
 
-stages:
-  - build
-  - test
-  - triage
-
 .fedora_deps: &fedora_deps
   before_script:
     - dnf -y install
@@ -89,12 +84,3 @@ fedora_from_dist:
     - make -j install
     - make -j uninstall
   image: fedora:latest
-
-triage:issues:
-  stage: triage
-  image: ruby:2.7
-  script:
-    - gem install gitlab-triage
-    - gitlab-triage -d --token $API_TOKEN --source-id $SOURCE_ID
-  only:
-    - schedules
