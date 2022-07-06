@@ -1297,10 +1297,8 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 
 			if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_PKCS12)) {
 				 /* OpenVPN allows --pkcs12 with external (PEM) --ca. Don't overwrite it with the PKCS#12 file. */
-				if (!have_ca) {
+				if (!have_ca)
 					setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CA, file);
-					have_ca = TRUE;
-				}
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_CERT, file);
 				setting_vpn_add_data_item_path (s_vpn, NM_OPENVPN_KEY_KEY, file);
 				have_pkcs12 = TRUE;
