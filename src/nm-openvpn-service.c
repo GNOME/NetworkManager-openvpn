@@ -197,6 +197,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_NOSECRET,                  G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS, G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_VERSION_MIN,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST,G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_VERSION_MAX,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                     G_TYPE_NONE, FALSE }
 };
@@ -1726,8 +1727,11 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	}
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN);
 	if (nmovpn_arg_is_set (tmp)) {
+		const char *or_highest = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST);
+
 		args_add_strv (args, "--tls-version-min");
-		args_add_strv (args, tmp);
+		args_add_strv0 (args, tmp, nm_streq0(or_highest, "yes") ? "or-highest" : NULL);
+
 	}
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MAX);
 	if (nmovpn_arg_is_set (tmp)) {

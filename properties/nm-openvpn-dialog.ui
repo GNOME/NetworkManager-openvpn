@@ -2330,7 +2330,7 @@ config: extra-certs &lt;file&gt;</property>
                           <object class="GtkEntry" id="tls_version_min">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes"> Sets the minimum TLS version we will accept from the peer (default is "1.0").  Examples for version include "1.0", "1.1", or "1.2".  If 'or-highest' is specified and version is not recognized, we will only accept the highest TLS version supported by the local SSL implementation.</property>
+                            <property name="tooltip_text" translatable="yes"> Sets the minimum TLS version we will accept from the peer (default is "1.0").  Examples for version include "1.0", "1.1", or "1.2".</property>
                             <property name="hexpand">True</property>
                           </object>
                           <packing>
@@ -2361,6 +2361,21 @@ config: extra-certs &lt;file&gt;</property>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="tls_version_min_or_highest">
+                            <property name="label" translatable="yes">_or highest</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="tooltip_text" translatable="yes">If set and version is not recognized, we will only accept the highest TLS version supported by the local SSL implementation.</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">0</property>
                           </packing>
                         </child>
                       </object>

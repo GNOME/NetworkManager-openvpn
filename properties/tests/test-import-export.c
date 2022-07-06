@@ -470,6 +470,7 @@ test_tls_import_4 (void)
 	_check_secret (s_vpn, NM_OPENVPN_KEY_CERTPASS, NULL);
 
 	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN, "1.0");
+	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST, "yes");
 	_check_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MAX, "1.2");
 
 }

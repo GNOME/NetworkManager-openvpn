@@ -1244,11 +1244,19 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 		}
 
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_TLS_VERSION_MIN)) {
-			if (!args_params_check_nargs_n (params, 1, &line_error))
+			if (!args_params_check_nargs_minmax (params, 1, 2, &line_error))
 				goto handle_line_error;
 			if (!args_params_check_arg_utf8 (params, 1, NULL, &line_error))
 				goto handle_line_error;
 			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN, params[1]);
+			if (params[2]) {
+				if (nm_streq (params[2], "or-highest")) {
+					setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST, "yes");
+				} else {
+					line_error = g_strdup_printf (_("invalid keyword “%s” in tls-version-min"), params[2]);
+					goto handle_line_error;
+				}
+			}
 			continue;
 		}
 
@@ -2213,8 +2221,12 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 		}
 
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN);
-		if (nmovpn_arg_is_set (key))
-			args_write_line (f, NMV_OVPN_TAG_TLS_VERSION_MIN, key);
+		if (nmovpn_arg_is_set (key)) {
+			const char *or_highest = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST);
+
+			args_write_line (f, NMV_OVPN_TAG_TLS_VERSION_MIN, key,
+			                 nm_streq0 (or_highest, "yes") ? "or-highest" : NULL);
+		}
 
 		key = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MAX);
 		if (nmovpn_arg_is_set (key))

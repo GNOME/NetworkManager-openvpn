@@ -812,6 +812,7 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_TLS_CRYPT_V2,
 	NM_OPENVPN_KEY_TLS_REMOTE,
 	NM_OPENVPN_KEY_TLS_VERSION_MIN,
+	NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST,
 	NM_OPENVPN_KEY_TLS_VERSION_MAX,
 	NM_OPENVPN_KEY_TUNNEL_MTU,
 	NM_OPENVPN_KEY_TUN_IPV6,
@@ -1956,6 +1957,10 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	if (value && *value) {
 		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_min"));
 		gtk_editable_set_text (GTK_EDITABLE (widget), value);
+
+		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST);
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_min_or_highest"));
+		gtk_check_button_set_active(GTK_CHECK_BUTTON (widget), nm_streq0 (value, "yes"));
 	}
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_VERSION_MAX);
 	if (value && *value) {
@@ -2189,6 +2194,13 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 	value = gtk_editable_get_text (GTK_EDITABLE (entry));
 	if (value && *value)
 		g_hash_table_insert (hash, NM_OPENVPN_KEY_TLS_VERSION_MIN, g_strdup (value));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_min_or_highest"));
+	if (gtk_check_button_get_active (GTK_CHECK_BUTTON(widget))) {
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST, g_strdup ("yes"));
+	} else {
+		g_hash_table_remove (hash, NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST);
+	}
 
 	entry = GTK_WIDGET (gtk_builder_get_object (builder, "tls_version_max"));
 	value = gtk_editable_get_text (GTK_EDITABLE (entry));
