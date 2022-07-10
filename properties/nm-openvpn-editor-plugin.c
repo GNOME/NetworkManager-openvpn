@@ -31,11 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-#include "nm-openvpn-editor.h"
-#else
 #include "nm-utils/nm-vpn-plugin-utils.h"
-#endif
 
 #include "import-export.h"
 
@@ -109,7 +105,6 @@ get_capabilities (NMVpnEditorPlugin *iface)
 	        NM_VPN_EDITOR_PLUGIN_CAPABILITY_IPV6);
 }
 
-#if !((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
 static NMVpnEditor *
 _call_editor_factory (gpointer factory,
                       NMVpnEditorPlugin *editor_plugin,
@@ -121,7 +116,6 @@ _call_editor_factory (gpointer factory,
 	                                       connection,
 	                                       error);
 }
-#endif
 
 static NMVpnEditor *
 get_editor (NMVpnEditorPlugin *iface, NMConnection *connection, GError **error)
@@ -144,9 +138,6 @@ get_editor (NMVpnEditorPlugin *iface, NMConnection *connection, GError **error)
 		editor = "libnm-gtk4-vpn-plugin-openvpn-editor.so";
 	}
 
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-	return openvpn_editor_new (connection, error);
-#else
 	return nm_vpn_plugin_utils_load_editor (editor,
 						"nm_vpn_editor_factory_openvpn",
 						_call_editor_factory,
@@ -154,7 +145,6 @@ get_editor (NMVpnEditorPlugin *iface, NMConnection *connection, GError **error)
 						connection,
 						NULL,
 						error);
-#endif
 }
 
 /*****************************************************************************/

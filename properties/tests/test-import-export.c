@@ -35,12 +35,7 @@
 #include "nm-utils/nm-test-utils.h"
 
 #define SRCDIR TEST_SRCDIR"/conf"
-
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-#define TMPDIR TEST_BUILDDIR"/conf-tmp-old"
-#else
-#define TMPDIR TEST_BUILDDIR"/conf-tmp-new"
-#endif
+#define TMPDIR TEST_BUILDDIR"/conf-tmp"
 
 /*****************************************************************************/
 
@@ -994,6 +989,7 @@ test_route_import (void)
 	gs_unref_object NMConnection *connection = NULL;
 	NMSettingIPConfig *s_ip4;
 	NMSettingVpn *s_vpn;
+	NMIPRoute *route;
 	int num_routes;
 	const char *expected_dest1 = "1.2.3.0";
 	guint32 expected_prefix1   = 24;
@@ -1015,60 +1011,26 @@ test_route_import (void)
 
 	s_ip4 = _get_setting_ip4_config (connection);
 
-#if ((NETWORKMANAGER_COMPILATION) & NM_NETWORKMANAGER_COMPILATION_WITH_LIBNM_UTIL)
-	{
-		NMIP4Route *route;
-		const char *expected_nh2   = "0.0.0.0";
+	num_routes = nm_setting_ip_config_get_num_routes (s_ip4);
+	g_assert_cmpint (num_routes, ==, 3);
 
-#define METR(metr) ((metr) == -1 ? 0 : ((guint32) (metr)))
+	route = nm_setting_ip_config_get_route (s_ip4, 0);
+	g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest1);
+	g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix1);
+	g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, expected_nh1);
+	g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric1);
 
-		num_routes = nm_setting_ip4_config_get_num_routes (s_ip4);
-		g_assert_cmpint (num_routes, ==, 3);
+	route = nm_setting_ip_config_get_route (s_ip4, 1);
+	g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest2);
+	g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix2);
+	g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, NULL);
+	g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric2);
 
-		route = nm_setting_ip4_config_get_route (s_ip4, 0);
-		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest1));
-		g_assert_cmpint (nm_ip4_route_get_prefix (route), ==, expected_prefix1);
-		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh1));
-		g_assert_cmpint (nm_ip4_route_get_metric (route), ==, METR (expected_metric1));
-
-		route = nm_setting_ip4_config_get_route (s_ip4, 1);
-		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest2));
-		g_assert_cmpint (nm_ip4_route_get_prefix (route), ==, expected_prefix2);
-		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh2));
-		g_assert_cmpint (nm_ip4_route_get_metric (route), ==, METR (expected_metric2));
-
-		route = nm_setting_ip4_config_get_route (s_ip4, 2);
-		g_assert_cmpint (nm_ip4_route_get_dest (route), ==, nmtst_inet4_from_string (expected_dest3));
-		g_assert_cmpint (nm_ip4_route_get_prefix (route), ==, expected_prefix3);
-		g_assert_cmpint (nm_ip4_route_get_next_hop (route), ==, nmtst_inet4_from_string (expected_nh3));
-		g_assert_cmpint (nm_ip4_route_get_metric (route), ==, METR (expected_metric3));
-	}
-#else
-	{
-		NMIPRoute *route;
-
-		num_routes = nm_setting_ip_config_get_num_routes (s_ip4);
-		g_assert_cmpint (num_routes, ==, 3);
-
-		route = nm_setting_ip_config_get_route (s_ip4, 0);
-		g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest1);
-		g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix1);
-		g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, expected_nh1);
-		g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric1);
-
-		route = nm_setting_ip_config_get_route (s_ip4, 1);
-		g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest2);
-		g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix2);
-		g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, NULL);
-		g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric2);
-
-		route = nm_setting_ip_config_get_route (s_ip4, 2);
-		g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest3);
-		g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix3);
-		g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, expected_nh3);
-		g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric3);
-	}
-#endif
+	route = nm_setting_ip_config_get_route (s_ip4, 2);
+	g_assert_cmpstr (nm_ip_route_get_dest (route), ==, expected_dest3);
+	g_assert_cmpint (nm_ip_route_get_prefix (route), ==, expected_prefix3);
+	g_assert_cmpstr (nm_ip_route_get_next_hop (route), ==, expected_nh3);
+	g_assert_cmpint (nm_ip_route_get_metric (route), ==, expected_metric3);
 }
 
 static void
