@@ -118,11 +118,22 @@ static void
 chooser_response (GtkDialog *chooser, gint response_id, gpointer user_data)
 {
 	GtkLabel *label = GTK_LABEL(user_data);
+	GFile *file;
 
 	if (response_id == GTK_RESPONSE_ACCEPT)
 		chooser_button_update (label, GTK_FILE_CHOOSER (chooser));
 
+	/* The current file is freed when the file chooser widget is unmapped
+	* (see gtk_file_chooser_widget_unmap function).
+	* So we need to restore it after hiding the dialog. */
+
+	file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (chooser));
+
 	gtk_widget_hide (GTK_WIDGET (chooser));
+
+	gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), file, NULL);
+	g_clear_object (&file);
+
 }
 
 static void
@@ -1555,6 +1566,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	GtkBuilder *builder;
 	GtkWidget *dialog = NULL;
 	GtkWidget *widget, *combo, *spin, *entry, *ok_button;
+	GtkWidget *chooser;
 	GFile *file = NULL;
 	GtkLabel *label;
 	const char *value, *value2, *value3;
@@ -1781,13 +1793,13 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	populate_ns_cert_type_combo (GTK_COMBO_BOX (widget), value);
 
 	/* TLS auth chooser */
-	widget = GTK_WIDGET(gtk_builder_get_object (builder, "tls_auth_chooser"));
+	chooser = GTK_WIDGET(gtk_builder_get_object (builder, "tls_auth_chooser"));
 	label = GTK_LABEL (gtk_builder_get_object (builder, "tls_auth_chooser_label"));
-	gtk_window_set_hide_on_close (GTK_WINDOW(widget), TRUE);
-	g_signal_connect (G_OBJECT (widget), "response",
+	gtk_window_set_hide_on_close (GTK_WINDOW(chooser), TRUE);
+	g_signal_connect (G_OBJECT (chooser), "response",
 	                  G_CALLBACK (chooser_response), label);
 	g_signal_connect_swapped (gtk_builder_get_object (builder, "tls_auth_chooser_button"),
-	                          "clicked", G_CALLBACK (gtk_widget_show), widget);
+	                          "clicked", G_CALLBACK (gtk_widget_show), chooser);
 	if (NM_IN_STRSET (contype,
 	                  NM_OPENVPN_CONTYPE_TLS,
 	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS,
@@ -1827,24 +1839,28 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 		} else
 			gtk_combo_box_set_active (GTK_COMBO_BOX (combo), TLS_AUTH_MODE_NONE);
 	}
+	if (file)
+		gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), file, NULL);
 	chooser_button_update_file (label, file);
 	g_clear_object (&file);
 
 	/* Extra certs */
-	widget = GTK_WIDGET(gtk_builder_get_object (builder, "extra_certs_chooser"));
+	chooser = GTK_WIDGET(gtk_builder_get_object (builder, "extra_certs_chooser"));
 	label = GTK_LABEL (gtk_builder_get_object (builder, "extra_certs_chooser_label"));
-	gtk_window_set_hide_on_close (GTK_WINDOW(widget), TRUE);
-	g_signal_connect (G_OBJECT (widget), "response",
+	gtk_window_set_hide_on_close (GTK_WINDOW(chooser), TRUE);
+	g_signal_connect (G_OBJECT (chooser), "response",
 	                  G_CALLBACK (chooser_response), label);
 	g_signal_connect_swapped (gtk_builder_get_object (builder, "extra_certs_chooser_button"),
-	                          "clicked", G_CALLBACK (gtk_widget_show), widget);
+	                          "clicked", G_CALLBACK (gtk_widget_show), chooser);
 	if (NM_IN_STRSET (contype,
 	                  NM_OPENVPN_CONTYPE_TLS,
 	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS,
 	                  NM_OPENVPN_CONTYPE_PASSWORD)) {
 		value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_EXTRA_CERTS);
-		if (value && value[0])
+		if (value && value[0]) {
 			file = g_file_new_for_path (value);
+			gtk_file_chooser_set_file (GTK_FILE_CHOOSER (chooser), file, NULL);
+		}
 		g_signal_connect (G_OBJECT (combo), "changed", G_CALLBACK (tls_auth_toggled_cb), builder);
 		tls_auth_toggled_cb (combo, builder);
 	} else {
