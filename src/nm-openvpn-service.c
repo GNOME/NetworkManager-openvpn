@@ -139,6 +139,7 @@ typedef struct {
 } ValidProperty;
 
 static const ValidProperty valid_properties[] = {
+	{ NM_OPENVPN_KEY_ALLOW_COMPRESSION,         G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_ALLOW_PULL_FQDN,           G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_AUTH,                      G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_CA,                        G_TYPE_STRING, 0, 0, FALSE },
@@ -1343,6 +1344,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	GPid pid;
 	gboolean dev_type_is_tap;
 	const char *defport, *proto_tcp;
+	const char *allow_compression = NULL;
 	const char *compress;
 	const char *tls_remote = NULL;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
@@ -1354,6 +1356,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	guint num_remotes = 0;
 	gs_free char *cmd_log = NULL;
 	NMOvpnComp comp;
+	NMOvpnAllowCompression allow_comp;
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -1528,6 +1531,9 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	 * See bgo#769177
 	 */
 
+	/* New (2.5+) allow-compression option ("yes", "no", "asym") */
+	allow_compression = nm_setting_vpn_get_data_item (s_vpn,
+	                                                  NM_OPENVPN_KEY_ALLOW_COMPRESSION);
 	/* New (2.4+) compress option ("lz4", "lzo", ...) */
 	compress = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS);
 	/* Legacy option ("yes", "adaptive", "no", ...) */
@@ -1536,42 +1542,52 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	if (compress && tmp)
 		_LOGW ("'compress' option overrides 'comp-lzo'");
 
+	allow_comp = nmovpn_allow_compression_from_options (allow_compression);
 	comp = nmovpn_compression_from_options (tmp, compress);
 	openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version);
 
-	switch (comp) {
-	case NMOVPN_COMP_DISABLED:
-		break;
-	case NMOVPN_COMP_LZO:
-		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
-			args_add_strv (args, "--comp-lzo", "yes");
-		else
-			args_add_strv (args, "--compress", "lzo");
-		break;
-	case NMOVPN_COMP_LZ4:
-	case NMOVPN_COMP_LZ4_V2:
-	case NMOVPN_COMP_AUTO:
-		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
-			_LOGW ("\"compress\" option supported only by OpenVPN >= 2.4");
-
-		if (comp == NMOVPN_COMP_LZ4)
-			args_add_strv (args, "--compress", "lz4");
-		else if (comp == NMOVPN_COMP_LZ4_V2)
-			args_add_strv (args, "--compress", "lz4-v2");
-		else
-			args_add_strv (args, "--compress");
-		break;
-	case NMOVPN_COMP_LEGACY_LZO_DISABLED:
-	case NMOVPN_COMP_LEGACY_LZO_ADAPTIVE:
-		if (openvpn_binary_version != OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
-			_LOGW ("\"comp-lzo\" is deprecated and will be removed in future OpenVPN releases");
-
-		args_add_strv (args, "--comp-lzo",
-		                  comp == NMOVPN_COMP_LEGACY_LZO_DISABLED
-		               ? "no"
-		               : "adaptive");
-		break;
+	if (nmovpn_arg_is_set (allow_compression)) {
+		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_4_OR_OLDER) {
+			_LOGW ("\"allow-compression\" is only supported in OpenVPN 2.5 and later versions");
+		} else {
+			args_add_strv (args, "--allow-compression", allow_compression);
+		}
 	}
+
+	if (allow_comp != NMOVPN_ALLOW_COMPRESSION_NO)
+		switch (comp) {
+		case NMOVPN_COMP_DISABLED:
+			break;
+		case NMOVPN_COMP_LZO:
+			if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
+				args_add_strv (args, "--comp-lzo", "yes");
+			else
+				args_add_strv (args, "--compress", "lzo");
+			break;
+		case NMOVPN_COMP_LZ4:
+		case NMOVPN_COMP_LZ4_V2:
+		case NMOVPN_COMP_AUTO:
+			if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
+				_LOGW ("\"compress\" option supported only by OpenVPN >= 2.4");
+
+			if (comp == NMOVPN_COMP_LZ4)
+				args_add_strv (args, "--compress", "lz4");
+			else if (comp == NMOVPN_COMP_LZ4_V2)
+				args_add_strv (args, "--compress", "lz4-v2");
+			else
+				args_add_strv (args, "--compress");
+			break;
+		case NMOVPN_COMP_LEGACY_LZO_DISABLED:
+		case NMOVPN_COMP_LEGACY_LZO_ADAPTIVE:
+			if (openvpn_binary_version != OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
+				_LOGW ("\"comp-lzo\" is deprecated and will be removed in future OpenVPN releases");
+
+			args_add_strv (args, "--comp-lzo",
+			               comp == NMOVPN_COMP_LEGACY_LZO_DISABLED
+			               ? "no"
+			               : "adaptive");
+			break;
+		}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT);
 	if (nm_streq0 (tmp, "yes"))

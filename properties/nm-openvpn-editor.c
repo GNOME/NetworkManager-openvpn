@@ -1578,6 +1578,7 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	NMSettingSecretFlags pw_flags;
 	GError *error = NULL;
 	NMOvpnComp comp;
+	NMOvpnAllowCompression allow_compression;
 
 	g_return_val_if_fail (hash != NULL, NULL);
 
@@ -1695,11 +1696,18 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	_builder_init_optional_spinbutton (builder, "fragment_checkbutton", "fragment_spinbutton", !!value,
 	                                   _nm_utils_ascii_str_to_int64 (value, 10, 0, 65535, 1300));
 
+	allow_compression = nmovpn_allow_compression_from_options (g_hash_table_lookup (hash, NM_OPENVPN_KEY_ALLOW_COMPRESSION));
+	combo = GTK_WIDGET (gtk_builder_get_object (builder, "compression-direction-combo"));
+
+	if (allow_compression != NMOVPN_ALLOW_COMPRESSION_NO)
+		gtk_combo_box_set_active (GTK_COMBO_BOX (combo), allow_compression - 1);
+
 	comp = nmovpn_compression_from_options (g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMP_LZO),
 	                                        g_hash_table_lookup (hash, NM_OPENVPN_KEY_COMPRESS));
 
 	combo = GTK_WIDGET (gtk_builder_get_object (builder, "compress_combo"));
-	widget = _builder_init_toggle_button (builder, "compress_checkbutton", comp != NMOVPN_COMP_DISABLED);
+	widget = _builder_init_toggle_button (builder, "compress_checkbutton",
+	                                      (allow_compression != NMOVPN_ALLOW_COMPRESSION_NO && comp != NMOVPN_COMP_DISABLED));
 	g_object_bind_property (widget, "active", combo, "sensitive", G_BINDING_SYNC_CREATE);
 	if (comp != NMOVPN_COMP_DISABLED)
 		gtk_combo_box_set_active (GTK_COMBO_BOX (combo), comp - 1);
@@ -2118,9 +2126,17 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "compress_checkbutton"));
 	if (gtk_check_button_get_active (GTK_CHECK_BUTTON (widget))) {
+		const char *opt_allow_compression;
 		const char *opt_compress;
 		const char *opt_comp_lzo;
 		NMOvpnComp comp;
+		NMOvpnAllowCompression allow_compression;
+
+		combo = GTK_WIDGET (gtk_builder_get_object (builder, "compression-direction-combo"));
+		allow_compression = gtk_combo_box_get_active (GTK_COMBO_BOX (combo)) + 1;
+		nmovpn_allow_compression_to_options (allow_compression, &opt_allow_compression);
+		if (opt_allow_compression)
+			g_hash_table_insert (hash, NM_OPENVPN_KEY_ALLOW_COMPRESSION, g_strdup (opt_allow_compression));
 
 		combo = GTK_WIDGET (gtk_builder_get_object (builder, "compress_combo"));
 		comp = gtk_combo_box_get_active (GTK_COMBO_BOX (combo)) + 1;
@@ -2129,6 +2145,8 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 			g_hash_table_insert (hash, NM_OPENVPN_KEY_COMPRESS, g_strdup (opt_compress));
 		if (opt_comp_lzo)
 			g_hash_table_insert (hash, NM_OPENVPN_KEY_COMP_LZO, g_strdup (opt_comp_lzo));
+	} else {
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_ALLOW_COMPRESSION, g_strdup ("no"));
 	}
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "mssfix_checkbutton"));
