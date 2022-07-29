@@ -808,6 +808,7 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_TA,
 	NM_OPENVPN_KEY_TAP_DEV,
 	NM_OPENVPN_KEY_TA_DIR,
+	NM_OPENVPN_KEY_TLS_CIPHER,
 	NM_OPENVPN_KEY_TLS_CRYPT,
 	NM_OPENVPN_KEY_TLS_CRYPT_V2,
 	NM_OPENVPN_KEY_TLS_REMOTE,
@@ -1853,6 +1854,13 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	chooser_button_update_file (label, file);
 	g_clear_object (&file);
 
+	/* TLS cipher string */
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_TLS_CIPHER);
+	if (value && *value) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "tls_cipher"));
+		gtk_editable_set_text (GTK_EDITABLE (widget), value);
+	}
+
 	/* ping check */
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_PING);
 	_builder_init_optional_spinbutton (builder, "ping_checkbutton", "ping_spinbutton", !!value,
@@ -2334,6 +2342,11 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 		g_free (filename);
 		g_clear_object (&file);
 	}
+
+	entry = GTK_WIDGET (gtk_builder_get_object (builder, "tls_cipher"));
+	value = gtk_editable_get_text (GTK_EDITABLE (entry));
+	if (value && *value)
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_TLS_CIPHER, g_strdup (value));
 
 	widget = GTK_WIDGET (gtk_builder_get_object (builder, "ping_checkbutton"));
 	if (gtk_check_button_get_active (GTK_CHECK_BUTTON (widget))) {
