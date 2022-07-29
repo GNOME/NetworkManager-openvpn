@@ -64,6 +64,19 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="compression-direction">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Asymmetric</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Symmetric</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkListStore" id="compression">
     <columns>
       <!-- column-name gchararray -->
@@ -1079,6 +1092,29 @@ config: comp-lzo</property>
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkComboBox" id="compression-direction-combo">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip-text" translatable="yes">Enable or disable outgoing traffic compression
+config: allow-compression asym|yes</property>
+                        <property name="model">compression-direction</property>
+                        <property name="active">0</property>
+                        <property name="id_column">0</property>
+                        <property name="sensitive" bind-source="compress_checkbutton" bind-property="active" bind-flags="sync-create">false</property>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkComboBox" id="compress_combo">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1095,7 +1131,7 @@ config: comp-lzo</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>

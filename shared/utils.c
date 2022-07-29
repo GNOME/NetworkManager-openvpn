@@ -113,6 +113,38 @@ _is_inet6_addr (const char *str, gboolean with_square_brackets)
 	return inet_pton (AF_INET6, str, &a) == 1;
 }
 
+NMOvpnAllowCompression
+nmovpn_allow_compression_from_options (const char *allow_compression)
+{
+    if (nm_streq0 (allow_compression, "asym"))
+		return NMOVPN_ALLOW_COMPRESSION_ASYM;
+	if (nm_streq0 (allow_compression, "yes"))
+		return NMOVPN_ALLOW_COMPRESSION_YES;
+	if (nm_streq0 (allow_compression, "no"))
+		return NMOVPN_ALLOW_COMPRESSION_NO;
+
+	return NMOVPN_ALLOW_COMPRESSION_ASYM;
+}
+
+void
+nmovpn_allow_compression_to_options (NMOvpnAllowCompression allow_compression,
+                                     const char **opt_allow_compression)
+{
+    NM_SET_OUT (opt_allow_compression, NULL);
+
+    switch (allow_compression) {
+    case NMOVPN_ALLOW_COMPRESSION_ASYM:
+        NM_SET_OUT (opt_allow_compression, "asym");
+        break;
+    case NMOVPN_ALLOW_COMPRESSION_YES:
+        NM_SET_OUT (opt_allow_compression, "yes");
+        break;
+    case NMOVPN_ALLOW_COMPRESSION_NO:
+        NM_SET_OUT (opt_allow_compression, "no");
+        break;
+    }
+}
+
 NMOvpnComp
 nmovpn_compression_from_options (const char *comp_lzo, const char *compress)
 {

@@ -999,6 +999,19 @@ do_import (const char *path, const char *contents, gsize contents_len, GError **
 			continue;
 		}
 
+		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_ALLOW_COMPRESSION)) {
+			if (!args_params_check_nargs_minmax (params, 1, 1, &line_error))
+				goto handle_line_error;
+
+			if (!NM_IN_STRSET (params[1], "yes", "no", "asym")) {
+				line_error = g_strdup_printf (_("allow-compression: invalid argument"));
+				goto handle_line_error;
+			}
+
+			setting_vpn_add_data_item (s_vpn, NM_OPENVPN_KEY_ALLOW_COMPRESSION, params[1]);
+			continue;
+		}
+
 		if (NM_IN_STRSET (params[0], NMV_OVPN_TAG_COMP_LZO)) {
 			const char *v;
 
@@ -2097,18 +2110,23 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	args_write_line_setting_value_int (f, NMV_OVPN_TAG_KEYSIZE, s_vpn, NM_OPENVPN_KEY_KEYSIZE);
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
-	if (value) {
-		if (nm_streq (value, "no-by-default"))
-			value = "no";
-		args_write_line (f, NMV_OVPN_TAG_COMP_LZO, value);
-	}
+	args_write_line_setting_value (f, NMV_OVPN_TAG_ALLOW_COMPRESSION, s_vpn, NM_OPENVPN_KEY_ALLOW_COMPRESSION);
 
-	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS);
-	if (nm_streq0 (value, "yes"))
-		args_write_line (f, NMV_OVPN_TAG_COMPRESS);
-	else if (value)
-		args_write_line_setting_value (f, NMV_OVPN_TAG_COMPRESS, s_vpn, NM_OPENVPN_KEY_COMPRESS);
+	value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_ALLOW_COMPRESSION);
+	if (!nm_streq0 (value, "no")) {
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO);
+		if (value) {
+			if (nm_streq (value, "no-by-default"))
+				value = "no";
+			args_write_line (f, NMV_OVPN_TAG_COMP_LZO, value);
+		}
+
+		value = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_COMPRESS);
+		if (nm_streq0 (value, "yes"))
+			args_write_line (f, NMV_OVPN_TAG_COMPRESS);
+		else if (value)
+			args_write_line_setting_value (f, NMV_OVPN_TAG_COMPRESS, s_vpn, NM_OPENVPN_KEY_COMPRESS);
+	}
 
 	if (nm_streq0 (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_FLOAT), "yes"))
 		args_write_line (f, NMV_OVPN_TAG_FLOAT);

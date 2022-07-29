@@ -1045,6 +1045,7 @@ test_compress_import (void)
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 
+	_check_item (s_vpn, NM_OPENVPN_KEY_ALLOW_COMPRESSION, "asym");
 	_check_item (s_vpn, NM_OPENVPN_KEY_COMP_LZO, "adaptive");
 	_check_item (s_vpn, NM_OPENVPN_KEY_COMPRESS, "lzo");
 }

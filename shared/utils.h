@@ -23,6 +23,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#define NMV_OVPN_TAG_ALLOW_COMPRESSION      "allow-compression"
 #define NMV_OVPN_TAG_ALLOW_PULL_FQDN        "allow-pull-fqdn"
 #define NMV_OVPN_TAG_AUTH                   "auth"
 #define NMV_OVPN_TAG_AUTH_NOCACHE           "auth-nocache"
@@ -99,6 +100,12 @@ typedef enum {
 	NMOVPN_COMP_LEGACY_LZO_ADAPTIVE,  /* "--comp-lzo [adaptive]" */
 } NMOvpnComp;
 
+typedef enum {
+	NMOVPN_ALLOW_COMPRESSION_NO,   /* "--allow-compression no" */
+	NMOVPN_ALLOW_COMPRESSION_ASYM, /* "--allow-compression asym" */
+	NMOVPN_ALLOW_COMPRESSION_YES,  /* "--allow-compression yes" */
+} NMOvpnAllowCompression;
+
 gboolean is_pkcs12 (const char *filepath);
 
 gboolean is_encrypted (const char *filename);
@@ -126,6 +133,10 @@ nmovpn_arg_is_set (const char *value)
 {
 	return (value && value[0]) ? value : NULL;
 }
+
+NMOvpnAllowCompression nmovpn_allow_compression_from_options (const char              *allow_compression);
+void                   nmovpn_allow_compression_to_options   (NMOvpnAllowCompression   allow_compression,
+                                                              const char             **opt_allow_compression);
 
 NMOvpnComp nmovpn_compression_from_options (const char *comp_lzo,
                                             const char *compress);
