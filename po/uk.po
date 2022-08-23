@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager openvpn\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/i"
 "ssues\n"
-"POT-Creation-Date: 2022-07-17 11:24+0000\n"
-"PO-Revision-Date: 2022-07-17 14:40+0300\n"
+"POT-Creation-Date: 2022-08-23 15:29+0000\n"
+"PO-Revision-Date: 2022-08-23 19:53+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -40,7 +40,6 @@ msgid "OpenVPN is a popular and flexible free-software VPN solution."
 msgstr "OpenVPN — популярне і гнучке вільне рішення для VPN."
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:32
-#| msgid "OpenVPN Advanced Options"
 msgid "The advanced options dialog"
 msgstr "Вікно додаткових параметрів"
 
@@ -53,7 +52,7 @@ msgid "Authentication required"
 msgstr "Слід пройти розпізнавання"
 
 #: auth-dialog/main.c:182 properties/nm-openvpn-dialog.ui:323
-#: properties/nm-openvpn-dialog.ui:422 properties/nm-openvpn-editor.c:2686
+#: properties/nm-openvpn-dialog.ui:422 properties/nm-openvpn-editor.c:2699
 msgid "Password"
 msgstr "Пароль"
 
@@ -379,7 +378,7 @@ msgid "LZO adaptive (legacy)"
 msgstr "Адаптивний LZO (застарілий варіант)"
 
 #: properties/nm-openvpn-dialog.ui:113 properties/nm-openvpn-editor.c:366
-#: properties/nm-openvpn-editor.c:1002 properties/nm-openvpn-editor.c:1798
+#: properties/nm-openvpn-editor.c:1003 properties/nm-openvpn-editor.c:1799
 msgid "None"
 msgstr "Немає"
 
@@ -475,7 +474,7 @@ msgstr "Локальна адреса IP"
 msgid "Key Direction"
 msgstr "Напрям ключа"
 
-#: properties/nm-openvpn-dialog.ui:569 properties/nm-openvpn-editor.c:2713
+#: properties/nm-openvpn-dialog.ui:569 properties/nm-openvpn-editor.c:2726
 msgid "Static Key"
 msgstr "Статичний ключ"
 
@@ -531,7 +530,7 @@ msgstr "Вибрати режим розпізнавання."
 msgid "Ad_vanced…"
 msgstr "Д_одатково…"
 
-#: properties/nm-openvpn-dialog.ui:839 properties/nm-openvpn-editor.c:1605
+#: properties/nm-openvpn-dialog.ui:839 properties/nm-openvpn-editor.c:1606
 msgid "Not required"
 msgstr "Не потрібно"
 
@@ -543,9 +542,9 @@ msgstr "Додаткові параметри OpenVPN"
 msgid "Advanced Properties"
 msgstr "Додаткові властивості"
 
-#: properties/nm-openvpn-dialog.ui:906 properties/nm-openvpn-dialog.ui:2783
-#: properties/nm-openvpn-dialog.ui:2836 properties/nm-openvpn-dialog.ui:2890
-#: properties/nm-openvpn-dialog.ui:2943 properties/nm-openvpn-dialog.ui:2996
+#: properties/nm-openvpn-dialog.ui:906 properties/nm-openvpn-dialog.ui:2808
+#: properties/nm-openvpn-dialog.ui:2861 properties/nm-openvpn-dialog.ui:2915
+#: properties/nm-openvpn-dialog.ui:2968 properties/nm-openvpn-dialog.ui:3021
 msgid "_Cancel"
 msgstr "_Скасувати"
 
@@ -1039,7 +1038,7 @@ msgstr "Файл ключа"
 msgid "Mode"
 msgstr "Режим"
 
-#: properties/nm-openvpn-dialog.ui:2180 properties/nm-openvpn-dialog.ui:2262
+#: properties/nm-openvpn-dialog.ui:2180 properties/nm-openvpn-dialog.ui:2287
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr "Додати шар шифрування або розпізнавання HMAC."
 
@@ -1057,40 +1056,49 @@ msgstr ""
 "який завершує ланцюжок локальної сертифікації.\n"
 "Файл налаштувань: extra-certs <file>"
 
-#: properties/nm-openvpn-dialog.ui:2265
+#: properties/nm-openvpn-dialog.ui:2256
+#| msgid "TLS _min version"
+msgid "TLS cipher string"
+msgstr "Рядок шифрування TLS"
+
+#: properties/nm-openvpn-dialog.ui:2269
+msgid ""
+"Set a value for the --tls-cipher parameter. This can be useful for working "
+"with VPNs using deprecated hashing schemes."
+msgstr ""
+"Встановити значення параметра --tls-cipher. Може бути корисним для роботи з"
+" VPN з використанням застарілих схем хешування."
+
+#: properties/nm-openvpn-dialog.ui:2290
 msgid "Additional TLS authentication or encryption"
 msgstr "Додаткове розпізнавання або шифрування TLS"
 
-#: properties/nm-openvpn-dialog.ui:2292
+#: properties/nm-openvpn-dialog.ui:2317
 msgid "Controls min and max version allowed for TLS."
 msgstr ""
 "Керує значеннями мінімальної і максимальної версій, які дозволено для TLS."
 
-#: properties/nm-openvpn-dialog.ui:2295
+#: properties/nm-openvpn-dialog.ui:2320
 msgid "TLS version control"
 msgstr "Керування версією TLS"
 
-#: properties/nm-openvpn-dialog.ui:2320
+#: properties/nm-openvpn-dialog.ui:2345
 msgid "TLS _min version"
 msgstr "_Мін. версія TLS"
 
-#: properties/nm-openvpn-dialog.ui:2333
-#| msgid ""
-#| "Set the maximum TLS version we will use (default is the highest version "
-#| "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
+#: properties/nm-openvpn-dialog.ui:2358
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
 msgstr ""
-"Встановити мінімальну версію TLS, якою ми користуватимемося (типовою є"
-" версія «1.0»). Приклади записів версії: «1.0», «1.1» або "
-"«1.2»."
+"Встановити мінімальну версію TLS, якою ми користуватимемося (типовою є "
+"версія «1.0»). Приклади записів версії: «1.0», «1.1» або «1.2»."
 
-#: properties/nm-openvpn-dialog.ui:2345
+#: properties/nm-openvpn-dialog.ui:2370
 msgid "TLS ma_x version"
 msgstr "М_акс. версія TLS"
 
-#: properties/nm-openvpn-dialog.ui:2358
+#: properties/nm-openvpn-dialog.ui:2383
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1099,29 +1107,23 @@ msgstr ""
 "найвища підтримувана версія). Приклади записів версії: «1.0», «1.1» або "
 "«1.2»."
 
-#: properties/nm-openvpn-dialog.ui:2368
+#: properties/nm-openvpn-dialog.ui:2393
 msgid "_or highest"
 msgstr "_або найвища"
 
-#: properties/nm-openvpn-dialog.ui:2371
-#| msgid ""
-#| " Sets the minimum TLS version we will accept from the peer (default is "
-#| "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\".  If "
-#| "'or-highest' is specified and version is not recognized, we will only "
-#| "accept the highest TLS version supported by the local SSL implementation."
+#: properties/nm-openvpn-dialog.ui:2396
 msgid ""
 "If set and version is not recognized, we will only accept the highest TLS "
 "version supported by the local SSL implementation."
 msgstr ""
-"Якщо вказано, і версія є невідомою програмі, ми "
-"прийматимемо лише найвищу підтримувану версією TLS у локальній реалізації "
-"SSL."
+"Якщо вказано, і версія є невідомою програмі, ми прийматимемо лише найвищу "
+"підтримувану версією TLS у локальній реалізації SSL."
 
-#: properties/nm-openvpn-dialog.ui:2400
+#: properties/nm-openvpn-dialog.ui:2425
 msgid "TLS Authentication"
 msgstr "Розпізнавання TLS"
 
-#: properties/nm-openvpn-dialog.ui:2421
+#: properties/nm-openvpn-dialog.ui:2446
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1129,11 +1131,11 @@ msgstr ""
 "Тип проксі-сервера: HTTP або Socks.\n"
 "Файл налаштувань: http-proxy або socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2441
+#: properties/nm-openvpn-dialog.ui:2466
 msgid "Proxy _Type"
 msgstr "Тип проксі-сервера"
 
-#: properties/nm-openvpn-dialog.ui:2457
+#: properties/nm-openvpn-dialog.ui:2482
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1141,11 +1143,11 @@ msgstr ""
 "<i>Виберіть цей параметр, якщо для доступу до інтернет у вашій організації "
 "використовується проксі-сервер.</i>"
 
-#: properties/nm-openvpn-dialog.ui:2472
+#: properties/nm-openvpn-dialog.ui:2497
 msgid "Server _Address"
 msgstr "Адреса сервера"
 
-#: properties/nm-openvpn-dialog.ui:2490
+#: properties/nm-openvpn-dialog.ui:2515
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1153,11 +1155,11 @@ msgstr ""
 "Встановити з'єднання з віддаленим вузлом через проксі із вказаною адресою.\n"
 "Файл налаштувань: http-proxy або socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2503
+#: properties/nm-openvpn-dialog.ui:2528
 msgid "_Port"
 msgstr "Порт"
 
-#: properties/nm-openvpn-dialog.ui:2520
+#: properties/nm-openvpn-dialog.ui:2545
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1165,11 +1167,11 @@ msgstr ""
 "Встановити з'єднання з віддаленим вузлом через проксі із вказаним портом.\n"
 "Файл налаштувань: http-proxy або socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2541
+#: properties/nm-openvpn-dialog.ui:2566
 msgid "_Retry indefinitely when errors occur"
 msgstr "Пов_торити незалежно від того, чи станеться помилка"
 
-#: properties/nm-openvpn-dialog.ui:2545
+#: properties/nm-openvpn-dialog.ui:2570
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1178,43 +1180,43 @@ msgstr ""
 "проксі-сервером. Імітує скидання за SIGUSR1.\n"
 "Файл налаштувань: http-proxy-retry або socks-proxy-retry"
 
-#: properties/nm-openvpn-dialog.ui:2559
+#: properties/nm-openvpn-dialog.ui:2584
 msgid "Proxy _Username"
 msgstr "Користувач на проксі-сервері"
 
-#: properties/nm-openvpn-dialog.ui:2574
+#: properties/nm-openvpn-dialog.ui:2599
 msgid "Proxy Passwor_d"
 msgstr "Пароль проксі-сервера"
 
-#: properties/nm-openvpn-dialog.ui:2589
+#: properties/nm-openvpn-dialog.ui:2614
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "Ім'я користувача HTTP/Socks-проксі, яке буде передано до OpenVPN, якщо "
 "надійде запит щодо імені."
 
-#: properties/nm-openvpn-dialog.ui:2600
+#: properties/nm-openvpn-dialog.ui:2625
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "Пароль до HTTP/Socks-проксі, який буде передано до OpenVPN, якщо надійде "
 "запит щодо пароля."
 
-#: properties/nm-openvpn-dialog.ui:2610
+#: properties/nm-openvpn-dialog.ui:2635
 msgid "_Show password"
 msgstr "Показати пароль"
 
-#: properties/nm-openvpn-dialog.ui:2637
+#: properties/nm-openvpn-dialog.ui:2662
 msgid "Proxies"
 msgstr "Проксі-сервери"
 
-#: properties/nm-openvpn-dialog.ui:2658
+#: properties/nm-openvpn-dialog.ui:2683
 msgid "Path mtu discovery"
 msgstr "Визначення шляхів MTU"
 
-#: properties/nm-openvpn-dialog.ui:2691
+#: properties/nm-openvpn-dialog.ui:2716
 msgid "Connect timeout"
 msgstr "Час очікування на з'єднання"
 
-#: properties/nm-openvpn-dialog.ui:2695 properties/nm-openvpn-dialog.ui:2708
+#: properties/nm-openvpn-dialog.ui:2720 properties/nm-openvpn-dialog.ui:2733
 msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
@@ -1225,15 +1227,15 @@ msgstr ""
 "на зв'язок із проксі-сервером та встановлення з'єднання TCP.\n"
 "Файл налаштувань: connect-timeout <n> | server-poll-timeout <n>"
 
-#: properties/nm-openvpn-dialog.ui:2711
+#: properties/nm-openvpn-dialog.ui:2736
 msgid "0"
 msgstr "0"
 
-#: properties/nm-openvpn-dialog.ui:2721
+#: properties/nm-openvpn-dialog.ui:2746
 msgid "Push peer info"
 msgstr "Надіслати дані щодо вузла"
 
-#: properties/nm-openvpn-dialog.ui:2725
+#: properties/nm-openvpn-dialog.ui:2750
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
@@ -1241,33 +1243,33 @@ msgstr ""
 "Надіслати додаткові відомості щодо клієнта на сервер.\n"
 "налаштування: push-peer-info"
 
-#: properties/nm-openvpn-dialog.ui:2742
+#: properties/nm-openvpn-dialog.ui:2767
 msgid "Misc"
 msgstr "Інше"
 
-#: properties/nm-openvpn-dialog.ui:2775
+#: properties/nm-openvpn-dialog.ui:2800
 msgid "Choose an OpenVPN static key…"
 msgstr "Виберіть статичний ключ OpenVPN…"
 
-#: properties/nm-openvpn-dialog.ui:2792 properties/nm-openvpn-dialog.ui:2845
-#: properties/nm-openvpn-dialog.ui:2899 properties/nm-openvpn-dialog.ui:2952
-#: properties/nm-openvpn-dialog.ui:3005
+#: properties/nm-openvpn-dialog.ui:2817 properties/nm-openvpn-dialog.ui:2870
+#: properties/nm-openvpn-dialog.ui:2924 properties/nm-openvpn-dialog.ui:2977
+#: properties/nm-openvpn-dialog.ui:3030
 msgid "_Select"
 msgstr "_Вибрати"
 
-#: properties/nm-openvpn-dialog.ui:2828
+#: properties/nm-openvpn-dialog.ui:2853
 msgid "Choose CRL file"
 msgstr "Виберіть файл CRL"
 
-#: properties/nm-openvpn-dialog.ui:2882
+#: properties/nm-openvpn-dialog.ui:2907
 msgid "Choose CRL directory"
 msgstr "Виберіть каталог CRL"
 
-#: properties/nm-openvpn-dialog.ui:2935
+#: properties/nm-openvpn-dialog.ui:2960
 msgid "Choose a key file"
 msgstr "Виберіть файл ключа"
 
-#: properties/nm-openvpn-dialog.ui:2988
+#: properties/nm-openvpn-dialog.ui:3013
 msgid "Choose extra certificate file"
 msgstr "Виберіть додатковий файл сертифіката"
 
@@ -1275,110 +1277,110 @@ msgstr "Виберіть додатковий файл сертифіката"
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Статичні ключі OpenVPN (*.key)"
 
-#: properties/nm-openvpn-editor.c:925 properties/nm-openvpn-editor.c:1019
+#: properties/nm-openvpn-editor.c:926 properties/nm-openvpn-editor.c:1020
 msgid "Default"
 msgstr "Типово"
 
-#: properties/nm-openvpn-editor.c:1003
+#: properties/nm-openvpn-editor.c:1004
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: properties/nm-openvpn-editor.c:1004
+#: properties/nm-openvpn-editor.c:1005
 msgid "MD-5"
 msgstr "MD-5"
 
-#: properties/nm-openvpn-editor.c:1005
+#: properties/nm-openvpn-editor.c:1006
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: properties/nm-openvpn-editor.c:1006
+#: properties/nm-openvpn-editor.c:1007
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: properties/nm-openvpn-editor.c:1007
+#: properties/nm-openvpn-editor.c:1008
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: properties/nm-openvpn-editor.c:1008
+#: properties/nm-openvpn-editor.c:1009
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: properties/nm-openvpn-editor.c:1009
+#: properties/nm-openvpn-editor.c:1010
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: properties/nm-openvpn-editor.c:1010
+#: properties/nm-openvpn-editor.c:1011
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: properties/nm-openvpn-editor.c:1068
+#: properties/nm-openvpn-editor.c:1069
 msgid "Don’t verify certificate identification"
 msgstr "Не перевіряти ідентифікацію сертифіката"
 
-#: properties/nm-openvpn-editor.c:1074
+#: properties/nm-openvpn-editor.c:1075
 msgid "Verify whole subject exactly"
 msgstr "Перевіряти усі дані призначення точно"
 
-#: properties/nm-openvpn-editor.c:1080
+#: properties/nm-openvpn-editor.c:1081
 msgid "Verify name exactly"
 msgstr "Перевіряти назву точно"
 
-#: properties/nm-openvpn-editor.c:1086
+#: properties/nm-openvpn-editor.c:1087
 msgid "Verify name by prefix"
 msgstr "Перевіряти назву за префіксом"
 
-#: properties/nm-openvpn-editor.c:1092
+#: properties/nm-openvpn-editor.c:1093
 msgid "Verify subject partially (legacy mode, strongly discouraged)"
 msgstr ""
 "Частково перевіряти призначення (застарілий режим, наполегливо не "
 "рекомендуємо)"
 
-#: properties/nm-openvpn-editor.c:1205 properties/nm-openvpn-editor.c:1277
+#: properties/nm-openvpn-editor.c:1206 properties/nm-openvpn-editor.c:1278
 msgid "Server"
 msgstr "Сервер"
 
-#: properties/nm-openvpn-editor.c:1210 properties/nm-openvpn-editor.c:1282
+#: properties/nm-openvpn-editor.c:1211 properties/nm-openvpn-editor.c:1283
 msgid "Client"
 msgstr "Клієнт"
 
-#: properties/nm-openvpn-editor.c:1607
+#: properties/nm-openvpn-editor.c:1608
 msgid "HTTP"
 msgstr "HTTP"
 
-#: properties/nm-openvpn-editor.c:1609
+#: properties/nm-openvpn-editor.c:1610
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: properties/nm-openvpn-editor.c:1717
+#: properties/nm-openvpn-editor.c:1718
 msgid "TUN"
 msgstr "TUN"
 
-#: properties/nm-openvpn-editor.c:1719
+#: properties/nm-openvpn-editor.c:1720
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: properties/nm-openvpn-editor.c:1726
+#: properties/nm-openvpn-editor.c:1727
 msgid "(automatic)"
 msgstr "(автоматично)"
 
-#: properties/nm-openvpn-editor.c:1878
+#: properties/nm-openvpn-editor.c:1886
 msgid "ping-exit"
 msgstr "ping-exit"
 
-#: properties/nm-openvpn-editor.c:1880
+#: properties/nm-openvpn-editor.c:1888
 msgid "ping-restart"
 msgstr "ping-restart"
 
-#: properties/nm-openvpn-editor.c:2675
+#: properties/nm-openvpn-editor.c:2688
 msgid "Certificates (TLS)"
 msgstr "Сертифікати (TLS)"
 
-#: properties/nm-openvpn-editor.c:2700
+#: properties/nm-openvpn-editor.c:2713
 msgid "Password with Certificates (TLS)"
 msgstr "Пароль з сертифікатами (TLS)"
 
-#: properties/nm-openvpn-editor.c:2880
+#: properties/nm-openvpn-editor.c:2893
 msgid "could not load UI widget"
 msgstr "не вдалося завантажити віджет інтерфейсу користувача"
 
