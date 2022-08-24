@@ -1,4 +1,18 @@
 =======================================================
+NetworkManager-openvpn-1.8.20
+Overview of changes since NetworkManager-openvpn-1.8.18
+=======================================================
+
+This is a new stable release of NetworkManager-openvpn.  Notable changes include:
+
+* Fix a regression in preserving the "tls-auth" settings.
+* Add support for "tls-min" and "tls-cipher" parameters.
+* Include the new gnome-control-center name in the AppData file.
+* Drop libnm-glib support, nobody is likely using it anymore.
+* Fix importing profiles with a PKCS#12 CA.
+* Make sure the plugin object links with glib.
+
+=======================================================
 NetworkManager-openvpn-1.8.18
 Overview of changes since NetworkManager-openvpn-1.8.16
 =======================================================
