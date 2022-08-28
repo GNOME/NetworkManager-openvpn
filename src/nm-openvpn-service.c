@@ -89,6 +89,7 @@ typedef enum {
 	OPENVPN_BINARY_VERSION_INVALID,
 	OPENVPN_BINARY_VERSION_UNKNOWN,
 	OPENVPN_BINARY_VERSION_2_3_OR_OLDER,
+	OPENVPN_BINARY_VERSION_2_4_OR_OLDER,
 	OPENVPN_BINARY_VERSION_2_4_OR_NEWER,
 } OpenvpnBinaryVersion;
 
@@ -576,6 +577,9 @@ openvpn_binary_detect_version (const char *exepath)
 
 	if (n <= 3)
 		return OPENVPN_BINARY_VERSION_2_3_OR_OLDER;
+	if (n <= 4)
+		return OPENVPN_BINARY_VERSION_2_4_OR_OLDER;
+
 	return OPENVPN_BINARY_VERSION_2_4_OR_NEWER;
 }
 
