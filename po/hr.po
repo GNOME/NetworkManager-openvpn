@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2022-08-23 15:29+0000\n"
-"PO-Revision-Date: 2022-08-28 00:28+0200\n"
+"POT-Creation-Date: 2022-08-29 16:31+0000\n"
+"PO-Revision-Date: 2022-08-31 19:06+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -49,8 +49,8 @@ msgstr "Razvijatelji Mrežnog upravitelja"
 msgid "Authentication required"
 msgstr "Potrebna je ovjera"
 
-#: auth-dialog/main.c:182 properties/nm-openvpn-dialog.ui:323
-#: properties/nm-openvpn-dialog.ui:422 properties/nm-openvpn-editor.c:2699
+#: auth-dialog/main.c:182 properties/nm-openvpn-dialog.ui:336
+#: properties/nm-openvpn-dialog.ui:435 properties/nm-openvpn-editor.c:2733
 msgid "Password"
 msgstr "Lozinka"
 
@@ -220,68 +220,72 @@ msgstr "nepodržan mtu-disc argument"
 msgid "unsupported crl-verify argument"
 msgstr "nepodržan crl-verify argument"
 
-#: properties/import-export.c:966 properties/import-export.c:1424
+#: properties/import-export.c:966 properties/import-export.c:1437
 msgid "invalid option"
 msgstr "nevaljana mogućnost"
 
-#: properties/import-export.c:1016
+#: properties/import-export.c:1007
+msgid "allow-compression: invalid argument"
+msgstr "allow-compression: nevaljani argument"
+
+#: properties/import-export.c:1029
 msgid "unsupported comp-lzo argument"
 msgstr "nepodržani comp-lzo argument"
 
-#: properties/import-export.c:1028
+#: properties/import-export.c:1041
 msgid "unsupported compress argument"
 msgstr "nepodržani compress argument"
 
-#: properties/import-export.c:1129
+#: properties/import-export.c:1142
 msgid "remote cannot contain space"
 msgstr "udaljeni poslužitelj ne može sadržavati razmak"
 
-#: properties/import-export.c:1133
+#: properties/import-export.c:1146
 msgid "remote cannot contain comma"
 msgstr "udaljeni poslužitelj ne može sadržavati zarez"
 
-#: properties/import-export.c:1144
+#: properties/import-export.c:1157
 msgid "remote expects protocol type like “udp” or “tcp”"
 msgstr "udaljeni poslužitelj očekuje vrstu protokola poput “udp” ili “tcp”"
 
-#: properties/import-export.c:1256
+#: properties/import-export.c:1269
 #, c-format
 msgid "invalid keyword “%s” in tls-version-min"
 msgstr "nevaljana ključna riječ “%s” u tls-version-min"
 
-#: properties/import-export.c:1408
+#: properties/import-export.c:1421
 msgid "invalid verify-x509-name type"
 msgstr "nevaljana verify-x509-name vrsta"
 
-#: properties/import-export.c:1544
+#: properties/import-export.c:1557
 msgid "unsupported blob/xml element"
 msgstr "nepodržani blob/xml element"
 
-#: properties/import-export.c:1573
+#: properties/import-export.c:1586
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "neprekinuti blob element <%s>"
 
-#: properties/import-export.c:1629
+#: properties/import-export.c:1642
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "greška podešavanja: %s (line %ld)"
 
-#: properties/import-export.c:1630
+#: properties/import-export.c:1643
 msgid "unknown or unsupported option"
 msgstr "nepoznata ili nepodržana mogućnost"
 
-#: properties/import-export.c:1645
+#: properties/import-export.c:1658
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr "Datoteka za uvoz nije valjano podešavanje OpenVPN klijenta"
 
-#: properties/import-export.c:1653
+#: properties/import-export.c:1666
 msgid "The file to import wasn’t a valid OpenVPN configuration (no remote)"
 msgstr ""
 "Datoteka za uvoz nije valjano OpenVPN podešavanje (nema udaljenog "
 "poslužitelja)"
 
-#: properties/import-export.c:1664
+#: properties/import-export.c:1677
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--pkcs12 can not be "
 "used with --cert or --key)"
@@ -289,7 +293,7 @@ msgstr ""
 "Datoteka za uvoz nije valjano OpenVPN podešavanje (--pkcs12 ne može se "
 "koristiti sa --cert ili --key)"
 
-#: properties/import-export.c:1674
+#: properties/import-export.c:1687
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--ca can not be "
 "PKCS#12 format)"
@@ -297,11 +301,11 @@ msgstr ""
 "Datoteka za uvoz nije valjano OpenVPN podešavanje  (--ca ne može biti u "
 "PKCS#12 formatu)"
 
-#: properties/import-export.c:1683
+#: properties/import-export.c:1696
 msgid "The file to import wasn’t a valid OpenVPN configuration (missing --ca)"
 msgstr "Datoteka za uvoz nije valjano OpenVPN podešavanje (nedostaje --ca)"
 
-#: properties/import-export.c:1693
+#: properties/import-export.c:1706
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (if you use one of --"
 "cert or --key, you must use them both)"
@@ -309,7 +313,7 @@ msgstr ""
 "Datoteka za uvoz nije valjano OpenVPN podešavanje (ako vidite jedan od --"
 "cert ili --key, morate ih oboje koristiti)"
 
-#: properties/import-export.c:1704
+#: properties/import-export.c:1717
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--cert can not be "
 "PKCS#12 format.)"
@@ -317,7 +321,7 @@ msgstr ""
 "Datoteka za uvoz nije valjano OpenVPN podešavanje (--cert ne može biti u "
 "PKCS#12 formatu.)"
 
-#: properties/import-export.c:1712
+#: properties/import-export.c:1725
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--key can not be "
 "PKCS#12 format.)"
@@ -325,85 +329,93 @@ msgstr ""
 "Datoteka za uvoz nije valjano OpenVPN podešavanje (--key ne može biti u "
 "PKCS#12 formatu.)"
 
-#: properties/import-export.c:1964
+#: properties/import-export.c:1977
 msgid "missing path argument"
 msgstr "nedostaje path argument"
 
-#: properties/import-export.c:1974
+#: properties/import-export.c:1987
 msgid "connection is not a valid OpenVPN connection"
 msgstr "povezivanje nije valjano OpenVPN povezivanje"
 
-#: properties/import-export.c:1983
+#: properties/import-export.c:1996
 msgid "connection was incomplete (missing gateway)"
 msgstr "povezivanje je nepotpuno (nedostaje pristupnik)"
 
-#: properties/import-export.c:2352
+#: properties/import-export.c:2370
 #, c-format
 msgid "failed to write file: %s"
 msgstr "neuspjelo zapisivanje datoteke: %s"
 
-#: properties/nm-openvpn-dialog.ui:74
+#: properties/nm-openvpn-dialog.ui:73
+msgid "Asymmetric"
+msgstr "Asimetrično"
+
+#: properties/nm-openvpn-dialog.ui:76
+msgid "Symmetric"
+msgstr "Simetričo"
+
+#: properties/nm-openvpn-dialog.ui:87
 msgid "LZO"
 msgstr "LZO"
 
-#: properties/nm-openvpn-dialog.ui:77
+#: properties/nm-openvpn-dialog.ui:90
 msgid "LZ4"
 msgstr "LZ4"
 
-#: properties/nm-openvpn-dialog.ui:80
+#: properties/nm-openvpn-dialog.ui:93
 msgid "LZ4 v2"
 msgstr "LZ4 v2"
 
-#: properties/nm-openvpn-dialog.ui:83
+#: properties/nm-openvpn-dialog.ui:96
 msgid "Automatic"
 msgstr "Automatski"
 
-#: properties/nm-openvpn-dialog.ui:86
+#: properties/nm-openvpn-dialog.ui:99
 msgid "LZO disabled (legacy)"
 msgstr "LZO onemogućen (zastarjelo)"
 
-#: properties/nm-openvpn-dialog.ui:89
+#: properties/nm-openvpn-dialog.ui:102
 msgid "LZO adaptive (legacy)"
 msgstr "LZO adaptivan (zastarjelo)"
 
-#: properties/nm-openvpn-dialog.ui:113 properties/nm-openvpn-editor.c:366
-#: properties/nm-openvpn-editor.c:1003 properties/nm-openvpn-editor.c:1799
+#: properties/nm-openvpn-dialog.ui:126 properties/nm-openvpn-editor.c:377
+#: properties/nm-openvpn-editor.c:1014 properties/nm-openvpn-editor.c:1819
 msgid "None"
 msgstr "Nepoznat"
 
-#: properties/nm-openvpn-dialog.ui:116
+#: properties/nm-openvpn-dialog.ui:129
 msgid "TLS-Auth"
 msgstr "TLS-Auth"
 
-#: properties/nm-openvpn-dialog.ui:119
+#: properties/nm-openvpn-dialog.ui:132
 msgid "TLS-Crypt"
 msgstr "TLS-Crypt"
 
-#: properties/nm-openvpn-dialog.ui:122
+#: properties/nm-openvpn-dialog.ui:135
 msgid "TLS-Crypt v2"
 msgstr "TLS-Crypt v2"
 
-#: properties/nm-openvpn-dialog.ui:133
+#: properties/nm-openvpn-dialog.ui:146
 msgid "No"
 msgstr "Ne"
 
-#: properties/nm-openvpn-dialog.ui:136
+#: properties/nm-openvpn-dialog.ui:149
 msgid "Maybe"
 msgstr "Možda"
 
-#: properties/nm-openvpn-dialog.ui:139
+#: properties/nm-openvpn-dialog.ui:152
 msgid "Yes"
 msgstr "Da"
 
-#: properties/nm-openvpn-dialog.ui:169 properties/nm-openvpn-dialog.ui:1559
+#: properties/nm-openvpn-dialog.ui:182 properties/nm-openvpn-dialog.ui:1595
 msgid "General"
 msgstr "Općenito"
 
-#: properties/nm-openvpn-dialog.ui:191
+#: properties/nm-openvpn-dialog.ui:204
 msgid "_Gateway"
 msgstr "_Pristupnik"
 
-#: properties/nm-openvpn-dialog.ui:204
+#: properties/nm-openvpn-dialog.ui:217
 msgid ""
 "Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
 "tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
@@ -415,24 +427,24 @@ msgstr ""
 "zareze ili razmake kao razdjelnike).\n"
 "podešavanje: remote"
 
-#: properties/nm-openvpn-dialog.ui:237
+#: properties/nm-openvpn-dialog.ui:250
 msgid "Authentication"
 msgstr "Ovjera"
 
-#: properties/nm-openvpn-dialog.ui:272 properties/nm-openvpn-dialog.ui:383
-#: properties/nm-openvpn-dialog.ui:482
+#: properties/nm-openvpn-dialog.ui:285 properties/nm-openvpn-dialog.ui:396
+#: properties/nm-openvpn-dialog.ui:495
 msgid "CA"
 msgstr "CA"
 
-#: properties/nm-openvpn-dialog.ui:285 properties/nm-openvpn-dialog.ui:495
+#: properties/nm-openvpn-dialog.ui:298 properties/nm-openvpn-dialog.ui:508
 msgid "User"
 msgstr "Korisnik"
 
-#: properties/nm-openvpn-dialog.ui:335 properties/nm-openvpn-dialog.ui:434
+#: properties/nm-openvpn-dialog.ui:348 properties/nm-openvpn-dialog.ui:447
 msgid "User name"
 msgstr "Korisničko ime"
 
-#: properties/nm-openvpn-dialog.ui:347 properties/nm-openvpn-dialog.ui:446
+#: properties/nm-openvpn-dialog.ui:360 properties/nm-openvpn-dialog.ui:459
 msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
@@ -440,7 +452,7 @@ msgstr ""
 "Lozinka proslijeđena OpenVPN-u kada je zatražena.\n"
 "podešavanje: auth-user-pass"
 
-#: properties/nm-openvpn-dialog.ui:362 properties/nm-openvpn-dialog.ui:461
+#: properties/nm-openvpn-dialog.ui:375 properties/nm-openvpn-dialog.ui:474
 msgid ""
 "Username passed to OpenVPN when prompted for it. If omitted, use the name of "
 "the system user that activates the connection.\n"
@@ -450,23 +462,23 @@ msgstr ""
 "izostavljeno, koristi ime korisnika sustava koji aktivira povezivanje.\n"
 "podešavanje: auth-user-pass"
 
-#: properties/nm-openvpn-dialog.ui:531
+#: properties/nm-openvpn-dialog.ui:544
 msgid "Remote IP Address"
 msgstr "Udaljena IP adresa"
 
-#: properties/nm-openvpn-dialog.ui:544
+#: properties/nm-openvpn-dialog.ui:557
 msgid "Local IP Address"
 msgstr "Lokalna IP adresa"
 
-#: properties/nm-openvpn-dialog.ui:557
+#: properties/nm-openvpn-dialog.ui:570
 msgid "Key Direction"
 msgstr "Smjer ključa"
 
-#: properties/nm-openvpn-dialog.ui:569 properties/nm-openvpn-editor.c:2726
+#: properties/nm-openvpn-dialog.ui:582 properties/nm-openvpn-editor.c:2760
 msgid "Static Key"
 msgstr "Nepromjenjivi ključ"
 
-#: properties/nm-openvpn-dialog.ui:581
+#: properties/nm-openvpn-dialog.ui:594
 msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
@@ -474,7 +486,7 @@ msgstr ""
 "Pred-dijeljena datoteka za način šifriranja nepromjenjivog ključa (ne-TLS).\n"
 "podešavanje: static <datoteka>"
 
-#: properties/nm-openvpn-dialog.ui:624
+#: properties/nm-openvpn-dialog.ui:637
 msgid ""
 "IP address of the remote VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -482,7 +494,7 @@ msgstr ""
 "IP adresa udaljene VPN krajnje točke.\n"
 "podešavanje: ifconfig <l> <rn>"
 
-#: properties/nm-openvpn-dialog.ui:637
+#: properties/nm-openvpn-dialog.ui:650
 msgid ""
 "IP address of the local VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
@@ -490,7 +502,7 @@ msgstr ""
 "IP adresa lokalne VPN krajnje točke.\n"
 "podešavanje: ifconfig <l> <rn>"
 
-#: properties/nm-openvpn-dialog.ui:650
+#: properties/nm-openvpn-dialog.ui:663
 msgid ""
 "Direction for Static Key encryption mode (non-TLS).\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -505,45 +517,45 @@ msgstr ""
 "administratora sustava.\n"
 "podešavanje: static <datoteka> [smjer]"
 
-#: properties/nm-openvpn-dialog.ui:696
+#: properties/nm-openvpn-dialog.ui:709
 msgid "Type"
 msgstr "Vrsta"
 
-#: properties/nm-openvpn-dialog.ui:708
+#: properties/nm-openvpn-dialog.ui:721
 msgid "Select an authentication mode."
 msgstr "Odaberi vrstu ovjere."
 
-#: properties/nm-openvpn-dialog.ui:765
+#: properties/nm-openvpn-dialog.ui:778
 msgid "Ad_vanced…"
 msgstr "Na_predno…"
 
-#: properties/nm-openvpn-dialog.ui:839 properties/nm-openvpn-editor.c:1606
+#: properties/nm-openvpn-dialog.ui:852 properties/nm-openvpn-editor.c:1619
 msgid "Not required"
 msgstr "Nije potrebno"
 
-#: properties/nm-openvpn-dialog.ui:879
+#: properties/nm-openvpn-dialog.ui:892
 msgid "OpenVPN Advanced Options"
 msgstr "OpenVPN napredne mogućnosti"
 
-#: properties/nm-openvpn-dialog.ui:898
+#: properties/nm-openvpn-dialog.ui:911
 msgid "Advanced Properties"
 msgstr "Napredna svojstva"
 
-#: properties/nm-openvpn-dialog.ui:906 properties/nm-openvpn-dialog.ui:2808
-#: properties/nm-openvpn-dialog.ui:2861 properties/nm-openvpn-dialog.ui:2915
-#: properties/nm-openvpn-dialog.ui:2968 properties/nm-openvpn-dialog.ui:3021
+#: properties/nm-openvpn-dialog.ui:919 properties/nm-openvpn-dialog.ui:2844
+#: properties/nm-openvpn-dialog.ui:2897 properties/nm-openvpn-dialog.ui:2951
+#: properties/nm-openvpn-dialog.ui:3004 properties/nm-openvpn-dialog.ui:3057
 msgid "_Cancel"
 msgstr "_Odustani"
 
-#: properties/nm-openvpn-dialog.ui:914
+#: properties/nm-openvpn-dialog.ui:927
 msgid "_Apply"
 msgstr "_Primijeni"
 
-#: properties/nm-openvpn-dialog.ui:976
+#: properties/nm-openvpn-dialog.ui:989
 msgid "Use custom gateway p_ort"
 msgstr "Koristi prilagođeni ulaz pris_tupnika"
 
-#: properties/nm-openvpn-dialog.ui:980 properties/nm-openvpn-dialog.ui:995
+#: properties/nm-openvpn-dialog.ui:993 properties/nm-openvpn-dialog.ui:1008
 msgid ""
 "TCP/UDP port number for peer. (Default value when there is no port for "
 "gateway).\n"
@@ -553,11 +565,11 @@ msgstr ""
 "pristupnika).\n"
 "podešavanje: port"
 
-#: properties/nm-openvpn-dialog.ui:1021
+#: properties/nm-openvpn-dialog.ui:1034
 msgid "Use custom _renegotiation interval"
 msgstr "Koristi prilagođeno razdoblje _ponovnog pregovaranja"
 
-#: properties/nm-openvpn-dialog.ui:1025 properties/nm-openvpn-dialog.ui:1040
+#: properties/nm-openvpn-dialog.ui:1038 properties/nm-openvpn-dialog.ui:1053
 msgid ""
 "Renegotiate data channel key after the specified number of seconds.\n"
 "config: reneg-sec"
@@ -565,11 +577,11 @@ msgstr ""
 "Ponovno pregovaraj ključ kanala podataka nakon određenog broja sekundi.\n"
 "podešavanje: reneg-sec"
 
-#: properties/nm-openvpn-dialog.ui:1066
+#: properties/nm-openvpn-dialog.ui:1079
 msgid "Data _compression"
 msgstr "Sažimanje _podataka"
 
-#: properties/nm-openvpn-dialog.ui:1070
+#: properties/nm-openvpn-dialog.ui:1083
 msgid ""
 "Use fast LZO compression.\n"
 "config: comp-lzo"
@@ -577,11 +589,19 @@ msgstr ""
 "Koristi brzo LZO sažimanje.\n"
 "podešavanje: comp-lzo"
 
-#: properties/nm-openvpn-dialog.ui:1110
+#: properties/nm-openvpn-dialog.ui:1098
+msgid ""
+"Enable or disable outgoing traffic compression\n"
+"config: allow-compression asym|yes"
+msgstr ""
+"Omogući ili onemogući sažimanje odlaznog prometa\n"
+"podešavanje: allow-compression asym|yes"
+
+#: properties/nm-openvpn-dialog.ui:1146
 msgid "Use a _TCP connection"
 msgstr "Koristi _TCP povezivanje"
 
-#: properties/nm-openvpn-dialog.ui:1114
+#: properties/nm-openvpn-dialog.ui:1150
 msgid ""
 "Use TCP for communicating with remote host.\n"
 "(This is a default setting only used when no protocol is specified for the "
@@ -593,15 +613,15 @@ msgstr ""
 "određen.)\n"
 "podešavanje: proto tcp-client | udp"
 
-#: properties/nm-openvpn-dialog.ui:1133
+#: properties/nm-openvpn-dialog.ui:1169
 msgid "Set virtual _device type"
 msgstr "Postavi vrstu _virtualnog uređaja"
 
-#: properties/nm-openvpn-dialog.ui:1137
+#: properties/nm-openvpn-dialog.ui:1173
 msgid "Explicitly set virtual device type and name (TUN/TAP)."
 msgstr "Izričito postavi vrstu virtualnog uređaja i naziv (TUN/TAP)."
 
-#: properties/nm-openvpn-dialog.ui:1151
+#: properties/nm-openvpn-dialog.ui:1187
 msgid ""
 "Explicitly set virtual device type (TUN/TAP).\n"
 "config: dev-type tun | tap"
@@ -609,11 +629,11 @@ msgstr ""
 "Izričito postavi vrstu virtualnog uređaja (TUN/TAP).\n"
 "podešavanje: dev-type tun | tap"
 
-#: properties/nm-openvpn-dialog.ui:1171
+#: properties/nm-openvpn-dialog.ui:1207
 msgid " and _name"
 msgstr " i _naziv"
 
-#: properties/nm-openvpn-dialog.ui:1186
+#: properties/nm-openvpn-dialog.ui:1222
 msgid ""
 "Use custom name for TUN/TAP virtual device (instead of default “tun” or "
 "“tap”).\n"
@@ -623,11 +643,11 @@ msgstr ""
 "ili “tap”).\n"
 "podešavanje: dev <naziv>"
 
-#: properties/nm-openvpn-dialog.ui:1210
+#: properties/nm-openvpn-dialog.ui:1246
 msgid "Use custom tunnel Maximum Transmission _Unit (MTU)"
 msgstr "Koristi najveću jedinicu prijenosa (MTU) _prilagođenog tunela"
 
-#: properties/nm-openvpn-dialog.ui:1214 properties/nm-openvpn-dialog.ui:1229
+#: properties/nm-openvpn-dialog.ui:1250 properties/nm-openvpn-dialog.ui:1265
 msgid ""
 "Take the TUN device MTU to be the specified value and derive the link MTU "
 "from it.\n"
@@ -637,11 +657,11 @@ msgstr ""
 "poveznicu iz nje.\n"
 "podešavanje: tun-mtu"
 
-#: properties/nm-openvpn-dialog.ui:1255
+#: properties/nm-openvpn-dialog.ui:1291
 msgid "Use custom UDP _fragment size"
 msgstr "Koristi prilagođenu veličinu UDP _fragmenta"
 
-#: properties/nm-openvpn-dialog.ui:1259 properties/nm-openvpn-dialog.ui:1274
+#: properties/nm-openvpn-dialog.ui:1295 properties/nm-openvpn-dialog.ui:1310
 msgid ""
 "Enable internal datagram fragmentation with this maximum size.\n"
 "config: fragment"
@@ -649,11 +669,11 @@ msgstr ""
 "Omogući unutarnju fragmentaciju datagrama s ovom najvećom veličinom.\n"
 "podešavanje: fragment"
 
-#: properties/nm-openvpn-dialog.ui:1295
+#: properties/nm-openvpn-dialog.ui:1331
 msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
 msgstr "Ograniči najveću veličinu TCP _segmenta tunela"
 
-#: properties/nm-openvpn-dialog.ui:1299
+#: properties/nm-openvpn-dialog.ui:1335
 msgid ""
 "Restrict tunnel TCP MSS.\n"
 "config: mssfix"
@@ -661,11 +681,11 @@ msgstr ""
 "Ograniči tunel TCP MSS.\n"
 "podešavanje: mssfix"
 
-#: properties/nm-openvpn-dialog.ui:1312
+#: properties/nm-openvpn-dialog.ui:1348
 msgid "Rando_mize remote hosts"
 msgstr "Izmje_šaj udaljene poslužitelje"
 
-#: properties/nm-openvpn-dialog.ui:1316
+#: properties/nm-openvpn-dialog.ui:1352
 msgid ""
 "Randomize the order of gateways list (remote) as a kind of basic load-"
 "balancing measure.\n"
@@ -675,11 +695,11 @@ msgstr ""
 "osnovne mjere opterećenja i uravnoteženja.\n"
 "podešavanje: remote-random"
 
-#: properties/nm-openvpn-dialog.ui:1329
+#: properties/nm-openvpn-dialog.ui:1365
 msgid "Allow Pull FQDN"
 msgstr "Omogući povlačenje FQDN-a"
 
-#: properties/nm-openvpn-dialog.ui:1333
+#: properties/nm-openvpn-dialog.ui:1369
 msgid ""
 "Allow client to pull DNS names from server\n"
 "config: allow-pull-fqdn"
@@ -687,11 +707,11 @@ msgstr ""
 "Dopusti klijentu povlačenje DNS naziva s poslužitelja\n"
 "podešavanje: allow-pull-fqdn"
 
-#: properties/nm-openvpn-dialog.ui:1346
+#: properties/nm-openvpn-dialog.ui:1382
 msgid "_Prefix remote DNS name with random string"
 msgstr "_Prefiks naziva udaljenog DNS-a s naizmjeničnim izrazom"
 
-#: properties/nm-openvpn-dialog.ui:1350
+#: properties/nm-openvpn-dialog.ui:1386
 msgid ""
 "Adds a random string to remote DNS name to avoid DNS caching.\n"
 "config: remote-random-hostname"
@@ -700,11 +720,11 @@ msgstr ""
 "predmemoriranje.\n"
 "podešavanje: remote-random-hostname"
 
-#: properties/nm-openvpn-dialog.ui:1363
+#: properties/nm-openvpn-dialog.ui:1399
 msgid "IPv6 tun link"
 msgstr "IPv6 tun poveznica"
 
-#: properties/nm-openvpn-dialog.ui:1367
+#: properties/nm-openvpn-dialog.ui:1403
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
@@ -712,11 +732,11 @@ msgstr ""
 "Izgradi tun poveznicu sposobnu za proslijeđivanje IPv6 prometa\n"
 "podešavanje: tun-ipv6"
 
-#: properties/nm-openvpn-dialog.ui:1385
+#: properties/nm-openvpn-dialog.ui:1421
 msgid "Specify pin_g interval"
 msgstr "Navedi pin_g razdoblje"
 
-#: properties/nm-openvpn-dialog.ui:1389 properties/nm-openvpn-dialog.ui:1404
+#: properties/nm-openvpn-dialog.ui:1425 properties/nm-openvpn-dialog.ui:1440
 msgid ""
 "Ping remote over the TCP/UDP control channel if no packets have been sent "
 "for at least n seconds.\n"
@@ -726,12 +746,12 @@ msgstr ""
 "nisu poslani za najmanje n sekundi.\n"
 "podešavanje: ping <n>"
 
-#: properties/nm-openvpn-dialog.ui:1430
+#: properties/nm-openvpn-dialog.ui:1466
 msgid "Specify _exit or restart ping"
 msgstr "Navedi _ping _zatvaranja i ponovnog pokretanja"
 
-#: properties/nm-openvpn-dialog.ui:1434 properties/nm-openvpn-dialog.ui:1449
-#: properties/nm-openvpn-dialog.ui:1469
+#: properties/nm-openvpn-dialog.ui:1470 properties/nm-openvpn-dialog.ui:1485
+#: properties/nm-openvpn-dialog.ui:1505
 msgid ""
 "Exit or restart after n seconds pass without reception of a ping or other "
 "packet from remote.\n"
@@ -741,11 +761,11 @@ msgstr ""
 "drugih paketa s udaljenog poslužitelja.\n"
 "podešavanje: ping-exit | ping-restart <n>"
 
-#: properties/nm-openvpn-dialog.ui:1490
+#: properties/nm-openvpn-dialog.ui:1526
 msgid "Accept authenticated packets from any address (F_loat)"
 msgstr "Prihvati pakete ovjere iz svake adrese (F_loat)"
 
-#: properties/nm-openvpn-dialog.ui:1494
+#: properties/nm-openvpn-dialog.ui:1530
 msgid ""
 "Allow remote peer to change its IP address and/or port number, such as due "
 "to DHCP (this is the default if --remote is not used). --float when "
@@ -773,11 +793,11 @@ msgstr ""
 "\n"
 "podešavanje: float"
 
-#: properties/nm-openvpn-dialog.ui:1515
+#: properties/nm-openvpn-dialog.ui:1551
 msgid "Specify max routes"
 msgstr "Navedi najviše rute"
 
-#: properties/nm-openvpn-dialog.ui:1519 properties/nm-openvpn-dialog.ui:1534
+#: properties/nm-openvpn-dialog.ui:1555 properties/nm-openvpn-dialog.ui:1570
 msgid ""
 "Specify the maximum number of routes the server is allowed to specify.\n"
 "config: max-routes <n>"
@@ -785,7 +805,7 @@ msgstr ""
 "Navedi najveći broj ruta koji  poslužitelj može odrediti.\n"
 "podešavanje: max-routes <n>"
 
-#: properties/nm-openvpn-dialog.ui:1579
+#: properties/nm-openvpn-dialog.ui:1615
 msgid ""
 "Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
 "Cipher Block Chaining mode).\n"
@@ -795,11 +815,11 @@ msgstr ""
 "lančanog bloka šifratora).\n"
 "podešavanje: cipher"
 
-#: properties/nm-openvpn-dialog.ui:1596
+#: properties/nm-openvpn-dialog.ui:1632
 msgid "Use custom _size of cipher key"
 msgstr "Koristi prilagođenu _veličinu ključa šifratora"
 
-#: properties/nm-openvpn-dialog.ui:1600 properties/nm-openvpn-dialog.ui:1614
+#: properties/nm-openvpn-dialog.ui:1636 properties/nm-openvpn-dialog.ui:1650
 msgid ""
 "Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
 "specific size.\n"
@@ -809,7 +829,7 @@ msgstr ""
 "određeno, zadana je cipher-specific veličina.\n"
 "podešavanje: keysize <n>"
 
-#: properties/nm-openvpn-dialog.ui:1629
+#: properties/nm-openvpn-dialog.ui:1665
 msgid ""
 "Authenticate packets with HMAC using message digest algorithm. The default "
 "is SHA1.\n"
@@ -818,19 +838,19 @@ msgstr ""
 "Ovjeri pakete s HMAC-om koristeći algoritam sažetka poruke. Zadano je SHA1.\n"
 "podešavanje: auth"
 
-#: properties/nm-openvpn-dialog.ui:1648
+#: properties/nm-openvpn-dialog.ui:1684
 msgid "Ci_pher"
 msgstr "Ši_frator"
 
-#: properties/nm-openvpn-dialog.ui:1663
+#: properties/nm-openvpn-dialog.ui:1699
 msgid "_HMAC Authentication"
 msgstr "_HMAC ovjera"
 
-#: properties/nm-openvpn-dialog.ui:1676
+#: properties/nm-openvpn-dialog.ui:1712
 msgid "Disable cipher _negotiation"
 msgstr "Onemogući pregovaranje _šifratora"
 
-#: properties/nm-openvpn-dialog.ui:1680
+#: properties/nm-openvpn-dialog.ui:1716
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
@@ -838,11 +858,11 @@ msgstr ""
 "Onemogući pregovaranje šifratora između klijenta i poslužitelja.\n"
 "podešavanje: ncp-disable"
 
-#: properties/nm-openvpn-dialog.ui:1692
+#: properties/nm-openvpn-dialog.ui:1728
 msgid "Verify CRL from file"
 msgstr "Provjeri CRL iz datoteke"
 
-#: properties/nm-openvpn-dialog.ui:1696 properties/nm-openvpn-dialog.ui:1722
+#: properties/nm-openvpn-dialog.ui:1732 properties/nm-openvpn-dialog.ui:1758
 msgid ""
 "Check peer certificate against the specified file in PEM format. A CRL "
 "(certificate revocation list) is used when a particular key is compromised "
@@ -852,11 +872,11 @@ msgstr ""
 "(popis opoziva vjerodajnica) se koristi kada je određeni ključ kompromitiran "
 "ali cjelokupni PKI je još uvijek netaknut."
 
-#: properties/nm-openvpn-dialog.ui:1706
+#: properties/nm-openvpn-dialog.ui:1742
 msgid "Verify CRL from directory"
 msgstr "Provjeri CRL iz direktorija"
 
-#: properties/nm-openvpn-dialog.ui:1710 properties/nm-openvpn-dialog.ui:1765
+#: properties/nm-openvpn-dialog.ui:1746 properties/nm-openvpn-dialog.ui:1801
 msgid ""
 "Check peer certificate by looking at files in the specified directory. The "
 "directory must contain files named as revoked serial numbers (the files may "
@@ -866,19 +886,19 @@ msgstr ""
 "Direktorij mora sadržavati datoteke koje su nazvane kao serijski brojevi "
 "opoziva (datoteke mogu biti prazne, sadržaj se nikada ne čita)."
 
-#: properties/nm-openvpn-dialog.ui:1731 properties/nm-openvpn-editor.c:103
+#: properties/nm-openvpn-dialog.ui:1767 properties/nm-openvpn-editor.c:103
 msgid "(None)"
 msgstr "(Nijedan)"
 
-#: properties/nm-openvpn-dialog.ui:1824
+#: properties/nm-openvpn-dialog.ui:1860
 msgid "Security"
 msgstr "Sigurnost"
 
-#: properties/nm-openvpn-dialog.ui:1853
+#: properties/nm-openvpn-dialog.ui:1889
 msgid "_Subject Match"
 msgstr "_Sadržaj podudaranja"
 
-#: properties/nm-openvpn-dialog.ui:1867
+#: properties/nm-openvpn-dialog.ui:1903
 msgid ""
 "Subject or Common Name to verify server certificate information against.\n"
 "\n"
@@ -891,11 +911,11 @@ msgstr ""
 "podešavanje: verify-x509-name subject-or-name [mode]\n"
 "podešavanje (legacy mode): tls-remote subject-or-name"
 
-#: properties/nm-openvpn-dialog.ui:1882
+#: properties/nm-openvpn-dialog.ui:1918
 msgid "Server _Certificate Check"
 msgstr "Provjera _vjerodajnice poslužitelja"
 
-#: properties/nm-openvpn-dialog.ui:1896
+#: properties/nm-openvpn-dialog.ui:1932
 msgid ""
 "Verify server certificate identification.\n"
 "\n"
@@ -924,11 +944,11 @@ msgstr ""
 "podešavanje: verify-x509-name subject-or-name [način]\n"
 "podešavanje (zastarjeli način): tls-remote subject-or-name"
 
-#: properties/nm-openvpn-dialog.ui:1936
+#: properties/nm-openvpn-dialog.ui:1972
 msgid "_Verify peer (server) certificate usage signature"
 msgstr "_Provjeri potpis korištenja vjerodajnice točke (poslužitelja)"
 
-#: properties/nm-openvpn-dialog.ui:1940
+#: properties/nm-openvpn-dialog.ui:1976
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -936,11 +956,11 @@ msgstr ""
 "Zahtijeva da je vjerodajnica točke potpisana korištenjem izričitog ključa i "
 "korištenjem proširenog ključa temeljenim na  RFC3280 TLS pravilima."
 
-#: properties/nm-openvpn-dialog.ui:1954
+#: properties/nm-openvpn-dialog.ui:1990
 msgid "_Remote peer certificate TLS type"
 msgstr "_TLS vrsta udaljene vjerodajnice točke"
 
-#: properties/nm-openvpn-dialog.ui:1968
+#: properties/nm-openvpn-dialog.ui:2004
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -950,22 +970,22 @@ msgstr ""
 "korištenjem proširenog ključa temeljenim na RFC3280 TLS pravilima.\n"
 "podešavanje: remote-cert-tls client|server"
 
-#: properties/nm-openvpn-dialog.ui:2000
+#: properties/nm-openvpn-dialog.ui:2036
 msgid "_Verify peer (server) certificate nsCertType designation"
 msgstr "_Provjeri nsCertType oznaku vjerodajnice točke (poslužitelja)"
 
-#: properties/nm-openvpn-dialog.ui:2004
+#: properties/nm-openvpn-dialog.ui:2040
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
 msgstr ""
 "Zahtijeva da je vjerodajnica točke potpisana sa izričitom nsCertType oznakom."
 
-#: properties/nm-openvpn-dialog.ui:2020
+#: properties/nm-openvpn-dialog.ui:2056
 msgid "_Remote peer certificate nsCert designation"
 msgstr "_nsCert oznaka vjerodajnice udaljene točke"
 
-#: properties/nm-openvpn-dialog.ui:2034
+#: properties/nm-openvpn-dialog.ui:2070
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
@@ -975,11 +995,11 @@ msgstr ""
 "config: ns-cert-type client|server\n"
 "podešavanje: ns-cert-type client|serverr"
 
-#: properties/nm-openvpn-dialog.ui:2076
+#: properties/nm-openvpn-dialog.ui:2112
 msgid "Key _Direction"
 msgstr "Smjer _ključa"
 
-#: properties/nm-openvpn-dialog.ui:2090
+#: properties/nm-openvpn-dialog.ui:2126
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
@@ -991,7 +1011,7 @@ msgstr ""
 "šifriran.\n"
 "podešavanje: tls-auth <datoteka> [smjer] | tls-crypt <datoteka>"
 
-#: properties/nm-openvpn-dialog.ui:2134
+#: properties/nm-openvpn-dialog.ui:2170
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -1006,23 +1026,23 @@ msgstr ""
 "administratora sustava.\n"
 "podešavanje: tls-auth <datoteka> [smjer]"
 
-#: properties/nm-openvpn-dialog.ui:2154
+#: properties/nm-openvpn-dialog.ui:2190
 msgid "Key _File"
 msgstr "Datoteka _ključa"
 
-#: properties/nm-openvpn-dialog.ui:2168
+#: properties/nm-openvpn-dialog.ui:2204
 msgid "Mode"
 msgstr "Način"
 
-#: properties/nm-openvpn-dialog.ui:2180 properties/nm-openvpn-dialog.ui:2287
+#: properties/nm-openvpn-dialog.ui:2216 properties/nm-openvpn-dialog.ui:2323
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr "Dodaj dodatni sloj šifriranja ili HMAC ovjere."
 
-#: properties/nm-openvpn-dialog.ui:2200
+#: properties/nm-openvpn-dialog.ui:2236
 msgid "Extra Certificates"
 msgstr "Dodatne vjerodajnice"
 
-#: properties/nm-openvpn-dialog.ui:2213
+#: properties/nm-openvpn-dialog.ui:2249
 msgid ""
 "Specify a file containing one or more PEM certs (concatenated together) that "
 "complete the local certificate chain.\n"
@@ -1032,11 +1052,11 @@ msgstr ""
 "zajedno) koje završavaju lokalni lanac vjerodajnica.\n"
 "podešavanje: extra-certs <datoteka>"
 
-#: properties/nm-openvpn-dialog.ui:2256
+#: properties/nm-openvpn-dialog.ui:2292
 msgid "TLS cipher string"
 msgstr "Izraz TLS šifratora"
 
-#: properties/nm-openvpn-dialog.ui:2269
+#: properties/nm-openvpn-dialog.ui:2305
 msgid ""
 "Set a value for the --tls-cipher parameter. This can be useful for working "
 "with VPNs using deprecated hashing schemes."
@@ -1044,23 +1064,23 @@ msgstr ""
 "Postavi vrijednost za --tls-cipher parametar. Ovo može biti korisno za rad s "
 "VPN-om kada se koriste zastarjele sheme hashiranja."
 
-#: properties/nm-openvpn-dialog.ui:2290
+#: properties/nm-openvpn-dialog.ui:2326
 msgid "Additional TLS authentication or encryption"
 msgstr "Dodatna TLS ovjera ili šifriranje"
 
-#: properties/nm-openvpn-dialog.ui:2317
+#: properties/nm-openvpn-dialog.ui:2353
 msgid "Controls min and max version allowed for TLS."
 msgstr "Upravlja najmanjom ili najvećom inačicom dopuštenom za TLS."
 
-#: properties/nm-openvpn-dialog.ui:2320
+#: properties/nm-openvpn-dialog.ui:2356
 msgid "TLS version control"
 msgstr "Upravljanje TLS inačicom"
 
-#: properties/nm-openvpn-dialog.ui:2345
+#: properties/nm-openvpn-dialog.ui:2381
 msgid "TLS _min version"
 msgstr "TLS _najmanja inačica"
 
-#: properties/nm-openvpn-dialog.ui:2358
+#: properties/nm-openvpn-dialog.ui:2394
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1068,11 +1088,11 @@ msgstr ""
 " Postavlja najmanju TLS inačicu koja će se prihvatiti iz točke (zadana je "
 "\"1.0\").  Primjeri za inačicu uključuju \"1.0\", \"1.1\" ili \"1.2\"."
 
-#: properties/nm-openvpn-dialog.ui:2370
+#: properties/nm-openvpn-dialog.ui:2406
 msgid "TLS ma_x version"
 msgstr "TLS naj_veća inačica"
 
-#: properties/nm-openvpn-dialog.ui:2383
+#: properties/nm-openvpn-dialog.ui:2419
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1081,11 +1101,11 @@ msgstr ""
 "podržana inačica).  Primjeri za inačicu uključuju \"1.0\", \"1.1\" ili "
 "\"1.2\"."
 
-#: properties/nm-openvpn-dialog.ui:2393
+#: properties/nm-openvpn-dialog.ui:2429
 msgid "_or highest"
 msgstr "_ili najveća"
 
-#: properties/nm-openvpn-dialog.ui:2396
+#: properties/nm-openvpn-dialog.ui:2432
 msgid ""
 "If set and version is not recognized, we will only accept the highest TLS "
 "version supported by the local SSL implementation."
@@ -1093,11 +1113,11 @@ msgstr ""
 "Ako je naveden a inačica nije prepoznata, biti će prihvaćena samo najveća "
 "TLS inačica podržana lokalnom SSL implementacijom."
 
-#: properties/nm-openvpn-dialog.ui:2425
+#: properties/nm-openvpn-dialog.ui:2461
 msgid "TLS Authentication"
 msgstr "TLS ovjera"
 
-#: properties/nm-openvpn-dialog.ui:2446
+#: properties/nm-openvpn-dialog.ui:2482
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1105,11 +1125,11 @@ msgstr ""
 "Proxy vrsta: HTTP ili Socks.\n"
 "podešavanje: http-proxy ili socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2466
+#: properties/nm-openvpn-dialog.ui:2502
 msgid "Proxy _Type"
 msgstr "Vrsta _proxya"
 
-#: properties/nm-openvpn-dialog.ui:2482
+#: properties/nm-openvpn-dialog.ui:2518
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1117,11 +1137,11 @@ msgstr ""
 "<i>Odaberite ovu mogućnost ako vaša organizacija zahtijeva korištenje proxy "
 "poslužitelja za pristup Internetu.</i>"
 
-#: properties/nm-openvpn-dialog.ui:2497
+#: properties/nm-openvpn-dialog.ui:2533
 msgid "Server _Address"
 msgstr "Adresa _poslužitelja"
 
-#: properties/nm-openvpn-dialog.ui:2515
+#: properties/nm-openvpn-dialog.ui:2551
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1129,11 +1149,11 @@ msgstr ""
 "Poveži se na udaljeni poslužitelj putem proxya s ovom adresom.\n"
 "podešavanje: http-proxy ili socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2528
+#: properties/nm-openvpn-dialog.ui:2564
 msgid "_Port"
 msgstr "_Ulaz"
 
-#: properties/nm-openvpn-dialog.ui:2545
+#: properties/nm-openvpn-dialog.ui:2581
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1141,11 +1161,11 @@ msgstr ""
 "Poveži se na udaljeni poslužitelj putem proxya s ovim ulazom.\n"
 "podešavanje: http-proxy ili socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2566
+#: properties/nm-openvpn-dialog.ui:2602
 msgid "_Retry indefinitely when errors occur"
 msgstr "_Ponavljaj neprekidno kada se pojave greške"
 
-#: properties/nm-openvpn-dialog.ui:2570
+#: properties/nm-openvpn-dialog.ui:2606
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1154,40 +1174,40 @@ msgstr ""
 "postavljanje.\n"
 "podešavanje: http-proxy-retry ili socks-proxy-retry"
 
-#: properties/nm-openvpn-dialog.ui:2584
+#: properties/nm-openvpn-dialog.ui:2620
 msgid "Proxy _Username"
 msgstr "Korisničko ime _proxya"
 
-#: properties/nm-openvpn-dialog.ui:2599
+#: properties/nm-openvpn-dialog.ui:2635
 msgid "Proxy Passwor_d"
 msgstr "Lozinka _proxya"
 
-#: properties/nm-openvpn-dialog.ui:2614
+#: properties/nm-openvpn-dialog.ui:2650
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "HTTP/Socks proxy korisničko ime proslijeđeno u OpenVPN kada je zatraženo."
 
-#: properties/nm-openvpn-dialog.ui:2625
+#: properties/nm-openvpn-dialog.ui:2661
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr "HTTP/Socks proxy lozinka proslijeđena u OpenVPN kada je zatražena."
 
-#: properties/nm-openvpn-dialog.ui:2635
+#: properties/nm-openvpn-dialog.ui:2671
 msgid "_Show password"
 msgstr "_Prikaži lozinku"
 
-#: properties/nm-openvpn-dialog.ui:2662
+#: properties/nm-openvpn-dialog.ui:2698
 msgid "Proxies"
 msgstr "Proxiji"
 
-#: properties/nm-openvpn-dialog.ui:2683
+#: properties/nm-openvpn-dialog.ui:2719
 msgid "Path mtu discovery"
 msgstr "Otkrivanje mtu putanje"
 
-#: properties/nm-openvpn-dialog.ui:2716
+#: properties/nm-openvpn-dialog.ui:2752
 msgid "Connect timeout"
 msgstr "Vrijeme isteka povezivanja"
 
-#: properties/nm-openvpn-dialog.ui:2720 properties/nm-openvpn-dialog.ui:2733
+#: properties/nm-openvpn-dialog.ui:2756 properties/nm-openvpn-dialog.ui:2769
 msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
@@ -1198,15 +1218,15 @@ msgstr ""
 "povezivanja .\n"
 "podešavanje: connect-timeout <n> | server-poll-timeout <n>"
 
-#: properties/nm-openvpn-dialog.ui:2736
+#: properties/nm-openvpn-dialog.ui:2772
 msgid "0"
 msgstr "0"
 
-#: properties/nm-openvpn-dialog.ui:2746
+#: properties/nm-openvpn-dialog.ui:2782
 msgid "Push peer info"
 msgstr "Poguraj informacije točke"
 
-#: properties/nm-openvpn-dialog.ui:2750
+#: properties/nm-openvpn-dialog.ui:2786
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
@@ -1214,143 +1234,143 @@ msgstr ""
 "Poguraj dodatne informacije o klijentu na poslužitelj.\n"
 "podešavanje: push-peer-info"
 
-#: properties/nm-openvpn-dialog.ui:2767
+#: properties/nm-openvpn-dialog.ui:2803
 msgid "Misc"
 msgstr "Ostalo"
 
-#: properties/nm-openvpn-dialog.ui:2800
+#: properties/nm-openvpn-dialog.ui:2836
 msgid "Choose an OpenVPN static key…"
 msgstr "Odaberite OpenVPN nepromjenjivi ključ…"
 
-#: properties/nm-openvpn-dialog.ui:2817 properties/nm-openvpn-dialog.ui:2870
-#: properties/nm-openvpn-dialog.ui:2924 properties/nm-openvpn-dialog.ui:2977
-#: properties/nm-openvpn-dialog.ui:3030
+#: properties/nm-openvpn-dialog.ui:2853 properties/nm-openvpn-dialog.ui:2906
+#: properties/nm-openvpn-dialog.ui:2960 properties/nm-openvpn-dialog.ui:3013
+#: properties/nm-openvpn-dialog.ui:3066
 msgid "_Select"
 msgstr "_Odaberi"
 
-#: properties/nm-openvpn-dialog.ui:2853
+#: properties/nm-openvpn-dialog.ui:2889
 msgid "Choose CRL file"
 msgstr "Odaberi CRL datoteku"
 
-#: properties/nm-openvpn-dialog.ui:2907
+#: properties/nm-openvpn-dialog.ui:2943
 msgid "Choose CRL directory"
 msgstr "Odaberi CRL direktorij"
 
-#: properties/nm-openvpn-dialog.ui:2960
+#: properties/nm-openvpn-dialog.ui:2996
 msgid "Choose a key file"
 msgstr "Odaberi datoteku ključa"
 
-#: properties/nm-openvpn-dialog.ui:3013
+#: properties/nm-openvpn-dialog.ui:3049
 msgid "Choose extra certificate file"
 msgstr "Odaberi dodatnu datoteku vjerodajnice"
 
-#: properties/nm-openvpn-editor.c:769
+#: properties/nm-openvpn-editor.c:780
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN nepromjenjivi ključevi (*.key)"
 
-#: properties/nm-openvpn-editor.c:926 properties/nm-openvpn-editor.c:1020
+#: properties/nm-openvpn-editor.c:937 properties/nm-openvpn-editor.c:1031
 msgid "Default"
 msgstr "Zadani"
 
-#: properties/nm-openvpn-editor.c:1004
+#: properties/nm-openvpn-editor.c:1015
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: properties/nm-openvpn-editor.c:1005
+#: properties/nm-openvpn-editor.c:1016
 msgid "MD-5"
 msgstr "MD-5"
 
-#: properties/nm-openvpn-editor.c:1006
+#: properties/nm-openvpn-editor.c:1017
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: properties/nm-openvpn-editor.c:1007
+#: properties/nm-openvpn-editor.c:1018
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: properties/nm-openvpn-editor.c:1008
+#: properties/nm-openvpn-editor.c:1019
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: properties/nm-openvpn-editor.c:1009
+#: properties/nm-openvpn-editor.c:1020
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: properties/nm-openvpn-editor.c:1010
+#: properties/nm-openvpn-editor.c:1021
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: properties/nm-openvpn-editor.c:1011
+#: properties/nm-openvpn-editor.c:1022
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: properties/nm-openvpn-editor.c:1069
+#: properties/nm-openvpn-editor.c:1080
 msgid "Don’t verify certificate identification"
 msgstr "Ne provjeravaj identifikaciju vjerodajnice"
 
-#: properties/nm-openvpn-editor.c:1075
+#: properties/nm-openvpn-editor.c:1086
 msgid "Verify whole subject exactly"
 msgstr "Provjeri točno cijeli sadržaj"
 
-#: properties/nm-openvpn-editor.c:1081
+#: properties/nm-openvpn-editor.c:1092
 msgid "Verify name exactly"
 msgstr "Provjeri točno cijeli naziv"
 
-#: properties/nm-openvpn-editor.c:1087
+#: properties/nm-openvpn-editor.c:1098
 msgid "Verify name by prefix"
 msgstr "Provjeri naziv prema prefiksu"
 
-#: properties/nm-openvpn-editor.c:1093
+#: properties/nm-openvpn-editor.c:1104
 msgid "Verify subject partially (legacy mode, strongly discouraged)"
 msgstr ""
 "Provjeri sadržaj djelomično (zastarjeli način, strogo se ne preporučuje)"
 
-#: properties/nm-openvpn-editor.c:1206 properties/nm-openvpn-editor.c:1278
+#: properties/nm-openvpn-editor.c:1217 properties/nm-openvpn-editor.c:1289
 msgid "Server"
 msgstr "Poslužitelj"
 
-#: properties/nm-openvpn-editor.c:1211 properties/nm-openvpn-editor.c:1283
+#: properties/nm-openvpn-editor.c:1222 properties/nm-openvpn-editor.c:1294
 msgid "Client"
 msgstr "Klijent"
 
-#: properties/nm-openvpn-editor.c:1608
+#: properties/nm-openvpn-editor.c:1621
 msgid "HTTP"
 msgstr "HTTP"
 
-#: properties/nm-openvpn-editor.c:1610
+#: properties/nm-openvpn-editor.c:1623
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: properties/nm-openvpn-editor.c:1718
+#: properties/nm-openvpn-editor.c:1738
 msgid "TUN"
 msgstr "TUN"
 
-#: properties/nm-openvpn-editor.c:1720
+#: properties/nm-openvpn-editor.c:1740
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: properties/nm-openvpn-editor.c:1727
+#: properties/nm-openvpn-editor.c:1747
 msgid "(automatic)"
 msgstr "(automatski)"
 
-#: properties/nm-openvpn-editor.c:1886
+#: properties/nm-openvpn-editor.c:1910
 msgid "ping-exit"
 msgstr "ping-exit"
 
-#: properties/nm-openvpn-editor.c:1888
+#: properties/nm-openvpn-editor.c:1912
 msgid "ping-restart"
 msgstr "ping-restart"
 
-#: properties/nm-openvpn-editor.c:2688
+#: properties/nm-openvpn-editor.c:2722
 msgid "Certificates (TLS)"
 msgstr "Vjerodajnice (TLS)"
 
-#: properties/nm-openvpn-editor.c:2713
+#: properties/nm-openvpn-editor.c:2747
 msgid "Password with Certificates (TLS)"
 msgstr "Lozinka s vjerodajnicama (TLS)"
 
-#: properties/nm-openvpn-editor.c:2893
+#: properties/nm-openvpn-editor.c:2927
 msgid "could not load UI widget"
 msgstr "neuspješno učitavanje korisničkog sučelja"
 
@@ -1423,200 +1443,200 @@ msgstr "nemoguće učitavanje tvorničkog %s iz priključka: %s"
 msgid "unknown error creating editor instance"
 msgstr "nepoznata greška stvaranja primjerka uređivača"
 
-#: shared/utils.c:214
+#: shared/utils.c:246
 #, c-format
 msgid "invalid delimiter character '%c'"
 msgstr "nevaljani znak razdjelnika '%c'"
 
-#: shared/utils.c:221
+#: shared/utils.c:253
 msgid "invalid non-utf-8 character"
 msgstr "nevaljani ne-utf-8 znak"
 
-#: shared/utils.c:249
+#: shared/utils.c:281
 msgid "empty host"
 msgstr "prazan poslužitelj"
 
-#: shared/utils.c:259
+#: shared/utils.c:291
 msgid "invalid port"
 msgstr "nevaljani ulaz"
 
-#: shared/utils.c:270
+#: shared/utils.c:302
 msgid "invalid protocol"
 msgstr "nevaljani protokol"
 
-#: src/nm-openvpn-service.c:430
+#: src/nm-openvpn-service.c:432
 #, c-format
 msgid "invalid address “%s”"
 msgstr "nevaljana adresa “%s”"
 
-#: src/nm-openvpn-service.c:442
+#: src/nm-openvpn-service.c:444
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "nevaljano cjelobrojno svojstvo “%s” ili je izvan raspona [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: src/nm-openvpn-service.c:453
+#: src/nm-openvpn-service.c:455
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "nevaljano boolean svojstvo “%s” (ne da ili da)"
 
-#: src/nm-openvpn-service.c:460
+#: src/nm-openvpn-service.c:462
 #, c-format
 msgid "unhandled property “%s” type %s"
 msgstr "nerukujuće svojstvo “%s” vrste %s"
 
-#: src/nm-openvpn-service.c:471
+#: src/nm-openvpn-service.c:473
 #, c-format
 msgid "property “%s” invalid or not supported"
 msgstr "svojstvo “%s” je neispravano ili nepodržano"
 
-#: src/nm-openvpn-service.c:487
+#: src/nm-openvpn-service.c:489
 msgid "No VPN configuration options."
 msgstr "Nema mogućnosti VPN podešavanja."
 
-#: src/nm-openvpn-service.c:941
+#: src/nm-openvpn-service.c:946
 msgid "A username is required."
 msgstr "Potrebno je korisničko ime."
 
-#: src/nm-openvpn-service.c:945
+#: src/nm-openvpn-service.c:950
 msgid "A password is required."
 msgstr "Potrebna je lozinka."
 
-#: src/nm-openvpn-service.c:948
+#: src/nm-openvpn-service.c:953
 msgid "A username and password are required."
 msgstr "Korisničko ime i lozinka su potrebni."
 
-#: src/nm-openvpn-service.c:970
+#: src/nm-openvpn-service.c:975
 msgid "A private key password is required."
 msgstr "Lozinka privatnog ključa je potrebna."
 
-#: src/nm-openvpn-service.c:983
+#: src/nm-openvpn-service.c:988
 msgid "An HTTP Proxy username is required."
 msgstr "HTTP proxy korisničko ime je potrebno."
 
-#: src/nm-openvpn-service.c:987
+#: src/nm-openvpn-service.c:992
 msgid "An HTTP Proxy password is required."
 msgstr "HTTP proxy lozinka je potrebna."
 
-#: src/nm-openvpn-service.c:990
+#: src/nm-openvpn-service.c:995
 msgid "An HTTP Proxy username and password are required."
 msgstr "HTTP proxy korisničko ime i lozinka su potrebni."
 
-#: src/nm-openvpn-service.c:1359 src/nm-openvpn-service.c:2178
-#: src/nm-openvpn-service.c:2213
+#: src/nm-openvpn-service.c:1366 src/nm-openvpn-service.c:2198
+#: src/nm-openvpn-service.c:2233
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr "Nemoguća obrada zahtjeva jer su postavke VPN povezivanja nevaljane."
 
-#: src/nm-openvpn-service.c:1368 src/nm-openvpn-service.c:2187
+#: src/nm-openvpn-service.c:1375 src/nm-openvpn-service.c:2207
 msgid "Invalid connection type."
 msgstr "Nevaljana vrsta povezivanja."
 
-#: src/nm-openvpn-service.c:1386
+#: src/nm-openvpn-service.c:1393
 msgid "Could not find the openvpn binary."
 msgstr "Nemoguć pronalazak openvpn binarne datoteke."
 
-#: src/nm-openvpn-service.c:1434
+#: src/nm-openvpn-service.c:1441
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "Nevaljani broj ulaza “%s”."
 
-#: src/nm-openvpn-service.c:1454
+#: src/nm-openvpn-service.c:1461
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "Nevaljani protokol “%s”."
 
-#: src/nm-openvpn-service.c:1503
+#: src/nm-openvpn-service.c:1510
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "Nevaljana proxy vrsta “%s”."
 
-#: src/nm-openvpn-service.c:1588
+#: src/nm-openvpn-service.c:1608
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "Nevaljano ping trajanje “%s”."
 
-#: src/nm-openvpn-service.c:1601
+#: src/nm-openvpn-service.c:1621
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "Nevaljano ping-exit trajanje “%s”."
 
-#: src/nm-openvpn-service.c:1614
+#: src/nm-openvpn-service.c:1634
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "Nevaljane ping-restart trajanje “%s”."
 
-#: src/nm-openvpn-service.c:1627
+#: src/nm-openvpn-service.c:1647
 #, c-format
 msgid "Invalid connect timeout “%s”."
 msgstr "Nevaljani istek povezivanja “%s”."
 
-#: src/nm-openvpn-service.c:1652
+#: src/nm-openvpn-service.c:1672
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "Nevaljani max-routes argument “%s”."
 
-#: src/nm-openvpn-service.c:1696
+#: src/nm-openvpn-service.c:1716
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "Nevaljana veličina ključa “%s”."
 
-#: src/nm-openvpn-service.c:1768
+#: src/nm-openvpn-service.c:1788
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "Nevaljano podešavanje sa tls-remote i verify-x509-name."
 
-#: src/nm-openvpn-service.c:1781
+#: src/nm-openvpn-service.c:1801
 msgid "Invalid verify-x509-name."
 msgstr "Nevaljano verify-x509-name."
 
-#: src/nm-openvpn-service.c:1804
+#: src/nm-openvpn-service.c:1824
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "Nevaljane sekunde ponovnog pregovaranja “%s”."
 
-#: src/nm-openvpn-service.c:1834
+#: src/nm-openvpn-service.c:1854
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "Nevaljana TUN MTU veličina “%s”."
 
-#: src/nm-openvpn-service.c:1847
+#: src/nm-openvpn-service.c:1867
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "Nevaljana veličina fragmenta “%s”."
 
-#: src/nm-openvpn-service.c:1957
+#: src/nm-openvpn-service.c:1977
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "Nepoznata vrsta povezivanja “%s”."
 
-#: src/nm-openvpn-service.c:1975
+#: src/nm-openvpn-service.c:1995
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "Korisnik “%s” nije pronađen, provjerite NM_OPENVPN_USER."
 
-#: src/nm-openvpn-service.c:1987
+#: src/nm-openvpn-service.c:2007
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "Grupa “%s” nije pronađena, provjerite NM_OPENVPN_GROUP."
 
-#: src/nm-openvpn-service.c:2226
+#: src/nm-openvpn-service.c:2246
 msgid "Unhandled pending authentication."
 msgstr "Nepoznato čekanje ovjere."
 
-#: src/nm-openvpn-service.c:2344
+#: src/nm-openvpn-service.c:2364
 msgid "Don’t quit when VPN connection terminates"
 msgstr "Ne zatvaraj kada se VPN povezivanje prekida"
 
-#: src/nm-openvpn-service.c:2345
+#: src/nm-openvpn-service.c:2365
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Omogući opširno zapisivanje otklanjanja grešaka (može otkriti lozinke)"
 
-#: src/nm-openvpn-service.c:2346
+#: src/nm-openvpn-service.c:2366
 msgid "D-Bus name to use for this instance"
 msgstr "D-Bus naziv za korištenje s ovim primjerkom"
 
-#: src/nm-openvpn-service.c:2372
+#: src/nm-openvpn-service.c:2392
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
