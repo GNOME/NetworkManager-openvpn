@@ -443,7 +443,7 @@ main (int argc, char *argv[])
 	GError *err = NULL;
 	GPtrArray *dns4_list, *dns6_list;
 	GPtrArray *nbns_list;
-	GPtrArray *dns_domains;
+	GPtrArray *dns_domains, *dns_domain_search;
 	struct in_addr temp_addr;
 	int tapdev = -1;
 	char **iter;
@@ -672,6 +672,7 @@ main (int argc, char *argv[])
 
 	/* DNS and WINS servers */
 	dns_domains = g_ptr_array_sized_new (3);
+	dns_domain_search = g_ptr_array_new ();
 	dns4_list = g_ptr_array_new ();
 	dns6_list = g_ptr_array_new ();
 	nbns_list = g_ptr_array_new ();
@@ -699,6 +700,14 @@ main (int argc, char *argv[])
 		else if (   g_str_has_prefix (tmp, "DOMAIN ")
 		         && is_domain_valid (&tmp[NM_STRLEN ("DOMAIN ")]))
 			g_ptr_array_add (dns_domains, &tmp[NM_STRLEN ("DOMAIN ")]);
+		else if (   g_str_has_prefix (tmp, "DOMAIN-SEARCH ")
+		         && is_domain_valid (&tmp[NM_STRLEN ("DOMAIN-SEARCH ")]))
+			g_ptr_array_add (dns_domain_search, &tmp[NM_STRLEN ("DOMAIN-SEARCH ")]);
+	}
+
+	/* if DOMAIN and DOMAIN-SEARCH are intermixed, make the latter follow the former */
+	for (i = 0; i < dns_domain_search->len; i++) {
+		g_ptr_array_add (dns_domains, g_ptr_array_index (dns_domain_search, i));
 	}
 
 	if (dns4_list->len) {
@@ -730,6 +739,7 @@ main (int argc, char *argv[])
 	g_ptr_array_unref (dns4_list);
 	g_ptr_array_unref (dns6_list);
 	g_ptr_array_unref (nbns_list);
+	g_ptr_array_unref (dns_domain_search);
 	g_ptr_array_unref (dns_domains);
 
 	/* Tunnel MTU */
