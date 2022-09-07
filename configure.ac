@@ -19,7 +19,6 @@ AC_PROG_CC
 AC_GNU_SOURCE
 AM_PROG_CC_C_O
 AC_PROG_INSTALL
-LT_INIT([disable-static])
 AC_PATH_PROG(GLIB_COMPILE_RESOURCES, glib-compile-resources)
 
 AC_CHECK_PROG([has_file], file, yes, no)
