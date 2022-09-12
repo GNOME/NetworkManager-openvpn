@@ -35,6 +35,7 @@
     - tar xJf NetworkManager-openvpn-*.tar.xz
     - cd NetworkManager-openvpn-*/
     - ./configure $EXTRA_CONFIGURE_FLAGS
+      --enable-more-warnings=error
       --disable-silent-rules
     - make -j
     - make -j check
