@@ -1264,6 +1264,118 @@ test_args_parse_line (void)
 
 /*****************************************************************************/
 
+static void test_version(void) {
+	const struct {
+		guint version;
+		char *const data;
+		} test_data[] = {
+	{
+		.version = 20507,
+		.data =
+			"OpenVPN 2.5.7 x86_64-redhat-linux-gnu [SSL (OpenSSL)] "
+			"[LZO] "
+			"[LZ4] "
+			"[EPOLL] [PKCS11] [MH/PKTINFO] [AEAD] built on May 31 "
+			"2022\n"
+			"library versions: OpenSSL 3.0.5 5 Jul 2022, LZO 2.10\n"
+			"Originally developed by James Yonan\n"
+			"Copyright (C) 2002-2022 OpenVPN Inc <sales@openvpn.net>\n"
+			"Compile time defines: enable_async_push=yes "
+			"enable_comp_stub=no "
+			"enable_crypto_ofb_cfb=yes enable_debug=yes "
+			"enable_def_auth=yes "
+			"enable_dependency_tracking=no enable_dlopen=unknown "
+			"enable_dlopen_self=unknown "
+			"enable_dlopen_self_static=unknown "
+			"enable_fast_install=needless enable_fragment=yes "
+			"enable_iproute2=no "
+			"enable_libtool_lock=yes enable_lz4=yes enable_lzo=yes "
+			"enable_management=yes enable_multihome=yes "
+			"enable_pam_dlopen=no "
+			"enable_pedantic=no enable_pf=yes enable_pkcs11=yes "
+			"enable_plugin_auth_pam=yes enable_plugin_down_root=yes "
+			"enable_plugins=yes enable_port_share=yes "
+			"enable_selinux=yes "
+			"enable_shared=yes enable_shared_with_static_runtimes=no "
+			"enable_silent_rules=yes enable_small=no enable_static=yes "
+			"enable_strict=no enable_strict_options=no "
+			"enable_systemd=yes "
+			"enable_werror=no enable_win32_dll=yes "
+			"enable_x509_alt_username=yes "
+			"with_aix_soname=aix with_crypto_library=openssl "
+			"with_gnu_ld=yes "
+			"with_mem_check=no with_openssl_engine=auto "
+			"with_sysroot=no\n"
+			"",
+		},
+		{
+		.version = 20310,
+		.data =
+			"OpenVPN 2.3.10 x86_64-pc-linux-gnu [SSL (OpenSSL)] [LZO] "
+			"[EPOLL] [PKCS11] [MH] [IPv6] built on Jan  9 2019\n"
+			"library versions: OpenSSL 1.0.2g  1 Mar 2016, LZO 2.08\n"
+			"Originally developed by James Yonan\n"
+			"Copyright (C) 2002-2010 OpenVPN Technologies, Inc. "
+			"<sales@openvpn.net>\n"
+			"Compile time defines: enable_crypto=yes "
+			"enable_crypto_ofb_cfb=yes enable_debug=yes "
+			"enable_def_auth=yes enable_dependency_tracking=no "
+			"enable_dlopen=unknown enable_dlopen_self=unknown "
+			"enable_dlopen_self_static=unknown enable_fast_install=yes "
+			"enable_fragment=yes enable_http_proxy=yes "
+			"enable_iproute2=yes enable_libtool_lock=yes "
+			"enable_lzo=yes enable_lzo_stub=no "
+			"enable_maintainer_mode=no enable_management=yes "
+			"enable_multi=yes enable_multihome=yes "
+			"enable_pam_dlopen=no enable_password_save=yes "
+			"enable_pedantic=no enable_pf=yes enable_pkcs11=yes "
+			"enable_plugin_auth_pam=yes enable_plugin_down_root=yes "
+			"enable_plugins=yes enable_port_share=yes "
+			"enable_selinux=no enable_server=yes enable_shared=yes "
+			"enable_shared_with_static_runtimes=no "
+			"enable_silent_rules=no enable_small=no enable_socks=yes "
+			"enable_ssl=yes enable_static=yes enable_strict=no "
+			"enable_strict_options=no enable_systemd=yes "
+			"enable_win32_dll=yes enable_x509_alt_username=yes "
+			"with_crypto_library=openssl with_gnu_ld=yes "
+			"with_mem_check=no with_plugindir='${prefix}/lib/openvpn' "
+			"with_sysroot=no\n"
+			"",
+		},
+	};
+	int i;
+
+	for (i = 0; i < (int)G_N_ELEMENTS(test_data); i++) {
+		g_assert_cmpint(test_data[i].version, ==,
+		                nmovpn_version_parse(test_data[i].data));
+	}
+
+#define _test_version(v_x, v_y, v_z, encoded) \
+	G_STMT_START { \
+		const guint _encoded = (encoded); \
+		const guint _v_x = (v_x); \
+		const guint _v_y = (v_y); \
+		const guint _v_z = (v_z); \
+		guint _v2_x; \
+		guint _v2_y; \
+		guint _v2_z; \
+		\
+		g_assert_cmpint(nmovpn_version_encode(_v_x, _v_y, _v_z), ==, _encoded); \
+		\
+		nmovpn_version_decode(_encoded, &_v2_x, &_v2_y, &_v2_z); \
+		g_assert_cmpint(_v_x, ==, _v2_x); \
+		g_assert_cmpint(_v_y, ==, _v2_y); \
+		g_assert_cmpint(_v_z, ==, _v2_z); \
+	} G_STMT_END
+
+	_test_version(1, 5, 88, 10588);
+	_test_version(2, 5, 0, 20500);
+	_test_version(2, 5, 4, 20504);
+	_test_version(3, 0, 0, 30000);
+}
+
+/*****************************************************************************/
+
 NMTST_DEFINE ();
 
 int main (int argc, char **argv)
@@ -1395,6 +1507,8 @@ int main (int argc, char **argv)
 	_add_test_func ("proto-tcp6-client-export", test_export_compare, "proto-tcp6-client.ovpn", "proto-tcp6-client.ovpntest");
 
 	_add_test_func_simple (test_args_parse_line);
+
+	_add_test_func_simple (test_version);
 
 	result = g_test_run ();
 	if (result != EXIT_SUCCESS)

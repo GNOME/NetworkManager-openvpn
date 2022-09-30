@@ -85,14 +85,6 @@ NMOpenvpnPlugin *nm_openvpn_plugin_new (const char *bus_name);
 
 /*****************************************************************************/
 
-typedef enum {
-	OPENVPN_BINARY_VERSION_INVALID,
-	OPENVPN_BINARY_VERSION_UNKNOWN,
-	OPENVPN_BINARY_VERSION_2_3_OR_OLDER,
-	OPENVPN_BINARY_VERSION_2_4_OR_OLDER,
-	OPENVPN_BINARY_VERSION_2_4_OR_NEWER,
-} OpenvpnBinaryVersion;
-
 typedef struct {
 	GPid pid;
 	guint watch_id;
@@ -530,15 +522,13 @@ openvpn_binary_find_exepath (void)
 	return NULL;
 }
 
-static OpenvpnBinaryVersion
+static guint
 openvpn_binary_detect_version (const char *exepath)
 {
 	gs_free char *s_stdout = NULL;
-	const char *s;
 	int exit_code;
-	int n;
 
-	g_return_val_if_fail (exepath && exepath[0] == '/', OPENVPN_BINARY_VERSION_UNKNOWN);
+	g_return_val_if_fail (exepath && exepath[0] == '/', NMOVPN_VERSION_UNKNOWN);
 
 	if (!g_spawn_sync (NULL,
 	                   (char *[]) { (char *) exepath, "--version", NULL },
@@ -550,61 +540,40 @@ openvpn_binary_detect_version (const char *exepath)
 	                   NULL,
 	                   &exit_code,
 	                   NULL))
-		return OPENVPN_BINARY_VERSION_UNKNOWN;
+		return NMOVPN_VERSION_UNKNOWN;
 
 	if (   !WIFEXITED (exit_code)
 	    || !NM_IN_SET(WEXITSTATUS (exit_code), 0, 1)) {
 		/* expect return code 1 (OPENVPN_EXIT_STATUS_USAGE).
 		 * Since 2.5.0, it returns 0. */
-		return OPENVPN_BINARY_VERSION_UNKNOWN;
+		return NMOVPN_VERSION_UNKNOWN;
 	}
 
-	/* the output for --version starts with title_string, which starts with PACKAGE_STRING,
-	 * which looks like "OpenVPN 2.#...". Do a strict parsing here... */
-	if (   !s_stdout
-	    || !g_str_has_prefix (s_stdout, "OpenVPN 2."))
-		return OPENVPN_BINARY_VERSION_UNKNOWN;
-	s = &s_stdout[NM_STRLEN ("OpenVPN 2.")];
-
-	if (!g_ascii_isdigit (s[0]))
-		return OPENVPN_BINARY_VERSION_UNKNOWN;
-
-	n = 0;
-	do {
-		if (n > G_MAXINT / 100)
-			return OPENVPN_BINARY_VERSION_UNKNOWN;
-		n = (n * 10) + (s[0] - '0');
-	} while (g_ascii_isdigit ((++s)[0]));
-
-	if (n <= 3)
-		return OPENVPN_BINARY_VERSION_2_3_OR_OLDER;
-	if (n <= 4)
-		return OPENVPN_BINARY_VERSION_2_4_OR_OLDER;
-
-	return OPENVPN_BINARY_VERSION_2_4_OR_NEWER;
+	return nmovpn_version_parse (s_stdout);
 }
 
-static OpenvpnBinaryVersion
-openvpn_binary_detect_version_cached (const char *exepath, OpenvpnBinaryVersion *cached)
+static guint
+openvpn_binary_detect_version_cached (const char *exepath, guint *cached)
 {
-	if (G_UNLIKELY (*cached == OPENVPN_BINARY_VERSION_INVALID)) {
-		const char *str;
+	guint v;
 
-		*cached = openvpn_binary_detect_version (exepath);
-		switch (*cached) {
-		case OPENVPN_BINARY_VERSION_2_3_OR_OLDER:
-			str = "2.3 or older";
-			break;
-		case OPENVPN_BINARY_VERSION_2_4_OR_NEWER:
-			str = "2.4 or newer";
-			break;
-		default:
-			str = "unknown";
-			break;
+	v = *cached;
+	if (G_UNLIKELY (v == NMOVPN_VERSION_INVALID)) {
+		v = openvpn_binary_detect_version (exepath);
+		if (v >= NMOVPN_VERSION_UNKNOWN) {
+			v = NMOVPN_VERSION_UNKNOWN;
+			_LOGI ("detected openvpn version UNKNOWN, assume max");
+		} else {
+			guint v_x;
+			guint v_y;
+			guint v_z;
+
+			nmovpn_version_decode (v, &v_x, &v_y, &v_z);
+			_LOGI ("detected openvpn version %u.%u.%u", v_x, v_y, v_z);
 		}
-		_LOGI ("detected openvpn version %s", str);
+		*cached = v;
 	}
-	return *cached;
+	return v;
 }
 
 /*****************************************************************************/
@@ -1352,7 +1321,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	NMSettingVpn *s_vpn;
 	const char *connection_type;
 	gint64 v_int64;
-	OpenvpnBinaryVersion openvpn_binary_version = OPENVPN_BINARY_VERSION_INVALID;
+	guint openvpn_binary_version = NMOVPN_VERSION_INVALID;
 	guint num_remotes = 0;
 	gs_free char *cmd_log = NULL;
 	NMOvpnComp comp;
@@ -1547,7 +1516,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version);
 
 	if (nmovpn_arg_is_set (allow_compression)) {
-		if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_4_OR_OLDER) {
+		if (openvpn_binary_version < nmovpn_version_encode (2, 5, 0)) {
 			_LOGW ("\"allow-compression\" is only supported in OpenVPN 2.5 and later versions");
 		} else {
 			args_add_strv (args, "--allow-compression", allow_compression);
@@ -1559,7 +1528,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		case NMOVPN_COMP_DISABLED:
 			break;
 		case NMOVPN_COMP_LZO:
-			if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
+			if (openvpn_binary_version < nmovpn_version_encode (2, 4, 0))
 				args_add_strv (args, "--comp-lzo", "yes");
 			else
 				args_add_strv (args, "--compress", "lzo");
@@ -1567,7 +1536,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		case NMOVPN_COMP_LZ4:
 		case NMOVPN_COMP_LZ4_V2:
 		case NMOVPN_COMP_AUTO:
-			if (openvpn_binary_version == OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
+			if (openvpn_binary_version < nmovpn_version_encode (2, 4, 0))
 				_LOGW ("\"compress\" option supported only by OpenVPN >= 2.4");
 
 			if (comp == NMOVPN_COMP_LZ4)
@@ -1579,7 +1548,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 			break;
 		case NMOVPN_COMP_LEGACY_LZO_DISABLED:
 		case NMOVPN_COMP_LEGACY_LZO_ADAPTIVE:
-			if (openvpn_binary_version != OPENVPN_BINARY_VERSION_2_3_OR_OLDER)
+			if (openvpn_binary_version >= nmovpn_version_encode (2, 4, 0))
 				_LOGW ("\"comp-lzo\" is deprecated and will be removed in future OpenVPN releases");
 
 			args_add_strv (args, "--comp-lzo",
@@ -1767,7 +1736,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
 	if (nmovpn_arg_is_set (tmp)) {
-		if (openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) == OPENVPN_BINARY_VERSION_2_3_OR_OLDER) {
+		if (openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) < nmovpn_version_encode (2, 4, 0)) {
 			_LOGW ("the tls-remote option is deprecated and removed from OpenVPN 2.4. Update your connection to use verify-x509-name (for example, \"verify-x509-name=name:%s\")", tmp);
 			args_add_strv (args, "--tls-remote", tmp);
 		} else {

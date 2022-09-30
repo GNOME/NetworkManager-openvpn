@@ -144,4 +144,30 @@ void nmovpn_compression_to_options (NMOvpnComp comp,
                                     const char **comp_lzo,
                                     const char **compress);
 
+/*****************************************************************************/
+
+#define NMOVPN_VERSION_MAX     999999u
+#define NMOVPN_VERSION_UNKNOWN (NMOVPN_VERSION_MAX+1u)
+#define NMOVPN_VERSION_INVALID (NMOVPN_VERSION_MAX+2u)
+
+static inline guint
+nmovpn_version_encode (guint x, guint y, guint z)
+{
+	nm_assert(x <= 99);
+	nm_assert(y <= 99);
+	nm_assert(z <= 99);
+
+	return ((x * 100u + y) * 100u) + z;
+}
+
+static inline void
+nmovpn_version_decode (guint version, guint *out_x, guint *out_y, guint *out_z)
+{
+	*out_x = (version / 10000u);
+	*out_y = (version / 100u) % 100u;
+	*out_z = (version % 100u);
+}
+
+guint nmovpn_version_parse (const char *version_str);
+
 #endif  /* UTILS_H */

@@ -335,3 +335,47 @@ out_fail:
 }
 
 /*****************************************************************************/
+
+guint
+nmovpn_version_parse (const char *version_str)
+{
+	const char *s;
+	guint v_x;
+	guint v_y;
+	guint v_z;
+
+	/* the output for --version starts with title_string, which starts with PACKAGE_STRING,
+	 * which looks like "OpenVPN 2.#...". Do a strict parsing here... */
+	if (   !version_str
+	    || !g_str_has_prefix (version_str, "OpenVPN 2."))
+		return NMOVPN_VERSION_UNKNOWN;
+	s = &version_str[NM_STRLEN ("OpenVPN 2.")];
+
+	if (!g_ascii_isdigit (s[0]))
+		return NMOVPN_VERSION_UNKNOWN;
+
+	v_x = 2;
+
+	v_y = 0;
+	do {
+		if (v_y > G_MAXINT / 100)
+			return NMOVPN_VERSION_UNKNOWN;
+		v_y = (v_y * 10) + (s[0] - '0');
+	} while (g_ascii_isdigit ((++s)[0]));
+	if (v_y > 99)
+		return NMOVPN_VERSION_UNKNOWN;
+
+	v_z = 0;
+	if (s[0] == '.') {
+		s++;
+		do {
+			if (v_z > G_MAXINT / 100)
+				break;
+			v_z = (v_z * 10) + (s[0] - '0');
+		} while (g_ascii_isdigit ((++s)[0]));
+	}
+	if (v_z > 99)
+		v_z = 0;
+
+	return nmovpn_version_encode (v_x, v_y, v_z);
+}
