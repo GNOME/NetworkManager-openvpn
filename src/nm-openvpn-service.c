@@ -1676,6 +1676,22 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, "--data-ciphers");
 
+	if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER) &&
+	    !nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS) &&
+	    openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) >=
+	        nmovpn_version_encode (2, 5, 0)) {
+		/* Since 2.5, openvpn will warn if "cipher" is set but "data-ciphers" doesn't
+		 * contain the cipher. It still used to automatically add the cipher.
+		 * Since 2.6, the cipher is no longer automatically added, which is unlikely
+		 * what the user wants.
+		 *
+		 * We automatically add it, so if the user only sets cipher (e.g. when
+		 * having an old profile or targeting 2.4) it still works. So ciphers
+		 * means something slightly different for the plugin, unless you set
+		 * data-ciphers to anything. */
+		args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_CIPHER, "--data-ciphers");
+	}
+
 	args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_TLS_CIPHER, "--tls-cipher");
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_KEYSIZE);
