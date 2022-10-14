@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
 "POT-Creation-Date: 2022-07-17 13:58+0000\n"
-"PO-Revision-Date: 2022-07-23 22:52+0200\n"
+"PO-Revision-Date: 2022-10-14 16:49+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: \n"
 "Language: ka\n"
@@ -37,7 +37,7 @@ msgstr ""
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:32
 msgid "The advanced options dialog"
-msgstr ""
+msgstr "დამატებთი პარამეტრების ფანჯარა"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:41
 msgid "The NetworkManager Developers"
@@ -70,7 +70,7 @@ msgstr "სერტიფიკატის _პაროლი:"
 
 #: auth-dialog/main.c:251
 msgid "_HTTP proxy password:"
-msgstr ""
+msgstr "_HTTP პროქსის პაროლი:"
 
 #: auth-dialog/main.c:517
 #, c-format
@@ -399,7 +399,7 @@ msgstr "ავთენტიკაცია"
 #: properties/nm-openvpn-dialog.ui:272 properties/nm-openvpn-dialog.ui:383
 #: properties/nm-openvpn-dialog.ui:482
 msgid "CA"
-msgstr ""
+msgstr "CA"
 
 #: properties/nm-openvpn-dialog.ui:285 properties/nm-openvpn-dialog.ui:495
 msgid "User"
@@ -424,11 +424,11 @@ msgstr ""
 
 #: properties/nm-openvpn-dialog.ui:531
 msgid "Remote IP Address"
-msgstr "დაშორებული IP მისამართი:"
+msgstr "დაშორებული IP მისამართი"
 
 #: properties/nm-openvpn-dialog.ui:544
 msgid "Local IP Address"
-msgstr "ლოკალური IP მისამართი:"
+msgstr "ლოკალური IP მისამართი"
 
 #: properties/nm-openvpn-dialog.ui:557
 msgid "Key Direction"
@@ -436,7 +436,7 @@ msgstr ""
 
 #: properties/nm-openvpn-dialog.ui:569 properties/nm-openvpn-editor.c:2713
 msgid "Static Key"
-msgstr ""
+msgstr "სტატიკური გასაღები"
 
 #: properties/nm-openvpn-dialog.ui:581
 msgid ""
@@ -471,7 +471,7 @@ msgstr "ტიპი"
 
 #: properties/nm-openvpn-dialog.ui:708
 msgid "Select an authentication mode."
-msgstr ""
+msgstr "აირჩიეთ ავთენტიკაციის რეჟიმი."
 
 #: properties/nm-openvpn-dialog.ui:765
 msgid "Ad_vanced…"
@@ -631,7 +631,7 @@ msgstr ""
 
 #: properties/nm-openvpn-dialog.ui:1363
 msgid "IPv6 tun link"
-msgstr ""
+msgstr "IPv6 tun link"
 
 #: properties/nm-openvpn-dialog.ui:1367
 msgid ""
@@ -1150,19 +1150,19 @@ msgstr ""
 
 #: properties/nm-openvpn-editor.c:1878
 msgid "ping-exit"
-msgstr ""
+msgstr "ping-exit"
 
 #: properties/nm-openvpn-editor.c:1880
 msgid "ping-restart"
-msgstr ""
+msgstr "ping-restart"
 
 #: properties/nm-openvpn-editor.c:2675
 msgid "Certificates (TLS)"
-msgstr ""
+msgstr "სერტიფიკატები (TLS)"
 
 #: properties/nm-openvpn-editor.c:2700
 msgid "Password with Certificates (TLS)"
-msgstr ""
+msgstr "პაროლი სერთიფიკატებით (TLS)"
 
 #: properties/nm-openvpn-editor.c:2880
 msgid "could not load UI widget"
@@ -1170,7 +1170,7 @@ msgstr ""
 
 #: properties/nm-openvpn-editor-plugin.c:38
 msgid "OpenVPN"
-msgstr ""
+msgstr "OpenVPN"
 
 #: properties/nm-openvpn-editor-plugin.c:39
 msgid "Compatible with the OpenVPN server."
@@ -1179,28 +1179,31 @@ msgstr ""
 #: shared/nm-utils/nm-shared-utils.c:946
 #, c-format
 msgid "object class '%s' has no property named '%s'"
-msgstr ""
+msgstr "ობიექტის კლასს '%s ' თვისება სახელით'%s' არ გააჩნია"
 
 #: shared/nm-utils/nm-shared-utils.c:953
 #, c-format
 msgid "property '%s' of object class '%s' is not writable"
-msgstr ""
+msgstr "თვისება '%s' ობიექტის კლასისთვის '%s' ჩაწერადი არაა"
 
 #: shared/nm-utils/nm-shared-utils.c:960
 #, c-format
 msgid ""
 "construct property \"%s\" for object '%s' can't be set after construction"
 msgstr ""
+"აგებული თვისების \"%s\" დაყენება ობიექტის (\"%s\") აგების შემდეგ შეუძლებელია"
 
 #: shared/nm-utils/nm-shared-utils.c:968
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
 msgstr ""
+"'%s::%s' თვისების სწორ სახელს არ წარმოადგენს; '%s' GObject-ის ქვეტიპი არაა"
 
 #: shared/nm-utils/nm-shared-utils.c:977
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
 msgstr ""
+"თვისების (%s) ტიპისთვის '%s' ტიპის '%s' მნიშვნელობიდან დაყენების შეცდომა"
 
 #: shared/nm-utils/nm-shared-utils.c:988
 #, c-format
@@ -1208,11 +1211,13 @@ msgid ""
 "value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
 "type '%s'"
 msgstr ""
+"მნიშვნელობა '%s' ტიპისთვის '%s' არასწორია ან დიაპაზონს გარეთაა თვისებისთვის "
+"'%s' ტიპისთვის '%s'"
 
 #: shared/nm-utils/nm-vpn-plugin-utils.c:69
 #, c-format
 msgid "unable to get editor plugin name: %s"
-msgstr ""
+msgstr "რედაქტორი დამატების სახელის მიღების პრობლემა: %s"
 
 #: shared/nm-utils/nm-vpn-plugin-utils.c:103
 #, c-format
@@ -1244,11 +1249,11 @@ msgstr ""
 
 #: shared/utils.c:249
 msgid "empty host"
-msgstr ""
+msgstr "ჰოსტი ცარიელია"
 
 #: shared/utils.c:259
 msgid "invalid port"
-msgstr ""
+msgstr "პორტის არასწორი ნომერი"
 
 #: shared/utils.c:270
 msgid "invalid protocol"
@@ -1273,7 +1278,7 @@ msgstr "\"%s\"-ის არასწორი ბულევური თვ�
 #: src/nm-openvpn-service.c:460
 #, c-format
 msgid "unhandled property “%s” type %s"
-msgstr ""
+msgstr "\"%s\"-ის დაუმუშავებელი თვისება. ტიპი %s"
 
 #: src/nm-openvpn-service.c:471
 #, c-format
@@ -1416,7 +1421,7 @@ msgstr ""
 
 #: src/nm-openvpn-service.c:2344
 msgid "Don’t quit when VPN connection terminates"
-msgstr ""
+msgstr "ნუ გახვალ VPN კავშირის შეწყვეტისას"
 
 #: src/nm-openvpn-service.c:2345
 msgid "Enable verbose debug logging (may expose passwords)"
@@ -1424,7 +1429,7 @@ msgstr ""
 
 #: src/nm-openvpn-service.c:2346
 msgid "D-Bus name to use for this instance"
-msgstr ""
+msgstr "ამ გაშვებული ასლისთვის გამოყენებული D-Bus -ის სახელი"
 
 #: src/nm-openvpn-service.c:2372
 msgid ""
