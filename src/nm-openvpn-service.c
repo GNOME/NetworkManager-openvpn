@@ -1318,6 +1318,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	const char *compress;
 	const char *tls_remote = NULL;
 	const char *nm_openvpn_user, *nm_openvpn_group, *nm_openvpn_chroot;
+	const char *cipher;
+	const char *data_ciphers;
 	gs_free char *bus_name = NULL;
 	NMSettingVpn *s_vpn;
 	const char *connection_type;
@@ -1672,24 +1674,71 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		dev_type_is_tap = nm_streq (tmp2, "tap");
 	}
 
-	args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_CIPHER, "--cipher");
+	cipher = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER);
+	data_ciphers = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS);
+	if (cipher && data_ciphers) {
+		/* The profile sets both "cipher" and "data-ciphers". That is probably
+		 * invalid configuration and at most valid with openvpn 2.5, where this
+		 * results in both options set. 2.5 will warn if "--data-ciphers" does
+		 * not contain "--cipher", but that needs to be worked around by the
+		 * user (to set the profile accordingly). */
+		args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, "--data-ciphers");
+		args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_CIPHER, "--cipher");
+	} else if (data_ciphers) {
+		/* The profile only sets "data-ciphers". That only works with openvpn 2.5+.
+		 * We just pass the option on and don't care about "--cipher". */
+		args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, "--data-ciphers");
+	} else if (cipher) {
+		const char *DEFAULT_CIPHERS = "AES-256-GCM:AES-128-GCM";
 
-	args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, "--data-ciphers");
+		/* The profile only sets "cipher". This needs special handling to work with various
+		 * versions of openvpn... */
+		if (openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) <
+		        nmovpn_version_encode (2, 5, 0) ||
+		    openvpn_binary_version == NMOVPN_VERSION_UNKNOWN) {
+			/* Before 2.5 (or on failure to detect the version) we just set the "--cipher"
+			 * option. */
+			args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_CIPHER, "--cipher");
+		} else {
+			/* On 2.5:
+			 *     Openvpn will warn if "--cipher" is set but "--data-ciphers" doesn't
+			 *     contain the cipher. Openvpn would still automatically add "cipher" to
+			 *     "data-ciphers".
+			 *
+			 *     In this case, we set "--data-ciphers" to a value that nm-openvpn would
+			 *     likely choose. This suppresses the warning and should result in a working
+			 *     configuration. We augment the "--data-ciphers" with the values that
+			 *     openvpn would choose by default.
+			 *
+			 *     If the user doesn't like this, the workaround is to set "data-ciphers"
+			 *     correctly.
+			 *
+			 * On 2.6+:
+			 *     Openvpn will probably ignore the "--cipher" option (unless you set
+			 *     "compat-mode=2.4", which we don't.
+			 *
+			 *     In any case, to get a working setup we probably need to set "--data-ciphers".
+			 *     Do that. Note that "--data-ciphers" on 2.6 possibly defaults to
+			 *     "AES-256-GCM:AES-128-GCM:CHACHA20-POLY1305". We ignore that and choose
+			 *     the same default as for 2.5.
+			 *
+			 * The behavior is confusing. Whether this really works correctly in all
+			 * cases, is unclear. The workaround is to set "data-ciphers" explicitly
+			 * or report a bug.
+			 **/
+			if (nmovpn_arg_is_set (cipher) &&
+			    !NM_IN_STRSET (cipher, "AES-256-GCM", "AES-128-GCM")) {
+				gs_free char *real_data_ciphers = NULL;
 
-	if (nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CIPHER) &&
-	    !nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS) &&
-	    openvpn_binary_detect_version_cached (openvpn_binary, &openvpn_binary_version) >=
-	        nmovpn_version_encode (2, 5, 0)) {
-		/* Since 2.5, openvpn will warn if "cipher" is set but "data-ciphers" doesn't
-		 * contain the cipher. It still used to automatically add the cipher.
-		 * Since 2.6, the cipher is no longer automatically added, which is unlikely
-		 * what the user wants.
-		 *
-		 * We automatically add it, so if the user only sets cipher (e.g. when
-		 * having an old profile or targeting 2.4) it still works. So ciphers
-		 * means something slightly different for the plugin, unless you set
-		 * data-ciphers to anything. */
-		args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_CIPHER, "--data-ciphers");
+				real_data_ciphers = g_strdup_printf ("%s:%s", cipher, DEFAULT_CIPHERS);
+				args_add_strv (args, "--data-ciphers", real_data_ciphers);
+			} else {
+				/* actually, cipher is either "" or set to one of the default values.
+				 * We don't augment "--data-ciphers", but we still set it explicitly
+				 * to the default from nm-openvpn. */
+				args_add_strv (args, "--data-ciphers", DEFAULT_CIPHERS);
+			}
+		}
 	}
 
 	args_add_vpn_data (args, s_vpn, NM_OPENVPN_KEY_TLS_CIPHER, "--tls-cipher");
