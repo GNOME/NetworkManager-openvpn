@@ -2310,7 +2310,7 @@ static gboolean
 signal_handler (gpointer user_data)
 {
 	g_main_loop_quit (user_data);
-	return G_SOURCE_REMOVE;
+	return G_SOURCE_CONTINUE;
 }
 
 static void
