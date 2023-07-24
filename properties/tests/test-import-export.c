@@ -222,6 +222,7 @@ test_password_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, "AES-256-CBC");
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -316,6 +317,7 @@ test_tls_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -364,6 +366,7 @@ test_tls_import_2 (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -409,6 +412,7 @@ test_tls_import_3 (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -458,6 +462,7 @@ test_tls_import_4 (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -531,6 +536,7 @@ test_tls_inline_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -584,6 +590,7 @@ test_pkcs12_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -626,6 +633,7 @@ test_pkcs12_with_ca_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -695,6 +703,7 @@ test_static_key_import (gconstpointer test_data)
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, "10.8.0.2");
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, "10.8.0.1");
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -807,6 +816,7 @@ test_proxy_http_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, "AES-256-CBC");
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -872,6 +882,7 @@ test_proxy_http_with_auth_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, "AES-256-CBC");
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -911,6 +922,7 @@ test_proxy_socks_import (void)
 	_check_item (s_vpn, NM_OPENVPN_KEY_TA_DIR, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_CIPHER, "AES-256-CBC");
 	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, NULL);
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_REMOTE_IP, NULL);
 	_check_item (s_vpn, NM_OPENVPN_KEY_AUTH, NULL);
@@ -1186,6 +1198,21 @@ test_proto_tcp6_client_import (void)
 	s_vpn = nm_connection_get_setting_vpn (connection);
 
 	_check_item (s_vpn, NM_OPENVPN_KEY_PROTO_TCP, "yes");
+}
+
+static void
+test_data_ciphers_fallback_import (void)
+{
+	_CREATE_PLUGIN (plugin);
+	gs_unref_object NMConnection *connection = NULL;
+	NMSettingVpn *s_vpn;
+
+	connection = get_basic_connection (plugin, SRCDIR, "data-ciphers-fallback.ovpn");
+
+	s_vpn = _get_setting_vpn (connection);
+
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS, "AES-256-CBC");
+	_check_item (s_vpn, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK, "AES-128-CBC");
 }
 
 /*****************************************************************************/
@@ -1517,6 +1544,9 @@ int main (int argc, char **argv)
 
 	_add_test_func_simple (test_proto_tcp6_client_import);
 	_add_test_func ("proto-tcp6-client-export", test_export_compare, "proto-tcp6-client.ovpn", "proto-tcp6-client.ovpntest");
+
+	_add_test_func_simple (test_data_ciphers_fallback_import);
+	_add_test_func ("data-ciphers-fallback-export", test_export_compare, "data-ciphers-fallback.ovpn", "data-ciphers-fallback.ovpntest");
 
 	_add_test_func_simple (test_args_parse_line);
 

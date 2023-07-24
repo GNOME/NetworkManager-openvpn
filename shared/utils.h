@@ -38,6 +38,7 @@
 #define NMV_OVPN_TAG_CONNECT_TIMEOUT        "connect-timeout"
 #define NMV_OVPN_TAG_CRL_VERIFY             "crl-verify"
 #define NMV_OVPN_TAG_DATA_CIPHERS           "data-ciphers"
+#define NMV_OVPN_TAG_DATA_CIPHERS_FALLBACK  "data-ciphers-fallback"
 #define NMV_OVPN_TAG_DEV                    "dev"
 #define NMV_OVPN_TAG_DEV_TYPE               "dev-type"
 #define NMV_OVPN_TAG_EXTRA_CERTS            "extra-certs"
