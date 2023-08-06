@@ -921,17 +921,17 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			}
 			if (!io_data->password) {
 				if (io_data->challenge_text) {
-				    /* If we have challenge_text we must have already authenticated with a password
+					/* If we have challenge_text we must have already authenticated with a password
 
-				    If the OpenVPN dynamic challenge flags include 'E', we should echo the challenge response */
-			            if (strstr(io_data->challenge_flags, "E"))
-				      hints[i++] = NM_OPENVPN_CHALLENGE_RESPONSE_ECHO;
-                                    else
-				      hints[i++] = NM_OPENVPN_CHALLENGE_RESPONSE_NOECHO;
-				    *out_message = io_data->challenge_text;
+					If the OpenVPN dynamic challenge flags include 'E', we should echo the challenge response */
+					if (strstr(io_data->challenge_flags, "E"))
+						hints[i++] = NM_OPENVPN_CHALLENGE_RESPONSE_ECHO;
+					else
+						hints[i++] = NM_OPENVPN_CHALLENGE_RESPONSE_NOECHO;
+					*out_message = io_data->challenge_text;
 				} else {
-				    hints[i++] = NM_OPENVPN_KEY_PASSWORD;
-				    *out_message = _("A password is required.");
+					hints[i++] = NM_OPENVPN_KEY_PASSWORD;
+					*out_message = _("A password is required.");
 				}
 			}
 			if (!username && !io_data->password)
