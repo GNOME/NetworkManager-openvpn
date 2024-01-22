@@ -120,13 +120,14 @@ keyfile_add_entry_info (GKeyFile    *keyfile,
                         const gchar *key,
                         const gchar *value,
                         const gchar *label,
-                        gboolean     is_secret,
+                        gboolean     force_echo,
                         gboolean     should_ask)
 {
 	g_key_file_set_string (keyfile, key, "Value", value);
 	g_key_file_set_string (keyfile, key, "Label", label);
-	g_key_file_set_boolean (keyfile, key, "IsSecret", is_secret);
+	g_key_file_set_boolean (keyfile, key, "IsSecret", TRUE);
 	g_key_file_set_boolean (keyfile, key, "ShouldAsk", should_ask);
+	g_key_file_set_boolean (keyfile, key, "ForceEcho", force_echo);
 }
 
 static void
@@ -150,7 +151,7 @@ eui_no_secrets_required (void)
 	keyfile = g_key_file_new ();
 
 	g_key_file_set_integer (keyfile, UI_KEYFILE_GROUP, "Version", 2);
-	keyfile_add_entry_info (keyfile, NM_OPENVPN_KEY_NOSECRET, "true", "", TRUE, FALSE);
+	keyfile_add_entry_info (keyfile, NM_OPENVPN_KEY_NOSECRET, "true", "", FALSE, FALSE);
 	keyfile_print_stdout (keyfile);
 	g_key_file_unref (keyfile);
 }
@@ -184,28 +185,28 @@ eui_finish (const char *vpn_name,
 	                        NM_OPENVPN_KEY_PASSWORD,
 	                        existing_password ? existing_password : "",
 	                        _("Password"),
-	                        TRUE,
+	                        FALSE,
 	                        need_password && allow_interaction);
 
 	keyfile_add_entry_info (keyfile,
 	                        NM_OPENVPN_KEY_CERTPASS,
 	                        existing_certpass ? existing_certpass : "",
 	                        _("Certificate password"),
-	                        TRUE,
+	                        FALSE,
 	                        need_certpass && allow_interaction);
 
 	keyfile_add_entry_info (keyfile,
 	                        NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,
 	                        existing_proxypass ? existing_proxypass : "",
 	                        _("HTTP proxy password"),
-	                        TRUE,
+	                        FALSE,
 	                        need_proxypass && allow_interaction);
 
 	keyfile_add_entry_info (keyfile,
 	                        NM_OPENVPN_KEY_CHALLENGE_RESPONSE,
 	                        "",
 	                        _("Challenge response"),
-	                        !need_challengeresponse_echo,
+	                        need_challengeresponse_echo,
 	                        need_challengeresponse && allow_interaction);
 
 	keyfile_print_stdout (keyfile);
@@ -415,9 +416,9 @@ get_passwords_required (GHashTable *data,
 				*out_need_certpass = TRUE;
 			else if (strcmp (*iter, NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD) == 0)
 				*out_need_proxypass = TRUE;
-			else if (strcmp (*iter, NM_OPENVPN_CHALLENGE_RESPONSE_NOECHO) == 0)
+			else if (strcmp (*iter, NM_OPENVPN_HINT_CHALLENGE_RESPONSE_NOECHO) == 0)
 				*out_need_challengeresponse = TRUE;
-			else if (strcmp (*iter, NM_OPENVPN_CHALLENGE_RESPONSE_ECHO) == 0) {
+			else if (strcmp (*iter, NM_OPENVPN_HINT_CHALLENGE_RESPONSE_ECHO) == 0) {
 				*out_need_challengeresponse = TRUE;
 				*out_need_challengeresponse_echo = TRUE;
 			}

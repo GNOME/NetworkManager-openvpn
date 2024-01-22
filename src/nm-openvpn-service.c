@@ -926,9 +926,9 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 
 					If the OpenVPN dynamic challenge flags include 'E', we should echo the challenge response */
 					if (strstr(io_data->challenge_flags, "E"))
-						hints[i++] = NM_OPENVPN_CHALLENGE_RESPONSE_ECHO;
+						hints[i++] = NM_OPENVPN_HINT_CHALLENGE_RESPONSE_ECHO;
 					else
-						hints[i++] = NM_OPENVPN_CHALLENGE_RESPONSE_NOECHO;
+						hints[i++] = NM_OPENVPN_HINT_CHALLENGE_RESPONSE_NOECHO;
 					*out_message = io_data->challenge_text;
 				} else {
 					hints[i++] = NM_OPENVPN_KEY_PASSWORD;

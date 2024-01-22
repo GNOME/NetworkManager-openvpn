@@ -99,9 +99,9 @@
 #define NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS "http-proxy-password-flags"
 #define NM_OPENVPN_KEY_CHALLENGE_RESPONSE_FLAGS  "challenge-response-flags"
 
-/* Additional names defined to allow hint to have two 'modes' */
-#define NM_OPENVPN_CHALLENGE_RESPONSE_ECHO       "challenge-response_echo"
-#define NM_OPENVPN_CHALLENGE_RESPONSE_NOECHO     "challenge-response_noecho"
+/* Challenge hints must use the "x-dynamic-challenge(-echo):" prefix to work properly */
+#define NM_OPENVPN_HINT_CHALLENGE_RESPONSE_ECHO   "x-dynamic-challenge-echo:challenge-response"
+#define NM_OPENVPN_HINT_CHALLENGE_RESPONSE_NOECHO "x-dynamic-challenge:challenge-response"
 
 /* Internal auth-dialog -> service token indicating that no secrets are
  * required for the connection.
