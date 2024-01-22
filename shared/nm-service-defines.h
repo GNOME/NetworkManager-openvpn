@@ -92,17 +92,15 @@
 #define NM_OPENVPN_KEY_PASSWORD                  "password"
 #define NM_OPENVPN_KEY_CERTPASS                  "cert-pass"
 #define NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD       "http-proxy-password"
-
-#define NM_OPENVPN_CHALLENGE_RESPONSE            "challenge-response"
-/* Additional names defined to allow hint to have two 'modes' */
-#define NM_OPENVPN_CHALLENGE_RESPONSE_ECHO       "challenge-response_echo"
-#define NM_OPENVPN_CHALLENGE_RESPONSE_NOECHO     "challenge-response_noecho"
-
+#define NM_OPENVPN_KEY_CHALLENGE_RESPONSE        "challenge-response"
 
 #define NM_OPENVPN_KEY_PASSWORD_FLAGS            "password-flags"
 #define NM_OPENVPN_KEY_CERTPASS_FLAGS            "cert-pass-flags"
 #define NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS "http-proxy-password-flags"
 
+/* Additional names defined to allow hint to have two 'modes' */
+#define NM_OPENVPN_CHALLENGE_RESPONSE_ECHO       "challenge-response_echo"
+#define NM_OPENVPN_CHALLENGE_RESPONSE_NOECHO     "challenge-response_noecho"
 
 /* Internal auth-dialog -> service token indicating that no secrets are
  * required for the connection.

@@ -204,7 +204,7 @@ static const ValidProperty valid_secrets[] = {
 	{ NM_OPENVPN_KEY_CERTPASS,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NOSECRET,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,  G_TYPE_STRING, 0, 0, FALSE },
-	{ NM_OPENVPN_CHALLENGE_RESPONSE,       G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CHALLENGE_RESPONSE,   G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
 
@@ -1228,7 +1228,7 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 		memset (io_data->challenge_response, 0, strlen (io_data->challenge_response));
 		g_free (io_data->challenge_response);
 	}
-	io_data->challenge_response = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_CHALLENGE_RESPONSE));
+	io_data->challenge_response = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CHALLENGE_RESPONSE));
 
 	if (io_data->priv_key_pass) {
 		memset (io_data->priv_key_pass, 0, strlen (io_data->priv_key_pass));
