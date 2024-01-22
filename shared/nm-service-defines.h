@@ -97,6 +97,7 @@
 #define NM_OPENVPN_KEY_PASSWORD_FLAGS            "password-flags"
 #define NM_OPENVPN_KEY_CERTPASS_FLAGS            "cert-pass-flags"
 #define NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS "http-proxy-password-flags"
+#define NM_OPENVPN_KEY_CHALLENGE_RESPONSE_FLAGS  "challenge-response-flags"
 
 /* Additional names defined to allow hint to have two 'modes' */
 #define NM_OPENVPN_CHALLENGE_RESPONSE_ECHO       "challenge-response_echo"
