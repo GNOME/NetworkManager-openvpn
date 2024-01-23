@@ -897,7 +897,7 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 		if (!username)
 			username = io_data->default_username;
 
-		if (username != NULL && io_data->password != NULL && io_data->challenge_state_id) {
+		if (username != NULL && io_data->challenge_response) {
 			gs_free char *response = NULL;
 
 			response = g_strdup_printf ("CRV1::%s::%s",
@@ -920,23 +920,21 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 				hints[i++] = NM_OPENVPN_KEY_USERNAME;
 				*out_message = _("A username is required.");
 			}
-			if (!io_data->password) {
-				if (io_data->challenge_text) {
-					/* If we have challenge_text we must have already authenticated with a password
 
-					If the OpenVPN dynamic challenge flags include 'E', we should echo the challenge response */
-					if (strstr(io_data->challenge_flags, "E"))
-						hints[i++] = NM_OPENVPN_HINT_CHALLENGE_RESPONSE_ECHO;
-					else
-						hints[i++] = NM_OPENVPN_HINT_CHALLENGE_RESPONSE_NOECHO;
-					*out_message = io_data->challenge_text;
-				} else {
-					hints[i++] = NM_OPENVPN_KEY_PASSWORD;
-					*out_message = _("A password is required.");
-				}
+			if (io_data->challenge_state_id) {
+				/* If we have a challenge we must have already authenticated with a password */
+				if (strstr (io_data->challenge_flags, "E"))
+					hints[i++] = NM_OPENVPN_HINT_CHALLENGE_RESPONSE_ECHO;
+				else
+					hints[i++] = NM_OPENVPN_HINT_CHALLENGE_RESPONSE_NOECHO;
+				*out_message = io_data->challenge_text;
+			} else if (!io_data->password) {
+				hints[i++] = NM_OPENVPN_KEY_PASSWORD;
+				if (username)
+					*out_message = _ ("A password is required.");
+				else
+					*out_message = _ ("A username and password are required.");
 			}
-			if (!username && !io_data->password)
-				*out_message = _("A username and password are required.");
 		}
 		handled = TRUE;
 	} else if (nm_streq (requested_auth, "Private Key")) {
