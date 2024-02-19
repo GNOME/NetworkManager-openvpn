@@ -1771,6 +1771,8 @@ handle_line_error:
 			                             NULL);
 		}
 	}
+	nm_setting_set_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_CHALLENGE_RESPONSE,
+	                             NM_SETTING_SECRET_FLAG_NOT_SAVED, NULL);
 
 	if (inline_blobs) {
 		GSList *tmp_list = NULL;

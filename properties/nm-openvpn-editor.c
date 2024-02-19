@@ -691,6 +691,9 @@ auth_widget_update_connection (GtkBuilder *builder,
 	} else
 		g_return_val_if_reached (FALSE);
 
+	nm_setting_set_secret_flags (NM_SETTING (s_vpn), NM_OPENVPN_KEY_CHALLENGE_RESPONSE,
+	                             NM_SETTING_SECRET_FLAG_NOT_SAVED, NULL);
+
 	return TRUE;
 }
 

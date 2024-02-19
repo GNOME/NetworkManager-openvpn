@@ -103,6 +103,8 @@ typedef struct {
 	char *pending_auth;
 	char *challenge_state_id;
 	char *challenge_text;
+	char *challenge_response;
+	char *challenge_flags;
 	GIOChannel *socket_channel;
 	guint socket_channel_eventid;
 } NMOpenvpnPluginIOData;
@@ -194,6 +196,7 @@ static const ValidProperty valid_properties[] = {
 	{ NM_OPENVPN_KEY_TLS_VERSION_MIN,           G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_VERSION_MIN_OR_HIGHEST,G_TYPE_BOOLEAN, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_TLS_VERSION_MAX,           G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CHALLENGE_RESPONSE_FLAGS,  G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                     G_TYPE_NONE, FALSE }
 };
 
@@ -202,6 +205,7 @@ static const ValidProperty valid_secrets[] = {
 	{ NM_OPENVPN_KEY_CERTPASS,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_NOSECRET,             G_TYPE_STRING, 0, 0, FALSE },
 	{ NM_OPENVPN_KEY_HTTP_PROXY_PASSWORD,  G_TYPE_STRING, 0, 0, FALSE },
+	{ NM_OPENVPN_KEY_CHALLENGE_RESPONSE,   G_TYPE_STRING, 0, 0, FALSE },
 	{ NULL,                                G_TYPE_NONE, FALSE }
 };
 
@@ -815,7 +819,7 @@ get_detail (const char *input, const char *prefix)
  * CRV1:flags:state_id:username:text
  */
 static gboolean
-parse_challenge (const char *failure_reason, char **challenge_state_id, char **challenge_text)
+parse_challenge (const char *failure_reason, char **challenge_state_id, char **challenge_text, char **challenge_flags)
 {
 	const char *colon[4];
 
@@ -839,6 +843,7 @@ parse_challenge (const char *failure_reason, char **challenge_state_id, char **c
 	if (!colon[3])
 		return FALSE;
 
+	*challenge_flags = g_strndup (colon[0] + 1, colon[1] - colon[0] - 1);
 	*challenge_state_id = g_strndup (colon[1] + 1, colon[2] - colon[1] - 1);
 	*challenge_text = g_strdup (colon[3] + 1);
 	return TRUE;
@@ -892,12 +897,12 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 		if (!username)
 			username = io_data->default_username;
 
-		if (username != NULL && io_data->password != NULL && io_data->challenge_state_id) {
+		if (username != NULL && io_data->challenge_response) {
 			gs_free char *response = NULL;
 
 			response = g_strdup_printf ("CRV1::%s::%s",
 			                            io_data->challenge_state_id,
-			                            io_data->password);
+			                            io_data->challenge_response);
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
 			                 username,
@@ -915,14 +920,21 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 				hints[i++] = NM_OPENVPN_KEY_USERNAME;
 				*out_message = _("A username is required.");
 			}
-			if (!io_data->password) {
-				hints[i++] = NM_OPENVPN_KEY_PASSWORD;
-				*out_message = _("A password is required.");
-			}
-			if (!username && !io_data->password)
-				*out_message = _("A username and password are required.");
-			if (io_data->challenge_text)
+
+			if (io_data->challenge_state_id) {
+				/* If we have a challenge we must have already authenticated with a password */
+				if (strstr (io_data->challenge_flags, "E"))
+					hints[i++] = NM_OPENVPN_HINT_CHALLENGE_RESPONSE_ECHO;
+				else
+					hints[i++] = NM_OPENVPN_HINT_CHALLENGE_RESPONSE_NOECHO;
 				*out_message = io_data->challenge_text;
+			} else if (!io_data->password) {
+				hints[i++] = NM_OPENVPN_KEY_PASSWORD;
+				if (username)
+					*out_message = _ ("A password is required.");
+				else
+					*out_message = _ ("A username and password are required.");
+			}
 		}
 		handled = TRUE;
 	} else if (nm_streq (requested_auth, "Private Key")) {
@@ -1046,10 +1058,12 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 			gs_free char *failure_reason = NULL;
 
 			failure_reason = get_detail (str, ">PASSWORD:Verification Failed: 'Auth' ['");
-			if (parse_challenge (failure_reason, &priv->io_data->challenge_state_id, &priv->io_data->challenge_text)) {
-				_LOGD ("Received challenge '%s' for state '%s'",
+			if (parse_challenge (failure_reason, &priv->io_data->challenge_state_id,
+			                     &priv->io_data->challenge_text, &priv->io_data->challenge_flags)) {
+				_LOGD ("Received challenge '%s' for state '%s' with flags '%s'",
 				       priv->io_data->challenge_state_id,
-				       priv->io_data->challenge_text);
+				       priv->io_data->challenge_text,
+				       priv->io_data->challenge_flags);
 			} else
 				_LOGW ("Password verification failed");
 
@@ -1209,6 +1223,11 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 		g_free (io_data->password);
 	}
 	io_data->password = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD));
+	if (io_data->challenge_response) {
+		memset (io_data->challenge_response, 0, strlen (io_data->challenge_response));
+		g_free (io_data->challenge_response);
+	}
+	io_data->challenge_response = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CHALLENGE_RESPONSE));
 
 	if (io_data->priv_key_pass) {
 		memset (io_data->priv_key_pass, 0, strlen (io_data->priv_key_pass));
