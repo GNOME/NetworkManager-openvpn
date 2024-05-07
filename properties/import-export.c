@@ -2204,6 +2204,9 @@ do_export_create (NMConnection *connection, const char *path, GError **error)
 
 	if (NM_IN_STRSET (connection_type,
 	                  NM_OPENVPN_CONTYPE_TLS,
+	                  /* TLS-Auth/Crypt might be used in the control channel even outside
+	                   * of the SSL/TLS mode. */
+	                  NM_OPENVPN_CONTYPE_PASSWORD,
 	                  NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		const char *x509_name, *key;
 
