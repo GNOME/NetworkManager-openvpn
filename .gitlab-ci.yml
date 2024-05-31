@@ -24,7 +24,7 @@
 .dist: &dist
   stage: test
   dependencies:
-    - fedora36_dist
+    - fedora40_dist
   variables:
     GIT_STRATEGY: none
 
@@ -43,9 +43,9 @@
     - make -j uninstall
 
 # Roll the distribution tarball
-fedora36_dist:
+fedora40_dist:
   <<: *fedora_deps
-  image: fedora:36
+  image: fedora:40
   stage: build
   script:
     - dnf -y install
@@ -57,11 +57,6 @@ fedora36_dist:
   artifacts:
     paths:
       - "*.xz"
-
-# Test on a vintage distro without Gtk4
-fedora_28_from_dist:
-  <<: *fedora_from_dist
-  image: fedora:28
 
 # Test on a recent distro
 fedora_latest_from_dist:
