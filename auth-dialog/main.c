@@ -203,7 +203,8 @@ eui_finish (const char *vpn_name,
 	                        need_proxypass && allow_interaction);
 
 	keyfile_add_entry_info (keyfile,
-	                        NM_OPENVPN_KEY_CHALLENGE_RESPONSE,
+	                        need_challengeresponse_echo ? NM_OPENVPN_HINT_CHALLENGE_RESPONSE_ECHO
+	                                                    : NM_OPENVPN_HINT_CHALLENGE_RESPONSE_NOECHO,
 	                        "",
 	                        _("Challenge response"),
 	                        need_challengeresponse_echo,
