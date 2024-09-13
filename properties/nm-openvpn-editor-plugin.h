@@ -34,6 +34,7 @@ typedef struct _OpenvpnEditorPluginClass OpenvpnEditorPluginClass;
 
 struct _OpenvpnEditorPlugin {
 	GObject parent;
+	char *module_path;
 };
 
 struct _OpenvpnEditorPluginClass {
@@ -52,4 +53,3 @@ nm_vpn_editor_factory_openvpn (NMVpnEditorPlugin *editor_plugin,
                                GError **error);
 
 #endif /* __NM_OPENVPN_EDITOR_PLUGIN_H__ */
-
