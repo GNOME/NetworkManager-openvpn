@@ -876,6 +876,13 @@ write_user_pass (GIOChannel *channel,
 	g_free (buf);
 }
 
+static void
+_invalidate_challenge_response (NMOpenvpnPluginIOData *io_data)
+{
+	memset (io_data->challenge_response, 0, strlen (io_data->challenge_response));
+	nm_clear_g_free (&io_data->challenge_response);
+}
+
 static gboolean
 handle_auth (NMOpenvpnPluginIOData *io_data,
              const char *requested_auth,
@@ -897,7 +904,7 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 		if (!username)
 			username = io_data->default_username;
 
-		if (username != NULL && io_data->challenge_response) {
+		if (username != NULL && io_data->challenge_state_id && io_data->challenge_response) {
 			gs_free char *response = NULL;
 
 			response = g_strdup_printf ("CRV1::%s::%s",
@@ -909,11 +916,20 @@ handle_auth (NMOpenvpnPluginIOData *io_data,
 			                 response);
 			nm_clear_g_free (&io_data->challenge_state_id);
 			nm_clear_g_free (&io_data->challenge_text);
+			/* Don't try to reuse OTP challenge responses or we'll loop if the challenge is wrong */
+			_invalidate_challenge_response (io_data);
 		} else if (username != NULL && io_data->password != NULL) {
 			write_user_pass (io_data->socket_channel,
 			                 requested_auth,
 			                 username,
 			                 io_data->password);
+			/* Invalidate any known OTP challenge response after reauthenticating with password
+			 * This is needed if the authenticator on the server side has invalidated a authentication
+			 * session after too many failed challenge responses
+			 */
+			if (io_data->challenge_response) {
+				_invalidate_challenge_response (io_data);
+			}
 		} else {
 			hints = g_new0 (const char *, 3);
 			if (!username) {
@@ -1224,8 +1240,7 @@ update_io_data_from_vpn_setting (NMOpenvpnPluginIOData *io_data,
 	}
 	io_data->password = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_PASSWORD));
 	if (io_data->challenge_response) {
-		memset (io_data->challenge_response, 0, strlen (io_data->challenge_response));
-		g_free (io_data->challenge_response);
+		_invalidate_challenge_response (io_data);
 	}
 	io_data->challenge_response = g_strdup (nm_setting_vpn_get_secret (s_vpn, NM_OPENVPN_KEY_CHALLENGE_RESPONSE));
 
