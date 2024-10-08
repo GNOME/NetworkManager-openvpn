@@ -1061,8 +1061,8 @@ handle_management_socket (NMOpenvpnPlugin *plugin,
 			if (parse_challenge (failure_reason, &priv->io_data->challenge_state_id,
 			                     &priv->io_data->challenge_text, &priv->io_data->challenge_flags)) {
 				_LOGD ("Received challenge '%s' for state '%s' with flags '%s'",
-				       priv->io_data->challenge_state_id,
 				       priv->io_data->challenge_text,
+				       priv->io_data->challenge_state_id,
 				       priv->io_data->challenge_flags);
 			} else
 				_LOGW ("Password verification failed");
