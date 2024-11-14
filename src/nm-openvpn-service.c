@@ -429,7 +429,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("invalid address “%s”"),
 			             key);
-			break;
+			return;
 		case G_TYPE_INT:
 			errno = 0;
 			tmp = strtol (value, NULL, 10);
@@ -441,7 +441,7 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("invalid integer property “%s” or out of range [%d -> %d]"),
 			             key, prop->int_min, prop->int_max);
-			break;
+			return;
 		case G_TYPE_BOOLEAN:
 			if (NM_IN_STRSET (value, "yes", "no"))
 				return; /* valid */
@@ -452,14 +452,14 @@ validate_one_property (const char *key, const char *value, gpointer user_data)
 			             /* Translators: keep "yes" and "no" untranslated! */
 			             _("invalid boolean property “%s” (not yes or no)"),
 			             key);
-			break;
+			return;
 		default:
 			g_set_error (info->error,
 			             NM_VPN_PLUGIN_ERROR,
 			             NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
 			             _("unhandled property “%s” type %s"),
 			             key, g_type_name (prop->type));
-			break;
+			return;
 		}
 	}
 
