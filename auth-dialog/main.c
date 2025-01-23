@@ -35,6 +35,11 @@
 
 #include "utils.h"
 
+#if !GTK_CHECK_VERSION(4,0,0)
+#define gtk_init()			gtk_init(NULL, NULL)
+#define gtk_window_destroy(window)			gtk_widget_destroy(GTK_WIDGET (window))
+#endif
+
 #define KEYRING_UUID_TAG "connection-uuid"
 #define KEYRING_SN_TAG "setting-name"
 #define KEYRING_SK_TAG "setting-key"
@@ -244,7 +249,7 @@ std_ask_user (const char *vpn_name,
 	g_return_val_if_fail (out_new_certpass != NULL, FALSE);
 	g_return_val_if_fail (out_new_proxypass != NULL, FALSE);
 
-	gtk_init (NULL, NULL);
+	gtk_init ();
 
 	dialog = NMA_VPN_PASSWORD_DIALOG (nma_vpn_password_dialog_new (_("Authenticate VPN"), prompt, NULL));
 
@@ -277,7 +282,7 @@ std_ask_user (const char *vpn_name,
 		success = TRUE;
 	}
 
-	gtk_widget_destroy (GTK_WIDGET (dialog));
+	gtk_window_destroy (GTK_WINDOW (dialog));
 	return success;
 }
 
@@ -506,7 +511,9 @@ main (int argc, char *argv[])
 
 	context = g_option_context_new ("- openvpn auth dialog");
 	g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
+#if !GTK_CHECK_VERSION(4,0,0)
 	g_option_context_add_group (context, gtk_get_option_group (FALSE));
+#endif
 	g_option_context_parse (context, &argc, &argv, NULL);
 	g_option_context_free (context);
 
