@@ -11,22 +11,23 @@
 # Stas Solovey <whats_up@tut.by>, 2011.
 # Виктор <victorr2007@yandex.ru>, 2018.
 # Дронова Ю <juliette.tux@gmail.com>, 2021.
+# Дронова Ю <juliette.tux@gmail.com>, 2025.
 msgid ""
 msgstr ""
-"Project-Id-Version: network-manager-openvpn trunk\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
-"issues\n"
-"POT-Creation-Date: 2022-08-29 16:31+0000\n"
-"PO-Revision-Date: 2023-04-15 13:38+0300\n"
-"Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
-"Language-Team: Russian <gnome-cyr@gnome.org>\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/is"
+"sues\n"
+"POT-Creation-Date: 2024-11-12 16:17+0000\n"
+"PO-Revision-Date: 2025-01-27 17:56+0300\n"
+"Last-Translator: Дронова Юлия <juliette.tux@gmail.com>\n"
+"Language-Team: RU\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.2.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 24.08.3\n"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:10
 msgid "OpenVPN client"
@@ -34,111 +35,117 @@ msgstr "Клиент OpenVPN"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:11
 msgid "Client for OpenVPN virtual private networks"
-msgstr "Клиент виртуальных частных сетей OpenVPN"
+msgstr "Клиент для частных виртуальных сетей OpenVPN"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:23
 msgid "Support for configuring OpenVPN virtual private network connections."
-msgstr "Поддержка настройки виртуальных частных сетевых соединений OpenVPN."
+msgstr ""
+"Возможность создания конфигураций виртуальных частных подключений OpenVPN"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:24
 msgid "OpenVPN is a popular and flexible free-software VPN solution."
-msgstr "OpenVPN — популярное и гибкое решение VPN со свободным кодом."
+msgstr ""
+"OpenVPN — это популярное и гибкое решение с открытым кодом для создания подклю"
+"чений VPN"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:32
 msgid "The advanced options dialog"
-msgstr "Диалоговое окно дополнительных параметров"
+msgstr "Диалог расширенных параметров"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:41
 msgid "The NetworkManager Developers"
 msgstr "Разработчики NetworkManager"
 
-#: auth-dialog/main.c:175
+#: auth-dialog/main.c:180
 msgid "Authentication required"
 msgstr "Требуется аутентификация"
 
-#: auth-dialog/main.c:182 properties/nm-openvpn-dialog.ui:336
-#: properties/nm-openvpn-dialog.ui:435 properties/nm-openvpn-editor.c:2733
+#: auth-dialog/main.c:187 properties/nm-openvpn-dialog.ui:336
+#: properties/nm-openvpn-dialog.ui:435 properties/nm-openvpn-editor.c:2737
 msgid "Password"
 msgstr "Пароль"
 
-#: auth-dialog/main.c:189
+#: auth-dialog/main.c:194
 msgid "Certificate password"
 msgstr "Пароль сертификата"
 
-#: auth-dialog/main.c:196
+#: auth-dialog/main.c:201
 msgid "HTTP proxy password"
 msgstr "Пароль прокси HTTP"
 
-#: auth-dialog/main.c:236
+#: auth-dialog/main.c:209
+msgid "Challenge response"
+msgstr "Запрос-ответ"
+
+#: auth-dialog/main.c:249
 msgid "Authenticate VPN"
 msgstr "Аутентификация VPN"
 
-#: auth-dialog/main.c:245
+#: auth-dialog/main.c:258
 msgid "Certificate pass_word:"
-msgstr "_Пароль сертификата:"
+msgstr "Пароль серти_фиката:"
 
-#: auth-dialog/main.c:251
+#: auth-dialog/main.c:264
 msgid "_HTTP proxy password:"
-msgstr "Пароль п_рокси HTTP:"
+msgstr "Пароль _прокси HTTP:"
 
-#: auth-dialog/main.c:517
+#: auth-dialog/main.c:546
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network “%s”."
-msgstr ""
-"Для доступа к виртуальной частной сети «%s» необходимо пройти аутентификацию."
+msgstr "Для доступа к частной виртуальной сети “%s” требуется аутентификация"
 
 #: properties/import-export.c:183
 #, c-format
 msgid "option %s expects between %u and %u argument"
 msgid_plural "option %s expects between %u and %u arguments"
-msgstr[0] "для параметра %s ожидается аргумент между %u и %u"
-msgstr[1] "для параметра %s ожидаются аргументы между %u и %u"
-msgstr[2] "для параметра %s ожидаются аргументы между %u и %u"
+msgstr[0] "для параметра %s ожидалось от %u до %u аргумента"
+msgstr[1] "для параметра %s ожидалось от %u до %u аргументов"
+msgstr[2] "для параметра %s ожидалось от %u до %u аргументов"
 
 #: properties/import-export.c:188
 #, c-format
 msgid "option %s expects no arguments"
-msgstr "параметр %s не ожидает аргументов"
+msgstr "для параметра %s аргументы не ожидаются"
 
 #: properties/import-export.c:190
 #, c-format
 msgid "option %s expects exactly one argument"
 msgid_plural "option %s expects exactly %u arguments"
-msgstr[0] "option %s ожидает ровно %u аргумент"
-msgstr[1] "параметр %s ожидает ровно %u аргумента"
-msgstr[2] "параметр %s ожидает ровно %u аргументов"
+msgstr[0] "для параметра %s ожидается ровно %u аргумент"
+msgstr[1] "для параметра %s ожидается ровно %u аргумента"
+msgstr[2] "для параметра %s ожидается ровно %u аргументов"
 
 #: properties/import-export.c:219
 #, c-format
 msgid "argument %s of “%s” can not be empty"
-msgstr "аргумент %s параметра «%s» не может быть пустым"
+msgstr "аргумент %s из “%s” не может быть пустым"
 
 #: properties/import-export.c:221
 #, c-format
 msgid "argument of “%s” can not be empty"
-msgstr "аргумент параметра «%s» не может быть пустым"
+msgstr "аргумент “%s” не может быть пустым"
 
 #: properties/import-export.c:237
 #, c-format
 msgid "argument %s of “%s” must be UTF-8 encoded"
-msgstr "аргумент %s параметра «%s» должен иметь кодировку UTF-8"
+msgstr "аргумент %s из “%s” должен быть в кодировке UTF-8"
 
 #: properties/import-export.c:239
 #, c-format
 msgid "argument of “%s” must be UTF-8 encoded"
-msgstr "аргумент параметра «%s» должен иметь кодировку UTF-8"
+msgstr "аргумент “%s” должен быть в кодировке UTF-8"
 
 #: properties/import-export.c:263
 #, c-format
 msgid "invalid %uth argument to “%s” where number expected"
-msgstr "недопустимый аргумент %uth для “%s”, ожидалось число"
+msgstr "недействительный аргумент %uth из “%s”, ожидается число"
 
 #. we don't support these special destinations, as they currently cannot be expressed
 #. * in a connection.
 #: properties/import-export.c:304
 #, c-format
 msgid "unsupported %uth argument %s to “%s”"
-msgstr "неподдерживаемый аргумент %uth %s для “%s”"
+msgstr "неподдерживаемый аргумент %uth %s из “%s”"
 
 #. we also don't support specifing a FQDN.
 #: properties/import-export.c:322
@@ -147,76 +154,77 @@ msgid ""
 "unsupported %uth argument to “%s” which looks like a FQDN but only IPv4 "
 "address supported"
 msgstr ""
-"неподдерживаемый аргумент %uth для “%s”, который выглядит как FQDN, но "
-"поддерживаются только адреса IPv4"
+"неподдерживаемый аргумент %uth из “%s”, выглядит, как FQDN, но поддерживаются "
+"только адреса IPv4"
 
 #: properties/import-export.c:329
 #, c-format
 msgid "invalid %uth argument to “%s” where IPv4 address expected"
-msgstr "недопустимый аргумент %uth для “%s”, ожидался адрес IP"
+msgstr ""
+"недействительный аргумент %uth для “%s”, где поддерживаются только адреса IPv4"
 
 #: properties/import-export.c:354
 #, c-format
 msgid "invalid %uth key-direction argument to “%s”"
-msgstr "недопустимый аргумент key-direction %uth для “%s”"
+msgstr "недействительный аргумент направления ключа %uth для “%s”"
 
 #: properties/import-export.c:368
 #, c-format
 msgid "invalid %uth argument to “%s”"
-msgstr "недопустимый аргумент %uth для “%s”"
+msgstr "недействительный аргумент %uth для “%s”"
 
 #: properties/import-export.c:483
 #, c-format
 msgid "unterminated %s at position %lld"
-msgstr "незавершённый %s в позиции %lld"
+msgstr "незавершённый %s по местоположению %lld"
 
 #: properties/import-export.c:484
 msgid "double quote"
-msgstr "двойная кавычка"
+msgstr "двойные кавычки"
 
 #: properties/import-export.c:484
 msgid "single quote"
-msgstr "одинарная кавычка"
+msgstr "одинарные кавычки"
 
 #: properties/import-export.c:500
 #, c-format
 msgid "trailing escaping backslash at position %lld"
-msgstr "конечная зеркалирующая обратная косая черта в позиции %lld"
+msgstr "конечная экранирующая обратная косая черта по местоположению %lld"
 
 #: properties/import-export.c:630
 msgid "unable to read HTTP proxy auth file"
-msgstr "не удаётся прочитать файл аутентификации HTTP-прокси"
+msgstr "невозможно прочитать файл аутентификации HTTP-прокси"
 
 #: properties/import-export.c:648
 msgid "cannot read user/password from HTTP proxy auth file"
 msgstr ""
-"не удалось прочитать пользователя/пароль из файла аутентификации HTTP-прокси"
+"невозможно прочитать пользователя/пароль из файла аутентификации HTTP-прокси"
 
 #: properties/import-export.c:656
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr ""
-"пользователь/пароль из файла аутентификации HTTP-прокси должен быть в "
-"кодировке UTF-8"
+"данные пользователя/пароля в файле аутентификации HTTP-прокси должны быть в ко"
+"дировке UTF-8"
 
 #: properties/import-export.c:718
 #, c-format
 msgid "“%s” is not a directory"
-msgstr "«%s» не является каталогом"
+msgstr "“%s” не является каталогом"
 
 #: properties/import-export.c:726
 #, c-format
 msgid "cannot create “%s” directory"
-msgstr "невозможно создать каталог «%s»"
+msgstr "невозможно создать каталог “%s”"
 
 #: properties/import-export.c:746
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
-msgstr "не удалось записать блоб <%s> из строки %ld в файл (%s)"
+msgstr "невозможно записать blob-объект <%s> из строки %ld в файл (%s)"
 
 #: properties/import-export.c:763
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file “%s”"
-msgstr "не удалось записать блоб <“%s> из строки %ld в файл «%s»"
+msgstr "невозможно записать blob-объект <%s> из строки %ld в файл “%s”"
 
 #: properties/import-export.c:907
 msgid "proto expects protocol type like “udp” or “tcp”"
@@ -230,13 +238,13 @@ msgstr "неподдерживаемый аргумент mtu-disc"
 msgid "unsupported crl-verify argument"
 msgstr "неподдерживаемый аргумент crl-verify"
 
-#: properties/import-export.c:966 properties/import-export.c:1437
+#: properties/import-export.c:966 properties/import-export.c:1446
 msgid "invalid option"
-msgstr "недопустимый параметр"
+msgstr "недействительный параметр"
 
 #: properties/import-export.c:1007
 msgid "allow-compression: invalid argument"
-msgstr "allow-compression: недопустимый аргумент"
+msgstr "allow-compression: недействительный аргумент"
 
 #: properties/import-export.c:1029
 msgid "unsupported comp-lzo argument"
@@ -248,120 +256,120 @@ msgstr "неподдерживаемый аргумент compress"
 
 #: properties/import-export.c:1142
 msgid "remote cannot contain space"
-msgstr "remote не может содержать пробелов"
+msgstr "remote не может содержать пробелы"
 
 #: properties/import-export.c:1146
 msgid "remote cannot contain comma"
-msgstr "remote не может содержать запятую"
+msgstr "remote не может содержать запятые"
 
 #: properties/import-export.c:1157
 msgid "remote expects protocol type like “udp” or “tcp”"
-msgstr "для remote ожидается тип протокола, например “udp” or “tcp”"
+msgstr "для remote ожидается тип протокола, например, “udp” или “tcp”"
 
 #: properties/import-export.c:1269
 #, c-format
 msgid "invalid keyword “%s” in tls-version-min"
-msgstr "недопустимое ключевое слово \"%s\" в tls-version-min"
+msgstr "недействительное ключевое слово “%s” в tls-version-min"
 
-#: properties/import-export.c:1421
+#: properties/import-export.c:1430
 msgid "invalid verify-x509-name type"
-msgstr "недопустимый тип verify-x509-name"
+msgstr "недействительный тип verify-x509-name"
 
-#: properties/import-export.c:1557
+#: properties/import-export.c:1566
 msgid "unsupported blob/xml element"
 msgstr "неподдерживаемый элемент blob/xml"
 
-#: properties/import-export.c:1586
+#: properties/import-export.c:1595
 #, c-format
 msgid "unterminated blob element <%s>"
-msgstr "незавершённый элемент блоб <%s>"
+msgstr "незавершённый элемент блоба <%s>"
 
-#: properties/import-export.c:1642
+#: properties/import-export.c:1651
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "ошибка конфигурации: %s (строка %ld)"
 
-#: properties/import-export.c:1643
+#: properties/import-export.c:1652
 msgid "unknown or unsupported option"
 msgstr "неизвестный или неподдерживаемый параметр"
 
-#: properties/import-export.c:1658
+#: properties/import-export.c:1667
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
-msgstr ""
-"Импортируемый файл не является допустимой конфигурацией клиента OpenVPN"
+msgstr "Импортируемый файл не был действительной конфигурацией клиента OpenVPN"
 
-#: properties/import-export.c:1666
+#: properties/import-export.c:1675
 msgid "The file to import wasn’t a valid OpenVPN configuration (no remote)"
 msgstr ""
-"Импортируемый файл не является допустимой конфигурацией клиента OpenVPN (не "
-"remote)"
+"Импортируемый файл не был действительной конфигурацией OpenVPN (отсутствует re"
+"mote)"
 
-#: properties/import-export.c:1677
+#: properties/import-export.c:1686
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--pkcs12 can not be "
 "used with --cert or --key)"
 msgstr ""
-"Импортируемый файл не является допустимой конфигурацией клиента OpenVPN (--"
-"pkcs12 не может использоваться с --cert или --key)"
+"Импортируемый файл не был действительной конфигурацией OpenVPN (--pkcs12 не мо"
+"жет использоваться с --cert или --key)"
 
-#: properties/import-export.c:1687
+#: properties/import-export.c:1696
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--ca can not be "
 "PKCS#12 format)"
 msgstr ""
-"Импортируемый файл не является допустимой конфигурацией клиента OpenVPN (--"
-"ca не может иметь формат PKCS#12)"
+"Импортируемый файл не был действительной конфигурацией OpenVPN (--ca не может "
+"быть в формате PKCS#12)"
 
-#: properties/import-export.c:1696
+#: properties/import-export.c:1705
 msgid "The file to import wasn’t a valid OpenVPN configuration (missing --ca)"
 msgstr ""
-"Импортируемый файл не является допустимой конфигурацией клиента OpenVPN "
-"(отсутствует --ca)"
+"Импортируемый файл не был действительной конфигурацией OpenVPN (отсутствует --"
+"ca)"
 
-#: properties/import-export.c:1706
+#: properties/import-export.c:1715
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (if you use one of --"
 "cert or --key, you must use them both)"
 msgstr ""
-"Импортируемый файл не является допустимой конфигурацией клиента OpenVPN (--"
-"cert и --key должны использоваться вместе)"
+"Импортируемый файл не был действительной конфигурацией OpenVPN (если используе"
+"тся --cert "
+"или --key, то их нужно использовать вместе)"
 
-#: properties/import-export.c:1717
+#: properties/import-export.c:1726
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--cert can not be "
 "PKCS#12 format.)"
 msgstr ""
-"Импортируемый файл не является допустимой конфигурацией клиента OpenVPN (--"
-"cert не может иметь формат PKCS#12)"
+"Импортируемый файл не был действительной конфигурацией OpenVPN (--cert не може"
+"т быть в формате PKCS#12)"
 
-#: properties/import-export.c:1725
+#: properties/import-export.c:1734
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--key can not be "
 "PKCS#12 format.)"
 msgstr ""
-"Импортируемый файл не является допустимой конфигурацией клиента OpenVPN (--"
-"key не может иметь формат PKCS#12)"
+"Импортируемый файл не был действительной конфигурацией OpenVPN (--key не может"
+" быть в формате PKCS#12)"
 
-#: properties/import-export.c:1977
+#: properties/import-export.c:1988
 msgid "missing path argument"
-msgstr "пропущен аргумент пути"
+msgstr "отсутствует аргумент пути"
 
-#: properties/import-export.c:1987
+#: properties/import-export.c:1998
 msgid "connection is not a valid OpenVPN connection"
-msgstr "соединение не является корректным соединением OpenVPN"
+msgstr "подключение не является действительным подключением OpenVPN"
 
-#: properties/import-export.c:1996
+#: properties/import-export.c:2007
 msgid "connection was incomplete (missing gateway)"
-msgstr "соединение было неполным (отсутствует шлюз)"
+msgstr "подключение было неполным (отсутствует шлюз)"
 
-#: properties/import-export.c:2370
+#: properties/import-export.c:2386
 #, c-format
 msgid "failed to write file: %s"
 msgstr "не удалось записать файл: %s"
 
 #: properties/nm-openvpn-dialog.ui:73
 msgid "Asymmetric"
-msgstr "Асимметричное"
+msgstr "Ассиметричное"
 
 #: properties/nm-openvpn-dialog.ui:76
 msgid "Symmetric"
@@ -385,14 +393,14 @@ msgstr "Автоматически"
 
 #: properties/nm-openvpn-dialog.ui:99
 msgid "LZO disabled (legacy)"
-msgstr "LZO отключено (устарело)"
+msgstr "LZO отключено (старый формат)"
 
 #: properties/nm-openvpn-dialog.ui:102
 msgid "LZO adaptive (legacy)"
-msgstr "Адаптивный LZO (устарело)"
+msgstr "Адаптивный LZO (старый формат)"
 
-#: properties/nm-openvpn-dialog.ui:126 properties/nm-openvpn-editor.c:377
-#: properties/nm-openvpn-editor.c:1014 properties/nm-openvpn-editor.c:1819
+#: properties/nm-openvpn-dialog.ui:126 properties/nm-openvpn-editor.c:379
+#: properties/nm-openvpn-editor.c:1019 properties/nm-openvpn-editor.c:1824
 msgid "None"
 msgstr "Нет"
 
@@ -422,7 +430,7 @@ msgstr "Да"
 
 #: properties/nm-openvpn-dialog.ui:182 properties/nm-openvpn-dialog.ui:1595
 msgid "General"
-msgstr "Общие"
+msgstr "Общее"
 
 #: properties/nm-openvpn-dialog.ui:204
 msgid "_Gateway"
@@ -435,10 +443,11 @@ msgid ""
 "delimiters).\n"
 "config: remote"
 msgstr ""
-"Список удалённых шлюзов с необязательным указанием порта и протокола "
-"(например,  ovpn.corp.com:1234:tcp). Чтобы перечислить несколько шлюзов, "
-"разделяйте их запятыми или пробелами.\n"
-"config: remote"
+"Удалённые шлюзы, с необязательным указанием порта и протокола (например: ovpn."
+"corp.com:1234:tcp). "
+"Для избыточности можно указать несколько хостов (в качестве разделителя исполь"
+"зовать запятые или пробелы).\n"
+"параметр файла конфигурации: remote"
 
 #: properties/nm-openvpn-dialog.ui:250
 msgid "Authentication"
@@ -447,7 +456,7 @@ msgstr "Аутентификация"
 #: properties/nm-openvpn-dialog.ui:285 properties/nm-openvpn-dialog.ui:396
 #: properties/nm-openvpn-dialog.ui:495
 msgid "CA"
-msgstr "CA"
+msgstr "ЦС"
 
 #: properties/nm-openvpn-dialog.ui:298 properties/nm-openvpn-dialog.ui:508
 msgid "User"
@@ -462,8 +471,8 @@ msgid ""
 "Password passed to OpenVPN when prompted for it.\n"
 "config: auth-user-pass"
 msgstr ""
-"Пароль, который будет передан OpenVPN.\n"
-"config: ifconfig <l> <rn>"
+"Пароль передаётся в OpenVPN по его запросу.\n"
+"параметр файла конфигурации: auth-user-pass"
 
 #: properties/nm-openvpn-dialog.ui:375 properties/nm-openvpn-dialog.ui:474
 msgid ""
@@ -471,23 +480,24 @@ msgid ""
 "the system user that activates the connection.\n"
 "config: auth-user-pass"
 msgstr ""
-"Имя пользователя, которое будет передано OpenVPN. Если этот параметр опущен, "
-"используйте имя пользователя системы, который активирует соединение.\n"
-"config: auth-user-pass"
+"Имя пользователя передаётся в OpenVPN по его запросу. Если имя пользователя "
+"опускается, использовать имя системного пользователя, активирующего подключени"
+"е.\n"
+"параметр файла конфигурации: auth-user-pass"
 
 #: properties/nm-openvpn-dialog.ui:544
 msgid "Remote IP Address"
-msgstr "Удалённый IP-адрес"
+msgstr "Удалённый адрес IP"
 
 #: properties/nm-openvpn-dialog.ui:557
 msgid "Local IP Address"
-msgstr "Локальный IP-адрес"
+msgstr "Локальный адрес IP"
 
 #: properties/nm-openvpn-dialog.ui:570
 msgid "Key Direction"
 msgstr "Направление ключа"
 
-#: properties/nm-openvpn-dialog.ui:582 properties/nm-openvpn-editor.c:2760
+#: properties/nm-openvpn-dialog.ui:582 properties/nm-openvpn-editor.c:2764
 msgid "Static Key"
 msgstr "Статический ключ"
 
@@ -496,24 +506,24 @@ msgid ""
 "Pre-shared file for Static Key encryption mode (non-TLS).\n"
 "config: static <file>"
 msgstr ""
-"Общий файл ключа для режима шифрования со статическим ключом (не TLS).\n"
-"config: static <file>"
+"Предопределённый ключ для режима шифрования статического ключа (не TLS).\n"
+"параметр файла конфигурации: static <file>"
 
 #: properties/nm-openvpn-dialog.ui:637
 msgid ""
 "IP address of the remote VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
 msgstr ""
-"IP-адрес удаленной конечной точки VPN.\n"
-"config: ifconfig <l> <rn>"
+"Адрес IP удалённой конечной точки VPN.\n"
+"параметр файла конфигурации: ifconfig <l> <rn>"
 
 #: properties/nm-openvpn-dialog.ui:650
 msgid ""
 "IP address of the local VPN endpoint.\n"
 "config: ifconfig <l> <rn>"
 msgstr ""
-"IP-адрес локального хоста в VPN.\n"
-"config: ifconfig <l> <rn>"
+"Адрес IP локальной конечной точки VPN.\n"
+"параметр файла конфигурации: ifconfig <l> <rn>"
 
 #: properties/nm-openvpn-dialog.ui:663
 msgid ""
@@ -523,13 +533,14 @@ msgid ""
 "you are unsure what value to use, contact your system administrator.\n"
 "config: static <file> [direction]"
 msgstr ""
-"Направление для режима шифрования статического ключа (не TLS).\n"
-"Если используется направление ключа, оно должно быть противоположно "
-"направлению, которое использует вторая сторона. Например, если вторая "
-"сторона использует «1», это соединение должно использовать «0». Если вы не "
-"уверены, какое значение использовать, свяжитесь с системным "
-"администратором.\n"
-"config: static <file> [direction]"
+"Направление режима шифрования статического ключа (не TLS).\n"
+"Если используется направление ключа, оно должно быть противоположным направлен"
+"ию, "
+"используемому на пире VPN. Если, например, пир использует «1», то в подключени"
+"и "
+"должно использоваться «0». Если не уверены в значении, свяжитесь с администрат"
+"ором.\n"
+"параметр файла конфигурации: static <file> [направление]"
 
 #: properties/nm-openvpn-dialog.ui:709
 msgid "Type"
@@ -537,23 +548,23 @@ msgstr "Тип"
 
 #: properties/nm-openvpn-dialog.ui:721
 msgid "Select an authentication mode."
-msgstr "Выберите режим аутентификации."
+msgstr "Выберите способ аутентификации"
 
 #: properties/nm-openvpn-dialog.ui:778
 msgid "Ad_vanced…"
-msgstr "_Дополнительно…"
+msgstr "До_полнительно…"
 
-#: properties/nm-openvpn-dialog.ui:852 properties/nm-openvpn-editor.c:1619
+#: properties/nm-openvpn-dialog.ui:852 properties/nm-openvpn-editor.c:1624
 msgid "Not required"
 msgstr "Не требуется"
 
 #: properties/nm-openvpn-dialog.ui:892
 msgid "OpenVPN Advanced Options"
-msgstr "Дополнительные параметры OpenVPN"
+msgstr "Дополнительные возможности OpenVPN"
 
 #: properties/nm-openvpn-dialog.ui:911
 msgid "Advanced Properties"
-msgstr "Дополнительные свойства"
+msgstr "Дополнительные параметры"
 
 #: properties/nm-openvpn-dialog.ui:919 properties/nm-openvpn-dialog.ui:2844
 #: properties/nm-openvpn-dialog.ui:2897 properties/nm-openvpn-dialog.ui:2951
@@ -567,7 +578,7 @@ msgstr "_Применить"
 
 #: properties/nm-openvpn-dialog.ui:989
 msgid "Use custom gateway p_ort"
-msgstr "Использовать другой _порт шлюза"
+msgstr "Использовать пользовательский _порт шлюза"
 
 #: properties/nm-openvpn-dialog.ui:993 properties/nm-openvpn-dialog.ui:1008
 msgid ""
@@ -575,45 +586,45 @@ msgid ""
 "gateway).\n"
 "config: port"
 msgstr ""
-"Номер порта TCP или UDP для подключения. Это значение будет использоваться "
-"по умолчанию, если для шлюза не указан порт.\n"
-"config: port"
+"Номер порта TCP/UDP пира. (Значение по умолчанию, если для шлюза не назначен п"
+"орт).\n"
+"параметр файла конфигурации: port"
 
 #: properties/nm-openvpn-dialog.ui:1034
 msgid "Use custom _renegotiation interval"
-msgstr "Использовать нестандартный интервал _пересогласования"
+msgstr "Использовать пользовательский интервал повторного согласования"
 
 #: properties/nm-openvpn-dialog.ui:1038 properties/nm-openvpn-dialog.ui:1053
 msgid ""
 "Renegotiate data channel key after the specified number of seconds.\n"
 "config: reneg-sec"
 msgstr ""
-"Создавать новый ключ канала данных с указанной периодичностью (в секундах).\n"
-"config: reneg-sec"
+"Повторное согласование ключа канала данных после определённого числа секунд.\n"
+"параметр файла конфигурации: reneg-sec"
 
 #: properties/nm-openvpn-dialog.ui:1079
-msgid "Data _compression"
-msgstr "Сжатие _данных"
+msgid "_Data compression"
+msgstr "_Сжатие данных"
 
 #: properties/nm-openvpn-dialog.ui:1083
 msgid ""
 "Use fast LZO compression.\n"
 "config: comp-lzo"
 msgstr ""
-"Использовать быстрое сжатие LZO.\n"
-"config: comp-lzo"
+"Использовать быстрое сжатие LZO compression.\n"
+"параметр файла конфигурации: comp-lzo"
 
 #: properties/nm-openvpn-dialog.ui:1098
 msgid ""
 "Enable or disable outgoing traffic compression\n"
 "config: allow-compression asym|yes"
 msgstr ""
-"Включить или отключить сжатие исходящего трафика\n"
-"config: allow-compression asym|yes"
+"Включить или отключить сжатие исходящего трафика.\n"
+"параметр файла конфигурации: allow-compression asym|yes"
 
 #: properties/nm-openvpn-dialog.ui:1146
 msgid "Use a _TCP connection"
-msgstr "Использовать соединение _TCP"
+msgstr "Использовать подключение _TCP"
 
 #: properties/nm-openvpn-dialog.ui:1150
 msgid ""
@@ -622,26 +633,26 @@ msgid ""
 "gateway.)\n"
 "config: proto tcp-client | udp"
 msgstr ""
-"Использовать протокол TCP для связи с другим сервером.\n"
-"(Это значение по умолчанию используется только тогда, когда не указан "
-"протокол для шлюза.\n"
-"config: proto tcp-client | udp"
+"Для обмена данными с удалённым хостом использовать TCP.\n"
+"(Это параметр по умолчанию, используемый только, если для шлюза не указан прот"
+"окол.)\n"
+"параметр файла конфигурации: proto tcp-client | udp"
 
 #: properties/nm-openvpn-dialog.ui:1169
-msgid "Set virtual _device type"
-msgstr "Задать тип виртуального _устройства"
+msgid "Set _virtual device type"
+msgstr "Указать тип _виртуального устройства"
 
 #: properties/nm-openvpn-dialog.ui:1173
 msgid "Explicitly set virtual device type and name (TUN/TAP)."
-msgstr "Явным образом задать тип виртуального устройства и имя (TUN или TAP)."
+msgstr "Явным образом указать тип и имя вирт. устройства (TUN/TAP)."
 
 #: properties/nm-openvpn-dialog.ui:1187
 msgid ""
 "Explicitly set virtual device type (TUN/TAP).\n"
 "config: dev-type tun | tap"
 msgstr ""
-"Явным образом задать тип виртуального устройства (TUN или TAP).\n"
-"config: dev-type tun | tap"
+"Явно указать тип виртуального устройства (TUN/TAP).\n"
+"параметр файла конфигурации: dev-type tun | tap"
 
 #: properties/nm-openvpn-dialog.ui:1207
 msgid " and _name"
@@ -653,14 +664,15 @@ msgid ""
 "“tap”).\n"
 "config: dev <name>"
 msgstr ""
-"Использовать нестандартное имя для виртуального устройства TUN/TAP (вместо "
-"«tun» или «tap»).\n"
-"config: dev <name>"
+"Использовать пользовательское имя для виртуального устройства TUN/TAP "
+"(вместо значений по умолчанию “tun” или “tap”).\n"
+"параметр файла конфигурации: dev <name>"
 
 #: properties/nm-openvpn-dialog.ui:1246
 msgid "Use custom tunnel Maximum Transmission _Unit (MTU)"
 msgstr ""
-"Использовать нестандартный максимальный размер элемента передачи (MTU):"
+"Использовать пользовательское значение Maximum Transmission _Unit (MTU) тоннел"
+"я"
 
 #: properties/nm-openvpn-dialog.ui:1250 properties/nm-openvpn-dialog.ui:1265
 msgid ""
@@ -668,37 +680,37 @@ msgid ""
 "from it.\n"
 "config: tun-mtu"
 msgstr ""
-"Использовать указанное значение в качестве MTU для устройства TUN.\n"
-"config: tun-mtu"
+"В качестве указанного значения взять MTU устройства TUN и получить MTU канала "
+"на его базе.\n"
+"параметр файла конфигурации: tun-mtu"
 
 #: properties/nm-openvpn-dialog.ui:1291
 msgid "Use custom UDP _fragment size"
-msgstr "Использовать нестандартный размер _фрагмента UDP"
+msgstr "Использовать пользовательский размер _фрагментов UDP"
 
 #: properties/nm-openvpn-dialog.ui:1295 properties/nm-openvpn-dialog.ui:1310
 msgid ""
 "Enable internal datagram fragmentation with this maximum size.\n"
 "config: fragment"
 msgstr ""
-"Включить принудительную фрагментацию датаграмм в протоколе UDP, ограничивая "
-"их размер указанным максимальным значением.\n"
-"config: fragment"
+"Включить внутреннюю фрагментацию датаграммы с этим макс. размером.\n"
+"параметр файла конфигурации: fragment"
 
 #: properties/nm-openvpn-dialog.ui:1331
 msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
-msgstr "Ограничить максимальный размер сегмента TCP (MSS) туннеля"
+msgstr "Ограничить значение MSS для TCP"
 
 #: properties/nm-openvpn-dialog.ui:1335
 msgid ""
 "Restrict tunnel TCP MSS.\n"
 "config: mssfix"
 msgstr ""
-"Ограничить максимальный размер сегмента (MSS) для TCP-соединения туннеля\n"
+"Ограничить значение MSS TCP тоннеля.\n"
 "config: mssfix"
 
 #: properties/nm-openvpn-dialog.ui:1348
 msgid "Rando_mize remote hosts"
-msgstr "Выбирать удаленные хосты случайно"
+msgstr "Рандо_мизировать удалённые хосты"
 
 #: properties/nm-openvpn-dialog.ui:1352
 msgid ""
@@ -706,50 +718,51 @@ msgid ""
 "balancing measure.\n"
 "config: remote-random"
 msgstr ""
-"Использовать случайный порядок списка шлюзов (удалённых) как своего рода "
-"базовую меру балансировки нагрузки.\n"
-"параметр: remote-random"
+"Рандомизировать порядок в списке шлюзов (remote) в качестве меры по балансиров"
+"ке "
+"нагрузки.\n"
+"параметр файла конфигурации: remote-random"
 
 #: properties/nm-openvpn-dialog.ui:1365
-msgid "Allow Pull FQDN"
-msgstr "Разрешить извлечение FQDN"
+msgid "Allo_w Pull FQDN"
+msgstr "Разрешить получение FQDN"
 
 #: properties/nm-openvpn-dialog.ui:1369
 msgid ""
 "Allow client to pull DNS names from server\n"
 "config: allow-pull-fqdn"
 msgstr ""
-"Разрешить клиентам извлекать имена DNS с серверов\n"
-"config: allow-pull-fqdn"
+"Разрешить клиенту получать имена DNS с сервера\n"
+"параметр файла конфигурации: allow-pull-fqdn"
 
 #: properties/nm-openvpn-dialog.ui:1382
 msgid "_Prefix remote DNS name with random string"
-msgstr "Использовать _префикс в виде случайных записей для имён удалённых DNS"
+msgstr "Добавлять префикс в виде случайной строки к именам DNS удалённых пиров"
 
 #: properties/nm-openvpn-dialog.ui:1386
 msgid ""
 "Adds a random string to remote DNS name to avoid DNS caching.\n"
 "config: remote-random-hostname"
 msgstr ""
-"Добавление случайных записей к именам удалённых DNS для избежания "
-"кэширования DNS.\n"
-"config: remote-random-hostname"
+"Добавляет случайную строку к имени DNS удалённого пира для избежания кеширован"
+"ия DNS.\n"
+"параметр файла конфигурации: remote-random-hostname"
 
 #: properties/nm-openvpn-dialog.ui:1399
-msgid "IPv6 tun link"
-msgstr "Сетевой интерфейс tun IPv6"
+msgid "_IPv6 tun link"
+msgstr "IPv6 канал tun"
 
 #: properties/nm-openvpn-dialog.ui:1403
 msgid ""
 "Build a tun link capable of forwarding IPv6 traffic\n"
 "config: tun-ipv6"
 msgstr ""
-"Создать сетевой интерфейс tun, способный передавать трафик IPv6\n"
-"config: tun-ipv6"
+"Создать канал tun с возможностью перенаправления трафика IPv6\n"
+"параметр файла конфигурации: tun-ipv6"
 
 #: properties/nm-openvpn-dialog.ui:1421
 msgid "Specify pin_g interval"
-msgstr "Периодичность проверочных пакетов (ping)"
+msgstr "Указать интервал ping"
 
 #: properties/nm-openvpn-dialog.ui:1425 properties/nm-openvpn-dialog.ui:1440
 msgid ""
@@ -757,13 +770,14 @@ msgid ""
 "for at least n seconds.\n"
 "config: ping <n>"
 msgstr ""
-"Отправлять проверочные пакеты (ping) по управляющему каналу TCP/UDP,\n"
-"не было отправлено ни одного пакета за последние N секунд.\n"
-"config: ping <n>"
+"Выполнить ping удалённого пира по каналу управления TCP/UDP, если отправка пак"
+"етов "
+"не выполняется как минимум в течение n секунд.\n"
+"параметр файла конфигурации: ping <n>"
 
 #: properties/nm-openvpn-dialog.ui:1466
 msgid "Specify _exit or restart ping"
-msgstr "Выход или перезапуск по ping"
+msgstr "Завершить или перезапустить ping"
 
 #: properties/nm-openvpn-dialog.ui:1470 properties/nm-openvpn-dialog.ui:1485
 #: properties/nm-openvpn-dialog.ui:1505
@@ -772,14 +786,13 @@ msgid ""
 "packet from remote.\n"
 "config: ping-exit | ping-restart <n>"
 msgstr ""
-"Завершить работу (ping-exit) или перезапустить соединение (ping-restart),\n"
-"если за последние N секунд не пришло ни одного пакета, включая ping,\n"
-"от удалённого хоста.\n"
-"config: ping-exit | ping-restart <n>"
+"Завершить или перезапустить после n секунд, в течение которых удалённый пир "
+"не откликается на ping или не отправляет другие пакеты.\n"
+"параметр файла конфигурации: ping-exit | ping-restart <n>"
 
 #: properties/nm-openvpn-dialog.ui:1526
 msgid "Accept authenticated packets from any address (F_loat)"
-msgstr "Принимать подлинные пакеты с любого адреса (float)"
+msgstr "Принимать пакеты, прошедшие аутентификацию, с любого адреса (F_loat)"
 
 #: properties/nm-openvpn-dialog.ui:1530
 msgid ""
@@ -796,31 +809,35 @@ msgid ""
 "\n"
 "config: float"
 msgstr ""
-"Разрешить удалённому одноранговому узлу изменять свой адрес IP и/или номер "
-"порта, например в связи с DHCP (это изначальное значение, если не "
-"используется --remote). Флаг --float, указанный вместе с --remote, позволяет "
-"сеансу VPN изначально подключаться к одноранговому узлу по известному "
-"адресу, но если пакеты приходят с нового адреса и проходят все проверки "
-"аутентификации, то этот новый адрес берёт управление сеансом. Это удобно при "
-"подключении к одноранговому узлу, имеющему динамический адрес, например, в "
-"случае пользователя dial-in или клиента DHCP.\n"
+"Разрешает удалённому пиру изменять свой адрес IP и/или номер порта, в таких сл"
+"учаях, например, как при использовании "
+"DHCP ( поведение по умолчанию, если не используется --remote). Параметр «--flo"
+"at», указанный вместе с «--remote», позволяет "
+"сеансу OpenVPN изначально подключаться к пиру по известному адресу, но если па"
+"кеты придут с нового адреса и пройдут "
+"все проверки аутентификации, то управлять сеансом станет этот новый адрес.Тако"
+"е поведение бывает удобно, если "
+"подключение выполнено к пиру с динамическим адресом, например, при использован"
+"ии клиента DHCP или пользователя с "
+"телефонным подключением (dial-in).\n"
 "\n"
-"Фактически, --float указывает OpenVPN принимать пакеты с любого адреса, а не "
-"только с того, который был указан с помощью параметра --remote.\n"
+"По сути, параметр «--float» указывает, что OpenVPN должен принимать пакеты, пр"
+"ошедшие аутентификацию, с любого адреса, а "
+"не только с адреса, указанного параметром «--remote».\n"
 "\n"
-"config: float"
+"параметр файла конфигурации: float"
 
 #: properties/nm-openvpn-dialog.ui:1551
-msgid "Specify max routes"
-msgstr "Максимальное число маршрутов"
+msgid "Specify ma_x routes"
+msgstr "Указать _макс. число маршрутов"
 
 #: properties/nm-openvpn-dialog.ui:1555 properties/nm-openvpn-dialog.ui:1570
 msgid ""
 "Specify the maximum number of routes the server is allowed to specify.\n"
 "config: max-routes <n>"
 msgstr ""
-"Серверу разрешено задать не более указанного здесь числа маршрутов.\n"
-"config: max-routes <n>"
+"Настроить максимальное число маршрутов, которое может указать сервер.\n"
+"параметр файла конфигурации: max-routes <n>"
 
 #: properties/nm-openvpn-dialog.ui:1615
 msgid ""
@@ -828,12 +845,13 @@ msgid ""
 "Cipher Block Chaining mode).\n"
 "config: cipher"
 msgstr ""
-"Шифровать пакеты указанным алгоритмом. По умолчанию используется BF-CBC.\n"
-"config: cipher"
+"Шифровать пакеты выбранным алгоритмом шифрования. Алгоритм по умолчанию: BF-CB"
+"C (Blowfish в режиме Cipher Block Chaining).\n"
+"параметр файла конфигурации: cipher"
 
 #: properties/nm-openvpn-dialog.ui:1632
 msgid "Use custom _size of cipher key"
-msgstr "Задать _длину ключа"
+msgstr "Использовать настраиваемый _размер ключа шифрования"
 
 #: properties/nm-openvpn-dialog.ui:1636 properties/nm-openvpn-dialog.ui:1650
 msgid ""
@@ -841,9 +859,9 @@ msgid ""
 "specific size.\n"
 "config: keysize <n>"
 msgstr ""
-"Использовать указанную длину ключа шифрования. Если не указано, используется "
-"стандартная для выбранного шифра длина ключа.\n"
-"config: keysize <n>"
+"Указать своё значение размера ключа шифрования. Если не указано, по умолчанию "
+"используется размер, задаваемый шифром.\n"
+"параметр файла конфигурации: keysize <n>"
 
 #: properties/nm-openvpn-dialog.ui:1665
 msgid ""
@@ -851,33 +869,33 @@ msgid ""
 "is SHA1.\n"
 "config: auth"
 msgstr ""
-"Хеш-функция, используемая в алгоритме HMAC проверки подлинности сообщений. "
-"По умолчанию используется SHA-1.\n"
-"config: auth"
+"Выполнять аутентификацию пакетов с HMAC с помощью алгоритма MD. По умолчанию: "
+"SHA1.\n"
+"параметр файла конфигурации: auth"
 
 #: properties/nm-openvpn-dialog.ui:1684
 msgid "Ci_pher"
-msgstr "Шифр"
+msgstr "Ш_ифр"
 
 #: properties/nm-openvpn-dialog.ui:1699
 msgid "_HMAC Authentication"
-msgstr "Ау_тентификация HMAC"
+msgstr "Аутентификация с помощью _HMAC"
 
 #: properties/nm-openvpn-dialog.ui:1712
 msgid "Disable cipher _negotiation"
-msgstr "Отключить _переговоры о выработке шифра"
+msgstr "Отключить _согласование шифра"
 
 #: properties/nm-openvpn-dialog.ui:1716
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
 msgstr ""
-"Отключить _переговоры о выработке шифра между клиентом и сервером.\n"
-"config: ncp-disable"
+"Отключить согласование шифра между клиентом и сервером.\n"
+"параметр файла конфигурации: ncp-disable"
 
 #: properties/nm-openvpn-dialog.ui:1728
-msgid "Verify CRL from file"
-msgstr "Проверять CRL из файла"
+msgid "Verify CRL from _file"
+msgstr "Использовать файл для подтверждения списков CRL"
 
 #: properties/nm-openvpn-dialog.ui:1732 properties/nm-openvpn-dialog.ui:1758
 msgid ""
@@ -885,13 +903,14 @@ msgid ""
 "(certificate revocation list) is used when a particular key is compromised "
 "but when the overall PKI is still intact."
 msgstr ""
-"Сверять сертификат однорангового узла с указанным файлом в формате PEM. В "
-"случае компрометации конкретного ключа, но в целом нетронутого PKI, "
-"используется список отзыва сертификатов."
+"Сверять сертификаты пира с указанным файлом в формате PEM. Список "
+"отозванных сертификатов (CRL) используется в том случае, когда теряется довери"
+"е к конкретному "
+"ключу, но инфраструктура PKI в целом не затронута."
 
 #: properties/nm-openvpn-dialog.ui:1742
-msgid "Verify CRL from directory"
-msgstr "Проверять CRL из каталога"
+msgid "Verify CRL from _directory"
+msgstr "Использовать каталог для подтверждения списков CRL"
 
 #: properties/nm-openvpn-dialog.ui:1746 properties/nm-openvpn-dialog.ui:1801
 msgid ""
@@ -899,10 +918,11 @@ msgid ""
 "directory must contain files named as revoked serial numbers (the files may "
 "be empty, the contents are never read)."
 msgstr ""
-"Сверять сертификат однорангового узла с файлами в указанном каталоге. "
-"Каталог должен содержать файлы с названиями, отображающими отозванные "
-"серийные номера (файлы могут быть пустыми, содержимое файлов никогда не "
-"просматривается)."
+"Сверять сертификаты пира с файлами в указанном каталоге. Имена файлов в катало"
+"ге "
+"должны дублировать отозванные серийные номера (сами файлы могут быть пустыми, "
+"их "
+"содержимое никогда не читается)."
 
 #: properties/nm-openvpn-dialog.ui:1767 properties/nm-openvpn-editor.c:103
 msgid "(None)"
@@ -914,7 +934,7 @@ msgstr "Безопасность"
 
 #: properties/nm-openvpn-dialog.ui:1889
 msgid "_Subject Match"
-msgstr "Совпадение _объекта"
+msgstr "Соответствие _субъекта"
 
 #: properties/nm-openvpn-dialog.ui:1903
 msgid ""
@@ -923,14 +943,14 @@ msgid ""
 "config: verify-x509-name subject-or-name [mode]\n"
 "config (legacy mode): tls-remote subject-or-name"
 msgstr ""
-"Субъект или общее имя (CN), с которым будет сверяться сертификат сервера.\n"
+"Субъект или общее имя для сверки данных сертификата сервера.\n"
 "\n"
-"onfig: verify-x509-name subject-or-name [mode]\n"
-"config (legacy mode): tls-remote subject-or-name"
+"параметр файла конфигурации: verify-x509-name subject-or-name [mode]\n"
+"параметр файла конфигурации (устаревший режим): tls-remote subject-or-name"
 
 #: properties/nm-openvpn-dialog.ui:1918
-msgid "Server _Certificate Check"
-msgstr "Проверка _сертификата сервера"
+msgid "Server Cert_ificate Check"
+msgstr "Проверка сертификата сервера"
 
 #: properties/nm-openvpn-dialog.ui:1932
 msgid ""
@@ -950,31 +970,34 @@ msgid ""
 msgstr ""
 "Подтверждение идентификации сертификата сервера.\n"
 "\n"
-"При включённом параметре, подключение будет успешным только при условии "
-"соответствия сертификата сервера определённым ожидаемым свойствам.\n"
-"На соответствие может проверяться субъект сертификата целиком (все поля),\n"
-"либо только общее имя (поле Общее Имя).\n"
+"Если параметр включён, подключение будет успешным только в том случае, если се"
+"ртификат сервера "
+"соответствует некоторым ожидаемым параметрам.\n"
+"Соответствие проверяется либо для субъекта сертификата в целом (все поля),\n"
+"либо только для общего имени (поле CN).\n"
 "\n"
-"Устаревший параметр tls-remote больше не используется, он был удалён из "
-"OpenVPN версии 2.4 и более поздних. Не используйте этот параметр.\n"
-"config: verify-x509-name subject-or-name [mode]\n"
-"config (legacy mode): tls-remote subject-or-name"
+"Применявшийся ранее параметр tls-remote устарел и был удалён из версии OpenVPN"
+" 2.4 "
+"и более поздних. Больше он не используется.\n"
+"\n"
+"параметр файла конфигурации: verify-x509-name subject-or-name [режим]\n"
+"параметр файла конфигурации (устаревший режим): tls-remote subject-or-name"
 
 #: properties/nm-openvpn-dialog.ui:1972
-msgid "_Verify peer (server) certificate usage signature"
-msgstr "_Проверять назначение сертификата удалённого хоста (сервера)"
+msgid "Verify peer (server) certificate _usage signature"
+msgstr "Подтверждать подпись использования сертификата пира (сервера)"
 
 #: properties/nm-openvpn-dialog.ui:1976
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
 msgstr ""
-"Требовать, чтобы сертификат удалённого хоста имел указанное явно назначение "
-"ключа и расширенное назначение ключа согласно RFC 3280."
+"Требовать, чтобы сертификат пира был подписан с явным указанием полей "
+"key usage и extended key usage согласно правилам стандарта RFC3280 для TLS"
 
 #: properties/nm-openvpn-dialog.ui:1990
-msgid "_Remote peer certificate TLS type"
-msgstr "Тип TLS сертификата _удалённого хоста"
+msgid "Remote peer certificate _TLS type"
+msgstr "Тип протокола _TLS сертификата удалённого пира"
 
 #: properties/nm-openvpn-dialog.ui:2004
 msgid ""
@@ -982,25 +1005,24 @@ msgid ""
 "extended key usage based on RFC3280 TLS rules.\n"
 "config: remote-cert-tls client|server"
 msgstr ""
-"Требовать, чтобы сертификат удалённого хоста имел указанное явно назначение "
-"ключа и расширенное назначение ключа согласно RFC 3280.\n"
-"config: remote-cert-tls client|server"
+"Требовать, чтобы сертификат пира был подписан с явным указанием полей "
+"key usage и extended key usage согласно правилам стандарта RFC3280 для TLS.\n"
+"параметр файла конфигурации: remote-cert-tls client|server"
 
 #: properties/nm-openvpn-dialog.ui:2036
 msgid "_Verify peer (server) certificate nsCertType designation"
-msgstr "_Проверять явное указание nsCertType у сертификата удалённого хоста"
+msgstr "_Проверять назначение nsCertType в сертификате пира (сервера)"
 
 #: properties/nm-openvpn-dialog.ui:2040
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
 msgstr ""
-"Требовать, чтобы у сертификата удалённого хоста было явно указано значение "
-"nsCertType."
+"Требовать, чтобы сертификат пира был подписан с явным назначением nsCertType"
 
 #: properties/nm-openvpn-dialog.ui:2056
 msgid "_Remote peer certificate nsCert designation"
-msgstr "nsCert у сертификата _удалённого хоста"
+msgstr "Назначение nsCert сертификатов удалённых пиров"
 
 #: properties/nm-openvpn-dialog.ui:2070
 msgid ""
@@ -1008,13 +1030,13 @@ msgid ""
 "designation.\n"
 "config: ns-cert-type client|server"
 msgstr ""
-"Требовать, чтобы у сертификата удалённого хоста было явно указано\n"
-"значение nsCertType.\n"
-"config: ns-cert-type client|server"
+"Требовать, чтобы сертификаты пиров подписывались явным назначением nsCertType."
+"\n"
+"параметр файла конфигурации: ns-cert-type client|server"
 
 #: properties/nm-openvpn-dialog.ui:2112
 msgid "Key _Direction"
-msgstr "_Направление ключа"
+msgstr "Направление _ключа"
 
 #: properties/nm-openvpn-dialog.ui:2126
 msgid ""
@@ -1023,10 +1045,11 @@ msgid ""
 "control channel is also encrypted.\n"
 "config: tls-auth <file> [direction] | tls-crypt <file>"
 msgstr ""
-"Добавить ещё одну проверку подлинности по механизму HMAC для управляющего "
-"канала TLS, чтобы защититься от DoS-атак. В случае режима TLS-Crypt канал "
-"управления также зашифровывается..\n"
-"config: tls-auth <file> [direction] | tls-crypt <file>"
+"Добавить дополнительный слой аутентификации с использованием механизма HMAC "
+"поверх канала управления TLS для защиты от атак DoS. В случае использования ре"
+"жима "
+"TLS-Crypt, канал управления тоже шифруется.\n"
+"параметр файла конфигурации: tls-auth <file> [направление] | tls-crypt <file>"
 
 #: properties/nm-openvpn-dialog.ui:2170
 msgid ""
@@ -1036,29 +1059,32 @@ msgid ""
 "you are unsure what value to use, contact your system administrator.\n"
 "config: tls-auth <file> [direction]"
 msgstr ""
-"Параметр направления для режима статического ключа.Если используется "
-"направление ключа, оно должно быть противоположно направлению, которое "
-"использует вторая сторона. Например, если вторая сторона использует «1», это "
-"соединение должно использовать «0». Если вы не уверены, какое значение "
-"использовать, свяжитесь с системным администратором.\n"
-"config: tls-auth <file> [direction]"
+"Параметр направления для статического режима ключа.\n"
+"Если используется направление ключа, оно должно быть противоположным направлен"
+"ию, "
+"используемому на пире VPN. Если, например, пир использует «1», то в подключени"
+"и "
+"должно использоваться «0». Если не уверены в значении, свяжитесь с администрат"
+"ором.\n"
+"параметр файла конфигурации: tls-auth <file> [направление]"
 
 #: properties/nm-openvpn-dialog.ui:2190
 msgid "Key _File"
-msgstr "Файл ключа"
+msgstr "Файл _ключа"
 
 #: properties/nm-openvpn-dialog.ui:2204
-msgid "Mode"
+msgid "_Mode"
 msgstr "Режим"
 
 #: properties/nm-openvpn-dialog.ui:2216 properties/nm-openvpn-dialog.ui:2323
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr ""
-"Добавить дополнительный уровень шифрования или проверку подлинности HMAC."
+"Добавить дополнительный слой шифрования или слой аутентификации с механизмом H"
+"MAC"
 
 #: properties/nm-openvpn-dialog.ui:2236
-msgid "Extra Certificates"
-msgstr "Дополнительные сертификаты"
+msgid "_Extra Certificates"
+msgstr "Дополнительные _сертификаты"
 
 #: properties/nm-openvpn-dialog.ui:2249
 msgid ""
@@ -1066,21 +1092,21 @@ msgid ""
 "complete the local certificate chain.\n"
 "config: extra-certs <file>"
 msgstr ""
-"Укажите файл, содержащий один или более сертификатов PEM (соединённых в "
-"цепочку), дополняющих локальную цепочку сертификатов.\n"
-"config: extra-certs <файл>"
+"Указать файл, содержащий один или несколько сертификатов PEM (объединённых "
+"составным шифрованием), представляющих собой цепочку локальных сертификатов.\n"
+"параметр файла конфигурации: extra-certs <file>"
 
 #: properties/nm-openvpn-dialog.ui:2292
-msgid "TLS cipher string"
-msgstr "Строка шифра TLS"
+msgid "TLS ci_pher string"
+msgstr "Строка _шифра TLS"
 
 #: properties/nm-openvpn-dialog.ui:2305
 msgid ""
 "Set a value for the --tls-cipher parameter. This can be useful for working "
 "with VPNs using deprecated hashing schemes."
 msgstr ""
-"Установите значение для параметра --tls-cipher. Это может быть полезно при "
-"работе с VPN, использующим устаревшие схемы хэширования."
+"Значение параметра --tls-cipher. Применяется при работе с VPN, использующими "
+"устаревшие схемы хэширования."
 
 #: properties/nm-openvpn-dialog.ui:2326
 msgid "Additional TLS authentication or encryption"
@@ -1088,47 +1114,50 @@ msgstr "Дополнительная аутентификация или шиф�
 
 #: properties/nm-openvpn-dialog.ui:2353
 msgid "Controls min and max version allowed for TLS."
-msgstr "Контролирует минимальную и максимальную версии, допустимые для TLS."
+msgstr "Контролирует минимальные и максимальные версии, допускаемые для TLS."
 
 #: properties/nm-openvpn-dialog.ui:2356
 msgid "TLS version control"
 msgstr "Контроль версий TLS"
 
 #: properties/nm-openvpn-dialog.ui:2381
-msgid "TLS _min version"
-msgstr "Минимальная _версия TLS"
+msgid "TLS mi_n version"
+msgstr "Мин. _версия TLS"
 
 #: properties/nm-openvpn-dialog.ui:2394
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
 msgstr ""
-" Устанавливает минимальную версию TLS, которую мы будем принимать от узла "
-"(по умолчанию \"1.0\").  Примеры версии: \"1.0\", \"1.1\" или \"1.2\"."
+" Настраивает минимальную версию TLS, которая будет приниматься от пира (по умо"
+"лчанию: \"1.0\"). "
+"Примеры версий: \"1.0\", \"1.1\", или \"1.2\"."
 
 #: properties/nm-openvpn-dialog.ui:2406
 msgid "TLS ma_x version"
-msgstr "Мак_симальная версия TLS"
+msgstr "Макс. _версия TLS"
 
 #: properties/nm-openvpn-dialog.ui:2419
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
 msgstr ""
-"Устанавливает максимальную используемую версию TLS (по умолчанию — самая "
-"новая поддерживаемая версия). Примеры версий: \"1.0\", \"1.1\" или \"1.2\"."
+"Настраивает максимальную используемую версию TLS, (по умолчанию: самая последн"
+"яя поддерживаемая "
+"версия). Примеры версий: \"1.0\", \"1.1\", или\"1.2\"."
 
 #: properties/nm-openvpn-dialog.ui:2429
 msgid "_or highest"
-msgstr "_или самая новая"
+msgstr "_или выше"
 
 #: properties/nm-openvpn-dialog.ui:2432
 msgid ""
 "If set and version is not recognized, we will only accept the highest TLS "
 "version supported by the local SSL implementation."
 msgstr ""
-"Если установлено и версия не распознана, мы будем принимать только самую "
-"новую версию TLS, поддерживаемую локальной реализацией SSL."
+"Если параметр настроен, но версия не распознаётся, то будет приниматься только"
+" "
+"самая последняя версия TLS, поддерживаемая локально установленным SSL."
 
 #: properties/nm-openvpn-dialog.ui:2461
 msgid "TLS Authentication"
@@ -1140,31 +1169,31 @@ msgid ""
 "config: http-proxy or socks-proxy"
 msgstr ""
 "Тип прокси: HTTP или Socks.\n"
-"config: http-proxy or socks-proxy"
+"параметр файла конфигурации: http-proxy or socks-proxy"
 
 #: properties/nm-openvpn-dialog.ui:2502
 msgid "Proxy _Type"
-msgstr "_Тип прокси"
+msgstr "Тип _прокси"
 
 #: properties/nm-openvpn-dialog.ui:2518
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
 msgstr ""
-"<i>Выберите этот параметр, если в вашей организации требуется использовать "
-"прокси-сервер для доступа к Интернет.</i>"
+"<i>Выберите этот параметр, если в вашей организации для доступа в Интернет тре"
+"буется использовать прокси.</i>"
 
 #: properties/nm-openvpn-dialog.ui:2533
-msgid "Server _Address"
-msgstr "_Адрес сервера"
+msgid "S_erver Address"
+msgstr "Адрес _сервера"
 
 #: properties/nm-openvpn-dialog.ui:2551
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
 msgstr ""
-"Подключаться к удаленному хосту через прокси-сервер на этом адресе.\n"
-"config: http-proxy or socks-proxy"
+"Подключаться к удалённому хосту через прокси с использованием этого адреса.\n"
+"параметр файла конфигурации: http-proxy или socks-proxy"
 
 #: properties/nm-openvpn-dialog.ui:2564
 msgid "_Port"
@@ -1175,57 +1204,54 @@ msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
 msgstr ""
-"Подключаться к удаленному хосту через прокси-сервер на этом порте.\n"
-"config: http-proxy or socks-proxy"
+"Подключаться к удалённому хосту через прокси с использованием этого порта.\n"
+"параметр файла конфигурации: http-proxy или socks-proxy"
 
 #: properties/nm-openvpn-dialog.ui:2602
 msgid "_Retry indefinitely when errors occur"
-msgstr "Повторять попытку при возникновении ошибок"
+msgstr "_При возникновении ошибок повторять попытки бесконечно"
 
 #: properties/nm-openvpn-dialog.ui:2606
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
 msgstr ""
-"Пытаться подключиться заново при ошибках прокси. Имитируется перезапуск как "
-"по сигналу SIGUSR1.\n"
-"config: http-proxy-retry or socks-proxy-retry"
+"При наличии ошибок прокси повторять попытки бесконечно. Эмулируется сброс SIGU"
+"SR1.\n"
+"параметр файла конфигурации: http-proxy-retry или socks-proxy-retry"
 
 #: properties/nm-openvpn-dialog.ui:2620
 msgid "Proxy _Username"
-msgstr "_Имя пользователя прокси"
+msgstr "Имя пользователя _прокси"
 
 #: properties/nm-openvpn-dialog.ui:2635
 msgid "Proxy Passwor_d"
-msgstr "П_ароль прокси"
+msgstr "Пароль _прокси"
 
 #: properties/nm-openvpn-dialog.ui:2650
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
-"Имя пользователя для прокси-сервера HTTP/SOCKS, через который будет\n"
-"подключаться OpenVPN."
+"Имя пользователя прокси HTTP/Socks, передаваемое в OpenVPN при его запросе"
 
 #: properties/nm-openvpn-dialog.ui:2661
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
-msgstr ""
-"Пароль для прокси-сервера HTTP/SOCKS, через который будет\n"
-"подключаться OpenVPN."
+msgstr "Пароль прокси HTTP/Socks, передаваемый в OpenVPN при его запросе"
 
 #: properties/nm-openvpn-dialog.ui:2671
 msgid "_Show password"
-msgstr "По_казать пароль"
+msgstr "Показать _пароль"
 
 #: properties/nm-openvpn-dialog.ui:2698
 msgid "Proxies"
 msgstr "Прокси"
 
 #: properties/nm-openvpn-dialog.ui:2719
-msgid "Path mtu discovery"
-msgstr "Открытие пути mtu"
+msgid "Path mtu _discovery"
+msgstr "Path mtu _discovery"
 
 #: properties/nm-openvpn-dialog.ui:2752
-msgid "Connect timeout"
-msgstr "Время ожидания подключения"
+msgid "Connect _timeout"
+msgstr "Истечение времени ожидания подключения"
 
 #: properties/nm-openvpn-dialog.ui:2756 properties/nm-openvpn-dialog.ui:2769
 msgid ""
@@ -1233,33 +1259,33 @@ msgid ""
 "proxy and TCP connect timeouts.\n"
 "config: connect-timeout <n> | server-poll-timeout <n>"
 msgstr ""
-"Период истечения времени ожидания, в секундах. Период включает в себя "
-"истечение времени ожидания подключений прокси и подключений TCP.\n"
-"config: connect-timeout <n> | server-poll-timeout <n>"
+"Время ожидания в секундах перед попыткой подключения к следующему серверу. "
+"Параметр включает в себя время ожидания подключений и прокси и TCP.\n"
+"параметр файла конфигурации: connect-timeout <n> | server-poll-timeout <n>"
 
 #: properties/nm-openvpn-dialog.ui:2772
 msgid "0"
 msgstr "0"
 
 #: properties/nm-openvpn-dialog.ui:2782
-msgid "Push peer info"
-msgstr "Push peer info"
+msgid "_Push peer info"
+msgstr "_Отправить сведения о пире"
 
 #: properties/nm-openvpn-dialog.ui:2786
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
 msgstr ""
-"Отправка дополнительной информации о клиенте на сервер.\n"
-"config: push-peer-info"
+"Отправка дополнительных сведений о клиенте на сервер.\n"
+"параметр файла конфигурации: push-peer-info"
 
 #: properties/nm-openvpn-dialog.ui:2803
 msgid "Misc"
-msgstr "Прочие"
+msgstr "Прочее"
 
 #: properties/nm-openvpn-dialog.ui:2836
 msgid "Choose an OpenVPN static key…"
-msgstr "Выберите статический ключ OpenVPN…"
+msgstr "Выбрать статический ключ OpenVPN…"
 
 #: properties/nm-openvpn-dialog.ui:2853 properties/nm-openvpn-dialog.ui:2906
 #: properties/nm-openvpn-dialog.ui:2960 properties/nm-openvpn-dialog.ui:3013
@@ -1269,11 +1295,11 @@ msgstr "_Выбрать"
 
 #: properties/nm-openvpn-dialog.ui:2889
 msgid "Choose CRL file"
-msgstr "Выберите файл CRL"
+msgstr "Выберите файл со списком CRL"
 
 #: properties/nm-openvpn-dialog.ui:2943
 msgid "Choose CRL directory"
-msgstr "Выберите каталог CRL"
+msgstr "Выберите каталог со списком CRL"
 
 #: properties/nm-openvpn-dialog.ui:2996
 msgid "Choose a key file"
@@ -1281,116 +1307,116 @@ msgstr "Выберите файл ключа"
 
 #: properties/nm-openvpn-dialog.ui:3049
 msgid "Choose extra certificate file"
-msgstr "Выберите файл дополнительного сертификата"
+msgstr "Выберите дополнительный файл сертификата"
 
-#: properties/nm-openvpn-editor.c:780
+#: properties/nm-openvpn-editor.c:785
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "Статические ключи OpenVPN (*.key)"
 
-#: properties/nm-openvpn-editor.c:937 properties/nm-openvpn-editor.c:1031
+#: properties/nm-openvpn-editor.c:942 properties/nm-openvpn-editor.c:1036
 msgid "Default"
 msgstr "По умолчанию"
 
-#: properties/nm-openvpn-editor.c:1015
+#: properties/nm-openvpn-editor.c:1020
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: properties/nm-openvpn-editor.c:1016
+#: properties/nm-openvpn-editor.c:1021
 msgid "MD-5"
 msgstr "MD-5"
 
-#: properties/nm-openvpn-editor.c:1017
+#: properties/nm-openvpn-editor.c:1022
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: properties/nm-openvpn-editor.c:1018
+#: properties/nm-openvpn-editor.c:1023
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: properties/nm-openvpn-editor.c:1019
+#: properties/nm-openvpn-editor.c:1024
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: properties/nm-openvpn-editor.c:1020
+#: properties/nm-openvpn-editor.c:1025
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: properties/nm-openvpn-editor.c:1021
+#: properties/nm-openvpn-editor.c:1026
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: properties/nm-openvpn-editor.c:1022
+#: properties/nm-openvpn-editor.c:1027
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: properties/nm-openvpn-editor.c:1080
+#: properties/nm-openvpn-editor.c:1085
 msgid "Don’t verify certificate identification"
-msgstr "Не проверять идентификацию сертификата"
+msgstr "Не подтверждать идентификацию сертификата"
 
-#: properties/nm-openvpn-editor.c:1086
+#: properties/nm-openvpn-editor.c:1091
 msgid "Verify whole subject exactly"
-msgstr "Точно проверять весь объект"
+msgstr "Подтверждать только полностью весь субъект"
 
-#: properties/nm-openvpn-editor.c:1092
+#: properties/nm-openvpn-editor.c:1097
 msgid "Verify name exactly"
-msgstr "Точно проверять имя"
+msgstr "Подтверждать только имя"
 
-#: properties/nm-openvpn-editor.c:1098
+#: properties/nm-openvpn-editor.c:1103
 msgid "Verify name by prefix"
-msgstr "Проверять имя по префиксу"
+msgstr "Подтверждать имя по префиксу"
 
-#: properties/nm-openvpn-editor.c:1104
+#: properties/nm-openvpn-editor.c:1109
 msgid "Verify subject partially (legacy mode, strongly discouraged)"
-msgstr "Проверять объект частично (устаревший режим, убедительно не советуем)"
+msgstr "Подтверждать субъект частично (устарело, крайне не рекомендуется)"
 
-#: properties/nm-openvpn-editor.c:1217 properties/nm-openvpn-editor.c:1289
+#: properties/nm-openvpn-editor.c:1222 properties/nm-openvpn-editor.c:1294
 msgid "Server"
 msgstr "Сервер"
 
-#: properties/nm-openvpn-editor.c:1222 properties/nm-openvpn-editor.c:1294
+#: properties/nm-openvpn-editor.c:1227 properties/nm-openvpn-editor.c:1299
 msgid "Client"
 msgstr "Клиент"
 
-#: properties/nm-openvpn-editor.c:1621
+#: properties/nm-openvpn-editor.c:1626
 msgid "HTTP"
 msgstr "HTTP"
 
-#: properties/nm-openvpn-editor.c:1623
+#: properties/nm-openvpn-editor.c:1628
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: properties/nm-openvpn-editor.c:1738
+#: properties/nm-openvpn-editor.c:1743
 msgid "TUN"
 msgstr "TUN"
 
-#: properties/nm-openvpn-editor.c:1740
+#: properties/nm-openvpn-editor.c:1745
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: properties/nm-openvpn-editor.c:1747
+#: properties/nm-openvpn-editor.c:1752
 msgid "(automatic)"
-msgstr "(автоматический)"
+msgstr "(автоматически)"
 
-#: properties/nm-openvpn-editor.c:1910
+#: properties/nm-openvpn-editor.c:1915
 msgid "ping-exit"
 msgstr "ping-exit"
 
-#: properties/nm-openvpn-editor.c:1912
+#: properties/nm-openvpn-editor.c:1917
 msgid "ping-restart"
 msgstr "ping-restart"
 
-#: properties/nm-openvpn-editor.c:2722
+#: properties/nm-openvpn-editor.c:2726
 msgid "Certificates (TLS)"
 msgstr "Сертификаты (TLS)"
 
-#: properties/nm-openvpn-editor.c:2747
+#: properties/nm-openvpn-editor.c:2751
 msgid "Password with Certificates (TLS)"
-msgstr "Пароль с сертификатами (TLS)"
+msgstr "Пароли с сертификатами (TLS)"
 
-#: properties/nm-openvpn-editor.c:2927
+#: properties/nm-openvpn-editor.c:2907
 msgid "could not load UI widget"
-msgstr "не удаётся загрузить виджет интерфейса пользователя"
+msgstr "не удалось загрузить виджет UI"
 
 #: properties/nm-openvpn-editor-plugin.c:38
 msgid "OpenVPN"
@@ -1398,37 +1424,38 @@ msgstr "OpenVPN"
 
 #: properties/nm-openvpn-editor-plugin.c:39
 msgid "Compatible with the OpenVPN server."
-msgstr "Совместим с сервером OpenVPN."
+msgstr "Совместимо с сервером OpenVPN"
 
 #: shared/nm-utils/nm-shared-utils.c:946
 #, c-format
 msgid "object class '%s' has no property named '%s'"
-msgstr "класс объекта «%s» не имеет свойства с именем «%s»"
+msgstr "у класса объектов '%s' нет параметра с именем '%s'"
 
 #: shared/nm-utils/nm-shared-utils.c:953
 #, c-format
 msgid "property '%s' of object class '%s' is not writable"
-msgstr "свойство «%s» класса объекта «%s» не доступно для записи"
+msgstr "свойство «%s» класса объекта «%s» недоступно для записи"
 
 #: shared/nm-utils/nm-shared-utils.c:960
 #, c-format
 msgid ""
 "construct property \"%s\" for object '%s' can't be set after construction"
 msgstr ""
-"свойство построения «%s» для объекта «%s» не может быть установлено после "
-"построения"
+"свойство конструкции \"%s\" объекта '%s' не может быть установлено после "
+"создания конструкции"
 
 #: shared/nm-utils/nm-shared-utils.c:968
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
 msgstr ""
-"«%s::%s» не является допустимым именем свойства; «%s» не является подтипом "
-"GObject"
+"'%s::%s' не является действительным именем свойства; '%s' не является "
+"подтипом GObject"
 
 #: shared/nm-utils/nm-shared-utils.c:977
 #, c-format
 msgid "unable to set property '%s' of type '%s' from value of type '%s'"
-msgstr "не удалось установить свойство «%s» типа «%s» из значения типа «%s»"
+msgstr ""
+"невозможно настроить свойство '%s' с типом '%s' на базе значения с типом '%s'"
 
 #: shared/nm-utils/nm-shared-utils.c:988
 #, c-format
@@ -1436,8 +1463,8 @@ msgid ""
 "value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
 "type '%s'"
 msgstr ""
-"значение «%s» типа «%s» недействительно или вне диапазона для свойства «%s» "
-"типа «%s»"
+"значение \"%s\" с типом '%s' не является действительным или выходит за границы"
+" диапазона для параметра '%s' с типом '%s'"
 
 #: shared/nm-utils/nm-vpn-plugin-utils.c:69
 #, c-format
@@ -1447,17 +1474,17 @@ msgstr "не удалось получить имя модуля редакто�
 #: shared/nm-utils/nm-vpn-plugin-utils.c:103
 #, c-format
 msgid "missing plugin file \"%s\""
-msgstr "отсутствует файл модуля «%s»"
+msgstr "отсутствует файл модуля \"%s\""
 
 #: shared/nm-utils/nm-vpn-plugin-utils.c:109
 #, c-format
 msgid "cannot load editor plugin: %s"
-msgstr "не удалось загрузить модуль редактора: %s"
+msgstr "невозможно загрузить модуль редактора: %s"
 
 #: shared/nm-utils/nm-vpn-plugin-utils.c:118
 #, c-format
 msgid "cannot load factory %s from plugin: %s"
-msgstr "невозможно загрузить фабрику %s из модуля: %s"
+msgstr "невозможно загрузить заводские настройки %s из модуля: %s"
 
 #: shared/nm-utils/nm-vpn-plugin-utils.c:144
 msgid "unknown error creating editor instance"
@@ -1466,55 +1493,57 @@ msgstr "неизвестная ошибка при создании экземп
 #: shared/utils.c:246
 #, c-format
 msgid "invalid delimiter character '%c'"
-msgstr "недопустимый символ ограничителя '%c'"
+msgstr "недействительный ограничительный символ '%c'"
 
 #: shared/utils.c:253
 msgid "invalid non-utf-8 character"
-msgstr "недопустимый символ не utf-8"
+msgstr "недействительный символ non-utf-8"
 
 #: shared/utils.c:281
 msgid "empty host"
-msgstr "хост пустой"
+msgstr "пустой хост"
 
 #: shared/utils.c:291
 msgid "invalid port"
-msgstr "некорректный порт"
+msgstr "недействительный порт"
 
 #: shared/utils.c:302
 msgid "invalid protocol"
-msgstr "некорректный протокол"
+msgstr "недействительный протокол"
 
-#: src/nm-openvpn-service.c:432
+#: src/nm-openvpn-service.c:429
 #, c-format
 msgid "invalid address “%s”"
-msgstr "некорректный адрес «%s»"
+msgstr "недействительный адрес “%s”"
 
-#: src/nm-openvpn-service.c:444
+#: src/nm-openvpn-service.c:441
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
-msgstr "недопустимое целочисленное свойство «%s» или вне диапазона [%d ->%d]"
+msgstr "параметр “%s” недействителен, либо вне диапазона [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: src/nm-openvpn-service.c:455
+#: src/nm-openvpn-service.c:452
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
-msgstr "некорректное логическое свойство «%s» (не «yes» или «no»)"
+msgstr ""
+"недействительный логический параметр “%s” (значениями не являются «да» или «не"
+"т»)"
 
-#: src/nm-openvpn-service.c:462
+#: src/nm-openvpn-service.c:459
 #, c-format
 msgid "unhandled property “%s” type %s"
-msgstr "необработанное свойство «%s» типа %s"
+msgstr "необработанный параметр “%s” с типом %s"
 
-#: src/nm-openvpn-service.c:473
+#: src/nm-openvpn-service.c:470
 #, c-format
 msgid "property “%s” invalid or not supported"
-msgstr "свойство «%s» некорректно или не поддерживается"
+msgstr "недействительный или неподдерживаемый параметр \"%s\""
 
-#: src/nm-openvpn-service.c:489
+#: src/nm-openvpn-service.c:486
 msgid "No VPN configuration options."
-msgstr "Нет параметров настройки VPN."
+msgstr "Нет параметров конфигурации для VPN"
 
-#: src/nm-openvpn-service.c:946
+#: src/nm-openvpn-service.c:937
 msgid "A username is required."
 msgstr "Требуется имя пользователя."
 
@@ -1522,253 +1551,147 @@ msgstr "Требуется имя пользователя."
 msgid "A password is required."
 msgstr "Требуется пароль."
 
-#: src/nm-openvpn-service.c:953
+#: src/nm-openvpn-service.c:952
 msgid "A username and password are required."
-msgstr "Требуется имя пользователя и пароль."
+msgstr "Требуется пароль и имя пользователя."
 
-#: src/nm-openvpn-service.c:975
+#: src/nm-openvpn-service.c:973
 msgid "A private key password is required."
-msgstr "Требуется пароль личного ключа."
+msgstr "Требуется пароль к закрытому ключу."
 
-#: src/nm-openvpn-service.c:988
+#: src/nm-openvpn-service.c:986
 msgid "An HTTP Proxy username is required."
-msgstr "Требуется имя пользователя прокси HTTP."
+msgstr "Требуется имя пользователя HTTP-прокси"
 
-#: src/nm-openvpn-service.c:992
+#: src/nm-openvpn-service.c:990
 msgid "An HTTP Proxy password is required."
-msgstr "Требуется пароль прокси HTTP."
+msgstr "Требуется пароль HTTP-прокси"
 
-#: src/nm-openvpn-service.c:995
+#: src/nm-openvpn-service.c:993
 msgid "An HTTP Proxy username and password are required."
-msgstr "Требуется имя пользователя и пароль прокси HTTP."
+msgstr "Требуется пароль и имя пользователя HTTP-прокси"
 
-#: src/nm-openvpn-service.c:1366 src/nm-openvpn-service.c:2198
-#: src/nm-openvpn-service.c:2233
+#: src/nm-openvpn-service.c:1370 src/nm-openvpn-service.c:2204
+#: src/nm-openvpn-service.c:2239
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr ""
-"Не удалось обработать запрос, так как настройки подключения VPN некорректны."
+"Не удалось обработать запрос, параметры подключения VPN оказались недействител"
+"ьными"
 
-#: src/nm-openvpn-service.c:1375 src/nm-openvpn-service.c:2207
+#: src/nm-openvpn-service.c:1379 src/nm-openvpn-service.c:2213
 msgid "Invalid connection type."
-msgstr "Некорректный тип подключения."
+msgstr "Недействительный тип подключения"
 
-#: src/nm-openvpn-service.c:1393
+#: src/nm-openvpn-service.c:1397
 msgid "Could not find the openvpn binary."
-msgstr "Не удалось найти исполняемый файл openvpn."
+msgstr "Не удалось найти бинарный файл openvpn"
 
-#: src/nm-openvpn-service.c:1441
+#: src/nm-openvpn-service.c:1445
 #, c-format
 msgid "Invalid port number “%s”."
-msgstr "Некорректный номер порта «%s»."
+msgstr "Недействительный номер порта: “%s”."
 
-#: src/nm-openvpn-service.c:1461
+#: src/nm-openvpn-service.c:1465
 #, c-format
 msgid "Invalid proto “%s”."
-msgstr "Некорректный proto «%s»."
+msgstr "Недействительный протокол “%s”."
 
-#: src/nm-openvpn-service.c:1510
+#: src/nm-openvpn-service.c:1514
 #, c-format
 msgid "Invalid proxy type “%s”."
-msgstr "Некорректный тип прокси «%s»."
+msgstr "Недействительный тип прокси “%s”."
 
-#: src/nm-openvpn-service.c:1608
+#: src/nm-openvpn-service.c:1612
 #, c-format
 msgid "Invalid ping duration “%s”."
-msgstr "Некорректная длительность пинга «%s»."
+msgstr "Недействительная продолжительность ping: “%s”."
 
-#: src/nm-openvpn-service.c:1621
+#: src/nm-openvpn-service.c:1625
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
-msgstr "Недопустимая длительность ping-exit: “%s”."
+msgstr "Недействительная продолжительность ping-exit: “%s”."
 
-#: src/nm-openvpn-service.c:1634
+#: src/nm-openvpn-service.c:1638
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
-msgstr "Недопустимая длительность ping-restart: “%s”."
+msgstr "Недействительная продолжительность ping-restart: “%s”."
 
-#: src/nm-openvpn-service.c:1647
+#: src/nm-openvpn-service.c:1651
 #, c-format
 msgid "Invalid connect timeout “%s”."
-msgstr "Некорректный тайм-аут подключения «%s»."
+msgstr "Недействительное значение истечения времени ожидания подключения “%s”."
 
-#: src/nm-openvpn-service.c:1672
+#: src/nm-openvpn-service.c:1676
 #, c-format
 msgid "Invalid max-routes argument “%s”."
-msgstr "Недопустимый аргумент max-routes: “%s”."
+msgstr "Недействительный аргумент max-routes: “%s”."
 
-#: src/nm-openvpn-service.c:1716
+#: src/nm-openvpn-service.c:1722
 #, c-format
 msgid "Invalid keysize “%s”."
-msgstr "Некорректный размер ключа «%s»."
+msgstr "Недействительный размер ключа: “%s”."
 
-#: src/nm-openvpn-service.c:1788
+#: src/nm-openvpn-service.c:1794
 msgid "Invalid configuration with tls-remote and verify-x509-name."
-msgstr "Недопустимая конфигурация с tls-remote и verify-x509-name."
+msgstr "Недействительная конфигурация с tls-remote и verify-x509-name."
 
-#: src/nm-openvpn-service.c:1801
+#: src/nm-openvpn-service.c:1807
 msgid "Invalid verify-x509-name."
-msgstr "Недопустимый verify-x509-name."
+msgstr "Недействительное значение verify-x509-name."
 
-#: src/nm-openvpn-service.c:1824
+#: src/nm-openvpn-service.c:1830
 #, c-format
 msgid "Invalid reneg seconds “%s”."
-msgstr "Некорректное число секунд «%s» для пересогласования."
+msgstr "Недействительное значение секунд для reneg: “%s”."
 
-#: src/nm-openvpn-service.c:1854
+#: src/nm-openvpn-service.c:1860
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
-msgstr "Некорректный размер TUN MTU «%s»."
+msgstr "Недействительный размер TUN MTU: “%s”."
 
-#: src/nm-openvpn-service.c:1867
+#: src/nm-openvpn-service.c:1873
 #, c-format
 msgid "Invalid fragment size “%s”."
-msgstr "Некорректный размер фрагмента «%s»."
+msgstr "Недействительный размер фрагмента: “%s”."
 
-#: src/nm-openvpn-service.c:1977
+#: src/nm-openvpn-service.c:1983
 #, c-format
 msgid "Unknown connection type “%s”."
-msgstr "Неизвестный тип подключения «%s»."
+msgstr "Неизвестный тип соединения “%s”."
 
-#: src/nm-openvpn-service.c:1995
+#: src/nm-openvpn-service.c:2001
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
-msgstr "Пользователь «%s» не найден, проверьте NM_OPENVPN_USER."
+msgstr "Пользователь “%s” не найден, проверьте параметр NM_OPENVPN_USER."
 
-#: src/nm-openvpn-service.c:2007
+#: src/nm-openvpn-service.c:2013
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
-msgstr "Группа «%s» не найдена, проверьте NM_OPENVPN_GROUP."
+msgstr "Группа “%s” не найдена, проверьте параметр NM_OPENVPN_GROUP."
 
-#: src/nm-openvpn-service.c:2246
+#: src/nm-openvpn-service.c:2252
 msgid "Unhandled pending authentication."
-msgstr "Необработанное ожидающее аутентификации."
+msgstr "Необработанная отложенная аутентификация"
 
-#: src/nm-openvpn-service.c:2364
+#: src/nm-openvpn-service.c:2370
 msgid "Don’t quit when VPN connection terminates"
-msgstr "Не завершать работу при отключении VPN"
+msgstr "Не закрывать программу после прерывания подключения VPN"
 
-#: src/nm-openvpn-service.c:2365
+#: src/nm-openvpn-service.c:2371
 msgid "Enable verbose debug logging (may expose passwords)"
-msgstr "Включить подробный режим отладки (могут отображаться пароли)"
+msgstr ""
+"Включить подробное журналирование отладки (пароли могут оказаться в открытом д"
+"оступе)"
 
-#: src/nm-openvpn-service.c:2366
+#: src/nm-openvpn-service.c:2372
 msgid "D-Bus name to use for this instance"
-msgstr "Имя D-Bus для использования в этом экземпляре"
+msgstr "Имя D-Bus, используемое для этого экземпляра"
 
-#: src/nm-openvpn-service.c:2392
+#: src/nm-openvpn-service.c:2398
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
-"nm-openvpn-service предоставляет интегрированные возможности OpenVPN для "
-"NetworkManager."
-
-#~ msgid "Authenticate VPN %s"
-#~ msgstr "Авторизовать VPN %s"
-
-#~ msgid "unknown OpenVPN file extension"
-#~ msgstr "неизвестное расширение файла OpenVPN"
-
-#~ msgid ""
-#~ "Select the LZO data compression mode.\n"
-#~ "config: comp-lzo"
-#~ msgstr ""
-#~ "Выбрать режим сжатия данных LZO.\n"
-#~ "config: comp-lzo"
-
-#~ msgid "could not create openvpn object"
-#~ msgstr "не удалось создать объект openvpn"
-
-#~ msgid "Invalid HMAC auth."
-#~ msgstr "Некорректная аутентификация HMAC."
-
-#~ msgid "Choose your private key..."
-#~ msgstr "Выберите свой личный ключ…"
-
-#~ msgid "Saved"
-#~ msgstr "Сохранённые"
-
-#~ msgid "Always Ask"
-#~ msgstr "Всегда спрашивать"
-
-#~ msgid "Not Required"
-#~ msgstr "Не требуется"
-
-#~ msgid "Choose a Certificate Authority certificate..."
-#~ msgstr "Выберите сертификат центра сертификации…"
-
-#~ msgid "PEM or PKCS#12 certificates (*.pem, *.crt, *.key, *.cer, *.p12)"
-#~ msgstr "Сертификаты PEM или PKCS#12 (*.pem, *.crt, *.key, *.cer, *.p12)"
-
-#~ msgid "PEM certificates (*.pem, *.crt, *.key, *.cer)"
-#~ msgstr "Сертификаты PEM (*.pem, *.crt, *.key, *.cer)"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "<b>General</b>"
-#~ msgstr "<b>Общие</b>"
-
-#~ msgid "<b>Authentication</b>"
-#~ msgstr "<b>Аутентификация</b>"
-
-#~ msgid "_Show passwords"
-#~ msgstr "Показать пароли"
-
-#, fuzzy
-#~ msgid "Password for private key"
-#~ msgstr "Выберите свой личный ключ…"
-
-#~ msgid "Private Key Password:"
-#~ msgstr "Пароль к личному ключу:"
-
-#~ msgid "Private Key:"
-#~ msgstr "Личный ключ:"
-
-#~ msgid "CA Certificate:"
-#~ msgstr "Сертификат ЦС:"
-
-#~ msgid ""
-#~ "<i>Connect only to servers whose certificate matches the given subject.\n"
-#~ "Example: /CN=myvpn.company.com</i>"
-#~ msgstr ""
-#~ "<i>Подключаться только к серверам, чьи сертификаты совпадают с заданным "
-#~ "объектом.\n"
-#~ "Пример: /CN=myvpn.company.com</i>"
-
-#~ msgid "Missing required local IP address for static key mode."
-#~ msgstr ""
-#~ "Отсутствует необходимый локальный IP-адрес для режима со статическим "
-#~ "ключом."
-
-#~ msgid "Missing required remote IP address for static key mode."
-#~ msgstr ""
-#~ "Отсутствует необходимый удалённый IP-адрес для режима со статическим "
-#~ "ключом."
-
-#, fuzzy
-#~ msgid ""
-#~ "Could not process the request because the openvpn connection type was "
-#~ "invalid."
-#~ msgstr ""
-#~ "Не удалось обработать запрос, так как настройки подключения VPN "
-#~ "некорректны."
-
-#~ msgid "_Password:"
-#~ msgstr "_Пароль:"
-
-#~ msgid "_Secondary Password:"
-#~ msgstr "_Вторичный пароль:"
-
-#~ msgid "Sh_ow passwords"
-#~ msgstr "Показ_ывать пароли"
-
-#~ msgid "Use a TA_P device"
-#~ msgstr "Использовать устройство TA_P"
-
-#~ msgid "No VPN secrets!"
-#~ msgstr "Нет VPN-ключей!"
-
-#~ msgid "Could not process the request because no username was provided."
-#~ msgstr "Не удалось обработать запрос, так как не указано имя пользователя."
+"nm-openvpn-service предоставляет встроенные возможности OpenVPN программе Netw"
+"orkManager."
