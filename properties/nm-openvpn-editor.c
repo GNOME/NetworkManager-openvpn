@@ -790,6 +790,8 @@ static const char *const advanced_keys[] = {
 	NM_OPENVPN_KEY_ALLOW_PULL_FQDN,
 	NM_OPENVPN_KEY_AUTH,
 	NM_OPENVPN_KEY_CIPHER,
+	NM_OPENVPN_KEY_DATA_CIPHERS,
+	NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK,
 	NM_OPENVPN_KEY_COMPRESS,
 	NM_OPENVPN_KEY_COMP_LZO,
 	NM_OPENVPN_KEY_CONNECT_TIMEOUT,
@@ -1764,6 +1766,15 @@ advanced_dialog_new (GHashTable *hash, const char *contype)
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_CIPHER);
 	populate_cipher_combo (GTK_COMBO_BOX (widget), value);
 
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_DATA_CIPHERS);
+	if (value && *value) {
+		widget = GTK_WIDGET (gtk_builder_get_object (builder, "data_ciphers_entry"));
+		gtk_editable_set_text (GTK_EDITABLE (widget), value);
+	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "data_ciphers_fallback_combo"));
+	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK);
+	populate_cipher_combo (GTK_COMBO_BOX (widget), value);
 
 	value = g_hash_table_lookup (hash, NM_OPENVPN_KEY_KEYSIZE);
 	_builder_init_optional_spinbutton (builder, "keysize_checkbutton", "keysize_spinbutton", !!value,
@@ -2213,6 +2224,26 @@ advanced_dialog_new_hash_from_dialog (GtkWidget *dialog)
 		                    TLS_CIPHER_COL_DEFAULT, &is_default, -1);
 		if (!is_default && cipher) {
 			g_hash_table_insert (hash, NM_OPENVPN_KEY_CIPHER,
+			                     g_steal_pointer (&cipher));
+		}
+	}
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "data_ciphers_entry"));
+	value = gtk_editable_get_text (GTK_EDITABLE (widget));
+	if (value && value[0] != '\0')
+		g_hash_table_insert (hash, NM_OPENVPN_KEY_DATA_CIPHERS, g_strdup (value));
+
+	widget = GTK_WIDGET (gtk_builder_get_object (builder, "data_ciphers_fallback_combo"));
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
+	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (widget), &iter)) {
+		gs_free char *cipher = NULL;
+		gboolean is_default;
+
+		gtk_tree_model_get (model, &iter,
+		                    TLS_CIPHER_COL_NAME, &cipher,
+		                    TLS_CIPHER_COL_DEFAULT, &is_default, -1);
+		if (!is_default && cipher) {
+			g_hash_table_insert (hash, NM_OPENVPN_KEY_DATA_CIPHERS_FALLBACK,
 			                     g_steal_pointer (&cipher));
 		}
 	}
