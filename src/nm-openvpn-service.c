@@ -786,14 +786,14 @@ ovpn_quote_string (const char *unquoted)
 
 	g_return_val_if_fail (unquoted != NULL, NULL);
 
-	/* FIXME: use unpaged memory */
-	quoted = q = g_malloc0 (strlen (unquoted) * 2);
+	quoted = q = g_malloc (strlen (unquoted) * 2 + 1);
 	while (*u) {
 		/* Escape certain characters */
 		if (*u == ' ' || *u == '\\' || *u == '"')
 			*q++ = '\\';
 		*q++ = *u++;
 	}
+	*q = '\0';
 
 	return quoted;
 }
