@@ -692,7 +692,7 @@ pids_pending_send_sigterm (PidsPendingData *pid_data)
 	_LOGI ("openvpn[%ld]: send SIGTERM", (long) pid_data->pid);
 	pid_data->is_terminating = TRUE;
 	kill (pid_data->pid, SIGTERM);
-	pid_data->kill_id = g_timeout_add (2000, pids_pending_ensure_killed, pid_data);
+	pid_data->kill_id = g_timeout_add (10000, pids_pending_ensure_killed, pid_data);
 }
 
 static gboolean
@@ -719,7 +719,7 @@ pids_pending_wait_for_processes (void)
 	for (iter = gl.pids_pending_list; iter; iter = iter->next)
 		pids_pending_send_sigterm (iter->data);
 
-	source_id = g_timeout_add (3000, _pids_pending_wait_for_processes_timeout, &timed_out);
+	source_id = g_timeout_add (15000, _pids_pending_wait_for_processes_timeout, &timed_out);
 
 	do {
 		g_main_context_iteration (NULL, TRUE);
