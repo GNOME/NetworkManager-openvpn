@@ -36,7 +36,7 @@
 
 #include "utils.h"
 #include "nm-utils/nm-shared-utils.h"
-
+#include "nm-utils/nm-vpn-plugin-utils.h"
 
 #define INLINE_BLOB_CA                  NMV_OVPN_TAG_CA
 #define INLINE_BLOB_CERT                NMV_OVPN_TAG_CERT
@@ -686,6 +686,7 @@ static char *
 inline_blob_construct_path (const char *basename, const char *token)
 {
 	gs_free char *f_filename = NULL;
+	gs_free char *path = NULL;
 
 	g_return_val_if_fail (basename, NULL);
 	g_return_val_if_fail (token && token[0], NULL);
@@ -696,7 +697,8 @@ inline_blob_construct_path (const char *basename, const char *token)
 	if (_nmovpn_test_temp_path)
 		return g_build_filename (_nmovpn_test_temp_path, f_filename, NULL);
 
-	return g_build_filename (g_get_home_dir (), ".cert/nm-openvpn", f_filename, NULL);
+	path = nm_vpn_plugin_utils_get_cert_path ("nm-openvpn");
+	return g_build_filename (path, f_filename, NULL);
 }
 
 static gboolean
