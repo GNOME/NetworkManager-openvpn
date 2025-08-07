@@ -1787,6 +1787,7 @@ config: ncp-disable</property>
                 <child>
                   <object class="GtkCheckButton" id="crl_file_check">
                     <property name="label" translatable="yes">Verify CRL from _file</property>
+                    <property name="use_underline">True</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1801,6 +1802,7 @@ config: ncp-disable</property>
                 <child>
                   <object class="GtkCheckButton" id="crl_dir_check">
                     <property name="label" translatable="yes">Verify CRL from _directory</property>
+                    <property name="use_underline">True</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -2263,6 +2265,7 @@ config: tls-auth &lt;file&gt; [direction]</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">_Mode</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">1</property>
                           </object>
                           <packing>
@@ -2351,7 +2354,7 @@ config: extra-certs &lt;file&gt;</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">TLS ci_pher string</property>
-                            <property name="use_underline">False</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">1</property>
                           </object>
                           <packing>
@@ -2778,6 +2781,7 @@ config: http-proxy-retry or socks-proxy-retry</property>
                 <child>
                   <object class="GtkCheckButton" id="mtu_disc_checkbutton">
                     <property name="label" translatable="yes">Path mtu _discovery</property>
+                    <property name="use_underline">True</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -2811,6 +2815,7 @@ config: http-proxy-retry or socks-proxy-retry</property>
                 <child>
                   <object class="GtkCheckButton" id="connect_timeout_checkbutton">
                     <property name="label" translatable="yes">Connect _timeout</property>
+                    <property name="use_underline">True</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
