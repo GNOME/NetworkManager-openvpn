@@ -4,6 +4,14 @@
 # If things don't seem to work, this can help:
 # https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/ci/lint
 
+# Import the necessary stuff for a CI release:
+# https://handbook.gnome.org/maintainers/release-pipeline.html
+include:
+  - component: "gitlab.gnome.org/GNOME/citemplates/release-service@master"
+    inputs:
+      dist-job-name: "release-dist"
+
+
 # Template to install the dependencies for the build
 .fedora_deps: &fedora_deps
   before_script:
@@ -33,9 +41,11 @@ release-dist:
       gtk4-devel
     - sh autogen.sh
     - make -j dist
+    - mkdir public-dist
+    - mv *.tar.xz public-dist
   artifacts:
     paths:
-      - "*.xz"
+      - public-dist
 
 # Template to test in any version of Fedora
 .test_in_fedora_from_dist: &test_in_fedora_from_dist
@@ -46,7 +56,7 @@ release-dist:
   variables:
     GIT_STRATEGY: none
   script:
-    - tar xJf NetworkManager-openvpn-*.tar.xz
+    - tar xJf public-dist/NetworkManager-openvpn-*.tar.xz
     - cd NetworkManager-openvpn-*/
     # Sometimes the CI builder clocks are skewed.
     # Make sure the dst files are not from future.
