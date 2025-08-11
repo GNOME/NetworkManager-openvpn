@@ -41,8 +41,9 @@ release-dist:
       gtk4-devel
     - sh autogen.sh
     - make -j dist
+    - for f in *.tar.xz; do sha256sum "$f" > "$f".sha256sum; done
     - mkdir public-dist
-    - mv *.tar.xz public-dist
+    - mv *.{tar.xz,tar.xz.sha256sum} public-dist
   artifacts:
     paths:
       - public-dist
