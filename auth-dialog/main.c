@@ -492,7 +492,6 @@ main (int argc, char *argv[])
 	NoSecretsRequiredFunc no_secrets_required_func;
 	AskUserFunc ask_user_func;
 	FinishFunc finish_func;
-
 	GOptionContext *context;
 	GOptionEntry entries[] = {
 			{ "reprompt", 'r', 0, G_OPTION_ARG_NONE, &retry, "Reprompt for passwords", NULL},
@@ -504,6 +503,7 @@ main (int argc, char *argv[])
 			{ "hint", 't', 0, G_OPTION_ARG_STRING_ARRAY, &hints, "Hints from the VPN plugin", NULL},
 			{ NULL }
 		};
+	GError *error = NULL;
 
 	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, NULL);
@@ -515,7 +515,11 @@ main (int argc, char *argv[])
 #if !GTK_CHECK_VERSION(4,0,0)
 	g_option_context_add_group (context, gtk_get_option_group (FALSE));
 #endif
-	g_option_context_parse (context, &argc, &argv, NULL);
+	if (!g_option_context_parse (context, &argc, &argv, &error)) {
+		fprintf (stderr, "Error parsing options: %s\n", error->message);
+		g_error_free (error);
+		return 1;
+	}
 	g_option_context_free (context);
 
 	if (vpn_uuid == NULL || vpn_name == NULL || vpn_service == NULL) {
