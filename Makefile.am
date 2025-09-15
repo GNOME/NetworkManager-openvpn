@@ -29,6 +29,9 @@ dbusservice_DATA = nm-openvpn-service.conf
 nmvpnservicedir = $(NM_VPN_SERVICE_DIR)
 nmvpnservice_DATA = nm-openvpn-service.name
 
+nmvpnsysusersdir = $(prefix)/lib/sysusers.d
+nmvpnsysusers_DATA = nm-openvpn-sysusers.conf
+
 uidir = $(datadir)/gnome-vpn-properties/openvpn
 ui_DATA =
 
@@ -390,6 +393,10 @@ nm-openvpn-service.name: $(srcdir)/nm-openvpn-service.name.in
 	    -e 's|[@]PLUGINDIR[@]/|@NM_PLUGIN_DIR_NAME_FILE@|g' \
 	    $^ >$@
 
+nm-openvpn-sysusers.conf: $(srcdir)/nm-openvpn-sysusers.conf.in
+	$(AM_V_GEN) sed -e 's|[@]LOCALSTATEDIR[@]|$(localstatedir)|g' \
+	    $^ >$@
+
 # we always build the tests during regular build.
 noinst_PROGRAMS += $(check_programs)
 
@@ -398,6 +405,7 @@ TESTS = $(check_programs)
 EXTRA_DIST += \
 	linker-script-binary.ver \
 	nm-openvpn-service.name.in \
+	nm-openvpn-sysusers.conf.in \
 	$(dbusservice_DATA) \
 	$(appdata_in_files) \
 	$(appdata_files) \
