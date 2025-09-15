@@ -32,6 +32,9 @@ nmvpnservice_DATA = nm-openvpn-service.name
 nmvpnsysusersdir = $(prefix)/lib/sysusers.d
 nmvpnsysusers_DATA = nm-openvpn-sysusers.conf
 
+nmvpntmpfilesdir = $(prefix)/lib/tmpfiles.d
+nmvpntmpfiles_DATA = nm-openvpn-tmpfiles.conf
+
 uidir = $(datadir)/gnome-vpn-properties/openvpn
 ui_DATA =
 
@@ -397,6 +400,10 @@ nm-openvpn-sysusers.conf: $(srcdir)/nm-openvpn-sysusers.conf.in
 	$(AM_V_GEN) sed -e 's|[@]LOCALSTATEDIR[@]|$(localstatedir)|g' \
 	    $^ >$@
 
+nm-openvpn-tmpfiles.conf: $(srcdir)/nm-openvpn-tmpfiles.conf.in
+	$(AM_V_GEN) sed -e 's|[@]LOCALSTATEDIR[@]|$(localstatedir)|g' \
+	    $^ >$@
+
 # we always build the tests during regular build.
 noinst_PROGRAMS += $(check_programs)
 
@@ -406,6 +413,7 @@ EXTRA_DIST += \
 	linker-script-binary.ver \
 	nm-openvpn-service.name.in \
 	nm-openvpn-sysusers.conf.in \
+	nm-openvpn-tmpfiles.conf.in \
 	$(dbusservice_DATA) \
 	$(appdata_in_files) \
 	$(appdata_files) \
