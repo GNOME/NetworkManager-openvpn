@@ -58,6 +58,7 @@ static struct {
 	int log_level_ovpn;
 	bool log_syslog;
 	GSList *pids_pending_list;
+	GPtrArray *tmp_file_paths;
 } gl/*obal*/;
 
 #define NM_OPENVPN_HELPER_PATH LIBEXECDIR"/nm-openvpn-service-openvpn-helper"
@@ -341,11 +342,84 @@ args_add_vpn_data (GPtrArray *args, NMSettingVpn *s_vpn, const char *s_key, cons
 		args_add_strv (args, a_key, arg);
 }
 
-static void
-args_add_vpn_certs (GPtrArray *args, NMSettingVpn *s_vpn)
+/*
+ * Given a file name and an (optional) user name owning the
+ * connection, returns the file name to be used in the configuration.
+ *
+ * If the user is set, the file is accessed on behalf of the user,
+ * and copied to a temporary file readable only by root. If
+ * requested, the file name is unescaped.
+ *
+ * The returned file name must be freed by the caller.
+ */
+static char *
+access_file (const char *filename,
+             const char *user,
+             gboolean do_unescape,
+             GError **error)
 {
-	const char *ca, *cert, *key;
-	gs_free char *ca_free = NULL, *cert_free = NULL, *key_free = NULL;
+	char *tmp = NULL;
+	gs_free char *to_free = NULL;
+
+	g_return_val_if_fail (filename, FALSE);
+	g_return_val_if_fail (!error || !*error, FALSE);
+
+	if (!user) {
+		if (do_unescape) {
+			return nm_utils_str_utf8safe_unescape_cp (filename);
+		} else
+			return g_strdup (filename);
+	}
+
+	/* Private connection */
+
+	if (do_unescape) {
+		filename = nm_utils_str_utf8safe_unescape (filename, &to_free);
+	}
+
+	tmp = nm_utils_copy_cert_as_user (filename, user, error);
+	if (!tmp)
+		return NULL;
+
+	g_ptr_array_add (gl.tmp_file_paths, g_strdup (tmp));
+
+	return tmp;
+}
+
+static gboolean
+args_add_file (GPtrArray *args,
+               const char *key,
+               const char *value,
+               const char *user,
+               gboolean do_unescape,
+               GError **error)
+{
+	gs_free char *file = NULL;
+
+	file = access_file (value, user, do_unescape, error);
+	if (!file)
+		return FALSE;
+
+	args_add_strv (args, key, file);
+
+	return TRUE;
+}
+
+static gboolean
+args_add_vpn_certs (GPtrArray *args,
+                    NMSettingVpn *s_vpn,
+                    const char *private_user,
+                    GError **error)
+{
+	const char *ca;
+	const char *cert;
+	const char *key;
+	gs_free char *ca_free = NULL;
+	gs_free char *cert_free = NULL;
+	gs_free char *key_free = NULL;
+	gs_free char *ca_tmp = NULL;
+	gs_free char *cert_tmp = NULL;
+	gs_free char *key_tmp = NULL;
 
 	nm_assert (args);
 	nm_assert (NM_IS_SETTING_VPN (s_vpn));
@@ -358,18 +432,36 @@ args_add_vpn_certs (GPtrArray *args, NMSettingVpn *s_vpn)
 	cert = nm_utils_str_utf8safe_unescape (cert, &cert_free);
 	key  = nm_utils_str_utf8safe_unescape (key,  &key_free);
 
-	if (   nmovpn_arg_is_set (ca)
-	    && !is_pkcs12 (ca))
-		args_add_strv (args, "--ca", ca);
+	if (nmovpn_arg_is_set (ca)) {
+		ca_tmp = access_file (ca, private_user, FALSE, error);
+		if (!ca_tmp)
+			return FALSE;
 
-	if (nmovpn_arg_is_set (cert) && is_pkcs12 (cert))
-		args_add_strv (args, "--pkcs12", cert);
-	else {
-		if (nmovpn_arg_is_set (cert))
-			args_add_strv (args, "--cert", cert);
-		if (nmovpn_arg_is_set (key))
-			args_add_strv (args, "--key", key);
+		if (!is_pkcs12 (ca_tmp)) {
+			args_add_strv (args, "--ca", ca_tmp);
+		}
 	}
+
+	if (nmovpn_arg_is_set (cert)) {
+		cert_tmp = access_file (cert, private_user, FALSE, error);
+		if (!cert_tmp)
+			return FALSE;
+
+		if (is_pkcs12 (cert_tmp)) {
+			args_add_strv (args, "--pkcs12", cert_tmp);
+		} else {
+			args_add_strv (args, "--cert", cert_tmp);
+
+			if (nmovpn_arg_is_set (key)) {
+				key_tmp = access_file (key, private_user, FALSE, error);
+				if (!key_tmp)
+					return FALSE;
+				args_add_strv (args, "--key", key_tmp);
+			}
+		}
+	}
+
+	return TRUE;
 }
 
 /*****************************************************************************/
@@ -1331,6 +1423,35 @@ check_chroot_dir_usability (const char *chdir, const char *user)
 	return b1 && b2;
 }
 
+static const char *
+get_connection_permission_user (NMConnection *connection)
+{
+    NMSettingConnection *s_con;
+    const char *ptype;
+    const char *pitem;
+    const char *pdetail;
+    guint num_perms;
+    guint i;
+
+    s_con = nm_connection_get_setting_connection (connection);
+    if (!s_con)
+        return NULL;
+
+    num_perms = nm_setting_connection_get_num_permissions (s_con);
+    if (num_perms == 0)
+        return NULL;
+
+    for (i = 0; i < num_perms; i++) {
+        if (!nm_setting_connection_get_permission (s_con, i, &ptype, &pitem, &pdetail))
+            continue;
+
+        if (nm_streq0 (ptype, "user"))
+            return pitem;
+    }
+
+    return NULL;
+}
+
 static gboolean
 nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
                                  NMConnection *connection,
@@ -1355,6 +1476,7 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	gs_free char *cmd_log = NULL;
 	NMOvpnComp comp;
 	NMOvpnAllowCompression allow_comp;
+	const char *private_user;
 
 	s_vpn = nm_connection_get_setting_vpn (connection);
 	if (!s_vpn) {
@@ -1364,6 +1486,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		                     _("Could not process the request because the VPN connection settings were invalid."));
 		return FALSE;
 	}
+
+	private_user = get_connection_permission_user (connection);
 
 	connection_type = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CONNECTION_TYPE);
 	if (!validate_connection_type (connection_type)) {
@@ -1729,8 +1853,9 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA);
 	if (nmovpn_arg_is_set (tmp)) {
-		args_add_strv (args, "--tls-auth");
-		args_add_utf8safe_str (args, tmp);
+		if (!args_add_file (args, "--tls-auth", tmp, private_user, TRUE, error))
+			return FALSE;
+
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TA_DIR);
 		if (nmovpn_arg_is_set (tmp))
 			args_add_strv (args, tmp);
@@ -1738,14 +1863,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT);
 	if (nmovpn_arg_is_set (tmp)) {
-		args_add_strv (args, "--tls-crypt");
-		args_add_utf8safe_str (args, tmp);
+		if (!args_add_file (args, "--tls-crypt", tmp, private_user, TRUE, error))
+			return FALSE;
 	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_CRYPT_V2);
 	if (nmovpn_arg_is_set (tmp)) {
-		args_add_strv (args, "--tls-crypt-v2");
-		args_add_utf8safe_str (args, tmp);
+		if (!args_add_file (args, "--tls-crypt-v2", tmp, private_user, TRUE, error))
+			return FALSE;
 	}
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_VERSION_MIN);
 	if (nmovpn_arg_is_set (tmp)) {
@@ -1763,8 +1888,8 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_EXTRA_CERTS);
 	if (nmovpn_arg_is_set (tmp)) {
-		args_add_strv (args, "--extra-certs");
-		args_add_utf8safe_str (args, tmp);
+		if (!args_add_file(args, "--extra-certs", tmp, private_user, TRUE, error))
+			return FALSE;
 	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_TLS_REMOTE);
@@ -1887,12 +2012,22 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 		args_add_strv (args, "--mtu-disc", tmp);
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_FILE);
-	if (tmp)
-		args_add_strv (args, "--crl-verify", tmp);
-	else {
+	if (tmp) {
+		if (!args_add_file (args, "--crl-verify", tmp, private_user, TRUE, error))
+			return FALSE;
+	} else {
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CRL_VERIFY_DIR);
-		if (tmp)
+		if (tmp) {
+			if (private_user) {
+				g_set_error_literal (error,
+				                     NM_VPN_PLUGIN_ERROR,
+				                     NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS,
+				                     _("A CRL directory can only be specified for connections "
+				                       "available to all users"));
+				return FALSE;
+			}
 			args_add_strv (args, "--crl-verify", tmp, "dir");
+		}
 	}
 
 	tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_LOCAL_IP);
@@ -1946,12 +2081,14 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 	/* Now append configuration options which are dependent on the configuration type */
 	if (nm_streq (connection_type, NM_OPENVPN_CONTYPE_TLS)) {
 		args_add_strv (args, "--client");
-		args_add_vpn_certs (args, s_vpn);
+		if (!args_add_vpn_certs (args, s_vpn, private_user, error))
+			return FALSE;
 	} else if (nm_streq (connection_type, NM_OPENVPN_CONTYPE_STATIC_KEY)) {
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY);
 		if (nmovpn_arg_is_set (tmp)) {
-			args_add_strv (args, "--secret");
-			args_add_utf8safe_str (args, tmp);
+			if (!args_add_file (args, "--secret", tmp, private_user, TRUE, error))
+				return FALSE;
+
 			tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_STATIC_KEY_DIRECTION);
 			if (nmovpn_arg_is_set (tmp))
 				args_add_strv (args, tmp);
@@ -1964,12 +2101,13 @@ nm_openvpn_start_openvpn_binary (NMOpenvpnPlugin *plugin,
 
 		tmp = nm_setting_vpn_get_data_item (s_vpn, NM_OPENVPN_KEY_CA);
 		if (nmovpn_arg_is_set (tmp)) {
-			args_add_strv (args, "--ca");
-			args_add_utf8safe_str (args, tmp);
+			if (!args_add_file (args, "--ca", tmp, private_user, TRUE, error))
+				return FALSE;
 		}
 	} else if (nm_streq (connection_type, NM_OPENVPN_CONTYPE_PASSWORD_TLS)) {
 		args_add_strv (args, "--client");
-		args_add_vpn_certs (args, s_vpn);
+		if (!args_add_vpn_certs (args, s_vpn, private_user, error))
+			return FALSE;
 		/* Use user/path authentication */
 		args_add_strv (args, "--auth-user-pass");
 	} else {
@@ -2361,6 +2499,7 @@ main (int argc, char *argv[])
 	guint source_id_sigterm;
 	guint source_id_sigint;
 	gulong handler_id_plugin = 0;
+	guint i;
 
 	GOptionEntry options[] = {
 		{ "persist", 0, 0, G_OPTION_ARG_NONE, &persist, N_("Don’t quit when VPN connection terminates"), NULL },
@@ -2375,6 +2514,8 @@ main (int argc, char *argv[])
 
 	if (getenv ("OPENVPN_DEBUG"))
 		gl.debug = TRUE;
+
+	gl.tmp_file_paths = g_ptr_array_new_with_free_func(g_free);
 
 	/* locale will be set according to environment LC_* variables */
 	setlocale (LC_ALL, "");
@@ -2455,6 +2596,11 @@ main (int argc, char *argv[])
 	g_clear_object (&plugin);
 
 	pids_pending_wait_for_processes ();
+
+	for (i = 0; i < gl.tmp_file_paths->len; i++) {
+		unlink ((const char *) gl.tmp_file_paths->pdata[i]);
+	}
+	g_ptr_array_unref (gl.tmp_file_paths);
 
 	g_main_loop_unref (loop);
 	return EXIT_SUCCESS;
