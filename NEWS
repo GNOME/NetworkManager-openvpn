@@ -1,4 +1,17 @@
 =======================================================
+NetworkManager-openvpn-1.12.4
+Overview of changes since NetworkManager-openvpn-1.12.3
+=======================================================
+
+* Add tmpfiles.d and sysusers.d files so that systemd
+  creates automatically the required tmp file and user.
+* Verify file permissions for private connections to
+  prevent unprivileged user from using other user's
+  certs (CVE-2025-9615).
+* Update translations: Catalan, Japanese, Russian,
+  Hungarian, Turkish and Lithuanian.
+
+=======================================================
 NetworkManager-openvpn-1.12.3
 Overview of changes since NetworkManager-openvpn-1.12.2
 =======================================================
