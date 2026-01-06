@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2025-11-11 19:23+0000\n"
-"PO-Revision-Date: 2025-11-23 21:51+0200\n"
+"POT-Creation-Date: 2025-12-12 11:59+0000\n"
+"PO-Revision-Date: 2026-01-06 20:19+0200\n"
 "Last-Translator: Aurimas Černius <aurimas.cernius@mailo.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -1509,180 +1509,186 @@ msgstr "netinkamas prievadas"
 msgid "invalid protocol"
 msgstr "netinkamas protokolas"
 
-#: src/nm-openvpn-service.c:430
+#: src/nm-openvpn-service.c:522
 #, c-format
 msgid "invalid address “%s”"
 msgstr "netinkamas adresas „%s“"
 
-#: src/nm-openvpn-service.c:442
+#: src/nm-openvpn-service.c:534
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "netinkama sveikaskaitinė savybė „%s“ arba už ribų [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: src/nm-openvpn-service.c:453
+#: src/nm-openvpn-service.c:545
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "netinkama loginė savybė „%s“ (ne taip arba ne)"
 
-#: src/nm-openvpn-service.c:460
+#: src/nm-openvpn-service.c:552
 #, c-format
 msgid "unhandled property “%s” type %s"
 msgstr "neapdorotas savybės „%s“ tipas %s"
 
-#: src/nm-openvpn-service.c:471
+#: src/nm-openvpn-service.c:563
 #, c-format
 msgid "property “%s” invalid or not supported"
 msgstr "savybė „%s“ netinkama arba nepalaikoma"
 
-#: src/nm-openvpn-service.c:487
+#: src/nm-openvpn-service.c:579
 msgid "No VPN configuration options."
 msgstr "Nėra VPN konfigūracijos parametrų."
 
-#: src/nm-openvpn-service.c:931
+#: src/nm-openvpn-service.c:1023
 msgid "A username is required."
 msgstr "Būtinas naudotojo vardas."
 
-#: src/nm-openvpn-service.c:944
+#: src/nm-openvpn-service.c:1036
 msgid "A password is required."
 msgstr "Būtinas slaptažodis."
 
-#: src/nm-openvpn-service.c:946
+#: src/nm-openvpn-service.c:1038
 msgid "A username and password are required."
 msgstr "Būtinas naudotojo vardas ir slaptažodis."
 
-#: src/nm-openvpn-service.c:967
+#: src/nm-openvpn-service.c:1059
 msgid "A private key password is required."
 msgstr "Būtinas privačiojo rakto slaptažodis."
 
-#: src/nm-openvpn-service.c:980
+#: src/nm-openvpn-service.c:1072
 msgid "An HTTP Proxy username is required."
 msgstr "Būtinas HTTP įgaliotojo serverio naudotojo vardas."
 
-#: src/nm-openvpn-service.c:984
+#: src/nm-openvpn-service.c:1076
 msgid "An HTTP Proxy password is required."
 msgstr "Būtinas HTTP įgaliotojo serverio slaptažodis."
 
-#: src/nm-openvpn-service.c:987
+#: src/nm-openvpn-service.c:1079
 msgid "An HTTP Proxy username and password are required."
 msgstr "Būtinas HTTP įgaliotojo serverio naudotojo vardas ir slaptažodis."
 
-#: src/nm-openvpn-service.c:1364 src/nm-openvpn-service.c:2200
-#: src/nm-openvpn-service.c:2235
+#: src/nm-openvpn-service.c:1486 src/nm-openvpn-service.c:2338
+#: src/nm-openvpn-service.c:2373
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr ""
 "Nepavyko apdoroti užklausos, nes VPN prisijungimo nustatymai buvo netinkami."
 
-#: src/nm-openvpn-service.c:1373 src/nm-openvpn-service.c:2209
+#: src/nm-openvpn-service.c:1497 src/nm-openvpn-service.c:2347
 msgid "Invalid connection type."
 msgstr "Netinkamas prisijungimo tipas."
 
-#: src/nm-openvpn-service.c:1391
+#: src/nm-openvpn-service.c:1515
 msgid "Could not find the openvpn binary."
 msgstr "Nepavyko rasti openvpn programos."
 
-#: src/nm-openvpn-service.c:1439
+#: src/nm-openvpn-service.c:1563
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "Netinkamas prievado numeris „%s“."
 
-#: src/nm-openvpn-service.c:1459
+#: src/nm-openvpn-service.c:1583
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "Netinkamas proto „%s“."
 
-#: src/nm-openvpn-service.c:1508
+#: src/nm-openvpn-service.c:1632
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "Netinkamas įgaliotojo serverio tipas „%s“."
 
-#: src/nm-openvpn-service.c:1606
+#: src/nm-openvpn-service.c:1730
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "Netinkama ping trukmė „%s“."
 
-#: src/nm-openvpn-service.c:1619
+#: src/nm-openvpn-service.c:1743
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "Netinkama ping-exit trukmė „%s“."
 
-#: src/nm-openvpn-service.c:1632
+#: src/nm-openvpn-service.c:1756
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "Netinkama ping-restart trukmė „%s“."
 
-#: src/nm-openvpn-service.c:1645
+#: src/nm-openvpn-service.c:1769
 #, c-format
 msgid "Invalid connect timeout “%s”."
 msgstr "Netinkamas ryšio laiko limitas „%s“."
 
-#: src/nm-openvpn-service.c:1670
+#: src/nm-openvpn-service.c:1794
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "Netinkamas max-routes argumentas „%s“."
 
-#: src/nm-openvpn-service.c:1718
+#: src/nm-openvpn-service.c:1842
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "Netinkamas rakto dydis „%s“."
 
-#: src/nm-openvpn-service.c:1790
+#: src/nm-openvpn-service.c:1915
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "Netinkama konfigūracija su tls-remote ir verify-x509-name."
 
-#: src/nm-openvpn-service.c:1803
+#: src/nm-openvpn-service.c:1928
 msgid "Invalid verify-x509-name."
 msgstr "Netinkamas verify-x509-name."
 
-#: src/nm-openvpn-service.c:1826
+#: src/nm-openvpn-service.c:1951
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "Netinkamos persijungimo sekundės „%s“."
 
-#: src/nm-openvpn-service.c:1856
+#: src/nm-openvpn-service.c:1981
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "Netinkamas TUN MTU dydis „%s“."
 
-#: src/nm-openvpn-service.c:1869
+#: src/nm-openvpn-service.c:1994
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "Netinkamas fragmento dydis „%s“."
 
-#: src/nm-openvpn-service.c:1979
+#: src/nm-openvpn-service.c:2025
+msgid ""
+"A CRL directory can only be specified for connections available to all users"
+msgstr ""
+"CRL katalogą galima nurodyti tik visiems naudotojams prieinamiems ryšiams"
+
+#: src/nm-openvpn-service.c:2117
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "Nežinomas ryšio tipas „%s“."
 
-#: src/nm-openvpn-service.c:1997
+#: src/nm-openvpn-service.c:2135
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "Naudotojas „%s“ nerastas, patikrinkite NM_OPENVPN_USER."
 
-#: src/nm-openvpn-service.c:2009
+#: src/nm-openvpn-service.c:2147
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "Grupė „%s“ nerasta, patikrinkite NM_OPENVPN_GROUP."
 
-#: src/nm-openvpn-service.c:2248
+#: src/nm-openvpn-service.c:2386
 msgid "Unhandled pending authentication."
 msgstr "Neapdorotas laukiantis tapatybės nustatymas."
 
-#: src/nm-openvpn-service.c:2366
+#: src/nm-openvpn-service.c:2505
 msgid "Don’t quit when VPN connection terminates"
 msgstr "Neišeiti, kai nutrūksta VPN ryšys"
 
-#: src/nm-openvpn-service.c:2367
+#: src/nm-openvpn-service.c:2506
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "Įjungti išsamų derinimo žurnalą (gali parodyti slaptažodžius)"
 
-#: src/nm-openvpn-service.c:2368
+#: src/nm-openvpn-service.c:2507
 msgid "D-Bus name to use for this instance"
 msgstr "D-Bus pavadinimas, kurį naudoti šiam egzemplioriui"
 
-#: src/nm-openvpn-service.c:2394
+#: src/nm-openvpn-service.c:2535
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
