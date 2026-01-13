@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2022-08-29 16:31+0000\n"
-"PO-Revision-Date: 2023-08-04 15:45-0400\n"
+"POT-Creation-Date: 2025-12-12 11:59+0000\n"
+"PO-Revision-Date: 2026-01-13 16:03+0800\n"
 "Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: zh_CN\n"
 "X-Source-Language: C\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.8\n"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:10
 msgid "OpenVPN client"
@@ -49,36 +49,40 @@ msgstr "高级选项对话框"
 msgid "The NetworkManager Developers"
 msgstr "NetworkManager 开发者"
 
-#: auth-dialog/main.c:175
+#: auth-dialog/main.c:186
 msgid "Authentication required"
 msgstr "需要身份验证"
 
-#: auth-dialog/main.c:182 properties/nm-openvpn-dialog.ui:336
-#: properties/nm-openvpn-dialog.ui:435 properties/nm-openvpn-editor.c:2733
+#: auth-dialog/main.c:193 properties/nm-openvpn-dialog.ui:336
+#: properties/nm-openvpn-dialog.ui:435 properties/nm-openvpn-editor.c:2768
 msgid "Password"
 msgstr "密码"
 
-#: auth-dialog/main.c:189
+#: auth-dialog/main.c:200
 msgid "Certificate password"
 msgstr "证书密码"
 
-#: auth-dialog/main.c:196
+#: auth-dialog/main.c:207
 msgid "HTTP proxy password"
 msgstr "HTTP 代理密码"
 
-#: auth-dialog/main.c:236
+#: auth-dialog/main.c:215
+msgid "Challenge response"
+msgstr "质询响应"
+
+#: auth-dialog/main.c:255
 msgid "Authenticate VPN"
 msgstr "验证 VPN"
 
-#: auth-dialog/main.c:245
+#: auth-dialog/main.c:264
 msgid "Certificate pass_word:"
 msgstr "证书密码(_W)："
 
-#: auth-dialog/main.c:251
+#: auth-dialog/main.c:270
 msgid "_HTTP proxy password:"
 msgstr "_HTTP 代理密码："
 
-#: auth-dialog/main.c:517
+#: auth-dialog/main.c:559
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network “%s”."
 msgstr "您需要进行身份验证才能访问虚拟专用网络“%s”。"
@@ -185,102 +189,102 @@ msgstr "无法从 HTTP 代理验证文件读取用户/密码"
 msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
 msgstr "HTTP 代理验证文件里的用户/密码必须为 UTF-8 编码"
 
-#: properties/import-export.c:718
+#: properties/import-export.c:720
 #, c-format
 msgid "“%s” is not a directory"
 msgstr "“%s”不是目录"
 
-#: properties/import-export.c:726
+#: properties/import-export.c:728
 #, c-format
 msgid "cannot create “%s” directory"
 msgstr "无法创建“%s”目录"
 
-#: properties/import-export.c:746
+#: properties/import-export.c:748
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file (%s)"
 msgstr "无法写入行 %2$ld 的 <%1$s> 比特块（blob）到文件（%3$s）"
 
-#: properties/import-export.c:763
+#: properties/import-export.c:765
 #, c-format
 msgid "cannot write <%s> blob from line %ld to file “%s”"
 msgstr "无法写入行 %2$ld 的 <%1$s> 比特块（blob）到文件“%3$s”"
 
-#: properties/import-export.c:907
+#: properties/import-export.c:909
 msgid "proto expects protocol type like “udp” or “tcp”"
 msgstr "proto 参数需要如“udp”或“tcp”的协议类型"
 
-#: properties/import-export.c:932
+#: properties/import-export.c:934
 msgid "unsupported mtu-disc argument"
 msgstr "不支持的 mtu-disc 参数"
 
-#: properties/import-export.c:948
+#: properties/import-export.c:950
 msgid "unsupported crl-verify argument"
 msgstr "不支持的 crl-verify 参数"
 
-#: properties/import-export.c:966 properties/import-export.c:1437
+#: properties/import-export.c:968 properties/import-export.c:1457
 msgid "invalid option"
 msgstr "无效的选项"
 
-#: properties/import-export.c:1007
+#: properties/import-export.c:1009
 msgid "allow-compression: invalid argument"
 msgstr "allow-compression：无效的参数"
 
-#: properties/import-export.c:1029
+#: properties/import-export.c:1031
 msgid "unsupported comp-lzo argument"
 msgstr "不支持的 comp-lzo 参数"
 
-#: properties/import-export.c:1041
+#: properties/import-export.c:1043
 msgid "unsupported compress argument"
 msgstr "不支持的压缩参数"
 
-#: properties/import-export.c:1142
+#: properties/import-export.c:1144
 msgid "remote cannot contain space"
 msgstr "远程参数不能包含空格"
 
-#: properties/import-export.c:1146
+#: properties/import-export.c:1148
 msgid "remote cannot contain comma"
 msgstr "远程参数不能包含逗号"
 
-#: properties/import-export.c:1157
+#: properties/import-export.c:1159
 msgid "remote expects protocol type like “udp” or “tcp”"
 msgstr "远程参数需要如“udp”或“tcp”的协议"
 
-#: properties/import-export.c:1269
+#: properties/import-export.c:1271
 #, c-format
 msgid "invalid keyword “%s” in tls-version-min"
 msgstr "在 tls-version-min 中有无效的关键字“%s”"
 
-#: properties/import-export.c:1421
+#: properties/import-export.c:1441
 msgid "invalid verify-x509-name type"
 msgstr "无效的 verify-x509-name 类型"
 
-#: properties/import-export.c:1557
+#: properties/import-export.c:1577
 msgid "unsupported blob/xml element"
 msgstr "不支持的 blob/xml 单元"
 
-#: properties/import-export.c:1586
+#: properties/import-export.c:1606
 #, c-format
 msgid "unterminated blob element <%s>"
 msgstr "未终止的比特块（blob）单元 <%s>"
 
-#: properties/import-export.c:1642
+#: properties/import-export.c:1662
 #, c-format
 msgid "configuration error: %s (line %ld)"
 msgstr "配置错误：%s（行 %ld）"
 
-#: properties/import-export.c:1643
+#: properties/import-export.c:1663
 msgid "unknown or unsupported option"
 msgstr "未知或不支持的选项"
 
-#: properties/import-export.c:1658
+#: properties/import-export.c:1678
 msgid "The file to import wasn’t a valid OpenVPN client configuration"
 msgstr "要导入的文件不是有效的 OpenVPN 客户端配置"
 
-#: properties/import-export.c:1666
+#: properties/import-export.c:1686
 msgid "The file to import wasn’t a valid OpenVPN configuration (no remote)"
 msgstr "要导入的文件不是有效的 OpenVPN 配置（非远程）"
 
-#: properties/import-export.c:1677
+#: properties/import-export.c:1697
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--pkcs12 can not be "
 "used with --cert or --key)"
@@ -288,17 +292,17 @@ msgstr ""
 "要导入的文件不是有效的 OpenVPN 配置（--pkcs12 不能与 --cert 或 --key 同时使"
 "用）"
 
-#: properties/import-export.c:1687
+#: properties/import-export.c:1707
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--ca can not be "
 "PKCS#12 format)"
 msgstr "要导入的文件不是有效的 OpenVPN 配置（--ca 不能为 PKCS#12 格式）"
 
-#: properties/import-export.c:1696
+#: properties/import-export.c:1716
 msgid "The file to import wasn’t a valid OpenVPN configuration (missing --ca)"
 msgstr "要导入的文件不是有效的 OpenVPN 配置（缺少 --ca）"
 
-#: properties/import-export.c:1706
+#: properties/import-export.c:1726
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (if you use one of --"
 "cert or --key, you must use them both)"
@@ -306,31 +310,31 @@ msgstr ""
 "要导入的文件不是有效的 OpenVPN 配置（如果要使用 --cert 或 --key，就必须同时使"
 "用它们两个）"
 
-#: properties/import-export.c:1717
+#: properties/import-export.c:1737
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--cert can not be "
 "PKCS#12 format.)"
 msgstr "要导入的文件不是有效的 OpenVPN 配置（--cert 不能为 PKCS#12 格式）"
 
-#: properties/import-export.c:1725
+#: properties/import-export.c:1745
 msgid ""
 "The file to import wasn’t a valid OpenVPN configuration (--key can not be "
 "PKCS#12 format.)"
 msgstr "要导入的文件不是有效的 OpenVPN 配置（--key 不能为 PKCS#12 格式）"
 
-#: properties/import-export.c:1977
+#: properties/import-export.c:1999
 msgid "missing path argument"
 msgstr "缺少路径参数"
 
-#: properties/import-export.c:1987
+#: properties/import-export.c:2009
 msgid "connection is not a valid OpenVPN connection"
 msgstr "连接不是有效的 OpenVPN 连接"
 
-#: properties/import-export.c:1996
+#: properties/import-export.c:2018
 msgid "connection was incomplete (missing gateway)"
 msgstr "连接不完整（缺少网关）"
 
-#: properties/import-export.c:2370
+#: properties/import-export.c:2399
 #, c-format
 msgid "failed to write file: %s"
 msgstr "写入文件失败：%s"
@@ -367,8 +371,8 @@ msgstr "LZO 禁用（传统）"
 msgid "LZO adaptive (legacy)"
 msgstr "LZO 自适应（传统）"
 
-#: properties/nm-openvpn-dialog.ui:126 properties/nm-openvpn-editor.c:377
-#: properties/nm-openvpn-editor.c:1014 properties/nm-openvpn-editor.c:1819
+#: properties/nm-openvpn-dialog.ui:126 properties/nm-openvpn-editor.c:379
+#: properties/nm-openvpn-editor.c:1021 properties/nm-openvpn-editor.c:1835
 msgid "None"
 msgstr "无"
 
@@ -406,9 +410,9 @@ msgstr "网关(_G)"
 
 #: properties/nm-openvpn-dialog.ui:217
 msgid ""
-"Remote gateway(s), with optional port and protocol (e.g. ovpn.corp.com:1234:"
-"tcp). You can specify multiple hosts for redundancy (use commas or spaces as "
-"delimiters).\n"
+"Remote gateway(s), with optional port and protocol (e.g. "
+"ovpn.corp.com:1234:tcp). You can specify multiple hosts for redundancy (use "
+"commas or spaces as delimiters).\n"
 "config: remote"
 msgstr ""
 "远程网关，可选附加端口和协议（示例 ovpn.corp.com:1234:tcp）。你可以指定多个主"
@@ -461,7 +465,7 @@ msgstr "本地 IP 地址"
 msgid "Key Direction"
 msgstr "密钥方向"
 
-#: properties/nm-openvpn-dialog.ui:582 properties/nm-openvpn-editor.c:2760
+#: properties/nm-openvpn-dialog.ui:582 properties/nm-openvpn-editor.c:2795
 msgid "Static Key"
 msgstr "静态密钥"
 
@@ -514,7 +518,7 @@ msgstr "选择验证模式。"
 msgid "Ad_vanced…"
 msgstr "高级(_V)…"
 
-#: properties/nm-openvpn-dialog.ui:852 properties/nm-openvpn-editor.c:1619
+#: properties/nm-openvpn-dialog.ui:852 properties/nm-openvpn-editor.c:1626
 msgid "Not required"
 msgstr "不需要"
 
@@ -526,9 +530,9 @@ msgstr "OpenVPN 高级选项"
 msgid "Advanced Properties"
 msgstr "高级选项"
 
-#: properties/nm-openvpn-dialog.ui:919 properties/nm-openvpn-dialog.ui:2844
-#: properties/nm-openvpn-dialog.ui:2897 properties/nm-openvpn-dialog.ui:2951
-#: properties/nm-openvpn-dialog.ui:3004 properties/nm-openvpn-dialog.ui:3057
+#: properties/nm-openvpn-dialog.ui:919 properties/nm-openvpn-dialog.ui:2910
+#: properties/nm-openvpn-dialog.ui:2963 properties/nm-openvpn-dialog.ui:3017
+#: properties/nm-openvpn-dialog.ui:3070 properties/nm-openvpn-dialog.ui:3123
 msgid "_Cancel"
 msgstr "取消(_C)"
 
@@ -562,8 +566,8 @@ msgstr ""
 "配置：reneg-sec"
 
 #: properties/nm-openvpn-dialog.ui:1079
-msgid "Data _compression"
-msgstr "数据压缩(_C)"
+msgid "_Data compression"
+msgstr "数据压缩(_D)"
 
 #: properties/nm-openvpn-dialog.ui:1083
 msgid ""
@@ -597,8 +601,8 @@ msgstr ""
 "配置：proto tcp-client | udp"
 
 #: properties/nm-openvpn-dialog.ui:1169
-msgid "Set virtual _device type"
-msgstr "设定虚拟设备类型(_D)"
+msgid "Set _virtual device type"
+msgstr "设定虚拟设备类型(_V)"
 
 #: properties/nm-openvpn-dialog.ui:1173
 msgid "Explicitly set virtual device type and name (TUN/TAP)."
@@ -676,8 +680,8 @@ msgstr ""
 "配置：remote-random"
 
 #: properties/nm-openvpn-dialog.ui:1365
-msgid "Allow Pull FQDN"
-msgstr "允许请求 FQDN"
+msgid "Allo_w Pull FQDN"
+msgstr "允许请求 FQDN(_W)"
 
 #: properties/nm-openvpn-dialog.ui:1369
 msgid ""
@@ -700,8 +704,8 @@ msgstr ""
 "配置：remote-random-hostname"
 
 #: properties/nm-openvpn-dialog.ui:1399
-msgid "IPv6 tun link"
-msgstr "IPv6 tun 链路"
+msgid "_IPv6 tun link"
+msgstr "IPv6 tun 链路(_I)"
 
 #: properties/nm-openvpn-dialog.ui:1403
 msgid ""
@@ -769,8 +773,8 @@ msgstr ""
 "配置：float"
 
 #: properties/nm-openvpn-dialog.ui:1551
-msgid "Specify max routes"
-msgstr "指定最大路由跳数"
+msgid "Specify ma_x routes"
+msgstr "指定最大路由跳数(_X)"
 
 #: properties/nm-openvpn-dialog.ui:1555 properties/nm-openvpn-dialog.ui:1570
 msgid ""
@@ -816,14 +820,42 @@ msgid "Ci_pher"
 msgstr "加密(_P)"
 
 #: properties/nm-openvpn-dialog.ui:1699
+msgid "D_ata ciphers"
+msgstr "数据加密算法(_A)"
+
+#: properties/nm-openvpn-dialog.ui:1714
+msgid "Da_ta ciphers fallback"
+msgstr "备用数据加密算法(_T)"
+
+#: properties/nm-openvpn-dialog.ui:1729
+msgid ""
+"Configure a cipher that is used to fall back to if we could not determine "
+"which cipher the peer is willing to use.\n"
+"config: data-ciphers-fallback"
+msgstr ""
+"配置备用加密算法，当无法确定对端愿意使用哪种加密算法时将回退使用该算法。\n"
+"配置：data-ciphers-fallback"
+
+#: properties/nm-openvpn-dialog.ui:1748
+msgid ""
+"Restrict the allowed ciphers to be negotiated to the ciphers in cipher-list. "
+"cipher-list is a colon-separated list of ciphers like AES-256-GCM:AES-128-"
+"GCM.\n"
+"config: data-ciphers"
+msgstr ""
+"将允许协商的加密算法限制为 cipher-list 中指定的算法。cipher-list 是以冒号分隔"
+"的加密算法列表，例如 AES-256-GCM:AES-128-GCM。\n"
+"配置：data-ciphers"
+
+#: properties/nm-openvpn-dialog.ui:1760
 msgid "_HMAC Authentication"
 msgstr "_HMAC 验证"
 
-#: properties/nm-openvpn-dialog.ui:1712
+#: properties/nm-openvpn-dialog.ui:1773
 msgid "Disable cipher _negotiation"
 msgstr "禁用加密协商(_N)"
 
-#: properties/nm-openvpn-dialog.ui:1716
+#: properties/nm-openvpn-dialog.ui:1777
 msgid ""
 "Disable cipher negotiation between client and server.\n"
 "config: ncp-disable"
@@ -831,11 +863,11 @@ msgstr ""
 "禁用客户端和服务器间的加密协商。\n"
 "配置：ncp-disable"
 
-#: properties/nm-openvpn-dialog.ui:1728
-msgid "Verify CRL from file"
-msgstr "从文件验证 CRL"
+#: properties/nm-openvpn-dialog.ui:1789
+msgid "Verify CRL from _file"
+msgstr "从文件验证 CRL(_F)"
 
-#: properties/nm-openvpn-dialog.ui:1732 properties/nm-openvpn-dialog.ui:1758
+#: properties/nm-openvpn-dialog.ui:1794 properties/nm-openvpn-dialog.ui:1821
 msgid ""
 "Check peer certificate against the specified file in PEM format. A CRL "
 "(certificate revocation list) is used when a particular key is compromised "
@@ -844,11 +876,11 @@ msgstr ""
 "根据指定的 PEM 格式的文件检查对等证书。当特定密钥被泄露但整体 PKI 仍完好时，"
 "使用 CRL（证书吊销列表）。"
 
-#: properties/nm-openvpn-dialog.ui:1742
-msgid "Verify CRL from directory"
-msgstr "从目录验证 CRL"
+#: properties/nm-openvpn-dialog.ui:1804
+msgid "Verify CRL from _directory"
+msgstr "从目录验证 CRL(_D)"
 
-#: properties/nm-openvpn-dialog.ui:1746 properties/nm-openvpn-dialog.ui:1801
+#: properties/nm-openvpn-dialog.ui:1809 properties/nm-openvpn-dialog.ui:1864
 msgid ""
 "Check peer certificate by looking at files in the specified directory. The "
 "directory must contain files named as revoked serial numbers (the files may "
@@ -857,19 +889,19 @@ msgstr ""
 "通过查看指定目录里的文件来检查对等证书。目录必须包含以已吊销序列号命名的文件"
 "（文件可以为空，不会读取其内容）。"
 
-#: properties/nm-openvpn-dialog.ui:1767 properties/nm-openvpn-editor.c:103
+#: properties/nm-openvpn-dialog.ui:1830 properties/nm-openvpn-editor.c:103
 msgid "(None)"
 msgstr "（无）"
 
-#: properties/nm-openvpn-dialog.ui:1860
+#: properties/nm-openvpn-dialog.ui:1923
 msgid "Security"
 msgstr "安全性"
 
-#: properties/nm-openvpn-dialog.ui:1889
+#: properties/nm-openvpn-dialog.ui:1952
 msgid "_Subject Match"
 msgstr "主体匹配(_S)"
 
-#: properties/nm-openvpn-dialog.ui:1903
+#: properties/nm-openvpn-dialog.ui:1966
 msgid ""
 "Subject or Common Name to verify server certificate information against.\n"
 "\n"
@@ -881,11 +913,11 @@ msgstr ""
 "配置：verify-x509-name subject-or-name [mode]\n"
 "配置（传统模式）：tls-remote subject-or-name"
 
-#: properties/nm-openvpn-dialog.ui:1918
-msgid "Server _Certificate Check"
-msgstr "服务器证书检查(_C)"
+#: properties/nm-openvpn-dialog.ui:1981
+msgid "Server Cert_ificate Check"
+msgstr "服务器证书检查(_I)"
 
-#: properties/nm-openvpn-dialog.ui:1932
+#: properties/nm-openvpn-dialog.ui:1995
 msgid ""
 "Verify server certificate identification.\n"
 "\n"
@@ -912,22 +944,22 @@ msgstr ""
 "配置：verify-x509-name subject-or-name [mode]\n"
 "配置（传统模式）：tls-remote subject-or-name"
 
-#: properties/nm-openvpn-dialog.ui:1972
-msgid "_Verify peer (server) certificate usage signature"
-msgstr "验证对等端（服务器）证书的使用签名(_V)"
+#: properties/nm-openvpn-dialog.ui:2035
+msgid "Verify peer (server) certificate _usage signature"
+msgstr "验证对等端（服务器）证书的使用签名(_U)"
 
-#: properties/nm-openvpn-dialog.ui:1976
+#: properties/nm-openvpn-dialog.ui:2039
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
 msgstr ""
 "要求对等端证书为基于 RFC3280 TLS 规则的显式密钥用法和扩展密钥用法所签名。"
 
-#: properties/nm-openvpn-dialog.ui:1990
-msgid "_Remote peer certificate TLS type"
-msgstr "远程端证书 TLS 类型(_R)"
+#: properties/nm-openvpn-dialog.ui:2053
+msgid "Remote peer certificate _TLS type"
+msgstr "远程端证书 TLS 类型(_T)"
 
-#: properties/nm-openvpn-dialog.ui:2004
+#: properties/nm-openvpn-dialog.ui:2067
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -936,21 +968,21 @@ msgstr ""
 "要求对等证书为基于 RFC3280 TLS 规则的显式密钥用法和扩展密钥用法所签名。\n"
 "配置：remote-cert-tls client|server"
 
-#: properties/nm-openvpn-dialog.ui:2036
+#: properties/nm-openvpn-dialog.ui:2099
 msgid "_Verify peer (server) certificate nsCertType designation"
 msgstr "验证对等端（服务器）证书的 nsCertType 指示符(_V)"
 
-#: properties/nm-openvpn-dialog.ui:2040
+#: properties/nm-openvpn-dialog.ui:2103
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
 msgstr "要求对等证书以明确的 nsCertType 指示符签名。"
 
-#: properties/nm-openvpn-dialog.ui:2056
+#: properties/nm-openvpn-dialog.ui:2119
 msgid "_Remote peer certificate nsCert designation"
 msgstr "远程端证书 nsCert 指示符(_R)"
 
-#: properties/nm-openvpn-dialog.ui:2070
+#: properties/nm-openvpn-dialog.ui:2133
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
@@ -959,11 +991,11 @@ msgstr ""
 "要求对等证书以明确的 nsCertType 指示符签名。\n"
 "配置：ns-cert-type client|server"
 
-#: properties/nm-openvpn-dialog.ui:2112
+#: properties/nm-openvpn-dialog.ui:2175
 msgid "Key _Direction"
 msgstr "密钥方向(_D)"
 
-#: properties/nm-openvpn-dialog.ui:2126
+#: properties/nm-openvpn-dialog.ui:2189
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
@@ -974,7 +1006,7 @@ msgstr ""
 "下，控制信道也被加密。\n"
 "配置：tls-auth <文件> [direction] | tls-crypt <文件>"
 
-#: properties/nm-openvpn-dialog.ui:2170
+#: properties/nm-openvpn-dialog.ui:2233
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -987,23 +1019,23 @@ msgstr ""
 "连接必须使用“0”。如果您不确认您应该使用何值，请联系你的系统管理员。\n"
 "配置：tls-auth <文件> [direction]"
 
-#: properties/nm-openvpn-dialog.ui:2190
+#: properties/nm-openvpn-dialog.ui:2253
 msgid "Key _File"
 msgstr "密钥文件(_F)"
 
-#: properties/nm-openvpn-dialog.ui:2204
-msgid "Mode"
-msgstr "模式"
+#: properties/nm-openvpn-dialog.ui:2267
+msgid "_Mode"
+msgstr "模式(_M)"
 
-#: properties/nm-openvpn-dialog.ui:2216 properties/nm-openvpn-dialog.ui:2323
+#: properties/nm-openvpn-dialog.ui:2280 properties/nm-openvpn-dialog.ui:2387
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr "添加额外的加密层或 HMAC 验证层。"
 
-#: properties/nm-openvpn-dialog.ui:2236
-msgid "Extra Certificates"
-msgstr "额外证书"
+#: properties/nm-openvpn-dialog.ui:2300
+msgid "_Extra Certificates"
+msgstr "额外证书(_E)"
 
-#: properties/nm-openvpn-dialog.ui:2249
+#: properties/nm-openvpn-dialog.ui:2313
 msgid ""
 "Specify a file containing one or more PEM certs (concatenated together) that "
 "complete the local certificate chain.\n"
@@ -1012,11 +1044,11 @@ msgstr ""
 "指定包含一个或多个 PEM 证书（连在一起）的文件，以完成本地证书链。\n"
 "配置：extra-certs <文件>"
 
-#: properties/nm-openvpn-dialog.ui:2292
-msgid "TLS cipher string"
-msgstr "TLS 加密字符串"
+#: properties/nm-openvpn-dialog.ui:2356
+msgid "TLS ci_pher string"
+msgstr "TLS 加密字符串(_P)"
 
-#: properties/nm-openvpn-dialog.ui:2305
+#: properties/nm-openvpn-dialog.ui:2369
 msgid ""
 "Set a value for the --tls-cipher parameter. This can be useful for working "
 "with VPNs using deprecated hashing schemes."
@@ -1024,23 +1056,23 @@ msgstr ""
 "为 --tls-cipher 参数设置值。该设置可能在配置使用已弃用的哈希方式的 VPN 时有所"
 "帮助。"
 
-#: properties/nm-openvpn-dialog.ui:2326
+#: properties/nm-openvpn-dialog.ui:2390
 msgid "Additional TLS authentication or encryption"
 msgstr "附加 TLS 验证或加密"
 
-#: properties/nm-openvpn-dialog.ui:2353
+#: properties/nm-openvpn-dialog.ui:2417
 msgid "Controls min and max version allowed for TLS."
 msgstr "控制 TLS 允许的最小和最大版本。"
 
-#: properties/nm-openvpn-dialog.ui:2356
+#: properties/nm-openvpn-dialog.ui:2420
 msgid "TLS version control"
 msgstr "TLS 版本控制"
 
-#: properties/nm-openvpn-dialog.ui:2381
-msgid "TLS _min version"
-msgstr "TLS 最低版本(_M)"
+#: properties/nm-openvpn-dialog.ui:2445
+msgid "TLS mi_n version"
+msgstr "TLS 最低版本(_N)"
 
-#: properties/nm-openvpn-dialog.ui:2394
+#: properties/nm-openvpn-dialog.ui:2458
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1048,11 +1080,11 @@ msgstr ""
 "设定我们将使用的最低 TLS 版本（默认为 \"1.0\"）。版本实例"
 "有“1.0”“1.1”或“1.2”。"
 
-#: properties/nm-openvpn-dialog.ui:2406
+#: properties/nm-openvpn-dialog.ui:2470
 msgid "TLS ma_x version"
 msgstr "TLS 最高版本(_X)"
 
-#: properties/nm-openvpn-dialog.ui:2419
+#: properties/nm-openvpn-dialog.ui:2483
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1060,22 +1092,22 @@ msgstr ""
 "设定我们将使用的最高 TLS 版本（默认为受支持的最大版本）。版本实例"
 "有“1.0”“1.1”或“1.2”。"
 
-#: properties/nm-openvpn-dialog.ui:2429
+#: properties/nm-openvpn-dialog.ui:2493
 msgid "_or highest"
 msgstr "或最高(_O)"
 
-#: properties/nm-openvpn-dialog.ui:2432
+#: properties/nm-openvpn-dialog.ui:2496
 msgid ""
 "If set and version is not recognized, we will only accept the highest TLS "
 "version supported by the local SSL implementation."
 msgstr ""
 "如果明确设置的版本无法识别，程序将只接受本地 SSL 实现所支持的最高 TLS 版本。"
 
-#: properties/nm-openvpn-dialog.ui:2461
+#: properties/nm-openvpn-dialog.ui:2525
 msgid "TLS Authentication"
 msgstr "TLS 验证"
 
-#: properties/nm-openvpn-dialog.ui:2482
+#: properties/nm-openvpn-dialog.ui:2546
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1083,21 +1115,21 @@ msgstr ""
 "代理类型：HTTP 或者 Socks。\n"
 "配置：http-proxy 或 socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2502
+#: properties/nm-openvpn-dialog.ui:2566
 msgid "Proxy _Type"
 msgstr "代理类型(_T)"
 
-#: properties/nm-openvpn-dialog.ui:2518
+#: properties/nm-openvpn-dialog.ui:2582
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
 msgstr "<i>如果您的组织要求使用代理服务器来访问互联网，请选择此选项。</i>"
 
-#: properties/nm-openvpn-dialog.ui:2533
-msgid "Server _Address"
-msgstr "服务器地址(_A)"
+#: properties/nm-openvpn-dialog.ui:2597
+msgid "S_erver Address"
+msgstr "服务器地址(_E)"
 
-#: properties/nm-openvpn-dialog.ui:2551
+#: properties/nm-openvpn-dialog.ui:2615
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1105,11 +1137,11 @@ msgstr ""
 "连接到远程主机的代理地址。\n"
 "配置：http-proxy 或 socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2564
+#: properties/nm-openvpn-dialog.ui:2628
 msgid "_Port"
 msgstr "端口(_P)"
 
-#: properties/nm-openvpn-dialog.ui:2581
+#: properties/nm-openvpn-dialog.ui:2645
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1117,11 +1149,11 @@ msgstr ""
 "连接到远程主机的代理端口。\n"
 "配置：http-proxy 或 socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2602
+#: properties/nm-openvpn-dialog.ui:2666
 msgid "_Retry indefinitely when errors occur"
 msgstr "发生错误时无限重试(_R)"
 
-#: properties/nm-openvpn-dialog.ui:2606
+#: properties/nm-openvpn-dialog.ui:2670
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1129,39 +1161,39 @@ msgstr ""
 "代理错误无限重试。他模拟了一个 SIGUSR1 重置。\n"
 "配置：http-proxy-retry 或 socks-proxy-retry"
 
-#: properties/nm-openvpn-dialog.ui:2620
+#: properties/nm-openvpn-dialog.ui:2684
 msgid "Proxy _Username"
 msgstr "代理用户名(_U)"
 
-#: properties/nm-openvpn-dialog.ui:2635
+#: properties/nm-openvpn-dialog.ui:2699
 msgid "Proxy Passwor_d"
 msgstr "代理密码(_D)"
 
-#: properties/nm-openvpn-dialog.ui:2650
+#: properties/nm-openvpn-dialog.ui:2714
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr "当提示时，传递给 OpenVPN 的 HTTP/Socks 代理用户名。"
 
-#: properties/nm-openvpn-dialog.ui:2661
+#: properties/nm-openvpn-dialog.ui:2725
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr "当提示时，传递给 OpenVPN 的 HTTP/Socks 代理密码。"
 
-#: properties/nm-openvpn-dialog.ui:2671
+#: properties/nm-openvpn-dialog.ui:2735
 msgid "_Show password"
 msgstr "显示密码(_S)"
 
-#: properties/nm-openvpn-dialog.ui:2698
+#: properties/nm-openvpn-dialog.ui:2762
 msgid "Proxies"
 msgstr "代理"
 
-#: properties/nm-openvpn-dialog.ui:2719
-msgid "Path mtu discovery"
-msgstr "路径 mtu 发现"
+#: properties/nm-openvpn-dialog.ui:2783
+msgid "Path mtu _discovery"
+msgstr "路径 mtu 发现(_D)"
 
-#: properties/nm-openvpn-dialog.ui:2752
-msgid "Connect timeout"
-msgstr "连接超时"
+#: properties/nm-openvpn-dialog.ui:2817
+msgid "Connect _timeout"
+msgstr "连接超时(_T)"
 
-#: properties/nm-openvpn-dialog.ui:2756 properties/nm-openvpn-dialog.ui:2769
+#: properties/nm-openvpn-dialog.ui:2822 properties/nm-openvpn-dialog.ui:2835
 msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
@@ -1170,15 +1202,15 @@ msgstr ""
 "尝试下个服务器前的超时，以秒计。此超时包括代理和 TCP 连接超时。\n"
 "配置：connect-timeout <n> | server-poll-timeout <n>"
 
-#: properties/nm-openvpn-dialog.ui:2772
+#: properties/nm-openvpn-dialog.ui:2838
 msgid "0"
 msgstr "0"
 
-#: properties/nm-openvpn-dialog.ui:2782
-msgid "Push peer info"
-msgstr "推送节点信息"
+#: properties/nm-openvpn-dialog.ui:2848
+msgid "_Push peer info"
+msgstr "推送节点信息(_P)"
 
-#: properties/nm-openvpn-dialog.ui:2786
+#: properties/nm-openvpn-dialog.ui:2852
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
@@ -1186,142 +1218,142 @@ msgstr ""
 "推送客户端的额外信息到服务器上。\n"
 "配置：push-peer-info"
 
-#: properties/nm-openvpn-dialog.ui:2803
+#: properties/nm-openvpn-dialog.ui:2869
 msgid "Misc"
 msgstr "杂项"
 
-#: properties/nm-openvpn-dialog.ui:2836
+#: properties/nm-openvpn-dialog.ui:2902
 msgid "Choose an OpenVPN static key…"
 msgstr "选择 OpenVPN 静态密钥…"
 
-#: properties/nm-openvpn-dialog.ui:2853 properties/nm-openvpn-dialog.ui:2906
-#: properties/nm-openvpn-dialog.ui:2960 properties/nm-openvpn-dialog.ui:3013
-#: properties/nm-openvpn-dialog.ui:3066
+#: properties/nm-openvpn-dialog.ui:2919 properties/nm-openvpn-dialog.ui:2972
+#: properties/nm-openvpn-dialog.ui:3026 properties/nm-openvpn-dialog.ui:3079
+#: properties/nm-openvpn-dialog.ui:3132
 msgid "_Select"
 msgstr "选中(_S)"
 
-#: properties/nm-openvpn-dialog.ui:2889
+#: properties/nm-openvpn-dialog.ui:2955
 msgid "Choose CRL file"
 msgstr "选择 CRL 文件"
 
-#: properties/nm-openvpn-dialog.ui:2943
+#: properties/nm-openvpn-dialog.ui:3009
 msgid "Choose CRL directory"
 msgstr "选择 CRL 目录"
 
-#: properties/nm-openvpn-dialog.ui:2996
+#: properties/nm-openvpn-dialog.ui:3062
 msgid "Choose a key file"
 msgstr "选择密钥文件"
 
-#: properties/nm-openvpn-dialog.ui:3049
+#: properties/nm-openvpn-dialog.ui:3115
 msgid "Choose extra certificate file"
 msgstr "选择额外证书文件"
 
-#: properties/nm-openvpn-editor.c:780
+#: properties/nm-openvpn-editor.c:785
 msgid "OpenVPN Static Keys (*.key)"
 msgstr "OpenVPN 静态密钥（*.key）"
 
-#: properties/nm-openvpn-editor.c:937 properties/nm-openvpn-editor.c:1031
+#: properties/nm-openvpn-editor.c:944 properties/nm-openvpn-editor.c:1038
 msgid "Default"
 msgstr "默认"
 
-#: properties/nm-openvpn-editor.c:1015
+#: properties/nm-openvpn-editor.c:1022
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: properties/nm-openvpn-editor.c:1016
+#: properties/nm-openvpn-editor.c:1023
 msgid "MD-5"
 msgstr "MD-5"
 
-#: properties/nm-openvpn-editor.c:1017
+#: properties/nm-openvpn-editor.c:1024
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: properties/nm-openvpn-editor.c:1018
+#: properties/nm-openvpn-editor.c:1025
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: properties/nm-openvpn-editor.c:1019
+#: properties/nm-openvpn-editor.c:1026
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: properties/nm-openvpn-editor.c:1020
+#: properties/nm-openvpn-editor.c:1027
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: properties/nm-openvpn-editor.c:1021
+#: properties/nm-openvpn-editor.c:1028
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: properties/nm-openvpn-editor.c:1022
+#: properties/nm-openvpn-editor.c:1029
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: properties/nm-openvpn-editor.c:1080
+#: properties/nm-openvpn-editor.c:1087
 msgid "Don’t verify certificate identification"
 msgstr "不要验证证书标识"
 
-#: properties/nm-openvpn-editor.c:1086
+#: properties/nm-openvpn-editor.c:1093
 msgid "Verify whole subject exactly"
 msgstr "完全验证整个主体"
 
-#: properties/nm-openvpn-editor.c:1092
+#: properties/nm-openvpn-editor.c:1099
 msgid "Verify name exactly"
 msgstr "完全验证名称"
 
-#: properties/nm-openvpn-editor.c:1098
+#: properties/nm-openvpn-editor.c:1105
 msgid "Verify name by prefix"
 msgstr "验证名称前缀"
 
-#: properties/nm-openvpn-editor.c:1104
+#: properties/nm-openvpn-editor.c:1111
 msgid "Verify subject partially (legacy mode, strongly discouraged)"
 msgstr "部分验证主体（传统模式，强烈不建议）"
 
-#: properties/nm-openvpn-editor.c:1217 properties/nm-openvpn-editor.c:1289
+#: properties/nm-openvpn-editor.c:1224 properties/nm-openvpn-editor.c:1296
 msgid "Server"
 msgstr "服务器"
 
-#: properties/nm-openvpn-editor.c:1222 properties/nm-openvpn-editor.c:1294
+#: properties/nm-openvpn-editor.c:1229 properties/nm-openvpn-editor.c:1301
 msgid "Client"
 msgstr "客户端"
 
-#: properties/nm-openvpn-editor.c:1621
+#: properties/nm-openvpn-editor.c:1628
 msgid "HTTP"
 msgstr "HTTP"
 
-#: properties/nm-openvpn-editor.c:1623
+#: properties/nm-openvpn-editor.c:1630
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: properties/nm-openvpn-editor.c:1738
+#: properties/nm-openvpn-editor.c:1745
 msgid "TUN"
 msgstr "TUN"
 
-#: properties/nm-openvpn-editor.c:1740
+#: properties/nm-openvpn-editor.c:1747
 msgid "TAP"
 msgstr "TAP"
 
 #. interface name is max 15 chars
-#: properties/nm-openvpn-editor.c:1747
+#: properties/nm-openvpn-editor.c:1754
 msgid "(automatic)"
 msgstr "（自动）"
 
-#: properties/nm-openvpn-editor.c:1910
+#: properties/nm-openvpn-editor.c:1926
 msgid "ping-exit"
 msgstr "ping 后退出"
 
-#: properties/nm-openvpn-editor.c:1912
+#: properties/nm-openvpn-editor.c:1928
 msgid "ping-restart"
 msgstr "ping 后重启"
 
-#: properties/nm-openvpn-editor.c:2722
+#: properties/nm-openvpn-editor.c:2757
 msgid "Certificates (TLS)"
 msgstr "证书（TLS）"
 
-#: properties/nm-openvpn-editor.c:2747
+#: properties/nm-openvpn-editor.c:2782
 msgid "Password with Certificates (TLS)"
 msgstr "密码和证书（TLS）"
 
-#: properties/nm-openvpn-editor.c:2927
+#: properties/nm-openvpn-editor.c:2938
 msgid "could not load UI widget"
 msgstr "无法加载 UI 部件"
 
@@ -1412,179 +1444,184 @@ msgstr "无效的端口"
 msgid "invalid protocol"
 msgstr "无效的协议"
 
-#: src/nm-openvpn-service.c:432
+#: src/nm-openvpn-service.c:522
 #, c-format
 msgid "invalid address “%s”"
 msgstr "无效的地址“%s”"
 
-#: src/nm-openvpn-service.c:444
+#: src/nm-openvpn-service.c:534
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "无效的整数属性“%s”或者超出范围 [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: src/nm-openvpn-service.c:455
+#: src/nm-openvpn-service.c:545
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "无效的布尔属性“%s”（不是 yes 或 no）"
 
-#: src/nm-openvpn-service.c:462
+#: src/nm-openvpn-service.c:552
 #, c-format
 msgid "unhandled property “%s” type %s"
 msgstr "未处理的属性“%s”类型 %s"
 
-#: src/nm-openvpn-service.c:473
+#: src/nm-openvpn-service.c:563
 #, c-format
 msgid "property “%s” invalid or not supported"
 msgstr "属性“%s”无效或不支持"
 
-#: src/nm-openvpn-service.c:489
+#: src/nm-openvpn-service.c:579
 msgid "No VPN configuration options."
 msgstr "没有 VPN 配置选项。"
 
-#: src/nm-openvpn-service.c:946
+#: src/nm-openvpn-service.c:1023
 msgid "A username is required."
 msgstr "需要用户名。"
 
-#: src/nm-openvpn-service.c:950
+#: src/nm-openvpn-service.c:1036
 msgid "A password is required."
 msgstr "需要密码。"
 
-#: src/nm-openvpn-service.c:953
+#: src/nm-openvpn-service.c:1038
 msgid "A username and password are required."
 msgstr "需要用户名和密码。"
 
-#: src/nm-openvpn-service.c:975
+#: src/nm-openvpn-service.c:1059
 msgid "A private key password is required."
 msgstr "需要私钥密码。"
 
-#: src/nm-openvpn-service.c:988
+#: src/nm-openvpn-service.c:1072
 msgid "An HTTP Proxy username is required."
 msgstr "需要 HTTP 代理用户名。"
 
-#: src/nm-openvpn-service.c:992
+#: src/nm-openvpn-service.c:1076
 msgid "An HTTP Proxy password is required."
 msgstr "需要 HTTP 代理密码。"
 
-#: src/nm-openvpn-service.c:995
+#: src/nm-openvpn-service.c:1079
 msgid "An HTTP Proxy username and password are required."
 msgstr "需要 HTTP 代理用户名和密码。"
 
-#: src/nm-openvpn-service.c:1366 src/nm-openvpn-service.c:2198
-#: src/nm-openvpn-service.c:2233
+#: src/nm-openvpn-service.c:1486 src/nm-openvpn-service.c:2338
+#: src/nm-openvpn-service.c:2373
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr "无法处理请求，因为 VPN 连接设置是无效的。"
 
-#: src/nm-openvpn-service.c:1375 src/nm-openvpn-service.c:2207
+#: src/nm-openvpn-service.c:1497 src/nm-openvpn-service.c:2347
 msgid "Invalid connection type."
 msgstr "错误的连接类型。"
 
-#: src/nm-openvpn-service.c:1393
+#: src/nm-openvpn-service.c:1515
 msgid "Could not find the openvpn binary."
 msgstr "不能找到 openvpn 命令。"
 
-#: src/nm-openvpn-service.c:1441
+#: src/nm-openvpn-service.c:1563
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "无效的端口号“%s”。"
 
-#: src/nm-openvpn-service.c:1461
+#: src/nm-openvpn-service.c:1583
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "无效的协议“%s”。"
 
-#: src/nm-openvpn-service.c:1510
+#: src/nm-openvpn-service.c:1632
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "无效的代理类型“%s”。"
 
-#: src/nm-openvpn-service.c:1608
+#: src/nm-openvpn-service.c:1730
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "无效的 ping 时长“%s”。"
 
-#: src/nm-openvpn-service.c:1621
+#: src/nm-openvpn-service.c:1743
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "无效的 ping 退出时长“%s”。"
 
-#: src/nm-openvpn-service.c:1634
+#: src/nm-openvpn-service.c:1756
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "无效的 ping 重启时长“%s”。"
 
-#: src/nm-openvpn-service.c:1647
+#: src/nm-openvpn-service.c:1769
 #, c-format
 msgid "Invalid connect timeout “%s”."
 msgstr "无效的连接超时“%s”。"
 
-#: src/nm-openvpn-service.c:1672
+#: src/nm-openvpn-service.c:1794
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "无效的 max-routes 参数“%s”。"
 
-#: src/nm-openvpn-service.c:1716
+#: src/nm-openvpn-service.c:1842
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "无效的密钥大小“%s”。"
 
-#: src/nm-openvpn-service.c:1788
+#: src/nm-openvpn-service.c:1915
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "tls-remote 和 verify-x509-name 有无效的配置。"
 
-#: src/nm-openvpn-service.c:1801
+#: src/nm-openvpn-service.c:1928
 msgid "Invalid verify-x509-name."
 msgstr "无效的 verify-x509-name。"
 
-#: src/nm-openvpn-service.c:1824
+#: src/nm-openvpn-service.c:1951
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "无效的重新协商秒数 %s。"
 
-#: src/nm-openvpn-service.c:1854
+#: src/nm-openvpn-service.c:1981
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "无效的 TUN MTU 大小“%s”。"
 
-#: src/nm-openvpn-service.c:1867
+#: src/nm-openvpn-service.c:1994
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "无效的分段大小“%s”。"
 
-#: src/nm-openvpn-service.c:1977
+#: src/nm-openvpn-service.c:2025
+msgid ""
+"A CRL directory can only be specified for connections available to all users"
+msgstr "仅对所有用户可用的连接才能指定 CRL 目录"
+
+#: src/nm-openvpn-service.c:2117
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "未知的连接类型“%s”。"
 
-#: src/nm-openvpn-service.c:1995
+#: src/nm-openvpn-service.c:2135
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "用户“%s”未找到，检查 NM_OPENVPN_USER。"
 
-#: src/nm-openvpn-service.c:2007
+#: src/nm-openvpn-service.c:2147
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "组“%s”未找到，检查 NM_OPENVPN_USER。"
 
-#: src/nm-openvpn-service.c:2246
+#: src/nm-openvpn-service.c:2386
 msgid "Unhandled pending authentication."
 msgstr "未处理的待定验证。"
 
-#: src/nm-openvpn-service.c:2364
+#: src/nm-openvpn-service.c:2505
 msgid "Don’t quit when VPN connection terminates"
 msgstr "不要在 VPN 连接终止时退出"
 
-#: src/nm-openvpn-service.c:2365
+#: src/nm-openvpn-service.c:2506
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "启用详细的调试日志记录（可能暴露密码）"
 
-#: src/nm-openvpn-service.c:2366
+#: src/nm-openvpn-service.c:2507
 msgid "D-Bus name to use for this instance"
 msgstr "此实例使用的 D-Bus 名称"
 
-#: src/nm-openvpn-service.c:2392
+#: src/nm-openvpn-service.c:2535
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
