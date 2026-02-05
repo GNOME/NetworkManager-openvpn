@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: NetworkManager-openvpn main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
 "issues\n"
-"POT-Creation-Date: 2025-07-09 12:51+0000\n"
-"PO-Revision-Date: 2025-07-27 12:06+0900\n"
+"POT-Creation-Date: 2025-12-15 17:47+0000\n"
+"PO-Revision-Date: 2025-12-18 11:03+0900\n"
 "Last-Translator: Makoto Sakaguchi <ycco34vx@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.8\n"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:10
 msgid "OpenVPN client"
@@ -47,40 +47,40 @@ msgstr "詳細オプションダイアログ"
 msgid "The NetworkManager Developers"
 msgstr "NetworkManager 開発者"
 
-#: auth-dialog/main.c:185
+#: auth-dialog/main.c:186
 msgid "Authentication required"
 msgstr "認証が必要です"
 
-#: auth-dialog/main.c:192 properties/nm-openvpn-dialog.ui:336
+#: auth-dialog/main.c:193 properties/nm-openvpn-dialog.ui:336
 #: properties/nm-openvpn-dialog.ui:435 properties/nm-openvpn-editor.c:2768
 msgid "Password"
 msgstr "パスワード"
 
-#: auth-dialog/main.c:199
+#: auth-dialog/main.c:200
 msgid "Certificate password"
 msgstr "証明書パスワード"
 
-#: auth-dialog/main.c:206
+#: auth-dialog/main.c:207
 msgid "HTTP proxy password"
 msgstr "HTTP プロキシパスワード"
 
-#: auth-dialog/main.c:214
+#: auth-dialog/main.c:215
 msgid "Challenge response"
 msgstr "チャレンジレスポンス"
 
-#: auth-dialog/main.c:254
+#: auth-dialog/main.c:255
 msgid "Authenticate VPN"
 msgstr "VPN 認証"
 
-#: auth-dialog/main.c:263
+#: auth-dialog/main.c:264
 msgid "Certificate pass_word:"
 msgstr "証明書パスワード(_W):"
 
-#: auth-dialog/main.c:269
+#: auth-dialog/main.c:270
 msgid "_HTTP proxy password:"
 msgstr "HTTP プロキシパスワード(_H):"
 
-#: auth-dialog/main.c:553
+#: auth-dialog/main.c:559
 #, c-format
 msgid "You need to authenticate to access the Virtual Private Network “%s”."
 msgstr "仮想プライベートネットワーク “%s” にアクセスするには認証が必要です。"
@@ -545,9 +545,9 @@ msgstr "OpenVPN 詳細オプション"
 msgid "Advanced Properties"
 msgstr "詳細プロパティ"
 
-#: properties/nm-openvpn-dialog.ui:919 properties/nm-openvpn-dialog.ui:2905
-#: properties/nm-openvpn-dialog.ui:2958 properties/nm-openvpn-dialog.ui:3012
-#: properties/nm-openvpn-dialog.ui:3065 properties/nm-openvpn-dialog.ui:3118
+#: properties/nm-openvpn-dialog.ui:919 properties/nm-openvpn-dialog.ui:2910
+#: properties/nm-openvpn-dialog.ui:2963 properties/nm-openvpn-dialog.ui:3017
+#: properties/nm-openvpn-dialog.ui:3070 properties/nm-openvpn-dialog.ui:3123
 msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
@@ -895,7 +895,7 @@ msgstr ""
 msgid "Verify CRL from _file"
 msgstr "ファイルから CRL を検証(_F)"
 
-#: properties/nm-openvpn-dialog.ui:1793 properties/nm-openvpn-dialog.ui:1819
+#: properties/nm-openvpn-dialog.ui:1794 properties/nm-openvpn-dialog.ui:1821
 msgid ""
 "Check peer certificate against the specified file in PEM format. A CRL "
 "(certificate revocation list) is used when a particular key is compromised "
@@ -905,11 +905,11 @@ msgstr ""
 "失効リスト) は、特定のキーが侵害されたが全体的な PKI がまだ無傷の場合に使用さ"
 "れます。"
 
-#: properties/nm-openvpn-dialog.ui:1803
+#: properties/nm-openvpn-dialog.ui:1804
 msgid "Verify CRL from _directory"
 msgstr "ディレクトリから CRL を検証(_D)"
 
-#: properties/nm-openvpn-dialog.ui:1807 properties/nm-openvpn-dialog.ui:1862
+#: properties/nm-openvpn-dialog.ui:1809 properties/nm-openvpn-dialog.ui:1864
 msgid ""
 "Check peer certificate by looking at files in the specified directory. The "
 "directory must contain files named as revoked serial numbers (the files may "
@@ -920,19 +920,19 @@ msgstr ""
 "要があります (ファイルは空でも構いません。内容が読み取られることはありませ"
 "ん)。"
 
-#: properties/nm-openvpn-dialog.ui:1828 properties/nm-openvpn-editor.c:103
+#: properties/nm-openvpn-dialog.ui:1830 properties/nm-openvpn-editor.c:103
 msgid "(None)"
 msgstr "(なし)"
 
-#: properties/nm-openvpn-dialog.ui:1921
+#: properties/nm-openvpn-dialog.ui:1923
 msgid "Security"
 msgstr "セキュリティ"
 
-#: properties/nm-openvpn-dialog.ui:1950
+#: properties/nm-openvpn-dialog.ui:1952
 msgid "_Subject Match"
 msgstr "サブジェクト一致(_S)"
 
-#: properties/nm-openvpn-dialog.ui:1964
+#: properties/nm-openvpn-dialog.ui:1966
 msgid ""
 "Subject or Common Name to verify server certificate information against.\n"
 "\n"
@@ -944,11 +944,11 @@ msgstr ""
 "設定: verify-x509-name subject-or-name [mode]\n"
 "設定 (レガシーモード): tls-remote subject-or-name"
 
-#: properties/nm-openvpn-dialog.ui:1979
+#: properties/nm-openvpn-dialog.ui:1981
 msgid "Server Cert_ificate Check"
 msgstr "サーバー証明書チェック(_I)"
 
-#: properties/nm-openvpn-dialog.ui:1993
+#: properties/nm-openvpn-dialog.ui:1995
 msgid ""
 "Verify server certificate identification.\n"
 "\n"
@@ -977,11 +977,11 @@ msgstr ""
 "設定: verify-x509-name subject-or-name [mode]\n"
 "設定 (レガシーモード): tls-remote subject-or-name"
 
-#: properties/nm-openvpn-dialog.ui:2033
+#: properties/nm-openvpn-dialog.ui:2035
 msgid "Verify peer (server) certificate _usage signature"
 msgstr "ピア (サーバー) 証明書使用署名を検証(_U)"
 
-#: properties/nm-openvpn-dialog.ui:2037
+#: properties/nm-openvpn-dialog.ui:2039
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules."
@@ -989,11 +989,11 @@ msgstr ""
 "ピア証明書が RFC3280 TLS ルールに基づく明示的なキー使用法と拡張キー使用法で署"
 "名されていることを要求します。"
 
-#: properties/nm-openvpn-dialog.ui:2051
+#: properties/nm-openvpn-dialog.ui:2053
 msgid "Remote peer certificate _TLS type"
 msgstr "リモートピア証明書 TLS タイプ(_T)"
 
-#: properties/nm-openvpn-dialog.ui:2065
+#: properties/nm-openvpn-dialog.ui:2067
 msgid ""
 "Require that peer certificate was signed with an explicit key usage and "
 "extended key usage based on RFC3280 TLS rules.\n"
@@ -1003,21 +1003,21 @@ msgstr ""
 "名されていることを要求します。\n"
 "設定: remote-cert-tls client|server"
 
-#: properties/nm-openvpn-dialog.ui:2097
+#: properties/nm-openvpn-dialog.ui:2099
 msgid "_Verify peer (server) certificate nsCertType designation"
 msgstr "ピア (サーバー) 証明書 nsCertType 指定を検証(_V)"
 
-#: properties/nm-openvpn-dialog.ui:2101
+#: properties/nm-openvpn-dialog.ui:2103
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation."
 msgstr "ピア証明書が明示的な nsCertType 指定で署名されていることを要求します。"
 
-#: properties/nm-openvpn-dialog.ui:2117
+#: properties/nm-openvpn-dialog.ui:2119
 msgid "_Remote peer certificate nsCert designation"
 msgstr "リモートピア証明書 nsCert 指定(_R)"
 
-#: properties/nm-openvpn-dialog.ui:2131
+#: properties/nm-openvpn-dialog.ui:2133
 msgid ""
 "Require that peer certificate was signed with an explicit nsCertType "
 "designation.\n"
@@ -1026,11 +1026,11 @@ msgstr ""
 "ピア証明書が明示的な nsCertType 指定で署名されていることを要求します。\n"
 "設定: ns-cert-type client|server"
 
-#: properties/nm-openvpn-dialog.ui:2173
+#: properties/nm-openvpn-dialog.ui:2175
 msgid "Key _Direction"
 msgstr "鍵方向(_D)"
 
-#: properties/nm-openvpn-dialog.ui:2187
+#: properties/nm-openvpn-dialog.ui:2189
 msgid ""
 "Add an additional layer of HMAC authentication on top of the TLS control "
 "channel to protect against DoS attacks. In case of TLS-Crypt mode, the "
@@ -1041,7 +1041,7 @@ msgstr ""
 "します。TLS-Crypt モードの場合、制御チャネルも暗号化されます。\n"
 "設定: tls-auth <file> [direction] | tls-crypt <file>"
 
-#: properties/nm-openvpn-dialog.ui:2231
+#: properties/nm-openvpn-dialog.ui:2233
 msgid ""
 "Direction parameter for static key mode.\n"
 "If key direction is used, it must be the opposite of that used on the VPN "
@@ -1056,23 +1056,23 @@ msgstr ""
 "さい。\n"
 "設定: tls-auth <file> [direction]"
 
-#: properties/nm-openvpn-dialog.ui:2251
+#: properties/nm-openvpn-dialog.ui:2253
 msgid "Key _File"
 msgstr "鍵ファイル(_F)"
 
-#: properties/nm-openvpn-dialog.ui:2265
+#: properties/nm-openvpn-dialog.ui:2267
 msgid "_Mode"
 msgstr "モード(_M)"
 
-#: properties/nm-openvpn-dialog.ui:2277 properties/nm-openvpn-dialog.ui:2384
+#: properties/nm-openvpn-dialog.ui:2280 properties/nm-openvpn-dialog.ui:2387
 msgid "Add an additional layer of encryption or HMAC authentication."
 msgstr "暗号化または HMAC 認証の追加レイヤーを追加します。"
 
-#: properties/nm-openvpn-dialog.ui:2297
+#: properties/nm-openvpn-dialog.ui:2300
 msgid "_Extra Certificates"
 msgstr "追加証明書(_E)"
 
-#: properties/nm-openvpn-dialog.ui:2310
+#: properties/nm-openvpn-dialog.ui:2313
 msgid ""
 "Specify a file containing one or more PEM certs (concatenated together) that "
 "complete the local certificate chain.\n"
@@ -1082,11 +1082,11 @@ msgstr ""
 "含むファイルを指定します。\n"
 "設定: extra-certs <file>"
 
-#: properties/nm-openvpn-dialog.ui:2353
+#: properties/nm-openvpn-dialog.ui:2356
 msgid "TLS ci_pher string"
 msgstr "TLS 暗号文字列(_P)"
 
-#: properties/nm-openvpn-dialog.ui:2366
+#: properties/nm-openvpn-dialog.ui:2369
 msgid ""
 "Set a value for the --tls-cipher parameter. This can be useful for working "
 "with VPNs using deprecated hashing schemes."
@@ -1094,23 +1094,23 @@ msgstr ""
 "--tls-cipher パラメーターの値を設定します。これは非推奨のハッシュスキームを使"
 "用する VPN で作業する場合に有用です。"
 
-#: properties/nm-openvpn-dialog.ui:2387
+#: properties/nm-openvpn-dialog.ui:2390
 msgid "Additional TLS authentication or encryption"
 msgstr "追加の TLS 認証または暗号化"
 
-#: properties/nm-openvpn-dialog.ui:2414
+#: properties/nm-openvpn-dialog.ui:2417
 msgid "Controls min and max version allowed for TLS."
 msgstr "TLS で許可される最小および最大バージョンを制御します。"
 
-#: properties/nm-openvpn-dialog.ui:2417
+#: properties/nm-openvpn-dialog.ui:2420
 msgid "TLS version control"
 msgstr "TLS バージョン制御"
 
-#: properties/nm-openvpn-dialog.ui:2442
+#: properties/nm-openvpn-dialog.ui:2445
 msgid "TLS mi_n version"
 msgstr "TLS 最小バージョン(_N)"
 
-#: properties/nm-openvpn-dialog.ui:2455
+#: properties/nm-openvpn-dialog.ui:2458
 msgid ""
 " Sets the minimum TLS version we will accept from the peer (default is "
 "\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1118,11 +1118,11 @@ msgstr ""
 " ピアから受け入れる最小 TLS バージョンを設定します (デフォルトは \"1.0\")。"
 "バージョンの例には \"1.0\"、\"1.1\"、\"1.2\" があります。"
 
-#: properties/nm-openvpn-dialog.ui:2467
+#: properties/nm-openvpn-dialog.ui:2470
 msgid "TLS ma_x version"
 msgstr "TLS 最大バージョン(_X)"
 
-#: properties/nm-openvpn-dialog.ui:2480
+#: properties/nm-openvpn-dialog.ui:2483
 msgid ""
 "Set the maximum TLS version we will use (default is the highest version "
 "supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
@@ -1130,11 +1130,11 @@ msgstr ""
 "使用する最大 TLS バージョンを設定します (デフォルトはサポートされている最高"
 "バージョン)。バージョンの例には \"1.0\"、\"1.1\"、\"1.2\" があります。"
 
-#: properties/nm-openvpn-dialog.ui:2490
+#: properties/nm-openvpn-dialog.ui:2493
 msgid "_or highest"
 msgstr "または最高(_O)"
 
-#: properties/nm-openvpn-dialog.ui:2493
+#: properties/nm-openvpn-dialog.ui:2496
 msgid ""
 "If set and version is not recognized, we will only accept the highest TLS "
 "version supported by the local SSL implementation."
@@ -1142,11 +1142,11 @@ msgstr ""
 "設定されていてバージョンが認識されない場合、ローカル SSL 実装でサポートされて"
 "いる最高の TLS バージョンのみを受け入れます。"
 
-#: properties/nm-openvpn-dialog.ui:2522
+#: properties/nm-openvpn-dialog.ui:2525
 msgid "TLS Authentication"
 msgstr "TLS 認証"
 
-#: properties/nm-openvpn-dialog.ui:2543
+#: properties/nm-openvpn-dialog.ui:2546
 msgid ""
 "Proxy type: HTTP or Socks.\n"
 "config: http-proxy or socks-proxy"
@@ -1154,11 +1154,11 @@ msgstr ""
 "プロキシタイプ: HTTP または Socks\n"
 "設定: http-proxy または socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2563
+#: properties/nm-openvpn-dialog.ui:2566
 msgid "Proxy _Type"
 msgstr "プロキシタイプ(_T)"
 
-#: properties/nm-openvpn-dialog.ui:2579
+#: properties/nm-openvpn-dialog.ui:2582
 msgid ""
 "<i>Select this option if your organization requires the use of a proxy "
 "server to access the Internet.</i>"
@@ -1166,11 +1166,11 @@ msgstr ""
 "<i>組織がインターネットにアクセスするためにプロキシサーバーの使用を要求してい"
 "る場合は、このオプションを選択してください。</i>"
 
-#: properties/nm-openvpn-dialog.ui:2594
+#: properties/nm-openvpn-dialog.ui:2597
 msgid "S_erver Address"
 msgstr "サーバーアドレス(_E)"
 
-#: properties/nm-openvpn-dialog.ui:2612
+#: properties/nm-openvpn-dialog.ui:2615
 msgid ""
 "Connect to remote host through a proxy with this address.\n"
 "config: http-proxy or socks-proxy"
@@ -1178,11 +1178,11 @@ msgstr ""
 "このアドレスのプロキシ経由でリモートホストに接続します。\n"
 "設定: http-proxy または socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2625
+#: properties/nm-openvpn-dialog.ui:2628
 msgid "_Port"
 msgstr "ポート(_P)"
 
-#: properties/nm-openvpn-dialog.ui:2642
+#: properties/nm-openvpn-dialog.ui:2645
 msgid ""
 "Connect to remote host through a proxy with this port.\n"
 "config: http-proxy or socks-proxy"
@@ -1190,11 +1190,11 @@ msgstr ""
 "このポートのプロキシ経由でリモートホストに接続します。\n"
 "設定: http-proxy または socks-proxy"
 
-#: properties/nm-openvpn-dialog.ui:2663
+#: properties/nm-openvpn-dialog.ui:2666
 msgid "_Retry indefinitely when errors occur"
 msgstr "エラー発生時に無限に再試行(_R)"
 
-#: properties/nm-openvpn-dialog.ui:2667
+#: properties/nm-openvpn-dialog.ui:2670
 msgid ""
 "Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
 "config: http-proxy-retry or socks-proxy-retry"
@@ -1203,43 +1203,43 @@ msgstr ""
 "す。\n"
 "設定: http-proxy-retry または socks-proxy-retry"
 
-#: properties/nm-openvpn-dialog.ui:2681
+#: properties/nm-openvpn-dialog.ui:2684
 msgid "Proxy _Username"
 msgstr "プロキシユーザー名(_U)"
 
-#: properties/nm-openvpn-dialog.ui:2696
+#: properties/nm-openvpn-dialog.ui:2699
 msgid "Proxy Passwor_d"
 msgstr "プロキシパスワード(_D)"
 
-#: properties/nm-openvpn-dialog.ui:2711
+#: properties/nm-openvpn-dialog.ui:2714
 msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
 msgstr ""
 "プロンプトが表示されたときに OpenVPN に渡される HTTP/Socks プロキシユーザー"
 "名。"
 
-#: properties/nm-openvpn-dialog.ui:2722
+#: properties/nm-openvpn-dialog.ui:2725
 msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
 msgstr ""
 "プロンプトが表示されたときに OpenVPN に渡される HTTP/Socks プロキシパスワー"
 "ド。"
 
-#: properties/nm-openvpn-dialog.ui:2732
+#: properties/nm-openvpn-dialog.ui:2735
 msgid "_Show password"
 msgstr "パスワードを表示(_S)"
 
-#: properties/nm-openvpn-dialog.ui:2759
+#: properties/nm-openvpn-dialog.ui:2762
 msgid "Proxies"
 msgstr "プロキシ"
 
-#: properties/nm-openvpn-dialog.ui:2780
+#: properties/nm-openvpn-dialog.ui:2783
 msgid "Path mtu _discovery"
 msgstr "パス MTU 発見(_D)"
 
-#: properties/nm-openvpn-dialog.ui:2813
+#: properties/nm-openvpn-dialog.ui:2817
 msgid "Connect _timeout"
 msgstr "接続タイムアウト(_T)"
 
-#: properties/nm-openvpn-dialog.ui:2817 properties/nm-openvpn-dialog.ui:2830
+#: properties/nm-openvpn-dialog.ui:2822 properties/nm-openvpn-dialog.ui:2835
 msgid ""
 "The timeout in seconds before trying the next server. This timeout includes "
 "proxy and TCP connect timeouts.\n"
@@ -1250,15 +1250,15 @@ msgstr ""
 "\n"
 "設定: connect-timeout <n> | server-poll-timeout <n>"
 
-#: properties/nm-openvpn-dialog.ui:2833
+#: properties/nm-openvpn-dialog.ui:2838
 msgid "0"
 msgstr "0"
 
-#: properties/nm-openvpn-dialog.ui:2843
+#: properties/nm-openvpn-dialog.ui:2848
 msgid "_Push peer info"
 msgstr "ピア情報をプッシュ(_P)"
 
-#: properties/nm-openvpn-dialog.ui:2847
+#: properties/nm-openvpn-dialog.ui:2852
 msgid ""
 "Push additional information about the client to server.\n"
 "config: push-peer-info"
@@ -1266,33 +1266,33 @@ msgstr ""
 "クライアントに関する追加情報をサーバーにプッシュします。\n"
 "設定: push-peer-info"
 
-#: properties/nm-openvpn-dialog.ui:2864
+#: properties/nm-openvpn-dialog.ui:2869
 msgid "Misc"
 msgstr "その他"
 
-#: properties/nm-openvpn-dialog.ui:2897
+#: properties/nm-openvpn-dialog.ui:2902
 msgid "Choose an OpenVPN static key…"
 msgstr "OpenVPN 静的鍵を選択…"
 
-#: properties/nm-openvpn-dialog.ui:2914 properties/nm-openvpn-dialog.ui:2967
-#: properties/nm-openvpn-dialog.ui:3021 properties/nm-openvpn-dialog.ui:3074
-#: properties/nm-openvpn-dialog.ui:3127
+#: properties/nm-openvpn-dialog.ui:2919 properties/nm-openvpn-dialog.ui:2972
+#: properties/nm-openvpn-dialog.ui:3026 properties/nm-openvpn-dialog.ui:3079
+#: properties/nm-openvpn-dialog.ui:3132
 msgid "_Select"
 msgstr "選択(_S)"
 
-#: properties/nm-openvpn-dialog.ui:2950
+#: properties/nm-openvpn-dialog.ui:2955
 msgid "Choose CRL file"
 msgstr "CRL ファイルを選択"
 
-#: properties/nm-openvpn-dialog.ui:3004
+#: properties/nm-openvpn-dialog.ui:3009
 msgid "Choose CRL directory"
 msgstr "CRL ディレクトリを選択"
 
-#: properties/nm-openvpn-dialog.ui:3057
+#: properties/nm-openvpn-dialog.ui:3062
 msgid "Choose a key file"
 msgstr "鍵ファイルを選択"
 
-#: properties/nm-openvpn-dialog.ui:3110
+#: properties/nm-openvpn-dialog.ui:3115
 msgid "Choose extra certificate file"
 msgstr "追加証明書ファイルを選択"
 
@@ -1496,179 +1496,185 @@ msgstr "無効なポート"
 msgid "invalid protocol"
 msgstr "無効なプロトコル"
 
-#: src/nm-openvpn-service.c:430
+#: src/nm-openvpn-service.c:522
 #, c-format
 msgid "invalid address “%s”"
 msgstr "無効なアドレス “%s”"
 
-#: src/nm-openvpn-service.c:442
+#: src/nm-openvpn-service.c:534
 #, c-format
 msgid "invalid integer property “%s” or out of range [%d -> %d]"
 msgstr "無効な整数型プロパティ “%s” または範囲外です [%d -> %d]"
 
 #. Translators: keep "yes" and "no" untranslated!
-#: src/nm-openvpn-service.c:453
+#: src/nm-openvpn-service.c:545
 #, c-format
 msgid "invalid boolean property “%s” (not yes or no)"
 msgstr "無効なブーリアン型プロパティ “%s” (yes または no ではありません)"
 
-#: src/nm-openvpn-service.c:460
+#: src/nm-openvpn-service.c:552
 #, c-format
 msgid "unhandled property “%s” type %s"
 msgstr "処理されていないプロパティ “%s” (型: %s)"
 
-#: src/nm-openvpn-service.c:471
+#: src/nm-openvpn-service.c:563
 #, c-format
 msgid "property “%s” invalid or not supported"
 msgstr "プロパティ “%s” は無効またはサポートされていません"
 
-#: src/nm-openvpn-service.c:487
+#: src/nm-openvpn-service.c:579
 msgid "No VPN configuration options."
 msgstr "OpenVPN 構成オプションがありません。"
 
-#: src/nm-openvpn-service.c:938
+#: src/nm-openvpn-service.c:1023
 msgid "A username is required."
 msgstr "ユーザー名が必要です。"
 
-#: src/nm-openvpn-service.c:951
+#: src/nm-openvpn-service.c:1036
 msgid "A password is required."
 msgstr "パスワードが必要です。"
 
-#: src/nm-openvpn-service.c:953
+#: src/nm-openvpn-service.c:1038
 msgid "A username and password are required."
 msgstr "ユーザー名とパスワードが必要です。"
 
-#: src/nm-openvpn-service.c:974
+#: src/nm-openvpn-service.c:1059
 msgid "A private key password is required."
 msgstr "秘密鍵のパスワードが必要です。"
 
-#: src/nm-openvpn-service.c:987
+#: src/nm-openvpn-service.c:1072
 msgid "An HTTP Proxy username is required."
 msgstr "HTTP プロキシのユーザー名が必要です。"
 
-#: src/nm-openvpn-service.c:991
+#: src/nm-openvpn-service.c:1076
 msgid "An HTTP Proxy password is required."
 msgstr "HTTP プロキシのパスワードが必要です。"
 
-#: src/nm-openvpn-service.c:994
+#: src/nm-openvpn-service.c:1079
 msgid "An HTTP Proxy username and password are required."
 msgstr "HTTP プロキシのユーザー名とパスワードが必要です。"
 
-#: src/nm-openvpn-service.c:1371 src/nm-openvpn-service.c:2207
-#: src/nm-openvpn-service.c:2242
+#: src/nm-openvpn-service.c:1486 src/nm-openvpn-service.c:2338
+#: src/nm-openvpn-service.c:2373
 msgid ""
 "Could not process the request because the VPN connection settings were "
 "invalid."
 msgstr "VPN 接続設定が無効なため、リクエストを処理できませんでした。"
 
-#: src/nm-openvpn-service.c:1380 src/nm-openvpn-service.c:2216
+#: src/nm-openvpn-service.c:1497 src/nm-openvpn-service.c:2347
 msgid "Invalid connection type."
 msgstr "無効な接続タイプ。"
 
-#: src/nm-openvpn-service.c:1398
+#: src/nm-openvpn-service.c:1515
 msgid "Could not find the openvpn binary."
 msgstr "openvpn バイナリが見つかりませんでした。"
 
-#: src/nm-openvpn-service.c:1446
+#: src/nm-openvpn-service.c:1563
 #, c-format
 msgid "Invalid port number “%s”."
 msgstr "無効なポート番号 “%s” です。"
 
-#: src/nm-openvpn-service.c:1466
+#: src/nm-openvpn-service.c:1583
 #, c-format
 msgid "Invalid proto “%s”."
 msgstr "無効なプロトコル “%s” です。"
 
-#: src/nm-openvpn-service.c:1515
+#: src/nm-openvpn-service.c:1632
 #, c-format
 msgid "Invalid proxy type “%s”."
 msgstr "無効なプロキシタイプ “%s” です。"
 
-#: src/nm-openvpn-service.c:1613
+#: src/nm-openvpn-service.c:1730
 #, c-format
 msgid "Invalid ping duration “%s”."
 msgstr "無効な ping 継続時間 “%s” です。"
 
-#: src/nm-openvpn-service.c:1626
+#: src/nm-openvpn-service.c:1743
 #, c-format
 msgid "Invalid ping-exit duration “%s”."
 msgstr "無効な ping-exit 継続時間 “%s” です。"
 
-#: src/nm-openvpn-service.c:1639
+#: src/nm-openvpn-service.c:1756
 #, c-format
 msgid "Invalid ping-restart duration “%s”."
 msgstr "無効な ping-restart 継続時間 “%s” です。"
 
-#: src/nm-openvpn-service.c:1652
+#: src/nm-openvpn-service.c:1769
 #, c-format
 msgid "Invalid connect timeout “%s”."
 msgstr "無効な接続タイムアウト “%s” です。"
 
-#: src/nm-openvpn-service.c:1677
+#: src/nm-openvpn-service.c:1794
 #, c-format
 msgid "Invalid max-routes argument “%s”."
 msgstr "無効な max-routes 引数 “%s” です。"
 
-#: src/nm-openvpn-service.c:1725
+#: src/nm-openvpn-service.c:1842
 #, c-format
 msgid "Invalid keysize “%s”."
 msgstr "無効なキーサイズ “%s” です。"
 
-#: src/nm-openvpn-service.c:1797
+#: src/nm-openvpn-service.c:1915
 msgid "Invalid configuration with tls-remote and verify-x509-name."
 msgstr "tls-remote と verify-x509-name による無効な設定です。"
 
-#: src/nm-openvpn-service.c:1810
+#: src/nm-openvpn-service.c:1928
 msgid "Invalid verify-x509-name."
 msgstr "無効な verify-x509-name です。"
 
-#: src/nm-openvpn-service.c:1833
+#: src/nm-openvpn-service.c:1951
 #, c-format
 msgid "Invalid reneg seconds “%s”."
 msgstr "無効な再交渉秒数 “%s” です。"
 
-#: src/nm-openvpn-service.c:1863
+#: src/nm-openvpn-service.c:1981
 #, c-format
 msgid "Invalid TUN MTU size “%s”."
 msgstr "無効な TUN MTU サイズ “%s” です。"
 
-#: src/nm-openvpn-service.c:1876
+#: src/nm-openvpn-service.c:1994
 #, c-format
 msgid "Invalid fragment size “%s”."
 msgstr "無効なフラグメントサイズ “%s” です。"
 
-#: src/nm-openvpn-service.c:1986
+#: src/nm-openvpn-service.c:2025
+msgid ""
+"A CRL directory can only be specified for connections available to all users"
+msgstr ""
+"CRL ディレクトリを指定できるのは、すべてのユーザーが利用可能な接続のみです"
+
+#: src/nm-openvpn-service.c:2117
 #, c-format
 msgid "Unknown connection type “%s”."
 msgstr "不明な接続タイプ “%s” です。"
 
-#: src/nm-openvpn-service.c:2004
+#: src/nm-openvpn-service.c:2135
 #, c-format
 msgid "User “%s” not found, check NM_OPENVPN_USER."
 msgstr "ユーザー “%s” が見つかりません。NM_OPENVPN_USER を確認してください。"
 
-#: src/nm-openvpn-service.c:2016
+#: src/nm-openvpn-service.c:2147
 #, c-format
 msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
 msgstr "グループ “%s” が見つかりません。NM_OPENVPN_GROUP を確認してください。"
 
-#: src/nm-openvpn-service.c:2255
+#: src/nm-openvpn-service.c:2386
 msgid "Unhandled pending authentication."
 msgstr "処理されない保留中の認証です。"
 
-#: src/nm-openvpn-service.c:2373
+#: src/nm-openvpn-service.c:2505
 msgid "Don’t quit when VPN connection terminates"
 msgstr "VPN 接続が終了しても終了しない"
 
-#: src/nm-openvpn-service.c:2374
+#: src/nm-openvpn-service.c:2506
 msgid "Enable verbose debug logging (may expose passwords)"
 msgstr "詳細なデバッグログを有効にする (パスワードが露出する可能性があります)"
 
-#: src/nm-openvpn-service.c:2375
+#: src/nm-openvpn-service.c:2507
 msgid "D-Bus name to use for this instance"
 msgstr "このインスタンスで使用する D-Bus 名"
 
-#: src/nm-openvpn-service.c:2401
+#: src/nm-openvpn-service.c:2535
 msgid ""
 "nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
 msgstr ""
