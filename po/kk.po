@@ -1,0 +1,1678 @@
+# Kazakh translation for NetworkManager-openvpn.
+# Copyright (C) 2026 NetworkManager-openvpn's COPYRIGHT HOLDER
+# This file is distributed under the same license as the NetworkManager-openvpn package.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>,  2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NetworkManager-openvpn main\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/"
+"issues\n"
+"POT-Creation-Date: 2025-12-12 11:59+0000\n"
+"PO-Revision-Date: 2026-03-14 12:31+0500\n"
+"Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
+"Language-Team: Kazakh <Kazakh>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:10
+msgid "OpenVPN client"
+msgstr "OpenVPN клиенті"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:11
+msgid "Client for OpenVPN virtual private networks"
+msgstr "OpenVPN виртуалды жеке желілеріне арналған клиент"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:23
+msgid "Support for configuring OpenVPN virtual private network connections."
+msgstr "OpenVPN виртуалды жеке желі байланыстарын баптауды қолдау."
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:24
+msgid "OpenVPN is a popular and flexible free-software VPN solution."
+msgstr "OpenVPN — танымал және икемді еркін бағдарламалық VPN шешімі."
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:32
+msgid "The advanced options dialog"
+msgstr "Кеңейтілген опциялар сұхбат терезесі"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:41
+msgid "The NetworkManager Developers"
+msgstr "NetworkManager әзірлеушілері"
+
+#: auth-dialog/main.c:186
+msgid "Authentication required"
+msgstr "Аутентификация қажет"
+
+#: auth-dialog/main.c:193 properties/nm-openvpn-dialog.ui:336
+#: properties/nm-openvpn-dialog.ui:435 properties/nm-openvpn-editor.c:2768
+msgid "Password"
+msgstr "Пароль"
+
+#: auth-dialog/main.c:200
+msgid "Certificate password"
+msgstr "Сертификат паролі"
+
+#: auth-dialog/main.c:207
+msgid "HTTP proxy password"
+msgstr "HTTP прокси паролі"
+
+#: auth-dialog/main.c:215
+msgid "Challenge response"
+msgstr "Сұрау-жауап"
+
+#: auth-dialog/main.c:255
+msgid "Authenticate VPN"
+msgstr "VPN аутентификациясы"
+
+#: auth-dialog/main.c:264
+msgid "Certificate pass_word:"
+msgstr "Сертификат па_ролі:"
+
+#: auth-dialog/main.c:270
+msgid "_HTTP proxy password:"
+msgstr "HTTP _прокси паролі:"
+
+#: auth-dialog/main.c:559
+#, c-format
+msgid "You need to authenticate to access the Virtual Private Network “%s”."
+msgstr ""
+"«%s» Виртуалды жеке желісіне қол жеткізу үшін аутентификациядан өтуіңіз керек."
+
+#: properties/import-export.c:183
+#, c-format
+msgid "option %s expects between %u and %u argument"
+msgid_plural "option %s expects between %u and %u arguments"
+msgstr[0] "%s опциясы %u мен %u арасындағы аргументтерді күтеді"
+
+#: properties/import-export.c:188
+#, c-format
+msgid "option %s expects no arguments"
+msgstr "%s опциясы аргументтерді күтпейді"
+
+#: properties/import-export.c:190
+#, c-format
+msgid "option %s expects exactly one argument"
+msgid_plural "option %s expects exactly %u arguments"
+msgstr[0] "%s опциясы дәл %u аргументті күтеді"
+
+#: properties/import-export.c:219
+#, c-format
+msgid "argument %s of “%s” can not be empty"
+msgstr "«%2$s» ішіндегі %1$s аргументі бос болмауы керек"
+
+#: properties/import-export.c:221
+#, c-format
+msgid "argument of “%s” can not be empty"
+msgstr "«%s» аргументі бос болмауы керек"
+
+#: properties/import-export.c:237
+#, c-format
+msgid "argument %s of “%s” must be UTF-8 encoded"
+msgstr "«%2$s» ішіндегі %1$s аргументі UTF-8 кодтауында болуы керек"
+
+#: properties/import-export.c:239
+#, c-format
+msgid "argument of “%s” must be UTF-8 encoded"
+msgstr "«%s» аргументі UTF-8 кодтауында болуы керек"
+
+#: properties/import-export.c:263
+#, c-format
+msgid "invalid %uth argument to “%s” where number expected"
+msgstr "«%2$s» үшін %1$u-ші аргумент жарамсыз, сан күтілген еді"
+
+#. we don't support these special destinations, as they currently cannot be
+#. expressed
+#. * in a connection.
+#: properties/import-export.c:304
+#, c-format
+msgid "unsupported %uth argument %s to “%s”"
+msgstr "«%3$s» үшін қолдау көрсетілмейтін %1$u-ші %2$s аргументі"
+
+#. we also don't support specifing a FQDN.
+#: properties/import-export.c:322
+#, c-format
+msgid ""
+"unsupported %uth argument to “%s” which looks like a FQDN but only IPv4 "
+"address supported"
+msgstr ""
+"«%2$s» үшін қолдау көрсетілмейтін %1$u-ші аргумент, ол FQDN сияқты көрінеді, "
+"бірақ тек IPv4 адресіне қолдау көрсетіледі"
+
+#: properties/import-export.c:329
+#, c-format
+msgid "invalid %uth argument to “%s” where IPv4 address expected"
+msgstr "«%2$s» үшін %1$u-ші аргумент жарамсыз, IPv4 адресі күтілген еді"
+
+#: properties/import-export.c:354
+#, c-format
+msgid "invalid %uth key-direction argument to “%s”"
+msgstr "«%2$s» үшін жарамсыз %1$u-ші key-direction аргументі"
+
+#: properties/import-export.c:368
+#, c-format
+msgid "invalid %uth argument to “%s”"
+msgstr "«%2$s» үшін жарамсыз %1$u-ші аргумент"
+
+#: properties/import-export.c:483
+#, c-format
+msgid "unterminated %s at position %lld"
+msgstr "%2$lld позициясындағы аяқталмаған %1$s"
+
+#: properties/import-export.c:484
+msgid "double quote"
+msgstr "қос тырнақша"
+
+#: properties/import-export.c:484
+msgid "single quote"
+msgstr "жалғыз тырнақша"
+
+#: properties/import-export.c:500
+#, c-format
+msgid "trailing escaping backslash at position %lld"
+msgstr "%lld позициясындағы соңғы экрандаушы кері қиғаш сызық"
+
+#: properties/import-export.c:630
+msgid "unable to read HTTP proxy auth file"
+msgstr "HTTP прокси аутентификация файлын оқу мүмкін емес"
+
+#: properties/import-export.c:648
+msgid "cannot read user/password from HTTP proxy auth file"
+msgstr ""
+"HTTP прокси аутентификация файлынан пайдаланушыны/парольді оқу мүмкін емес"
+
+#: properties/import-export.c:656
+msgid "user/password from HTTP proxy auth file must be UTF-8 encoded"
+msgstr ""
+"HTTP прокси аутентификация файлындағы пайдаланушы/пароль UTF-8 кодтауында "
+"болуы керек"
+
+#: properties/import-export.c:720
+#, c-format
+msgid "“%s” is not a directory"
+msgstr "«%s» бума емес"
+
+#: properties/import-export.c:728
+#, c-format
+msgid "cannot create “%s” directory"
+msgstr "«%s» бумасын жасау мүмкін емес"
+
+#: properties/import-export.c:748
+#, c-format
+msgid "cannot write <%s> blob from line %ld to file (%s)"
+msgstr "%2$ld жолындағы <%1$s> блобын файлға (%3$s) жазу мүмкін емес"
+
+#: properties/import-export.c:765
+#, c-format
+msgid "cannot write <%s> blob from line %ld to file “%s”"
+msgstr "%2$ld жолындағы <%1$s> блобын «%3$s» файлына жазу мүмкін емес"
+
+#: properties/import-export.c:909
+msgid "proto expects protocol type like “udp” or “tcp”"
+msgstr "proto «udp» немесе «tcp» сияқты хаттама түрін күтеді"
+
+#: properties/import-export.c:934
+msgid "unsupported mtu-disc argument"
+msgstr "қолдау көрсетілмейтін mtu-disc аргументі"
+
+#: properties/import-export.c:950
+msgid "unsupported crl-verify argument"
+msgstr "қолдау көрсетілмейтін crl-verify аргументі"
+
+#: properties/import-export.c:968 properties/import-export.c:1457
+msgid "invalid option"
+msgstr "жарамсыз опция"
+
+#: properties/import-export.c:1009
+msgid "allow-compression: invalid argument"
+msgstr "allow-compression: жарамсыз аргумент"
+
+#: properties/import-export.c:1031
+msgid "unsupported comp-lzo argument"
+msgstr "қолдау көрсетілмейтін comp-lzo аргументі"
+
+#: properties/import-export.c:1043
+msgid "unsupported compress argument"
+msgstr "қолдау көрсетілмейтін compress аргументі"
+
+#: properties/import-export.c:1144
+msgid "remote cannot contain space"
+msgstr "remote ішінде бос орын болмауы керек"
+
+#: properties/import-export.c:1148
+msgid "remote cannot contain comma"
+msgstr "remote ішінде үтір болмауы керек"
+
+#: properties/import-export.c:1159
+msgid "remote expects protocol type like “udp” or “tcp”"
+msgstr "remote «udp» немесе «tcp» сияқты хаттама түрін күтеді"
+
+#: properties/import-export.c:1271
+#, c-format
+msgid "invalid keyword “%s” in tls-version-min"
+msgstr "tls-version-min ішіндегі жарамсыз «%s» кілт сөзі"
+
+#: properties/import-export.c:1441
+msgid "invalid verify-x509-name type"
+msgstr "жарамсыз verify-x509-name түрі"
+
+#: properties/import-export.c:1577
+msgid "unsupported blob/xml element"
+msgstr "қолдау көрсетілмейтін blob/xml элементі"
+
+#: properties/import-export.c:1606
+#, c-format
+msgid "unterminated blob element <%s>"
+msgstr "аяқталмаған <%s> blob элементі"
+
+#: properties/import-export.c:1662
+#, c-format
+msgid "configuration error: %s (line %ld)"
+msgstr "баптау қатесі: %s (%ld-ші жол)"
+
+#: properties/import-export.c:1663
+msgid "unknown or unsupported option"
+msgstr "белгісіз немесе қолдау көрсетілмейтін опция"
+
+#: properties/import-export.c:1678
+msgid "The file to import wasn’t a valid OpenVPN client configuration"
+msgstr "Импортталатын файл жарамды OpenVPN клиент баптауы болмады"
+
+#: properties/import-export.c:1686
+msgid "The file to import wasn’t a valid OpenVPN configuration (no remote)"
+msgstr "Импортталатын файл жарамды OpenVPN баптауы болмады (remote жоқ)"
+
+#: properties/import-export.c:1697
+msgid ""
+"The file to import wasn’t a valid OpenVPN configuration (--pkcs12 can not be "
+"used with --cert or --key)"
+msgstr ""
+"Импортталатын файл жарамды OpenVPN баптауы болмады (--pkcs12 параметрін --cert "
+"немесе --key параметрімен бірге қолдануға болмайды)"
+
+#: properties/import-export.c:1707
+msgid ""
+"The file to import wasn’t a valid OpenVPN configuration (--ca can not be "
+"PKCS#12 format)"
+msgstr ""
+"Импортталатын файл жарамды OpenVPN баптауы болмады (--ca параметрі PKCS#12 "
+"пішімінде болмауы керек)"
+
+#: properties/import-export.c:1716
+msgid "The file to import wasn’t a valid OpenVPN configuration (missing --ca)"
+msgstr "Импортталатын файл жарамды OpenVPN баптауы болмады (--ca жетіспейді)"
+
+#: properties/import-export.c:1726
+msgid ""
+"The file to import wasn’t a valid OpenVPN configuration (if you use one of --"
+"cert or --key, you must use them both)"
+msgstr ""
+"Импортталатын файл жарамды OpenVPN баптауы болмады (егер сіз --cert немесе --"
+"key параметрлерінің бірін қолдансаңыз, екеуін де қолдануыңыз керек)"
+
+#: properties/import-export.c:1737
+msgid ""
+"The file to import wasn’t a valid OpenVPN configuration (--cert can not be "
+"PKCS#12 format.)"
+msgstr ""
+"Импортталатын файл жарамды OpenVPN баптауы болмады (--cert параметрі PKCS#12 "
+"пішімінде болмауы керек.)"
+
+#: properties/import-export.c:1745
+msgid ""
+"The file to import wasn’t a valid OpenVPN configuration (--key can not be "
+"PKCS#12 format.)"
+msgstr ""
+"Импортталатын файл жарамды OpenVPN баптауы болмады (--key параметрі PKCS#12 "
+"пішімінде болмауы керек.)"
+
+#: properties/import-export.c:1999
+msgid "missing path argument"
+msgstr "жол аргументі жетіспейді"
+
+#: properties/import-export.c:2009
+msgid "connection is not a valid OpenVPN connection"
+msgstr "байланыс жарамды OpenVPN байланысы емес"
+
+#: properties/import-export.c:2018
+msgid "connection was incomplete (missing gateway)"
+msgstr "байланыс толық емес (шлюз жетіспейді)"
+
+#: properties/import-export.c:2399
+#, c-format
+msgid "failed to write file: %s"
+msgstr "файлға жазу сәтсіз аяқталды: %s"
+
+#: properties/nm-openvpn-dialog.ui:73
+msgid "Asymmetric"
+msgstr "Асимметриялық"
+
+#: properties/nm-openvpn-dialog.ui:76
+msgid "Symmetric"
+msgstr "Симметриялық"
+
+#: properties/nm-openvpn-dialog.ui:87
+msgid "LZO"
+msgstr "LZO"
+
+#: properties/nm-openvpn-dialog.ui:90
+msgid "LZ4"
+msgstr "LZ4"
+
+#: properties/nm-openvpn-dialog.ui:93
+msgid "LZ4 v2"
+msgstr "LZ4 v2"
+
+#: properties/nm-openvpn-dialog.ui:96
+msgid "Automatic"
+msgstr "Автоматты түрде"
+
+#: properties/nm-openvpn-dialog.ui:99
+msgid "LZO disabled (legacy)"
+msgstr "LZO сөндірілген (ескірген)"
+
+#: properties/nm-openvpn-dialog.ui:102
+msgid "LZO adaptive (legacy)"
+msgstr "LZO адаптивті (ескірген)"
+
+#: properties/nm-openvpn-dialog.ui:126 properties/nm-openvpn-editor.c:379
+#: properties/nm-openvpn-editor.c:1021 properties/nm-openvpn-editor.c:1835
+msgid "None"
+msgstr "Жоқ"
+
+#: properties/nm-openvpn-dialog.ui:129
+msgid "TLS-Auth"
+msgstr "TLS-Auth"
+
+#: properties/nm-openvpn-dialog.ui:132
+msgid "TLS-Crypt"
+msgstr "TLS-Crypt"
+
+#: properties/nm-openvpn-dialog.ui:135
+msgid "TLS-Crypt v2"
+msgstr "TLS-Crypt v2"
+
+#: properties/nm-openvpn-dialog.ui:146
+msgid "No"
+msgstr "Жоқ"
+
+#: properties/nm-openvpn-dialog.ui:149
+msgid "Maybe"
+msgstr "Мүмкін"
+
+#: properties/nm-openvpn-dialog.ui:152
+msgid "Yes"
+msgstr "Иә"
+
+#: properties/nm-openvpn-dialog.ui:182 properties/nm-openvpn-dialog.ui:1595
+msgid "General"
+msgstr "Жалпы"
+
+#: properties/nm-openvpn-dialog.ui:204
+msgid "_Gateway"
+msgstr "_Шлюз"
+
+#: properties/nm-openvpn-dialog.ui:217
+msgid ""
+"Remote gateway(s), with optional port and protocol (e.g. "
+"ovpn.corp.com:1234:tcp). You can specify multiple hosts for redundancy (use "
+"commas or spaces as delimiters).\n"
+"config: remote"
+msgstr ""
+"Қашықтағы шлюз(дер), қосымша порты және хаттамасымен (мысалы, "
+"ovpn.corp.com:1234:tcp). Резервтеу үшін бірнеше хостты көрсетуге болады "
+"(бөлгіш ретінде үтір немесе бос орындарды қолданыңыз).\n"
+"config: remote"
+
+#: properties/nm-openvpn-dialog.ui:250
+msgid "Authentication"
+msgstr "Аутентификация"
+
+#: properties/nm-openvpn-dialog.ui:285 properties/nm-openvpn-dialog.ui:396
+#: properties/nm-openvpn-dialog.ui:495
+msgid "CA"
+msgstr "CA"
+
+#: properties/nm-openvpn-dialog.ui:298 properties/nm-openvpn-dialog.ui:508
+msgid "User"
+msgstr "Пайдаланушы"
+
+#: properties/nm-openvpn-dialog.ui:348 properties/nm-openvpn-dialog.ui:447
+msgid "User name"
+msgstr "Пайдаланушы аты"
+
+#: properties/nm-openvpn-dialog.ui:360 properties/nm-openvpn-dialog.ui:459
+msgid ""
+"Password passed to OpenVPN when prompted for it.\n"
+"config: auth-user-pass"
+msgstr ""
+"Сұралған кезде OpenVPN-ге жіберілетін пароль.\n"
+"config: auth-user-pass"
+
+#: properties/nm-openvpn-dialog.ui:375 properties/nm-openvpn-dialog.ui:474
+msgid ""
+"Username passed to OpenVPN when prompted for it. If omitted, use the name of "
+"the system user that activates the connection.\n"
+"config: auth-user-pass"
+msgstr ""
+"Сұралған кезде OpenVPN-ге жіберілетін пайдаланушы аты. Егер көрсетілмесе, "
+"байланысты іске қосатын жүйе пайдаланушысының аты қолданылады.\n"
+"config: auth-user-pass"
+
+#: properties/nm-openvpn-dialog.ui:544
+msgid "Remote IP Address"
+msgstr "Қашықтағы IP адресі"
+
+#: properties/nm-openvpn-dialog.ui:557
+msgid "Local IP Address"
+msgstr "Жергілікті IP адресі"
+
+#: properties/nm-openvpn-dialog.ui:570
+msgid "Key Direction"
+msgstr "Кілт бағыты"
+
+#: properties/nm-openvpn-dialog.ui:582 properties/nm-openvpn-editor.c:2795
+msgid "Static Key"
+msgstr "Статикалық кілт"
+
+#: properties/nm-openvpn-dialog.ui:594
+msgid ""
+"Pre-shared file for Static Key encryption mode (non-TLS).\n"
+"config: static <file>"
+msgstr ""
+"Статикалық кілтпен шифрлеу режиміне арналған алдын ала бөлісілген файл (TLS "
+"емес).\n"
+"config: static <file>"
+
+#: properties/nm-openvpn-dialog.ui:637
+msgid ""
+"IP address of the remote VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
+msgstr ""
+"Қашықтағы VPN соңғы нүктесінің IP адресі.\n"
+"config: ifconfig <l> <rn>"
+
+#: properties/nm-openvpn-dialog.ui:650
+msgid ""
+"IP address of the local VPN endpoint.\n"
+"config: ifconfig <l> <rn>"
+msgstr ""
+"Жергілікті VPN соңғы нүктесінің IP адресі.\n"
+"config: ifconfig <l> <rn>"
+
+#: properties/nm-openvpn-dialog.ui:663
+msgid ""
+"Direction for Static Key encryption mode (non-TLS).\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer. For example, if the peer uses “1”, this connection must use “0”. If you "
+"are unsure what value to use, contact your system administrator.\n"
+"config: static <file> [direction]"
+msgstr ""
+"Статикалық кілтпен шифрлеу режимінің бағыты (TLS емес).\n"
+"Егер кілт бағыты қолданылса, ол VPN серіктесінде қолданылатын бағытқа қарама-"
+"қарсы болуы керек. Мысалы, егер серіктес «1» қолданса, бұл байланыс «0» "
+"қолдануы керек. Қандай мәнді қолдану керектігін білмесеңіз, жүйе әкімшісіне "
+"хабарласыңыз.\n"
+"config: static <file> [direction]"
+
+#: properties/nm-openvpn-dialog.ui:709
+msgid "Type"
+msgstr "Түрі"
+
+#: properties/nm-openvpn-dialog.ui:721
+msgid "Select an authentication mode."
+msgstr "Аутентификация режимін таңдаңыз."
+
+#: properties/nm-openvpn-dialog.ui:778
+msgid "Ad_vanced…"
+msgstr "Кең_ейтілген…"
+
+#: properties/nm-openvpn-dialog.ui:852 properties/nm-openvpn-editor.c:1626
+msgid "Not required"
+msgstr "Қажет емес"
+
+#: properties/nm-openvpn-dialog.ui:892
+msgid "OpenVPN Advanced Options"
+msgstr "OpenVPN кеңейтілген опциялары"
+
+#: properties/nm-openvpn-dialog.ui:911
+msgid "Advanced Properties"
+msgstr "Кеңейтілген қасиеттер"
+
+#: properties/nm-openvpn-dialog.ui:919 properties/nm-openvpn-dialog.ui:2910
+#: properties/nm-openvpn-dialog.ui:2963 properties/nm-openvpn-dialog.ui:3017
+#: properties/nm-openvpn-dialog.ui:3070 properties/nm-openvpn-dialog.ui:3123
+msgid "_Cancel"
+msgstr "_Бас тарту"
+
+#: properties/nm-openvpn-dialog.ui:927
+msgid "_Apply"
+msgstr "Іс_ке асыру"
+
+#: properties/nm-openvpn-dialog.ui:989
+msgid "Use custom gateway p_ort"
+msgstr "Арнайы шлюз п_ортын қолдану"
+
+#: properties/nm-openvpn-dialog.ui:993 properties/nm-openvpn-dialog.ui:1008
+msgid ""
+"TCP/UDP port number for peer. (Default value when there is no port for "
+"gateway).\n"
+"config: port"
+msgstr ""
+"Серіктес үшін TCP/UDP порт нөмірі. (Шлюз үшін порт көрсетілмеген жағдайдағы "
+"бастапқы мән).\n"
+"config: port"
+
+#: properties/nm-openvpn-dialog.ui:1034
+msgid "Use custom _renegotiation interval"
+msgstr "Арнайы қайта келі_су интервалын қолдану"
+
+#: properties/nm-openvpn-dialog.ui:1038 properties/nm-openvpn-dialog.ui:1053
+msgid ""
+"Renegotiate data channel key after the specified number of seconds.\n"
+"config: reneg-sec"
+msgstr ""
+"Деректер арнасының кілтін көрсетілген секунд санынан кейін қайта келісу.\n"
+"config: reneg-sec"
+
+#: properties/nm-openvpn-dialog.ui:1079
+msgid "_Data compression"
+msgstr "_Деректерді сығу"
+
+#: properties/nm-openvpn-dialog.ui:1083
+msgid ""
+"Use fast LZO compression.\n"
+"config: comp-lzo"
+msgstr ""
+"Жылдам LZO сығуын қолдану.\n"
+"config: comp-lzo"
+
+#: properties/nm-openvpn-dialog.ui:1098
+msgid ""
+"Enable or disable outgoing traffic compression\n"
+"config: allow-compression asym|yes"
+msgstr ""
+"Шығыс трафикті сығуды іске қосу немесе сөндіру\n"
+"config: allow-compression asym|yes"
+
+#: properties/nm-openvpn-dialog.ui:1146
+msgid "Use a _TCP connection"
+msgstr "_TCP байланысын қолдану"
+
+#: properties/nm-openvpn-dialog.ui:1150
+msgid ""
+"Use TCP for communicating with remote host.\n"
+"(This is a default setting only used when no protocol is specified for the "
+"gateway.)\n"
+"config: proto tcp-client | udp"
+msgstr ""
+"Қашықтағы хостпен байланысу үшін TCP қолдану.\n"
+"(Бұл тек шлюз үшін хаттама көрсетілмеген жағдайда қолданылатын бастапқы "
+"баптау.)\n"
+"config: proto tcp-client | udp"
+
+#: properties/nm-openvpn-dialog.ui:1169
+msgid "Set _virtual device type"
+msgstr "_Виртуалды құрылғы түрін орнату"
+
+#: properties/nm-openvpn-dialog.ui:1173
+msgid "Explicitly set virtual device type and name (TUN/TAP)."
+msgstr "Виртуалды құрылғы түрін және атын (TUN/TAP) нақты орнату."
+
+#: properties/nm-openvpn-dialog.ui:1187
+msgid ""
+"Explicitly set virtual device type (TUN/TAP).\n"
+"config: dev-type tun | tap"
+msgstr ""
+"Виртуалды құрылғы түрін (TUN/TAP) нақты орнату.\n"
+"config: dev-type tun | tap"
+
+#: properties/nm-openvpn-dialog.ui:1207
+msgid " and _name"
+msgstr " және _аты"
+
+#: properties/nm-openvpn-dialog.ui:1222
+msgid ""
+"Use custom name for TUN/TAP virtual device (instead of default “tun” or "
+"“tap”).\n"
+"config: dev <name>"
+msgstr ""
+"TUN/TAP виртуалды құрылғысы үшін арнайы атты қолдану (бастапқы «tun» немесе "
+"«tap» орнына).\n"
+"config: dev <name>"
+
+#: properties/nm-openvpn-dialog.ui:1246
+msgid "Use custom tunnel Maximum Transmission _Unit (MTU)"
+msgstr "Туннельдің арнайы максималды тасымалдау _юнитін (MTU) қолдану"
+
+#: properties/nm-openvpn-dialog.ui:1250 properties/nm-openvpn-dialog.ui:1265
+msgid ""
+"Take the TUN device MTU to be the specified value and derive the link MTU from "
+"it.\n"
+"config: tun-mtu"
+msgstr ""
+"TUN құрылғысының MTU мәнін көрсетілген мән ретінде қабылдау және одан байланыс "
+"MTU мәнін шығару.\n"
+"config: tun-mtu"
+
+#: properties/nm-openvpn-dialog.ui:1291
+msgid "Use custom UDP _fragment size"
+msgstr "Арнайы UDP _фрагмент өлшемін қолдану"
+
+#: properties/nm-openvpn-dialog.ui:1295 properties/nm-openvpn-dialog.ui:1310
+msgid ""
+"Enable internal datagram fragmentation with this maximum size.\n"
+"config: fragment"
+msgstr ""
+"Осы максималды өлшеммен ішкі датаграмма фрагментациясын іске қосу.\n"
+"config: fragment"
+
+#: properties/nm-openvpn-dialog.ui:1331
+msgid "Restrict tunnel TCP Maximum _Segment Size (MSS)"
+msgstr "Туннельдің TCP максималды _сегмент өлшемін (MSS) шектеу"
+
+#: properties/nm-openvpn-dialog.ui:1335
+msgid ""
+"Restrict tunnel TCP MSS.\n"
+"config: mssfix"
+msgstr ""
+"Туннельдің TCP MSS шектеу.\n"
+"config: mssfix"
+
+#: properties/nm-openvpn-dialog.ui:1348
+msgid "Rando_mize remote hosts"
+msgstr "Қашықтағы хосттарды рандо_мизациялау"
+
+#: properties/nm-openvpn-dialog.ui:1352
+msgid ""
+"Randomize the order of gateways list (remote) as a kind of basic load-"
+"balancing measure.\n"
+"config: remote-random"
+msgstr ""
+"Жүктемені негізгі теңестіру шарасы ретінде шлюздер тізімінің (қашықтағы) ретін "
+"кездейсоқ түрде өзгерту.\n"
+"config: remote-random"
+
+#: properties/nm-openvpn-dialog.ui:1365
+msgid "Allo_w Pull FQDN"
+msgstr "FQDN алуға рұқ_сат ету"
+
+#: properties/nm-openvpn-dialog.ui:1369
+msgid ""
+"Allow client to pull DNS names from server\n"
+"config: allow-pull-fqdn"
+msgstr ""
+"Клиентке серверден DNS аттарын алуға рұқсат ету\n"
+"config: allow-pull-fqdn"
+
+#: properties/nm-openvpn-dialog.ui:1382
+msgid "_Prefix remote DNS name with random string"
+msgstr "Қа_шықтағы DNS атының алдына кездейсоқ жолды қосу"
+
+#: properties/nm-openvpn-dialog.ui:1386
+msgid ""
+"Adds a random string to remote DNS name to avoid DNS caching.\n"
+"config: remote-random-hostname"
+msgstr ""
+"DNS кэштеуін болдырмау үшін қашықтағы DNS атына кездейсоқ жолды қосады.\n"
+"config: remote-random-hostname"
+
+#: properties/nm-openvpn-dialog.ui:1399
+msgid "_IPv6 tun link"
+msgstr "_IPv6 tun байланысы"
+
+#: properties/nm-openvpn-dialog.ui:1403
+msgid ""
+"Build a tun link capable of forwarding IPv6 traffic\n"
+"config: tun-ipv6"
+msgstr ""
+"IPv6 трафигін бағыттай алатын tun байланысын құрастыру\n"
+"config: tun-ipv6"
+
+#: properties/nm-openvpn-dialog.ui:1421
+msgid "Specify pin_g interval"
+msgstr "Пин_г интервалын көрсету"
+
+#: properties/nm-openvpn-dialog.ui:1425 properties/nm-openvpn-dialog.ui:1440
+msgid ""
+"Ping remote over the TCP/UDP control channel if no packets have been sent for "
+"at least n seconds.\n"
+"config: ping <n>"
+msgstr ""
+"Егер кем дегенде n секунд ішінде ешқандай пакет жіберілмесе, TCP/UDP басқару "
+"арнасы арқылы қашықтағы хостты пингтеу.\n"
+"config: ping <n>"
+
+#: properties/nm-openvpn-dialog.ui:1466
+msgid "Specify _exit or restart ping"
+msgstr "Пингке жауап болмаса, _шығуды немесе қайта іске қосуды көрсету"
+
+#: properties/nm-openvpn-dialog.ui:1470 properties/nm-openvpn-dialog.ui:1485
+#: properties/nm-openvpn-dialog.ui:1505
+msgid ""
+"Exit or restart after n seconds pass without reception of a ping or other "
+"packet from remote.\n"
+"config: ping-exit | ping-restart <n>"
+msgstr ""
+"Қашықтағы хосттан пинг немесе басқа пакет алынбағаннан кейін n секунд өткен "
+"соң шығу немесе қайта іске қосу.\n"
+"config: ping-exit | ping-restart <n>"
+
+#: properties/nm-openvpn-dialog.ui:1526
+msgid "Accept authenticated packets from any address (F_loat)"
+msgstr ""
+"Кез келген адрестен аутентификацияланған пакеттерді қабылдау (Қа_лқымалы)"
+
+#: properties/nm-openvpn-dialog.ui:1530
+msgid ""
+"Allow remote peer to change its IP address and/or port number, such as due to "
+"DHCP (this is the default if --remote is not used). --float when specified "
+"with --remote allows an OpenVPN session to initially connect to a peer at a "
+"known address, however if packets arrive from a new address and pass all "
+"authentication tests, the new address will take control of the session. This "
+"is useful when you are connecting to a peer which holds a dynamic address such "
+"as a dial-in user or DHCP client.\n"
+"\n"
+"Essentially, --float tells OpenVPN to accept authenticated packets from any "
+"address, not only the address which was specified in the --remote option.\n"
+"\n"
+"config: float"
+msgstr ""
+"Қашықтағы серіктеске DHCP себебінен (егер --remote қолданылмаса, бұл бастапқы "
+"мән) өзінің IP адресін және/немесе порт нөмірін өзгертуге рұқсат ету. --remote "
+"параметрімен бірге --float көрсетілгенде, OpenVPN сессиясына бастапқыда "
+"белгілі адрестегі серіктеске қосылуға мүмкіндік береді, бірақ пакеттер жаңа "
+"адрестен келіп, барлық аутентификация тексерістерінен өтсе, жаңа адрес "
+"сессияны басқаруды өз қолына алады. Бұл динамикалық адресі бар серіктеске "
+"(мысалы, dial-in пайдаланушысы немесе DHCP клиенті) қосылған кезде пайдалы.\n"
+"\n"
+"Негізінде, --float опциясы OpenVPN-ге тек --remote опциясында көрсетілген "
+"адрестен ғана емес, кез келген адрестен аутентификацияланған пакеттерді "
+"қабылдауды бұйырады.\n"
+"\n"
+"config: float"
+
+#: properties/nm-openvpn-dialog.ui:1551
+msgid "Specify ma_x routes"
+msgstr "Ма_кс. маршруттар санын көрсету"
+
+#: properties/nm-openvpn-dialog.ui:1555 properties/nm-openvpn-dialog.ui:1570
+msgid ""
+"Specify the maximum number of routes the server is allowed to specify.\n"
+"config: max-routes <n>"
+msgstr ""
+"Серверге көрсетуге рұқсат етілген маршруттардың максималды санын көрсету.\n"
+"config: max-routes <n>"
+
+#: properties/nm-openvpn-dialog.ui:1615
+msgid ""
+"Encrypt packets with cipher algorithm. The default is BF-CBC (Blowfish in "
+"Cipher Block Chaining mode).\n"
+"config: cipher"
+msgstr ""
+"Пакеттерді шифрлеу алгоритмімен шифрлеу. Бастапқы мәні — BF-CBC (Blowfish, "
+"Cipher Block Chaining режимінде).\n"
+"config: cipher"
+
+#: properties/nm-openvpn-dialog.ui:1632
+msgid "Use custom _size of cipher key"
+msgstr "Шифрлеу кілтінің арнайы ө_лшемін қолдану"
+
+#: properties/nm-openvpn-dialog.ui:1636 properties/nm-openvpn-dialog.ui:1650
+msgid ""
+"Set cipher key size to a custom value. If unspecified, it defaults to cipher-"
+"specific size.\n"
+"config: keysize <n>"
+msgstr ""
+"Шифрлеу кілтінің өлшемін арнайы мәнге орнату. Егер көрсетілмесе, ол шифрге тән "
+"өлшемге тең болады.\n"
+"config: keysize <n>"
+
+#: properties/nm-openvpn-dialog.ui:1665
+msgid ""
+"Authenticate packets with HMAC using message digest algorithm. The default is "
+"SHA1.\n"
+"config: auth"
+msgstr ""
+"Хатламалық дайджест алгоритмін қолданып, HMAC көмегімен пакеттерді "
+"аутентификациялау. Бастапқы мәні — SHA1.\n"
+"config: auth"
+
+#: properties/nm-openvpn-dialog.ui:1684
+msgid "Ci_pher"
+msgstr "Ши_фр"
+
+#: properties/nm-openvpn-dialog.ui:1699
+msgid "D_ata ciphers"
+msgstr "Д_еректер шифрлері"
+
+#: properties/nm-openvpn-dialog.ui:1714
+msgid "Da_ta ciphers fallback"
+msgstr "Де_ректер шифрлерінің резервтік нұсқасы"
+
+#: properties/nm-openvpn-dialog.ui:1729
+msgid ""
+"Configure a cipher that is used to fall back to if we could not determine "
+"which cipher the peer is willing to use.\n"
+"config: data-ciphers-fallback"
+msgstr ""
+"Егер серіктестің қандай шифрді қолданғысы келетінін анықтай алмасақ, резервтік "
+"ретінде қолданылатын шифрді баптау.\n"
+"config: data-ciphers-fallback"
+
+#: properties/nm-openvpn-dialog.ui:1748
+msgid ""
+"Restrict the allowed ciphers to be negotiated to the ciphers in cipher-list. "
+"cipher-list is a colon-separated list of ciphers like AES-256-GCM:AES-128-"
+"GCM.\n"
+"config: data-ciphers"
+msgstr ""
+"Келісілетін шифрлерді cipher-list ішіндегі шифрлермен шектеу. cipher-list — "
+"бұл AES-256-GCM:AES-128-GCM сияқты үтірмен бөлінген шифрлер тізімі.\n"
+"config: data-ciphers"
+
+#: properties/nm-openvpn-dialog.ui:1760
+msgid "_HMAC Authentication"
+msgstr "_HMAC аутентификациясы"
+
+#: properties/nm-openvpn-dialog.ui:1773
+msgid "Disable cipher _negotiation"
+msgstr "Шифрді _келісуді сөндіру"
+
+#: properties/nm-openvpn-dialog.ui:1777
+msgid ""
+"Disable cipher negotiation between client and server.\n"
+"config: ncp-disable"
+msgstr ""
+"Клиент пен сервер арасындағы шифр келісуін сөндіру.\n"
+"config: ncp-disable"
+
+#: properties/nm-openvpn-dialog.ui:1789
+msgid "Verify CRL from _file"
+msgstr "CRL-ді _файлдан тексеру"
+
+#: properties/nm-openvpn-dialog.ui:1794 properties/nm-openvpn-dialog.ui:1821
+msgid ""
+"Check peer certificate against the specified file in PEM format. A CRL "
+"(certificate revocation list) is used when a particular key is compromised but "
+"when the overall PKI is still intact."
+msgstr ""
+"Серіктес сертификатын PEM пішіміндегі көрсетілген файлға сәйкес тексеру. CRL "
+"(сертификаттарды қайта шақырту тізімі) белгілі бір кілт бұзылғанда, бірақ "
+"жалпы PKI әлі бүтін болған кезде қолданылады."
+
+#: properties/nm-openvpn-dialog.ui:1804
+msgid "Verify CRL from _directory"
+msgstr "CRL-ді _бумадан тексеру"
+
+#: properties/nm-openvpn-dialog.ui:1809 properties/nm-openvpn-dialog.ui:1864
+msgid ""
+"Check peer certificate by looking at files in the specified directory. The "
+"directory must contain files named as revoked serial numbers (the files may be "
+"empty, the contents are never read)."
+msgstr ""
+"Серіктес сертификатын көрсетілген бумадағы файлдарды қарау арқылы тексеру. "
+"Бумада қайта шақыртылған сериялық нөмірлермен аталған файлдар болуы керек "
+"(файлдар бос болуы мүмкін, мазмұны ешқашан оқылмайды)."
+
+#: properties/nm-openvpn-dialog.ui:1830 properties/nm-openvpn-editor.c:103
+msgid "(None)"
+msgstr "(Жоқ)"
+
+#: properties/nm-openvpn-dialog.ui:1923
+msgid "Security"
+msgstr "Қауіпсіздік"
+
+#: properties/nm-openvpn-dialog.ui:1952
+msgid "_Subject Match"
+msgstr "_Тақырып сәйкестігі"
+
+#: properties/nm-openvpn-dialog.ui:1966
+msgid ""
+"Subject or Common Name to verify server certificate information against.\n"
+"\n"
+"config: verify-x509-name subject-or-name [mode]\n"
+"config (legacy mode): tls-remote subject-or-name"
+msgstr ""
+"Сервер сертификатының ақпаратын тексеруге арналған Тақырып немесе Жалпы Аты "
+"(CN).\n"
+"\n"
+"config: verify-x509-name subject-or-name [mode]\n"
+"config (ескірген режим): tls-remote subject-or-name"
+
+#: properties/nm-openvpn-dialog.ui:1981
+msgid "Server Cert_ificate Check"
+msgstr "Сервер серти_фикатын тексеру"
+
+#: properties/nm-openvpn-dialog.ui:1995
+msgid ""
+"Verify server certificate identification.\n"
+"\n"
+"When enabled, connection will only succeed if the server certificate matches "
+"some expected properties.\n"
+"Matching can either apply to the whole certificate subject (all the fields),\n"
+"or just the Common Name (CN field).\n"
+"\n"
+"The legacy option tls-remote is deprecated and removed from OpenVPN 2.4 and "
+"newer. Do not use it anymore.\n"
+"\n"
+"config: verify-x509-name subject-or-name [mode]\n"
+"config (legacy mode): tls-remote subject-or-name"
+msgstr ""
+"Сервер сертификатының сәйкестігін тексеру.\n"
+"\n"
+"Іске қосылған кезде, байланыс тек сервер сертификаты кейбір күтілетін "
+"қасиеттерге сәйкес келген жағдайда ғана сәтті болады.\n"
+"Сәйкестікті тексеру бүкіл сертификат тақырыбына (барлық өрістер) немесе тек "
+"Жалпы Аты (CN өрісі) үшін қолданылуы мүмкін.\n"
+"\n"
+"Ескірген tls-remote опциясы ескірген және OpenVPN 2.4 және одан жаңа "
+"нұсқаларынан алынып тасталған. Оны енді қолданбаңыз.\n"
+"\n"
+"config: verify-x509-name subject-or-name [mode]\n"
+"config (ескірген режим): tls-remote subject-or-name"
+
+#: properties/nm-openvpn-dialog.ui:2035
+msgid "Verify peer (server) certificate _usage signature"
+msgstr "Серіктес (сервер) сертификатының қол_данылу қолтаңбасын тексеру"
+
+#: properties/nm-openvpn-dialog.ui:2039
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules."
+msgstr ""
+"RFC3280 TLS ережелеріне негізделген нақты кілтті қолданумен және кеңейтілген "
+"кілтті қолданумен серіктес сертификатына қол қойылуын талап ету."
+
+#: properties/nm-openvpn-dialog.ui:2053
+msgid "Remote peer certificate _TLS type"
+msgstr "Қашықтағы серіктес сертификатының _TLS түрі"
+
+#: properties/nm-openvpn-dialog.ui:2067
+msgid ""
+"Require that peer certificate was signed with an explicit key usage and "
+"extended key usage based on RFC3280 TLS rules.\n"
+"config: remote-cert-tls client|server"
+msgstr ""
+"RFC3280 TLS ережелеріне негізделген нақты кілтті қолданумен және кеңейтілген "
+"кілтті қолданумен серіктес сертификатына қол қойылуын талап ету.\n"
+"config: remote-cert-tls client|server"
+
+#: properties/nm-openvpn-dialog.ui:2099
+msgid "_Verify peer (server) certificate nsCertType designation"
+msgstr "Серіктес (сервер) сертификатының nsCertType тағайындалуын _тексеру"
+
+#: properties/nm-openvpn-dialog.ui:2103
+msgid ""
+"Require that peer certificate was signed with an explicit nsCertType "
+"designation."
+msgstr ""
+"Серіктес сертификатының нақты nsCertType тағайындалуымен қол қойылуын талап "
+"ету."
+
+#: properties/nm-openvpn-dialog.ui:2119
+msgid "_Remote peer certificate nsCert designation"
+msgstr "Қа_шықтағы серіктес сертификатының nsCert тағайындалуы"
+
+#: properties/nm-openvpn-dialog.ui:2133
+msgid ""
+"Require that peer certificate was signed with an explicit nsCertType "
+"designation.\n"
+"config: ns-cert-type client|server"
+msgstr ""
+"Серіктес сертификатының нақты nsCertType тағайындалуымен қол қойылуын талап "
+"ету.\n"
+"config: ns-cert-type client|server"
+
+#: properties/nm-openvpn-dialog.ui:2175
+msgid "Key _Direction"
+msgstr "Кілт _бағыты"
+
+#: properties/nm-openvpn-dialog.ui:2189
+msgid ""
+"Add an additional layer of HMAC authentication on top of the TLS control "
+"channel to protect against DoS attacks. In case of TLS-Crypt mode, the control "
+"channel is also encrypted.\n"
+"config: tls-auth <file> [direction] | tls-crypt <file>"
+msgstr ""
+"DoS шабуылдарынан қорғау үшін TLS басқару арнасының үстіне HMAC "
+"аутентификациясының қосымша қабатын қосу. TLS-Crypt режимі жағдайында басқару "
+"арнасы да шифрленеді.\n"
+"config: tls-auth <file> [direction] | tls-crypt <file>"
+
+#: properties/nm-openvpn-dialog.ui:2233
+msgid ""
+"Direction parameter for static key mode.\n"
+"If key direction is used, it must be the opposite of that used on the VPN "
+"peer. For example, if the peer uses “1”, this connection must use “0”. If you "
+"are unsure what value to use, contact your system administrator.\n"
+"config: tls-auth <file> [direction]"
+msgstr ""
+"Статикалық кілт режиміне арналған бағыт параметрі.\n"
+"Егер кілт бағыты қолданылса, ол VPN серіктесінде қолданылатын бағытқа қарама-"
+"қарсы болуы керек. Мысалы, егер серіктес «1» қолданса, бұл байланыс «0» "
+"қолдануы керек. Қандай мәнді қолдану керектігін білмесеңіз, жүйе әкімшісіне "
+"хабарласыңыз.\n"
+"config: tls-auth <file> [direction]"
+
+#: properties/nm-openvpn-dialog.ui:2253
+msgid "Key _File"
+msgstr "Кілт _файлы"
+
+#: properties/nm-openvpn-dialog.ui:2267
+msgid "_Mode"
+msgstr "_Режим"
+
+#: properties/nm-openvpn-dialog.ui:2280 properties/nm-openvpn-dialog.ui:2387
+msgid "Add an additional layer of encryption or HMAC authentication."
+msgstr "Шифрлеудің немесе HMAC аутентификациясының қосымша қабатын қосу."
+
+#: properties/nm-openvpn-dialog.ui:2300
+msgid "_Extra Certificates"
+msgstr "Қо_сымша сертификаттар"
+
+#: properties/nm-openvpn-dialog.ui:2313
+msgid ""
+"Specify a file containing one or more PEM certs (concatenated together) that "
+"complete the local certificate chain.\n"
+"config: extra-certs <file>"
+msgstr ""
+"Жергілікті сертификаттар тізбегін аяқтайтын бір немесе бірнеше PEM "
+"сертификаттары (біріктірілген) бар файлды көрсету.\n"
+"config: extra-certs <file>"
+
+#: properties/nm-openvpn-dialog.ui:2356
+msgid "TLS ci_pher string"
+msgstr "TLS ши_фр жолы"
+
+#: properties/nm-openvpn-dialog.ui:2369
+msgid ""
+"Set a value for the --tls-cipher parameter. This can be useful for working "
+"with VPNs using deprecated hashing schemes."
+msgstr ""
+"--tls-cipher параметрі үшін мән орнату. Бұл ескірген хэштеу схемаларын "
+"қолданатын VPN-дермен жұмыс істеу үшін пайдалы болуы мүмкін."
+
+#: properties/nm-openvpn-dialog.ui:2390
+msgid "Additional TLS authentication or encryption"
+msgstr "Қосымша TLS аутентификациясы немесе шифрлеу"
+
+#: properties/nm-openvpn-dialog.ui:2417
+msgid "Controls min and max version allowed for TLS."
+msgstr "TLS үшін рұқсат етілген минималды және максималды нұсқаларды басқарады."
+
+#: properties/nm-openvpn-dialog.ui:2420
+msgid "TLS version control"
+msgstr "TLS нұсқасын басқару"
+
+#: properties/nm-openvpn-dialog.ui:2445
+msgid "TLS mi_n version"
+msgstr "TLS ми_н. нұсқасы"
+
+#: properties/nm-openvpn-dialog.ui:2458
+msgid ""
+" Sets the minimum TLS version we will accept from the peer (default is "
+"\"1.0\").  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
+msgstr ""
+" Серіктестен қабылдайтын минималды TLS нұсқасын орнатады (бастапқы мәні "
+"«1.0»). Нұсқа мысалдары: «1.0», «1.1» немесе «1.2»."
+
+#: properties/nm-openvpn-dialog.ui:2470
+msgid "TLS ma_x version"
+msgstr "TLS ма_кс. нұсқасы"
+
+#: properties/nm-openvpn-dialog.ui:2483
+msgid ""
+"Set the maximum TLS version we will use (default is the highest version "
+"supported).  Examples for version include \"1.0\", \"1.1\", or \"1.2\"."
+msgstr ""
+"Біз қолданатын максималды TLS нұсқасын орнату (бастапқы мәні — қолдау "
+"көрсетілетін ең жоғары нұсқа). Нұсқа мысалдары: «1.0», «1.1» немесе «1.2»."
+
+#: properties/nm-openvpn-dialog.ui:2493
+msgid "_or highest"
+msgstr "_немесе ең жоғарысы"
+
+#: properties/nm-openvpn-dialog.ui:2496
+msgid ""
+"If set and version is not recognized, we will only accept the highest TLS "
+"version supported by the local SSL implementation."
+msgstr ""
+"Егер орнатылса және нұсқа танылмаса, біз тек жергілікті SSL іске асыруымен "
+"қолдау көрсетілетін ең жоғары TLS нұсқасын қабылдаймыз."
+
+#: properties/nm-openvpn-dialog.ui:2525
+msgid "TLS Authentication"
+msgstr "TLS аутентификациясы"
+
+#: properties/nm-openvpn-dialog.ui:2546
+msgid ""
+"Proxy type: HTTP or Socks.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Прокси түрі: HTTP немесе Socks.\n"
+"config: http-proxy or socks-proxy"
+
+#: properties/nm-openvpn-dialog.ui:2566
+msgid "Proxy _Type"
+msgstr "Прокси _түрі"
+
+#: properties/nm-openvpn-dialog.ui:2582
+msgid ""
+"<i>Select this option if your organization requires the use of a proxy server "
+"to access the Internet.</i>"
+msgstr ""
+"<i>Егер ұйымыңыз Интернетке шығу үшін прокси-серверді пайдалануды талап етсе, "
+"осы опцияны таңдаңыз.</i>"
+
+#: properties/nm-openvpn-dialog.ui:2597
+msgid "S_erver Address"
+msgstr "С_ервер адресі"
+
+#: properties/nm-openvpn-dialog.ui:2615
+msgid ""
+"Connect to remote host through a proxy with this address.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Қашықтағы хостқа осы адресі бар прокси арқылы қосылу.\n"
+"config: http-proxy or socks-proxy"
+
+#: properties/nm-openvpn-dialog.ui:2628
+msgid "_Port"
+msgstr "_Порт"
+
+#: properties/nm-openvpn-dialog.ui:2645
+msgid ""
+"Connect to remote host through a proxy with this port.\n"
+"config: http-proxy or socks-proxy"
+msgstr ""
+"Қашықтағы хостқа осы порты бар прокси арқылы қосылу.\n"
+"config: http-proxy or socks-proxy"
+
+#: properties/nm-openvpn-dialog.ui:2666
+msgid "_Retry indefinitely when errors occur"
+msgstr "Қателер орын алғанда шексіз _қайталау"
+
+#: properties/nm-openvpn-dialog.ui:2670
+msgid ""
+"Retry indefinitely on proxy errors. It simulates a SIGUSR1 reset.\n"
+"config: http-proxy-retry or socks-proxy-retry"
+msgstr ""
+"Прокси қателері кезінде шексіз қайталау. Ол SIGUSR1 ысыруын имитациялайды.\n"
+"config: http-proxy-retry or socks-proxy-retry"
+
+#: properties/nm-openvpn-dialog.ui:2684
+msgid "Proxy _Username"
+msgstr "Прокси _пайдаланушы аты"
+
+#: properties/nm-openvpn-dialog.ui:2699
+msgid "Proxy Passwor_d"
+msgstr "Прокси па_ролі"
+
+#: properties/nm-openvpn-dialog.ui:2714
+msgid "HTTP/Socks proxy username passed to OpenVPN when prompted for it."
+msgstr "Сұралған кезде OpenVPN-ге жіберілетін HTTP/Socks прокси пайдаланушы аты."
+
+#: properties/nm-openvpn-dialog.ui:2725
+msgid "HTTP/Socks proxy password passed to OpenVPN when prompted for it."
+msgstr "Сұралған кезде OpenVPN-ге жіберілетін HTTP/Socks прокси паролі."
+
+#: properties/nm-openvpn-dialog.ui:2735
+msgid "_Show password"
+msgstr "_Көрсету"
+
+#: properties/nm-openvpn-dialog.ui:2762
+msgid "Proxies"
+msgstr "Проксилер"
+
+#: properties/nm-openvpn-dialog.ui:2783
+msgid "Path mtu _discovery"
+msgstr "Жолдың MTU мәнін _анықтау"
+
+#: properties/nm-openvpn-dialog.ui:2817
+msgid "Connect _timeout"
+msgstr "Қосылу _күту уақыты"
+
+#: properties/nm-openvpn-dialog.ui:2822 properties/nm-openvpn-dialog.ui:2835
+msgid ""
+"The timeout in seconds before trying the next server. This timeout includes "
+"proxy and TCP connect timeouts.\n"
+"config: connect-timeout <n> | server-poll-timeout <n>"
+msgstr ""
+"Келесі серверді қолданып көру алдындағы секундпен берілген күту уақыты. Бұл "
+"күту уақытына прокси және TCP қосылу күту уақыттары кіреді.\n"
+"config: connect-timeout <n> | server-poll-timeout <n>"
+
+#: properties/nm-openvpn-dialog.ui:2838
+msgid "0"
+msgstr "0"
+
+#: properties/nm-openvpn-dialog.ui:2848
+msgid "_Push peer info"
+msgstr "Серіктес туралы ақпаратты _Push"
+
+#: properties/nm-openvpn-dialog.ui:2852
+msgid ""
+"Push additional information about the client to server.\n"
+"config: push-peer-info"
+msgstr ""
+"Серверге клиент туралы қосымша ақпаратты жіберу.\n"
+"config: push-peer-info"
+
+#: properties/nm-openvpn-dialog.ui:2869
+msgid "Misc"
+msgstr "Әртүрлі"
+
+#: properties/nm-openvpn-dialog.ui:2902
+msgid "Choose an OpenVPN static key…"
+msgstr "OpenVPN статикалық кілтін таңдаңыз…"
+
+#: properties/nm-openvpn-dialog.ui:2919 properties/nm-openvpn-dialog.ui:2972
+#: properties/nm-openvpn-dialog.ui:3026 properties/nm-openvpn-dialog.ui:3079
+#: properties/nm-openvpn-dialog.ui:3132
+msgid "_Select"
+msgstr "_Таңдау"
+
+#: properties/nm-openvpn-dialog.ui:2955
+msgid "Choose CRL file"
+msgstr "CRL файлын таңдау"
+
+#: properties/nm-openvpn-dialog.ui:3009
+msgid "Choose CRL directory"
+msgstr "CRL бумасын таңдау"
+
+#: properties/nm-openvpn-dialog.ui:3062
+msgid "Choose a key file"
+msgstr "Кілт файлын таңдау"
+
+#: properties/nm-openvpn-dialog.ui:3115
+msgid "Choose extra certificate file"
+msgstr "Қосымша сертификат файлын таңдау"
+
+#: properties/nm-openvpn-editor.c:785
+msgid "OpenVPN Static Keys (*.key)"
+msgstr "OpenVPN статикалық кілттері (*.key)"
+
+#: properties/nm-openvpn-editor.c:944 properties/nm-openvpn-editor.c:1038
+msgid "Default"
+msgstr "Бастапқы"
+
+#: properties/nm-openvpn-editor.c:1022
+msgid "RSA MD-4"
+msgstr "RSA MD-4"
+
+#: properties/nm-openvpn-editor.c:1023
+msgid "MD-5"
+msgstr "MD-5"
+
+#: properties/nm-openvpn-editor.c:1024
+msgid "SHA-1"
+msgstr "SHA-1"
+
+#: properties/nm-openvpn-editor.c:1025
+msgid "SHA-224"
+msgstr "SHA-224"
+
+#: properties/nm-openvpn-editor.c:1026
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#: properties/nm-openvpn-editor.c:1027
+msgid "SHA-384"
+msgstr "SHA-384"
+
+#: properties/nm-openvpn-editor.c:1028
+msgid "SHA-512"
+msgstr "SHA-512"
+
+#: properties/nm-openvpn-editor.c:1029
+msgid "RIPEMD-160"
+msgstr "RIPEMD-160"
+
+#: properties/nm-openvpn-editor.c:1087
+msgid "Don’t verify certificate identification"
+msgstr "Сертификат сәйкестігін тексермеу"
+
+#: properties/nm-openvpn-editor.c:1093
+msgid "Verify whole subject exactly"
+msgstr "Бүкіл тақырыпты дәл тексеру"
+
+#: properties/nm-openvpn-editor.c:1099
+msgid "Verify name exactly"
+msgstr "Атты дәл тексеру"
+
+#: properties/nm-openvpn-editor.c:1105
+msgid "Verify name by prefix"
+msgstr "Атты префикс бойынша тексеру"
+
+#: properties/nm-openvpn-editor.c:1111
+msgid "Verify subject partially (legacy mode, strongly discouraged)"
+msgstr "Тақырыпты ішінара тексеру (ескірген режим, қолдану ұсынылмайды)"
+
+#: properties/nm-openvpn-editor.c:1224 properties/nm-openvpn-editor.c:1296
+msgid "Server"
+msgstr "Сервер"
+
+#: properties/nm-openvpn-editor.c:1229 properties/nm-openvpn-editor.c:1301
+msgid "Client"
+msgstr "Клиент"
+
+#: properties/nm-openvpn-editor.c:1628
+msgid "HTTP"
+msgstr "HTTP"
+
+#: properties/nm-openvpn-editor.c:1630
+msgid "SOCKS"
+msgstr "SOCKS"
+
+#: properties/nm-openvpn-editor.c:1745
+msgid "TUN"
+msgstr "TUN"
+
+#: properties/nm-openvpn-editor.c:1747
+msgid "TAP"
+msgstr "TAP"
+
+#. interface name is max 15 chars
+#: properties/nm-openvpn-editor.c:1754
+msgid "(automatic)"
+msgstr "(автоматты түрде)"
+
+#: properties/nm-openvpn-editor.c:1926
+msgid "ping-exit"
+msgstr "ping-exit"
+
+#: properties/nm-openvpn-editor.c:1928
+msgid "ping-restart"
+msgstr "ping-restart"
+
+#: properties/nm-openvpn-editor.c:2757
+msgid "Certificates (TLS)"
+msgstr "Сертификаттар (TLS)"
+
+#: properties/nm-openvpn-editor.c:2782
+msgid "Password with Certificates (TLS)"
+msgstr "Сертификаттары бар пароль (TLS)"
+
+#: properties/nm-openvpn-editor.c:2938
+msgid "could not load UI widget"
+msgstr "интерфейс виджетін жүктеу мүмкін емес"
+
+#: properties/nm-openvpn-editor-plugin.c:38
+msgid "OpenVPN"
+msgstr "OpenVPN"
+
+#: properties/nm-openvpn-editor-plugin.c:39
+msgid "Compatible with the OpenVPN server."
+msgstr "OpenVPN серверімен үйлесімді."
+
+#: shared/nm-utils/nm-shared-utils.c:946
+#, c-format
+msgid "object class '%s' has no property named '%s'"
+msgstr "«%s» объект класында «%s» атты қасиет жоқ"
+
+#: shared/nm-utils/nm-shared-utils.c:953
+#, c-format
+msgid "property '%s' of object class '%s' is not writable"
+msgstr "«%2$s» объект класының «%1$s» қасиеті жазуға жабық"
+
+#: shared/nm-utils/nm-shared-utils.c:960
+#, c-format
+msgid "construct property \"%s\" for object '%s' can't be set after construction"
+msgstr ""
+"«%2$s» объектісі үшін «%1$s» құрастыру қасиетін құрастырудан кейін орнату "
+"мүмкін емес"
+
+#: shared/nm-utils/nm-shared-utils.c:968
+#, c-format
+msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
+msgstr "«%s::%s» — жарамды қасиет аты емес; «%s» GObject ішкі түрі емес"
+
+#: shared/nm-utils/nm-shared-utils.c:977
+#, c-format
+msgid "unable to set property '%s' of type '%s' from value of type '%s'"
+msgstr ""
+"«%2$s» түріндегі «%1$s» қасиетін «%3$s» түріндегі мәннен орнату мүмкін емес"
+
+#: shared/nm-utils/nm-shared-utils.c:988
+#, c-format
+msgid ""
+"value \"%s\" of type '%s' is invalid or out of range for property '%s' of type "
+"'%s'"
+msgstr ""
+"«%2$s» түріндегі «%1$s» мәні жарамсыз немесе «%4$s» түріндегі «%3$s» қасиеті "
+"үшін ауқымнан тыс"
+
+#: shared/nm-utils/nm-vpn-plugin-utils.c:69
+#, c-format
+msgid "unable to get editor plugin name: %s"
+msgstr "түзету плагинінің атын алу мүмкін емес: %s"
+
+#: shared/nm-utils/nm-vpn-plugin-utils.c:103
+#, c-format
+msgid "missing plugin file \"%s\""
+msgstr "«%s» плагин файлы жетіспейді"
+
+#: shared/nm-utils/nm-vpn-plugin-utils.c:109
+#, c-format
+msgid "cannot load editor plugin: %s"
+msgstr "түзету плагинін жүктеу мүмкін емес: %s"
+
+#: shared/nm-utils/nm-vpn-plugin-utils.c:118
+#, c-format
+msgid "cannot load factory %s from plugin: %s"
+msgstr "плагиннен %s фабрикасын жүктеу мүмкін емес: %s"
+
+#: shared/nm-utils/nm-vpn-plugin-utils.c:144
+msgid "unknown error creating editor instance"
+msgstr "түзету данасын жасау кезінде белгісіз қате"
+
+#: shared/utils.c:246
+#, c-format
+msgid "invalid delimiter character '%c'"
+msgstr "жарамсыз «%c» бөлгіш таңбасы"
+
+#: shared/utils.c:253
+msgid "invalid non-utf-8 character"
+msgstr "жарамсыз non-utf-8 таңбасы"
+
+#: shared/utils.c:281
+msgid "empty host"
+msgstr "бос хост"
+
+#: shared/utils.c:291
+msgid "invalid port"
+msgstr "жарамсыз порт"
+
+#: shared/utils.c:302
+msgid "invalid protocol"
+msgstr "жарамсыз хаттама"
+
+#: src/nm-openvpn-service.c:522
+#, c-format
+msgid "invalid address “%s”"
+msgstr "жарамсыз «%s» адресі"
+
+#: src/nm-openvpn-service.c:534
+#, c-format
+msgid "invalid integer property “%s” or out of range [%d -> %d]"
+msgstr "жарамсыз «%s» бүтін сан қасиеті немесе ауқымнан тыс [%d -> %d]"
+
+#. Translators: keep "yes" and "no" untranslated!
+#: src/nm-openvpn-service.c:545
+#, c-format
+msgid "invalid boolean property “%s” (not yes or no)"
+msgstr "жарамсыз «%s» логикалық қасиеті (иә немесе жоқ емес)"
+
+#: src/nm-openvpn-service.c:552
+#, c-format
+msgid "unhandled property “%s” type %s"
+msgstr "өңделмеген «%s» қасиеті, %s түрі"
+
+#: src/nm-openvpn-service.c:563
+#, c-format
+msgid "property “%s” invalid or not supported"
+msgstr "«%s» қасиеті жарамсыз немесе қолдау көрсетілмейді"
+
+#: src/nm-openvpn-service.c:579
+msgid "No VPN configuration options."
+msgstr "VPN баптау опциялары жоқ."
+
+#: src/nm-openvpn-service.c:1023
+msgid "A username is required."
+msgstr "Пайдаланушы аты қажет."
+
+#: src/nm-openvpn-service.c:1036
+msgid "A password is required."
+msgstr "Пароль қажет."
+
+#: src/nm-openvpn-service.c:1038
+msgid "A username and password are required."
+msgstr "Пайдаланушы аты мен пароль қажет."
+
+#: src/nm-openvpn-service.c:1059
+msgid "A private key password is required."
+msgstr "Жеке кілт паролі қажет."
+
+#: src/nm-openvpn-service.c:1072
+msgid "An HTTP Proxy username is required."
+msgstr "HTTP прокси пайдаланушы аты қажет."
+
+#: src/nm-openvpn-service.c:1076
+msgid "An HTTP Proxy password is required."
+msgstr "HTTP прокси паролі қажет."
+
+#: src/nm-openvpn-service.c:1079
+msgid "An HTTP Proxy username and password are required."
+msgstr "HTTP прокси пайдаланушы аты мен паролі қажет."
+
+#: src/nm-openvpn-service.c:1486 src/nm-openvpn-service.c:2338
+#: src/nm-openvpn-service.c:2373
+msgid ""
+"Could not process the request because the VPN connection settings were invalid."
+msgstr ""
+"VPN байланыс баптаулары жарамсыз болғандықтан, сұранысты өңдеу мүмкін болмады."
+
+#: src/nm-openvpn-service.c:1497 src/nm-openvpn-service.c:2347
+msgid "Invalid connection type."
+msgstr "Жарамсыз байланыс түрі."
+
+#: src/nm-openvpn-service.c:1515
+msgid "Could not find the openvpn binary."
+msgstr "OpenVPN бинарлы файлы табылмады."
+
+#: src/nm-openvpn-service.c:1563
+#, c-format
+msgid "Invalid port number “%s”."
+msgstr "Жарамсыз «%s» порт нөмірі."
+
+#: src/nm-openvpn-service.c:1583
+#, c-format
+msgid "Invalid proto “%s”."
+msgstr "Жарамсыз «%s» proto."
+
+#: src/nm-openvpn-service.c:1632
+#, c-format
+msgid "Invalid proxy type “%s”."
+msgstr "Жарамсыз «%s» прокси түрі."
+
+#: src/nm-openvpn-service.c:1730
+#, c-format
+msgid "Invalid ping duration “%s”."
+msgstr "Жарамсыз «%s» пинг ұзақтығы."
+
+#: src/nm-openvpn-service.c:1743
+#, c-format
+msgid "Invalid ping-exit duration “%s”."
+msgstr "Жарамсыз «%s» ping-exit ұзақтығы."
+
+#: src/nm-openvpn-service.c:1756
+#, c-format
+msgid "Invalid ping-restart duration “%s”."
+msgstr "Жарамсыз «%s» ping-restart ұзақтығы."
+
+#: src/nm-openvpn-service.c:1769
+#, c-format
+msgid "Invalid connect timeout “%s”."
+msgstr "Жарамсыз «%s» қосылу күту уақыты."
+
+#: src/nm-openvpn-service.c:1794
+#, c-format
+msgid "Invalid max-routes argument “%s”."
+msgstr "Жарамсыз «%s» max-routes аргументі."
+
+#: src/nm-openvpn-service.c:1842
+#, c-format
+msgid "Invalid keysize “%s”."
+msgstr "Жарамсыз «%s» кілт өлшемі."
+
+#: src/nm-openvpn-service.c:1915
+msgid "Invalid configuration with tls-remote and verify-x509-name."
+msgstr "tls-remote және verify-x509-name бар жарамсыз баптау."
+
+#: src/nm-openvpn-service.c:1928
+msgid "Invalid verify-x509-name."
+msgstr "Жарамсыз verify-x509-name."
+
+#: src/nm-openvpn-service.c:1951
+#, c-format
+msgid "Invalid reneg seconds “%s”."
+msgstr "Жарамсыз «%s» қайта келісу секундтары."
+
+#: src/nm-openvpn-service.c:1981
+#, c-format
+msgid "Invalid TUN MTU size “%s”."
+msgstr "Жарамсыз «%s» TUN MTU өлшемі."
+
+#: src/nm-openvpn-service.c:1994
+#, c-format
+msgid "Invalid fragment size “%s”."
+msgstr "Жарамсыз «%s» фрагмент өлшемі."
+
+#: src/nm-openvpn-service.c:2025
+msgid ""
+"A CRL directory can only be specified for connections available to all users"
+msgstr ""
+"CRL бумасын тек барлық пайдаланушыларға қолжетімді байланыстар үшін көрсетуге "
+"болады"
+
+#: src/nm-openvpn-service.c:2117
+#, c-format
+msgid "Unknown connection type “%s”."
+msgstr "Белгісіз «%s» байланыс түрі."
+
+#: src/nm-openvpn-service.c:2135
+#, c-format
+msgid "User “%s” not found, check NM_OPENVPN_USER."
+msgstr "«%s» пайдаланушысы табылмады, NM_OPENVPN_USER тексеріңіз."
+
+#: src/nm-openvpn-service.c:2147
+#, c-format
+msgid "Group “%s” not found, check NM_OPENVPN_GROUP."
+msgstr "«%s» тобы табылмады, NM_OPENVPN_GROUP тексеріңіз."
+
+#: src/nm-openvpn-service.c:2386
+msgid "Unhandled pending authentication."
+msgstr "Өңделмеген күтудегі аутентификация."
+
+#: src/nm-openvpn-service.c:2505
+msgid "Don’t quit when VPN connection terminates"
+msgstr "VPN байланысы аяқталған кезде шықпау"
+
+#: src/nm-openvpn-service.c:2506
+msgid "Enable verbose debug logging (may expose passwords)"
+msgstr "Толық дебаг логтауды іске қосу (парольдер ашылып қалуы мүмкін)"
+
+#: src/nm-openvpn-service.c:2507
+msgid "D-Bus name to use for this instance"
+msgstr "Осы дана үшін қолданылатын D-Bus аты"
+
+#: src/nm-openvpn-service.c:2535
+msgid ""
+"nm-openvpn-service provides integrated OpenVPN capability to NetworkManager."
+msgstr ""
+"nm-openvpn-service NetworkManager үшін интеграцияланған OpenVPN мүмкіндіктерін "
+"ұсынады."
