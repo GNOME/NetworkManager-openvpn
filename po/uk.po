@@ -3,23 +3,23 @@
 # This file is distributed under the same license as the NetworkManager package.
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2005-2007.
 # Korostil Daniel <ted.korostiled@gmail.com>, 2011.
-# Yuri Chornoivan <yurchor@ukr.net>, 2020, 2021, 2022, 2024, 2025.
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2024, 2025, 2026 Yuri Chornoivan <yurchor@ukr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: NetworkManager openvpn\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/i"
-"ssues\n"
-"POT-Creation-Date: 2025-12-22 08:57+0000\n"
-"PO-Revision-Date: 2025-12-23 11:54+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/is"
+"sues\n"
+"POT-Creation-Date: 2025-12-12 11:59+0000\n"
+"PO-Revision-Date: 2026-07-25 15:40+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.3\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n%10>=2"
+" && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 25.12.1\n"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:10
 msgid "OpenVPN client"
@@ -28,6 +28,34 @@ msgstr "Клієнт OpenVPN"
 #: appdata/network-manager-openvpn.metainfo.xml.in:11
 msgid "Client for OpenVPN virtual private networks"
 msgstr "Клієнт для віртуальних приватних мереж OpenVPN"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:14
+msgid "network"
+msgstr "мережа"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:15
+msgid "manager"
+msgstr "керування"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:16
+#| msgid "The NetworkManager Developers"
+msgid "NetworkManager"
+msgstr "NetworkManager"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:17
+#| msgid "Use a _TCP connection"
+msgid "connection"
+msgstr "з'єднання"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:18
+#| msgid "OpenVPN"
+msgid "VPN"
+msgstr "VPN"
+
+#: appdata/network-manager-openvpn.metainfo.xml.in:19
+#: properties/nm-openvpn-editor-plugin.c:38
+msgid "OpenVPN"
+msgstr "OpenVPN"
 
 #: appdata/network-manager-openvpn.metainfo.xml.in:23
 msgid "Support for configuring OpenVPN virtual private network connections."
@@ -1437,10 +1465,6 @@ msgstr "Пароль з сертифікатами (TLS)"
 msgid "could not load UI widget"
 msgstr "не вдалося завантажити віджет інтерфейсу користувача"
 
-#: properties/nm-openvpn-editor-plugin.c:38
-msgid "OpenVPN"
-msgstr "OpenVPN"
-
 #: properties/nm-openvpn-editor-plugin.c:39
 msgid "Compatible with the OpenVPN server."
 msgstr "Сумісний з сервером OpenVPN."
@@ -1465,8 +1489,7 @@ msgstr ""
 #: shared/nm-utils/nm-shared-utils.c:968
 #, c-format
 msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
-msgstr ""
-"«%s::%s» не є коректною назвою властивості; «%s» не є підтипом GObject"
+msgstr "«%s::%s» не є коректною назвою властивості; «%s» не є підтипом GObject"
 
 #: shared/nm-utils/nm-shared-utils.c:977
 #, c-format
@@ -1679,8 +1702,8 @@ msgstr "Некоректний розмір фрагмента «%s»."
 msgid ""
 "A CRL directory can only be specified for connections available to all users"
 msgstr ""
-"Каталог CRL можна вказувати, лише для з'єднань, які є доступними для усіх"
-" користувачів"
+"Каталог CRL можна вказувати, лише для з'єднань, які є доступними для усіх "
+"користувачів"
 
 #: src/nm-openvpn-service.c:2117
 #, c-format
